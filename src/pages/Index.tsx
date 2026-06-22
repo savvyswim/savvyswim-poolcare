@@ -143,30 +143,96 @@ const Index = () => {
         <div className="container-tight">
           <div className="max-w-2xl mb-16">
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-              / 01 — What we do
+              / 01 — Services
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              Full-spectrum supply chain,
-              <span className="text-gradient-amber"> handled.</span>
+              Categories built for
+              <span className="text-gradient-amber"> serious operators.</span>
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              From single-SKU procurement to enterprise-wide MRO programs.
-              One vendor. Zero friction.
+              Clear scopes. Transparent inclusions. Request a tailored quote on
+              any category in under 24 hours.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { icon: Factory, title: "Industrial Procurement", desc: "Tools, safety gear, hardware, and MRO consumables — sourced and delivered at scale." },
-              { icon: Truck, title: "Logistics & Freight", desc: "LTL, FTL, and last-mile delivery across the continental US with real-time tracking." },
-              { icon: PackageCheck, title: "Inventory Management", desc: "Vendor-managed inventory programs that keep your floors stocked and your books clean." },
-              { icon: Shield, title: "Safety Compliance", desc: "OSHA-compliant PPE programs, audits, and training documentation for your crew." },
-              { icon: Zap, title: "Emergency Response", desc: "Same-day fulfillment on critical SKUs. We answer when production is on the line." },
-              { icon: Globe, title: "Custom Sourcing", desc: "Can't find it? We will. Global supplier network with vetted partners on six continents." },
+              {
+                icon: Factory,
+                title: "Industrial Procurement",
+                desc: "Sourcing and supply of tools, hardware, and MRO consumables at scale.",
+                includes: [
+                  "Hand & power tools",
+                  "Fasteners and hardware",
+                  "MRO consumables",
+                  "Vendor consolidation",
+                ],
+                subject: "Quote — Industrial Procurement",
+              },
+              {
+                icon: Truck,
+                title: "Logistics & Freight",
+                desc: "Door-to-door freight across the continental US with live tracking.",
+                includes: [
+                  "LTL & FTL freight",
+                  "Last-mile delivery",
+                  "Real-time tracking",
+                  "Dedicated dispatch",
+                ],
+                subject: "Quote — Logistics & Freight",
+              },
+              {
+                icon: PackageCheck,
+                title: "Inventory Management",
+                desc: "Vendor-managed inventory programs that keep floors stocked.",
+                includes: [
+                  "On-site stocking",
+                  "Min/max replenishment",
+                  "Barcoded bin systems",
+                  "Monthly usage reports",
+                ],
+                subject: "Quote — Inventory Management",
+              },
+              {
+                icon: Shield,
+                title: "Safety & PPE Programs",
+                desc: "OSHA-compliant PPE rollouts and ongoing safety supply support.",
+                includes: [
+                  "Head, eye & hand PPE",
+                  "Hi-vis & FR workwear",
+                  "Compliance audits",
+                  "Training documentation",
+                ],
+                subject: "Quote — Safety & PPE Program",
+              },
+              {
+                icon: Zap,
+                title: "Emergency Response",
+                desc: "Same-day fulfillment when production or a project is on the line.",
+                includes: [
+                  "Same-day dispatch",
+                  "After-hours hotline",
+                  "Priority freight",
+                  "Critical-SKU buffer stock",
+                ],
+                subject: "Quote — Emergency Response",
+              },
+              {
+                icon: Globe,
+                title: "Custom Sourcing",
+                desc: "Hard-to-find parts and specialty items via our vetted global network.",
+                includes: [
+                  "Global supplier network",
+                  "Spec-matched sourcing",
+                  "Sample coordination",
+                  "Import & compliance docs",
+                ],
+                subject: "Quote — Custom Sourcing",
+              },
             ].map((s, i) => (
               <div
                 key={s.title}
-                className="card-3d rounded-md p-6 sm:p-8 hover:translate-y-[-2px] transition-transform duration-300 group"
+                className="card-3d rounded-md p-6 sm:p-8 hover:translate-y-[-2px] transition-transform duration-300 group flex flex-col"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="h-12 w-12 rounded-sm bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
@@ -176,6 +242,28 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+
+                <div className="my-5 h-px bg-hairline" />
+
+                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                  What's included
+                </div>
+                <ul className="space-y-2 mb-6">
+                  {s.includes.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" />
+                      <span className="text-foreground/90">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
+                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground hover:bg-amber-brand hover:text-primary-foreground hover:border-amber-brand transition group/cta"
+                >
+                  Request quote
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover/cta:translate-x-0.5" />
+                </a>
               </div>
             ))}
           </div>
