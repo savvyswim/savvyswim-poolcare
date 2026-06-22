@@ -120,8 +120,8 @@ const Index = () => {
             <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
               {[
                 { k: "100+", v: "Companies sold or funded" },
+                { k: "1,000+", v: "Vetted suppliers in network" },
                 { k: "$420M", v: "Capital & exits closed" },
-                { k: "18+", v: "Industries served" },
               ].map((s) => (
                 <div key={s.v}>
                   <div className="text-2xl sm:text-3xl font-bold text-gradient-chrome">{s.k}</div>
@@ -369,9 +369,9 @@ const Index = () => {
                 <div className="grid grid-cols-2 gap-px bg-hairline">
                   {[
                     { k: "100+", v: "Companies advised", icon: Briefcase },
+                    { k: "1,000+", v: "Suppliers in database", icon: Globe },
                     { k: "$420M", v: "Closed deal value", icon: LineChart },
                     { k: "400+", v: "Investor network", icon: Handshake },
-                    { k: "A+", v: "Founder NPS", icon: Award },
                   ].map((s) => (
                     <div key={s.v} className="bg-ink-soft p-5">
                       <s.icon className="h-4 w-4 text-amber-brand mb-3" />
