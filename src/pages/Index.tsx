@@ -54,12 +54,20 @@ const Index = () => {
             <a href="#about" className="hover:text-foreground transition">About</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="hidden sm:inline-flex items-center gap-2 rounded-sm bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
-          >
-            Request Quote <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={PHONE_HREF}
+              className="hidden sm:inline-flex items-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-3.5 py-2 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
+            >
+              <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="hidden sm:inline-flex items-center gap-2 rounded-sm bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+            >
+              Request Quote <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </header>
 
