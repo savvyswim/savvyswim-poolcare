@@ -446,7 +446,10 @@ const Index = () => {
             <img src={emblem} alt="" width={24} height={24} className="h-6 w-6" />
             <span>© {new Date().getFullYear()} Savage Supplies. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 justify-center">
+            <a href={PHONE_HREF} className="hover:text-foreground transition inline-flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 text-amber-brand" /> {PHONE_DISPLAY}
+            </a>
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
             <span>savagesupplies.us</span>
           </div>
