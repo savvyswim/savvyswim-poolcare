@@ -3,23 +3,23 @@ import {
   Mail,
   Phone,
   Shield,
-  Truck,
-  PackageCheck,
-  Factory,
+  TrendingUp,
+  Target,
+  Rocket,
   Award,
   ArrowRight,
   CheckCircle2,
-  Zap,
+  LineChart,
   Globe,
   Clock,
   Star,
+  Handshake,
+  DollarSign,
+  Briefcase,
 } from "lucide-react";
 import heroVideo from "@/assets/hero-savage.mp4.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg";
 import emblem from "@/assets/savage-emblem.png";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
 
 const EMAIL = "hi@savagesupplies.us";
 const PHONE_DISPLAY = "(469) 213-8087";
@@ -45,12 +45,12 @@ const Index = () => {
           <a href="#" className="flex items-center gap-2.5">
             <img src={emblem} alt="" width={32} height={32} className="h-8 w-8 drop-shadow-[0_4px_12px_hsl(22_95%_55%/0.5)]" />
             <span className="font-bold tracking-tight text-base">
-              SAVAGE<span className="text-amber-brand">.</span>SUPPLIES
+              SAVAGE<span className="text-amber-brand">.</span>GROWTH
             </span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             <a href="#services" className="hover:text-foreground transition">Services</a>
-            <a href="#catalog" className="hover:text-foreground transition">Catalog</a>
+            <a href="#results" className="hover:text-foreground transition">Results</a>
             <a href="#about" className="hover:text-foreground transition">About</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
@@ -62,10 +62,10 @@ const Index = () => {
               <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
             </a>
             <a
-              href={`mailto:${EMAIL}`}
+              href={`mailto:${EMAIL}?subject=${encodeURIComponent("Strategy Call Request")}`}
               className="hidden sm:inline-flex items-center gap-2 rounded-sm bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
             >
-              Request Quote <ArrowRight className="h-4 w-4" />
+              Book Strategy Call <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </div>
@@ -89,39 +89,39 @@ const Index = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-6">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-              Industrial Supply · Logistics · Service
+              Growth · Capital · Exit Advisory
             </div>
             <h1 className="text-[2.75rem] leading-[0.95] sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="text-gradient-chrome">Engineered</span>
+              <span className="text-gradient-chrome">We grow companies.</span>
               <br />
-              <span className="text-gradient-amber">Supply Solutions.</span>
+              <span className="text-gradient-amber">In any market.</span>
             </h1>
             <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Premium industrial supplies, tools, and turnkey procurement
-              services for contractors, fleets, and enterprise operations
-              nationwide.
+              We build the strategy that takes your company from stuck to sold,
+              scaled, or funded. 100+ companies sold or backed by investors
+              under our advisory.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <a
-                href={`mailto:${EMAIL}`}
+                href={PHONE_HREF}
                 className="inline-flex items-center justify-center gap-2 rounded-sm bg-amber-brand px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
               >
-                Request a Quote <ArrowRight className="h-4 w-4" />
+                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
               </a>
               <a
-                href="#catalog"
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent("Strategy Call Request")}`}
                 className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 backdrop-blur px-6 py-3.5 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
               >
-                View Catalog
+                Book a Strategy Call <ArrowRight className="h-4 w-4" />
               </a>
             </div>
 
             {/* Floating stats */}
             <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
               {[
-                { k: "12K+", v: "SKUs in stock" },
-                { k: "48hr", v: "Avg fulfillment" },
-                { k: "98%", v: "On-time delivery" },
+                { k: "100+", v: "Companies sold or funded" },
+                { k: "$420M", v: "Capital & exits closed" },
+                { k: "18+", v: "Industries served" },
               ].map((s) => (
                 <div key={s.v}>
                   <div className="text-2xl sm:text-3xl font-bold text-gradient-chrome">{s.k}</div>
@@ -138,12 +138,13 @@ const Index = () => {
         <div className="flex animate-marquee gap-12 whitespace-nowrap text-sm uppercase tracking-[0.2em] text-muted-foreground">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-12 items-center shrink-0">
-              <span>ISO 9001 Certified</span><span className="text-amber-brand">◆</span>
-              <span>OSHA Compliant</span><span className="text-amber-brand">◆</span>
-              <span>Net-30 Terms Available</span><span className="text-amber-brand">◆</span>
-              <span>Nationwide Logistics</span><span className="text-amber-brand">◆</span>
-              <span>Bulk & Wholesale</span><span className="text-amber-brand">◆</span>
-              <span>24/7 Support</span><span className="text-amber-brand">◆</span>
+              <span>SaaS</span><span className="text-amber-brand">◆</span>
+              <span>E-Commerce</span><span className="text-amber-brand">◆</span>
+              <span>Industrial & Services</span><span className="text-amber-brand">◆</span>
+              <span>Healthcare</span><span className="text-amber-brand">◆</span>
+              <span>Real Estate</span><span className="text-amber-brand">◆</span>
+              <span>Consumer Brands</span><span className="text-amber-brand">◆</span>
+              <span>Fintech</span><span className="text-amber-brand">◆</span>
             </div>
           ))}
         </div>
@@ -157,88 +158,88 @@ const Index = () => {
               / 01 — Services
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              Categories built for
-              <span className="text-gradient-amber"> serious operators.</span>
+              A strategy built for
+              <span className="text-gradient-amber"> your next milestone.</span>
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              Clear scopes. Transparent inclusions. Request a tailored quote on
-              any category in under 24 hours.
+              Whether you're scaling revenue, raising capital, or preparing for
+              an exit — we engineer the playbook and execute it with you.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
-                icon: Factory,
-                title: "Industrial Procurement",
-                desc: "Sourcing and supply of tools, hardware, and MRO consumables at scale.",
+                icon: TrendingUp,
+                title: "Growth Strategy",
+                desc: "A 90-day operating plan to unlock revenue and tighten unit economics.",
                 includes: [
-                  "Hand & power tools",
-                  "Fasteners and hardware",
-                  "MRO consumables",
-                  "Vendor consolidation",
+                  "Market & competitor diagnostic",
+                  "GTM & pricing strategy",
+                  "Revenue model rebuild",
+                  "90-day execution roadmap",
                 ],
-                subject: "Quote — Industrial Procurement",
+                subject: "Quote — Growth Strategy",
               },
               {
-                icon: Truck,
-                title: "Logistics & Freight",
-                desc: "Door-to-door freight across the continental US with live tracking.",
+                icon: DollarSign,
+                title: "Investor Readiness",
+                desc: "Get fundable. Pitch deck, financials, and warm intros to capital.",
                 includes: [
-                  "LTL & FTL freight",
-                  "Last-mile delivery",
-                  "Real-time tracking",
-                  "Dedicated dispatch",
+                  "Investor-grade pitch deck",
+                  "Financial model & projections",
+                  "Data room build-out",
+                  "Warm intros to our VC & PE network",
                 ],
-                subject: "Quote — Logistics & Freight",
+                subject: "Quote — Investor Readiness",
               },
               {
-                icon: PackageCheck,
-                title: "Inventory Management",
-                desc: "Vendor-managed inventory programs that keep floors stocked.",
+                icon: Handshake,
+                title: "M&A / Exit Advisory",
+                desc: "Position, value, and sell your company to the right strategic buyer.",
                 includes: [
-                  "On-site stocking",
-                  "Min/max replenishment",
-                  "Barcoded bin systems",
-                  "Monthly usage reports",
+                  "Valuation & buyer mapping",
+                  "Confidential outreach",
+                  "Negotiation & deal terms",
+                  "End-to-end closing support",
                 ],
-                subject: "Quote — Inventory Management",
-              },
-              {
-                icon: Shield,
-                title: "Safety & PPE Programs",
-                desc: "OSHA-compliant PPE rollouts and ongoing safety supply support.",
-                includes: [
-                  "Head, eye & hand PPE",
-                  "Hi-vis & FR workwear",
-                  "Compliance audits",
-                  "Training documentation",
-                ],
-                subject: "Quote — Safety & PPE Program",
-              },
-              {
-                icon: Zap,
-                title: "Emergency Response",
-                desc: "Same-day fulfillment when production or a project is on the line.",
-                includes: [
-                  "Same-day dispatch",
-                  "After-hours hotline",
-                  "Priority freight",
-                  "Critical-SKU buffer stock",
-                ],
-                subject: "Quote — Emergency Response",
+                subject: "Quote — M&A / Exit",
               },
               {
                 icon: Globe,
-                title: "Custom Sourcing",
-                desc: "Hard-to-find parts and specialty items via our vetted global network.",
+                title: "Market Expansion",
+                desc: "Enter new geos, verticals, or channels without burning runway.",
                 includes: [
-                  "Global supplier network",
-                  "Spec-matched sourcing",
-                  "Sample coordination",
-                  "Import & compliance docs",
+                  "Market sizing & entry plan",
+                  "Channel & partner strategy",
+                  "Local ops & hiring playbook",
+                  "Risk & compliance review",
                 ],
-                subject: "Quote — Custom Sourcing",
+                subject: "Quote — Market Expansion",
+              },
+              {
+                icon: Target,
+                title: "Brand & Positioning",
+                desc: "Sharpen your story so customers, talent, and investors lean in.",
+                includes: [
+                  "Brand & messaging audit",
+                  "Category positioning",
+                  "Website & sales narrative",
+                  "Founder & PR strategy",
+                ],
+                subject: "Quote — Brand & Positioning",
+              },
+              {
+                icon: Rocket,
+                title: "Sales Acceleration",
+                desc: "Build a repeatable sales engine that hits target every quarter.",
+                includes: [
+                  "Outbound & inbound playbooks",
+                  "CRM & pipeline setup",
+                  "Comp plan & quota design",
+                  "Sales hiring & coaching",
+                ],
+                subject: "Quote — Sales Acceleration",
               },
             ].map((s, i) => (
               <div
@@ -272,7 +273,7 @@ const Index = () => {
                   href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
                   className="mt-auto inline-flex items-center justify-between gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground hover:bg-amber-brand hover:text-primary-foreground hover:border-amber-brand transition group/cta"
                 >
-                  Request quote
+                  Request strategy
                   <ArrowRight className="h-4 w-4 transition-transform group-hover/cta:translate-x-0.5" />
                 </a>
               </div>
@@ -281,51 +282,40 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CATALOG / 3D Product showcase */}
-      <section id="catalog" className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
+      {/* RESULTS */}
+      <section id="results" className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
         <div className="container-tight">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-xl">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 02 — Catalog
+                / 02 — Results
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-                Built to spec.
+                Strategy that
                 <br />
-                <span className="text-gradient-chrome">Stocked to perform.</span>
+                <span className="text-gradient-chrome">closes deals.</span>
               </h2>
             </div>
-            <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
-              Browse full catalog <ArrowRight className="h-4 w-4" />
+            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Send full case studies")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
+              Request full case studies <ArrowRight className="h-4 w-4" />
             </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: product1, cat: "Tools", title: "Precision Hand Tools", count: "320+ SKUs" },
-              { img: product2, cat: "Safety", title: "PPE & Head Protection", count: "180+ SKUs" },
-              { img: product3, cat: "Workwear", title: "Industrial Gloves & Gear", count: "240+ SKUs" },
+              { tag: "SaaS", title: "$18M Series A", desc: "Repositioned an early-stage SaaS, built investor deck, and closed Series A in 11 weeks.", metric: "11 weeks to term sheet" },
+              { tag: "E-Commerce", title: "9-figure exit", desc: "Advised DTC brand on positioning, EBITDA cleanup, and buyer outreach — closed strategic acquisition.", metric: "6.4x EBITDA multiple" },
+              { tag: "Services", title: "3.2x revenue in 12 mo", desc: "Built outbound engine and pricing rebuild for B2B services firm — tripled ARR within a year.", metric: "+220% net new revenue" },
             ].map((p) => (
-              <div key={p.title} className="card-3d rounded-md overflow-hidden group">
-                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-ink-soft to-ink">
-                  <img
-                    src={p.img}
-                    alt={p.title}
-                    loading="lazy"
-                    width={800}
-                    height={800}
-                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 left-4 rounded-full glass px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
-                    {p.cat}
-                  </div>
+              <div key={p.title} className="card-3d rounded-md p-6 sm:p-8 group flex flex-col">
+                <div className="inline-flex w-fit rounded-full glass px-3 py-1 text-[10px] uppercase tracking-[0.18em] mb-6">
+                  {p.tag}
                 </div>
-                <div className="p-5 flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold">{p.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">{p.count}</p>
-                  </div>
-                  <ArrowRight className="h-4 w-4 text-amber-brand opacity-0 group-hover:opacity-100 transition" />
+                <h3 className="text-2xl font-bold mb-3 text-gradient-amber">{p.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
+                <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
+                  <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
+                  <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 transition" />
                 </div>
               </div>
             ))}
@@ -339,24 +329,24 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 03 — Why Savage
+                / 03 — Why Savage Growth
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                Engineered like the machines
-                <span className="text-gradient-amber"> we supply.</span>
+                Operators and dealmakers —
+                <span className="text-gradient-amber"> not just consultants.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                Savage Supplies is a vertically-integrated supply partner trusted
-                by general contractors, manufacturing operators, and Fortune 500
-                facility teams. We don't just ship boxes — we engineer reliable
-                supply chains.
+                Savage Growth Partners is led by founders, former investors, and
+                M&A advisors who have personally built, sold, and funded
+                companies. We don't hand you a slide deck — we sit on your side
+                of the table until the deal is signed.
               </p>
               <ul className="space-y-3">
                 {[
-                  "Dedicated account engineer assigned on day one",
-                  "Transparent margins, audited invoicing",
-                  "Net-30 terms for qualified accounts",
-                  "Custom kitting & branded packaging available",
+                  "Senior partner on every engagement — no junior hand-offs",
+                  "Fixed scopes and transparent fees, with performance upside",
+                  "Direct access to our 400+ investor and acquirer network",
+                  "Industry-agnostic: we've operated across 18+ verticals",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-3 text-sm">
                     <CheckCircle2 className="h-5 w-5 text-amber-brand flex-shrink-0 mt-0.5" />
@@ -372,16 +362,16 @@ const Index = () => {
                 <div className="flex items-center gap-3 mb-6">
                   <img src={emblem} alt="" width={48} height={48} className="h-12 w-12 animate-float" />
                   <div>
-                    <div className="font-bold">Savage Supplies</div>
-                    <div className="text-xs text-muted-foreground">Est. operations · US-based</div>
+                    <div className="font-bold">Savage Growth Partners</div>
+                    <div className="text-xs text-muted-foreground">Strategy · Capital · Exits</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline">
                   {[
-                    { k: "12,000+", v: "Active SKUs", icon: PackageCheck },
-                    { k: "48 States", v: "Service area", icon: Globe },
-                    { k: "24/7", v: "Account support", icon: Clock },
-                    { k: "A+", v: "Vendor rating", icon: Award },
+                    { k: "100+", v: "Companies advised", icon: Briefcase },
+                    { k: "$420M", v: "Closed deal value", icon: LineChart },
+                    { k: "400+", v: "Investor network", icon: Handshake },
+                    { k: "A+", v: "Founder NPS", icon: Award },
                   ].map((s) => (
                     <div key={s.v} className="bg-ink-soft p-5">
                       <s.icon className="h-4 w-4 text-amber-brand mb-3" />
@@ -394,7 +384,7 @@ const Index = () => {
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="h-3.5 w-3.5 fill-amber-brand text-amber-brand" />
                   ))}
-                  <span className="ml-2">Trusted by 500+ enterprise accounts</span>
+                  <span className="ml-2">Trusted by founders, boards, and operators</span>
                 </div>
               </div>
             </div>
@@ -412,10 +402,12 @@ const Index = () => {
               <img src={emblem} alt="" width={64} height={64} className="h-16 w-16 mx-auto mb-6 animate-float" />
               <h2 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
                 Let's build your
-                <span className="text-gradient-amber"> supply program.</span>
+                <span className="text-gradient-amber"> growth strategy.</span>
               </h2>
               <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-                Request a quote, schedule a procurement consult, or talk to an account engineer today.
+                Book a confidential 30-minute strategy call. We'll diagnose
+                where you're stuck and outline the path to your next milestone —
+                no pitch, no fluff.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
@@ -425,14 +417,14 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
                 <a
-                  href={`mailto:${EMAIL}`}
+                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Strategy Call Request")}`}
                   className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <Mail className="h-4 w-4" /> {EMAIL}
                 </a>
               </div>
               <p className="mt-5 text-xs text-muted-foreground">
-                Call or text · Mon–Fri 7a–7p CT · After-hours hotline for active accounts
+                Confidential · NDA on request · Mon–Fri 7a–7p CT
               </p>
             </div>
           </div>
@@ -444,7 +436,7 @@ const Index = () => {
         <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <img src={emblem} alt="" width={24} height={24} className="h-6 w-6" />
-            <span>© {new Date().getFullYear()} Savage Supplies. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Savage Growth Partners. All rights reserved.</span>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 justify-center">
             <a href={PHONE_HREF} className="hover:text-foreground transition inline-flex items-center gap-1.5">
