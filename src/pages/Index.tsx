@@ -419,18 +419,21 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
-                  href={`mailto:${EMAIL}`}
+                  href={PHONE_HREF}
                   className="inline-flex items-center justify-center gap-2 rounded-sm bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                >
+                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                </a>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <Mail className="h-4 w-4" /> {EMAIL}
                 </a>
-                <a
-                  href="#catalog"
-                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
-                >
-                  Explore catalog
-                </a>
               </div>
+              <p className="mt-5 text-xs text-muted-foreground">
+                Call or text · Mon–Fri 7a–7p CT · After-hours hotline for active accounts
+              </p>
             </div>
           </div>
         </div>
