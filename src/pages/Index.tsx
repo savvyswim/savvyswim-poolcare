@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Mail,
+  Phone,
   Shield,
   Truck,
   PackageCheck,
@@ -21,6 +22,8 @@ import product2 from "@/assets/product-2.jpg";
 import product3 from "@/assets/product-3.jpg";
 
 const EMAIL = "hi@savagesupplies.us";
+const PHONE_DISPLAY = "(469) 213-8087";
+const PHONE_HREF = "tel:+14692138087";
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -51,12 +54,20 @@ const Index = () => {
             <a href="#about" className="hover:text-foreground transition">About</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="hidden sm:inline-flex items-center gap-2 rounded-sm bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
-          >
-            Request Quote <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={PHONE_HREF}
+              className="hidden sm:inline-flex items-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-3.5 py-2 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
+            >
+              <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="hidden sm:inline-flex items-center gap-2 rounded-sm bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+            >
+              Request Quote <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </header>
 
@@ -408,18 +419,21 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
-                  href={`mailto:${EMAIL}`}
+                  href={PHONE_HREF}
                   className="inline-flex items-center justify-center gap-2 rounded-sm bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                >
+                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                </a>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <Mail className="h-4 w-4" /> {EMAIL}
                 </a>
-                <a
-                  href="#catalog"
-                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
-                >
-                  Explore catalog
-                </a>
               </div>
+              <p className="mt-5 text-xs text-muted-foreground">
+                Call or text · Mon–Fri 7a–7p CT · After-hours hotline for active accounts
+              </p>
             </div>
           </div>
         </div>
@@ -432,7 +446,10 @@ const Index = () => {
             <img src={emblem} alt="" width={24} height={24} className="h-6 w-6" />
             <span>© {new Date().getFullYear()} Savage Supplies. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 justify-center">
+            <a href={PHONE_HREF} className="hover:text-foreground transition inline-flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 text-amber-brand" /> {PHONE_DISPLAY}
+            </a>
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
             <span>savagesupplies.us</span>
           </div>
