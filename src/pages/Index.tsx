@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Mail,
+  Phone,
   Shield,
   Truck,
   PackageCheck,
@@ -21,6 +22,8 @@ import product2 from "@/assets/product-2.jpg";
 import product3 from "@/assets/product-3.jpg";
 
 const EMAIL = "hi@savagesupplies.us";
+const PHONE_DISPLAY = "(469) 213-8087";
+const PHONE_HREF = "tel:+14692138087";
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
