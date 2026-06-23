@@ -301,14 +301,13 @@ const Index = () => {
                   ))}
                 </ul>
 
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
-                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground hover:bg-amber-brand hover:text-primary-foreground hover:border-amber-brand transition group/cta"
+                <span
+                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
                 >
                   Request Quote
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover/cta:translate-x-0.5" />
-                </a>
-              </div>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </a>
             ))}
           </div>
         </div>
