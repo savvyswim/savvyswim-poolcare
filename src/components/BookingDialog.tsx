@@ -1,0 +1,375 @@
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { z } from "zod";
+import { CalendarIcon, CheckCircle2, Loader2, Mail, Phone, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "sonner";
+
+const EMAIL = "hi@savagepools.us";
+
+const SERVICES = [
+  "Custom Pool Design & Build",
+  "Spa & Water Features",
+  "Outdoor Living",
+  "Renovation & Resurfacing",
+  "Weekly Service & Maintenance",
+  "Smart Pool Automation",
+  "On-site Inspection",
+  "Not sure — help me decide",
+] as const;
+
+const TIMES = [
+  "8:00 AM",
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+];
+
+const schema = z.object({
+  name: z.string().trim().min(2, "Please enter your full name").max(80),
+  email: z.string().trim().email("Enter a valid email").max(200),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Enter a valid phone number")
+    .max(30)
+    .regex(/^[0-9+()\-.\s]+$/, "Phone can only contain digits and + ( ) - ."),
+  address: z.string().trim().min(4, "Enter your property address").max(200),
+  service: z.string().min(1, "Pick a service"),
+  date: z.date({ required_error: "Pick a preferred date" }),
+  time: z.string().min(1, "Pick a preferred time"),
+  notes: z.string().max(1000).optional().or(z.literal("")),
+});
+
+export type BookingFormValues = z.infer<typeof schema>;
+
+interface BookingDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  defaultService?: string;
+}
+
+const STORAGE_KEY = "savage-pools-bookings";
+
+export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDialogProps) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState<null | BookingFormValues>(null);
+  const [values, setValues] = useState<Partial<BookingFormValues>>({
+    service: defaultService ?? "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (open) {
+      setDone(null);
+      setErrors({});
+      setValues((v) => ({ ...v, service: defaultService ?? v.service ?? "" }));
+    }
+  }, [open, defaultService]);
+
+  const set = <K extends keyof BookingFormValues>(k: K, v: BookingFormValues[K]) =>
+    setValues((prev) => ({ ...prev, [k]: v }));
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = schema.safeParse(values);
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        fe[issue.path[0] as string] = issue.message;
+      }
+      setErrors(fe);
+      return;
+    }
+    setErrors({});
+    setSubmitting(true);
+
+    const data = parsed.data;
+    try {
+      const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      existing.push({
+        ...data,
+        date: format(data.date, "yyyy-MM-dd"),
+        createdAt: new Date().toISOString(),
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    } catch {
+      /* ignore */
+    }
+
+    // Build a mailto so the request reaches Savage Pools immediately, even
+    // without a backend. This opens the user's mail client pre-filled.
+    const subject = `Booking — ${data.service} — ${data.name}`;
+    const body = [
+      `New booking request from savagepools.us`,
+      ``,
+      `Name:    ${data.name}`,
+      `Email:   ${data.email}`,
+      `Phone:   ${data.phone}`,
+      `Address: ${data.address}`,
+      ``,
+      `Service:  ${data.service}`,
+      `Date:     ${format(data.date, "EEEE, MMMM d, yyyy")}`,
+      `Time:     ${data.time}`,
+      ``,
+      `Notes:`,
+      data.notes || "(none)",
+    ].join("\n");
+
+    const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+
+    // Defer opening so toast renders first
+    setTimeout(() => {
+      window.location.href = mailto;
+    }, 250);
+
+    setSubmitting(false);
+    setDone(data);
+    toast.success("Booking received — we'll confirm shortly", {
+      description: `${format(data.date, "EEE, MMM d")} · ${data.time}`,
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-xl max-h-[92vh] overflow-y-auto bg-ink border border-hairline">
+        {done ? (
+          <div className="py-6 text-center">
+            <div className="mx-auto h-14 w-14 rounded-full bg-amber-brand/15 border border-amber-brand/40 grid place-items-center mb-4">
+              <CheckCircle2 className="h-7 w-7 text-amber-brand" />
+            </div>
+            <DialogTitle className="text-2xl">You're booked in</DialogTitle>
+            <DialogDescription className="mt-2 text-base">
+              We've received your request for{" "}
+              <span className="text-foreground font-semibold">{done.service}</span> on{" "}
+              <span className="text-foreground font-semibold">
+                {format(done.date, "EEE, MMM d")} at {done.time}
+              </span>
+              . A specialist will confirm by phone or email within one business day.
+            </DialogDescription>
+            <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
+              <a
+                href="tel:+14692138087"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+              >
+                <Phone className="h-4 w-4" /> Call us now
+              </a>
+              <Button
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                className="rounded-full"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <DialogHeader>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-2">
+                <Sparkles className="h-3.5 w-3.5" /> Free · No obligation
+              </div>
+              <DialogTitle className="text-2xl sm:text-3xl">
+                Book your inspection or 3D quote
+              </DialogTitle>
+              <DialogDescription>
+                Pick a time — we'll confirm by phone or email within one business day.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={onSubmit} className="space-y-4 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Full name" error={errors.name}>
+                  <Input
+                    autoComplete="name"
+                    value={values.name ?? ""}
+                    onChange={(e) => set("name", e.target.value)}
+                    placeholder="Jane Doe"
+                  />
+                </Field>
+                <Field label="Phone" error={errors.phone}>
+                  <Input
+                    type="tel"
+                    autoComplete="tel"
+                    value={values.phone ?? ""}
+                    onChange={(e) => set("phone", e.target.value)}
+                    placeholder="(469) 555-0199"
+                  />
+                </Field>
+              </div>
+
+              <Field label="Email" error={errors.email}>
+                <Input
+                  type="email"
+                  autoComplete="email"
+                  value={values.email ?? ""}
+                  onChange={(e) => set("email", e.target.value)}
+                  placeholder="you@email.com"
+                />
+              </Field>
+
+              <Field label="Property address" error={errors.address}>
+                <Input
+                  autoComplete="street-address"
+                  value={values.address ?? ""}
+                  onChange={(e) => set("address", e.target.value)}
+                  placeholder="123 Lakeshore Dr, Austin, TX"
+                />
+              </Field>
+
+              <Field label="Service" error={errors.service}>
+                <Select
+                  value={values.service ?? ""}
+                  onValueChange={(v) => set("service", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="What can we help with?" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-ink border-hairline">
+                    {SERVICES.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {s}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Preferred date" error={errors.date}>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !values.date && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {values.date ? format(values.date, "PPP") : "Pick a date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 bg-ink border-hairline" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={values.date}
+                        onSelect={(d) => d && set("date", d)}
+                        disabled={(d) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return d < today;
+                        }}
+                        initialFocus
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </Field>
+                <Field label="Preferred time" error={errors.time}>
+                  <Select
+                    value={values.time ?? ""}
+                    onValueChange={(v) => set("time", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pick a time" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-ink border-hairline max-h-64">
+                      {TIMES.map((t) => (
+                        <SelectItem key={t} value={t}>
+                          {t}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </div>
+
+              <Field label="Project notes (optional)" error={errors.notes}>
+                <Textarea
+                  rows={3}
+                  value={values.notes ?? ""}
+                  onChange={(e) => set("notes", e.target.value)}
+                  placeholder="Lot size, style you love, budget range, timing…"
+                  maxLength={1000}
+                />
+              </Field>
+
+              <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex-1 rounded-full bg-amber-brand text-primary-foreground hover:brightness-110 shadow-cta h-12 text-sm font-semibold"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Booking…
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="h-4 w-4" /> Confirm booking
+                    </>
+                  )}
+                </Button>
+                <a
+                  href="tel:+14692138087"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-5 h-12 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
+                >
+                  <Phone className="h-4 w-4" /> Call instead
+                </a>
+              </div>
+              <p className="text-[11px] text-muted-foreground text-center">
+                By booking you agree to be contacted about your project. We never share your info.
+              </p>
+            </form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const Field = ({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) => (
+  <div className="space-y-1.5">
+    <Label className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{label}</Label>
+    {children}
+    {error ? <p className="text-xs text-destructive">{error}</p> : null}
+  </div>
+);

@@ -15,12 +15,14 @@ import {
   Star,
   MapPin,
   ShieldCheck,
+  CalendarCheck,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import heroPoster from "@/assets/pool-hero.jpg";
 import poolDesign from "@/assets/pool-design.jpg";
 import poolNight from "@/assets/pool-night.jpg";
 import poolService from "@/assets/pool-service.jpg";
+import { BookingDialog } from "@/components/BookingDialog";
 
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
@@ -28,6 +30,12 @@ const PHONE_HREF = "tel:+14692138087";
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const openBooking = (service?: string) => {
+    setBookingService(service);
+    setBookingOpen(true);
+  };
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -79,12 +87,13 @@ const Index = () => {
             >
               <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
             </a>
-            <a
-              href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free Pool Quote")}`}
+            <button
+              type="button"
+              onClick={() => openBooking()}
               className="inline-flex items-center gap-2 rounded-full bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
             >
-              Free Quote <ArrowRight className="h-4 w-4" />
-            </a>
+              Book Free Quote <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </header>
@@ -123,13 +132,15 @@ const Index = () => {
               across Texas.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free Pool Quote")}`}
+              <button
+                type="button"
+                onClick={() => openBooking("Custom Pool Design & Build")}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
               >
-                Get a Free 3D Design
+                <CalendarCheck className="h-4 w-4" />
+                Book Inspection / 3D Quote
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
               <a
                 href={PHONE_HREF}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 backdrop-blur px-7 py-4 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
@@ -271,12 +282,13 @@ const Index = () => {
                 subject: "Quote — Pool Automation",
               },
             ].map((s, i) => (
-              <a
+              <button
                 key={s.title}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
-                title={`Click to request a free quote for ${s.title}`}
-                aria-label={`Request a free quote for ${s.title}`}
-                className="card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                type="button"
+                onClick={() => openBooking(s.title)}
+                title={`Click to book a free quote for ${s.title}`}
+                aria-label={`Book a free quote for ${s.title}`}
+                className="text-left card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="h-12 w-12 rounded-xl bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
@@ -304,10 +316,10 @@ const Index = () => {
                 <span
                   className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
                 >
-                  Request Quote
+                  <span className="inline-flex items-center gap-2"><CalendarCheck className="h-4 w-4" /> Book Free Quote</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -570,12 +582,13 @@ const Index = () => {
                 3D rendering of your pool — no pressure, no obligation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free 3D Pool Design")}`}
+                <button
+                  type="button"
+                  onClick={() => openBooking("Custom Pool Design & Build")}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  <Mail className="h-4 w-4" /> Get my free 3D design
-                </a>
+                  <CalendarCheck className="h-4 w-4" /> Book my free 3D design
+                </button>
                 <a
                   href={PHONE_HREF}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
@@ -604,6 +617,12 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <BookingDialog
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+        defaultService={bookingService}
+      />
     </div>
   );
 };
