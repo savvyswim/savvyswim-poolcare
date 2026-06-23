@@ -611,9 +611,11 @@ const Index = () => {
             <Waves className="h-4 w-4 text-amber-brand" />
             <span>© {new Date().getFullYear()} Savage Pools · Powered by Manor Fix. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
+            <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
           </div>
         </div>
       </footer>
