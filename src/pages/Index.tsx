@@ -617,6 +617,12 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <BookingDialog
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+        defaultService={bookingService}
+      />
     </div>
   );
 };
