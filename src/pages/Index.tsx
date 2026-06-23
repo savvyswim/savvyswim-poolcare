@@ -61,8 +61,9 @@ const Index = () => {
               <Waves className="h-4.5 w-4.5 text-primary-foreground" />
               <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
             </div>
-            <span className="font-bold tracking-tight text-base">
-              SAVAGE<span className="text-amber-brand">·</span>POOLS
+            <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
+              <span>SAVAGE<span className="text-amber-brand">·</span>POOLS</span>
+              <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Powered by Manor Fix</span>
             </span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
@@ -270,9 +271,12 @@ const Index = () => {
                 subject: "Quote — Pool Automation",
               },
             ].map((s, i) => (
-              <div
+              <a
                 key={s.title}
-                className="card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col"
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
+                title={`Click to request a free quote for ${s.title}`}
+                aria-label={`Request a free quote for ${s.title}`}
+                className="card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="h-12 w-12 rounded-xl bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
@@ -297,14 +301,13 @@ const Index = () => {
                   ))}
                 </ul>
 
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
-                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground hover:bg-amber-brand hover:text-primary-foreground hover:border-amber-brand transition group/cta"
+                <span
+                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
                 >
                   Request Quote
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover/cta:translate-x-0.5" />
-                </a>
-              </div>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </a>
             ))}
           </div>
         </div>
@@ -392,7 +395,13 @@ const Index = () => {
               { img: poolNight, tag: "Spa & Fire", title: "Night Lounge", desc: "Color-changing LEDs, spillover spa, and six bronze fire bowls — built for entertaining after dark.", metric: "6 fire features · automation" },
               { img: poolService, tag: "Lap & Wellness", title: "Modern Lap", desc: "65-ft lap lane with pebble finish, salt system, and weekly white-glove service.", metric: "65 ft · salt · serviced weekly" },
             ].map((p) => (
-              <div key={p.title} className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col">
+              <a
+                key={p.title}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
+                title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
+                aria-label={`Inquire about ${p.title}`}
+                className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+              >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
                     src={p.img}
@@ -404,16 +413,19 @@ const Index = () => {
                   <div className="absolute top-4 left-4 inline-flex rounded-full glass px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
                     {p.tag}
                   </div>
+                  <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground opacity-0 group-hover:opacity-100 transition shadow-cta">
+                    Ask about this build <ArrowRight className="h-3 w-3" />
+                  </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
                   <h3 className="text-2xl font-bold mb-2 text-gradient-amber">{p.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
                   <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
                     <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
-                    <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 transition" />
+                    <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition" />
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -504,7 +516,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="font-bold">Savage Pools</div>
-                    <div className="text-xs text-muted-foreground">Design · Build · Service</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">Powered by Manor Fix</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline rounded-2xl overflow-hidden">
@@ -584,11 +596,11 @@ const Index = () => {
         <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <Waves className="h-4 w-4 text-amber-brand" />
-            <span>© {new Date().getFullYear()} Savage Pools. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Savage Pools · Powered by Manor Fix. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-5">
-            <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
+            <a href={PHONE_HREF} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
           </div>
         </div>
       </footer>
