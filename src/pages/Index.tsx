@@ -395,7 +395,13 @@ const Index = () => {
               { img: poolNight, tag: "Spa & Fire", title: "Night Lounge", desc: "Color-changing LEDs, spillover spa, and six bronze fire bowls — built for entertaining after dark.", metric: "6 fire features · automation" },
               { img: poolService, tag: "Lap & Wellness", title: "Modern Lap", desc: "65-ft lap lane with pebble finish, salt system, and weekly white-glove service.", metric: "65 ft · salt · serviced weekly" },
             ].map((p) => (
-              <div key={p.title} className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col">
+              <a
+                key={p.title}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
+                title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
+                aria-label={`Inquire about ${p.title}`}
+                className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+              >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
                     src={p.img}
@@ -407,16 +413,19 @@ const Index = () => {
                   <div className="absolute top-4 left-4 inline-flex rounded-full glass px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
                     {p.tag}
                   </div>
+                  <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground opacity-0 group-hover:opacity-100 transition shadow-cta">
+                    Ask about this build <ArrowRight className="h-3 w-3" />
+                  </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
                   <h3 className="text-2xl font-bold mb-2 text-gradient-amber">{p.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
                   <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
                     <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
-                    <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 transition" />
+                    <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition" />
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
