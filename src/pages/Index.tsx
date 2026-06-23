@@ -596,11 +596,11 @@ const Index = () => {
         <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <Waves className="h-4 w-4 text-amber-brand" />
-            <span>© {new Date().getFullYear()} Savage Pools. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Savage Pools · Powered by Manor Fix. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-5">
-            <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
+            <a href={PHONE_HREF} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
           </div>
         </div>
       </footer>
