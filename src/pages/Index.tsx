@@ -30,6 +30,12 @@ const PHONE_HREF = "tel:+14692138087";
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const openBooking = (service?: string) => {
+    setBookingService(service);
+    setBookingOpen(true);
+  };
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
