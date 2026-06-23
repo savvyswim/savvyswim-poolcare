@@ -132,13 +132,15 @@ const Index = () => {
               across Texas.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free Pool Quote")}`}
+              <button
+                type="button"
+                onClick={() => openBooking("Custom Pool Design & Build")}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
               >
-                Get a Free 3D Design
+                <CalendarCheck className="h-4 w-4" />
+                Book Inspection / 3D Quote
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
               <a
                 href={PHONE_HREF}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 backdrop-blur px-7 py-4 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
