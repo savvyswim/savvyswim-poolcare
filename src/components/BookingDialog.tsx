@@ -65,6 +65,7 @@ const schema = z.object({
   date: z.date({ required_error: "Pick a preferred date" }),
   time: z.string().min(1, "Pick a preferred time"),
   notes: z.string().max(1000).optional().or(z.literal("")),
+  smsOptIn: z.boolean().optional(),
 });
 
 export type BookingFormValues = z.infer<typeof schema>;
@@ -82,6 +83,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
   const [done, setDone] = useState<null | BookingFormValues>(null);
   const [values, setValues] = useState<Partial<BookingFormValues>>({
     service: defaultService ?? "",
+    smsOptIn: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -225,6 +227,26 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                   />
                 </Field>
               </div>
+
+              <label className="flex gap-3 items-start rounded-md border border-hairline bg-ink-soft/40 p-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!!values.smsOptIn}
+                  onChange={(e) => set("smsOptIn", e.target.checked)}
+                  className="mt-1 h-4 w-4 accent-amber-brand shrink-0"
+                />
+                <span className="text-[11px] leading-relaxed text-muted-foreground">
+                  I agree to receive SMS text messages from <strong className="text-foreground">Savage Pools</strong>.
+                  By checking this box, you consent to receive text messages from
+                  Savage Pools regarding appointment reminders, quote follow-ups,
+                  and marketing updates. Message frequency varies. Message and data
+                  rates may apply. You can reply <strong>STOP</strong> to opt-out at
+                  any time or <strong>HELP</strong> for more information. Read our{" "}
+                  <a href="/privacy" target="_blank" rel="noopener" className="underline text-amber-brand">Privacy Policy</a>{" "}
+                  and{" "}
+                  <a href="/terms" target="_blank" rel="noopener" className="underline text-amber-brand">Terms &amp; Conditions</a>.
+                </span>
+              </label>
 
               <Field label="Email" error={errors.email}>
                 <Input
