@@ -61,8 +61,9 @@ const Index = () => {
               <Waves className="h-4.5 w-4.5 text-primary-foreground" />
               <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
             </div>
-            <span className="font-bold tracking-tight text-base">
-              SAVAGE<span className="text-amber-brand">·</span>POOLS
+            <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
+              <span>SAVAGE<span className="text-amber-brand">·</span>POOLS</span>
+              <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Powered by Manor Fix</span>
             </span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
