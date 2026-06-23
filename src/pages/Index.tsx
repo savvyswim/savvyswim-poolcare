@@ -87,12 +87,13 @@ const Index = () => {
             >
               <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
             </a>
-            <a
-              href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free Pool Quote")}`}
+            <button
+              type="button"
+              onClick={() => openBooking()}
               className="inline-flex items-center gap-2 rounded-full bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
             >
-              Free Quote <ArrowRight className="h-4 w-4" />
-            </a>
+              Book Free Quote <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </header>
