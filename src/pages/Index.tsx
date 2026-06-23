@@ -15,12 +15,14 @@ import {
   Star,
   MapPin,
   ShieldCheck,
+  CalendarCheck,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import heroPoster from "@/assets/pool-hero.jpg";
 import poolDesign from "@/assets/pool-design.jpg";
 import poolNight from "@/assets/pool-night.jpg";
 import poolService from "@/assets/pool-service.jpg";
+import { BookingDialog } from "@/components/BookingDialog";
 
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
