@@ -114,11 +114,18 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
 
     const data = parsed.data;
     try {
+      const consentTimestamp = new Date().toISOString();
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       existing.push({
         ...data,
+        smsOptIn: !!data.smsOptIn,
+        smsConsentAt: data.smsOptIn ? consentTimestamp : null,
+        smsConsentText: data.smsOptIn
+          ? "I agree to receive SMS text messages from Savage Pools regarding appointment reminders, quote follow-ups, and marketing updates. Msg & data rates may apply. Reply STOP to opt-out, HELP for help."
+          : null,
+        consentSourceUrl: typeof window !== "undefined" ? window.location.href : null,
         date: format(data.date, "yyyy-MM-dd"),
-        createdAt: new Date().toISOString(),
+        createdAt: consentTimestamp,
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
     } catch {
@@ -127,7 +134,16 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
 
     // Build a mailto so the request reaches Savage Pools immediately, even
     // without a backend. This opens the user's mail client pre-filled.
+    const consentStamp = new Date().toISOString();
     const subject = `Booking — ${data.service} — ${data.name}`;
+    const smsBlock = data.smsOptIn
+      ? [
+          `SMS Consent:  GRANTED`,
+          `Consent at:   ${consentStamp}`,
+          `Source URL:   ${typeof window !== "undefined" ? window.location.href : "savagepools.us"}`,
+          `Consent text: "I agree to receive SMS text messages from Savage Pools regarding appointment reminders, quote follow-ups, and marketing updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt-out, HELP for help."`,
+        ].join("\n")
+      : `SMS Consent:  NOT GRANTED — do NOT send SMS to this number.`;
     const body = [
       `New booking request from savagepools.us`,
       ``,
@@ -139,6 +155,8 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       `Service:  ${data.service}`,
       `Date:     ${format(data.date, "EEEE, MMMM d, yyyy")}`,
       `Time:     ${data.time}`,
+      ``,
+      smsBlock,
       ``,
       `Notes:`,
       data.notes || "(none)",
