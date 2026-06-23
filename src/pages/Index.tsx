@@ -516,7 +516,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="font-bold">Savage Pools</div>
-                    <div className="text-xs text-muted-foreground">Design · Build · Service</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">Powered by Manor Fix</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline rounded-2xl overflow-hidden">
