@@ -582,12 +582,13 @@ const Index = () => {
                 3D rendering of your pool — no pressure, no obligation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free 3D Pool Design")}`}
+                <button
+                  type="button"
+                  onClick={() => openBooking("Custom Pool Design & Build")}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  <Mail className="h-4 w-4" /> Get my free 3D design
-                </a>
+                  <CalendarCheck className="h-4 w-4" /> Book my free 3D design
+                </button>
                 <a
                   href={PHONE_HREF}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
