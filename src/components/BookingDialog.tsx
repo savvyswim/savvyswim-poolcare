@@ -195,6 +195,13 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
               </span>
               . A specialist will confirm by phone or email within one business day.
             </DialogDescription>
+            <p className="mt-3 text-xs text-muted-foreground">
+              SMS updates: {done.smsOptIn ? (
+                <span className="text-amber-brand font-semibold">Opted in ✓</span>
+              ) : (
+                <span>Not opted in — we'll only contact you by phone or email.</span>
+              )}
+            </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
               <a
                 href="tel:+14692138087"
