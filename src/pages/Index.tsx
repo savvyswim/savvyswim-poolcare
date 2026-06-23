@@ -282,12 +282,13 @@ const Index = () => {
                 subject: "Quote — Pool Automation",
               },
             ].map((s, i) => (
-              <a
+              <button
                 key={s.title}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(s.subject)}`}
-                title={`Click to request a free quote for ${s.title}`}
-                aria-label={`Request a free quote for ${s.title}`}
-                className="card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                type="button"
+                onClick={() => openBooking(s.title)}
+                title={`Click to book a free quote for ${s.title}`}
+                aria-label={`Book a free quote for ${s.title}`}
+                className="text-left card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="h-12 w-12 rounded-xl bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
@@ -315,10 +316,10 @@ const Index = () => {
                 <span
                   className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
                 >
-                  Request Quote
+                  <span className="inline-flex items-center gap-2"><CalendarCheck className="h-4 w-4" /> Book Free Quote</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
-              </a>
+              </button>
             ))}
           </div>
         </div>
