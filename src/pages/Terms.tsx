@@ -4,64 +4,178 @@ const Terms = () => (
       <a href="/" className="text-amber-brand text-sm">&larr; Back to Savage Pools</a>
       <h1 className="text-3xl font-bold mt-4 mb-2">Terms and Conditions</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
-      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC</p>
-      <p className="text-sm text-muted-foreground mb-8">
+      <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
+      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savage Pools</p>
+      <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
         <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a>
+      </p>
+      <p className="text-sm text-muted-foreground mb-8">
+        <strong>Contact:</strong>{" "}
+        <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a>{" "}·{" "}
+        <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a>
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
       <p className="mb-4">
         By accessing our website (https://savagesupplies.us) or utilizing the services provided by
-        Manor Fix LLC, you agree to be bound by these Terms and Conditions. If you do not agree
-        with any part of these terms, you must not use our website or services.
+        Manor Fix LLC ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
+        Terms and Conditions ("Terms") and our{" "}
+        <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a>. If you do not
+        agree with any part of these Terms, you must not use our website or services.
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">2. Services Provided</h2>
       <p className="mb-4">
-        Manor Fix LLC provides repair, maintenance, and contracting services. All estimates
-        provided are subject to change based on the physical scope of work determined upon on-site
-        inspection.
+        Manor Fix LLC provides repair, maintenance, contracting, and pool design/build services.
+        All estimates provided are non-binding and subject to change based on the physical scope of
+        work determined upon on-site inspection, market pricing of materials, and site conditions.
       </p>
 
-      <h2 className="text-xl font-semibold mt-8 mb-2">3. SMS Text Messaging Terms</h2>
+      <h2 className="text-xl font-semibold mt-8 mb-2">3. SMS Text Messaging Terms (10DLC Program Disclosure)</h2>
       <p className="mb-4">
-        By opting into our SMS communications via our website form or physical intake forms, you
-        agree to the following terms regarding text messaging:
+        By opting into our SMS communications via our website form, in-person paper intake form, or
+        by texting us first, you agree to the following terms regarding text messaging. This
+        section is also our messaging program disclosure for carrier and 10DLC compliance.
       </p>
+
       <ul className="space-y-3 mb-4 list-disc pl-6">
         <li>
-          <strong>Use Case:</strong> Text messaging will be used to send service estimates,
-          appointment reminders, maintenance updates, and customer support.
+          <strong>Program Name / Brand:</strong> Savage Pools (operated by Manor Fix LLC).
+        </li>
+        <li>
+          <strong>Program Description / Use Case:</strong> Customer Care and Account Notifications.
+          Text messages are used to send service estimates, appointment confirmations and reminders,
+          on-the-way notifications, maintenance updates, quote follow-ups, and customer support
+          replies related to services you requested.
+        </li>
+        <li>
+          <strong>How to Opt In:</strong> You opt in by (a) checking the SMS consent box on our
+          website booking/contact form, (b) signing a paper intake form that includes the SMS
+          consent disclosure, or (c) texting us first from your mobile device. Opt-in is never a
+          condition of purchase. Consent is collected from one user at a time and is not
+          transferable.
         </li>
         <li>
           <strong>Message Frequency:</strong> Message frequency varies based on your requested
-          services and appointments.
+          services and appointments. You will typically receive messages only in response to your
+          activity (appointments, quotes, service updates).
         </li>
         <li>
           <strong>Costs:</strong> Standard message and data rates may apply depending on your
-          cellular provider plan.
+          cellular provider plan. Manor Fix LLC does not charge for the messages themselves.
         </li>
         <li>
-          <strong>Opt-Out:</strong> You may opt-out of receiving text messages at any time by
-          replying "STOP", "CANCEL", "UNSUBSCRIBE", or "QUIT" to any message you receive from us.
+          <strong>Opt-Out (STOP):</strong> You may opt out of receiving text messages at any time
+          by replying <strong>STOP</strong>, CANCEL, UNSUBSCRIBE, END, or QUIT to any message you
+          receive from us. After opting out, you will receive one final confirmation message and no
+          further messages, unless you opt back in.
         </li>
         <li>
-          <strong>Support:</strong> If you need assistance, reply "HELP" to any message, or contact
-          us through our website.
+          <strong>Help (HELP):</strong> If you need assistance, reply <strong>HELP</strong> to any
+          message and you will receive a message with our contact information, or contact us at{" "}
+          <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a> or{" "}
+          <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a>.
         </li>
         <li>
-          <strong>Carrier Liability:</strong> Mobile carriers are not liable for delayed or
-          undelivered messages.
+          <strong>Sample Message:</strong> "Savage Pools: Hi Jane, this is a reminder of your pool
+          inspection tomorrow at 10:00 AM. Reply STOP to opt out, HELP for help. Msg &amp; data
+          rates may apply."
+        </li>
+        <li>
+          <strong>Supported Carriers:</strong> Messaging is supported on all major U.S. carriers,
+          including AT&amp;T, T-Mobile, Verizon Wireless, Sprint, Boost, U.S. Cellular, MetroPCS,
+          and others. Carriers are not liable for delayed or undelivered messages.
+        </li>
+        <li>
+          <strong>No Sharing:</strong> We will not share, sell, or trade your mobile telephone
+          number or SMS consent data with any third parties or affiliates for marketing or
+          promotional purposes. See our{" "}
+          <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a> for details.
+        </li>
+        <li>
+          <strong>Eligibility:</strong> The SMS program is available to U.S. residents who are at
+          least 18 years of age (or the age of majority in their jurisdiction).
         </li>
       </ul>
 
-      <h2 className="text-xl font-semibold mt-8 mb-2">4. Limitation of Liability</h2>
+      <h2 className="text-xl font-semibold mt-8 mb-2">4. Estimates, Payment &amp; Cancellation</h2>
       <p className="mb-4">
-        In no event shall Manor Fix LLC, its directors, employees, or agents be liable to you or
-        any third party for any direct, indirect, consequential, exemplary, incidental, special, or
-        punitive damages arising from your use of the site or our services.
+        All estimates are valid for the period stated on the estimate. Payment terms, deposits, and
+        cancellation policies for any scheduled work will be set forth in the written estimate or
+        service agreement provided to you. You agree to pay all amounts due for work performed
+        according to the agreed terms.
       </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">5. User Conduct</h2>
+      <p className="mb-4">
+        You agree not to misuse our website or services, including by attempting unauthorized
+        access, transmitting malicious code, scraping, or using our messaging program to harass,
+        spam, or send unlawful content. We may suspend or terminate access for any user who
+        violates these Terms.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">6. Intellectual Property</h2>
+      <p className="mb-4">
+        All content on the website — including text, graphics, logos, images, and software — is the
+        property of Manor Fix LLC or its licensors and is protected by U.S. and international
+        intellectual-property laws. You may not reproduce, distribute, or create derivative works
+        without our prior written consent.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">7. Disclaimer of Warranties</h2>
+      <p className="mb-4">
+        Our website and the services offered through it are provided on an "as is" and "as
+        available" basis without warranties of any kind, either express or implied, including
+        implied warranties of merchantability, fitness for a particular purpose, and
+        non-infringement, except where prohibited by law.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">8. Limitation of Liability</h2>
+      <p className="mb-4">
+        In no event shall Manor Fix LLC, its directors, employees, contractors, or agents be liable
+        to you or any third party for any direct, indirect, consequential, exemplary, incidental,
+        special, or punitive damages — including lost profits, lost data, or business interruption —
+        arising from your use of the site, the SMS program, or our services, even if we have been
+        advised of the possibility of such damages. To the maximum extent permitted by law, our
+        total liability for any claim shall not exceed the amount you paid Manor Fix LLC for the
+        services giving rise to the claim.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">9. Indemnification</h2>
+      <p className="mb-4">
+        You agree to defend, indemnify, and hold harmless Manor Fix LLC and its officers,
+        directors, employees, and agents from any claims, liabilities, damages, losses, and
+        expenses (including reasonable attorneys' fees) arising out of or related to your violation
+        of these Terms or misuse of our services.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">10. Governing Law &amp; Dispute Resolution</h2>
+      <p className="mb-4">
+        These Terms are governed by the laws of the State of Texas, without regard to its conflict
+        of laws principles. Any disputes arising out of or related to these Terms or our services
+        shall be resolved in the state or federal courts located in Texas, and you consent to the
+        personal jurisdiction of those courts.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">11. Changes to These Terms</h2>
+      <p className="mb-4">
+        We may update these Terms from time to time. When we do, we will revise the "Last Updated"
+        date above. Continued use of our website or services after changes take effect constitutes
+        acceptance of the revised Terms.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">12. Severability</h2>
+      <p className="mb-4">
+        If any provision of these Terms is found to be unenforceable, the remaining provisions
+        shall remain in full force and effect.
+      </p>
+
+      <h2 className="text-xl font-semibold mt-8 mb-2">13. Contact Us</h2>
+      <p className="mb-1"><strong>Manor Fix LLC (dba Savage Pools)</strong></p>
+      <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
+      <p className="mb-1">Phone: <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a></p>
+      <p className="mb-1">Website: <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a></p>
     </article>
   </main>
 );
