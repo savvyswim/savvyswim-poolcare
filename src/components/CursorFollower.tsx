@@ -118,8 +118,8 @@ export const CursorFollower = () => {
           filter: "drop-shadow(0 0 8px hsl(var(--amber-brand, 38 92% 55%) / 0.55))",
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
-          <path d="M12 2.5c3.5 4 6 7 6 10.5a6 6 0 0 1-12 0c0-3.5 2.5-6.5 6-10.5z" />
+        <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" />
         </svg>
       </div>
     </div>
