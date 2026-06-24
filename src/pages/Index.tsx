@@ -23,6 +23,8 @@ import poolDesign from "@/assets/pool-design.jpg";
 import poolNight from "@/assets/pool-night.jpg";
 import poolService from "@/assets/pool-service.jpg";
 import { BookingDialog } from "@/components/BookingDialog";
+import { CursorFollower } from "@/components/CursorFollower";
+import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
