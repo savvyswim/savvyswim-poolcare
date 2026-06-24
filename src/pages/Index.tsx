@@ -103,15 +103,9 @@ const Index = () => {
       {/* HERO */}
       <section className="relative min-h-[100svh] flex items-end pt-24 pb-16 sm:pb-24 overflow-hidden">
         <div ref={heroRef} className="absolute inset-0 will-change-transform">
-          <video
-            src={heroVideo.url}
-            poster={heroPoster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 h-[120%] w-full object-cover"
-          />
+          <div className="absolute inset-0 h-[120%] w-full">
+            <SmoothLoopVideo src={heroVideo.url} poster={heroPoster} fade={1.4} />
+          </div>
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
         <div className="absolute inset-0 water-caustics pointer-events-none mix-blend-screen" />
