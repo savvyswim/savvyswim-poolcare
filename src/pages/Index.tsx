@@ -613,6 +613,7 @@ const Index = () => {
             <a href={PHONE_HREF} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
             <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
             <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
+            <a href="/auth" className="hover:text-foreground transition">Admin</a>
           </div>
         </div>
       </footer>
