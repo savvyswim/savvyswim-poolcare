@@ -32,9 +32,9 @@ export default function AdminDesigns() {
       nav("/auth", { replace: true });
       return;
     }
-    // Attempt to claim admin if none exists yet (silently)
+    // First-signup admin bootstrap now happens via a database trigger; just refresh role.
     if (!isAdmin) {
-      supabase.rpc("claim_admin_if_unowned").then(() => refreshRole());
+      refreshRole();
     }
   }, [user, isAdmin, loading, nav, refreshRole]);
 
