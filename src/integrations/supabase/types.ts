@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       pool_designs: {
         Row: {
+          category: Database["public"]["Enums"]["pool_category"]
           created_at: string
           description: string
           display_order: number
@@ -24,11 +25,14 @@ export type Database = {
           features: string[]
           id: string
           image_path: string
+          media_type: Database["public"]["Enums"]["pool_media_type"]
+          stage_order: number | null
           style: string
           title: string
           updated_at: string
         }
         Insert: {
+          category?: Database["public"]["Enums"]["pool_category"]
           created_at?: string
           description: string
           display_order?: number
@@ -37,11 +41,14 @@ export type Database = {
           features?: string[]
           id?: string
           image_path: string
+          media_type?: Database["public"]["Enums"]["pool_media_type"]
+          stage_order?: number | null
           style: string
           title: string
           updated_at?: string
         }
         Update: {
+          category?: Database["public"]["Enums"]["pool_category"]
           created_at?: string
           description?: string
           display_order?: number
@@ -50,6 +57,8 @@ export type Database = {
           features?: string[]
           id?: string
           image_path?: string
+          media_type?: Database["public"]["Enums"]["pool_media_type"]
+          stage_order?: number | null
           style?: string
           title?: string
           updated_at?: string
@@ -86,6 +95,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      pool_category: "design" | "plan" | "construction"
+      pool_media_type: "image" | "video"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -214,6 +225,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      pool_category: ["design", "plan", "construction"],
+      pool_media_type: ["image", "video"],
     },
   },
 } as const
