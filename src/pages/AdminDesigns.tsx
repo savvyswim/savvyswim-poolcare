@@ -181,14 +181,31 @@ export default function AdminDesigns() {
               <MessageSquare className="h-3.5 w-3.5 mr-1.5" /> Text
             </Button>
             {url && (
-              <a
-                href={url}
-                download={d.image_path.split("/").pop()}
+              <button
+                type="button"
+                onClick={async () => {
+                  const filename = d.image_path.split("/").pop() || "download";
+                  try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("fetch failed");
+                    const blob = await res.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(blobUrl);
+                  } catch {
+                    window.open(url, "_blank");
+                  }
+                }}
                 className="inline-flex items-center text-xs px-3 py-1.5 rounded-md border border-hairline hover:bg-muted"
               >
                 <Download className="h-3.5 w-3.5 mr-1.5" />
                 {d.media_type === "video" ? "Video" : "Image"}
-              </a>
+              </button>
             )}
           </div>
         </div>
