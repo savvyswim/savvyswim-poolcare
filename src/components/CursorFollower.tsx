@@ -80,12 +80,11 @@ export const CursorFollower = () => {
           width: 120,
           height: 120,
           borderRadius: "9999px",
-          border: "1px solid hsl(var(--foreground) / 0.25)",
+          border: "1px solid hsl(199 89% 60% / 0.35)",
           position: "fixed",
           left: 0,
           top: 0,
           transition: "width 400ms cubic-bezier(.22,1,.36,1), height 400ms cubic-bezier(.22,1,.36,1), border-color 300ms",
-          mixBlendMode: "difference",
         }}
         className={hovering ? "!w-[160px] !h-[160px]" : ""}
       />
@@ -95,11 +94,10 @@ export const CursorFollower = () => {
           width: 56,
           height: 56,
           borderRadius: "9999px",
-          border: "1px solid hsl(var(--foreground) / 0.55)",
+          border: "1px solid hsl(199 89% 65% / 0.7)",
           position: "fixed",
           left: 0,
           top: 0,
-          backdropFilter: "blur(2px)",
           transition: "width 300ms cubic-bezier(.22,1,.36,1), height 300ms cubic-bezier(.22,1,.36,1)",
         }}
         className={hovering ? "!w-[78px] !h-[78px]" : ""}
@@ -114,8 +112,8 @@ export const CursorFollower = () => {
           height: 18,
           transform: `translate(-50%, -50%) scale(${scale})`,
           transition: "transform 250ms cubic-bezier(.22,1,.36,1)",
-          color: "hsl(var(--amber-brand, 38 92% 55%))",
-          filter: "drop-shadow(0 0 8px hsl(var(--amber-brand, 38 92% 55%) / 0.55))",
+          color: "hsl(199 89% 55%)",
+          filter: "drop-shadow(0 0 10px hsl(199 89% 55% / 0.7))",
         }}
       >
         <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
