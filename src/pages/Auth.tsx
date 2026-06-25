@@ -36,8 +36,7 @@ export default function Auth() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        // Try to claim admin if no admin exists yet (bootstrap for first owner)
-        await supabase.rpc("claim_admin_if_unowned");
+        // First-signup admin bootstrap happens automatically via database trigger.
         nav("/admin/designs", { replace: true });
       }
     } catch (err: any) {
