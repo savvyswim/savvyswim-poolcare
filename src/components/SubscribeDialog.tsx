@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import {
   Dialog,
   DialogContent,
@@ -40,7 +38,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
   const [veg, setVeg] = useState<string>("");
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", notes: "" });
   const [submitting, setSubmitting] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -51,31 +49,33 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
       .order("size_rank")
       .order("vegetation_rank")
       .then(({ data, error }) => {
-        if (error) return toast.error("Could not load pricing");
+        if (error) return toast.error("Could not load service options");
         const list = (data ?? []) as PricingRow[];
         setRows(list);
-        if (list.length) {
-          setSize((s) => s || list[0].pool_size);
-        }
+        if (list.length) setSize((s) => s || list[0].pool_size);
       });
   }, [open]);
 
   useEffect(() => {
     if (!open) {
-      setClientSecret(null);
+      setDone(false);
       setSubmitting(false);
     }
   }, [open]);
 
   const sizes = useMemo(
-    () => [...new Map(rows.map((r) => [r.pool_size, r.size_rank])).entries()]
-      .sort((a, b) => a[1] - b[1])
-      .map(([name]) => name),
+    () =>
+      [...new Map(rows.map((r) => [r.pool_size, r.size_rank])).entries()]
+        .sort((a, b) => a[1] - b[1])
+        .map(([name]) => name),
     [rows],
   );
 
   const vegOptions = useMemo(
-    () => rows.filter((r) => r.pool_size === size).sort((a, b) => a.vegetation_rank - b.vegetation_rank),
+    () =>
+      rows
+        .filter((r) => r.pool_size === size)
+        .sort((a, b) => a.vegetation_rank - b.vegetation_rank),
     [rows, size],
   );
 
@@ -87,61 +87,59 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
 
   const selected = vegOptions.find((v) => v.vegetation_level === veg) ?? null;
 
-  const startCheckout = async () => {
-    if (!selected?.price_key) return toast.error("Pick your pool size and vegetation level");
+  const submitRequest = async () => {
     if (form.name.trim().length < 2) return toast.error("Please enter your name");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
       return toast.error("Please enter a valid email");
+    if (form.phone.trim().length < 7) return toast.error("Please enter a phone number");
 
     setSubmitting(true);
-    const { data, error } = await supabase.functions.invoke("create-subscription-checkout", {
-      body: {
-        priceKey: selected.price_key,
-        customerName: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        address: form.address.trim(),
-        notes: form.notes.trim(),
-        environment: getStripeEnvironment(),
-        returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}&plan=service`,
-      },
+    const serviceLabel = [
+      planName ?? "Monthly pool service",
+      selected?.plan_name ?? size,
+      selected?.vegetation_level,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+
+    const { error } = await supabase.from("bookings").insert({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim() || "Not provided",
+      service: serviceLabel,
+      preferred_date: new Date().toISOString().slice(0, 10),
+      preferred_time: "Anytime",
+      notes: form.notes.trim() || null,
+      consent_source_url: window.location.href,
     });
     setSubmitting(false);
 
-    if (error || !data?.clientSecret) {
-      return toast.error(error?.message || data?.error || "Could not start checkout");
-    }
-    setClientSecret(data.clientSecret);
+    if (error) return toast.error(error.message || "Could not send your request");
+    setDone(true);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto">
-        {clientSecret ? (
-          <>
-            <DialogHeader>
-              <DialogTitle>Complete your monthly service</DialogTitle>
-              <DialogDescription>
-                {selected?.plan_name ?? `${selected?.pool_size} pool`} ·{" "}
-                {selected?.vegetation_level} — ${selected?.price}/month
-              </DialogDescription>
-            </DialogHeader>
-            <div id="subscription-checkout">
-              <EmbeddedCheckoutProvider
-                stripe={getStripe()}
-                options={{ fetchClientSecret: async () => clientSecret }}
-              >
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
-            </div>
-          </>
+        {done ? (
+          <div className="py-6 text-center space-y-3">
+            <CheckCircle2 className="h-10 w-10 text-primary mx-auto" />
+            <DialogTitle>Request received</DialogTitle>
+            <DialogDescription>
+              A Savvy Swim specialist will contact you shortly with your custom service quote.
+            </DialogDescription>
+            <Button className="mt-2" onClick={() => onOpenChange(false)}>
+              Close
+            </Button>
+          </div>
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>{planName ?? "Start monthly pool service"}</DialogTitle>
+              <DialogTitle>{planName ?? "Request your service quote"}</DialogTitle>
               <DialogDescription>
-                Your price depends on pool size and how much vegetation surrounds it. Billed
-                monthly, cancel anytime.
+                Tell us about your pool and we'll send a custom quote — pricing depends on pool size,
+                vegetation and equipment. No obligation.
               </DialogDescription>
             </DialogHeader>
 
@@ -167,7 +165,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
               </div>
 
               <div className="space-y-2">
-                <Label>Trees & vegetation around the pool</Label>
+                <Label>Trees &amp; vegetation around the pool</Label>
                 <div className="grid gap-2">
                   {vegOptions.map((v) => (
                     <button
@@ -193,7 +191,6 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
                           </span>
                         </span>
                       </span>
-                      <span className="font-semibold">${v.price}/mo</span>
                     </button>
                   ))}
                 </div>
@@ -245,17 +242,13 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-md bg-muted/40 px-4 py-3">
-                <span className="text-sm text-muted-foreground">Your monthly price</span>
-                <span className="text-xl font-semibold">
-                  {selected?.price != null ? `$${selected.price}/mo` : "—"}
-                </span>
-              </div>
-
-              <Button className="w-full" onClick={startCheckout} disabled={submitting}>
+              <Button className="w-full" onClick={submitRequest} disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Continue to payment
+                Request my custom quote
               </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                We'll confirm your quote by phone or email — no card required.
+              </p>
             </div>
           </>
         )}
