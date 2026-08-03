@@ -63,14 +63,14 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(186 95% 50% / 0.15), transparent),
-      radial-gradient(ellipse 60% 40% at 90% 100%, hsl(200 90% 40% / 0.12), transparent),
-      linear-gradient(180deg, hsl(205 55% 5%), hsl(205 60% 7%));
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(32 70% 45% / 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 100%, hsl(20 60% 35% / 0.10), transparent),
+      linear-gradient(180deg, hsl(25 18% 7%), hsl(25 20% 5%));
     background-attachment: fixed;
   }
   h1, h2, h3, h4 {
     font-family: 'Playfair Display', 'Space Grotesk', serif;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     font-weight: 700;
   }
 }
@@ -89,33 +89,33 @@
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
   .text-gradient-amber {
-    background: linear-gradient(135deg, hsl(180 100% 75%), hsl(196 95% 50%));
+    background: linear-gradient(135deg, hsl(40 90% 74%), hsl(22 78% 55%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-chrome {
-    background: linear-gradient(180deg, hsl(190 30% 99%), hsl(190 15% 65%));
+    background: linear-gradient(180deg, hsl(38 40% 98%), hsl(30 16% 72%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(48 100% 75%), hsl(32 95% 55%));
+    background: linear-gradient(135deg, hsl(44 92% 78%), hsl(30 82% 58%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .glass {
-    background: linear-gradient(180deg, hsl(186 80% 60% / 0.06), hsl(186 80% 60% / 0.01));
+    background: linear-gradient(180deg, hsl(36 40% 80% / 0.07), hsl(36 40% 80% / 0.015));
     backdrop-filter: blur(14px);
-    border: 1px solid hsl(186 80% 70% / 0.12);
+    border: 1px solid hsl(36 45% 82% / 0.13);
   }
 
   .card-3d {
-    background: linear-gradient(180deg, hsl(205 45% 11%), hsl(205 50% 7%));
-    border: 1px solid hsl(200 25% 18%);
+    background: linear-gradient(180deg, hsl(26 15% 12%), hsl(25 18% 8%));
+    border: 1px solid hsl(28 14% 20%);
     position: relative;
   }
   .card-3d::before {
@@ -123,7 +123,7 @@
     position: absolute; inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(180deg, hsl(186 95% 70% / 0.18), transparent 45%);
+    background: linear-gradient(180deg, hsl(38 70% 75% / 0.16), transparent 45%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor; mask-composite: exclude;
     pointer-events: none;
@@ -131,20 +131,21 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(186 95% 50% / 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(186 95% 50% / 0.06) 1px, transparent 1px);
-    background-size: 60px 60px;
+      linear-gradient(hsl(36 40% 70% / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(36 40% 70% / 0.035) 1px, transparent 1px);
+    background-size: 90px 90px;
   }
 
-  /* Animated water caustics overlay */
+  /* Soft evening light drifting over the water */
   .water-caustics {
     background:
-      radial-gradient(ellipse 40% 30% at 30% 40%, hsl(186 95% 70% / 0.18), transparent 60%),
-      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(196 95% 60% / 0.15), transparent 65%),
-      radial-gradient(ellipse 30% 20% at 50% 20%, hsl(180 100% 75% / 0.12), transparent 60%);
-    filter: blur(20px);
-    animation: caustics 12s ease-in-out infinite;
+      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(36 80% 70% / 0.14), transparent 62%),
+      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(22 70% 55% / 0.10), transparent 66%),
+      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(44 85% 78% / 0.10), transparent 62%);
+    filter: blur(26px);
+    animation: caustics 16s ease-in-out infinite;
   }
+
   @keyframes caustics {
     0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
     33% { transform: translate(2%, -1%) scale(1.05); opacity: 0.9; }
