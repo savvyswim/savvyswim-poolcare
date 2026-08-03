@@ -182,27 +182,25 @@
   }
 
 
-  /* 3D tilt card */
+  /* subtle lift, no gimmicky 3D rotation */
   .tilt-card {
-    transform-style: preserve-3d;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .tilt-card:hover {
-    transform: perspective(1200px) rotateX(4deg) rotateY(-6deg) translateY(-6px);
-  }
+  .tilt-card:hover { transform: translateY(-3px); }
 }
 
 @layer utilities {
   /* Text sitting on top of photos/video */
-  .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 2px 24px hsl(210 60% 8% / 0.55); }
+  .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 1px 2px hsl(210 60% 8% / 0.35); }
   .hero-scrim {
-    background: linear-gradient(180deg, hsl(210 60% 10% / 0.55), hsl(210 60% 10% / 0.35) 45%, hsl(210 60% 10% / 0.72));
+    background:
+      linear-gradient(90deg, hsl(210 55% 8% / 0.78) 0%, hsl(210 55% 8% / 0.55) 42%, hsl(210 55% 8% / 0.12) 78%),
+      linear-gradient(180deg, hsl(210 55% 8% / 0.45), transparent 30%, hsl(210 55% 8% / 0.45));
   }
   .btn-quote {
-    background: var(--gradient-gold);
+    background: hsl(var(--accent));
     color: hsl(var(--accent-foreground));
-    box-shadow: 0 10px 24px -12px hsl(355 78% 45% / 0.6);
   }
-  .btn-quote:hover { filter: brightness(1.07); }
-  .topbar { background: linear-gradient(90deg, hsl(196 92% 40%), hsl(208 84% 30%)); color: hsl(0 0% 100%); }
+  .btn-quote:hover { background: hsl(350 72% 46%); }
+  .topbar { background: hsl(208 84% 24%); color: hsl(0 0% 100%); }
 }
