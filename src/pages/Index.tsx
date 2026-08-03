@@ -349,35 +349,34 @@ const Index = () => {
                 onClick={() => openBooking(s.title)}
                 title={`Click to book a free quote for ${s.title}`}
                 aria-label={`Book a free quote for ${s.title}`}
-                className="text-left card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                className="text-left card-3d rounded-sm p-6 sm:p-7 group flex flex-col cursor-pointer"
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="h-12 w-12 rounded-xl bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
-                    <s.icon className="h-5 w-5 text-amber-brand" />
-                  </div>
-                  <span className="text-xs font-mono text-muted-foreground">0{i + 1}</span>
+                <div className="flex items-center gap-3 mb-5">
+                  <s.icon className="h-[18px] w-[18px] text-amber-brand" strokeWidth={1.75} />
+                  <span className="h-px flex-1 bg-hairline" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
+                <h3 className="text-[1.15rem] font-semibold mb-2 leading-snug">{s.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
 
                 <div className="my-5 h-px bg-hairline" />
 
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   What's included
                 </div>
                 <ul className="space-y-2 mb-6">
                   {s.includes.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
                       <span className="text-foreground/90">{item}</span>
                     </li>
                   ))}
                 </ul>
 
                 <span
-                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
+                  className="mt-auto inline-flex items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground group-hover:text-primary transition"
                 >
-                  <span className="inline-flex items-center gap-2"><CalendarCheck className="h-4 w-4" /> Book Free Quote</span>
+                  <span className="inline-flex items-center gap-2">Book Free Quote</span>
+
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </button>
