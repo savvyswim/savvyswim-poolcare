@@ -284,6 +284,48 @@ export type Database = {
         }
         Relationships: []
       }
+      service_pricing: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          pool_size: string
+          price: number | null
+          price_key: string | null
+          size_rank: number
+          sku: string
+          updated_at: string
+          vegetation_level: string
+          vegetation_rank: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pool_size: string
+          price?: number | null
+          price_key?: string | null
+          size_rank?: number
+          sku: string
+          updated_at?: string
+          vegetation_level: string
+          vegetation_rank?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pool_size?: string
+          price?: number | null
+          price_key?: string | null
+          size_rank?: number
+          sku?: string
+          updated_at?: string
+          vegetation_level?: string
+          vegetation_rank?: number
+        }
+        Relationships: []
+      }
       shop_orders: {
         Row: {
           address: string | null
