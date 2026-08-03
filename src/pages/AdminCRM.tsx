@@ -357,7 +357,9 @@ export default function AdminCRM() {
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
+            <TabsTrigger value="plans">Service plans</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="pipeline" className="space-y-4">
             <Input
