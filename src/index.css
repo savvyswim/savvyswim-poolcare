@@ -4,54 +4,56 @@
 
 @layer base {
   :root {
-    /* Savvy Swim — warm dusk: sun-warmed stone, evening water, candlelight */
-    --background: 25 18% 7%;
-    --foreground: 34 30% 95%;
+    /* Savvy Swim — bright Texas daylight: white, pool blue, sunset red */
+    --background: 0 0% 100%;
+    --foreground: 210 30% 14%;
 
-    --card: 25 16% 10%;
-    --card-foreground: 34 30% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 30% 14%;
 
-    --popover: 25 16% 10%;
-    --popover-foreground: 34 30% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 30% 14%;
 
-    --primary: 196 84% 55%;
-    --primary-foreground: 205 60% 8%;
+    --primary: 199 89% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 14% 15%;
-    --secondary-foreground: 34 30% 95%;
+    --secondary: 205 40% 96%;
+    --secondary-foreground: 210 30% 14%;
 
-    --muted: 25 12% 14%;
-    --muted-foreground: 32 14% 70%;
+    --muted: 205 30% 96%;
+    --muted-foreground: 210 12% 42%;
 
-    --accent: 196 84% 55%;
-    --accent-foreground: 205 60% 8%;
+    --accent: 355 78% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 55%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 28 14% 20%;
-    --input: 28 14% 20%;
-    --ring: 196 84% 55%;
+    --border: 205 25% 88%;
+    --input: 205 25% 88%;
+    --ring: 199 89% 42%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Brand tokens */
-    --ink: 25 20% 5%;
-    --ink-soft: 25 16% 11%;
-    --amber: 194 82% 58%;       /* clear pool blue */
-    --amber-deep: 205 78% 42%;  /* deep water */
-    --gold: 40 72% 66%;         /* soft candlelight */
-    --chrome: 34 22% 92%;
-    --hairline: 28 14% 20%;
+    --ink: 205 45% 97%;
+    --ink-soft: 205 40% 94%;
+    --amber: 199 89% 42%;        /* pool blue (primary brand) */
+    --amber-deep: 208 84% 30%;   /* deep water navy */
+    --gold: 355 78% 55%;         /* CTA red */
+    --chrome: 210 30% 14%;
+    --hairline: 205 25% 88%;
 
-    --gradient-amber: linear-gradient(135deg, hsl(188 88% 62%), hsl(206 80% 44%));
-    --gradient-gold: linear-gradient(135deg, hsl(42 85% 72%), hsl(28 76% 55%));
-    --gradient-ink: linear-gradient(180deg, hsl(25 16% 10%), hsl(25 20% 5%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(194 82% 58% / 0.18), transparent 62%);
-    --gradient-water: linear-gradient(180deg, hsl(192 70% 60% / 0), hsl(196 65% 50% / 0.18) 40%, hsl(206 60% 22% / 0.4));
-    --shadow-cta: 0 12px 34px -14px hsl(198 85% 50% / 0.5), inset 0 1px 0 hsl(40 60% 90% / 0.16);
-    --shadow-card: 0 1px 0 hsl(40 40% 90% / 0.04) inset, 0 26px 55px -32px hsl(20 40% 2% / 0.85);
-    --shadow-3d: 0 18px 50px -24px hsl(200 75% 45% / 0.28), 0 40px 80px -44px hsl(20 40% 2% / 0.9);
+    --gradient-amber: linear-gradient(135deg, hsl(196 92% 48%), hsl(208 84% 32%));
+    --gradient-gold: linear-gradient(135deg, hsl(355 82% 58%), hsl(350 72% 44%));
+    --gradient-ink: linear-gradient(180deg, hsl(0 0% 100%), hsl(205 40% 96%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(199 89% 50% / 0.12), transparent 62%);
+    --gradient-water: linear-gradient(180deg, hsl(196 90% 60% / 0), hsl(199 85% 50% / 0.18) 40%, hsl(208 70% 30% / 0.35));
+    --shadow-cta: 0 10px 26px -12px hsl(199 89% 40% / 0.55);
+    --shadow-card: 0 1px 0 hsl(210 20% 100% / 0.6) inset, 0 18px 40px -28px hsl(210 40% 20% / 0.35);
+    --shadow-3d: 0 10px 30px -18px hsl(210 40% 25% / 0.25), 0 30px 60px -40px hsl(210 40% 20% / 0.3);
+
+    --on-media: 0 0% 100%;
   }
 }
 
@@ -62,15 +64,11 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(196 70% 45% / 0.14), transparent),
-      radial-gradient(ellipse 60% 40% at 90% 100%, hsl(30 55% 35% / 0.09), transparent),
-      linear-gradient(180deg, hsl(25 18% 7%), hsl(25 20% 5%));
-    background-attachment: fixed;
+    background-color: hsl(var(--background));
   }
   h1, h2, h3, h4 {
-    font-family: 'Playfair Display', 'Space Grotesk', serif;
-    letter-spacing: -0.015em;
+    font-family: 'Poppins', 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
     font-weight: 700;
   }
 }
@@ -89,33 +87,34 @@
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
   .text-gradient-amber {
-    background: linear-gradient(135deg, hsl(188 90% 72%), hsl(206 82% 52%));
+    background: linear-gradient(135deg, hsl(196 92% 46%), hsl(208 84% 30%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-chrome {
-    background: linear-gradient(180deg, hsl(38 40% 98%), hsl(30 16% 72%));
+    background: linear-gradient(180deg, hsl(210 32% 18%), hsl(210 22% 34%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(44 92% 78%), hsl(30 82% 58%));
+    background: linear-gradient(135deg, hsl(355 82% 58%), hsl(350 72% 44%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .glass {
-    background: linear-gradient(180deg, hsl(36 40% 80% / 0.07), hsl(36 40% 80% / 0.015));
+    background: hsl(0 0% 100% / 0.82);
     backdrop-filter: blur(14px);
-    border: 1px solid hsl(36 45% 82% / 0.13);
+    border: 1px solid hsl(205 30% 85% / 0.9);
   }
 
   .card-3d {
-    background: linear-gradient(180deg, hsl(26 15% 12%), hsl(25 18% 8%));
-    border: 1px solid hsl(28 14% 20%);
+    background: linear-gradient(180deg, hsl(0 0% 100%), hsl(205 40% 98%));
+    border: 1px solid hsl(205 25% 88%);
+    box-shadow: var(--shadow-card);
     position: relative;
   }
   .card-3d::before {
@@ -123,7 +122,7 @@
     position: absolute; inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(180deg, hsl(38 70% 75% / 0.16), transparent 45%);
+    background: linear-gradient(180deg, hsl(199 89% 55% / 0.18), transparent 45%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor; mask-composite: exclude;
     pointer-events: none;
@@ -131,17 +130,17 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(36 40% 70% / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(36 40% 70% / 0.035) 1px, transparent 1px);
+      linear-gradient(hsl(208 40% 40% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(208 40% 40% / 0.05) 1px, transparent 1px);
     background-size: 90px 90px;
   }
 
   /* Soft evening light drifting over the water */
   .water-caustics {
     background:
-      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(192 85% 68% / 0.16), transparent 62%),
-      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(204 78% 55% / 0.12), transparent 66%),
-      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(184 88% 76% / 0.11), transparent 62%);
+      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(192 90% 62% / 0.22), transparent 62%),
+      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(204 85% 50% / 0.16), transparent 66%),
+      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(186 90% 70% / 0.14), transparent 62%);
     filter: blur(26px);
     animation: caustics 16s ease-in-out infinite;
   }
@@ -202,4 +201,19 @@
   .tilt-card:hover {
     transform: perspective(1200px) rotateX(4deg) rotateY(-6deg) translateY(-6px);
   }
+}
+
+@layer utilities {
+  /* Text sitting on top of photos/video */
+  .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 2px 24px hsl(210 60% 8% / 0.55); }
+  .hero-scrim {
+    background: linear-gradient(180deg, hsl(210 60% 10% / 0.55), hsl(210 60% 10% / 0.35) 45%, hsl(210 60% 10% / 0.72));
+  }
+  .btn-quote {
+    background: var(--gradient-gold);
+    color: hsl(var(--accent-foreground));
+    box-shadow: 0 10px 24px -12px hsl(355 78% 45% / 0.6);
+  }
+  .btn-quote:hover { filter: brightness(1.07); }
+  .topbar { background: linear-gradient(90deg, hsl(196 92% 40%), hsl(208 84% 30%)); color: hsl(0 0% 100%); }
 }
