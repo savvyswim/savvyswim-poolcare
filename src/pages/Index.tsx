@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Mail,
   Phone,
@@ -17,6 +17,8 @@ import {
   ShieldCheck,
   CalendarCheck,
   ShoppingCart,
+  Search,
+  X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import heroPoster from "@/assets/pool-hero.jpg";
