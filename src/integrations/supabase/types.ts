@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          address: string
+          consent_source_url: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          service: string
+          sms_consent_at: string | null
+          sms_consent_text: string | null
+          sms_opt_in: boolean
+          status: string
+        }
+        Insert: {
+          address: string
+          consent_source_url?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          service: string
+          sms_consent_at?: string | null
+          sms_consent_text?: string | null
+          sms_opt_in?: boolean
+          status?: string
+        }
+        Update: {
+          address?: string
+          consent_source_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          preferred_date?: string
+          preferred_time?: string
+          service?: string
+          sms_consent_at?: string | null
+          sms_consent_text?: string | null
+          sms_opt_in?: boolean
+          status?: string
+        }
+        Relationships: []
+      }
       cleaning_plans: {
         Row: {
           blurb: string
