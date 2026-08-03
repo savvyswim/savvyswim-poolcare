@@ -260,8 +260,8 @@ const Index = () => {
       <section id="services" className="py-24 sm:py-32 relative">
         <div className="container-tight">
           <div className="max-w-2xl mb-16">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-              / 01 — Services
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+              What we do
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
               Everything water,
@@ -414,8 +414,8 @@ const Index = () => {
               </div>
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 02 — Our process
+              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+                How it goes
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
                 See your pool in 3D
@@ -452,8 +452,8 @@ const Index = () => {
       <section id="cleaning" className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-              / 03 — Pool Cleaning Service
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+              Keeping it clean
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
               Weekly cleaning
@@ -511,8 +511,8 @@ const Index = () => {
       <section id="shop" className="py-24 sm:py-32 relative">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-              / 04 — Pool Supply Store
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+              The supply room
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
               Pro-grade gear,
@@ -570,8 +570,8 @@ const Index = () => {
         <div className="container-tight">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-xl">
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 03 — Recent builds
+              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+                Backyards we've built
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
                 Pools that turn
@@ -630,8 +630,8 @@ const Index = () => {
       <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-              / 04 — Clients
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+              Neighbors talking
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
               Loved by neighbors
@@ -686,8 +686,8 @@ const Index = () => {
         <div className="container-tight">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 05 — Why Savvy Swim
+              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+                Why folks pick us
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
                 Builders, not brokers —
