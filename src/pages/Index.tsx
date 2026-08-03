@@ -29,6 +29,7 @@ import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
+import { SubscribeDialog } from "@/components/SubscribeDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { productImage, type Product } from "@/lib/products";
 import { useCart, money } from "@/hooks/useCart";
@@ -102,6 +103,8 @@ const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [subscribePlan, setSubscribePlan] = useState<string | undefined>(undefined);
   const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
   const openOrder = (item: OrderItem) => {
@@ -163,6 +166,26 @@ const Index = () => {
         .eq("is_active", true)
         .order("display_order");
       if (active && data && data.length) setCleaningPlans(data as CleaningPlan[]);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const [pricingRows, setPricingRows] = useState<
+    { id: string; pool_size: string; vegetation_level: string; price: number | null }[]
+  >([]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("service_pricing")
+        .select("id,pool_size,vegetation_level,price,size_rank,vegetation_rank")
+        .eq("is_active", true)
+        .order("size_rank")
+        .order("vegetation_rank");
+      if (active && data) setPricingRows(data as typeof pricingRows);
     })();
     return () => {
       active = false;
@@ -584,9 +607,10 @@ const Index = () => {
                 </ul>
                 <button
                   type="button"
-                  onClick={() =>
-                    openOrder({ name: `${plan.name} cleaning plan`, sku: plan.name, type: "cleaning_plan" })
-                  }
+                  onClick={() => {
+                    setSubscribePlan(`Start ${plan.name}`);
+                    setSubscribeOpen(true);
+                  }}
                   className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
                   Start this plan <ArrowRight className="h-4 w-4" />
@@ -594,6 +618,54 @@ const Index = () => {
               </div>
             ))}
           </div>
+
+          {pricingRows.length > 0 && (
+            <div className="mt-14">
+              <h3 className="text-xl font-semibold mb-2">Monthly service pricing</h3>
+              <p className="text-muted-foreground text-sm mb-6 max-w-2xl">
+                Your rate is set by pool size and how much vegetation drops into the water. Pick
+                yours below and start service in under two minutes.
+              </p>
+              <div className="overflow-x-auto rounded-sm border border-hairline">
+                <table className="w-full text-sm">
+                  <thead className="bg-ink/60 text-left">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Pool size</th>
+                      <th className="px-4 py-3 font-semibold">Trees / vegetation</th>
+                      <th className="px-4 py-3 font-semibold text-right">Per month</th>
+                      <th className="px-4 py-3" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pricingRows.map((row) => (
+                      <tr key={row.id} className="border-t border-hairline">
+                        <td className="px-4 py-3 font-medium">{row.pool_size}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
+                        <td className="px-4 py-3 text-right font-semibold text-gradient-amber">
+                          {row.price != null ? `$${row.price}` : "Call"}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSubscribePlan("Start monthly pool service");
+                              setSubscribeOpen(true);
+                            }}
+                            className="text-xs font-semibold uppercase tracking-wider text-amber-brand hover:underline"
+                          >
+                            Select
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                Extra large pools are quoted individually — call us for pricing.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -1023,6 +1095,11 @@ const Index = () => {
         defaultService={bookingService}
       />
       <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+      <SubscribeDialog
+        open={subscribeOpen}
+        onOpenChange={setSubscribeOpen}
+        planName={subscribePlan}
+      />
 
     </div>
   );
