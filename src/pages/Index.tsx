@@ -21,10 +21,22 @@ import {
   X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
-import heroPoster from "@/assets/pool-hero.jpg";
-import poolDesign from "@/assets/pool-design.jpg";
-import poolNight from "@/assets/pool-night.jpg";
-import poolService from "@/assets/pool-service.jpg";
+import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
+import photoSunsetVilla from "@/assets/AdobeStock_116633511.jpg.asset.json";
+import photoStoneCourtyard from "@/assets/AdobeStock_191328716.jpg.asset.json";
+import photoDeskSunset from "@/assets/AdobeStock_470929864.jpg.asset.json";
+import photoResortLap from "@/assets/AdobeStock_517091924.jpg.asset.json";
+import photoFamilySplash from "@/assets/AdobeStock_528893688.jpg.asset.json";
+import photoGeometric from "@/assets/AdobeStock_548072467.jpg.asset.json";
+import photoWhiteHouse from "@/assets/AdobeStock_559236027.jpg.asset.json";
+import photoTexasFreeform from "@/assets/AdobeStock_611792597.jpg.asset.json";
+import photoKidSwim from "@/assets/AdobeStock_77771910.jpg.asset.json";
+
+const heroPoster = photoTexasFreeform.url;
+const poolDesign = photoGeometric.url;
+const poolNight = photoSunsetVilla.url;
+const poolService = photoResortLap.url;
+
 import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
@@ -520,16 +532,17 @@ const Index = () => {
               <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
-                  alt="3D rendered pool with glass mosaic tile and waterfall"
-                  width={1024}
-                  height={1024}
+                  alt="Modern rectangular pool with tanning ledge and spillover spa built by Savvy Swim"
+                  width={1920}
+                  height={1280}
                   loading="lazy"
                   className="w-full h-auto"
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-                  3D Preview
+                  Recent build
                 </div>
+
               </div>
             </div>
             <div>
@@ -583,6 +596,25 @@ const Index = () => {
               report in your inbox — no guessing, no surprise invoices.
             </p>
           </div>
+
+          <div className="mb-12 grid gap-4 sm:grid-cols-3">
+            {[
+              { src: photoFamilySplash.url, alt: "Family playing in a clean, freshly serviced backyard pool in Dallas–Fort Worth" },
+              { src: photoKidSwim.url, alt: "Child swimming in crystal clear balanced pool water" },
+              { src: photoModernPatio.url, alt: "Modern poolside patio with lounge chairs and shade sail" },
+            ].map((p) => (
+              <div key={p.src} className="overflow-hidden rounded-sm border border-hairline shadow-card">
+                <img
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+
+
 
           <div className="grid md:grid-cols-3 gap-5">
             {cleaningPlans.map((plan) => (
@@ -868,9 +900,13 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: heroPoster, tag: "Infinity Edge", title: "Hillside Sunset", desc: "60-ft vanishing edge with glass mosaic and travertine deck, overlooking Austin hill country.", metric: "60 ft · gunite · 3D designed" },
-              { img: poolNight, tag: "Spa & Fire", title: "Night Lounge", desc: "Color-changing LEDs, spillover spa, and six bronze fire bowls — built for entertaining after dark.", metric: "6 fire features · automation" },
-              { img: poolService, tag: "Lap & Wellness", title: "Modern Lap", desc: "65-ft lap lane with pebble finish, salt system, and weekly white-glove service.", metric: "65 ft · salt · serviced weekly" },
+              { img: photoTexasFreeform.url, tag: "Freeform", title: "Hill Country Freeform", desc: "Curved freeform gunite with flagstone coping, raised spa spillway and shaded oak deck.", metric: "gunite · flagstone · spa spillway" },
+              { img: photoSunsetVilla.url, tag: "Pool & Spa", title: "Sunset Villa", desc: "Travertine deck, glass fencing and a raised spa with LED lighting — built for evenings outside.", metric: "spa · LED lighting · travertine" },
+              { img: photoGeometric.url, tag: "Modern Geometric", title: "Clean Lines", desc: "Rectangular pool with tanning ledge, spillover spa and broom-finish concrete surround.", metric: "tanning ledge · spillover spa" },
+              { img: photoWhiteHouse.url, tag: "Lap & Deck Jets", title: "White Modern", desc: "Long lap pool with deck jets, limestone coping and a crisp all-white architectural backdrop.", metric: "lap lane · deck jets · limestone" },
+              { img: photoDeskSunset.url, tag: "Resort Style", title: "Desert Sunset", desc: "Free-form pool with boulder accents, paver decking and warm evening landscape lighting.", metric: "boulders · pavers · night lighting" },
+              { img: photoStoneCourtyard.url, tag: "Courtyard", title: "Stone Courtyard", desc: "Kidney-shape pool wrapped in natural flagstone with an outdoor kitchen and lounge area.", metric: "flagstone · outdoor kitchen" },
+
             ].map((p) => (
               <a
                 key={p.title}
