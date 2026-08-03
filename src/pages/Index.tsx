@@ -441,7 +441,7 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
+      <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
@@ -449,38 +449,51 @@ const Index = () => {
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
               Loved by neighbors
-              <span className="text-gradient-amber"> across Texas.</span>
+              <span className="text-gradient-amber"> across DFW.</span>
             </h2>
+            <p className="text-muted-foreground mt-4">
+              200+ five-star reviews from Dallas–Fort Worth homeowners. Hover to pause.
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { q: "The 3D design sold us instantly — what we saw on screen is exactly what we got in the backyard.", a: "Megan R.", c: "Austin, TX" },
-              { q: "Crew was on time, on budget, and the spa is unreal at night. Best decision we made for our home.", a: "Daniel K.", c: "Dallas, TX" },
-              { q: "Weekly service is flawless. I haven't touched a chemical in two years and the water looks like glass.", a: "Priya S.", c: "Houston, TX" },
-            ].map((t) => (
-              <div key={t.a} className="card-3d rounded-2xl p-7">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-brand text-amber-brand" />
-                  ))}
-                </div>
-                <p className="text-foreground/90 leading-relaxed mb-6">"{t.q}"</p>
-                <div className="flex items-center gap-3 pt-4 border-t border-hairline">
-                  <div className="h-9 w-9 rounded-full bg-amber-brand/15 grid place-items-center text-amber-brand font-bold text-sm">
-                    {t.a[0]}
+        </div>
+
+        <div className="marquee-pause marquee-fade space-y-4">
+          {[REVIEWS_ROW_1, REVIEWS_ROW_2].map((row, rowIdx) => (
+            <div
+              key={rowIdx}
+              className={`flex w-max gap-4 ${
+                rowIdx === 0 ? "animate-marquee-slow" : "animate-marquee-slow-reverse"
+              }`}
+            >
+              {[...row, ...row].map((t, i) => (
+                <div
+                  key={`${rowIdx}-${i}`}
+                  className="card-3d rounded-2xl p-6 w-[330px] sm:w-[380px] shrink-0"
+                >
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, s) => (
+                      <Star key={s} className="h-4 w-4 fill-amber-brand text-amber-brand" />
+                    ))}
                   </div>
-                  <div>
-                    <div className="text-sm font-semibold">{t.a}</div>
-                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {t.c}
+                  <p className="text-sm text-foreground/90 leading-relaxed mb-6">"{t.q}"</p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-hairline">
+                    <div className="h-9 w-9 rounded-full bg-amber-brand/15 grid place-items-center text-amber-brand font-bold text-sm">
+                      {t.a[0]}
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold">{t.a}</div>
+                      <div className="text-xs text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3 w-3" /> {t.c}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ))}
         </div>
       </section>
+
 
       {/* ABOUT */}
       <section id="about" className="py-24 sm:py-32 relative">
