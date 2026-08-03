@@ -16,6 +16,7 @@ import {
   MapPin,
   ShieldCheck,
   CalendarCheck,
+  ShoppingCart,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import heroPoster from "@/assets/pool-hero.jpg";
@@ -27,10 +28,8 @@ import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { supabase } from "@/integrations/supabase/client";
-import shopRobot from "@/assets/shop-robot-cleaner.jpg";
-import shopChemicals from "@/assets/shop-chemicals.jpg";
-import shopPump from "@/assets/shop-pump.jpg";
-import shopTools from "@/assets/shop-tools.jpg";
+import { productImage, type Product } from "@/lib/products";
+import { useCart, money } from "@/hooks/useCart";
 
 
 const EMAIL = "hi@savagepools.us";
@@ -96,12 +95,6 @@ const CLEANING_PLANS: CleaningPlan[] = [
   },
 ];
 
-const SHOP_PRODUCTS = [
-  { name: "AquaGlide Robotic Cleaner", sku: "SS-ROB-01", price: 899, img: shopRobot, blurb: "Cordless robot that scrubs floor, walls, and waterline in 90 minutes." },
-  { name: "Crystal Chem Season Kit", sku: "SS-CHEM-04", price: 189, img: shopChemicals, blurb: "Chlorine tabs, shock, algaecide, clarifier, and a pro test kit." },
-  { name: "Variable-Speed Pump 1.65HP", sku: "SS-PMP-165", price: 1149, img: shopPump, blurb: "Energy-saving pump that typically cuts pool power bills by half." },
-  { name: "Pro Maintenance Tool Set", sku: "SS-TOOL-07", price: 129, img: shopTools, blurb: "Telescopic pole, leaf rake, vacuum head, and wall brush." },
-];
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -119,6 +112,23 @@ const Index = () => {
   };
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
+  const [products, setProducts] = useState<Product[]>([]);
+  const cart = useCart();
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order");
+      if (active && data) setProducts(data as unknown as Product[]);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -198,6 +208,19 @@ const Index = () => {
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
+              <button
+                type="button"
+                aria-label="Open cart"
+                onClick={() => cart.setOpen(true)}
+                className="relative inline-flex items-center justify-center rounded-md border border-hairline h-10 w-10 hover:text-primary transition"
+              >
+                <ShoppingCart className="h-4.5 w-4.5" />
+                {cart.count > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-amber-brand px-1 text-[10px] font-bold text-primary-foreground">
+                    {cart.count}
+                  </span>
+                )}
+              </button>
               <button
                 type="button"
                 onClick={() => openBooking()}
@@ -569,35 +592,73 @@ const Index = () => {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {SHOP_PRODUCTS.map((p) => (
-              <div key={p.sku} className="card-3d rounded-sm overflow-hidden flex flex-col">
-                <img
-                  src={p.img}
-                  alt={`${p.name} — pool supply available from Savvy Swim`}
-                  loading="lazy"
-                  width={800}
-                  height={800}
-                  className="aspect-square w-full object-cover"
-                />
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-bold leading-snug">{p.name}</h3>
-                  <p className="text-xs text-muted-foreground mt-2 mb-5 leading-relaxed">{p.blurb}</p>
-                  <div className="mt-auto flex items-center justify-between gap-3">
-                    <span className="text-lg font-bold text-gradient-amber">${p.price}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openOrder({ name: p.name, sku: p.sku, price: p.price, type: "product" })
-                      }
-                      className="inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
-                    >
-                      Order <ArrowRight className="h-3.5 w-3.5" />
-                    </button>
+            {products.map((p) => {
+              const img = productImage(p);
+              const out = p.stock_quantity <= 0;
+              return (
+                <div key={p.id} className="card-3d rounded-sm overflow-hidden flex flex-col">
+                  <div className="relative">
+                    <img
+                      src={img}
+                      alt={`${p.name} — pool supply available from Savvy Swim`}
+                      loading="lazy"
+                      width={800}
+                      height={800}
+                      className="aspect-square w-full object-cover"
+                    />
+                    {p.featured && !out && (
+                      <span className="absolute left-3 top-3 rounded-full bg-amber-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                        Best seller
+                      </span>
+                    )}
+                    {out && (
+                      <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-background">
+                        Backordered
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="font-bold leading-snug">{p.name}</h3>
+                    <p className="text-xs text-muted-foreground mt-2 mb-4 leading-relaxed">
+                      {p.description}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground mb-4">
+                      SKU {p.sku} ·{" "}
+                      {out ? "Ships in 2–3 weeks" : `${p.stock_quantity} in stock`}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between gap-3">
+                      <span className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-gradient-amber">
+                          {money(Number(p.price))}
+                        </span>
+                        {p.compare_at_price ? (
+                          <span className="text-xs text-muted-foreground line-through">
+                            {money(Number(p.compare_at_price))}
+                          </span>
+                        ) : null}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          cart.add({
+                            product_id: p.id,
+                            name: p.name,
+                            sku: p.sku,
+                            price: Number(p.price),
+                            image: img,
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
+                      >
+                        Add <ShoppingCart className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
+
 
           <p className="mt-8 text-sm text-muted-foreground">
             Need something not listed? Call{" "}
