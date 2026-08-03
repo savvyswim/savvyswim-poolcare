@@ -532,16 +532,17 @@ const Index = () => {
               <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
-                  alt="3D rendered pool with glass mosaic tile and waterfall"
-                  width={1024}
-                  height={1024}
+                  alt="Modern rectangular pool with tanning ledge and spillover spa built by Savvy Swim"
+                  width={1920}
+                  height={1280}
                   loading="lazy"
                   className="w-full h-auto"
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-                  3D Preview
+                  Recent build
                 </div>
+
               </div>
             </div>
             <div>
