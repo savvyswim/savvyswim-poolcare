@@ -1,6 +1,13 @@
+import Seo from "@/components/Seo";
+
 const Privacy = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">
     <article className="max-w-3xl mx-auto">
+      <Seo
+        title="Privacy Policy | Savvy Swim"
+        description="How Savvy Swim (Santana & Rivera) collects, uses, and protects your personal information, including SMS opt-in consent data."
+        path="/privacy"
+      />
       <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
       <h1 className="text-3xl font-bold mt-4 mb-2">Privacy Policy</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>

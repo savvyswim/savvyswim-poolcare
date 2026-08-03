@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Loader2 } from "lucide-react";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { ShopifyCartDrawer } from "@/components/ShopifyCartDrawer";
 import { useCartSync } from "@/hooks/useCartSync";
@@ -30,7 +31,6 @@ const ProductDetail = () => {
         if (node) {
           setProduct({ node });
           setVariantId(node.variants.edges[0]?.node?.id ?? "");
-          document.title = `${node.title} | Savvy Swim Shop`;
         }
       } catch (e) {
         console.error("Failed to load product", e);
@@ -44,6 +44,27 @@ const ProductDetail = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      {product && (
+        <Seo
+          title={`${product.node.title} | Savvy Swim Shop`}
+          description={(product.node.description || `Buy ${product.node.title} from the Savvy Swim pool supply shop.`).slice(0, 155)}
+          path={`/product/${handle}`}
+          jsonLd={{
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.node.title,
+            description: product.node.description,
+            image: product.node.images.edges[0]?.node?.url,
+            offers: {
+              "@type": "Offer",
+              price: (variant ?? product.node.variants.edges[0]?.node)?.price?.amount,
+              priceCurrency: (variant ?? product.node.variants.edges[0]?.node)?.price?.currencyCode,
+              url: `https://savvyswim.com/product/${handle}`,
+              availability: "https://schema.org/InStock",
+            },
+          }}
+        />
+      )}
       <header className="border-b">
         <div className="mx-auto max-w-5xl px-5 h-16 flex items-center justify-between">
           <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-medium">

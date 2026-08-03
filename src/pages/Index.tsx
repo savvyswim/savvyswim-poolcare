@@ -38,6 +38,7 @@ const poolNight = photoSunsetVilla.url;
 const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
+import Seo from "@/components/Seo";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
@@ -209,6 +210,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
+      <Seo
+        title="Savvy Swim — Pool Cleaning & Custom Pools in Texas"
+        description="Weekly pool cleaning, maintenance and custom pool construction across DFW and Texas. Free quote from Savvy Swim, a Santana & Rivera company."
+        path="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Savvy Swim",
+          url: "https://savvyswim.com",
+        }}
+      />
       <CursorFollower />
       {/* NAV */}
       <header className="fixed top-0 left-0 right-0 z-50">
