@@ -12,6 +12,7 @@ import Auth from "./pages/Auth.tsx";
 import AdminDesigns from "./pages/AdminDesigns.tsx";
 import AdminCleaning from "./pages/AdminCleaning.tsx";
 import AdminStore from "./pages/AdminStore.tsx";
+import CheckoutReturn from "./pages/CheckoutReturn.tsx";
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
             <Route path="/admin/store" element={<AdminStore />} />
+            <Route path="/checkout/return" element={<CheckoutReturn />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
