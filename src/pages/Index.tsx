@@ -243,12 +243,13 @@ const Index = () => {
               </span>
             </a>
             <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
-              <a href="#services" className="hover:text-primary transition">Residential</a>
-              <a href="#cleaning" className="hover:text-primary transition">Pool Care</a>
+              <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
+              <a href="#services" className="hover:text-primary transition">Design &amp; Build</a>
               <a href="#shop" className="hover:text-primary transition">Shop</a>
               <a href="#portfolio" className="hover:text-primary transition">Portfolio</a>
               <a href="#about" className="hover:text-primary transition">About Us</a>
               <a href="#contact" className="hover:text-primary transition">Contact</a>
+
             </nav>
             <div className="flex items-center gap-2">
               <a
