@@ -25,6 +25,12 @@ import poolService from "@/assets/pool-service.jpg";
 import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
+import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
+import shopRobot from "@/assets/shop-robot-cleaner.jpg";
+import shopChemicals from "@/assets/shop-chemicals.jpg";
+import shopPump from "@/assets/shop-pump.jpg";
+import shopTools from "@/assets/shop-tools.jpg";
+
 
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
