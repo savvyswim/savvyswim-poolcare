@@ -194,9 +194,10 @@
   .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 1px 2px hsl(210 60% 8% / 0.35); }
   .hero-scrim {
     background:
-      linear-gradient(90deg, hsl(210 55% 8% / 0.78) 0%, hsl(210 55% 8% / 0.55) 42%, hsl(210 55% 8% / 0.12) 78%),
-      linear-gradient(180deg, hsl(210 55% 8% / 0.45), transparent 30%, hsl(210 55% 8% / 0.45));
+      linear-gradient(180deg, hsl(210 55% 8% / 0.55) 0%, hsl(210 55% 8% / 0.30) 35%, hsl(210 55% 8% / 0.52) 100%),
+      radial-gradient(ellipse 70% 55% at 50% 50%, hsl(210 55% 8% / 0.18), hsl(210 55% 8% / 0.42));
   }
+
   .btn-quote {
     background: hsl(var(--accent));
     color: hsl(var(--accent-foreground));
