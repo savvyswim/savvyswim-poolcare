@@ -29,6 +29,7 @@ import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
+import { SubscribeDialog } from "@/components/SubscribeDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { productImage, type Product } from "@/lib/products";
 import { useCart, money } from "@/hooks/useCart";
@@ -102,6 +103,8 @@ const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [subscribePlan, setSubscribePlan] = useState<string | undefined>(undefined);
   const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
   const openOrder = (item: OrderItem) => {
@@ -584,9 +587,10 @@ const Index = () => {
                 </ul>
                 <button
                   type="button"
-                  onClick={() =>
-                    openOrder({ name: `${plan.name} cleaning plan`, sku: plan.name, type: "cleaning_plan" })
-                  }
+                  onClick={() => {
+                    setSubscribePlan(`Start ${plan.name}`);
+                    setSubscribeOpen(true);
+                  }}
                   className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
                   Start this plan <ArrowRight className="h-4 w-4" />
@@ -1023,6 +1027,11 @@ const Index = () => {
         defaultService={bookingService}
       />
       <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+      <SubscribeDialog
+        open={subscribeOpen}
+        onOpenChange={setSubscribeOpen}
+        planName={subscribePlan}
+      />
 
     </div>
   );
