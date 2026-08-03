@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Mail,
   Phone,
@@ -17,6 +17,8 @@ import {
   ShieldCheck,
   CalendarCheck,
   ShoppingCart,
+  Search,
+  X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import heroPoster from "@/assets/pool-hero.jpg";
@@ -113,7 +115,29 @@ const Index = () => {
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
   const [products, setProducts] = useState<Product[]>([]);
+  const [shopQuery, setShopQuery] = useState("");
+  const [shopCategory, setShopCategory] = useState("all");
   const cart = useCart();
+
+  const shopCategories = useMemo(() => {
+    const set = new Set<string>();
+    products.forEach((p) => p.category && set.add(p.category));
+    return Array.from(set).sort();
+  }, [products]);
+
+  const visibleProducts = useMemo(() => {
+    const q = shopQuery.trim().toLowerCase();
+    return products.filter((p) => {
+      const matchesCategory = shopCategory === "all" || p.category === shopCategory;
+      const matchesQuery =
+        !q ||
+        [p.name, p.description, p.sku, p.category]
+          .filter(Boolean)
+          .some((f) => String(f).toLowerCase().includes(q));
+      return matchesCategory && matchesQuery;
+    });
+  }, [products, shopQuery, shopCategory]);
+
 
   useEffect(() => {
     let active = true;
@@ -591,8 +615,60 @@ const Index = () => {
             </p>
           </div>
 
+          {/* Search + category filters */}
+          <div className="mb-8 flex flex-col gap-4">
+            <div className="relative max-w-md">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="search"
+                value={shopQuery}
+                onChange={(e) => setShopQuery(e.target.value)}
+                placeholder="Search products, SKU, or category…"
+                aria-label="Search pool products"
+                className="w-full rounded-full border border-border bg-background py-3 pl-11 pr-10 text-sm outline-none transition focus:border-amber-brand"
+              />
+              {shopQuery && (
+                <button
+                  type="button"
+                  onClick={() => setShopQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {shopCategories.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {["all", ...shopCategories].map((c) => {
+                  const activeChip = shopCategory === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setShopCategory(c)}
+                      aria-pressed={activeChip}
+                      className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${
+                        activeChip
+                          ? "border-transparent bg-amber-brand text-primary-foreground shadow-cta"
+                          : "border-border text-muted-foreground hover:border-amber-brand hover:text-foreground"
+                      }`}
+                    >
+                      {c === "all" ? "All products" : c}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">
+              Showing {visibleProducts.length} of {products.length} products
+            </p>
+          </div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {products.map((p) => {
+            {visibleProducts.map((p) => {
               const img = productImage(p);
               const out = p.stock_quantity <= 0;
               return (
@@ -658,6 +734,26 @@ const Index = () => {
               );
             })}
           </div>
+
+          {products.length > 0 && visibleProducts.length === 0 && (
+            <div className="rounded-sm border border-border p-10 text-center">
+              <p className="font-semibold">No products match your search.</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Try a different keyword or clear the filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setShopQuery("");
+                  setShopCategory("all");
+                }}
+                className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
+              >
+                Reset filters
+              </button>
+            </div>
+          )}
+
 
 
           <p className="mt-8 text-sm text-muted-foreground">
