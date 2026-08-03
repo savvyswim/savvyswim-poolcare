@@ -5,7 +5,7 @@ const Terms = () => (
       <h1 className="text-3xl font-bold mt-4 mb-2">Terms and Conditions</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
-      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savvy Swim</p>
+      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Santana &amp; Rivera, doing business as Savvy Swim</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
         <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
@@ -19,7 +19,7 @@ const Terms = () => (
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
       <p className="mb-4">
         By accessing our website (https://savvyswim.com) or utilizing the services provided by
-        Manor Fix LLC ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
+        Santana &amp; Rivera ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
         Terms and Conditions ("Terms") and our{" "}
         <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a>. If you do not
         agree with any part of these Terms, you must not use our website or services.
@@ -27,7 +27,7 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">2. Services Provided</h2>
       <p className="mb-4">
-        Manor Fix LLC provides repair, maintenance, contracting, and pool design/build services.
+        Santana &amp; Rivera provides repair, maintenance, contracting, and pool design/build services.
         All estimates provided are non-binding and subject to change based on the physical scope of
         work determined upon on-site inspection, market pricing of materials, and site conditions.
       </p>
@@ -41,7 +41,7 @@ const Terms = () => (
 
       <ul className="space-y-3 mb-4 list-disc pl-6">
         <li>
-          <strong>Program Name / Brand:</strong> Savvy Swim (operated by Manor Fix LLC).
+          <strong>Program Name / Brand:</strong> Savvy Swim (operated by Santana &amp; Rivera).
         </li>
         <li>
           <strong>Program Description / Use Case:</strong> Customer Care and Account Notifications.
@@ -63,7 +63,7 @@ const Terms = () => (
         </li>
         <li>
           <strong>Costs:</strong> Standard message and data rates may apply depending on your
-          cellular provider plan. Manor Fix LLC does not charge for the messages themselves.
+          cellular provider plan. Santana &amp; Rivera does not charge for the messages themselves.
         </li>
         <li>
           <strong>Opt-Out (STOP):</strong> You may opt out of receiving text messages at any time
@@ -118,7 +118,7 @@ const Terms = () => (
       <h2 className="text-xl font-semibold mt-8 mb-2">6. Intellectual Property</h2>
       <p className="mb-4">
         All content on the website — including text, graphics, logos, images, and software — is the
-        property of Manor Fix LLC or its licensors and is protected by U.S. and international
+        property of Santana &amp; Rivera or its licensors and is protected by U.S. and international
         intellectual-property laws. You may not reproduce, distribute, or create derivative works
         without our prior written consent.
       </p>
@@ -133,18 +133,18 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">8. Limitation of Liability</h2>
       <p className="mb-4">
-        In no event shall Manor Fix LLC, its directors, employees, contractors, or agents be liable
+        In no event shall Santana &amp; Rivera, its directors, employees, contractors, or agents be liable
         to you or any third party for any direct, indirect, consequential, exemplary, incidental,
         special, or punitive damages — including lost profits, lost data, or business interruption —
         arising from your use of the site, the SMS program, or our services, even if we have been
         advised of the possibility of such damages. To the maximum extent permitted by law, our
-        total liability for any claim shall not exceed the amount you paid Manor Fix LLC for the
+        total liability for any claim shall not exceed the amount you paid Santana &amp; Rivera for the
         services giving rise to the claim.
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">9. Indemnification</h2>
       <p className="mb-4">
-        You agree to defend, indemnify, and hold harmless Manor Fix LLC and its officers,
+        You agree to defend, indemnify, and hold harmless Santana &amp; Rivera and its officers,
         directors, employees, and agents from any claims, liabilities, damages, losses, and
         expenses (including reasonable attorneys' fees) arising out of or related to your violation
         of these Terms or misuse of our services.
@@ -172,7 +172,7 @@ const Terms = () => (
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">13. Contact Us</h2>
-      <p className="mb-1"><strong>Manor Fix LLC (dba Savvy Swim)</strong></p>
+      <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
       <p className="mb-1">Phone: <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a></p>
       <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>

@@ -5,7 +5,7 @@ const Privacy = () => (
       <h1 className="text-3xl font-bold mt-4 mb-2">Privacy Policy</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
-      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savvy Swim ("we," "our," or "us")</p>
+      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Santana &amp; Rivera, doing business as Savvy Swim ("we," "our," or "us")</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
         <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
@@ -18,7 +18,7 @@ const Privacy = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Introduction</h2>
       <p className="mb-4">
-        Manor Fix LLC is committed to protecting your privacy. This Privacy Policy explains how we
+        Santana &amp; Rivera is committed to protecting your privacy. This Privacy Policy explains how we
         collect, use, disclose, and safeguard your information when you visit our website
         (https://savvyswim.com), submit a form, call or text us, or otherwise engage with our
         services. By using our website or services, you consent to the practices described in this
@@ -55,7 +55,7 @@ const Privacy = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">4. SMS Information Sharing &amp; Data Protection</h2>
       <p className="mb-4">
-        Manor Fix LLC strictly respects your privacy.{" "}
+        Santana &amp; Rivera strictly respects your privacy.{" "}
         <strong>
           No mobile information, mobile phone numbers, or SMS opt-in consent data will be shared
           with any third parties or affiliates for marketing or promotional purposes.
@@ -143,7 +143,7 @@ const Privacy = () => (
       <p className="mb-4">
         Questions about this Privacy Policy or our data practices? Contact:
       </p>
-      <p className="mb-1"><strong>Manor Fix LLC (dba Savvy Swim)</strong></p>
+      <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
       <p className="mb-1">Phone: <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a></p>
       <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
