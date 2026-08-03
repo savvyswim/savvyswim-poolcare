@@ -102,8 +102,10 @@ export function SubscriptionsPanel() {
               key={row.id}
               className="grid grid-cols-1 sm:grid-cols-[1fr_1.2fr_auto_auto_auto] items-center gap-3 rounded-md border p-3"
             >
-              <div className="text-sm font-medium">{row.pool_size}</div>
-              <div className="text-sm text-muted-foreground">{row.vegetation_level}</div>
+              <div className="text-sm font-medium">{row.plan_name ?? row.pool_size}</div>
+              <div className="text-sm text-muted-foreground">
+                {row.pool_size} · {row.vegetation_level}
+              </div>
               <div className="text-xs font-mono text-muted-foreground">{row.sku}</div>
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">$</span>

@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
     // Price + amount come from the database, never from the client.
     const { data: pricing, error: pricingError } = await supabase
       .from("service_pricing")
-      .select("id, pool_size, vegetation_level, sku, price, price_key, is_active")
+      .select("id, pool_size, vegetation_level, plan_name, sku, price, price_key, is_active")
       .eq("price_key", priceKey)
       .eq("is_active", true)
       .maybeSingle();
@@ -70,7 +70,8 @@ Deno.serve(async (req) => {
           ...(phone ? { phone } : {}),
         });
 
-    const planName = `${pricing.pool_size} pool · ${pricing.vegetation_level}`;
+    const planName =
+      pricing.plan_name ?? `${pricing.pool_size} pool · ${pricing.vegetation_level}`;
 
     const { data: subRow, error: subError } = await supabase
       .from("subscriptions")
