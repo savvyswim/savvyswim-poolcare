@@ -38,6 +38,7 @@ const poolNight = photoSunsetVilla.url;
 const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
+import Seo from "@/components/Seo";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
@@ -218,7 +219,6 @@ const Index = () => {
           "@type": "WebSite",
           name: "Savvy Swim",
           url: "https://savvyswim.com",
-challenge: undefined,
         }}
       />
       <CursorFollower />
