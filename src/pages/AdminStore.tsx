@@ -42,6 +42,8 @@ type Order = {
   state: string | null;
   postal_code: string | null;
   subtotal: number;
+  discount: number;
+  promo_code: string | null;
   tax: number;
   shipping: number;
   total: number;
@@ -189,6 +191,7 @@ export default function AdminStore() {
           <TabsList>
             <TabsTrigger value="orders">Orders ({orders.length})</TabsTrigger>
             <TabsTrigger value="products">Products ({products.length})</TabsTrigger>
+            <TabsTrigger value="promos">Promo codes</TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders" className="mt-6 space-y-4">
