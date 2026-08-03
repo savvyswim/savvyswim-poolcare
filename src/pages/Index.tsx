@@ -115,7 +115,29 @@ const Index = () => {
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
   const [products, setProducts] = useState<Product[]>([]);
+  const [shopQuery, setShopQuery] = useState("");
+  const [shopCategory, setShopCategory] = useState("all");
   const cart = useCart();
+
+  const shopCategories = useMemo(() => {
+    const set = new Set<string>();
+    products.forEach((p) => p.category && set.add(p.category));
+    return Array.from(set).sort();
+  }, [products]);
+
+  const visibleProducts = useMemo(() => {
+    const q = shopQuery.trim().toLowerCase();
+    return products.filter((p) => {
+      const matchesCategory = shopCategory === "all" || p.category === shopCategory;
+      const matchesQuery =
+        !q ||
+        [p.name, p.description, p.sku, p.category]
+          .filter(Boolean)
+          .some((f) => String(f).toLowerCase().includes(q));
+      return matchesCategory && matchesQuery;
+    });
+  }, [products, shopQuery, shopCategory]);
+
 
   useEffect(() => {
     let active = true;
