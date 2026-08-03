@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { Waves, ArrowLeft, Plus, Trash2, Save, Loader2 } from "lucide-react";
 import { money } from "@/hooks/useCart";
+import { PromoCodesPanel } from "@/components/admin/PromoCodesPanel";
 import type { Product } from "@/lib/products";
 
 type OrderItem = {
