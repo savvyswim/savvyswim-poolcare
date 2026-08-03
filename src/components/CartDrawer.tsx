@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { z } from "zod";
-import { Minus, Plus, ShoppingBag, Trash2, Loader2, CheckCircle2 } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, Loader2 } from "lucide-react";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import {
   Sheet,
   SheetContent,
@@ -88,7 +90,7 @@ export const CartDrawer = () => {
 
     setPlaced(orderNumber as string);
     clear();
-    toast.success(`Order ${orderNumber} received`);
+    toast.success(`Order ${orderNumber} received — pay securely below`);
   };
 
   return (
