@@ -26,6 +26,7 @@ import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
+import { supabase } from "@/integrations/supabase/client";
 import shopRobot from "@/assets/shop-robot-cleaner.jpg";
 import shopChemicals from "@/assets/shop-chemicals.jpg";
 import shopPump from "@/assets/shop-pump.jpg";
@@ -55,8 +56,20 @@ const REVIEWS_ROW_2 = [
 ];
 
 
-const CLEANING_PLANS = [
+type CleaningPlan = {
+  id: string;
+  name: string;
+  blurb: string;
+  price: string;
+  cadence: string;
+  items: string[];
+  featured: boolean;
+};
+
+const CLEANING_PLANS: CleaningPlan[] = [
   {
+    id: "fallback-essential",
+    featured: false,
     name: "Essential Clean",
     price: "$149",
     cadence: "/ month",
@@ -64,6 +77,7 @@ const CLEANING_PLANS = [
     items: ["2 visits per month", "Skim, brush & vacuum", "Basket & skimmer cleanout", "Water chemistry balance", "Digital service report"],
   },
   {
+    id: "fallback-weekly",
     name: "Weekly Crystal",
     price: "$219",
     cadence: "/ month",
@@ -72,6 +86,8 @@ const CLEANING_PLANS = [
     featured: true,
   },
   {
+    id: "fallback-total",
+    featured: false,
     name: "Total Care",
     price: "$349",
     cadence: "/ month",
@@ -101,6 +117,23 @@ const Index = () => {
     setBookingService(service);
     setBookingOpen(true);
   };
+
+  const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("cleaning_plans")
+        .select("id,name,blurb,price,cadence,items,featured")
+        .eq("is_active", true)
+        .order("display_order");
+      if (active && data && data.length) setCleaningPlans(data as CleaningPlan[]);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -460,9 +493,9 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
-            {CLEANING_PLANS.map((plan) => (
+            {cleaningPlans.map((plan) => (
               <div
-                key={plan.name}
+                key={plan.id}
                 className={`card-3d rounded-sm p-7 flex flex-col ${
                   plan.featured ? "ring-1 ring-amber-brand/50" : ""
                 }`}
