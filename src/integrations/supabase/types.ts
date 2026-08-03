@@ -327,12 +327,14 @@ export type Database = {
           id: string
           notes: string | null
           order_number: string
+          paid_at: string | null
           payment_status: string
           phone: string | null
           postal_code: string | null
           shipping: number
           state: string | null
           status: string
+          stripe_session_id: string | null
           subtotal: number
           tax: number
           total: number
@@ -347,12 +349,14 @@ export type Database = {
           id?: string
           notes?: string | null
           order_number?: string
+          paid_at?: string | null
           payment_status?: string
           phone?: string | null
           postal_code?: string | null
           shipping?: number
           state?: string | null
           status?: string
+          stripe_session_id?: string | null
           subtotal?: number
           tax?: number
           total?: number
@@ -367,12 +371,14 @@ export type Database = {
           id?: string
           notes?: string | null
           order_number?: string
+          paid_at?: string | null
           payment_status?: string
           phone?: string | null
           postal_code?: string | null
           shipping?: number
           state?: string | null
           status?: string
+          stripe_session_id?: string | null
           subtotal?: number
           tax?: number
           total?: number

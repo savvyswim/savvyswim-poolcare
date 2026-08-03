@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { z } from "zod";
-import { Minus, Plus, ShoppingBag, Trash2, Loader2, CheckCircle2 } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, Loader2 } from "lucide-react";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import {
   Sheet,
   SheetContent,
@@ -88,21 +90,30 @@ export const CartDrawer = () => {
 
     setPlaced(orderNumber as string);
     clear();
-    toast.success(`Order ${orderNumber} received`);
+    toast.success(`Order ${orderNumber} received — pay securely below`);
   };
 
   return (
     <Sheet open={open} onOpenChange={close}>
       <SheetContent className="w-full sm:max-w-md flex flex-col overflow-y-auto">
         {placed ? (
-          <div className="flex flex-1 flex-col items-center justify-center text-center gap-4 py-10">
-            <CheckCircle2 className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">Order {placed} confirmed</h3>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              A specialist will email you within one business hour with stock confirmation, final
-              freight cost, and a secure payment link. Nothing is charged yet.
+          <div className="flex flex-1 flex-col gap-4 py-4">
+            <SheetHeader>
+              <SheetTitle>Pay for order {placed}</SheetTitle>
+              <SheetDescription>
+                Secure card payment. Your order is marked paid automatically as soon as the
+                payment goes through.
+              </SheetDescription>
+            </SheetHeader>
+            <PaymentTestModeBanner />
+            <StripeEmbeddedCheckout orderNumber={placed} />
+            <p className="text-xs text-muted-foreground pb-6">
+              Prefer to pay later? Your order {placed} is already saved — call{" "}
+              <a href="tel:+14692138087" className="font-semibold text-foreground">
+                (469) 213-8087
+              </a>{" "}
+              and we'll invoice you instead.
             </p>
-            <Button onClick={() => close(false)}>Keep shopping</Button>
           </div>
         ) : step === "cart" ? (
           <>
@@ -222,7 +233,8 @@ export const CartDrawer = () => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              No card is charged here. We confirm stock and freight, then send a secure payment link.
+              Next step is secure card payment. Your order is confirmed and marked paid as soon as
+              the payment clears.
             </p>
 
             <div className="flex gap-2 pb-6">
