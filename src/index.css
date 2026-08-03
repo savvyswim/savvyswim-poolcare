@@ -93,53 +93,35 @@
   .shadow-3d { box-shadow: var(--shadow-3d); }
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
-  .text-gradient-amber {
-    background: linear-gradient(135deg, hsl(196 92% 46%), hsl(208 84% 30%));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .text-gradient-chrome {
-    background: linear-gradient(180deg, hsl(210 32% 18%), hsl(210 22% 34%));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(355 82% 58%), hsl(350 72% 44%));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+  .text-gradient-amber { color: hsl(var(--amber-deep)); }
+  .text-gradient-chrome { color: hsl(210 30% 16%); }
+  .text-gradient-gold { color: hsl(var(--gold)); }
 
   .glass {
-    background: hsl(0 0% 100% / 0.82);
-    backdrop-filter: blur(14px);
+    background: hsl(0 0% 100% / 0.9);
+    backdrop-filter: blur(10px);
     border: 1px solid hsl(205 30% 85% / 0.9);
   }
 
   .card-3d {
-    background: linear-gradient(180deg, hsl(0 0% 100%), hsl(205 40% 98%));
-    border: 1px solid hsl(205 25% 88%);
+    background: hsl(0 0% 100%);
+    border: 1px solid hsl(205 22% 89%);
     box-shadow: var(--shadow-card);
     position: relative;
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
   }
-  .card-3d::before {
-    content: '';
-    position: absolute; inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(180deg, hsl(199 89% 55% / 0.18), transparent 45%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    pointer-events: none;
+  .card-3d:hover {
+    border-color: hsl(205 25% 78%);
+    box-shadow: 0 2px 4px hsl(210 30% 20% / 0.05), 0 22px 44px -30px hsl(210 40% 20% / 0.4);
   }
+
+  .rule-top { border-top: 2px solid hsl(var(--amber)); }
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(208 40% 40% / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(208 40% 40% / 0.05) 1px, transparent 1px);
-    background-size: 90px 90px;
+      linear-gradient(hsl(208 40% 40% / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(208 40% 40% / 0.035) 1px, transparent 1px);
+    background-size: 120px 120px;
   }
 
   /* Soft evening light drifting over the water */
