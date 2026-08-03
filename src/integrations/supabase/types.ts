@@ -80,6 +80,12 @@ export type Database = {
           items: string[]
           name: string
           price: string
+          price_key_large: string | null
+          price_key_medium: string | null
+          price_key_small: string | null
+          price_large: number | null
+          price_medium: number | null
+          price_small: number | null
           updated_at: string
         }
         Insert: {
@@ -93,6 +99,12 @@ export type Database = {
           items?: string[]
           name: string
           price?: string
+          price_key_large?: string | null
+          price_key_medium?: string | null
+          price_key_small?: string | null
+          price_large?: number | null
+          price_medium?: number | null
+          price_small?: number | null
           updated_at?: string
         }
         Update: {
@@ -106,6 +118,12 @@ export type Database = {
           items?: string[]
           name?: string
           price?: string
+          price_key_large?: string | null
+          price_key_medium?: string | null
+          price_key_small?: string | null
+          price_large?: number | null
+          price_medium?: number | null
+          price_small?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -439,6 +457,83 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          address: string | null
+          amount: number | null
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string | null
+          customer_name: string | null
+          email: string | null
+          environment: string
+          id: string
+          notes: string | null
+          phone: string | null
+          plan_id: string | null
+          plan_name: string | null
+          pool_size: string | null
+          price_key: string | null
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          amount?: number | null
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          customer_name?: string | null
+          email?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          plan_id?: string | null
+          plan_name?: string | null
+          pool_size?: string | null
+          price_key?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          amount?: number | null
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          customer_name?: string | null
+          email?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          plan_id?: string | null
+          plan_name?: string | null
+          pool_size?: string | null
+          price_key?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "cleaning_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
