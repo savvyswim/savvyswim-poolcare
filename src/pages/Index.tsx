@@ -173,7 +173,13 @@ const Index = () => {
   }, []);
 
   const [pricingRows, setPricingRows] = useState<
-    { id: string; pool_size: string; vegetation_level: string; price: number | null }[]
+    {
+      id: string;
+      pool_size: string;
+      vegetation_level: string;
+      plan_name: string | null;
+      price: number | null;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -181,7 +187,7 @@ const Index = () => {
     (async () => {
       const { data } = await supabase
         .from("service_pricing")
-        .select("id,pool_size,vegetation_level,price,size_rank,vegetation_rank")
+        .select("id,pool_size,vegetation_level,plan_name,price,size_rank,vegetation_rank")
         .eq("is_active", true)
         .order("size_rank")
         .order("vegetation_rank");
