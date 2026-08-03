@@ -735,6 +735,26 @@ const Index = () => {
             })}
           </div>
 
+          {products.length > 0 && visibleProducts.length === 0 && (
+            <div className="rounded-sm border border-border p-10 text-center">
+              <p className="font-semibold">No products match your search.</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Try a different keyword or clear the filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setShopQuery("");
+                  setShopCategory("all");
+                }}
+                className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
+              >
+                Reset filters
+              </button>
+            </div>
+          )}
+
+
 
           <p className="mt-8 text-sm text-muted-foreground">
             Need something not listed? Call{" "}
