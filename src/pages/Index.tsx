@@ -600,9 +600,9 @@ const Index = () => {
                 <h3 className="text-xl font-bold">{plan.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.blurb}</p>
                 <div className="flex items-end gap-1 mb-6">
-                  <span className="text-[2rem] font-semibold text-gradient-amber">{plan.price}</span>
-                  <span className="text-sm text-muted-foreground mb-1">{plan.cadence}</span>
+                  <span className="text-[1.5rem] font-semibold text-gradient-amber">Custom quote</span>
                 </div>
+
                 <ul className="space-y-2.5 mb-7">
                   {plan.items.map((it) => (
                     <li key={it} className="flex gap-2.5 text-sm text-foreground/85">
