@@ -14,6 +14,7 @@ type PricingRow = {
   size_rank: number;
   vegetation_level: string;
   vegetation_rank: number;
+  plan_name: string | null;
   sku: string;
   price: number | null;
   price_key: string | null;
