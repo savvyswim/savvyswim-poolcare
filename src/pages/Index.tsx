@@ -125,116 +125,116 @@ const Index = () => {
     <div className="min-h-screen overflow-x-hidden">
       <CursorFollower />
       {/* NAV */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "bg-ink/80 backdrop-blur-xl border-b border-hairline" : ""
-        }`}
-      >
-        <div className="container-tight flex h-16 items-center justify-between">
-          <a href="#" className="flex items-center gap-2.5">
-            <div className="relative h-9 w-9 rounded-full bg-amber-brand grid place-items-center shadow-cta">
-              <Waves className="h-4.5 w-4.5 text-primary-foreground" />
-              <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
-            </div>
-            <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
-              <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
-              <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
-            </span>
-          </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#services" className="hover:text-foreground transition">Services</a>
-            <a href="#cleaning" className="hover:text-foreground transition">Cleaning</a>
-            <a href="#shop" className="hover:text-foreground transition">Shop</a>
-            <a href="#portfolio" className="hover:text-foreground transition">Portfolio</a>
-
-            <a href="#about" className="hover:text-foreground transition">About</a>
-            <a href="#contact" className="hover:text-foreground transition">Contact</a>
-          </nav>
-          <div className="flex items-center gap-2">
-            <a
-              href={PHONE_HREF}
-              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-3.5 py-2 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
-            >
-              <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+      <header className="fixed top-0 left-0 right-0 z-50">
+        {/* Utility bar */}
+        <div className="topbar hidden md:block text-[13px]">
+          <div className="container-tight flex h-9 items-center justify-end gap-6">
+            <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
+            <a href="#shop" className="hover:opacity-80 transition">Shop</a>
+            <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
+            <span className="font-semibold">Sales: {PHONE_DISPLAY}</span>
+          </div>
+        </div>
+        <div
+          className={`bg-background border-b border-hairline transition-shadow duration-300 ${
+            scrolled ? "shadow-card" : ""
+          }`}
+        >
+          <div className="container-tight flex h-[72px] items-center justify-between">
+            <a href="#" className="flex items-center gap-2.5">
+              <div className="relative h-11 w-11 rounded-lg bg-amber-brand grid place-items-center shadow-cta">
+                <Waves className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
+                <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
+                <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
+              </span>
             </a>
-            <button
-              type="button"
-              onClick={() => openBooking()}
-              className="inline-flex items-center gap-2 rounded-full bg-amber-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
-            >
-              Book Free Quote <ArrowRight className="h-4 w-4" />
-            </button>
+            <nav className="hidden lg:flex items-center gap-7 text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
+              <a href="#services" className="hover:text-primary transition">Residential</a>
+              <a href="#cleaning" className="hover:text-primary transition">Pool Care</a>
+              <a href="#shop" className="hover:text-primary transition">Shop</a>
+              <a href="#portfolio" className="hover:text-primary transition">Portfolio</a>
+              <a href="#about" className="hover:text-primary transition">About Us</a>
+              <a href="#contact" className="hover:text-primary transition">Contact</a>
+            </nav>
+            <div className="flex items-center gap-2">
+              <a
+                href={PHONE_HREF}
+                className="hidden sm:inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
+              >
+                <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+              </a>
+              <button
+                type="button"
+                onClick={() => openBooking()}
+                className="btn-quote inline-flex items-center gap-2 rounded-md px-5 py-3 text-[13px] font-bold uppercase tracking-wide transition"
+              >
+                Request Quote
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* HERO */}
-      <section className="relative min-h-[100svh] flex items-end pt-24 pb-16 sm:pb-24 overflow-hidden">
+      <section className="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden">
         <div ref={heroRef} className="absolute inset-0 will-change-transform">
           <div className="absolute inset-0 h-[120%] w-full">
             <SmoothLoopVideo src={heroVideo.url} poster={heroPoster} fade={1.4} />
           </div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
-        <div className="absolute inset-0 water-caustics pointer-events-none mix-blend-screen" />
-        <div className="absolute inset-0 grid-bg opacity-20" />
+        <div className="absolute inset-0 hero-scrim" />
 
-        <div className="container-tight relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium tracking-wide text-muted-foreground mb-6">
+        <div className="container-tight relative z-10 text-center">
+          <div className="mx-auto max-w-4xl">
+            <div className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground mb-7">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-brand" />
               Family-run in DFW since 2009
             </div>
-            <h1 className="text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="text-gradient-chrome">The backyard your</span>
-              <br />
-              <span className="text-gradient-amber italic">family never leaves.</span>
+            <h1 className="text-on-media text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem] font-extrabold tracking-tight">
+              North Texas&rsquo; Award-Winning
+              <br className="hidden sm:block" /> Luxury Pool Builder
             </h1>
-            <p className="mt-6 text-base sm:text-lg text-foreground/80 max-w-xl leading-relaxed">
-              We're a small Texas crew that builds pools the slow, careful way — one
-              family at a time. You'll have our cell number, meet the guys pouring your
-              shell, and swim in it for decades. 600+ backyards later, we still answer
-              the phone ourselves.
+            <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium">
+              Creating Backyard Memories For Over 15 Years
+            </p>
+            <p className="text-on-media/90 mx-auto mt-5 max-w-2xl text-base leading-relaxed opacity-90">
+              Custom gunite pools, spas and outdoor living across Dallas–Fort Worth.
+              You&rsquo;ll have our cell number, meet the crew pouring your shell, and
+              swim in it for decades — 600+ backyards later, we still answer the phone ourselves.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 type="button"
                 onClick={() => openBooking("Custom Pool Design & Build")}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                className="btn-quote inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-sm font-bold uppercase tracking-wide transition"
               >
                 <CalendarCheck className="h-4 w-4" />
-                Book Inspection / 3D Quote
+                Free Design Consultation
                 <ArrowRight className="h-4 w-4" />
               </button>
               <a
                 href={PHONE_HREF}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 backdrop-blur px-7 py-4 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-background/95 px-8 py-4 text-sm font-bold uppercase tracking-wide text-foreground hover:bg-background transition"
               >
-                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
             </div>
 
-            <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
+            <div className="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-4 sm:gap-8">
               {[
                 { k: "600+", v: "Pools built" },
                 { k: "4.9★", v: "Avg client rating" },
                 { k: "25yr", v: "Structural warranty" },
               ].map((s) => (
                 <div key={s.v}>
-                  <div className="text-2xl sm:text-3xl font-bold text-gradient-chrome">{s.k}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
+                  <div className="text-on-media text-2xl sm:text-4xl font-extrabold">{s.k}</div>
+                  <div className="text-on-media mt-1 text-xs uppercase tracking-widest opacity-80">{s.v}</div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Floating water drops */}
-        <div className="absolute top-32 right-10 hidden lg:block">
-          <div className="relative h-32 w-32 rounded-full bg-amber-brand/10 border border-amber-brand/30 animate-float grid place-items-center">
-            <Droplets className="h-8 w-8 text-amber-brand" />
-            <span className="absolute inset-0 rounded-full border border-amber-brand/40 animate-ripple" />
           </div>
         </div>
       </section>
