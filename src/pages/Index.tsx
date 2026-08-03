@@ -305,21 +305,25 @@ const Index = () => {
               <div className="mx-auto -mt-2 h-9 w-9 rotate-45 rounded-[6px] border-[3px] border-white/95 bg-primary" />
             </div>
 
+            <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/25 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-on-media">
+              Weekly Pool Cleaning &amp; Maintenance · DFW
+            </div>
+
             <h1 className="text-on-media text-[2.3rem] leading-[1.1] sm:text-[3.1rem] lg:text-[3.6rem] font-bold tracking-tight">
-              Dallas–Fort Worth&rsquo;s #1 Award-Winning Luxury Pool Builder
+              Crystal-Clear Pool Cleaning Service, Every Single Week
             </h1>
             <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium opacity-95">
-              Creating Backyard Memories For Over 15 Years
+              Licensed techs, balanced chemistry, spotless water — no contracts to get started.
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 type="button"
-                onClick={() => openBooking("Custom Pool Design & Build")}
+                onClick={() => openBooking("Weekly Service & Maintenance")}
                 className="btn-quote inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[13px] font-bold uppercase tracking-[0.1em] transition"
               >
                 <CalendarCheck className="h-4 w-4" />
-                Free Design Consultation
+                Get My Cleaning Quote
               </button>
               <a
                 href={PHONE_HREF}
@@ -329,11 +333,18 @@ const Index = () => {
               </a>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-xl grid-cols-3 gap-6 border-t border-white/25 pt-6">
+            <a
+              href="#services"
+              className="mt-6 inline-flex text-on-media text-sm font-semibold underline underline-offset-4 opacity-90 hover:opacity-100"
+            >
+              Building a new pool? See our custom design &amp; build services →
+            </a>
+
+            <div className="mx-auto mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-white/25 pt-6">
               {[
-                { k: "600+", v: "Pools built" },
+                { k: "1,200+", v: "Pools serviced" },
                 { k: "4.9★", v: "Avg client rating" },
-                { k: "25yr", v: "Structural warranty" },
+                { k: "52", v: "Visits per year" },
               ].map((s) => (
                 <div key={s.v}>
                   <div className="text-on-media text-2xl sm:text-[2rem] font-bold">{s.k}</div>
@@ -341,6 +352,7 @@ const Index = () => {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </section>
