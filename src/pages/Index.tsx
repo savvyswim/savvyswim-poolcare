@@ -820,6 +820,8 @@ const Index = () => {
         onOpenChange={setBookingOpen}
         defaultService={bookingService}
       />
+      <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+
     </div>
   );
 };
