@@ -11,6 +11,9 @@ import Terms from "./pages/Terms.tsx";
 import Auth from "./pages/Auth.tsx";
 import AdminDesigns from "./pages/AdminDesigns.tsx";
 import AdminCleaning from "./pages/AdminCleaning.tsx";
+import AdminStore from "./pages/AdminStore.tsx";
+import { CartProvider } from "@/hooks/useCart";
+import { CartDrawer } from "@/components/CartDrawer";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +24,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <CartProvider>
+          <CartDrawer />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/privacy" element={<Privacy />} />
@@ -30,9 +35,11 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
+            <Route path="/admin/store" element={<AdminStore />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </CartProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
