@@ -614,13 +614,14 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setSubscribePlan(`Start ${plan.name}`);
+                    setSubscribePlan(`Request a quote — ${plan.name}`);
                     setSubscribeOpen(true);
                   }}
                   className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  Start this plan <ArrowRight className="h-4 w-4" />
+                  Get my quote <ArrowRight className="h-4 w-4" />
                 </button>
+
               </div>
             ))}
           </div>
