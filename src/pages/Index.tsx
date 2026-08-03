@@ -49,14 +49,53 @@ const REVIEWS_ROW_2 = [
 ];
 
 
+const CLEANING_PLANS = [
+  {
+    name: "Essential Clean",
+    price: "$149",
+    cadence: "/ month",
+    blurb: "Bi-weekly visits for low-traffic backyards.",
+    items: ["2 visits per month", "Skim, brush & vacuum", "Basket & skimmer cleanout", "Water chemistry balance", "Digital service report"],
+  },
+  {
+    name: "Weekly Crystal",
+    price: "$219",
+    cadence: "/ month",
+    blurb: "Our most popular DFW weekly service.",
+    items: ["4 visits per month", "Full chemical package included", "Filter pressure check", "Equipment inspection each visit", "Photo report after every clean", "Priority scheduling"],
+    featured: true,
+  },
+  {
+    name: "Total Care",
+    price: "$349",
+    cadence: "/ month",
+    blurb: "Hands-off ownership, pool always guest-ready.",
+    items: ["4 visits + on-call touch-ups", "Chemicals, salt & tabs included", "Quarterly filter deep clean", "Free minor equipment repairs", "Seasonal open/close service", "24/7 text support"],
+  },
+];
+
+const SHOP_PRODUCTS = [
+  { name: "AquaGlide Robotic Cleaner", sku: "SS-ROB-01", price: 899, img: shopRobot, blurb: "Cordless robot that scrubs floor, walls, and waterline in 90 minutes." },
+  { name: "Crystal Chem Season Kit", sku: "SS-CHEM-04", price: 189, img: shopChemicals, blurb: "Chlorine tabs, shock, algaecide, clarifier, and a pro test kit." },
+  { name: "Variable-Speed Pump 1.65HP", sku: "SS-PMP-165", price: 1149, img: shopPump, blurb: "Energy-saving pump that typically cuts pool power bills by half." },
+  { name: "Pro Maintenance Tool Set", sku: "SS-TOOL-07", price: 129, img: shopTools, blurb: "Telescopic pole, leaf rake, vacuum head, and wall brush." },
+];
+
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
+  const [orderOpen, setOrderOpen] = useState(false);
+  const openOrder = (item: OrderItem) => {
+    setOrderItem(item);
+    setOrderOpen(true);
+  };
   const openBooking = (service?: string) => {
     setBookingService(service);
     setBookingOpen(true);
   };
+
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
