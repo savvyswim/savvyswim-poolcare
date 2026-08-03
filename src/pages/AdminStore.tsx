@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { Waves, ArrowLeft, Plus, Trash2, Save, Loader2 } from "lucide-react";
 import { money } from "@/hooks/useCart";
 import { PromoCodesPanel } from "@/components/admin/PromoCodesPanel";
+import { SubscriptionsPanel } from "@/components/admin/SubscriptionsPanel";
 import type { Product } from "@/lib/products";
 
 type OrderItem = {
@@ -192,6 +193,7 @@ export default function AdminStore() {
             <TabsTrigger value="orders">Orders ({orders.length})</TabsTrigger>
             <TabsTrigger value="products">Products ({products.length})</TabsTrigger>
             <TabsTrigger value="promos">Promo codes</TabsTrigger>
+            <TabsTrigger value="subscriptions">Service plans</TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders" className="mt-6 space-y-4">
@@ -398,6 +400,10 @@ export default function AdminStore() {
 
           <TabsContent value="promos" className="mt-6">
             <PromoCodesPanel />
+          </TabsContent>
+
+          <TabsContent value="subscriptions" className="mt-6">
+            <SubscriptionsPanel />
           </TabsContent>
         </Tabs>
       </main>
