@@ -148,6 +148,27 @@ export default function AdminCRM() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
+  const [pricingRows, setPricingRows] = useState<
+    { id: string; pool_size: string; vegetation_level: string; plan_name: string | null; price: number | null }[]
+  >([]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("service_pricing")
+        .select("id,pool_size,vegetation_level,plan_name,price")
+        .eq("is_active", true)
+        .order("size_rank")
+        .order("vegetation_rank");
+      if (active && data) setPricingRows(data as typeof pricingRows);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [isAdmin]);
+
   const contactById = useMemo(
     () => Object.fromEntries(contacts.map((c) => [c.id, c])) as Record<string, Contact>,
     [contacts],
