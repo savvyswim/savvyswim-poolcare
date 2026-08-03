@@ -24,6 +24,8 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
 
 const EMAIL = "hi@savagepools.us";
 
