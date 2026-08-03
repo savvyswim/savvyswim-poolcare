@@ -504,7 +504,6 @@ export default function AdminCRM() {
               )}
             </Card>
           </TabsContent>
-          </TabsContent>
 
           <TabsContent value="plans">
             <Card className="crm-panel p-0 overflow-hidden">
