@@ -254,19 +254,19 @@ const Index = () => {
       {/* SERVICES */}
       <section id="services" className="py-24 sm:py-32 relative">
         <div className="container-tight">
-          <div className="max-w-2xl mb-16">
-            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+          <div className="max-w-2xl mb-14 border-t-2 border-accent pt-6">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-3">
               What we do
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              Everything water,
-              <span className="text-gradient-amber"> under one roof.</span>
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
+              Everything water, under one roof.
             </h2>
-            <p className="mt-4 text-muted-foreground text-lg">
+            <p className="mt-4 text-muted-foreground text-base leading-relaxed">
               From custom design and ground-up construction to weekly service
               and renovations — one team, one warranty, one phone call.
             </p>
           </div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
