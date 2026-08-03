@@ -21,10 +21,22 @@ import {
   X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
-import heroPoster from "@/assets/pool-hero.jpg";
-import poolDesign from "@/assets/pool-design.jpg";
-import poolNight from "@/assets/pool-night.jpg";
-import poolService from "@/assets/pool-service.jpg";
+import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
+import photoSunsetVilla from "@/assets/AdobeStock_116633511.jpg.asset.json";
+import photoStoneCourtyard from "@/assets/AdobeStock_191328716.jpg.asset.json";
+import photoDeskSunset from "@/assets/AdobeStock_470929864.jpg.asset.json";
+import photoResortLap from "@/assets/AdobeStock_517091924.jpg.asset.json";
+import photoFamilySplash from "@/assets/AdobeStock_528893688.jpg.asset.json";
+import photoGeometric from "@/assets/AdobeStock_548072467.jpg.asset.json";
+import photoWhiteHouse from "@/assets/AdobeStock_559236027.jpg.asset.json";
+import photoTexasFreeform from "@/assets/AdobeStock_611792597.jpg.asset.json";
+import photoKidSwim from "@/assets/AdobeStock_77771910.jpg.asset.json";
+
+const heroPoster = photoTexasFreeform.url;
+const poolDesign = photoGeometric.url;
+const poolNight = photoSunsetVilla.url;
+const poolService = photoResortLap.url;
+
 import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
