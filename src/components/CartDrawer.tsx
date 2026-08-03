@@ -233,7 +233,8 @@ export const CartDrawer = () => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              No card is charged here. We confirm stock and freight, then send a secure payment link.
+              Next step is secure card payment. Your order is confirmed and marked paid as soon as
+              the payment clears.
             </p>
 
             <div className="flex gap-2 pb-6">
