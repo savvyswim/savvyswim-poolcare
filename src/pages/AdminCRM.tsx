@@ -335,22 +335,24 @@ export default function AdminCRM() {
 
 
       <main className="container mx-auto px-4 py-6 space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Open leads", value: stats.open },
             { label: "Won", value: stats.won },
             { label: "Pipeline value", value: money(stats.pipeline) },
             { label: "Overdue tasks", value: stats.overdue },
           ].map((s) => (
-            <Card key={s.label} className="p-4">
-              <div className="text-xs uppercase tracking-wide text-muted-foreground">{s.label}</div>
-              <div className="text-2xl font-semibold mt-1">{s.value}</div>
-            </Card>
+            <div key={s.label} className="crm-panel crm-stat p-4">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {s.label}
+              </div>
+              <div className="text-2xl font-bold mt-1 tracking-tight">{s.value}</div>
+            </div>
           ))}
         </div>
 
-        <Tabs defaultValue="pipeline">
-          <TabsList>
+        <Tabs defaultValue="pipeline" className="space-y-5">
+          <TabsList className="crm-tabs">
             <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
@@ -362,7 +364,7 @@ export default function AdminCRM() {
               placeholder="Search leads by name, email, phone, service…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="max-w-md"
+              className="max-w-md bg-card"
             />
             {loadingData ? (
               <div className="py-12 text-center text-muted-foreground">Loading…</div>
@@ -372,19 +374,24 @@ export default function AdminCRM() {
                   const items = filteredLeads.filter((l) => l.stage === stage.key);
                   return (
                     <div key={stage.key} className="space-y-2">
-                      <div className="flex items-center justify-between px-1">
-                        <span className="text-sm font-semibold">{stage.label}</span>
-                        <span className="text-xs text-muted-foreground">{items.length}</span>
+                      <div className="crm-col-head flex items-center justify-between px-3 py-2">
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          {stage.label}
+                        </span>
+                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                          {items.length}
+                        </span>
                       </div>
                       <div className="space-y-2 min-h-[80px]">
                         {items.map((l) => {
                           const c = l.contact_id ? contactById[l.contact_id] : null;
                           return (
-                            <Card
+                            <div
                               key={l.id}
                               onClick={() => setOpenLeadId(l.id)}
-                              className="p-3 cursor-pointer hover:border-primary/60 transition"
+                              className="crm-lead-card p-3 cursor-pointer"
                             >
+
                               <div className="text-sm font-medium leading-snug">{l.title}</div>
                               <div className="text-xs text-muted-foreground mt-1">
                                 {c?.full_name ?? "No contact"}
