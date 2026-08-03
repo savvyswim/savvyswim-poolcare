@@ -172,6 +172,26 @@ const Index = () => {
     };
   }, []);
 
+  const [pricingRows, setPricingRows] = useState<
+    { id: string; pool_size: string; vegetation_level: string; price: number | null }[]
+  >([]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("service_pricing")
+        .select("id,pool_size,vegetation_level,price,size_rank,vegetation_rank")
+        .eq("is_active", true)
+        .order("size_rank")
+        .order("vegetation_rank");
+      if (active && data) setPricingRows(data as typeof pricingRows);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
