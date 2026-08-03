@@ -289,6 +289,7 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
+          plan_name: string | null
           pool_size: string
           price: number | null
           price_key: string | null
@@ -302,6 +303,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          plan_name?: string | null
           pool_size: string
           price?: number | null
           price_key?: string | null
@@ -315,6 +317,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          plan_name?: string | null
           pool_size?: string
           price?: number | null
           price_key?: string | null

@@ -173,7 +173,13 @@ const Index = () => {
   }, []);
 
   const [pricingRows, setPricingRows] = useState<
-    { id: string; pool_size: string; vegetation_level: string; price: number | null }[]
+    {
+      id: string;
+      pool_size: string;
+      vegetation_level: string;
+      plan_name: string | null;
+      price: number | null;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -181,7 +187,7 @@ const Index = () => {
     (async () => {
       const { data } = await supabase
         .from("service_pricing")
-        .select("id,pool_size,vegetation_level,price,size_rank,vegetation_rank")
+        .select("id,pool_size,vegetation_level,plan_name,price,size_rank,vegetation_rank")
         .eq("is_active", true)
         .order("size_rank")
         .order("vegetation_rank");
@@ -621,17 +627,18 @@ const Index = () => {
 
           {pricingRows.length > 0 && (
             <div className="mt-14">
-              <h3 className="text-xl font-semibold mb-2">Monthly service pricing</h3>
+              <h3 className="text-xl font-semibold mb-2">Monthly service plans</h3>
               <p className="text-muted-foreground text-sm mb-6 max-w-2xl">
-                Your rate is set by pool size and how much vegetation drops into the water. Pick
-                yours below and start service in under two minutes.
+                Every plan is weekly service with chemicals included. Your rate is set by pool size
+                and how much vegetation drops into the water — pick yours and start in two minutes.
               </p>
               <div className="overflow-x-auto rounded-sm border border-hairline">
                 <table className="w-full text-sm">
                   <thead className="bg-ink/60 text-left">
                     <tr>
+                      <th className="px-4 py-3 font-semibold">Plan</th>
                       <th className="px-4 py-3 font-semibold">Pool size</th>
-                      <th className="px-4 py-3 font-semibold">Trees / vegetation</th>
+                      <th className="px-4 py-3 font-semibold">Vegetation</th>
                       <th className="px-4 py-3 font-semibold text-right">Per month</th>
                       <th className="px-4 py-3" />
                     </tr>
@@ -639,7 +646,10 @@ const Index = () => {
                   <tbody>
                     {pricingRows.map((row) => (
                       <tr key={row.id} className="border-t border-hairline">
-                        <td className="px-4 py-3 font-medium">{row.pool_size}</td>
+                        <td className="px-4 py-3 font-semibold">
+                          {row.plan_name ?? `${row.pool_size} Pool`}
+                        </td>
+                        <td className="px-4 py-3">{row.pool_size}</td>
                         <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
                         <td className="px-4 py-3 text-right font-semibold text-gradient-amber">
                           {row.price != null ? `$${row.price}` : "Call"}

@@ -22,6 +22,7 @@ export type PricingRow = {
   size_rank: number;
   vegetation_level: string;
   vegetation_rank: number;
+  plan_name: string | null;
   sku: string;
   price: number | null;
   price_key: string | null;
@@ -45,7 +46,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
     if (!open) return;
     supabase
       .from("service_pricing")
-      .select("id,pool_size,size_rank,vegetation_level,vegetation_rank,sku,price,price_key")
+      .select("id,pool_size,size_rank,vegetation_level,vegetation_rank,plan_name,sku,price,price_key")
       .eq("is_active", true)
       .order("size_rank")
       .order("vegetation_rank")
@@ -121,7 +122,8 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
             <DialogHeader>
               <DialogTitle>Complete your monthly service</DialogTitle>
               <DialogDescription>
-                {selected?.pool_size} pool · {selected?.vegetation_level} — ${selected?.price}/month
+                {selected?.plan_name ?? `${selected?.pool_size} pool`} ·{" "}
+                {selected?.vegetation_level} — ${selected?.price}/month
               </DialogDescription>
             </DialogHeader>
             <div id="subscription-checkout">
@@ -178,11 +180,18 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
                           : "border-border hover:border-primary/50"
                       }`}
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-start gap-2 text-left">
                         {veg === v.vegetation_level && (
-                          <CheckCircle2 className="h-4 w-4 text-primary" />
+                          <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
                         )}
-                        {v.vegetation_level}
+                        <span>
+                          <span className="block font-medium">
+                            {v.plan_name ?? v.vegetation_level}
+                          </span>
+                          <span className="block text-xs text-muted-foreground">
+                            {v.vegetation_level}
+                          </span>
+                        </span>
                       </span>
                       <span className="font-semibold">${v.price}/mo</span>
                     </button>
