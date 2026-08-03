@@ -214,13 +214,19 @@ const Index = () => {
       <header className="fixed top-0 left-0 right-0 z-50">
         {/* Utility bar */}
         <div className="topbar hidden md:block text-[13px]">
-          <div className="container-tight flex h-9 items-center justify-end gap-6">
-            <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-            <a href="#shop" className="hover:opacity-80 transition">Shop</a>
-            <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
-            <span className="font-semibold">Sales: {PHONE_DISPLAY}</span>
+          <div className="container-tight flex h-9 items-center justify-between gap-6">
+            <a href="#services" className="font-semibold hover:opacity-80 transition">
+              Also a full custom pool building company — Design &amp; Build →
+            </a>
+            <div className="flex items-center gap-6">
+              <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
+              <a href="#shop" className="hover:opacity-80 transition">Shop</a>
+              <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
+              <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
+            </div>
           </div>
         </div>
+
         <div
           className={`bg-background border-b border-hairline transition-shadow duration-300 ${
             scrolled ? "shadow-card" : ""
