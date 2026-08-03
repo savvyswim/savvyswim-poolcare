@@ -10,6 +10,7 @@ import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Auth from "./pages/Auth.tsx";
 import AdminDesigns from "./pages/AdminDesigns.tsx";
+import AdminCleaning from "./pages/AdminCleaning.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/designs" element={<AdminDesigns />} />
+            <Route path="/admin/cleaning" element={<AdminCleaning />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

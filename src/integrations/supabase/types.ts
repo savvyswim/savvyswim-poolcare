@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      cleaning_plans: {
+        Row: {
+          blurb: string
+          cadence: string
+          created_at: string
+          display_order: number
+          featured: boolean
+          id: string
+          is_active: boolean
+          items: string[]
+          name: string
+          price: string
+          updated_at: string
+        }
+        Insert: {
+          blurb?: string
+          cadence?: string
+          created_at?: string
+          display_order?: number
+          featured?: boolean
+          id?: string
+          is_active?: boolean
+          items?: string[]
+          name: string
+          price?: string
+          updated_at?: string
+        }
+        Update: {
+          blurb?: string
+          cadence?: string
+          created_at?: string
+          display_order?: number
+          featured?: boolean
+          id?: string
+          is_active?: boolean
+          items?: string[]
+          name?: string
+          price?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pool_designs: {
         Row: {
           category: Database["public"]["Enums"]["pool_category"]
