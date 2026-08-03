@@ -175,6 +175,23 @@
   }
   .animate-marquee { animation: marquee 30s linear infinite; }
 
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  .animate-marquee-slow { animation: marquee 55s linear infinite; }
+  .animate-marquee-slow-reverse { animation: marquee-reverse 65s linear infinite; }
+  .marquee-pause:hover .animate-marquee-slow,
+  .marquee-pause:hover .animate-marquee-slow-reverse { animation-play-state: paused; }
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee-slow, .animate-marquee-slow-reverse { animation: none; }
+  }
+
+
   /* 3D tilt card */
   .tilt-card {
     transform-style: preserve-3d;
