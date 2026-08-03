@@ -33,7 +33,7 @@
     --input: 205 25% 88%;
     --ring: 199 89% 42%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
     /* Brand tokens */
     --ink: 205 45% 97%;
@@ -49,9 +49,9 @@
     --gradient-ink: linear-gradient(180deg, hsl(0 0% 100%), hsl(205 40% 96%));
     --gradient-radial: radial-gradient(ellipse at top, hsl(199 89% 50% / 0.12), transparent 62%);
     --gradient-water: linear-gradient(180deg, hsl(196 90% 60% / 0), hsl(199 85% 50% / 0.18) 40%, hsl(208 70% 30% / 0.35));
-    --shadow-cta: 0 10px 26px -12px hsl(199 89% 40% / 0.55);
-    --shadow-card: 0 1px 0 hsl(210 20% 100% / 0.6) inset, 0 18px 40px -28px hsl(210 40% 20% / 0.35);
-    --shadow-3d: 0 10px 30px -18px hsl(210 40% 25% / 0.25), 0 30px 60px -40px hsl(210 40% 20% / 0.3);
+    --shadow-cta: 0 6px 18px -12px hsl(210 40% 20% / 0.45);
+    --shadow-card: 0 1px 2px hsl(210 30% 20% / 0.04), 0 8px 24px -20px hsl(210 30% 20% / 0.35);
+    --shadow-3d: 0 1px 2px hsl(210 30% 20% / 0.05), 0 18px 40px -34px hsl(210 40% 20% / 0.3);
 
     --on-media: 0 0% 100%;
   }
