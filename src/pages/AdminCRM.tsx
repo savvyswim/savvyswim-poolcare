@@ -303,28 +303,36 @@ export default function AdminCRM() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border sticky top-0 z-20 bg-background/95 backdrop-blur">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
+    <div className="crm-scope min-h-screen bg-background text-foreground">
+      <header className="crm-topbar sticky top-0 z-20">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Waves className="h-5 w-5 text-primary" />
+            <span className="grid h-9 w-9 place-items-center rounded-md bg-white/10">
+              <Waves className="h-5 w-5" />
+            </span>
             <div>
-              <h1 className="font-semibold leading-tight">CRM</h1>
-              <p className="text-xs text-muted-foreground">Leads, contacts, follow-ups</p>
+              <h1 className="font-semibold leading-tight tracking-tight">Savvy Swim CRM</h1>
+              <p className="text-xs crm-sub">Leads · Contacts · Follow-ups</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-white/85 hover:text-white hover:bg-white/10"
+            >
               <Link to="/admin/store">
                 <ArrowLeft className="h-4 w-4 mr-1" /> Store
               </Link>
             </Button>
-            <Button size="sm" onClick={() => setNewLeadOpen(true)}>
-              <Plus className="h-4 w-4 mr-1" /> New lead
+            <Button size="sm" onClick={() => setNewLeadOpen(true)} className="font-semibold">
+              <Plus className="h-4 w-4 mr-1" /> Create lead
             </Button>
           </div>
         </div>
       </header>
+
 
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
