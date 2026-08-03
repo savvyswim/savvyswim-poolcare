@@ -181,9 +181,15 @@ export default function AdminStore() {
           <Link to="/" className="flex items-center gap-2 font-bold">
             <Waves className="h-5 w-5 text-primary" /> Savvy Swim Store
           </Link>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4 inline mr-1" /> Back to site
-          </Link>
+          <div className="flex items-center gap-4 text-sm">
+            <Link to="/admin/crm" className="font-semibold text-primary hover:underline">
+              CRM
+            </Link>
+            <Link to="/" className="text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4 inline mr-1" /> Back to site
+            </Link>
+          </div>
+
         </div>
       </header>
 
