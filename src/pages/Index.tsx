@@ -74,7 +74,7 @@ const Index = () => {
             </div>
             <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
               <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
-              <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Powered by Manor Fix</span>
+              <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
             </span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
@@ -525,7 +525,7 @@ const Index = () => {
                   </div>
                   <div>
                     <div className="font-bold">Savvy Swim</div>
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">Powered by Manor Fix</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">A Santana &amp; Rivera Company</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline rounded-2xl overflow-hidden">
@@ -606,7 +606,7 @@ const Index = () => {
         <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <Waves className="h-4 w-4 text-amber-brand" />
-            <span>© {new Date().getFullYear()} Savvy Swim · Powered by Manor Fix. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Savvy Swim · A Santana & Rivera Company. All rights reserved.</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
