@@ -266,6 +266,12 @@ export default function AdminStore() {
                       {money(Number(o.shipping))}
                     </span>
                   </div>
+                  {Number(o.discount) > 0 && (
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Promo {o.promo_code}</span>
+                      <span>−{money(Number(o.discount))}</span>
+                    </div>
+                  )}
                   {o.notes && <p className="pt-2 text-muted-foreground">Notes: {o.notes}</p>}
                 </div>
               </Card>
@@ -388,6 +394,10 @@ export default function AdminStore() {
                 </div>
               </Card>
             ))}
+          </TabsContent>
+
+          <TabsContent value="promos" className="mt-6">
+            <PromoCodesPanel />
           </TabsContent>
         </Tabs>
       </main>
