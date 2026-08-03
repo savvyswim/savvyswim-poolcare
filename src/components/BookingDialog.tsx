@@ -113,17 +113,44 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     setSubmitting(true);
 
     const data = parsed.data;
+    const consentTimestamp = new Date().toISOString();
+    const consentText =
+      "I agree to receive SMS text messages from Savvy Swim regarding appointment reminders, quote follow-ups, and marketing updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt-out, HELP for help.";
+    const sourceUrl = typeof window !== "undefined" ? window.location.href : null;
+
+    // 1) Server-side write — this is the source of truth for the lead.
+    const { error } = await supabase.from("bookings").insert({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      service: data.service,
+      preferred_date: format(data.date, "yyyy-MM-dd"),
+      preferred_time: data.time,
+      notes: data.notes || null,
+      sms_opt_in: !!data.smsOptIn,
+      sms_consent_at: data.smsOptIn ? consentTimestamp : null,
+      sms_consent_text: data.smsOptIn ? consentText : null,
+      consent_source_url: sourceUrl,
+    });
+
+    if (error) {
+      setSubmitting(false);
+      toast.error("We couldn't submit your request", {
+        description: "Please try again or call us at (469) 213-8087.",
+      });
+      return;
+    }
+
+    // 2) Local copy (best effort, non-blocking)
     try {
-      const consentTimestamp = new Date().toISOString();
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       existing.push({
         ...data,
         smsOptIn: !!data.smsOptIn,
         smsConsentAt: data.smsOptIn ? consentTimestamp : null,
-        smsConsentText: data.smsOptIn
-          ? "I agree to receive SMS text messages from Savvy Swim regarding appointment reminders, quote follow-ups, and marketing updates. Msg & data rates may apply. Reply STOP to opt-out, HELP for help."
-          : null,
-        consentSourceUrl: typeof window !== "undefined" ? window.location.href : null,
+        smsConsentText: data.smsOptIn ? consentText : null,
+        consentSourceUrl: sourceUrl,
         date: format(data.date, "yyyy-MM-dd"),
         createdAt: consentTimestamp,
       });
@@ -132,51 +159,13 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       /* ignore */
     }
 
-    // Build a mailto so the request reaches Savvy Swim immediately, even
-    // without a backend. This opens the user's mail client pre-filled.
-    const consentStamp = new Date().toISOString();
-    const subject = `Booking — ${data.service} — ${data.name}`;
-    const smsBlock = data.smsOptIn
-      ? [
-          `SMS Consent:  GRANTED`,
-          `Consent at:   ${consentStamp}`,
-          `Source URL:   ${typeof window !== "undefined" ? window.location.href : "savagepools.us"}`,
-          `Consent text: "I agree to receive SMS text messages from Savvy Swim regarding appointment reminders, quote follow-ups, and marketing updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt-out, HELP for help."`,
-        ].join("\n")
-      : `SMS Consent:  NOT GRANTED — do NOT send SMS to this number.`;
-    const body = [
-      `New booking request from savvyswim.com`,
-      ``,
-      `Name:    ${data.name}`,
-      `Email:   ${data.email}`,
-      `Phone:   ${data.phone}`,
-      `Address: ${data.address}`,
-      ``,
-      `Service:  ${data.service}`,
-      `Date:     ${format(data.date, "EEEE, MMMM d, yyyy")}`,
-      `Time:     ${data.time}`,
-      ``,
-      smsBlock,
-      ``,
-      `Notes:`,
-      data.notes || "(none)",
-    ].join("\n");
-
-    const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-
-    // Defer opening so toast renders first
-    setTimeout(() => {
-      window.location.href = mailto;
-    }, 250);
-
     setSubmitting(false);
     setDone(data);
     toast.success("Booking received — we'll confirm shortly", {
       description: `${format(data.date, "EEE, MMM d")} · ${data.time}`,
     });
   };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
