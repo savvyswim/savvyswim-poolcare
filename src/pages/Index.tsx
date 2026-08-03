@@ -597,6 +597,25 @@ const Index = () => {
             </p>
           </div>
 
+          <div className="mb-12 grid gap-4 sm:grid-cols-3">
+            {[
+              { src: photoFamilySplash.url, alt: "Family playing in a clean, freshly serviced backyard pool in Dallas–Fort Worth" },
+              { src: photoKidSwim.url, alt: "Child swimming in crystal clear balanced pool water" },
+              { src: photoModernPatio.url, alt: "Modern poolside patio with lounge chairs and shade sail" },
+            ].map((p) => (
+              <div key={p.src} className="overflow-hidden rounded-sm border border-hairline shadow-card">
+                <img
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+
+
+
           <div className="grid md:grid-cols-3 gap-5">
             {cleaningPlans.map((plan) => (
               <div
