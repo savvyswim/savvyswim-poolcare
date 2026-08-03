@@ -150,7 +150,7 @@ const Index = () => {
                 <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
               </span>
             </a>
-            <nav className="hidden lg:flex items-center gap-7 text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
+            <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
               <a href="#services" className="hover:text-primary transition">Residential</a>
               <a href="#cleaning" className="hover:text-primary transition">Pool Care</a>
               <a href="#shop" className="hover:text-primary transition">Shop</a>
@@ -161,14 +161,14 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <a
                 href={PHONE_HREF}
-                className="hidden sm:inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
+                className="hidden sm:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
               <button
                 type="button"
                 onClick={() => openBooking()}
-                className="btn-quote inline-flex items-center gap-2 rounded-md px-5 py-3 text-[13px] font-bold uppercase tracking-wide transition"
+                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-5 py-3 text-[13px] font-bold uppercase tracking-wide transition"
               >
                 Request Quote
               </button>
@@ -199,7 +199,7 @@ const Index = () => {
             <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium">
               Creating Backyard Memories For Over 15 Years
             </p>
-            <p className="text-on-media/90 mx-auto mt-5 max-w-2xl text-base leading-relaxed opacity-90">
+            <p className="text-on-media mx-auto mt-5 max-w-2xl text-base leading-relaxed opacity-95">
               Custom gunite pools, spas and outdoor living across Dallas–Fort Worth.
               You&rsquo;ll have our cell number, meet the crew pouring your shell, and
               swim in it for decades — 600+ backyards later, we still answer the phone ourselves.
