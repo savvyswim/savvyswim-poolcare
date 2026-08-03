@@ -95,14 +95,23 @@ export const CartDrawer = () => {
     <Sheet open={open} onOpenChange={close}>
       <SheetContent className="w-full sm:max-w-md flex flex-col overflow-y-auto">
         {placed ? (
-          <div className="flex flex-1 flex-col items-center justify-center text-center gap-4 py-10">
-            <CheckCircle2 className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">Order {placed} confirmed</h3>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              A specialist will email you within one business hour with stock confirmation, final
-              freight cost, and a secure payment link. Nothing is charged yet.
+          <div className="flex flex-1 flex-col gap-4 py-4">
+            <SheetHeader>
+              <SheetTitle>Pay for order {placed}</SheetTitle>
+              <SheetDescription>
+                Secure card payment. Your order is marked paid automatically as soon as the
+                payment goes through.
+              </SheetDescription>
+            </SheetHeader>
+            <PaymentTestModeBanner />
+            <StripeEmbeddedCheckout orderNumber={placed} />
+            <p className="text-xs text-muted-foreground pb-6">
+              Prefer to pay later? Your order {placed} is already saved — call{" "}
+              <a href="tel:+14692138087" className="font-semibold text-foreground">
+                (469) 213-8087
+              </a>{" "}
+              and we'll invoice you instead.
             </p>
-            <Button onClick={() => close(false)}>Keep shopping</Button>
           </div>
         ) : step === "cart" ? (
           <>
