@@ -218,6 +218,54 @@ export type Database = {
         }
         Relationships: []
       }
+      promo_codes: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_redemptions: number | null
+          min_subtotal: number
+          starts_at: string | null
+          times_used: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          min_subtotal?: number
+          starts_at?: string | null
+          times_used?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          min_subtotal?: number
+          starts_at?: string | null
+          times_used?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       shop_orders: {
         Row: {
           address: string | null
@@ -323,6 +371,7 @@ export type Database = {
           city: string | null
           created_at: string
           customer_name: string
+          discount: number
           email: string
           id: string
           notes: string | null
@@ -331,6 +380,7 @@ export type Database = {
           payment_status: string
           phone: string | null
           postal_code: string | null
+          promo_code: string | null
           shipping: number
           state: string | null
           status: string
@@ -345,6 +395,7 @@ export type Database = {
           city?: string | null
           created_at?: string
           customer_name: string
+          discount?: number
           email: string
           id?: string
           notes?: string | null
@@ -353,6 +404,7 @@ export type Database = {
           payment_status?: string
           phone?: string | null
           postal_code?: string | null
+          promo_code?: string | null
           shipping?: number
           state?: string | null
           status?: string
@@ -367,6 +419,7 @@ export type Database = {
           city?: string | null
           created_at?: string
           customer_name?: string
+          discount?: number
           email?: string
           id?: string
           notes?: string | null
@@ -375,6 +428,7 @@ export type Database = {
           payment_status?: string
           phone?: string | null
           postal_code?: string | null
+          promo_code?: string | null
           shipping?: number
           state?: string | null
           status?: string
@@ -412,6 +466,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_promo_code: {
+        Args: { p_code: string; p_subtotal: number }
+        Returns: Json
+      }
       place_store_order: {
         Args: {
           p_address: string
@@ -422,6 +480,7 @@ export type Database = {
           p_notes: string
           p_phone: string
           p_postal_code: string
+          p_promo_code?: string
           p_state: string
         }
         Returns: string
