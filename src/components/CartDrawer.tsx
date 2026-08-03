@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Minus, Plus, ShoppingBag, Trash2, Loader2 } from "lucide-react";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
@@ -41,14 +41,51 @@ const EMPTY = {
 };
 
 export const CartDrawer = () => {
-  const { lines, open, setOpen, setQty, remove, clear, subtotal, tax, shipping, total, count } =
-    useCart();
+  const { lines, open, setOpen, setQty, remove, clear, subtotal, shipping, count } = useCart();
   const [step, setStep] = useState<"cart" | "checkout">("cart");
   const [form, setForm] = useState(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [placed, setPlaced] = useState<string | null>(null);
+  const [promoInput, setPromoInput] = useState("");
+  const [promo, setPromo] = useState<{ code: string; discount: number } | null>(null);
+  const [checkingPromo, setCheckingPromo] = useState(false);
+
+  // Discount, tax and total mirror the server-side calculation in place_store_order.
+  const discount = Math.min(promo?.discount ?? 0, subtotal);
+  const taxable = Math.max(subtotal - discount, 0);
+  const tax = Math.round(taxable * 0.0825 * 100) / 100;
+  const total = Math.round((taxable + tax + shipping) * 100) / 100;
+
+  // A changing cart invalidates a previously calculated discount.
+  useEffect(() => {
+    setPromo(null);
+  }, [subtotal]);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const applyPromo = async () => {
+    const code = promoInput.trim();
+    if (!code) return;
+    setCheckingPromo(true);
+    const { data, error } = await supabase.rpc("check_promo_code", {
+      p_code: code,
+      p_subtotal: subtotal,
+    });
+    setCheckingPromo(false);
+    const result = data as { valid?: boolean; code?: string; discount?: number; message?: string } | null;
+    if (error || !result?.valid) {
+      setPromo(null);
+      toast.error(result?.message ?? "We couldn't apply that code");
+      return;
+    }
+    setPromo({ code: result.code!, discount: Number(result.discount) || 0 });
+    toast.success(`${result.code} applied`);
+  };
+
+  const removePromo = () => {
+    setPromo(null);
+    setPromoInput("");
+  };
 
   const close = (v: boolean) => {
     setOpen(v);
@@ -80,6 +117,7 @@ export const CartDrawer = () => {
       p_postal_code: parsed.data.postal_code ?? null,
       p_notes: parsed.data.notes ?? null,
       p_items: lines.map((l) => ({ product_id: l.product_id, quantity: l.quantity })),
+      p_promo_code: promo?.code ?? null,
     });
 
     setSubmitting(false);
@@ -90,6 +128,7 @@ export const CartDrawer = () => {
 
     setPlaced(orderNumber as string);
     clear();
+    removePromo();
     toast.success(`Order ${orderNumber} received — pay securely below`);
   };
 
@@ -179,7 +218,35 @@ export const CartDrawer = () => {
                 </div>
 
                 <div className="border-t border-hairline pt-4 space-y-1.5 text-sm">
+                  <div className="flex gap-2 pb-2">
+                    <Input
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                      placeholder="Promo code"
+                      aria-label="Promo code"
+                      className="h-9"
+                    />
+                    {promo ? (
+                      <Button type="button" variant="outline" className="h-9" onClick={removePromo}>
+                        Remove
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-9"
+                        onClick={applyPromo}
+                        disabled={checkingPromo || !promoInput.trim()}
+                      >
+                        {checkingPromo && <Loader2 className="h-4 w-4 animate-spin mr-1" />}
+                        Apply
+                      </Button>
+                    )}
+                  </div>
                   <Row label="Subtotal" value={money(subtotal)} />
+                  {discount > 0 && (
+                    <Row label={`Promo ${promo?.code}`} value={`−${money(discount)}`} />
+                  )}
                   <Row label="Estimated tax" value={money(tax)} />
                   <Row label="Delivery" value={shipping === 0 ? "Free" : money(shipping)} />
                   <div className="flex justify-between pt-2 text-base font-bold">
@@ -224,6 +291,9 @@ export const CartDrawer = () => {
 
             <div className="border-t border-hairline pt-3 space-y-1.5 text-sm">
               <Row label="Subtotal" value={money(subtotal)} />
+              {discount > 0 && (
+                <Row label={`Promo ${promo?.code}`} value={`−${money(discount)}`} />
+              )}
               <Row label="Estimated tax" value={money(tax)} />
               <Row label="Delivery" value={shipping === 0 ? "Free" : money(shipping)} />
               <div className="flex justify-between pt-1 text-base font-bold">

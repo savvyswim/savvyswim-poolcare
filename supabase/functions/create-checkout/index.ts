@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
 
     const { data: order, error: orderError } = await supabase
       .from("store_orders")
-      .select("id, order_number, email, customer_name, subtotal, tax, shipping, total, payment_status")
+      .select("id, order_number, email, customer_name, subtotal, discount, promo_code, tax, shipping, total, payment_status")
       .eq("order_number", orderNumber)
       .maybeSingle();
 
@@ -79,8 +79,23 @@ Deno.serve(async (req) => {
     }
 
     const stripe = createStripeClient(environment as StripeEnv);
+
+    // Discounts can't be negative line items — attach a one-off coupon instead.
+    let discounts: { coupon: string }[] | undefined;
+    const discountCents = cents(order.discount ?? 0);
+    if (discountCents > 0) {
+      const coupon = await stripe.coupons.create({
+        amount_off: discountCents,
+        currency: "usd",
+        duration: "once",
+        name: order.promo_code ? `Promo ${order.promo_code}` : "Discount",
+      });
+      discounts = [{ coupon: coupon.id }];
+    }
+
     const session = await stripe.checkout.sessions.create({
       line_items,
+      ...(discounts ? { discounts } : {}),
       mode: "payment",
       ui_mode: "embedded_page",
       return_url: returnUrl,

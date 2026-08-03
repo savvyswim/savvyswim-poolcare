@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { Waves, ArrowLeft, Plus, Trash2, Save, Loader2 } from "lucide-react";
 import { money } from "@/hooks/useCart";
+import { PromoCodesPanel } from "@/components/admin/PromoCodesPanel";
 import type { Product } from "@/lib/products";
 
 type OrderItem = {
@@ -41,6 +42,8 @@ type Order = {
   state: string | null;
   postal_code: string | null;
   subtotal: number;
+  discount: number;
+  promo_code: string | null;
   tax: number;
   shipping: number;
   total: number;
@@ -188,6 +191,7 @@ export default function AdminStore() {
           <TabsList>
             <TabsTrigger value="orders">Orders ({orders.length})</TabsTrigger>
             <TabsTrigger value="products">Products ({products.length})</TabsTrigger>
+            <TabsTrigger value="promos">Promo codes</TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders" className="mt-6 space-y-4">
@@ -262,6 +266,12 @@ export default function AdminStore() {
                       {money(Number(o.shipping))}
                     </span>
                   </div>
+                  {Number(o.discount) > 0 && (
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Promo {o.promo_code}</span>
+                      <span>−{money(Number(o.discount))}</span>
+                    </div>
+                  )}
                   {o.notes && <p className="pt-2 text-muted-foreground">Notes: {o.notes}</p>}
                 </div>
               </Card>
@@ -384,6 +394,10 @@ export default function AdminStore() {
                 </div>
               </Card>
             ))}
+          </TabsContent>
+
+          <TabsContent value="promos" className="mt-6">
+            <PromoCodesPanel />
           </TabsContent>
         </Tabs>
       </main>
