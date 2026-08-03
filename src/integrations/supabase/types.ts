@@ -65,6 +65,54 @@ export type Database = {
         }
         Relationships: []
       }
+      shop_orders: {
+        Row: {
+          address: string | null
+          created_at: string
+          customer_name: string
+          email: string
+          id: string
+          item_name: string
+          item_sku: string | null
+          notes: string | null
+          order_type: string
+          phone: string | null
+          quantity: number
+          status: string
+          unit_price: number | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          customer_name: string
+          email: string
+          id?: string
+          item_name: string
+          item_sku?: string | null
+          notes?: string | null
+          order_type?: string
+          phone?: string | null
+          quantity?: number
+          status?: string
+          unit_price?: number | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          customer_name?: string
+          email?: string
+          id?: string
+          item_name?: string
+          item_sku?: string | null
+          notes?: string | null
+          order_type?: string
+          phone?: string | null
+          quantity?: number
+          status?: string
+          unit_price?: number | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

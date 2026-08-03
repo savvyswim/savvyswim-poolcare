@@ -25,6 +25,12 @@ import poolService from "@/assets/pool-service.jpg";
 import { BookingDialog } from "@/components/BookingDialog";
 import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
+import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
+import shopRobot from "@/assets/shop-robot-cleaner.jpg";
+import shopChemicals from "@/assets/shop-chemicals.jpg";
+import shopPump from "@/assets/shop-pump.jpg";
+import shopTools from "@/assets/shop-tools.jpg";
+
 
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
@@ -49,14 +55,53 @@ const REVIEWS_ROW_2 = [
 ];
 
 
+const CLEANING_PLANS = [
+  {
+    name: "Essential Clean",
+    price: "$149",
+    cadence: "/ month",
+    blurb: "Bi-weekly visits for low-traffic backyards.",
+    items: ["2 visits per month", "Skim, brush & vacuum", "Basket & skimmer cleanout", "Water chemistry balance", "Digital service report"],
+  },
+  {
+    name: "Weekly Crystal",
+    price: "$219",
+    cadence: "/ month",
+    blurb: "Our most popular DFW weekly service.",
+    items: ["4 visits per month", "Full chemical package included", "Filter pressure check", "Equipment inspection each visit", "Photo report after every clean", "Priority scheduling"],
+    featured: true,
+  },
+  {
+    name: "Total Care",
+    price: "$349",
+    cadence: "/ month",
+    blurb: "Hands-off ownership, pool always guest-ready.",
+    items: ["4 visits + on-call touch-ups", "Chemicals, salt & tabs included", "Quarterly filter deep clean", "Free minor equipment repairs", "Seasonal open/close service", "24/7 text support"],
+  },
+];
+
+const SHOP_PRODUCTS = [
+  { name: "AquaGlide Robotic Cleaner", sku: "SS-ROB-01", price: 899, img: shopRobot, blurb: "Cordless robot that scrubs floor, walls, and waterline in 90 minutes." },
+  { name: "Crystal Chem Season Kit", sku: "SS-CHEM-04", price: 189, img: shopChemicals, blurb: "Chlorine tabs, shock, algaecide, clarifier, and a pro test kit." },
+  { name: "Variable-Speed Pump 1.65HP", sku: "SS-PMP-165", price: 1149, img: shopPump, blurb: "Energy-saving pump that typically cuts pool power bills by half." },
+  { name: "Pro Maintenance Tool Set", sku: "SS-TOOL-07", price: 129, img: shopTools, blurb: "Telescopic pole, leaf rake, vacuum head, and wall brush." },
+];
+
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
+  const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
+  const [orderOpen, setOrderOpen] = useState(false);
+  const openOrder = (item: OrderItem) => {
+    setOrderItem(item);
+    setOrderOpen(true);
+  };
   const openBooking = (service?: string) => {
     setBookingService(service);
     setBookingOpen(true);
   };
+
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,7 +143,10 @@ const Index = () => {
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             <a href="#services" className="hover:text-foreground transition">Services</a>
+            <a href="#cleaning" className="hover:text-foreground transition">Cleaning</a>
+            <a href="#shop" className="hover:text-foreground transition">Shop</a>
             <a href="#portfolio" className="hover:text-foreground transition">Portfolio</a>
+
             <a href="#about" className="hover:text-foreground transition">About</a>
             <a href="#contact" className="hover:text-foreground transition">Contact</a>
           </nav>
@@ -398,6 +446,123 @@ const Index = () => {
         </div>
       </section>
 
+      {/* CLEANING PLANS */}
+      <section id="cleaning" className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
+        <div className="container-tight">
+          <div className="max-w-2xl mb-12">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
+              / 03 — Pool Cleaning Service
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+              Weekly cleaning
+              <span className="text-gradient-amber"> across DFW.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Licensed, insured techs. Chemicals included. Every visit ends with a photo
+              report in your inbox — no guessing, no surprise invoices.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {CLEANING_PLANS.map((plan) => (
+              <div
+                key={plan.name}
+                className={`card-3d rounded-2xl p-7 flex flex-col ${
+                  plan.featured ? "ring-1 ring-amber-brand/50" : ""
+                }`}
+              >
+                {plan.featured && (
+                  <span className="self-start mb-4 rounded-full bg-amber-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                    Most popular
+                  </span>
+                )}
+                <h3 className="text-xl font-bold">{plan.name}</h3>
+                <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.blurb}</p>
+                <div className="flex items-end gap-1 mb-6">
+                  <span className="text-4xl font-bold text-gradient-amber">{plan.price}</span>
+                  <span className="text-sm text-muted-foreground mb-1">{plan.cadence}</span>
+                </div>
+                <ul className="space-y-2.5 mb-7">
+                  {plan.items.map((it) => (
+                    <li key={it} className="flex gap-2.5 text-sm text-foreground/85">
+                      <CheckCircle2 className="h-4 w-4 text-amber-brand shrink-0 mt-0.5" />
+                      {it}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  onClick={() =>
+                    openOrder({ name: `${plan.name} cleaning plan`, sku: plan.name, type: "cleaning_plan" })
+                  }
+                  className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                >
+                  Start this plan <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SHOP */}
+      <section id="shop" className="py-24 sm:py-32 relative">
+        <div className="container-tight">
+          <div className="max-w-2xl mb-12">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
+              / 04 — Pool Supply Store
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+              Pro-grade gear,
+              <span className="text-gradient-amber"> contractor pricing.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Order equipment and chemicals direct from our warehouse. Every request lands in
+              our order system and a specialist confirms stock, final price, and delivery
+              before anything is charged. Free local drop-off across DFW.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {SHOP_PRODUCTS.map((p) => (
+              <div key={p.sku} className="card-3d rounded-2xl overflow-hidden flex flex-col">
+                <img
+                  src={p.img}
+                  alt={`${p.name} — pool supply available from Savvy Swim`}
+                  loading="lazy"
+                  width={800}
+                  height={800}
+                  className="aspect-square w-full object-cover"
+                />
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="font-bold leading-snug">{p.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-2 mb-5 leading-relaxed">{p.blurb}</p>
+                  <div className="mt-auto flex items-center justify-between gap-3">
+                    <span className="text-lg font-bold text-gradient-amber">${p.price}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openOrder({ name: p.name, sku: p.sku, price: p.price, type: "product" })
+                      }
+                      className="inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
+                    >
+                      Order <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-sm text-muted-foreground">
+            Need something not listed? Call{" "}
+            <a href={PHONE_HREF} className="text-amber-brand font-semibold">{PHONE_DISPLAY}</a>{" "}
+            — we source pumps, heaters, tile, and automation from every major brand.
+          </p>
+        </div>
+      </section>
+
+
       {/* PORTFOLIO */}
       <section id="portfolio" className="py-24 sm:py-32 relative">
         <div className="container-tight">
@@ -655,6 +820,8 @@ const Index = () => {
         onOpenChange={setBookingOpen}
         defaultService={bookingService}
       />
+      <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+
     </div>
   );
 };
