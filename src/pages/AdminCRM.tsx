@@ -303,46 +303,56 @@ export default function AdminCRM() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border sticky top-0 z-20 bg-background/95 backdrop-blur">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
+    <div className="crm-scope min-h-screen bg-background text-foreground">
+      <header className="crm-topbar sticky top-0 z-20">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Waves className="h-5 w-5 text-primary" />
+            <span className="grid h-9 w-9 place-items-center rounded-md bg-white/10">
+              <Waves className="h-5 w-5" />
+            </span>
             <div>
-              <h1 className="font-semibold leading-tight">CRM</h1>
-              <p className="text-xs text-muted-foreground">Leads, contacts, follow-ups</p>
+              <h1 className="font-semibold leading-tight tracking-tight">Savvy Swim CRM</h1>
+              <p className="text-xs crm-sub">Leads · Contacts · Follow-ups</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-white/85 hover:text-white hover:bg-white/10"
+            >
               <Link to="/admin/store">
                 <ArrowLeft className="h-4 w-4 mr-1" /> Store
               </Link>
             </Button>
-            <Button size="sm" onClick={() => setNewLeadOpen(true)}>
-              <Plus className="h-4 w-4 mr-1" /> New lead
+            <Button size="sm" onClick={() => setNewLeadOpen(true)} className="font-semibold">
+              <Plus className="h-4 w-4 mr-1" /> Create lead
             </Button>
           </div>
         </div>
       </header>
 
+
       <main className="container mx-auto px-4 py-6 space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Open leads", value: stats.open },
             { label: "Won", value: stats.won },
             { label: "Pipeline value", value: money(stats.pipeline) },
             { label: "Overdue tasks", value: stats.overdue },
           ].map((s) => (
-            <Card key={s.label} className="p-4">
-              <div className="text-xs uppercase tracking-wide text-muted-foreground">{s.label}</div>
-              <div className="text-2xl font-semibold mt-1">{s.value}</div>
-            </Card>
+            <div key={s.label} className="crm-panel crm-stat p-4">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {s.label}
+              </div>
+              <div className="text-2xl font-bold mt-1 tracking-tight">{s.value}</div>
+            </div>
           ))}
         </div>
 
-        <Tabs defaultValue="pipeline">
-          <TabsList>
+        <Tabs defaultValue="pipeline" className="space-y-5">
+          <TabsList className="crm-tabs">
             <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
@@ -354,7 +364,7 @@ export default function AdminCRM() {
               placeholder="Search leads by name, email, phone, service…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="max-w-md"
+              className="max-w-md bg-card"
             />
             {loadingData ? (
               <div className="py-12 text-center text-muted-foreground">Loading…</div>
@@ -364,19 +374,24 @@ export default function AdminCRM() {
                   const items = filteredLeads.filter((l) => l.stage === stage.key);
                   return (
                     <div key={stage.key} className="space-y-2">
-                      <div className="flex items-center justify-between px-1">
-                        <span className="text-sm font-semibold">{stage.label}</span>
-                        <span className="text-xs text-muted-foreground">{items.length}</span>
+                      <div className="crm-col-head flex items-center justify-between px-3 py-2">
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          {stage.label}
+                        </span>
+                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                          {items.length}
+                        </span>
                       </div>
                       <div className="space-y-2 min-h-[80px]">
                         {items.map((l) => {
                           const c = l.contact_id ? contactById[l.contact_id] : null;
                           return (
-                            <Card
+                            <div
                               key={l.id}
                               onClick={() => setOpenLeadId(l.id)}
-                              className="p-3 cursor-pointer hover:border-primary/60 transition"
+                              className="crm-lead-card p-3 cursor-pointer"
                             >
+
                               <div className="text-sm font-medium leading-snug">{l.title}</div>
                               <div className="text-xs text-muted-foreground mt-1">
                                 {c?.full_name ?? "No contact"}
@@ -392,7 +407,8 @@ export default function AdminCRM() {
                                   <CalendarClock className="h-3 w-3" /> {fmtDate(l.next_follow_up)}
                                 </div>
                               )}
-                            </Card>
+                            </div>
+
                           );
                         })}
                         {!items.length && (
@@ -409,7 +425,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="contacts">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {contacts.map((c) => (
                 <div key={c.id} className="p-4 flex flex-wrap items-center justify-between gap-3">
                   <div>
@@ -444,7 +460,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="tasks">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {tasks.map((t) => (
                 <label key={t.id} className="p-4 flex items-center gap-3 cursor-pointer">
                   <Checkbox checked={t.is_done} onCheckedChange={() => toggleTask(t)} />
@@ -468,7 +484,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="activity">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {activities.slice(0, 100).map((a) => (
                 <div key={a.id} className="p-4">
                   <div className="text-sm font-medium">
