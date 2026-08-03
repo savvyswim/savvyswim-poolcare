@@ -407,7 +407,8 @@ export default function AdminCRM() {
                                   <CalendarClock className="h-3 w-3" /> {fmtDate(l.next_follow_up)}
                                 </div>
                               )}
-                            </Card>
+                            </div>
+
                           );
                         })}
                         {!items.length && (
