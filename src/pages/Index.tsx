@@ -186,52 +186,47 @@ const Index = () => {
         </div>
         <div className="absolute inset-0 hero-scrim" />
 
-        <div className="container-tight relative z-10 text-center">
-          <div className="mx-auto max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground mb-7">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-brand" />
+        <div className="container-tight relative z-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 border-l-2 border-accent pl-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-on-media mb-6">
               Family-run in DFW since 2009
             </div>
-            <h1 className="text-on-media text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem] font-extrabold tracking-tight">
-              North Texas&rsquo; Award-Winning
-              <br className="hidden sm:block" /> Luxury Pool Builder
+            <h1 className="text-on-media text-[2.4rem] leading-[1.08] sm:text-[3.25rem] lg:text-[3.75rem] font-semibold tracking-tight">
+              North Texas&rsquo; award-winning
+              <br className="hidden sm:block" /> luxury pool builder
             </h1>
-            <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium">
-              Creating Backyard Memories For Over 15 Years
-            </p>
-            <p className="text-on-media mx-auto mt-5 max-w-2xl text-base leading-relaxed opacity-95">
+            <p className="text-on-media mt-6 max-w-xl text-[15px] sm:text-base leading-relaxed opacity-90">
               Custom gunite pools, spas and outdoor living across Dallas–Fort Worth.
               You&rsquo;ll have our cell number, meet the crew pouring your shell, and
               swim in it for decades — 600+ backyards later, we still answer the phone ourselves.
             </p>
 
-            <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
                 onClick={() => openBooking("Custom Pool Design & Build")}
-                className="btn-quote inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-sm font-bold uppercase tracking-wide transition"
+                className="btn-quote inline-flex items-center justify-center gap-2 rounded-sm px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] transition"
               >
                 <CalendarCheck className="h-4 w-4" />
                 Free Design Consultation
-                <ArrowRight className="h-4 w-4" />
               </button>
               <a
                 href={PHONE_HREF}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-background/95 px-8 py-4 text-sm font-bold uppercase tracking-wide text-foreground hover:bg-background transition"
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/40 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-on-media hover:bg-white/10 transition"
               >
-                <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
               </a>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-4 sm:gap-8">
+            <div className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-white/20 pt-6">
               {[
                 { k: "600+", v: "Pools built" },
                 { k: "4.9★", v: "Avg client rating" },
                 { k: "25yr", v: "Structural warranty" },
               ].map((s) => (
                 <div key={s.v}>
-                  <div className="text-on-media text-2xl sm:text-4xl font-extrabold">{s.k}</div>
-                  <div className="text-on-media mt-1 text-xs uppercase tracking-widest opacity-80">{s.v}</div>
+                  <div className="text-on-media text-2xl sm:text-[2rem] font-semibold">{s.k}</div>
+                  <div className="text-on-media mt-1 text-[10px] uppercase tracking-[0.18em] opacity-75">{s.v}</div>
                 </div>
               ))}
             </div>
@@ -259,19 +254,19 @@ const Index = () => {
       {/* SERVICES */}
       <section id="services" className="py-24 sm:py-32 relative">
         <div className="container-tight">
-          <div className="max-w-2xl mb-16">
-            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+          <div className="max-w-2xl mb-14 border-t-2 border-accent pt-6">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-3">
               What we do
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              Everything water,
-              <span className="text-gradient-amber"> under one roof.</span>
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
+              Everything water, under one roof.
             </h2>
-            <p className="mt-4 text-muted-foreground text-lg">
+            <p className="mt-4 text-muted-foreground text-base leading-relaxed">
               From custom design and ground-up construction to weekly service
               and renovations — one team, one warranty, one phone call.
             </p>
           </div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
@@ -354,35 +349,34 @@ const Index = () => {
                 onClick={() => openBooking(s.title)}
                 title={`Click to book a free quote for ${s.title}`}
                 aria-label={`Book a free quote for ${s.title}`}
-                className="text-left card-3d rounded-2xl p-6 sm:p-8 tilt-card group flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                className="text-left card-3d rounded-sm p-6 sm:p-7 group flex flex-col cursor-pointer"
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="h-12 w-12 rounded-xl bg-amber-brand/10 border border-amber-brand/30 flex items-center justify-center group-hover:bg-amber-brand/20 transition">
-                    <s.icon className="h-5 w-5 text-amber-brand" />
-                  </div>
-                  <span className="text-xs font-mono text-muted-foreground">0{i + 1}</span>
+                <div className="flex items-center gap-3 mb-5">
+                  <s.icon className="h-[18px] w-[18px] text-amber-brand" strokeWidth={1.75} />
+                  <span className="h-px flex-1 bg-hairline" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
+                <h3 className="text-[1.15rem] font-semibold mb-2 leading-snug">{s.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
 
                 <div className="my-5 h-px bg-hairline" />
 
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   What's included
                 </div>
                 <ul className="space-y-2 mb-6">
                   {s.includes.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
                       <span className="text-foreground/90">{item}</span>
                     </li>
                   ))}
                 </ul>
 
                 <span
-                  className="mt-auto inline-flex items-center justify-between gap-2 rounded-full border border-hairline bg-ink-soft/60 px-4 py-3 text-sm font-semibold text-foreground group-hover:bg-amber-brand group-hover:text-primary-foreground group-hover:border-amber-brand transition"
+                  className="mt-auto inline-flex items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground group-hover:text-primary transition"
                 >
-                  <span className="inline-flex items-center gap-2"><CalendarCheck className="h-4 w-4" /> Book Free Quote</span>
+                  <span className="inline-flex items-center gap-2">Book Free Quote</span>
+
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </button>
@@ -398,7 +392,7 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="relative tilt-card">
               <div className="absolute -inset-6 bg-gradient-radial opacity-70 blur-3xl" />
-              <div className="relative rounded-3xl overflow-hidden shadow-3d border border-hairline">
+              <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
                   alt="3D rendered pool with glass mosaic tile and waterfall"
@@ -417,7 +411,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 How it goes
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
                 See your pool in 3D
                 <span className="text-gradient-amber"> before we break ground.</span>
               </h2>
@@ -455,7 +449,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Keeping it clean
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
               Weekly cleaning
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
@@ -469,7 +463,7 @@ const Index = () => {
             {CLEANING_PLANS.map((plan) => (
               <div
                 key={plan.name}
-                className={`card-3d rounded-2xl p-7 flex flex-col ${
+                className={`card-3d rounded-sm p-7 flex flex-col ${
                   plan.featured ? "ring-1 ring-amber-brand/50" : ""
                 }`}
               >
@@ -481,7 +475,7 @@ const Index = () => {
                 <h3 className="text-xl font-bold">{plan.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.blurb}</p>
                 <div className="flex items-end gap-1 mb-6">
-                  <span className="text-4xl font-bold text-gradient-amber">{plan.price}</span>
+                  <span className="text-[2rem] font-semibold text-gradient-amber">{plan.price}</span>
                   <span className="text-sm text-muted-foreground mb-1">{plan.cadence}</span>
                 </div>
                 <ul className="space-y-2.5 mb-7">
@@ -514,7 +508,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               The supply room
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
               Pro-grade gear,
               <span className="text-gradient-amber"> contractor pricing.</span>
             </h2>
@@ -527,7 +521,7 @@ const Index = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {SHOP_PRODUCTS.map((p) => (
-              <div key={p.sku} className="card-3d rounded-2xl overflow-hidden flex flex-col">
+              <div key={p.sku} className="card-3d rounded-sm overflow-hidden flex flex-col">
                 <img
                   src={p.img}
                   alt={`${p.name} — pool supply available from Savvy Swim`}
@@ -573,7 +567,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 Backyards we've built
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
                 Pools that turn
                 <br />
                 <span className="text-gradient-chrome">heads.</span>
@@ -595,7 +589,7 @@ const Index = () => {
                 href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
                 title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
                 aria-label={`Inquire about ${p.title}`}
-                className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                className="card-3d rounded-sm overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
@@ -613,7 +607,7 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
-                  <h3 className="text-2xl font-bold mb-2 text-gradient-amber">{p.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-gradient-amber">{p.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
                   <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
                     <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
@@ -633,7 +627,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Neighbors talking
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
               Loved by neighbors
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
@@ -654,7 +648,7 @@ const Index = () => {
               {[...row, ...row].map((t, i) => (
                 <div
                   key={`${rowIdx}-${i}`}
-                  className="card-3d rounded-2xl p-6 w-[330px] sm:w-[380px] shrink-0"
+                  className="card-3d rounded-sm p-6 w-[330px] sm:w-[380px] shrink-0"
                 >
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(5)].map((_, s) => (
@@ -689,7 +683,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 Why folks pick us
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
                 Builders, not brokers —
                 <span className="text-gradient-amber"> in-house from dig to dive.</span>
               </h2>
@@ -716,7 +710,7 @@ const Index = () => {
 
             <div className="relative">
               <div className="absolute -inset-8 bg-gradient-radial opacity-70 blur-3xl" />
-              <div className="relative card-3d rounded-3xl p-8 shadow-3d">
+              <div className="relative card-3d rounded-sm p-8 shadow-3d">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="relative h-12 w-12 rounded-full bg-amber-brand grid place-items-center shadow-cta">
                     <Waves className="h-5 w-5 text-primary-foreground" />
@@ -727,7 +721,7 @@ const Index = () => {
                     <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">A Santana &amp; Rivera Company</div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-px bg-hairline rounded-2xl overflow-hidden">
+                <div className="grid grid-cols-2 gap-px bg-hairline rounded-sm overflow-hidden">
                   {[
                     { k: "600+", v: "Pools built", icon: Hammer },
                     { k: "25 yr", v: "Structural warranty", icon: ShieldCheck },
@@ -756,7 +750,7 @@ const Index = () => {
       {/* CTA */}
       <section id="contact" className="py-24 sm:py-32 relative overflow-hidden">
         <div className="container-tight">
-          <div className="relative rounded-3xl overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
+          <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">
               <img src={poolNight} alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" />
             </div>
@@ -768,7 +762,7 @@ const Index = () => {
                 <Waves className="h-7 w-7 text-primary-foreground" />
                 <span className="absolute inset-0 rounded-full border border-white/40 animate-ripple" />
               </div>
-              <h2 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
+              <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
                 <br />
                 <span className="text-gradient-amber italic">Let's design your pool.</span>
