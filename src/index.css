@@ -85,7 +85,7 @@
   .bg-ink-soft { background-color: hsl(var(--ink-soft)); }
   .text-amber-brand { color: hsl(var(--amber)); }
   .text-gold { color: hsl(var(--gold)); }
-  .bg-amber-brand { background: var(--gradient-amber); }
+  .bg-amber-brand { background: hsl(var(--amber)); }
   .bg-gold-brand { background: var(--gradient-gold); }
   .border-hairline { border-color: hsl(var(--hairline)); }
   .shadow-cta { box-shadow: var(--shadow-cta); }

@@ -186,52 +186,47 @@ const Index = () => {
         </div>
         <div className="absolute inset-0 hero-scrim" />
 
-        <div className="container-tight relative z-10 text-center">
-          <div className="mx-auto max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground mb-7">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-brand" />
+        <div className="container-tight relative z-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 border-l-2 border-accent pl-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-on-media mb-6">
               Family-run in DFW since 2009
             </div>
-            <h1 className="text-on-media text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem] font-extrabold tracking-tight">
-              North Texas&rsquo; Award-Winning
-              <br className="hidden sm:block" /> Luxury Pool Builder
+            <h1 className="text-on-media text-[2.4rem] leading-[1.08] sm:text-[3.25rem] lg:text-[3.75rem] font-semibold tracking-tight">
+              North Texas&rsquo; award-winning
+              <br className="hidden sm:block" /> luxury pool builder
             </h1>
-            <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium">
-              Creating Backyard Memories For Over 15 Years
-            </p>
-            <p className="text-on-media mx-auto mt-5 max-w-2xl text-base leading-relaxed opacity-95">
+            <p className="text-on-media mt-6 max-w-xl text-[15px] sm:text-base leading-relaxed opacity-90">
               Custom gunite pools, spas and outdoor living across Dallas–Fort Worth.
               You&rsquo;ll have our cell number, meet the crew pouring your shell, and
               swim in it for decades — 600+ backyards later, we still answer the phone ourselves.
             </p>
 
-            <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
                 onClick={() => openBooking("Custom Pool Design & Build")}
-                className="btn-quote inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-sm font-bold uppercase tracking-wide transition"
+                className="btn-quote inline-flex items-center justify-center gap-2 rounded-sm px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] transition"
               >
                 <CalendarCheck className="h-4 w-4" />
                 Free Design Consultation
-                <ArrowRight className="h-4 w-4" />
               </button>
               <a
                 href={PHONE_HREF}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-background/95 px-8 py-4 text-sm font-bold uppercase tracking-wide text-foreground hover:bg-background transition"
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/40 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-on-media hover:bg-white/10 transition"
               >
-                <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
               </a>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-4 sm:gap-8">
+            <div className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-white/20 pt-6">
               {[
                 { k: "600+", v: "Pools built" },
                 { k: "4.9★", v: "Avg client rating" },
                 { k: "25yr", v: "Structural warranty" },
               ].map((s) => (
                 <div key={s.v}>
-                  <div className="text-on-media text-2xl sm:text-4xl font-extrabold">{s.k}</div>
-                  <div className="text-on-media mt-1 text-xs uppercase tracking-widest opacity-80">{s.v}</div>
+                  <div className="text-on-media text-2xl sm:text-[2rem] font-semibold">{s.k}</div>
+                  <div className="text-on-media mt-1 text-[10px] uppercase tracking-[0.18em] opacity-75">{s.v}</div>
                 </div>
               ))}
             </div>
