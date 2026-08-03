@@ -121,7 +121,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
         smsOptIn: !!data.smsOptIn,
         smsConsentAt: data.smsOptIn ? consentTimestamp : null,
         smsConsentText: data.smsOptIn
-          ? "I agree to receive SMS text messages from Savage Pools regarding appointment reminders, quote follow-ups, and marketing updates. Msg & data rates may apply. Reply STOP to opt-out, HELP for help."
+          ? "I agree to receive SMS text messages from Savvy Swim regarding appointment reminders, quote follow-ups, and marketing updates. Msg & data rates may apply. Reply STOP to opt-out, HELP for help."
           : null,
         consentSourceUrl: typeof window !== "undefined" ? window.location.href : null,
         date: format(data.date, "yyyy-MM-dd"),
@@ -132,7 +132,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       /* ignore */
     }
 
-    // Build a mailto so the request reaches Savage Pools immediately, even
+    // Build a mailto so the request reaches Savvy Swim immediately, even
     // without a backend. This opens the user's mail client pre-filled.
     const consentStamp = new Date().toISOString();
     const subject = `Booking — ${data.service} — ${data.name}`;
@@ -141,11 +141,11 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
           `SMS Consent:  GRANTED`,
           `Consent at:   ${consentStamp}`,
           `Source URL:   ${typeof window !== "undefined" ? window.location.href : "savagepools.us"}`,
-          `Consent text: "I agree to receive SMS text messages from Savage Pools regarding appointment reminders, quote follow-ups, and marketing updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt-out, HELP for help."`,
+          `Consent text: "I agree to receive SMS text messages from Savvy Swim regarding appointment reminders, quote follow-ups, and marketing updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt-out, HELP for help."`,
         ].join("\n")
       : `SMS Consent:  NOT GRANTED — do NOT send SMS to this number.`;
     const body = [
-      `New booking request from savagepools.us`,
+      `New booking request from savvyswim.com`,
       ``,
       `Name:    ${data.name}`,
       `Email:   ${data.email}`,
@@ -261,9 +261,9 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                   className="mt-1 h-4 w-4 accent-amber-brand shrink-0"
                 />
                 <span className="text-[11px] leading-relaxed text-muted-foreground">
-                  I agree to receive SMS text messages from <strong className="text-foreground">Savage Pools</strong>.
+                  I agree to receive SMS text messages from <strong className="text-foreground">Savvy Swim</strong>.
                   By checking this box, you consent to receive text messages from
-                  Savage Pools regarding appointment reminders, quote follow-ups,
+                  Savvy Swim regarding appointment reminders, quote follow-ups,
                   and marketing updates. Message frequency varies. Message and data
                   rates may apply. You can reply <strong>STOP</strong> to opt-out at
                   any time or <strong>HELP</strong> for more information. Read our{" "}

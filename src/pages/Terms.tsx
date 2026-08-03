@@ -1,14 +1,14 @@
 const Terms = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">
     <article className="max-w-3xl mx-auto">
-      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savage Pools</a>
+      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
       <h1 className="text-3xl font-bold mt-4 mb-2">Terms and Conditions</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
-      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savage Pools</p>
+      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savvy Swim</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
-        <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a>
+        <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
@@ -18,7 +18,7 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
       <p className="mb-4">
-        By accessing our website (https://savagesupplies.us) or utilizing the services provided by
+        By accessing our website (https://savvyswim.com) or utilizing the services provided by
         Manor Fix LLC ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
         Terms and Conditions ("Terms") and our{" "}
         <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a>. If you do not
@@ -41,7 +41,7 @@ const Terms = () => (
 
       <ul className="space-y-3 mb-4 list-disc pl-6">
         <li>
-          <strong>Program Name / Brand:</strong> Savage Pools (operated by Manor Fix LLC).
+          <strong>Program Name / Brand:</strong> Savvy Swim (operated by Manor Fix LLC).
         </li>
         <li>
           <strong>Program Description / Use Case:</strong> Customer Care and Account Notifications.
@@ -78,7 +78,7 @@ const Terms = () => (
           <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a>.
         </li>
         <li>
-          <strong>Sample Message:</strong> "Savage Pools: Hi Jane, this is a reminder of your pool
+          <strong>Sample Message:</strong> "Savvy Swim: Hi Jane, this is a reminder of your pool
           inspection tomorrow at 10:00 AM. Reply STOP to opt out, HELP for help. Msg &amp; data
           rates may apply."
         </li>
@@ -172,10 +172,10 @@ const Terms = () => (
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">13. Contact Us</h2>
-      <p className="mb-1"><strong>Manor Fix LLC (dba Savage Pools)</strong></p>
+      <p className="mb-1"><strong>Manor Fix LLC (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
       <p className="mb-1">Phone: <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a></p>
-      <p className="mb-1">Website: <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a></p>
+      <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
   </main>
 );

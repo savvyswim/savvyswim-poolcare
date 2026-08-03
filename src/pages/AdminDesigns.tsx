@@ -111,12 +111,12 @@ export default function AdminDesigns() {
         ? ` Estimated investment: $${d.est_price_low.toLocaleString()}–$${d.est_price_high.toLocaleString()}.`
         : "";
     const kindWord = d.category === "plan" ? "blueprint" : d.category === "construction" ? "construction stage video" : "design idea";
-    const msg = `Savage Pools ${kindWord} — ${d.title} (${d.style}).\n${d.description}${priceTxt}\nPreview (link valid 1 hour): ${url}`;
+    const msg = `Savvy Swim ${kindWord} — ${d.title} (${d.style}).\n${d.description}${priceTxt}\nPreview (link valid 1 hour): ${url}`;
     if (channel === "copy") {
       await navigator.clipboard.writeText(msg);
       toast.success("Message copied — paste into a text or email");
     } else if (channel === "email") {
-      window.location.href = `mailto:?subject=${encodeURIComponent("Savage Pools: " + d.title)}&body=${encodeURIComponent(msg)}`;
+      window.location.href = `mailto:?subject=${encodeURIComponent("Savvy Swim: " + d.title)}&body=${encodeURIComponent(msg)}`;
     } else {
       window.location.href = `sms:?&body=${encodeURIComponent(msg)}`;
     }
@@ -230,7 +230,7 @@ export default function AdminDesigns() {
 
       <main className="container-tight py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-semibold">Savage Pools — design library</h1>
+          <h1 className="text-2xl font-semibold">Savvy Swim — design library</h1>
           <p className="text-sm text-muted-foreground">
             {grouped.design.length} designs · {grouped.plan.length} blueprint plans · {grouped.construction.length} 3D construction stage videos. Use Copy / Email / Text to share with customers.
           </p>
