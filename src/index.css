@@ -14,8 +14,8 @@
     --popover: 25 16% 10%;
     --popover-foreground: 34 30% 95%;
 
-    --primary: 34 78% 60%;
-    --primary-foreground: 25 30% 8%;
+    --primary: 196 84% 55%;
+    --primary-foreground: 205 60% 8%;
 
     --secondary: 25 14% 15%;
     --secondary-foreground: 34 30% 95%;
@@ -23,35 +23,35 @@
     --muted: 25 12% 14%;
     --muted-foreground: 32 14% 70%;
 
-    --accent: 34 78% 60%;
-    --accent-foreground: 25 30% 8%;
+    --accent: 196 84% 55%;
+    --accent-foreground: 205 60% 8%;
 
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 28 14% 20%;
     --input: 28 14% 20%;
-    --ring: 34 78% 60%;
+    --ring: 196 84% 55%;
 
     --radius: 0.75rem;
 
     /* Brand tokens */
     --ink: 25 20% 5%;
     --ink-soft: 25 16% 11%;
-    --amber: 34 80% 62%;        /* warm sun */
-    --amber-deep: 22 70% 48%;   /* terracotta */
+    --amber: 194 82% 58%;       /* clear pool blue */
+    --amber-deep: 205 78% 42%;  /* deep water */
     --gold: 40 72% 66%;         /* soft candlelight */
     --chrome: 34 22% 92%;
     --hairline: 28 14% 20%;
 
-    --gradient-amber: linear-gradient(135deg, hsl(38 88% 66%), hsl(20 72% 50%));
+    --gradient-amber: linear-gradient(135deg, hsl(188 88% 62%), hsl(206 80% 44%));
     --gradient-gold: linear-gradient(135deg, hsl(42 85% 72%), hsl(28 76% 55%));
     --gradient-ink: linear-gradient(180deg, hsl(25 16% 10%), hsl(25 20% 5%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(34 80% 60% / 0.16), transparent 62%);
-    --gradient-water: linear-gradient(180deg, hsl(190 45% 55% / 0), hsl(192 45% 45% / 0.12) 40%, hsl(200 40% 25% / 0.35));
-    --shadow-cta: 0 12px 34px -14px hsl(28 75% 50% / 0.55), inset 0 1px 0 hsl(40 60% 90% / 0.16);
+    --gradient-radial: radial-gradient(ellipse at top, hsl(194 82% 58% / 0.18), transparent 62%);
+    --gradient-water: linear-gradient(180deg, hsl(192 70% 60% / 0), hsl(196 65% 50% / 0.18) 40%, hsl(206 60% 22% / 0.4));
+    --shadow-cta: 0 12px 34px -14px hsl(198 85% 50% / 0.5), inset 0 1px 0 hsl(40 60% 90% / 0.16);
     --shadow-card: 0 1px 0 hsl(40 40% 90% / 0.04) inset, 0 26px 55px -32px hsl(20 40% 2% / 0.85);
-    --shadow-3d: 0 18px 50px -24px hsl(28 70% 45% / 0.25), 0 40px 80px -44px hsl(20 40% 2% / 0.9);
+    --shadow-3d: 0 18px 50px -24px hsl(200 75% 45% / 0.28), 0 40px 80px -44px hsl(20 40% 2% / 0.9);
   }
 }
 
@@ -63,8 +63,8 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(32 70% 45% / 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 90% 100%, hsl(20 60% 35% / 0.10), transparent),
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(196 70% 45% / 0.14), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 100%, hsl(30 55% 35% / 0.09), transparent),
       linear-gradient(180deg, hsl(25 18% 7%), hsl(25 20% 5%));
     background-attachment: fixed;
   }
@@ -89,7 +89,7 @@
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
   .text-gradient-amber {
-    background: linear-gradient(135deg, hsl(40 90% 74%), hsl(22 78% 55%));
+    background: linear-gradient(135deg, hsl(188 90% 72%), hsl(206 82% 52%));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -139,9 +139,9 @@
   /* Soft evening light drifting over the water */
   .water-caustics {
     background:
-      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(36 80% 70% / 0.14), transparent 62%),
-      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(22 70% 55% / 0.10), transparent 66%),
-      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(44 85% 78% / 0.10), transparent 62%);
+      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(192 85% 68% / 0.16), transparent 62%),
+      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(204 78% 55% / 0.12), transparent 66%),
+      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(184 88% 76% / 0.11), transparent 62%);
     filter: blur(26px);
     animation: caustics 16s ease-in-out infinite;
   }
