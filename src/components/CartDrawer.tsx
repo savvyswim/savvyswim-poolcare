@@ -218,7 +218,35 @@ export const CartDrawer = () => {
                 </div>
 
                 <div className="border-t border-hairline pt-4 space-y-1.5 text-sm">
+                  <div className="flex gap-2 pb-2">
+                    <Input
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                      placeholder="Promo code"
+                      aria-label="Promo code"
+                      className="h-9"
+                    />
+                    {promo ? (
+                      <Button type="button" variant="outline" className="h-9" onClick={removePromo}>
+                        Remove
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-9"
+                        onClick={applyPromo}
+                        disabled={checkingPromo || !promoInput.trim()}
+                      >
+                        {checkingPromo && <Loader2 className="h-4 w-4 animate-spin mr-1" />}
+                        Apply
+                      </Button>
+                    )}
+                  </div>
                   <Row label="Subtotal" value={money(subtotal)} />
+                  {discount > 0 && (
+                    <Row label={`Promo ${promo?.code}`} value={`−${money(discount)}`} />
+                  )}
                   <Row label="Estimated tax" value={money(tax)} />
                   <Row label="Delivery" value={shipping === 0 ? "Free" : money(shipping)} />
                   <div className="flex justify-between pt-2 text-base font-bold">
@@ -263,6 +291,9 @@ export const CartDrawer = () => {
 
             <div className="border-t border-hairline pt-3 space-y-1.5 text-sm">
               <Row label="Subtotal" value={money(subtotal)} />
+              {discount > 0 && (
+                <Row label={`Promo ${promo?.code}`} value={`−${money(discount)}`} />
+              )}
               <Row label="Estimated tax" value={money(tax)} />
               <Row label="Delivery" value={shipping === 0 ? "Free" : money(shipping)} />
               <div className="flex justify-between pt-1 text-base font-bold">
