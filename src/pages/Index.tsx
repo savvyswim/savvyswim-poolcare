@@ -880,9 +880,13 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: heroPoster, tag: "Infinity Edge", title: "Hillside Sunset", desc: "60-ft vanishing edge with glass mosaic and travertine deck, overlooking Austin hill country.", metric: "60 ft · gunite · 3D designed" },
-              { img: poolNight, tag: "Spa & Fire", title: "Night Lounge", desc: "Color-changing LEDs, spillover spa, and six bronze fire bowls — built for entertaining after dark.", metric: "6 fire features · automation" },
-              { img: poolService, tag: "Lap & Wellness", title: "Modern Lap", desc: "65-ft lap lane with pebble finish, salt system, and weekly white-glove service.", metric: "65 ft · salt · serviced weekly" },
+              { img: photoTexasFreeform.url, tag: "Freeform", title: "Hill Country Freeform", desc: "Curved freeform gunite with flagstone coping, raised spa spillway and shaded oak deck.", metric: "gunite · flagstone · spa spillway" },
+              { img: photoSunsetVilla.url, tag: "Pool & Spa", title: "Sunset Villa", desc: "Travertine deck, glass fencing and a raised spa with LED lighting — built for evenings outside.", metric: "spa · LED lighting · travertine" },
+              { img: photoGeometric.url, tag: "Modern Geometric", title: "Clean Lines", desc: "Rectangular pool with tanning ledge, spillover spa and broom-finish concrete surround.", metric: "tanning ledge · spillover spa" },
+              { img: photoWhiteHouse.url, tag: "Lap & Deck Jets", title: "White Modern", desc: "Long lap pool with deck jets, limestone coping and a crisp all-white architectural backdrop.", metric: "lap lane · deck jets · limestone" },
+              { img: photoDeskSunset.url, tag: "Resort Style", title: "Desert Sunset", desc: "Free-form pool with boulder accents, paver decking and warm evening landscape lighting.", metric: "boulders · pavers · night lighting" },
+              { img: photoStoneCourtyard.url, tag: "Courtyard", title: "Stone Courtyard", desc: "Kidney-shape pool wrapped in natural flagstone with an outdoor kitchen and lounge area.", metric: "flagstone · outdoor kitchen" },
+
             ].map((p) => (
               <a
                 key={p.title}
