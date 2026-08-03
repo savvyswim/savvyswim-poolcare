@@ -211,7 +211,7 @@ const Index = () => {
       </header>
 
       {/* HERO */}
-      <section className="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden">
+      <section className="relative min-h-[100svh] flex items-center pt-32 pb-24 overflow-hidden">
         <div ref={heroRef} className="absolute inset-0 will-change-transform">
           <div className="absolute inset-0 h-[120%] w-full">
             <SmoothLoopVideo src={heroVideo.url} poster={heroPoster} fade={1.4} />
@@ -220,52 +220,68 @@ const Index = () => {
         <div className="absolute inset-0 hero-scrim" />
 
         <div className="container-tight relative z-10">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 border-l-2 border-accent pl-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-on-media mb-6">
-              Family-run in DFW since 2009
+          <div className="mx-auto max-w-3xl text-center">
+            {/* Shield emblem */}
+            <div className="mx-auto mb-8 w-[92px]">
+              <div className="rounded-t-md bg-white/95 px-3 pt-3 pb-2 shadow-cta">
+                <div className="rounded-sm bg-primary px-2 py-3 text-center leading-none">
+                  <div className="text-[13px] font-extrabold tracking-[0.16em] text-white">SAVVY</div>
+                  <div className="text-[13px] font-extrabold tracking-[0.16em] text-white mt-1">SWIM</div>
+                </div>
+              </div>
+              <div className="mx-auto -mt-2 h-9 w-9 rotate-45 rounded-[6px] border-[3px] border-white/95 bg-primary" />
             </div>
-            <h1 className="text-on-media text-[2.4rem] leading-[1.08] sm:text-[3.25rem] lg:text-[3.75rem] font-semibold tracking-tight">
-              North Texas&rsquo; award-winning
-              <br className="hidden sm:block" /> luxury pool builder
+
+            <h1 className="text-on-media text-[2.3rem] leading-[1.1] sm:text-[3.1rem] lg:text-[3.6rem] font-bold tracking-tight">
+              Dallas–Fort Worth&rsquo;s #1 Award-Winning Luxury Pool Builder
             </h1>
-            <p className="text-on-media mt-6 max-w-xl text-[15px] sm:text-base leading-relaxed opacity-90">
-              Custom gunite pools, spas and outdoor living across Dallas–Fort Worth.
-              You&rsquo;ll have our cell number, meet the crew pouring your shell, and
-              swim in it for decades — 600+ backyards later, we still answer the phone ourselves.
+            <p className="text-on-media mt-5 text-lg sm:text-2xl font-medium opacity-95">
+              Creating Backyard Memories For Over 15 Years
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 type="button"
                 onClick={() => openBooking("Custom Pool Design & Build")}
-                className="btn-quote inline-flex items-center justify-center gap-2 rounded-sm px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] transition"
+                className="btn-quote inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[13px] font-bold uppercase tracking-[0.1em] transition"
               >
                 <CalendarCheck className="h-4 w-4" />
                 Free Design Consultation
               </button>
               <a
                 href={PHONE_HREF}
-                className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/40 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-on-media hover:bg-white/10 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/50 px-8 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-on-media hover:bg-white/10 transition"
               >
                 <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
               </a>
             </div>
 
-            <div className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-white/20 pt-6">
+            <div className="mx-auto mt-14 grid max-w-xl grid-cols-3 gap-6 border-t border-white/25 pt-6">
               {[
                 { k: "600+", v: "Pools built" },
                 { k: "4.9★", v: "Avg client rating" },
                 { k: "25yr", v: "Structural warranty" },
               ].map((s) => (
                 <div key={s.v}>
-                  <div className="text-on-media text-2xl sm:text-[2rem] font-semibold">{s.k}</div>
-                  <div className="text-on-media mt-1 text-[10px] uppercase tracking-[0.18em] opacity-75">{s.v}</div>
+                  <div className="text-on-media text-2xl sm:text-[2rem] font-bold">{s.k}</div>
+                  <div className="text-on-media mt-1 text-[10px] uppercase tracking-[0.18em] opacity-80">{s.v}</div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </section>
+
+      {/* Side quote tab */}
+      <button
+        type="button"
+        onClick={() => openBooking()}
+        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center rounded-l-md px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta"
+        style={{ writingMode: "vertical-rl" }}
+      >
+        Request a Quote
+      </button>
+
 
       {/* MARQUEE */}
       <section className="border-y border-hairline bg-ink/60 py-6 overflow-hidden">
