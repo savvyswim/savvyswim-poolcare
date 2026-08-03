@@ -91,14 +91,15 @@ const CLEANING_PLANS: CleaningPlan[] = [
     items: ["2 visits per month", "Skim, brush & vacuum", "Basket & skimmer cleanout", "Water chemistry balance", "Digital service report"],
   },
   {
-    id: "fallback-weekly",
-    name: "Weekly Crystal",
-    price: "$219",
-    cadence: "/ month",
-    blurb: "Our most popular DFW weekly service.",
-    items: ["4 visits per month", "Full chemical package included", "Filter pressure check", "Equipment inspection each visit", "Photo report after every clean", "Priority scheduling"],
+    id: "fallback-annual",
+    name: "Savvy Annual",
+    price: "Custom quote",
+    cadence: "billed monthly",
+    blurb: "Annual agreement with 4 complimentary cleanings included.",
+    items: ["4 complimentary cleanings per year", "Weekly service visits", "Full chemical package included", "Filter pressure & equipment checks", "Photo report after every clean", "Priority scheduling"],
     featured: true,
   },
+
   {
     id: "fallback-total",
     featured: false,
