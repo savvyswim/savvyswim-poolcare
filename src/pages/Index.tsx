@@ -181,20 +181,22 @@ const Index = () => {
 
         <div className="container-tight relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground mb-6">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-              Design · Build · Service
+            <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium tracking-wide text-muted-foreground mb-6">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-brand" />
+              Family-run in DFW since 2009
             </div>
-            <h1 className="text-[2.75rem] leading-[0.95] sm:text-6xl lg:text-8xl font-bold tracking-tight">
-              <span className="text-gradient-chrome">Backyards,</span>
+            <h1 className="text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-7xl font-bold tracking-tight">
+              <span className="text-gradient-chrome">The backyard your</span>
               <br />
-              <span className="text-gradient-amber italic">reimagined.</span>
+              <span className="text-gradient-amber italic">family never leaves.</span>
             </h1>
             <p className="mt-6 text-base sm:text-lg text-foreground/80 max-w-xl leading-relaxed">
-              Custom luxury pools, spas, and outdoor living — designed in 3D,
-              engineered to last, and serviced for life. Over 600 pools built
-              across Texas.
+              We're a small Texas crew that builds pools the slow, careful way — one
+              family at a time. You'll have our cell number, meet the guys pouring your
+              shell, and swim in it for decades. 600+ backyards later, we still answer
+              the phone ourselves.
             </p>
+
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
