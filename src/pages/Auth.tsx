@@ -51,7 +51,7 @@ export default function Auth() {
       <div className="w-full max-w-sm space-y-6">
         <Link to="/" className="flex items-center gap-2 justify-center text-foreground">
           <Waves className="h-5 w-5 text-amber-brand" />
-          <span className="font-semibold">Savage Pools — Admin</span>
+          <span className="font-semibold">Savvy Swim — Admin</span>
         </Link>
         <form onSubmit={submit} className="space-y-4 border border-hairline rounded-2xl p-6 bg-card">
           <h1 className="text-xl font-semibold">{mode === "signin" ? "Sign in" : "Create account"}</h1>

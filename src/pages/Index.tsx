@@ -73,7 +73,7 @@ const Index = () => {
               <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
             </div>
             <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
-              <span>SAVAGE<span className="text-amber-brand">·</span>POOLS</span>
+              <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
               <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Powered by Manor Fix</span>
             </span>
           </a>
@@ -353,7 +353,7 @@ const Index = () => {
                 <span className="text-gradient-amber"> before we break ground.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                Every Savage Pools project starts with a photoreal 3D rendering
+                Every Savvy Swim project starts with a photoreal 3D rendering
                 and a full virtual walk-through — so you can change the tile,
                 the shape, even the sunset, before a single shovel hits dirt.
               </p>
@@ -488,14 +488,14 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand mb-3">
-                / 05 — Why Savage Pools
+                / 05 — Why Savvy Swim
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
                 Builders, not brokers —
                 <span className="text-gradient-amber"> in-house from dig to dive.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                We don't sub out the hard parts. Savage Pools owns excavation,
+                We don't sub out the hard parts. Savvy Swim owns excavation,
                 gunite, plumbing, tile, plaster, and service in-house — so your
                 pool is built by one team, backed by one warranty, and serviced
                 by the people who know it best.
@@ -524,7 +524,7 @@ const Index = () => {
                     <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
                   </div>
                   <div>
-                    <div className="font-bold">Savage Pools</div>
+                    <div className="font-bold">Savvy Swim</div>
                     <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">Powered by Manor Fix</div>
                   </div>
                 </div>
@@ -606,7 +606,7 @@ const Index = () => {
         <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <Waves className="h-4 w-4 text-amber-brand" />
-            <span>© {new Date().getFullYear()} Savage Pools · Powered by Manor Fix. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Savvy Swim · Powered by Manor Fix. All rights reserved.</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>

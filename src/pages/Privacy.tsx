@@ -1,14 +1,14 @@
 const Privacy = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">
     <article className="max-w-3xl mx-auto">
-      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savage Pools</a>
+      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
       <h1 className="text-3xl font-bold mt-4 mb-2">Privacy Policy</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
-      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savage Pools ("we," "our," or "us")</p>
+      <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Manor Fix LLC, doing business as Savvy Swim ("we," "our," or "us")</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
-        <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a>
+        <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
@@ -20,7 +20,7 @@ const Privacy = () => (
       <p className="mb-4">
         Manor Fix LLC is committed to protecting your privacy. This Privacy Policy explains how we
         collect, use, disclose, and safeguard your information when you visit our website
-        (https://savagesupplies.us), submit a form, call or text us, or otherwise engage with our
+        (https://savvyswim.com), submit a form, call or text us, or otherwise engage with our
         services. By using our website or services, you consent to the practices described in this
         Privacy Policy.
       </p>
@@ -143,10 +143,10 @@ const Privacy = () => (
       <p className="mb-4">
         Questions about this Privacy Policy or our data practices? Contact:
       </p>
-      <p className="mb-1"><strong>Manor Fix LLC (dba Savage Pools)</strong></p>
+      <p className="mb-1"><strong>Manor Fix LLC (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
       <p className="mb-1">Phone: <a href="tel:+14692138087" className="text-amber-brand">(469) 213-8087</a></p>
-      <p className="mb-1">Website: <a href="https://savagesupplies.us" className="text-amber-brand">https://savagesupplies.us</a></p>
+      <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
   </main>
 );
