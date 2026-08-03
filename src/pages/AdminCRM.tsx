@@ -148,6 +148,27 @@ export default function AdminCRM() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
+  const [pricingRows, setPricingRows] = useState<
+    { id: string; pool_size: string; vegetation_level: string; plan_name: string | null; price: number | null }[]
+  >([]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("service_pricing")
+        .select("id,pool_size,vegetation_level,plan_name,price")
+        .eq("is_active", true)
+        .order("size_rank")
+        .order("vegetation_rank");
+      if (active && data) setPricingRows(data as typeof pricingRows);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [isAdmin]);
+
   const contactById = useMemo(
     () => Object.fromEntries(contacts.map((c) => [c.id, c])) as Record<string, Contact>,
     [contacts],
@@ -357,7 +378,9 @@ export default function AdminCRM() {
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
+            <TabsTrigger value="plans">Service plans</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="pipeline" className="space-y-4">
             <Input
@@ -502,8 +525,52 @@ export default function AdminCRM() {
               )}
             </Card>
           </TabsContent>
+
+          <TabsContent value="plans">
+            <Card className="crm-panel p-0 overflow-hidden">
+              <div className="p-5 border-b border-border">
+                <h3 className="text-base font-semibold">Monthly service plans</h3>
+                <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
+                  Internal rate card. Every plan is weekly service with chemicals included — rate is
+                  set by pool size and vegetation level. Prices are not shown on the website.
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/50 text-left">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Plan</th>
+                      <th className="px-4 py-3 font-semibold">Pool size</th>
+                      <th className="px-4 py-3 font-semibold">Vegetation</th>
+                      <th className="px-4 py-3 font-semibold text-right">Monthly price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pricingRows.map((row) => (
+                      <tr key={row.id} className="border-t border-border">
+                        <td className="px-4 py-3 font-medium">
+                          {row.plan_name ?? `${row.pool_size} Pool`}
+                        </td>
+                        <td className="px-4 py-3">{row.pool_size}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
+                        <td className="px-4 py-3 text-right font-semibold">{money(row.price)}</td>
+                      </tr>
+                    ))}
+                    {!pricingRows.length && (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-sm text-muted-foreground">
+                          No service plans configured.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </TabsContent>
         </Tabs>
       </main>
+
 
       {/* LEAD DETAIL */}
       <Dialog open={!!openLead} onOpenChange={(o) => !o && setOpenLeadId(null)}>

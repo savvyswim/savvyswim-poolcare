@@ -185,31 +185,8 @@ const Index = () => {
     };
   }, []);
 
-  const [pricingRows, setPricingRows] = useState<
-    {
-      id: string;
-      pool_size: string;
-      vegetation_level: string;
-      plan_name: string | null;
-      price: number | null;
-    }[]
-  >([]);
 
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      const { data } = await supabase
-        .from("service_pricing")
-        .select("id,pool_size,vegetation_level,plan_name,price,size_rank,vegetation_rank")
-        .eq("is_active", true)
-        .order("size_rank")
-        .order("vegetation_rank");
-      if (active && data) setPricingRows(data as typeof pricingRows);
-    })();
-    return () => {
-      active = false;
-    };
-  }, []);
+
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -659,56 +636,8 @@ const Index = () => {
             ))}
           </div>
 
-          {pricingRows.length > 0 && (
-            <div className="mt-14">
-              <h3 className="text-xl font-semibold mb-2">Monthly service plans</h3>
-              <p className="text-muted-foreground text-sm mb-6 max-w-2xl">
-                Every plan is weekly service with chemicals included. Your rate is set by pool size
-                and how much vegetation drops into the water — request a quote and a specialist
-                confirms your exact plan.
-              </p>
-              <div className="overflow-x-auto rounded-sm border border-hairline">
-                <table className="w-full text-sm">
-                  <thead className="bg-ink/60 text-left">
-                    <tr>
-                      <th className="px-4 py-3 font-semibold">Plan</th>
-                      <th className="px-4 py-3 font-semibold">Pool size</th>
-                      <th className="px-4 py-3 font-semibold">Vegetation</th>
-                      <th className="px-4 py-3" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pricingRows.map((row) => (
-                      <tr key={row.id} className="border-t border-hairline">
-                        <td className="px-4 py-3 font-semibold">
-                          {row.plan_name ?? `${row.pool_size} Pool`}
-                        </td>
-                        <td className="px-4 py-3">{row.pool_size}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSubscribePlan("Request a monthly service quote");
-                              setSubscribeOpen(true);
-                            }}
-                            className="text-xs font-semibold uppercase tracking-wider text-amber-brand hover:underline"
-                          >
-                            Get quote
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="text-xs text-muted-foreground mt-3">
-                All service plans are quoted individually — call us and we'll price your pool in
-                minutes.
-              </p>
 
-            </div>
-          )}
+
         </div>
       </section>
 
