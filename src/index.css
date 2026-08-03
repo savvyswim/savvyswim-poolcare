@@ -205,3 +205,88 @@
   .btn-quote:hover { background: hsl(350 72% 46%); }
   .topbar { background: hsl(208 84% 24%); color: hsl(0 0% 100%); }
 }
+
+/* ── HubSpot-style admin CRM shell (blue tones) ───────────────── */
+@layer utilities {
+  .crm-scope {
+    --background: 206 40% 97%;
+    --foreground: 210 42% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 42% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 42% 16%;
+    --primary: 205 88% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 206 40% 95%;
+    --secondary-foreground: 210 42% 16%;
+    --muted: 206 38% 95%;
+    --muted-foreground: 208 16% 46%;
+    --accent: 205 88% 40%;
+    --accent-foreground: 0 0% 100%;
+    --border: 206 26% 88%;
+    --input: 206 26% 88%;
+    --ring: 205 88% 40%;
+    --radius: 0.5rem;
+  }
+
+  .crm-topbar {
+    background: linear-gradient(90deg, hsl(211 58% 15%), hsl(207 64% 24%));
+    color: hsl(0 0% 100%);
+    border-bottom: 1px solid hsl(207 40% 22%);
+  }
+  .crm-topbar .crm-sub { color: hsl(205 45% 78%); }
+
+  .crm-panel {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.6rem;
+    box-shadow: 0 1px 2px hsl(210 40% 20% / 0.06), 0 6px 16px -14px hsl(210 40% 20% / 0.5);
+  }
+
+  .crm-stat { border-left: 3px solid hsl(var(--primary)); }
+
+  .crm-tabs {
+    background: transparent;
+    border-bottom: 1px solid hsl(var(--border));
+    border-radius: 0;
+    padding: 0;
+    height: auto;
+    gap: 0.25rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .crm-tabs [data-state] {
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+  }
+  .crm-tabs [data-state="active"] {
+    background: transparent;
+    box-shadow: none;
+    color: hsl(var(--primary));
+    border-bottom-color: hsl(var(--primary));
+  }
+
+  .crm-col-head {
+    background: hsl(206 45% 94%);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+  }
+  .crm-lead-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-left: 3px solid hsl(205 60% 78%);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px hsl(210 40% 20% / 0.06);
+    transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .crm-lead-card:hover {
+    border-left-color: hsl(var(--primary));
+    box-shadow: 0 6px 18px -10px hsl(210 50% 25% / 0.35);
+    transform: translateY(-1px);
+  }
+}
