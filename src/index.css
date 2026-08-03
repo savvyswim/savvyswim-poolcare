@@ -4,56 +4,57 @@
 
 @layer base {
   :root {
-    /* Savvy Swim — Midnight aqua luxury */
-    --background: 205 50% 5%;
-    --foreground: 190 30% 96%;
+    /* Savvy Swim — warm dusk: sun-warmed stone, evening water, candlelight */
+    --background: 25 18% 7%;
+    --foreground: 34 30% 95%;
 
-    --card: 205 45% 8%;
-    --card-foreground: 190 30% 96%;
+    --card: 25 16% 10%;
+    --card-foreground: 34 30% 95%;
 
-    --popover: 205 45% 8%;
-    --popover-foreground: 190 30% 96%;
+    --popover: 25 16% 10%;
+    --popover-foreground: 34 30% 95%;
 
-    --primary: 186 95% 48%;
-    --primary-foreground: 205 60% 6%;
+    --primary: 34 78% 60%;
+    --primary-foreground: 25 30% 8%;
 
-    --secondary: 205 35% 14%;
-    --secondary-foreground: 190 30% 96%;
+    --secondary: 25 14% 15%;
+    --secondary-foreground: 34 30% 95%;
 
-    --muted: 205 30% 12%;
-    --muted-foreground: 190 12% 68%;
+    --muted: 25 12% 14%;
+    --muted-foreground: 32 14% 70%;
 
-    --accent: 186 95% 48%;
-    --accent-foreground: 205 60% 6%;
+    --accent: 34 78% 60%;
+    --accent-foreground: 25 30% 8%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 25% 18%;
-    --input: 200 25% 18%;
-    --ring: 186 95% 48%;
+    --border: 28 14% 20%;
+    --input: 28 14% 20%;
+    --ring: 34 78% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Brand tokens (kept names; pool palette) */
-    --ink: 205 60% 4%;
-    --ink-soft: 205 45% 9%;
-    --amber: 186 95% 52%;      /* aqua */
-    --amber-deep: 196 90% 38%; /* deep teal */
-    --gold: 42 90% 60%;        /* sun gold accent */
-    --chrome: 190 20% 88%;
-    --hairline: 200 25% 18%;
+    /* Brand tokens */
+    --ink: 25 20% 5%;
+    --ink-soft: 25 16% 11%;
+    --amber: 34 80% 62%;        /* warm sun */
+    --amber-deep: 22 70% 48%;   /* terracotta */
+    --gold: 40 72% 66%;         /* soft candlelight */
+    --chrome: 34 22% 92%;
+    --hairline: 28 14% 20%;
 
-    --gradient-amber: linear-gradient(135deg, hsl(180 95% 55%), hsl(200 90% 42%));
-    --gradient-gold: linear-gradient(135deg, hsl(45 95% 65%), hsl(32 90% 50%));
-    --gradient-ink: linear-gradient(180deg, hsl(205 50% 8%), hsl(205 60% 3%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(186 95% 50% / 0.22), transparent 60%);
-    --gradient-water: linear-gradient(180deg, hsl(190 90% 55% / 0.0), hsl(186 95% 48% / 0.15) 40%, hsl(200 95% 35% / 0.4));
-    --shadow-cta: 0 10px 40px -10px hsl(186 95% 50% / 0.65), inset 0 1px 0 hsl(0 0% 100% / 0.18);
-    --shadow-card: 0 1px 0 hsl(0 0% 100% / 0.05) inset, 0 30px 60px -30px hsl(0 0% 0% / 0.8);
-    --shadow-3d: 0 20px 60px -20px hsl(186 95% 50% / 0.35), 0 40px 80px -40px hsl(0 0% 0% / 0.9);
+    --gradient-amber: linear-gradient(135deg, hsl(38 88% 66%), hsl(20 72% 50%));
+    --gradient-gold: linear-gradient(135deg, hsl(42 85% 72%), hsl(28 76% 55%));
+    --gradient-ink: linear-gradient(180deg, hsl(25 16% 10%), hsl(25 20% 5%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(34 80% 60% / 0.16), transparent 62%);
+    --gradient-water: linear-gradient(180deg, hsl(190 45% 55% / 0), hsl(192 45% 45% / 0.12) 40%, hsl(200 40% 25% / 0.35));
+    --shadow-cta: 0 12px 34px -14px hsl(28 75% 50% / 0.55), inset 0 1px 0 hsl(40 60% 90% / 0.16);
+    --shadow-card: 0 1px 0 hsl(40 40% 90% / 0.04) inset, 0 26px 55px -32px hsl(20 40% 2% / 0.85);
+    --shadow-3d: 0 18px 50px -24px hsl(28 70% 45% / 0.25), 0 40px 80px -44px hsl(20 40% 2% / 0.9);
   }
 }
+
 
 @layer base {
   * { @apply border-border; }
