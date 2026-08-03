@@ -631,7 +631,8 @@ const Index = () => {
               <h3 className="text-xl font-semibold mb-2">Monthly service plans</h3>
               <p className="text-muted-foreground text-sm mb-6 max-w-2xl">
                 Every plan is weekly service with chemicals included. Your rate is set by pool size
-                and how much vegetation drops into the water — pick yours and start in two minutes.
+                and how much vegetation drops into the water — request a quote and a specialist
+                confirms your exact plan.
               </p>
               <div className="overflow-x-auto rounded-sm border border-hairline">
                 <table className="w-full text-sm">
@@ -640,7 +641,6 @@ const Index = () => {
                       <th className="px-4 py-3 font-semibold">Plan</th>
                       <th className="px-4 py-3 font-semibold">Pool size</th>
                       <th className="px-4 py-3 font-semibold">Vegetation</th>
-                      <th className="px-4 py-3 font-semibold text-right">Per month</th>
                       <th className="px-4 py-3" />
                     </tr>
                   </thead>
@@ -652,19 +652,16 @@ const Index = () => {
                         </td>
                         <td className="px-4 py-3">{row.pool_size}</td>
                         <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
-                        <td className="px-4 py-3 text-right font-semibold text-gradient-amber">
-                          {row.price != null ? `$${row.price}` : "Call"}
-                        </td>
                         <td className="px-4 py-3 text-right">
                           <button
                             type="button"
                             onClick={() => {
-                              setSubscribePlan("Start monthly pool service");
+                              setSubscribePlan("Request a monthly service quote");
                               setSubscribeOpen(true);
                             }}
                             className="text-xs font-semibold uppercase tracking-wider text-amber-brand hover:underline"
                           >
-                            Select
+                            Get quote
                           </button>
                         </td>
                       </tr>
@@ -673,8 +670,10 @@ const Index = () => {
                 </table>
               </div>
               <p className="text-xs text-muted-foreground mt-3">
-                Extra large pools are quoted individually — call us for pricing.
+                All service plans are quoted individually — call us and we'll price your pool in
+                minutes.
               </p>
+
             </div>
           )}
         </div>
