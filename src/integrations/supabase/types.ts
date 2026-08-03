@@ -128,6 +128,233 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_activities: {
+        Row: {
+          body: string | null
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          lead_id: string | null
+          occurred_at: string
+          subject: string | null
+          type: string
+        }
+        Insert: {
+          body?: string | null
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id?: string | null
+          occurred_at?: string
+          subject?: string | null
+          type?: string
+        }
+        Update: {
+          body?: string | null
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id?: string | null
+          occurred_at?: string
+          subject?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_activities_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_contacts: {
+        Row: {
+          address: string | null
+          city: string | null
+          company: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          marketing_opt_in: boolean
+          notes: string | null
+          phone: string | null
+          source: string
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          marketing_opt_in?: boolean
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          marketing_opt_in?: boolean
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_leads: {
+        Row: {
+          booking_id: string | null
+          closed_at: string | null
+          contact_id: string | null
+          created_at: string
+          estimated_value: number | null
+          id: string
+          next_follow_up: string | null
+          notes: string | null
+          owner_id: string | null
+          pool_size: string | null
+          priority: string
+          quoted_price: number | null
+          service_interest: string | null
+          source: string
+          stage: string
+          title: string
+          updated_at: string
+          vegetation_level: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          closed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          estimated_value?: number | null
+          id?: string
+          next_follow_up?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          pool_size?: string | null
+          priority?: string
+          quoted_price?: number | null
+          service_interest?: string | null
+          source?: string
+          stage?: string
+          title: string
+          updated_at?: string
+          vegetation_level?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          closed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          estimated_value?: number | null
+          id?: string
+          next_follow_up?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          pool_size?: string | null
+          priority?: string
+          quoted_price?: number | null
+          service_interest?: string | null
+          source?: string
+          stage?: string
+          title?: string
+          updated_at?: string
+          vegetation_level?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_leads_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          contact_id: string | null
+          created_at: string
+          details: string | null
+          due_date: string | null
+          id: string
+          is_done: boolean
+          lead_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          is_done?: boolean
+          lead_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          is_done?: boolean
+          lead_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_tasks_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "crm_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pool_designs: {
         Row: {
           category: Database["public"]["Enums"]["pool_category"]
