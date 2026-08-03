@@ -392,7 +392,7 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="relative tilt-card">
               <div className="absolute -inset-6 bg-gradient-radial opacity-70 blur-3xl" />
-              <div className="relative rounded-3xl overflow-hidden shadow-3d border border-hairline">
+              <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
                   alt="3D rendered pool with glass mosaic tile and waterfall"
@@ -411,7 +411,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 How it goes
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
                 See your pool in 3D
                 <span className="text-gradient-amber"> before we break ground.</span>
               </h2>
@@ -449,7 +449,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Keeping it clean
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
               Weekly cleaning
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
@@ -463,7 +463,7 @@ const Index = () => {
             {CLEANING_PLANS.map((plan) => (
               <div
                 key={plan.name}
-                className={`card-3d rounded-2xl p-7 flex flex-col ${
+                className={`card-3d rounded-sm p-7 flex flex-col ${
                   plan.featured ? "ring-1 ring-amber-brand/50" : ""
                 }`}
               >
@@ -475,7 +475,7 @@ const Index = () => {
                 <h3 className="text-xl font-bold">{plan.name}</h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.blurb}</p>
                 <div className="flex items-end gap-1 mb-6">
-                  <span className="text-4xl font-bold text-gradient-amber">{plan.price}</span>
+                  <span className="text-[2rem] font-semibold text-gradient-amber">{plan.price}</span>
                   <span className="text-sm text-muted-foreground mb-1">{plan.cadence}</span>
                 </div>
                 <ul className="space-y-2.5 mb-7">
@@ -508,7 +508,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               The supply room
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
               Pro-grade gear,
               <span className="text-gradient-amber"> contractor pricing.</span>
             </h2>
@@ -521,7 +521,7 @@ const Index = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {SHOP_PRODUCTS.map((p) => (
-              <div key={p.sku} className="card-3d rounded-2xl overflow-hidden flex flex-col">
+              <div key={p.sku} className="card-3d rounded-sm overflow-hidden flex flex-col">
                 <img
                   src={p.img}
                   alt={`${p.name} — pool supply available from Savvy Swim`}
@@ -567,7 +567,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 Backyards we've built
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
                 Pools that turn
                 <br />
                 <span className="text-gradient-chrome">heads.</span>
@@ -589,7 +589,7 @@ const Index = () => {
                 href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
                 title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
                 aria-label={`Inquire about ${p.title}`}
-                className="card-3d rounded-2xl overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
+                className="card-3d rounded-sm overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
@@ -607,7 +607,7 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
-                  <h3 className="text-2xl font-bold mb-2 text-gradient-amber">{p.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-gradient-amber">{p.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
                   <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
                     <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
@@ -627,7 +627,7 @@ const Index = () => {
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Neighbors talking
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
               Loved by neighbors
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
@@ -648,7 +648,7 @@ const Index = () => {
               {[...row, ...row].map((t, i) => (
                 <div
                   key={`${rowIdx}-${i}`}
-                  className="card-3d rounded-2xl p-6 w-[330px] sm:w-[380px] shrink-0"
+                  className="card-3d rounded-sm p-6 w-[330px] sm:w-[380px] shrink-0"
                 >
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(5)].map((_, s) => (
@@ -683,7 +683,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 Why folks pick us
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
                 Builders, not brokers —
                 <span className="text-gradient-amber"> in-house from dig to dive.</span>
               </h2>
@@ -710,7 +710,7 @@ const Index = () => {
 
             <div className="relative">
               <div className="absolute -inset-8 bg-gradient-radial opacity-70 blur-3xl" />
-              <div className="relative card-3d rounded-3xl p-8 shadow-3d">
+              <div className="relative card-3d rounded-sm p-8 shadow-3d">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="relative h-12 w-12 rounded-full bg-amber-brand grid place-items-center shadow-cta">
                     <Waves className="h-5 w-5 text-primary-foreground" />
@@ -721,7 +721,7 @@ const Index = () => {
                     <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">A Santana &amp; Rivera Company</div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-px bg-hairline rounded-2xl overflow-hidden">
+                <div className="grid grid-cols-2 gap-px bg-hairline rounded-sm overflow-hidden">
                   {[
                     { k: "600+", v: "Pools built", icon: Hammer },
                     { k: "25 yr", v: "Structural warranty", icon: ShieldCheck },
@@ -750,7 +750,7 @@ const Index = () => {
       {/* CTA */}
       <section id="contact" className="py-24 sm:py-32 relative overflow-hidden">
         <div className="container-tight">
-          <div className="relative rounded-3xl overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
+          <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">
               <img src={poolNight} alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" />
             </div>
@@ -762,7 +762,7 @@ const Index = () => {
                 <Waves className="h-7 w-7 text-primary-foreground" />
                 <span className="absolute inset-0 rounded-full border border-white/40 animate-ripple" />
               </div>
-              <h2 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
+              <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
                 <br />
                 <span className="text-gradient-amber italic">Let's design your pool.</span>
