@@ -1,6 +1,13 @@
+import Seo from "@/components/Seo";
+
 const Terms = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">
     <article className="max-w-3xl mx-auto">
+      <Seo
+        title="Terms & Conditions | Savvy Swim"
+        description="Terms and conditions for Savvy Swim pool cleaning, construction, and store purchases, including SMS program and payment terms."
+        path="/terms"
+      />
       <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
       <h1 className="text-3xl font-bold mt-4 mb-2">Terms and Conditions</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>

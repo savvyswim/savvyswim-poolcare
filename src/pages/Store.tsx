@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { ShopifyCartDrawer } from "@/components/ShopifyCartDrawer";
 import { useCartSync } from "@/hooks/useCartSync";
@@ -15,7 +16,6 @@ const Store = () => {
   const isLoading = useShopifyCart((s) => s.isLoading);
 
   useEffect(() => {
-    document.title = "Shop | Savvy Swim Pool Supplies";
     (async () => {
       try {
         const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: 50 });
@@ -30,6 +30,11 @@ const Store = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Seo
+        title="Pool Supply Shop | Savvy Swim"
+        description="Shop pro-grade pool chemicals, equipment and tools with contractor pricing. Secure checkout from Savvy Swim in Texas."
+        path="/shop"
+      />
       <header className="border-b">
         <div className="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
           <Link to="/" className="font-bold tracking-tight text-lg">
