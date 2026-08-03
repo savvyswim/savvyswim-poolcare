@@ -425,7 +425,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="contacts">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {contacts.map((c) => (
                 <div key={c.id} className="p-4 flex flex-wrap items-center justify-between gap-3">
                   <div>
@@ -460,7 +460,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="tasks">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {tasks.map((t) => (
                 <label key={t.id} className="p-4 flex items-center gap-3 cursor-pointer">
                   <Checkbox checked={t.is_done} onCheckedChange={() => toggleTask(t)} />
@@ -484,7 +484,7 @@ export default function AdminCRM() {
           </TabsContent>
 
           <TabsContent value="activity">
-            <Card className="divide-y divide-border">
+            <Card className="crm-panel divide-y divide-border">
               {activities.slice(0, 100).map((a) => (
                 <div key={a.id} className="p-4">
                   <div className="text-sm font-medium">
