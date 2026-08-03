@@ -220,7 +220,7 @@ const Index = () => {
             </a>
             <div className="flex items-center gap-6">
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-              <a href="#shop" className="hover:opacity-80 transition">Shop</a>
+              <a href="/shop" className="hover:opacity-80 transition">Shop</a>
               <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
@@ -245,7 +245,7 @@ const Index = () => {
             <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
               <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
               <a href="#services" className="hover:text-primary transition">Design &amp; Build</a>
-              <a href="#shop" className="hover:text-primary transition">Shop</a>
+              <a href="/shop" className="hover:text-primary transition">Shop</a>
               <a href="#portfolio" className="hover:text-primary transition">Portfolio</a>
               <a href="#about" className="hover:text-primary transition">About Us</a>
               <a href="#contact" className="hover:text-primary transition">Contact</a>
