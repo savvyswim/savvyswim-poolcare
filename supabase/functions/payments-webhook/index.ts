@@ -38,6 +38,56 @@ async function markFailed(session: any) {
   if (error) console.error("Failed to mark order failed:", error);
 }
 
+
+function isoFromUnix(seconds: number | null | undefined): string | null {
+  return seconds ? new Date(seconds * 1000).toISOString() : null;
+}
+
+async function upsertSubscription(sub: any, env: StripeEnv) {
+  const rowId = sub?.metadata?.subscription_row_id ?? null;
+  const item = sub?.items?.data?.[0];
+  const periodEnd = item?.current_period_end ?? sub?.current_period_end;
+
+  const patch: Record<string, unknown> = {
+    stripe_subscription_id: sub.id,
+    stripe_customer_id: typeof sub.customer === "string" ? sub.customer : sub.customer?.id,
+    environment: env,
+    status: sub.status,
+    current_period_end: isoFromUnix(periodEnd),
+    cancel_at_period_end: sub.cancel_at_period_end ?? false,
+    canceled_at: isoFromUnix(sub.canceled_at),
+  };
+  if (item?.price?.lookup_key) patch.price_key = item.price.lookup_key;
+  if (typeof item?.price?.unit_amount === "number") patch.amount = item.price.unit_amount / 100;
+
+  const client = getSupabase();
+  if (rowId) {
+    const { error } = await client.from("subscriptions").update(patch).eq("id", rowId);
+    if (error) console.error("Failed to update subscription row:", error);
+    return;
+  }
+  const { error } = await client
+    .from("subscriptions")
+    .upsert(patch, { onConflict: "stripe_subscription_id" });
+  if (error) console.error("Failed to upsert subscription:", error);
+}
+
+async function linkSubscriptionSession(session: any, env: StripeEnv) {
+  const rowId = session?.metadata?.subscription_row_id;
+  if (!rowId || !session.subscription) return;
+  const { error } = await getSupabase()
+    .from("subscriptions")
+    .update({
+      stripe_subscription_id: typeof session.subscription === "string"
+        ? session.subscription
+        : session.subscription.id,
+      environment: env,
+      status: "active",
+    })
+    .eq("id", rowId);
+  if (error) console.error("Failed to link subscription session:", error);
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
@@ -56,9 +106,20 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
-        if (session.payment_status !== "unpaid") await markPaid(session);
+        if (session.mode === "subscription") {
+          await linkSubscriptionSession(session, env);
+        } else if (session.payment_status !== "unpaid") {
+          await markPaid(session);
+        }
         break;
       }
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+      case "customer.subscription.paused":
+      case "customer.subscription.resumed":
+        await upsertSubscription(event.data.object, env);
+        break;
       case "checkout.session.async_payment_succeeded":
         await markPaid(event.data.object);
         break;
