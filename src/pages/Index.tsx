@@ -665,8 +665,9 @@ const Index = () => {
                   Become a member <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center text-xs text-muted-foreground">
-                  Billed monthly. Cancel anytime.
+                  12-month agreement · Billed monthly at $19.99
                 </p>
+
               </div>
             </div>
           </div>
