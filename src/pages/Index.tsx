@@ -14,8 +14,9 @@ import {
   MapPin,
   ShieldCheck,
   CalendarCheck,
-import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
 } from "lucide-react";
+import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
+
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
