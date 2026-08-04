@@ -81,7 +81,6 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { supabase } from "@/integrations/supabase/client";
-import { useCart, money } from "@/hooks/useCart";
 
 
 const EMAIL = "hi@savagepools.us";
