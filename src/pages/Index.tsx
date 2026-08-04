@@ -830,12 +830,12 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: photoTexasFreeform.url, tag: "Weekly Service", title: "Hill Country Freeform", desc: "Weekly cleaning and chemistry on a large freeform pool shaded by oaks — heavy leaf load, spotless water.", metric: "weekly clean · chemistry · skim" },
-              { img: photoSunsetVilla.url, tag: "Pool & Spa Care", title: "Sunset Villa", desc: "Pool and spa maintained together, with LED and heater checks every visit.", metric: "spa care · heater check · LED" },
-              { img: photoGeometric.url, tag: "Filter Service", title: "Clean Lines", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this modern pool glass-clear.", metric: "filter clean · brush · vacuum" },
-              { img: photoWhiteHouse.url, tag: "Salt System", title: "White Modern", desc: "Salt cell servicing and balanced chemistry for a lap pool used every morning.", metric: "salt cell · balance · vacuum" },
-              { img: photoDeskSunset.url, tag: "Green Pool Recovery", title: "Desert Sunset", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
-              { img: photoStoneCourtyard.url, tag: "Tile & Deck Care", title: "Stone Courtyard", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
+              { img: photoLifeguardChair.url, tag: "Weekly Service", title: "The Lifeguard Stand", desc: "Lane-line pool kept swim-ready year round — weekly cleaning, chemistry, and equipment checks.", metric: "weekly clean · chemistry · skim" },
+              { img: photoRivieraLoungers.url, tag: "Pool & Spa Care", title: "Riviera Terrace", desc: "Pool and spa maintained together, with heater and light checks every visit.", metric: "spa care · heater check · LED" },
+              { img: photoNavyCabana.url, tag: "Filter Service", title: "Navy Cabana", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this pool glass-clear.", metric: "filter clean · brush · vacuum" },
+              { img: photoOliveRings.url, tag: "Salt System", title: "Olive Lounge", desc: "Salt cell servicing and balanced chemistry for a pool used every morning.", metric: "salt cell · balance · vacuum" },
+              { img: photoPoolMartinis.url, tag: "Green Pool Recovery", title: "Poolside Social", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
+              { img: photoRedUmbrellas.url, tag: "Tile & Deck Care", title: "Cabana Red", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
 
             ].map((p) => (
               <a
