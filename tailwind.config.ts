@@ -17,6 +17,7 @@ export default {
         display: ["Anton", "Impact", "system-ui", "sans-serif"],
         badge: ["Bebas Neue", "Oswald", "system-ui", "sans-serif"],
         body: ["Montserrat", "system-ui", "sans-serif"],
+        editorial: ["Cormorant Garamond", "Times New Roman", "serif"],
       },
       colors: {
         lifeguard: "hsl(var(--lifeguard-red))",
@@ -24,6 +25,8 @@ export default {
         olive: "hsl(var(--olive-lounge))",
         chlorine: "hsl(var(--chlorine))",
         canvas: "hsl(var(--canvas))",
+        navy: "hsl(var(--navy))",
+        sand: "hsl(var(--sand))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

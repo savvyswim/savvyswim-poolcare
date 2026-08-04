@@ -4,64 +4,67 @@
 
 @layer base {
   :root {
-    /* Savvy Swim — "Leisure, Guarded." vintage resort / high-end lifeguard */
-    --background: 48 25% 97%;      /* Canvas White #F9F8F4 */
-    --foreground: 90 10% 13%;
+    /* Savvy Swim — "Leisure, Guarded." classic riviera / high-end lifeguard */
+    --background: 42 34% 96%;      /* Sun-bleached Canvas */
+    --foreground: 213 33% 15%;     /* Deep Cabana Navy ink */
 
-    --card: 0 0% 100%;
-    --card-foreground: 90 10% 13%;
+    --card: 40 40% 99%;
+    --card-foreground: 213 33% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 90 10% 13%;
+    --popover: 40 40% 99%;
+    --popover-foreground: 213 33% 15%;
 
-    --primary: 191 75% 44%;        /* Crystal Chlorine #1CA3C4 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 213 44% 22%;        /* Cabana Navy */
+    --primary-foreground: 42 40% 97%;
 
-    --secondary: 48 22% 93%;
-    --secondary-foreground: 90 10% 13%;
+    --secondary: 40 28% 92%;
+    --secondary-foreground: 213 33% 15%;
 
-    --muted: 48 20% 94%;
-    --muted-foreground: 90 8% 38%;
+    --muted: 40 24% 93%;
+    --muted-foreground: 210 12% 40%;
 
-    --accent: 0 72% 47%;           /* Lifeguard Red #D12222 */
+    --accent: 4 62% 44%;           /* Riviera Red */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 47%;
+    --destructive: 4 62% 44%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 14% 86%;
-    --input: 45 14% 86%;
-    --ring: 0 72% 47%;
+    --border: 40 18% 85%;
+    --input: 40 18% 85%;
+    --ring: 4 62% 44%;
 
-    --radius: 0.25rem;
+    --radius: 0.125rem;
 
     /* Brand tokens */
-    --ink: 48 25% 97%;
-    --ink-soft: 48 22% 93%;
-    --lifeguard-red: 0 72% 47%;
-    --cabana-orange: 22 96% 48%;   /* #F25C05 */
-    --olive-lounge: 88 21% 35%;    /* #5A6B46 */
-    --chlorine: 191 75% 44%;
-    --canvas: 48 25% 97%;
+    --ink: 42 34% 96%;
+    --ink-soft: 40 28% 92%;
+    --lifeguard-red: 4 62% 44%;    /* deep classic brick red */
+    --cabana-orange: 18 74% 50%;   /* terracotta */
+    --olive-lounge: 84 16% 36%;    /* olive lounge */
+    --chlorine: 189 32% 52%;       /* faded pool teal */
+    --navy: 213 44% 22%;           /* cabana navy */
+    --sand: 36 30% 82%;            /* warm sand */
+    --canvas: 42 34% 96%;
 
-    --amber: 191 75% 44%;          /* legacy alias → chlorine */
-    --amber-deep: 88 21% 35%;      /* legacy alias → olive */
-    --gold: 0 72% 47%;             /* legacy alias → lifeguard red */
-    --chrome: 90 10% 13%;
-    --hairline: 45 14% 86%;
+    --amber: 189 32% 52%;
+    --amber-deep: 84 16% 36%;
+    --gold: 4 62% 44%;
+    --chrome: 213 33% 15%;
+    --hairline: 40 18% 85%;
 
-    --gradient-amber: linear-gradient(135deg, hsl(191 75% 48%), hsl(191 78% 32%));
-    --gradient-gold: linear-gradient(135deg, hsl(0 72% 50%), hsl(22 96% 48%));
-    --gradient-ink: linear-gradient(180deg, hsl(48 25% 97%), hsl(48 22% 93%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(191 75% 50% / 0.14), transparent 62%);
-    --gradient-water: linear-gradient(180deg, hsl(191 80% 60% / 0), hsl(191 75% 48% / 0.2) 40%, hsl(191 78% 26% / 0.35));
-    --shadow-cta: 0 6px 18px -12px hsl(90 20% 15% / 0.45);
-    --shadow-card: 0 1px 2px hsl(90 20% 15% / 0.05), 0 8px 24px -20px hsl(90 20% 15% / 0.35);
-    --shadow-3d: 0 1px 2px hsl(90 20% 15% / 0.05), 0 18px 40px -34px hsl(90 20% 15% / 0.3);
+    --gradient-amber: linear-gradient(135deg, hsl(189 34% 58%), hsl(196 30% 38%));
+    --gradient-gold: linear-gradient(135deg, hsl(4 62% 46%), hsl(18 70% 48%));
+    --gradient-ink: linear-gradient(180deg, hsl(42 34% 96%), hsl(40 28% 92%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(189 40% 60% / 0.12), transparent 62%);
+    --gradient-water: linear-gradient(180deg, hsl(189 45% 62% / 0), hsl(189 38% 48% / 0.18) 40%, hsl(200 35% 26% / 0.34));
+    --shadow-cta: 0 6px 20px -14px hsl(213 40% 15% / 0.5);
+    --shadow-card: 0 1px 2px hsl(213 30% 15% / 0.04), 0 10px 30px -24px hsl(213 30% 15% / 0.35);
+    --shadow-3d: 0 1px 2px hsl(213 30% 15% / 0.04), 0 20px 46px -38px hsl(213 30% 15% / 0.3);
 
-    --on-media: 0 0% 100%;
+    --on-media: 40 40% 98%;
   }
 }
+
 
 
 
@@ -76,16 +79,17 @@
   h1, h2, h3 {
     font-family: 'Anton', 'Oswald', Impact, system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.005em;
     font-weight: 400;
   }
 
   h4, h5, h6 {
     font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     font-weight: 400;
   }
+  p { letter-spacing: 0.005em; }
 }
 
 @layer utilities {
@@ -104,59 +108,99 @@
   /* Brand type helpers */
   .font-display { font-family: 'Anton', Impact, system-ui, sans-serif; text-transform: uppercase; }
   .font-badge { font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+  /* Editorial serif — chic, classic riviera accents */
+  .font-editorial {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+  .editorial-italic { font-family: 'Cormorant Garamond', serif; font-style: italic; text-transform: none; letter-spacing: 0.01em; }
+  .eyebrow {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
 
   .text-red-brand { color: hsl(var(--lifeguard-red)); }
   .text-orange-brand { color: hsl(var(--cabana-orange)); }
   .text-olive-brand { color: hsl(var(--olive-lounge)); }
+  .text-navy-brand { color: hsl(var(--navy)); }
   .bg-red-brand { background-color: hsl(var(--lifeguard-red)); }
   .bg-orange-brand { background-color: hsl(var(--cabana-orange)); }
   .bg-olive-brand { background-color: hsl(var(--olive-lounge)); }
+  .bg-navy-brand { background-color: hsl(var(--navy)); }
+  .bg-sand-brand { background-color: hsl(var(--sand)); }
 
-  /* Mandatory stripe motif */
+  /* Mandatory stripe motif — wide cabana awning stripes */
   .stripes-red {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--lifeguard-red)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--lifeguard-red)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
   .stripes-orange {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--cabana-orange)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--cabana-orange)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
   .stripes-olive {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--olive-lounge)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--olive-lounge)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
-  .stripe-rule { height: 8px; width: 100%; }
+  .stripes-navy {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--navy)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripe-rule { height: 10px; width: 100%; }
+  /* Hairline pinstripe wash for section backdrops */
+  .pinstripe {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--navy) / 0.05) 0 1px, transparent 1px 14px);
+  }
+  /* Scalloped cabana-umbrella edge */
+  .scallop-edge {
+    height: 14px;
+    width: 100%;
+    background-color: hsl(var(--lifeguard-red));
+    -webkit-mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    -webkit-mask-size: 18px 14px;
+    mask-size: 18px 14px;
+    -webkit-mask-position: 0 14px;
+    mask-position: 0 14px;
+    transform: scaleY(-1);
+  }
 
   .text-gradient-amber { color: hsl(var(--olive-lounge)); }
-  .text-gradient-chrome { color: hsl(90 10% 13%); }
+  .text-gradient-chrome { color: hsl(var(--navy)); }
   .text-gradient-gold { color: hsl(var(--lifeguard-red)); }
 
   .glass {
-    background: hsl(48 25% 97% / 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid hsl(45 14% 84% / 0.9);
+    background: hsl(42 34% 96% / 0.86);
+    backdrop-filter: blur(14px) saturate(1.05);
+    border: 1px solid hsl(40 18% 82% / 0.9);
   }
 
   .card-3d {
-    background: hsl(0 0% 100%);
-    border: 1px solid hsl(45 14% 86%);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--hairline));
     box-shadow: var(--shadow-card);
     position: relative;
-    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+    transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
   .card-3d:hover {
     border-color: hsl(var(--lifeguard-red) / 0.35);
-    box-shadow: 0 2px 4px hsl(90 20% 15% / 0.05), 0 22px 44px -30px hsl(90 20% 15% / 0.4);
+    box-shadow: 0 2px 4px hsl(213 30% 15% / 0.05), 0 26px 50px -34px hsl(213 30% 15% / 0.38);
   }
 
-  .rule-top { border-top: 3px solid hsl(var(--lifeguard-red)); }
+  .rule-top { border-top: 2px solid hsl(var(--lifeguard-red)); }
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(88 21% 35% / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(88 21% 35% / 0.05) 1px, transparent 1px);
+      linear-gradient(hsl(213 44% 22% / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(213 44% 22% / 0.04) 1px, transparent 1px);
     background-size: 120px 120px;
   }
+
 
 
   /* Soft evening light drifting over the water */
@@ -226,19 +270,20 @@
 
 @layer utilities {
   /* Text sitting on top of photos/video */
-  .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 1px 2px hsl(210 60% 8% / 0.35); }
+  .text-on-media { color: hsl(var(--on-media)); text-shadow: 0 1px 3px hsl(213 45% 8% / 0.4); }
   .hero-scrim {
     background:
-      linear-gradient(180deg, hsl(210 55% 8% / 0.55) 0%, hsl(210 55% 8% / 0.30) 35%, hsl(210 55% 8% / 0.52) 100%),
-      radial-gradient(ellipse 70% 55% at 50% 50%, hsl(210 55% 8% / 0.18), hsl(210 55% 8% / 0.42));
+      linear-gradient(180deg, hsl(213 45% 10% / 0.5) 0%, hsl(213 45% 10% / 0.22) 38%, hsl(213 45% 10% / 0.55) 100%),
+      radial-gradient(ellipse 70% 55% at 50% 50%, hsl(36 30% 60% / 0.1), hsl(213 45% 10% / 0.42));
   }
 
   .btn-quote {
     background: hsl(var(--lifeguard-red));
-    color: hsl(0 0% 100%);
+    color: hsl(40 40% 98%);
+    letter-spacing: 0.08em;
   }
-  .btn-quote:hover { background: hsl(var(--cabana-orange)); }
-  .topbar { background: hsl(var(--olive-lounge)); color: hsl(0 0% 100%); }
+  .btn-quote:hover { background: hsl(var(--navy)); }
+  .topbar { background: hsl(var(--navy)); color: hsl(40 40% 98%); letter-spacing: 0.12em; }
 }
 
 /* ── HubSpot-style admin CRM shell (blue tones) ───────────────── */
