@@ -73,21 +73,21 @@
   html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
     background-color: hsl(var(--background));
   }
   h1, h2, h3 {
-    font-family: 'Anton', 'Oswald', Impact, system-ui, sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: -0.005em;
-    font-weight: 400;
+    letter-spacing: -0.015em;
+    font-weight: 500;
   }
 
   h4, h5, h6 {
-    font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 400;
+    letter-spacing: 0.04em;
+    font-weight: 500;
   }
   p { letter-spacing: 0.005em; }
 }
@@ -105,16 +105,15 @@
   .shadow-3d { box-shadow: var(--shadow-3d); }
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
-  /* Brand type helpers */
-  .font-display { font-family: 'Anton', Impact, system-ui, sans-serif; text-transform: uppercase; }
-  .font-badge { font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
-  /* Editorial serif — chic, classic riviera accents */
+  /* Brand type helpers — single Jacquemus-style grotesque */
+  .font-display { font-family: 'Archivo', Helvetica, Arial, sans-serif; text-transform: uppercase; font-weight: 500; }
+  .font-badge { font-family: 'Archivo', Helvetica, Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
   .font-editorial {
-    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
-    letter-spacing: 0.01em;
+    letter-spacing: -0.005em;
   }
-  .editorial-italic { font-family: 'Cormorant Garamond', serif; font-style: italic; text-transform: none; letter-spacing: 0.01em; }
+  .editorial-italic { font-family: 'Archivo', Helvetica, Arial, sans-serif; font-style: italic; text-transform: none; letter-spacing: -0.005em; }
   .eyebrow {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
     text-transform: uppercase;
@@ -155,17 +154,19 @@
   .animate-blip { animation: blip 1.8s steps(1,end) infinite; }
   /* Jacquemus-scale display type */
   .type-mega {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    line-height: 0.92;
-    letter-spacing: -0.02em;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
     font-size: clamp(3.2rem, 11vw, 10rem);
   }
   .type-mega-alt {
-    font-family: 'Anton', Impact, sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: uppercase;
+    font-weight: 500;
     line-height: 0.88;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.03em;
     font-size: clamp(2.6rem, 9vw, 8rem);
   }
 

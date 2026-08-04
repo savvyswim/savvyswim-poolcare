@@ -14,10 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Anton", "Impact", "system-ui", "sans-serif"],
-        badge: ["Bebas Neue", "Oswald", "system-ui", "sans-serif"],
-        body: ["Montserrat", "system-ui", "sans-serif"],
-        editorial: ["Cormorant Garamond", "Times New Roman", "serif"],
+        display: ["Archivo", "Helvetica", "Arial", "sans-serif"],
+        badge: ["Archivo", "Helvetica", "Arial", "sans-serif"],
+        body: ["Archivo", "Helvetica", "Arial", "sans-serif"],
+        editorial: ["Archivo", "Helvetica", "Arial", "sans-serif"],
       },
       colors: {
         lifeguard: "hsl(var(--lifeguard-red))",
