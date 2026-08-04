@@ -234,11 +234,11 @@
   }
 
   .btn-quote {
-    background: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
+    background: hsl(var(--lifeguard-red));
+    color: hsl(0 0% 100%);
   }
-  .btn-quote:hover { background: hsl(350 72% 46%); }
-  .topbar { background: hsl(208 84% 24%); color: hsl(0 0% 100%); }
+  .btn-quote:hover { background: hsl(var(--cabana-orange)); }
+  .topbar { background: hsl(var(--olive-lounge)); color: hsl(0 0% 100%); }
 }
 
 /* ── HubSpot-style admin CRM shell (blue tones) ───────────────── */
