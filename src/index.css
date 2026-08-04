@@ -70,29 +70,30 @@
   html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Montserrat', system-ui, sans-serif;
     background-color: hsl(var(--background));
-    font-feature-settings: "cv02","cv03","cv04","ss01";
   }
   h1, h2, h3 {
-    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    font-family: 'Anton', 'Oswald', Impact, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    font-weight: 400;
   }
 
   h4, h5, h6 {
-    font-family: 'Inter', system-ui, sans-serif;
-    letter-spacing: -0.01em;
-    font-weight: 600;
+    font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 400;
   }
 }
 
 @layer utilities {
   .bg-ink { background-color: hsl(var(--ink)); }
   .bg-ink-soft { background-color: hsl(var(--ink-soft)); }
-  .text-amber-brand { color: hsl(var(--amber)); }
-  .text-gold { color: hsl(var(--gold)); }
-  .bg-amber-brand { background: hsl(var(--amber)); }
+  .text-amber-brand { color: hsl(var(--chlorine)); }
+  .text-gold { color: hsl(var(--lifeguard-red)); }
+  .bg-amber-brand { background: hsl(var(--chlorine)); }
   .bg-gold-brand { background: var(--gradient-gold); }
   .border-hairline { border-color: hsl(var(--hairline)); }
   .shadow-cta { box-shadow: var(--shadow-cta); }
@@ -100,36 +101,63 @@
   .shadow-3d { box-shadow: var(--shadow-3d); }
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
-  .text-gradient-amber { color: hsl(var(--amber-deep)); }
-  .text-gradient-chrome { color: hsl(210 30% 16%); }
-  .text-gradient-gold { color: hsl(var(--gold)); }
+  /* Brand type helpers */
+  .font-display { font-family: 'Anton', Impact, system-ui, sans-serif; text-transform: uppercase; }
+  .font-badge { font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .text-red-brand { color: hsl(var(--lifeguard-red)); }
+  .text-orange-brand { color: hsl(var(--cabana-orange)); }
+  .text-olive-brand { color: hsl(var(--olive-lounge)); }
+  .bg-red-brand { background-color: hsl(var(--lifeguard-red)); }
+  .bg-orange-brand { background-color: hsl(var(--cabana-orange)); }
+  .bg-olive-brand { background-color: hsl(var(--olive-lounge)); }
+
+  /* Mandatory stripe motif */
+  .stripes-red {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--lifeguard-red)) 0 18px, hsl(var(--canvas)) 18px 36px);
+  }
+  .stripes-orange {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--cabana-orange)) 0 18px, hsl(var(--canvas)) 18px 36px);
+  }
+  .stripes-olive {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--olive-lounge)) 0 18px, hsl(var(--canvas)) 18px 36px);
+  }
+  .stripe-rule { height: 8px; width: 100%; }
+
+  .text-gradient-amber { color: hsl(var(--olive-lounge)); }
+  .text-gradient-chrome { color: hsl(90 10% 13%); }
+  .text-gradient-gold { color: hsl(var(--lifeguard-red)); }
 
   .glass {
-    background: hsl(0 0% 100% / 0.9);
+    background: hsl(48 25% 97% / 0.9);
     backdrop-filter: blur(10px);
-    border: 1px solid hsl(205 30% 85% / 0.9);
+    border: 1px solid hsl(45 14% 84% / 0.9);
   }
 
   .card-3d {
     background: hsl(0 0% 100%);
-    border: 1px solid hsl(205 22% 89%);
+    border: 1px solid hsl(45 14% 86%);
     box-shadow: var(--shadow-card);
     position: relative;
     transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
   }
   .card-3d:hover {
-    border-color: hsl(205 25% 78%);
-    box-shadow: 0 2px 4px hsl(210 30% 20% / 0.05), 0 22px 44px -30px hsl(210 40% 20% / 0.4);
+    border-color: hsl(var(--lifeguard-red) / 0.35);
+    box-shadow: 0 2px 4px hsl(90 20% 15% / 0.05), 0 22px 44px -30px hsl(90 20% 15% / 0.4);
   }
 
-  .rule-top { border-top: 2px solid hsl(var(--amber)); }
+  .rule-top { border-top: 3px solid hsl(var(--lifeguard-red)); }
 
   .grid-bg {
     background-image:
-      linear-gradient(hsl(208 40% 40% / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(208 40% 40% / 0.035) 1px, transparent 1px);
+      linear-gradient(hsl(88 21% 35% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(88 21% 35% / 0.05) 1px, transparent 1px);
     background-size: 120px 120px;
   }
+
 
   /* Soft evening light drifting over the water */
   .water-caustics {
