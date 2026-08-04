@@ -13,7 +13,17 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ["Anton", "Impact", "system-ui", "sans-serif"],
+        badge: ["Bebas Neue", "Oswald", "system-ui", "sans-serif"],
+        body: ["Montserrat", "system-ui", "sans-serif"],
+      },
       colors: {
+        lifeguard: "hsl(var(--lifeguard-red))",
+        cabana: "hsl(var(--cabana-orange))",
+        olive: "hsl(var(--olive-lounge))",
+        chlorine: "hsl(var(--chlorine))",
+        canvas: "hsl(var(--canvas))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
