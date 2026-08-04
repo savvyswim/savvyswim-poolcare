@@ -48,36 +48,36 @@ import {
 
 const MEMBERSHIP_FAQ = [
   {
-    q: "How long is the Swim Club commitment?",
-    a: "Savvy Swim Club is a 12-month agreement billed monthly at $19.99. Your perks start the day you join and stay active for the full term. At the end of the 12 months the membership continues month to month unless you tell us to stop.",
+    q: "What is the Savvy Swim Club?",
+    a: "It's our $19.99/month membership for pool owners in DFW. Members get discounted pricing on parts and labor, a half-price filter clean, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
   },
   {
-    q: "How does the 50% off filter clean work?",
-    a: "Members get one filter clean at 50% off during the membership term. It is a one-time benefit per membership — just mention it when you schedule and we apply the discount automatically on the invoice.",
+    q: "What do members get, exactly?",
+    a: "One filter clean at 50% off (one time per membership), 5% off all parts we supply, 7% off installation and repair labor, priority booking on the service calendar, and unlimited 24/7 text support for water chemistry and equipment questions.",
   },
   {
-    q: "What does the 5% parts discount cover?",
-    a: "5% off all parts we supply — pumps, filters, motors, valves, heaters, salt cells, lights, and standard replacement hardware. The discount is applied to the parts line of your invoice on every job during your membership.",
+    q: "How does billing work?",
+    a: "Membership is $19.99 per month, charged automatically to the card on file on the same day each month. The first charge happens the day you join, and your perks are active immediately. Service visits, repairs, and parts are invoiced separately — the membership fee never covers the work itself.",
   },
   {
-    q: "What does the 7% installation discount cover?",
-    a: "7% off installation labor on equipment we install for you, including pump and filter swaps, heater and salt system installs, automation, and lighting. It applies to the labor portion of the invoice.",
+    q: "How long is the commitment?",
+    a: "The Swim Club runs on a 12-month agreement billed monthly. After the first 12 months it continues month to month, so you can stay on at the same rate or stop any time with no further obligation.",
   },
   {
-    q: "Are repairs and inspections eligible?",
-    a: "Yes. Repair visits and equipment inspections are eligible for member pricing — parts on a repair get 5% off and any installation labor gets 7% off. Members are also prioritized on the schedule for diagnostic and inspection appointments.",
+    q: "How do I cancel?",
+    a: "Text or email us and we'll cancel your renewal — no phone maze, no cancellation fee after the initial 12-month term. During the term, cancellation ends your monthly perks and any remaining months of the agreement are due; if your situation changes, like selling the home, let us know and we'll work with you.",
   },
   {
-    q: "What is not included?",
-    a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and full-service maintenance are billed under a Savvy cleaning plan. Discounts do not stack with promo codes or other active offers.",
+    q: "How do I use my member discounts?",
+    a: "Just book as usual — we apply member pricing automatically when we build your invoice. Parts get 5% off the parts line and labor gets 7% off the labor line. Mention the filter clean when you schedule so we tag it as your 50% benefit.",
   },
   {
     q: "What is 24/7 text support?",
-    a: "Text us any time at your service number with a photo or question about your pool. Members get answers on water chemistry, equipment alarms, and troubleshooting outside normal business hours.",
+    a: "Text your service number any time with a photo or a question. Members get answers on water chemistry, equipment alarms, and troubleshooting outside normal business hours — often before we ever need to roll a truck.",
   },
   {
-    q: "Can I cancel?",
-    a: "The agreement runs 12 months. You can cancel at the end of the term, or contact us if your property situation changes — for example if you sell the home — and we will work with you.",
+    q: "What isn't included?",
+    a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
   },
 ];
 import { supabase } from "@/integrations/supabase/client";
