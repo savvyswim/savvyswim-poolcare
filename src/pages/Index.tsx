@@ -538,7 +538,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PROCESS — 3D design highlight */}
+      {/* PROCESS — how service works */}
       <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="absolute inset-0 water-caustics opacity-40" />
         <div className="container-tight relative">
@@ -548,7 +548,7 @@ const Index = () => {
               <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
-                  alt="Modern rectangular pool with tanning ledge and spillover spa built by Savvy Swim"
+                  alt="Sparkling clean backyard pool maintained weekly by Savvy Swim"
                   width={1920}
                   height={1280}
                   loading="lazy"
@@ -556,7 +556,7 @@ const Index = () => {
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-                  Recent build
+                  Serviced weekly
                 </div>
 
               </div>
@@ -566,21 +566,21 @@ const Index = () => {
                 How it goes
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
-                See your pool in 3D
-                <span className="text-gradient-amber"> before we break ground.</span>
+                Clean water,
+                <span className="text-gradient-amber"> handled on a schedule.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                Every Savvy Swim project starts with a photoreal 3D rendering
-                and a full virtual walk-through — so you can change the tile,
-                the shape, even the sunset, before a single shovel hits dirt.
+                Every Savvy Swim account starts with a free water test and equipment
+                check — then a certified tech shows up the same day each week and
+                sends you a photo report before they leave.
               </p>
               <ol className="space-y-5">
                 {[
-                  { n: "01", t: "Discovery & site survey", d: "Free on-site consult, lot measurement, and budget alignment." },
-                  { n: "02", t: "3D design & virtual walk-through", d: "Photoreal renders of your pool, deck, and outdoor living." },
-                  { n: "03", t: "Engineering & permits", d: "Structural plans, soil tests, HOA and city permitting handled." },
-                  { n: "04", t: "Build & finish", d: "Excavation, gunite, plumbing, tile, plaster — typical 8–12 weeks." },
-                  { n: "05", t: "Service for life", d: "Optional weekly maintenance and a 25-year structural warranty." },
+                  { n: "01", t: "Free water test & walk-through", d: "We test chemistry, inspect equipment, and quote on the spot." },
+                  { n: "02", t: "Pick your plan", d: "Weekly, bi-weekly, or one-time cleanup — no contracts." },
+                  { n: "03", t: "Same tech, same day", d: "Skim, brush, vacuum, balance, and filter check every visit." },
+                  { n: "04", t: "Photo report after every visit", d: "Chemistry readings and photos texted or emailed to you." },
+                  { n: "05", t: "Repairs when you need them", d: "Pumps, filters, heaters, and salt systems fixed fast." },
                 ].map((p) => (
                   <li key={p.n} className="flex gap-4">
                     <div className="text-amber-brand font-mono font-bold text-sm pt-1">{p.n}</div>
