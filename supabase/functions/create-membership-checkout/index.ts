@@ -56,9 +56,21 @@ Deno.serve(async (req) => {
       ui_mode: "embedded_page",
       return_url: returnUrl,
       customer: customer.id,
-      metadata: { product: "savvy_membership", service_address: address || "" },
+      metadata: {
+        product: "savvy_membership",
+        service_address: address || "",
+        agreement_months: "12",
+        agreed_to_terms: body.agreedToTerms === true ? "true" : "false",
+        agreement_start: new Date().toISOString(),
+      },
       subscription_data: {
-        metadata: { product: "savvy_membership", service_address: address || "" },
+        metadata: {
+          product: "savvy_membership",
+          service_address: address || "",
+          agreement_months: "12",
+          agreed_to_terms: body.agreedToTerms === true ? "true" : "false",
+          agreement_start: new Date().toISOString(),
+        },
       },
     });
 
