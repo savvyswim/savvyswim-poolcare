@@ -940,6 +940,8 @@ const Index = () => {
         onOpenChange={setSubscribeOpen}
         planName={subscribePlan}
       />
+      <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+
 
     </div>
   );
