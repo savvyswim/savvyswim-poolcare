@@ -407,9 +407,27 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="border-t border-primary/10 bg-primary px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/80">
-                  Water not clear after a visit? We come back free — same day.
-                </p>
+                <div className="border-t border-primary/10 bg-primary px-4 py-3">
+                  <p className="text-[13px] leading-relaxed text-primary-foreground/80">
+                    Water not clear after a visit? We come back free — same day.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <a
+                      href={PHONE_HREF}
+                      onClick={() => trackContactClick("call_click", "guarantee")}
+                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+                    >
+                      <Phone className="h-3 w-3" /> Call
+                    </a>
+                    <a
+                      href={SMS_HREF}
+                      onClick={() => trackContactClick("text_click", "guarantee")}
+                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+                    >
+                      Text us
+                    </a>
+                  </div>
+                </div>
               </div>
 
 
