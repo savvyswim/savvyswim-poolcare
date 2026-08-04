@@ -770,8 +770,9 @@ const Index = () => {
                 <div className="mt-auto flex items-center gap-4 pt-10">
                   <div className="h-px flex-grow bg-chlorine/30" />
                   <span className="font-badge text-xl tracking-[0.2em] text-chlorine">
-                    Santana &amp; Rivera
+                    On duty, so you don&apos;t have to be.
                   </span>
+
                   <div className="h-px flex-grow bg-chlorine/30" />
                 </div>
               </div>
