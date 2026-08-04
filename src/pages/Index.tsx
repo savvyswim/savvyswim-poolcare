@@ -661,68 +661,106 @@ const Index = () => {
             ))}
           </div>
 
-          {/* SAVVY MEMBERSHIP */}
-          <div id="membership" className="mt-16 rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-lg">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-8">
-              <div className="flex-1">
-                <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                  Savvy Swim Club
-                </span>
-                <h3 className="mt-3 text-3xl font-bold">
-                  $19.99 <span className="text-base font-medium text-muted-foreground">/ month</span>
-                </h3>
-                <p className="mt-2 text-muted-foreground max-w-xl">
-                  Member perks on every service call. Requires a 12-month agreement, billed monthly.
+          {/* SAVVY SWIM CLUB — Riviera cabana luxe */}
+          <div
+            id="membership"
+            className="mt-16 overflow-hidden rounded-sm border border-primary/10 shadow-3d"
+          >
+            <div className="flex flex-col lg:flex-row">
+              {/* Membership card */}
+              <div className="w-full lg:w-1/2 bg-card flex flex-col">
+                <div className="stripes-navy h-6 w-full" />
+
+                <div className="flex flex-1 flex-col p-8 sm:p-10">
+                  <div className="mb-6 flex items-start justify-between gap-6">
+                    <div>
+                      <span className="font-badge block text-lg leading-none tracking-[0.2em] text-red-brand">
+                        Exclusivity
+                      </span>
+                      <h3 className="font-display mt-1 text-4xl sm:text-5xl leading-none text-navy-brand">
+                        Swim Club
+                      </h3>
+                    </div>
+                    <div className="hidden sm:flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-chlorine">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chlorine/20">
+                        <div className="h-8 w-8 rounded-full border border-primary/20" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-display text-5xl sm:text-6xl text-navy-brand">$19.99</span>
+                      <span className="font-editorial italic text-xl text-primary/60">per month</span>
+                    </div>
+                    <p className="mt-2 text-sm font-semibold uppercase tracking-tight text-primary/80">
+                      Member perks on every service call · 12-month agreement, billed monthly
+                    </p>
+                  </div>
+
+                  <ul className="mb-10 space-y-4 text-sm text-primary">
+                    {[
+                      "50% off one filter clean (one time)",
+                      "5% off all parts",
+                      "7% off installation labor",
+                      "24/7 text support",
+                    ].map((perk) => (
+                      <li key={perk} className="flex items-center gap-3">
+                        <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-lifeguard" />
+                        <span>{perk}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => setMembershipOpen(true)}
+                    className="font-display mt-auto w-full bg-lifeguard py-5 text-xl uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-navy"
+                  >
+                    Join the Club
+                  </button>
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    12-month agreement · Billed monthly at $19.99
+                  </p>
+                </div>
+              </div>
+
+              {/* FAQ block */}
+              <div className="flex w-full flex-col bg-navy-brand p-8 sm:p-10 lg:w-1/2">
+                <h4 className="font-editorial italic text-3xl text-canvas normal-case">
+                  Membership Details
+                </h4>
+                <p className="mt-2 text-xs text-canvas/60">
+                  Everything included with your $19.99/month Savvy Swim Club.
                 </p>
 
-                <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-                  {[
-                    "50% off one filter clean (one time)",
-                    "5% off all parts",
-                    "7% off installation labor",
-                    "24/7 text support",
-                  ].map((perk) => (
-                    <li key={perk} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
-                      <span>{perk}</span>
-                    </li>
+                <Accordion type="single" collapsible className="mt-6">
+                  {MEMBERSHIP_FAQ.map((item) => (
+                    <AccordionItem
+                      key={item.q}
+                      value={item.q}
+                      className="border-b border-canvas/20"
+                    >
+                      <AccordionTrigger className="text-left text-sm font-semibold uppercase tracking-wide text-canvas hover:no-underline [&>svg]:text-lifeguard">
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-xs leading-relaxed text-canvas/70">
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </ul>
-              </div>
-              <div className="lg:w-64">
-                <button
-                  onClick={() => setMembershipOpen(true)}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3.5 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
-                >
-                  Join the Swim Club <ArrowRight className="h-4 w-4" />
-                </button>
-                <p className="mt-3 text-center text-xs text-muted-foreground">
-                  12-month agreement · Billed monthly at $19.99
-                </p>
+                </Accordion>
 
+                <div className="mt-auto flex items-center gap-4 pt-10">
+                  <div className="h-px flex-grow bg-chlorine/30" />
+                  <span className="font-badge text-xl tracking-[0.2em] text-chlorine">
+                    Santana &amp; Rivera
+                  </span>
+                  <div className="h-px flex-grow bg-chlorine/30" />
+                </div>
               </div>
-            </div>
-
-            {/* MEMBERSHIP FAQ */}
-            <div className="mt-10 border-t border-border pt-8">
-              <h4 className="text-lg font-semibold">Swim Club FAQ</h4>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Everything included with your $19.99/month Savvy Swim Club.
-              </p>
-              <Accordion type="single" collapsible className="mt-4">
-                {MEMBERSHIP_FAQ.map((item) => (
-                  <AccordionItem key={item.q} value={item.q}>
-                    <AccordionTrigger className="text-left text-sm font-semibold">
-                      {item.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground">
-                      {item.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
             </div>
           </div>
+
 
         </div>
       </section>
