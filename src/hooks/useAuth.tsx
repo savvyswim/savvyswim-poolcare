@@ -41,10 +41,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
       setSession(s);
       setUser(s?.user ?? null);
       setTimeout(() => checkRole(s?.user?.id), 0);
+      if (event === "SIGNED_IN") {
+        setTimeout(() => {
+          logAdminAction({
+            area: "auth",
+            action: "Signed in",
+            recordType: "user",
+            recordId: s?.user?.id ?? null,
+            details: { email: s?.user?.email ?? null },
+          });
+        }, 0);
+      }
     });
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
