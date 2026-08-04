@@ -312,9 +312,9 @@ const Index = () => {
         <div className="container-tight relative z-10">
           <div className="relative mx-auto max-w-5xl px-6 py-16 sm:py-20 text-center">
             {/* Cabana stripe accent — top */}
-            <div className="absolute inset-x-0 top-0 h-4 stripes-red" />
+            <div className="absolute inset-x-0 top-0 h-4 stripes-red ring-1 ring-primary/15" />
             {/* Cabana stripe accent — bottom */}
-            <div className="absolute inset-x-0 bottom-0 h-4 stripes-navy" />
+            <div className="absolute inset-x-0 bottom-0 h-4 stripes-navy ring-1 ring-primary/15" />
 
             {/* Shield emblem */}
             <div className="mx-auto mb-8 w-[92px]">
