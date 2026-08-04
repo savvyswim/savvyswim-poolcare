@@ -569,6 +569,7 @@ export default function AdminCRM() {
                       <th className="px-4 py-3 font-semibold">Plan</th>
                       <th className="px-4 py-3 font-semibold">Pool size</th>
                       <th className="px-4 py-3 font-semibold">Vegetation</th>
+                      <th className="px-4 py-3 font-semibold">SKU</th>
                       <th className="px-4 py-3 font-semibold text-right">Monthly price</th>
                     </tr>
                   </thead>
@@ -580,12 +581,17 @@ export default function AdminCRM() {
                         </td>
                         <td className="px-4 py-3">{row.pool_size}</td>
                         <td className="px-4 py-3 text-muted-foreground">{row.vegetation_level}</td>
-                        <td className="px-4 py-3 text-right font-semibold">{money(row.price)}</td>
+                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                          {row.sku}
+                        </td>
+                        <td className="px-4 py-3 text-right font-semibold">
+                          {row.price != null ? money(row.price) : "TBD"}
+                        </td>
                       </tr>
                     ))}
                     {!pricingRows.length && (
                       <tr>
-                        <td colSpan={4} className="p-8 text-center text-sm text-muted-foreground">
+                        <td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">
                           No service plans configured.
                         </td>
                       </tr>
