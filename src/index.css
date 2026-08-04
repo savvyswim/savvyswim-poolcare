@@ -79,16 +79,17 @@
   h1, h2, h3 {
     font-family: 'Anton', 'Oswald', Impact, system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.005em;
     font-weight: 400;
   }
 
   h4, h5, h6 {
     font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     font-weight: 400;
   }
+  p { letter-spacing: 0.005em; }
 }
 
 @layer utilities {
