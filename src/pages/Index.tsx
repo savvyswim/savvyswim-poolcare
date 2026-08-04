@@ -7,16 +7,13 @@ import {
   Sparkles,
   Sun,
   Wrench,
-  Hammer,
   Cpu,
-  Flame,
   ArrowRight,
   CheckCircle2,
   Star,
   MapPin,
   ShieldCheck,
   CalendarCheck,
-  ShoppingCart,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
@@ -171,7 +168,6 @@ const Index = () => {
   };
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
-  const cart = useCart();
 
 
   useEffect(() => {
