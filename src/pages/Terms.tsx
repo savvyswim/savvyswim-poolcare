@@ -5,7 +5,7 @@ const Terms = () => (
     <article className="max-w-3xl mx-auto">
       <Seo
         title="Terms & Conditions | Savvy Swim"
-        description="Terms and conditions for Savvy Swim pool cleaning, construction, and store purchases, including SMS program and payment terms."
+        description="Terms and conditions for Savvy Swim pool cleaning, service, and repair, including SMS program and payment terms."
         path="/terms"
       />
       <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
