@@ -116,6 +116,7 @@ const Index = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState(false);
   const [subscribePlan, setSubscribePlan] = useState<string | undefined>(undefined);
   const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
