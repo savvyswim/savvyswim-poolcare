@@ -2,8 +2,7 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 
 type StripeEnv = "sandbox" | "live";
 
-// Card payments are temporarily turned off. Flip to true to re-enable checkout.
-export const PAYMENTS_ENABLED = false;
+export const PAYMENTS_ENABLED = true;
 
 const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN;
 
