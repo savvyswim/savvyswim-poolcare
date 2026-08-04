@@ -79,6 +79,26 @@ const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
 const PHONE_HREF = "tel:+14692138087";
 
+const TICKER_ITEMS: { label: string; live?: boolean }[] = [
+  { label: "Est. Texas — Pool Care Systems" },
+  { label: "Live routes: 24 trucks", live: true },
+  { label: "Now serving — Dallas" },
+  { label: "Plano" },
+  { label: "Frisco" },
+  { label: "McKinney" },
+  { label: "Allen" },
+  { label: "Richardson" },
+  { label: "Highland Park" },
+  { label: "University Park" },
+  { label: "Garland" },
+  { label: "Irving" },
+  { label: "Rockwall" },
+  { label: "Prosper" },
+  { label: "Lat 32.7767 / Lon −96.7970" },
+  { label: "Rev. 04" },
+];
+
+
 const REVIEWS_ROW_1 = [
   { q: "Our green pool was swimmable in four days. I still can't believe the before and after.", a: "Megan R.", c: "Plano, TX" },
   { q: "Tech showed up on time, replaced the pump motor same day, and texted me photos of the work.", a: "Daniel K.", c: "Frisco, TX" },
