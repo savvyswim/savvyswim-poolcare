@@ -116,12 +116,59 @@
   }
   .editorial-italic { font-family: 'Cormorant Garamond', serif; font-style: italic; text-transform: none; letter-spacing: 0.01em; }
   .eyebrow {
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
     text-transform: uppercase;
-    letter-spacing: 0.28em;
-    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    font-size: 0.68rem;
     font-weight: 500;
   }
+
+  /* Technical / instrumentation layer */
+  .font-tech {
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.68rem;
+  }
+  .tech-label { @apply font-tech text-primary/45; }
+  .tech-rule { border-top: 1px solid hsl(var(--navy) / 0.14); }
+  .tech-grid {
+    background-image:
+      linear-gradient(hsl(var(--navy) / 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--navy) / 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .tech-chip {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.64rem;
+    border: 1px solid hsl(var(--navy) / 0.18);
+    padding: 0.28rem 0.55rem;
+    color: hsl(var(--navy) / 0.7);
+  }
+  .tech-readout {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  @keyframes blip { 0%,100% { opacity: 1 } 50% { opacity: 0.15 } }
+  .animate-blip { animation: blip 1.8s steps(1,end) infinite; }
+  /* Jacquemus-scale display type */
+  .type-mega {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    font-size: clamp(3.2rem, 11vw, 10rem);
+  }
+  .type-mega-alt {
+    font-family: 'Anton', Impact, sans-serif;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    font-size: clamp(2.6rem, 9vw, 8rem);
+  }
+
 
   .text-red-brand { color: hsl(var(--lifeguard-red)); }
   .text-orange-brand { color: hsl(var(--cabana-orange)); }
