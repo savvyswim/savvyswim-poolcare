@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "fc3c6fd9-9b7e-4f00-a184-793b939ef812",
-  "project_id": "e08cd288-6101-47c5-98bc-9ec43c6f492f",
-  "url": "/__l5e/assets-v1/fc3c6fd9-9b7e-4f00-a184-793b939ef812/AdobeStock_559236027.jpg",
-  "r2_key": "a/v1/e08cd288-6101-47c5-98bc-9ec43c6f492f/fc3c6fd9-9b7e-4f00-a184-793b939ef812/AdobeStock_559236027.jpg",
-  "original_filename": "AdobeStock_559236027.jpg",
-  "size": 282815,
   "content_type": "image/jpeg",
-  "created_at": "2026-08-03T19:31:58Z"
+  "created_at": "2026-08-03T19:31:58Z",
+  "original_filename": "AdobeStock_559236027.jpg",
+  "project_id": "beff0d54-4ac3-49d5-8d2c-3d4520824e41",
+  "r2_key": "a/v1/beff0d54-4ac3-49d5-8d2c-3d4520824e41/fc3c6fd9-9b7e-4f00-a184-793b939ef812/AdobeStock_559236027.jpg",
+  "size": 282815,
+  "url": "/__l5e/assets-v1/fc3c6fd9-9b7e-4f00-a184-793b939ef812/AdobeStock_559236027.jpg",
+  "version": 1
 }
