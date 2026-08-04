@@ -150,7 +150,15 @@ export default function AdminCRM() {
   }, [isAdmin]);
 
   const [pricingRows, setPricingRows] = useState<
-    { id: string; pool_size: string; vegetation_level: string; plan_name: string | null; price: number | null }[]
+    {
+      id: string;
+      pool_size: string;
+      vegetation_level: string;
+      plan_name: string | null;
+      sku: string;
+      price: number | null;
+      is_active: boolean;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -159,8 +167,7 @@ export default function AdminCRM() {
     (async () => {
       const { data } = await supabase
         .from("service_pricing")
-        .select("id,pool_size,vegetation_level,plan_name,price")
-        .eq("is_active", true)
+        .select("id,pool_size,vegetation_level,plan_name,sku,price,is_active")
         .order("size_rank")
         .order("vegetation_rank");
       if (active && data) setPricingRows(data as typeof pricingRows);
