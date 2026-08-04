@@ -70,6 +70,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto">
+        <PaymentTestModeBanner />
         {clientSecret ? (
           <div id="membership-checkout">
             <EmbeddedCheckoutProvider stripe={getStripe()} options={{ clientSecret }}>
