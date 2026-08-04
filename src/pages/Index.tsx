@@ -640,8 +640,9 @@ const Index = () => {
                   $19.99 <span className="text-base font-medium text-muted-foreground">/ month</span>
                 </h3>
                 <p className="mt-2 text-muted-foreground max-w-xl">
-                  Member perks on every service call — no contract, cancel anytime.
+                  Member perks on every service call. Requires a 12-month agreement, billed monthly.
                 </p>
+
                 <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                   {[
                     "50% off one filter clean (one time)",
@@ -664,8 +665,9 @@ const Index = () => {
                   Become a member <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center text-xs text-muted-foreground">
-                  Billed monthly. Cancel anytime.
+                  12-month agreement · Billed monthly at $19.99
                 </p>
+
               </div>
             </div>
           </div>
