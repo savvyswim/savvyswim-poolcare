@@ -214,8 +214,8 @@ const Index = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Savvy Swim — Pool Cleaning & Custom Pools in Texas"
-        description="Weekly pool cleaning, maintenance and custom pool construction across DFW and Texas. Free quote from Savvy Swim, a Santana & Rivera company."
+        title="Savvy Swim — Pool Cleaning, Service & Repair in Texas"
+        description="Weekly pool cleaning, maintenance, equipment service and repair across DFW and Texas. Free quote from Savvy Swim, a Santana & Rivera company."
         path="/"
         jsonLd={{
           "@context": "https://schema.org",
@@ -230,12 +230,12 @@ const Index = () => {
         {/* Utility bar */}
         <div className="topbar hidden md:block text-[13px]">
           <div className="container-tight flex h-9 items-center justify-between gap-6">
-            <a href="#services" className="font-semibold hover:opacity-80 transition">
-              Also a full custom pool building company — Design &amp; Build →
+            <a href="#cleaning" className="font-semibold hover:opacity-80 transition">
+              Weekly pool cleaning, service &amp; repair — Get a quote →
             </a>
             <div className="flex items-center gap-6">
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-              <a href="/shop" className="hover:opacity-80 transition">Shop</a>
+              <a href="#services" className="hover:opacity-80 transition">Repairs</a>
               <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
@@ -259,9 +259,8 @@ const Index = () => {
             </a>
             <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
               <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
-              <a href="#services" className="hover:text-primary transition">Design &amp; Build</a>
-              <a href="/shop" className="hover:text-primary transition">Shop</a>
-              <a href="#portfolio" className="hover:text-primary transition">Portfolio</a>
+              <a href="#services" className="hover:text-primary transition">Service &amp; Repair</a>
+              <a href="#portfolio" className="hover:text-primary transition">Our Work</a>
               <a href="#about" className="hover:text-primary transition">About Us</a>
               <a href="#contact" className="hover:text-primary transition">Contact</a>
 
@@ -277,14 +276,9 @@ const Index = () => {
                 type="button"
                 aria-label="Open cart"
                 onClick={() => cart.setOpen(true)}
-                className="relative inline-flex items-center justify-center rounded-md border border-hairline h-10 w-10 hover:text-primary transition"
+                className="hidden"
               >
                 <ShoppingCart className="h-4.5 w-4.5" />
-                {cart.count > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-amber-brand px-1 text-[10px] font-bold text-primary-foreground">
-                    {cart.count}
-                  </span>
-                )}
               </button>
               <button
                 type="button"
