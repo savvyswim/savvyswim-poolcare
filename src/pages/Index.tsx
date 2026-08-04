@@ -407,7 +407,7 @@ const Index = () => {
                   ))}
                 </ul>
                 <p className="border-t border-primary/10 bg-primary px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/80">
-                  Water not clear after a visit? We come back free.
+                  Water not clear after a visit? We come back free — same day.
                 </p>
               </div>
 
