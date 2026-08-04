@@ -298,102 +298,88 @@ const Index = () => {
         </div>
       </header>
 
-      {/* HERO — Riviera Classic */}
-      <section className="relative min-h-[100svh] flex items-center pt-32 pb-24 overflow-hidden bg-canvas">
-        {/* diagonal cabana wash */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(45deg, hsl(var(--lifeguard-red)) 0 40px, transparent 40px 80px)",
-          }}
-        />
+      {/* HERO — Editorial studio */}
+      <section className="relative bg-canvas pt-36 pb-0">
+        <div className="container-tight">
+          <h1 className="font-editorial italic text-primary tracking-tight leading-[1.05] text-[3rem] sm:text-[4.5rem] lg:text-[5.5rem] max-w-5xl pb-16">
+            Crystal-clear pools, cared for every single week.
+          </h1>
+        </div>
 
-        <div className="container-tight relative z-10">
-          <div className="relative mx-auto max-w-5xl px-6 py-16 sm:py-20 text-center">
-            {/* Cabana stripe accent — top */}
-            <div className="absolute inset-x-0 top-0 h-4 stripes-red ring-1 ring-primary/15" />
-            {/* Cabana stripe accent — bottom */}
-            <div className="absolute inset-x-0 bottom-0 h-4 stripes-navy ring-1 ring-primary/15" />
+        <div className="border-t border-primary/10">
+          <div className="container-tight grid gap-14 py-20 lg:grid-cols-12">
+            <div className="lg:col-span-6">
+              <p className="text-sm text-primary/40">Our Process</p>
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+                Licensed technicians, balanced chemistry, and spotless water — every visit, every week.
+                We handle filtration, skimming, brushing, and equipment checks so your pool is always ready
+                for the afternoon.
+              </p>
 
-            {/* Shield emblem */}
-            <div className="mx-auto mb-8 w-[92px]">
-              <div className="rounded-t-md bg-canvas px-3 pt-3 pb-2 shadow-cta">
-                <div className="rounded-sm bg-primary px-2 py-3 text-center leading-none">
-                  <div className="text-[13px] font-extrabold tracking-[0.16em] text-primary-foreground">SAVVY</div>
-                  <div className="text-[13px] font-extrabold tracking-[0.16em] text-primary-foreground mt-1">SWIM</div>
-                </div>
+              <p className="mt-12 text-sm text-primary/40">What We Do</p>
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+                Weekly maintenance is the base of everything we offer. From there we cover repairs, equipment
+                upgrades, and full custom design &amp; build — no contracts required to get started.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => openBooking("Weekly Service & Maintenance")}
+                  className="inline-flex items-center gap-2 bg-primary/[0.07] px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  <CalendarCheck className="h-4 w-4" /> Work With Us
+                </button>
+                <a
+                  href={PHONE_HREF}
+                  className="inline-flex items-center gap-2 px-2 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary/70 hover:text-primary transition"
+                >
+                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                </a>
               </div>
-              <div className="mx-auto -mt-2 h-9 w-9 rotate-45 rounded-[6px] border-[3px] border-canvas bg-primary" />
             </div>
 
-            <div className="mb-8 inline-block bg-accent px-6 py-2 font-badge text-lg tracking-[0.22em] text-accent-foreground">
-              Weekly Pool Cleaning &amp; Maintenance · DFW
-            </div>
-
-            <h1 className="font-display uppercase leading-[0.9] tracking-tight text-primary text-5xl sm:text-7xl lg:text-8xl">
-              Crystal-Clear Pools,
-              <br />
-              <span className="text-accent">Every Single</span> Week
-            </h1>
-
-            <p className="mt-6 font-editorial italic text-primary text-2xl sm:text-3xl">
-              Pristine waters, curated for the refined poolside lifestyle.
-            </p>
-
-            <p className="mx-auto mt-6 max-w-xl font-medium leading-relaxed text-primary/80">
-              Licensed techs, balanced chemistry, spotless water — no contracts to get started.
-            </p>
-
-            <div className="mt-10 flex flex-col sm:flex-row gap-5 justify-center">
-              <button
-                type="button"
-                onClick={() => openBooking("Weekly Service & Maintenance")}
-                className="inline-flex items-center justify-center gap-2 border-2 border-primary bg-primary px-10 py-4 font-badge text-xl uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:border-accent"
-              >
-                <CalendarCheck className="h-4 w-4" />
-                Get My Cleaning Quote
-              </button>
-              <a
-                href={PHONE_HREF}
-                className="inline-flex items-center justify-center gap-2 border-2 border-primary px-10 py-4 font-badge text-xl uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
-              </a>
-            </div>
-
-            <a
-              href="#services"
-              className="mt-7 inline-flex text-primary text-sm font-semibold underline underline-offset-4 opacity-80 hover:opacity-100"
-            >
-              Building a new pool? See our custom design &amp; build services →
-            </a>
-
-            {/* Buoy accent */}
-            <div className="mt-12 flex items-center justify-center gap-4">
-              <div className="h-[2px] w-12 bg-accent" />
-              <div className="relative grid h-8 w-8 place-items-center rounded-full border-4 border-accent">
-                <div className="absolute h-[2px] w-full rotate-45 bg-accent" />
-                <div className="absolute h-[2px] w-full -rotate-45 bg-accent" />
-              </div>
-              <div className="h-[2px] w-12 bg-accent" />
-            </div>
-
-            <div className="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-primary/20 pt-6">
-              {[
-                { k: "1,200+", v: "Pools serviced" },
-                { k: "4.9★", v: "Avg client rating" },
-                { k: "52", v: "Visits per year" },
-              ].map((s) => (
-                <div key={s.v}>
-                  <div className="font-display text-primary text-3xl sm:text-[2.4rem]">{s.k}</div>
-                  <div className="mt-1 font-badge text-[12px] uppercase tracking-[0.22em] text-primary/70">{s.v}</div>
-                </div>
-              ))}
+            <div className="lg:col-span-4 lg:col-start-9">
+              <p className="text-sm text-primary/40">Our Services</p>
+              <ul className="mt-6 space-y-3 text-[17px] text-primary">
+                {[
+                  "Weekly Pool Cleaning",
+                  "Chemical Balancing",
+                  "Filter &amp; Pump Service",
+                  "Equipment Repair",
+                  "Green Pool Recovery",
+                  "Tile &amp; Deck Care",
+                  "Custom Design &amp; Build",
+                  "Remodels &amp; Resurfacing",
+                  "Seasonal Openings",
+                ].map((s) => (
+                  <li key={s}>
+                    <a href="#services" className="hover:text-accent transition-colors">
+                      {s.replace(/&amp;/g, "&")}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
+
+        <div className="border-t border-primary/10">
+          <div className="container-tight grid max-w-3xl grid-cols-3 gap-6 py-12">
+            {[
+              { k: "1,200+", v: "Pools serviced" },
+              { k: "4.9★", v: "Avg client rating" },
+              { k: "52", v: "Visits per year" },
+            ].map((s) => (
+              <div key={s.v}>
+                <div className="font-editorial italic text-primary text-4xl">{s.k}</div>
+                <div className="mt-2 text-xs uppercase tracking-[0.14em] text-primary/45">{s.v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
+
 
 
       {/* Side quote tab */}
