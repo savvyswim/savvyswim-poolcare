@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Mail,
   Phone,
@@ -17,8 +17,6 @@ import {
   ShieldCheck,
   CalendarCheck,
   ShoppingCart,
-  Search,
-  X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
@@ -44,7 +42,6 @@ import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
 import { supabase } from "@/integrations/supabase/client";
-import { productImage, type Product } from "@/lib/products";
 import { useCart, money } from "@/hooks/useCart";
 
 
