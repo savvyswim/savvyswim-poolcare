@@ -312,8 +312,9 @@ const Index = () => {
 
               <p className="mt-12 text-sm text-primary/40">What We Do</p>
               <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
-                Weekly maintenance is the base of everything we offer. From there we cover repairs, equipment
-                upgrades, and full custom design &amp; build — no contracts required to get started.
+                Weekly maintenance is the base of everything we offer. From there we cover equipment repairs,
+                pump and filter service, and green-pool recovery — no contracts required to get started.
+              </p>
               </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -343,8 +344,8 @@ const Index = () => {
                   "Equipment Repair",
                   "Green Pool Recovery",
                   "Tile &amp; Deck Care",
-                  "Custom Design &amp; Build",
-                  "Remodels &amp; Resurfacing",
+                  "Salt System Service",
+                  "Leak &amp; Plumbing Repair",
                   "Seasonal Openings",
                 ].map((s) => (
                   <li key={s}>
@@ -412,11 +413,11 @@ const Index = () => {
               What we do
             </div>
             <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
-              Everything water, under one roof.
+              Cleaning, service &amp; repair.
             </h2>
             <p className="mt-4 text-muted-foreground text-base leading-relaxed">
-              From custom design and ground-up construction to weekly service
-              and renovations — one team, one warranty, one phone call.
+              Weekly maintenance, equipment repair, and everything in between —
+              one team, one phone call, no contracts.
             </p>
           </div>
 
