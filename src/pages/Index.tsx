@@ -15,17 +15,6 @@ import {
   ShieldCheck,
   CalendarCheck,
 } from "lucide-react";
-import heroVideo from "@/assets/pool-hero.mp4.asset.json";
-import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
-import photoSunsetVilla from "@/assets/AdobeStock_116633511.jpg.asset.json";
-import photoStoneCourtyard from "@/assets/AdobeStock_191328716.jpg.asset.json";
-import photoDeskSunset from "@/assets/AdobeStock_470929864.jpg.asset.json";
-import photoResortLap from "@/assets/AdobeStock_517091924.jpg.asset.json";
-import photoFamilySplash from "@/assets/AdobeStock_528893688.jpg.asset.json";
-import photoGeometric from "@/assets/AdobeStock_548072467.jpg.asset.json";
-import photoWhiteHouse from "@/assets/AdobeStock_559236027.jpg.asset.json";
-import photoTexasFreeform from "@/assets/AdobeStock_611792597.jpg.asset.json";
-import photoKidSwim from "@/assets/AdobeStock_77771910.jpg.asset.json";
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
@@ -37,10 +26,8 @@ import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
 import photoPoolMartinis from "@/assets/IMG_5496-2.jpg.asset.json";
 import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 
-const heroPoster = photoSavvyLetters.url;
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
-const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
