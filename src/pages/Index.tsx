@@ -288,31 +288,85 @@ const Index = () => {
         </div>
 
         <div className="relative tech-rule">
-          <div className="container-tight py-16 sm:py-24">
-            <p className="tech-label mb-8">Fig. 01 — Weekly Service Program</p>
-            <h1 className="type-mega text-primary max-w-[16ch]">
-              Crystal-clear
-              <span className="block type-mega-alt text-accent">water,</span>
-              <span className="block">engineered weekly.</span>
-            </h1>
+          <div className="container-tight grid gap-x-12 gap-y-14 py-16 sm:py-24 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-7">
+              <p className="tech-label mb-8">Fig. 01 — Weekly Service Program</p>
+              <h1 className="type-mega text-primary max-w-[16ch]">
+                Crystal-clear
+                <span className="block type-mega-alt text-accent">water,</span>
+                <span className="block">engineered weekly.</span>
+              </h1>
 
-            <div className="mt-12 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => openBooking("Weekly Service & Maintenance")}
-                className="font-tech inline-flex items-center gap-2 bg-primary px-7 py-4 text-primary-foreground transition-colors hover:bg-accent"
-              >
-                <CalendarCheck className="h-4 w-4" /> Start Service
-              </button>
-              <a
-                href={PHONE_HREF}
-                className="font-tech inline-flex items-center gap-2 border border-primary/20 px-7 py-4 text-primary transition-colors hover:border-primary"
-              >
-                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
-              </a>
+              <p className="mt-8 font-editorial italic text-primary/80 text-2xl sm:text-3xl leading-snug max-w-[22ch]">
+                On duty, so you don't have to be.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => openBooking("Weekly Service & Maintenance")}
+                  className="font-tech inline-flex items-center gap-2 bg-primary px-7 py-4 text-primary-foreground transition-colors hover:bg-accent"
+                >
+                  <CalendarCheck className="h-4 w-4" /> Start Service
+                </button>
+                <a
+                  href={PHONE_HREF}
+                  className="font-tech inline-flex items-center gap-2 border border-primary/20 px-7 py-4 text-primary transition-colors hover:border-primary"
+                >
+                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                </a>
+              </div>
+            </div>
+
+            {/* Photo plate — vintage spec card */}
+            <div className="lg:col-span-5">
+              <figure className="relative border border-primary/15 bg-canvas p-3 shadow-card">
+                <div className="flex items-start justify-between px-1 pb-3">
+                  <span className="tech-label">Plate I — Station 04</span>
+                  <span className="tech-readout text-[11px] text-primary/40">SS-01</span>
+                </div>
+                <div className="relative overflow-hidden border border-primary/10">
+                  <img
+                    src={photoLifeguardChair.url}
+                    alt="Savvy Swim lifeguard chair and red cabana umbrella beside a serviced pool"
+                    loading="eager"
+                    className="aspect-[4/5] w-full object-cover"
+                  />
+                  <figcaption className="absolute bottom-0 left-0 bg-accent px-3 py-1.5 font-tech text-[10px] uppercase tracking-[0.2em] text-primary-foreground">
+                    On duty
+                  </figcaption>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-4 border-t border-primary/10 px-1 pt-3">
+                  <div>
+                    <p className="tech-label">Clarity</p>
+                    <p className="tech-readout text-sm text-primary">99.8%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="tech-label">Cadence</p>
+                    <p className="tech-readout text-sm text-accent">Weekly</p>
+                  </div>
+                </div>
+              </figure>
+
+              <div className="mt-3 grid grid-cols-3 gap-3">
+                {[
+                  { src: photoRescueTube.url, alt: "Savvy Swim rescue tube floating in a clear pool" },
+                  { src: photoSavvyLetters.url, alt: "Inflatable SAVVY letters in blue pool water" },
+                  { src: photoRivieraLoungers.url, alt: "Red and white striped loungers beside a pool" },
+                ].map((p) => (
+                  <img
+                    key={p.src}
+                    src={p.src}
+                    alt={p.alt}
+                    loading="lazy"
+                    className="aspect-square w-full border border-primary/10 object-cover"
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
+
 
         {/* Spec sheet grid */}
         <div className="relative tech-rule">
