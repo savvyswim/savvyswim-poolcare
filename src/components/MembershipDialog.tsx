@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 interface MembershipDialogProps {
   open: boolean;
