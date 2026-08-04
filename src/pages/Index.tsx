@@ -1004,7 +1004,6 @@ const Index = () => {
             <div className="relative">
               <div className="mx-auto mb-6 relative h-16 w-16 rounded-full bg-amber-brand grid place-items-center shadow-cta animate-float">
                 <Waves className="h-7 w-7 text-primary-foreground" />
-                <span className="absolute inset-0 rounded-full border border-white/40 animate-ripple" />
               </div>
               <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
