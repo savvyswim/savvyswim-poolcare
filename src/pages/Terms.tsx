@@ -114,6 +114,23 @@ const Terms = () => (
         according to the agreed terms.
       </p>
 
+      <h3 className="text-lg font-semibold mt-6 mb-2">4.1 Clear Water Guarantee</h3>
+      <p className="mb-4">
+        If your water is not clear after a service visit and the cause is our workmanship — missed
+        steps, incorrect chemistry, or an error by our technician — we return the same day, at no
+        charge, to correct it. Same-day return is subject to notifying us on the day of the visit;
+        reports made afterward are scheduled for the next available service window.
+      </p>
+      <p className="mb-4">
+        If the water condition is caused by factors outside our control — landscaping or yard work,
+        heavy debris, storms, construction, pets or heavy bather load, algae blooms following missed
+        or skipped visits, equipment failure, refills, or third-party chemical additions — the
+        return visit is not covered by the guarantee. In those cases we provide one (1)
+        complimentary corrective visit per customer; any additional work is quoted and billed
+        separately at standard rates.
+      </p>
+
+
       <h2 className="text-xl font-semibold mt-8 mb-2">5. User Conduct</h2>
       <p className="mb-4">
         You agree not to misuse our website or services, including by attempting unauthorized
