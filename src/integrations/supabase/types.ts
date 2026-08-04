@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          note: string | null
+          roles: Database["public"]["Enums"]["app_role"][]
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          note?: string | null
+          roles?: Database["public"]["Enums"]["app_role"][]
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          note?: string | null
+          roles?: Database["public"]["Enums"]["app_role"][]
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           address: string
@@ -991,7 +1033,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "crm_manager" | "store_manager"
       pool_category: "design" | "plan" | "construction"
       pool_media_type: "image" | "video"
     }
@@ -1121,7 +1163,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "crm_manager", "store_manager"],
       pool_category: ["design", "plan", "construction"],
       pool_media_type: ["image", "video"],
     },
