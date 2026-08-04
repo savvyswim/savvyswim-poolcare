@@ -30,12 +30,12 @@ import { supabase } from "@/integrations/supabase/client";
 const EMAIL = "hi@savagepools.us";
 
 const SERVICES = [
-  "Custom Pool Design & Build",
-  "Spa & Water Features",
-  "Outdoor Living",
-  "Renovation & Resurfacing",
   "Weekly Service & Maintenance",
-  "Smart Pool Automation",
+  "Equipment Repair",
+  "Green Pool Recovery",
+  "Salt & Automation Service",
+  "Filter Clean",
+  "Surface & Tile Care",
   "On-site Inspection",
   "Not sure — help me decide",
 ] as const;

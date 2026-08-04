@@ -84,21 +84,21 @@ const PHONE_DISPLAY = "(469) 213-8087";
 const PHONE_HREF = "tel:+14692138087";
 
 const REVIEWS_ROW_1 = [
-  { q: "The 3D design sold us instantly — what we saw on screen is exactly what we got in the backyard.", a: "Megan R.", c: "Plano, TX" },
-  { q: "Crew was on time, on budget, and the spa is unreal at night. Best decision we made for our home.", a: "Daniel K.", c: "Frisco, TX" },
+  { q: "Our green pool was swimmable in four days. I still can't believe the before and after.", a: "Megan R.", c: "Plano, TX" },
+  { q: "Tech showed up on time, replaced the pump motor same day, and texted me photos of the work.", a: "Daniel K.", c: "Frisco, TX" },
   { q: "Weekly service is flawless. I haven't touched a chemical in two years and the water looks like glass.", a: "Priya S.", c: "Southlake, TX" },
-  { q: "They rebuilt our 1990s pool into a modern infinity edge. Neighbors keep asking who did it.", a: "Chris B.", c: "Fort Worth, TX" },
-  { q: "Permits, HOA approval, everything handled. We just picked tile and watched it happen.", a: "Alyssa M.", c: "Highland Park, TX" },
-  { q: "Gunite to plaster in under nine weeks through a rainy spring. Communication was daily.", a: "Marcus T.", c: "Arlington, TX" },
+  { q: "They diagnosed a leak two other companies missed. Repair was clean and priced fair.", a: "Chris B.", c: "Fort Worth, TX" },
+  { q: "Filter cleans, salt cell service, everything on schedule. I never think about my pool anymore.", a: "Alyssa M.", c: "Highland Park, TX" },
+  { q: "Photo report after every visit. I always know exactly what was done.", a: "Marcus T.", c: "Arlington, TX" },
 ];
 
 const REVIEWS_ROW_2 = [
-  { q: "The fire bowls and tanning ledge turned our small lot into a resort. Worth every dollar.", a: "Jenna W.", c: "McKinney, TX" },
-  { q: "Automation on my phone — heater, lights, spa. I run the whole pool from the couch.", a: "Ravi P.", c: "Irving, TX" },
-  { q: "Third bid we got, first one that showed a real 3D render. Easy choice.", a: "Tyler G.", c: "Grapevine, TX" },
+  { q: "Heater stopped working mid-winter, they had it running again in one visit.", a: "Jenna W.", c: "McKinney, TX" },
+  { q: "Automation on my phone — heater, lights, spa. They set it all up and walked me through it.", a: "Ravi P.", c: "Irving, TX" },
+  { q: "Third company we tried, first one that actually kept the chemistry stable all summer.", a: "Tyler G.", c: "Grapevine, TX" },
   { q: "Warranty claim on a pump was handled in 48 hours, no argument. That's rare.", a: "Sharon L.", c: "Rockwall, TX" },
-  { q: "They protected our lawn, cleaned daily, and finished ahead of schedule.", a: "Omar H.", c: "Allen, TX" },
-  { q: "Our backyard in Keller was a slope. They engineered it into a two-level pool and spa.", a: "Brittany N.", c: "Keller, TX" },
+  { q: "Tile line and steps look brand new after their surface care visit.", a: "Omar H.", c: "Allen, TX" },
+  { q: "Swim Club membership pays for itself with the filter clean discount alone.", a: "Brittany N.", c: "Keller, TX" },
 ];
 
 

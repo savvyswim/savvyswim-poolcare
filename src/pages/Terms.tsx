@@ -5,7 +5,7 @@ const Terms = () => (
     <article className="max-w-3xl mx-auto">
       <Seo
         title="Terms & Conditions | Savvy Swim"
-        description="Terms and conditions for Savvy Swim pool cleaning, construction, and store purchases, including SMS program and payment terms."
+        description="Terms and conditions for Savvy Swim pool cleaning, service, and repair, including SMS program and payment terms."
         path="/terms"
       />
       <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
@@ -34,7 +34,7 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">2. Services Provided</h2>
       <p className="mb-4">
-        Santana &amp; Rivera provides repair, maintenance, contracting, and pool design/build services.
+        Santana &amp; Rivera provides pool cleaning, maintenance, service, and repair.
         All estimates provided are non-binding and subject to change based on the physical scope of
         work determined upon on-site inspection, market pricing of materials, and site conditions.
       </p>
