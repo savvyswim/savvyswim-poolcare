@@ -299,7 +299,7 @@ const Index = () => {
       </header>
 
       {/* HERO — Riviera Classic */}
-      <section className="relative min-h-[100svh] flex items-center pt-32 pb-24 overflow-hidden bg-canvas-brand">
+      <section className="relative min-h-[100svh] flex items-center pt-32 pb-24 overflow-hidden bg-canvas">
         {/* diagonal cabana wash */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -318,13 +318,13 @@ const Index = () => {
 
             {/* Shield emblem */}
             <div className="mx-auto mb-8 w-[92px]">
-              <div className="rounded-t-md bg-canvas-brand px-3 pt-3 pb-2 shadow-cta">
+              <div className="rounded-t-md bg-canvas px-3 pt-3 pb-2 shadow-cta">
                 <div className="rounded-sm bg-primary px-2 py-3 text-center leading-none">
                   <div className="text-[13px] font-extrabold tracking-[0.16em] text-primary-foreground">SAVVY</div>
                   <div className="text-[13px] font-extrabold tracking-[0.16em] text-primary-foreground mt-1">SWIM</div>
                 </div>
               </div>
-              <div className="mx-auto -mt-2 h-9 w-9 rotate-45 rounded-[6px] border-[3px] border-canvas-brand bg-primary" />
+              <div className="mx-auto -mt-2 h-9 w-9 rotate-45 rounded-[6px] border-[3px] border-canvas bg-primary" />
             </div>
 
             <div className="mb-8 inline-block bg-accent px-6 py-2 font-badge text-lg tracking-[0.22em] text-accent-foreground">
