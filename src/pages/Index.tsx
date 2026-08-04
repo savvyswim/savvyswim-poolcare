@@ -720,11 +720,6 @@ const Index = () => {
                         Swim Club
                       </h3>
                     </div>
-                    <div className="hidden sm:flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-chlorine">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chlorine/20">
-                        <div className="h-8 w-8 rounded-full border border-primary/20" />
-                      </div>
-                    </div>
                   </div>
 
                   <div className="mb-8">
@@ -964,7 +959,6 @@ const Index = () => {
                 <div className="flex items-center gap-3 mb-6">
                   <div className="relative h-12 w-12 rounded-full bg-amber-brand grid place-items-center shadow-cta">
                     <Waves className="h-5 w-5 text-primary-foreground" />
-                    <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
                   </div>
                   <div>
                     <div className="font-bold">Savvy Swim</div>
@@ -1010,7 +1004,6 @@ const Index = () => {
             <div className="relative">
               <div className="mx-auto mb-6 relative h-16 w-16 rounded-full bg-amber-brand grid place-items-center shadow-cta animate-float">
                 <Waves className="h-7 w-7 text-primary-foreground" />
-                <span className="absolute inset-0 rounded-full border border-white/40 animate-ripple" />
               </div>
               <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
