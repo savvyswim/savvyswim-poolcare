@@ -26,10 +26,20 @@ import photoGeometric from "@/assets/AdobeStock_548072467.jpg.asset.json";
 import photoWhiteHouse from "@/assets/AdobeStock_559236027.jpg.asset.json";
 import photoTexasFreeform from "@/assets/AdobeStock_611792597.jpg.asset.json";
 import photoKidSwim from "@/assets/AdobeStock_77771910.jpg.asset.json";
+import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
+import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
+import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
+import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
+import photoMartiniTray from "@/assets/IMG_5504-2.JPG.asset.json";
+import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
+import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
+import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
+import photoPoolMartinis from "@/assets/IMG_5496-2.jpg.asset.json";
+import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 
-const heroPoster = photoTexasFreeform.url;
-const poolDesign = photoGeometric.url;
-const poolNight = photoSunsetVilla.url;
+const heroPoster = photoSavvyLetters.url;
+const poolDesign = photoNavyCabana.url;
+const poolNight = photoRivieraLoungers.url;
 const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
@@ -639,9 +649,9 @@ const Index = () => {
 
           <div className="mb-12 grid gap-4 sm:grid-cols-3">
             {[
-              { src: photoFamilySplash.url, alt: "Family playing in a clean, freshly serviced backyard pool in Dallas–Fort Worth" },
-              { src: photoKidSwim.url, alt: "Child swimming in crystal clear balanced pool water" },
-              { src: photoModernPatio.url, alt: "Modern poolside patio with lounge chairs and shade sail" },
+              { src: photoRescueTube.url, alt: "Savvy Swim rescue tube floating in a sparkling clean pool" },
+              { src: photoSavvyRings.url, alt: "Red and white striped Savvy pool rings floating in clear water" },
+              { src: photoSavvyLetters.url, alt: "Inflatable SAVVY letters floating in a bright blue pool" },
             ].map((p) => (
               <div key={p.src} className="overflow-hidden rounded-sm border border-hairline shadow-card">
                 <img
@@ -820,12 +830,12 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: photoTexasFreeform.url, tag: "Weekly Service", title: "Hill Country Freeform", desc: "Weekly cleaning and chemistry on a large freeform pool shaded by oaks — heavy leaf load, spotless water.", metric: "weekly clean · chemistry · skim" },
-              { img: photoSunsetVilla.url, tag: "Pool & Spa Care", title: "Sunset Villa", desc: "Pool and spa maintained together, with LED and heater checks every visit.", metric: "spa care · heater check · LED" },
-              { img: photoGeometric.url, tag: "Filter Service", title: "Clean Lines", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this modern pool glass-clear.", metric: "filter clean · brush · vacuum" },
-              { img: photoWhiteHouse.url, tag: "Salt System", title: "White Modern", desc: "Salt cell servicing and balanced chemistry for a lap pool used every morning.", metric: "salt cell · balance · vacuum" },
-              { img: photoDeskSunset.url, tag: "Green Pool Recovery", title: "Desert Sunset", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
-              { img: photoStoneCourtyard.url, tag: "Tile & Deck Care", title: "Stone Courtyard", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
+              { img: photoLifeguardChair.url, tag: "Weekly Service", title: "The Lifeguard Stand", desc: "Lane-line pool kept swim-ready year round — weekly cleaning, chemistry, and equipment checks.", metric: "weekly clean · chemistry · skim" },
+              { img: photoRivieraLoungers.url, tag: "Pool & Spa Care", title: "Riviera Terrace", desc: "Pool and spa maintained together, with heater and light checks every visit.", metric: "spa care · heater check · LED" },
+              { img: photoNavyCabana.url, tag: "Filter Service", title: "Navy Cabana", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this pool glass-clear.", metric: "filter clean · brush · vacuum" },
+              { img: photoOliveRings.url, tag: "Salt System", title: "Olive Lounge", desc: "Salt cell servicing and balanced chemistry for a pool used every morning.", metric: "salt cell · balance · vacuum" },
+              { img: photoPoolMartinis.url, tag: "Green Pool Recovery", title: "Poolside Social", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
+              { img: photoRedUmbrellas.url, tag: "Tile & Deck Care", title: "Cabana Red", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
 
             ].map((p) => (
               <a
