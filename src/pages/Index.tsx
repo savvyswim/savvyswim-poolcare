@@ -748,33 +748,33 @@ const Index = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-xl">
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
-                Backyards we've built
+                Pools we take care of
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
-                Pools that turn
+                Water that stays
                 <br />
-                <span className="text-gradient-chrome">heads.</span>
+                <span className="text-gradient-chrome">crystal clear.</span>
               </h2>
             </div>
-            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Full portfolio request")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
-              See full portfolio <ArrowRight className="h-4 w-4" />
+            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Service gallery request")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
+              See more of our work <ArrowRight className="h-4 w-4" />
             </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: photoTexasFreeform.url, tag: "Freeform", title: "Hill Country Freeform", desc: "Curved freeform gunite with flagstone coping, raised spa spillway and shaded oak deck.", metric: "gunite · flagstone · spa spillway" },
-              { img: photoSunsetVilla.url, tag: "Pool & Spa", title: "Sunset Villa", desc: "Travertine deck, glass fencing and a raised spa with LED lighting — built for evenings outside.", metric: "spa · LED lighting · travertine" },
-              { img: photoGeometric.url, tag: "Modern Geometric", title: "Clean Lines", desc: "Rectangular pool with tanning ledge, spillover spa and broom-finish concrete surround.", metric: "tanning ledge · spillover spa" },
-              { img: photoWhiteHouse.url, tag: "Lap & Deck Jets", title: "White Modern", desc: "Long lap pool with deck jets, limestone coping and a crisp all-white architectural backdrop.", metric: "lap lane · deck jets · limestone" },
-              { img: photoDeskSunset.url, tag: "Resort Style", title: "Desert Sunset", desc: "Free-form pool with boulder accents, paver decking and warm evening landscape lighting.", metric: "boulders · pavers · night lighting" },
-              { img: photoStoneCourtyard.url, tag: "Courtyard", title: "Stone Courtyard", desc: "Kidney-shape pool wrapped in natural flagstone with an outdoor kitchen and lounge area.", metric: "flagstone · outdoor kitchen" },
+              { img: photoTexasFreeform.url, tag: "Weekly Service", title: "Hill Country Freeform", desc: "Weekly cleaning and chemistry on a large freeform pool shaded by oaks — heavy leaf load, spotless water.", metric: "weekly clean · chemistry · skim" },
+              { img: photoSunsetVilla.url, tag: "Pool & Spa Care", title: "Sunset Villa", desc: "Pool and spa maintained together, with LED and heater checks every visit.", metric: "spa care · heater check · LED" },
+              { img: photoGeometric.url, tag: "Filter Service", title: "Clean Lines", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this modern pool glass-clear.", metric: "filter clean · brush · vacuum" },
+              { img: photoWhiteHouse.url, tag: "Salt System", title: "White Modern", desc: "Salt cell servicing and balanced chemistry for a lap pool used every morning.", metric: "salt cell · balance · vacuum" },
+              { img: photoDeskSunset.url, tag: "Green Pool Recovery", title: "Desert Sunset", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
+              { img: photoStoneCourtyard.url, tag: "Tile & Deck Care", title: "Stone Courtyard", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
 
             ].map((p) => (
               <a
                 key={p.title}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
-                title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Service inquiry — ${p.title}`)}`}
+                title={`Click to ask about ${p.tag.toLowerCase()} like ${p.title}`}
                 aria-label={`Inquire about ${p.title}`}
                 className="card-3d rounded-sm overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
@@ -790,7 +790,7 @@ const Index = () => {
                     {p.tag}
                   </div>
                   <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground opacity-0 group-hover:opacity-100 transition shadow-cta">
-                    Ask about this build <ArrowRight className="h-3 w-3" />
+                    Ask about this service <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
@@ -871,21 +871,20 @@ const Index = () => {
                 Why folks pick us
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
-                Builders, not brokers —
-                <span className="text-gradient-amber"> in-house from dig to dive.</span>
+                Techs, not middlemen —
+                <span className="text-gradient-amber"> service you can count on.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                We don't sub out the hard parts. Savvy Swim owns excavation,
-                gunite, plumbing, tile, plaster, and service in-house — so your
-                pool is built by one team, backed by one warranty, and serviced
-                by the people who know it best.
+                We don't sub out your pool. Savvy Swim keeps cleaning, chemistry,
+                and equipment repair in-house — so the same trained tech knows your
+                pool, your equipment, and exactly what it needs.
               </p>
               <ul className="space-y-3">
                 {[
-                  "In-house crews for every trade — no flaky subs",
-                  "25-year structural warranty on every new build",
+                  "Same tech every week — no rotating crews",
+                  "Chemicals and photo reports included",
                   "Licensed, bonded, and insured in Texas",
-                  "Free 3D design for qualified projects",
+                  "Repairs quoted up front, no surprise invoices",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-3 text-sm">
                     <ShieldCheck className="h-5 w-5 text-amber-brand flex-shrink-0 mt-0.5" />
@@ -952,19 +951,19 @@ const Index = () => {
               <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
                 <br />
-                <span className="text-gradient-amber italic">Let's design your pool.</span>
+                <span className="text-gradient-amber italic">Let's clean your pool.</span>
               </h2>
               <p className="text-foreground/80 text-lg max-w-xl mx-auto mb-8">
-                Book a free on-site consultation and we'll send you a photoreal
-                3D rendering of your pool — no pressure, no obligation.
+                Book a free on-site water test and equipment check — we'll quote
+                your weekly service or repair on the spot. No pressure, no contracts.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   type="button"
-                  onClick={() => openBooking("Custom Pool Design & Build")}
+                  onClick={() => openBooking("Weekly Pool Cleaning")}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  <CalendarCheck className="h-4 w-4" /> Book my free 3D design
+                  <CalendarCheck className="h-4 w-4" /> Book my free water test
                 </button>
                 <a
                   href={PHONE_HREF}
