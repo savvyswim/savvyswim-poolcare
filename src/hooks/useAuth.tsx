@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    await logAdminAction({ area: "auth", action: "Signed out", recordType: "user", recordId: user?.id ?? null });
     await supabase.auth.signOut();
   };
 
