@@ -388,12 +388,9 @@ const Index = () => {
               </figure>
 
               <div className="mt-3 border border-primary/15 bg-background">
-                <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
+                <div className="border-b border-primary/10 px-4 py-3">
                   <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary/50">
                     Every visit includes
-                  </span>
-                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-accent">
-                    No contracts
                   </span>
                 </div>
                 <ul className="divide-y divide-primary/10">
