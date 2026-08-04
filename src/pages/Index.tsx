@@ -244,22 +244,22 @@ const Index = () => {
         >
           <div className="container-tight flex h-[72px] items-center justify-between">
             <a href="#" className="flex items-center gap-2.5">
-              <div className="relative h-11 w-11 rounded-lg bg-amber-brand grid place-items-center shadow-cta">
-                <Waves className="h-5 w-5 text-primary-foreground" />
+              <div className="relative h-10 w-10 border border-primary/25 grid place-items-center">
+                <Waves className="h-4 w-4 text-accent" />
               </div>
-              <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
-                <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
-                <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
+              <span className="tracking-tight text-base leading-tight flex flex-col">
+                <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
+                <span className="font-tech text-[8.5px] text-primary/45">A Santana &amp; Rivera Company</span>
               </span>
             </a>
-            <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
-              <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
-              <a href="#services" className="hover:text-primary transition">Service &amp; Repair</a>
-              <a href="#portfolio" className="hover:text-primary transition">Our Work</a>
-              <a href="#about" className="hover:text-primary transition">About Us</a>
-              <a href="#contact" className="hover:text-primary transition">Contact</a>
-
+            <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
+              <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
+              <a href="#services" className="hover:text-accent transition">Service &amp; Repair</a>
+              <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
+              <a href="#about" className="hover:text-accent transition">About Us</a>
+              <a href="#contact" className="hover:text-accent transition">Contact</a>
             </nav>
+
             <div className="flex items-center gap-2">
               <a
                 href={PHONE_HREF}
@@ -279,65 +279,104 @@ const Index = () => {
         </div>
       </header>
 
-      {/* HERO — Editorial studio */}
-      <section className="relative bg-canvas pt-36 pb-0">
-        <div className="container-tight">
-          <h1 className="font-editorial italic text-primary tracking-tight leading-[1.05] text-[3rem] sm:text-[4.5rem] lg:text-[5.5rem] max-w-5xl pb-16">
-            Crystal-clear pools, cared for every single week.
-          </h1>
+      {/* HERO — vintage riviera meets instrumentation */}
+      <section className="relative bg-canvas pt-32 sm:pt-36">
+        <div className="absolute inset-0 tech-grid pointer-events-none" aria-hidden />
+
+        {/* instrumentation strip */}
+        <div className="relative tech-rule">
+          <div className="container-tight flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-3">
+            <span className="tech-label">Est. Texas — Pool Care Systems</span>
+            <span className="tech-label flex items-center gap-2">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+              Live routes: 24 trucks
+            </span>
+            <span className="tech-label">Lat 32.7767 / Lon −96.7970</span>
+            <span className="tech-label">Rev. 04</span>
+          </div>
         </div>
 
-        <div className="border-t border-primary/10">
-          <div className="container-tight grid gap-14 py-20 lg:grid-cols-12">
-            <div className="lg:col-span-6">
-              <p className="text-sm text-primary/40">Our Process</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
-                Licensed technicians, balanced chemistry, and spotless water — every visit, every week.
-                We handle filtration, skimming, brushing, and equipment checks so your pool is always ready
-                for the afternoon.
-              </p>
+        <div className="relative tech-rule">
+          <div className="container-tight py-16 sm:py-24">
+            <p className="tech-label mb-8">Fig. 01 — Weekly Service Program</p>
+            <h1 className="type-mega text-primary max-w-[16ch]">
+              Crystal-clear
+              <span className="block type-mega-alt text-accent">water,</span>
+              <span className="block">engineered weekly.</span>
+            </h1>
 
-              <p className="mt-12 text-sm text-primary/40">What We Do</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
-                Weekly maintenance is the base of everything we offer. From there we cover equipment repairs,
-                pump and filter service, and green-pool recovery — no contracts required to get started.
-              </p>
+            <div className="mt-12 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => openBooking("Weekly Service & Maintenance")}
+                className="font-tech inline-flex items-center gap-2 bg-primary px-7 py-4 text-primary-foreground transition-colors hover:bg-accent"
+              >
+                <CalendarCheck className="h-4 w-4" /> Start Service
+              </button>
+              <a
+                href={PHONE_HREF}
+                className="font-tech inline-flex items-center gap-2 border border-primary/20 px-7 py-4 text-primary transition-colors hover:border-primary"
+              >
+                <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+              </a>
+            </div>
+          </div>
+        </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => openBooking("Weekly Service & Maintenance")}
-                  className="inline-flex items-center gap-2 bg-primary/[0.07] px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                >
-                  <CalendarCheck className="h-4 w-4" /> Work With Us
-                </button>
-                <a
-                  href={PHONE_HREF}
-                  className="inline-flex items-center gap-2 px-2 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary/70 hover:text-primary transition"
-                >
-                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
-                </a>
-              </div>
+        {/* Spec sheet grid */}
+        <div className="relative tech-rule">
+          <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="tech-label">§ 01 — Method</p>
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+                Licensed technicians, calibrated chemistry, and monitored equipment. Every visit is logged,
+                photographed, and time-stamped — classic pool craft, run like a control room.
+              </p>
+              <p className="mt-10 tech-label">§ 02 — Scope</p>
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+                Weekly maintenance is the baseline. From there: equipment repair, pump and filter service,
+                salt and automation tuning, and green-pool recovery. No contracts.
+              </p>
             </div>
 
-            <div className="lg:col-span-4 lg:col-start-9">
-              <p className="text-sm text-primary/40">Our Services</p>
-              <ul className="mt-6 space-y-3 text-[17px] text-primary">
+            {/* Readouts */}
+            <div className="lg:col-span-3">
+              <p className="tech-label">Water Readout</p>
+              <dl className="mt-6 divide-y divide-primary/10 border-y border-primary/10">
+                {[
+                  ["pH", "7.40"],
+                  ["Free Cl", "3.0 ppm"],
+                  ["Alkalinity", "100 ppm"],
+                  ["Calcium", "300 ppm"],
+                  ["Cyanuric", "50 ppm"],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between py-2.5">
+                    <dt className="font-tech text-primary/50">{k}</dt>
+                    <dd className="tech-readout text-sm text-primary">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="lg:col-span-3 lg:col-start-10">
+              <p className="tech-label">Index of Services</p>
+              <ul className="mt-6 space-y-2.5 text-[15px] text-primary">
                 {[
                   "Weekly Pool Cleaning",
                   "Chemical Balancing",
-                  "Filter &amp; Pump Service",
+                  "Filter & Pump Service",
                   "Equipment Repair",
                   "Green Pool Recovery",
-                  "Tile &amp; Deck Care",
+                  "Tile & Deck Care",
                   "Salt System Service",
-                  "Leak &amp; Plumbing Repair",
+                  "Leak & Plumbing Repair",
                   "Seasonal Openings",
-                ].map((s) => (
-                  <li key={s}>
-                    <a href="#services" className="hover:text-accent transition-colors">
-                      {s.replace(/&amp;/g, "&")}
-                    </a>
+                ].map((s, i) => (
+                  <li key={s} className="flex gap-3">
+                    <span className="tech-readout text-[11px] pt-1 text-primary/35">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <a href="#services" className="hover:text-accent transition-colors">{s}</a>
                   </li>
                 ))}
               </ul>
@@ -345,51 +384,51 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="border-t border-primary/10">
-          <div className="container-tight grid max-w-3xl grid-cols-3 gap-6 py-12">
+        <div className="relative tech-rule">
+          <div className="container-tight grid max-w-4xl grid-cols-3 gap-6 py-12">
             {[
               { k: "1,200+", v: "Pools serviced" },
               { k: "4.9★", v: "Avg client rating" },
               { k: "52", v: "Visits per year" },
             ].map((s) => (
               <div key={s.v}>
-                <div className="font-editorial italic text-primary text-4xl">{s.k}</div>
-                <div className="mt-2 text-xs uppercase tracking-[0.14em] text-primary/45">{s.v}</div>
+                <div className="font-editorial italic text-primary text-4xl sm:text-5xl">{s.k}</div>
+                <div className="mt-2 tech-label">{s.v}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-
-
       {/* Side quote tab */}
       <button
         type="button"
         onClick={() => openBooking()}
-        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center rounded-l-md px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta"
+        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta"
         style={{ writingMode: "vertical-rl" }}
       >
         Request a Quote
       </button>
 
-
-      {/* MARQUEE */}
-      <section className="border-y border-hairline bg-ink/60 py-6 overflow-hidden">
-        <div className="flex animate-marquee gap-12 whitespace-nowrap text-sm uppercase tracking-[0.2em] text-muted-foreground">
+      {/* MARQUEE — telemetry ticker */}
+      <section className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden">
+        <div className="flex animate-marquee gap-10 whitespace-nowrap font-tech">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-12 items-center shrink-0">
-              <span>Weekly Cleaning</span><span className="text-amber-brand">◆</span>
-              <span>Chemical Balancing</span><span className="text-amber-brand">◆</span>
-              <span>Filter Cleans</span><span className="text-amber-brand">◆</span>
-              <span>Pump Repair</span><span className="text-amber-brand">◆</span>
-              <span>Heater Service</span><span className="text-amber-brand">◆</span>
-              <span>Green Pool Recovery</span><span className="text-amber-brand">◆</span>
-              <span>Salt Systems</span><span className="text-amber-brand">◆</span>
+            <div key={i} className="flex gap-10 items-center shrink-0 opacity-90">
+              <span>Weekly Cleaning</span><span className="text-accent">/</span>
+              <span>pH 7.4</span><span className="text-accent">/</span>
+              <span>Chemical Balancing</span><span className="text-accent">/</span>
+              <span>Filter Cleans</span><span className="text-accent">/</span>
+              <span>Pump Repair</span><span className="text-accent">/</span>
+              <span>ORP 700mV</span><span className="text-accent">/</span>
+              <span>Heater Service</span><span className="text-accent">/</span>
+              <span>Green Pool Recovery</span><span className="text-accent">/</span>
+              <span>Salt Systems</span><span className="text-accent">/</span>
             </div>
           ))}
         </div>
       </section>
+
 
       {/* SERVICES */}
       <section id="services" className="py-24 sm:py-32 relative">
