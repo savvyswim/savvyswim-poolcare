@@ -244,22 +244,22 @@ const Index = () => {
         >
           <div className="container-tight flex h-[72px] items-center justify-between">
             <a href="#" className="flex items-center gap-2.5">
-              <div className="relative h-11 w-11 rounded-lg bg-amber-brand grid place-items-center shadow-cta">
-                <Waves className="h-5 w-5 text-primary-foreground" />
+              <div className="relative h-10 w-10 border border-primary/25 grid place-items-center">
+                <Waves className="h-4 w-4 text-accent" />
               </div>
-              <span className="font-bold tracking-tight text-base leading-tight flex flex-col">
-                <span>SAVVY<span className="text-amber-brand">·</span>SWIM</span>
-                <span className="text-[9px] font-medium tracking-[0.2em] text-muted-foreground uppercase">A Santana &amp; Rivera Company</span>
+              <span className="tracking-tight text-base leading-tight flex flex-col">
+                <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
+                <span className="font-tech text-[8.5px] text-primary/45">A Santana &amp; Rivera Company</span>
               </span>
             </a>
-            <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
-              <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
-              <a href="#services" className="hover:text-primary transition">Service &amp; Repair</a>
-              <a href="#portfolio" className="hover:text-primary transition">Our Work</a>
-              <a href="#about" className="hover:text-primary transition">About Us</a>
-              <a href="#contact" className="hover:text-primary transition">Contact</a>
-
+            <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
+              <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
+              <a href="#services" className="hover:text-accent transition">Service &amp; Repair</a>
+              <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
+              <a href="#about" className="hover:text-accent transition">About Us</a>
+              <a href="#contact" className="hover:text-accent transition">Contact</a>
             </nav>
+
             <div className="flex items-center gap-2">
               <a
                 href={PHONE_HREF}
