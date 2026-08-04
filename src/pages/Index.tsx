@@ -297,9 +297,17 @@ const Index = () => {
                 <span className="block">engineered weekly.</span>
               </h1>
 
-              <p className="mt-8 font-editorial italic text-primary/80 text-2xl sm:text-3xl leading-snug max-w-[22ch]">
-                On duty, so you don't have to be.
-              </p>
+              <div className="mt-9 inline-flex max-w-full flex-col border-y-2 border-accent/70 py-4 pr-2">
+                <span className="tech-label flex items-center gap-2 text-accent">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+                  On duty — 24/7
+                </span>
+                <p className="mt-2 font-display uppercase leading-[0.95] tracking-tight text-primary text-[clamp(1.7rem,4.2vw,3.1rem)]">
+                  On duty, so you
+                  <span className="block text-accent">don&apos;t have to be.</span>
+                </p>
+              </div>
+
 
               <div className="mt-10 flex flex-wrap items-center gap-3">
                 <button
