@@ -79,6 +79,7 @@ import { supabase } from "@/integrations/supabase/client";
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
 const PHONE_HREF = "tel:+14692138087";
+const SMS_HREF = "sms:+14692138087";
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
