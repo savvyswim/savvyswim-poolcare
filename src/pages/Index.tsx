@@ -42,6 +42,47 @@ import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
 import { MembershipDialog } from "@/components/MembershipDialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+const MEMBERSHIP_FAQ = [
+  {
+    q: "How long is the membership commitment?",
+    a: "Savvy Membership is a 12-month agreement billed monthly at $19.99. Your perks start the day you join and stay active for the full term. At the end of the 12 months the membership continues month to month unless you tell us to stop.",
+  },
+  {
+    q: "How does the 50% off filter clean work?",
+    a: "Members get one filter clean at 50% off during the membership term. It is a one-time benefit per membership — just mention it when you schedule and we apply the discount automatically on the invoice.",
+  },
+  {
+    q: "What does the 5% parts discount cover?",
+    a: "5% off all parts we supply — pumps, filters, motors, valves, heaters, salt cells, lights, and standard replacement hardware. The discount is applied to the parts line of your invoice on every job during your membership.",
+  },
+  {
+    q: "What does the 7% installation discount cover?",
+    a: "7% off installation labor on equipment we install for you, including pump and filter swaps, heater and salt system installs, automation, and lighting. It applies to the labor portion of the invoice.",
+  },
+  {
+    q: "Are repairs and inspections eligible?",
+    a: "Yes. Repair visits and equipment inspections are eligible for member pricing — parts on a repair get 5% off and any installation labor gets 7% off. Members are also prioritized on the schedule for diagnostic and inspection appointments.",
+  },
+  {
+    q: "What is not included?",
+    a: "Membership is a discount and support program, not a service plan. Weekly cleaning, chemicals, and full-service maintenance are billed under a Savvy cleaning plan. Discounts do not stack with promo codes or other active offers.",
+  },
+  {
+    q: "What is 24/7 text support?",
+    a: "Text us any time at your service number with a photo or question about your pool. Members get answers on water chemistry, equipment alarms, and troubleshooting outside normal business hours.",
+  },
+  {
+    q: "Can I cancel?",
+    a: "The agreement runs 12 months. You can cancel at the end of the term, or contact us if your property situation changes — for example if you sell the home — and we will work with you.",
+  },
+];
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, money } from "@/hooks/useCart";
 
@@ -669,6 +710,26 @@ const Index = () => {
                 </p>
 
               </div>
+            </div>
+
+            {/* MEMBERSHIP FAQ */}
+            <div className="mt-10 border-t border-border pt-8">
+              <h4 className="text-lg font-semibold">Membership FAQ</h4>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Everything included with your $19.99/month Savvy Membership.
+              </p>
+              <Accordion type="single" collapsible className="mt-4">
+                {MEMBERSHIP_FAQ.map((item) => (
+                  <AccordionItem key={item.q} value={item.q}>
+                    <AccordionTrigger className="text-left text-sm font-semibold">
+                      {item.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground">
+                      {item.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </div>
 
