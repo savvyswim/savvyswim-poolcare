@@ -51,8 +51,8 @@ import {
 
 const MEMBERSHIP_FAQ = [
   {
-    q: "How long is the membership commitment?",
-    a: "Savvy Membership is a 12-month agreement billed monthly at $19.99. Your perks start the day you join and stay active for the full term. At the end of the 12 months the membership continues month to month unless you tell us to stop.",
+    q: "How long is the Swim Club commitment?",
+    a: "Savvy Swim Club is a 12-month agreement billed monthly at $19.99. Your perks start the day you join and stay active for the full term. At the end of the 12 months the membership continues month to month unless you tell us to stop.",
   },
   {
     q: "How does the 50% off filter clean work?",
@@ -72,7 +72,7 @@ const MEMBERSHIP_FAQ = [
   },
   {
     q: "What is not included?",
-    a: "Membership is a discount and support program, not a service plan. Weekly cleaning, chemicals, and full-service maintenance are billed under a Savvy cleaning plan. Discounts do not stack with promo codes or other active offers.",
+    a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and full-service maintenance are billed under a Savvy cleaning plan. Discounts do not stack with promo codes or other active offers.",
   },
   {
     q: "What is 24/7 text support?",
@@ -685,7 +685,7 @@ const Index = () => {
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
                 <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                  Savvy Membership
+                  Savvy Swim Club
                 </span>
                 <h3 className="mt-3 text-3xl font-bold">
                   $19.99 <span className="text-base font-medium text-muted-foreground">/ month</span>
@@ -713,7 +713,7 @@ const Index = () => {
                   onClick={() => setMembershipOpen(true)}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3.5 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  Become a member <ArrowRight className="h-4 w-4" />
+                  Join the Swim Club <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center text-xs text-muted-foreground">
                   12-month agreement · Billed monthly at $19.99
@@ -724,9 +724,9 @@ const Index = () => {
 
             {/* MEMBERSHIP FAQ */}
             <div className="mt-10 border-t border-border pt-8">
-              <h4 className="text-lg font-semibold">Membership FAQ</h4>
+              <h4 className="text-lg font-semibold">Swim Club FAQ</h4>
               <p className="mt-1 text-sm text-muted-foreground">
-                Everything included with your $19.99/month Savvy Membership.
+                Everything included with your $19.99/month Savvy Swim Club.
               </p>
               <Accordion type="single" collapsible className="mt-4">
                 {MEMBERSHIP_FAQ.map((item) => (

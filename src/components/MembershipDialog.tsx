@@ -31,7 +31,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
     if (form.name.trim().length < 2) return toast.error("Please enter your name");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
       return toast.error("Please enter a valid email");
-    if (!agreed) return toast.error("Please accept the 12-month membership agreement");
+    if (!agreed) return toast.error("Please accept the 12-month Swim Club agreement");
     if (!PAYMENTS_ENABLED) {
       return toast.info("Online payment is temporarily unavailable — call (469) 213-8087 to join.");
     }
@@ -79,7 +79,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>Savvy Membership — $19.99 / month</DialogTitle>
+              <DialogTitle>Savvy Swim Club — $19.99 / month</DialogTitle>
               <DialogDescription>
                 50% off one filter clean (one time), 5% off parts, 7% off installation labor, and
                 24/7 text support. Requires a 12-month agreement, billed monthly.
@@ -129,7 +129,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
                 className="mt-0.5"
               />
               <span>
-                I agree to a 12-month Savvy Membership term at $19.99/month. My membership renews
+                I agree to a 12-month Savvy Swim Club term at $19.99/month. My membership renews
                 monthly during the term and may be cancelled at the end of the 12 months.
               </span>
             </label>
