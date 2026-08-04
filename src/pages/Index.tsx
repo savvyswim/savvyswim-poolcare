@@ -41,6 +41,7 @@ import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
+import { MembershipDialog } from "@/components/MembershipDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, money } from "@/hooks/useCart";
 
@@ -115,6 +116,7 @@ const Index = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [membershipOpen, setMembershipOpen] = useState(false);
   const [subscribePlan, setSubscribePlan] = useState<string | undefined>(undefined);
   const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
@@ -627,10 +629,50 @@ const Index = () => {
             ))}
           </div>
 
-
+          {/* SAVVY MEMBERSHIP */}
+          <div id="membership" className="mt-16 rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-lg">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+              <div className="flex-1">
+                <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                  Savvy Membership
+                </span>
+                <h3 className="mt-3 text-3xl font-bold">
+                  $19.99 <span className="text-base font-medium text-muted-foreground">/ month</span>
+                </h3>
+                <p className="mt-2 text-muted-foreground max-w-xl">
+                  Member perks on every service call — no contract, cancel anytime.
+                </p>
+                <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+                  {[
+                    "50% off one filter clean (one time)",
+                    "5% off all parts",
+                    "7% off installation labor",
+                    "24/7 text support",
+                  ].map((perk) => (
+                    <li key={perk} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+                      <span>{perk}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="lg:w-64">
+                <button
+                  onClick={() => setMembershipOpen(true)}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3.5 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                >
+                  Become a member <ArrowRight className="h-4 w-4" />
+                </button>
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  Billed monthly. Cancel anytime.
+                </p>
+              </div>
+            </div>
+          </div>
 
         </div>
       </section>
+
 
 
       {/* PORTFOLIO */}
@@ -900,6 +942,8 @@ const Index = () => {
         onOpenChange={setSubscribeOpen}
         planName={subscribePlan}
       />
+      <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+
 
     </div>
   );
