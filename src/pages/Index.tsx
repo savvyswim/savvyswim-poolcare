@@ -26,10 +26,20 @@ import photoGeometric from "@/assets/AdobeStock_548072467.jpg.asset.json";
 import photoWhiteHouse from "@/assets/AdobeStock_559236027.jpg.asset.json";
 import photoTexasFreeform from "@/assets/AdobeStock_611792597.jpg.asset.json";
 import photoKidSwim from "@/assets/AdobeStock_77771910.jpg.asset.json";
+import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
+import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
+import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
+import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
+import photoMartiniTray from "@/assets/IMG_5504-2.JPG.asset.json";
+import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
+import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
+import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
+import photoPoolMartinis from "@/assets/IMG_5496-2.jpg.asset.json";
+import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 
-const heroPoster = photoTexasFreeform.url;
-const poolDesign = photoGeometric.url;
-const poolNight = photoSunsetVilla.url;
+const heroPoster = photoSavvyLetters.url;
+const poolDesign = photoNavyCabana.url;
+const poolNight = photoRivieraLoungers.url;
 const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
