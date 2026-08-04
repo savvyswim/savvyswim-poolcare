@@ -315,7 +315,6 @@ const Index = () => {
                 Weekly maintenance is the base of everything we offer. From there we cover equipment repairs,
                 pump and filter service, and green-pool recovery — no contracts required to get started.
               </p>
-              </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <button
