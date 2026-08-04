@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Mail,
   Phone,
@@ -17,8 +17,6 @@ import {
   ShieldCheck,
   CalendarCheck,
   ShoppingCart,
-  Search,
-  X,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
@@ -44,7 +42,6 @@ import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
 import { supabase } from "@/integrations/supabase/client";
-import { productImage, type Product } from "@/lib/products";
 import { useCart, money } from "@/hooks/useCart";
 
 
@@ -131,45 +128,8 @@ const Index = () => {
   };
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [shopQuery, setShopQuery] = useState("");
-  const [shopCategory, setShopCategory] = useState("all");
   const cart = useCart();
 
-  const shopCategories = useMemo(() => {
-    const set = new Set<string>();
-    products.forEach((p) => p.category && set.add(p.category));
-    return Array.from(set).sort();
-  }, [products]);
-
-  const visibleProducts = useMemo(() => {
-    const q = shopQuery.trim().toLowerCase();
-    return products.filter((p) => {
-      const matchesCategory = shopCategory === "all" || p.category === shopCategory;
-      const matchesQuery =
-        !q ||
-        [p.name, p.description, p.sku, p.category]
-          .filter(Boolean)
-          .some((f) => String(f).toLowerCase().includes(q));
-      return matchesCategory && matchesQuery;
-    });
-  }, [products, shopQuery, shopCategory]);
-
-
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_active", true)
-        .order("display_order");
-      if (active && data) setProducts(data as unknown as Product[]);
-    })();
-    return () => {
-      active = false;
-    };
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -669,173 +629,6 @@ const Index = () => {
 
 
 
-        </div>
-      </section>
-
-      {/* SHOP */}
-      <section id="shop" className="py-24 sm:py-32 relative">
-        <div className="container-tight">
-          <div className="max-w-2xl mb-12">
-            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
-              The supply room
-            </div>
-            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
-              Pro-grade gear,
-              <span className="text-gradient-amber"> contractor pricing.</span>
-            </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              Order equipment and chemicals direct from our warehouse. Every request lands in
-              our order system and a specialist confirms stock, final price, and delivery
-              before anything is charged. Free local drop-off across DFW.
-            </p>
-          </div>
-
-          {/* Search + category filters */}
-          <div className="mb-8 flex flex-col gap-4">
-            <div className="relative max-w-md">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="search"
-                value={shopQuery}
-                onChange={(e) => setShopQuery(e.target.value)}
-                placeholder="Search products, SKU, or category…"
-                aria-label="Search pool products"
-                className="w-full rounded-full border border-border bg-background py-3 pl-11 pr-10 text-sm outline-none transition focus:border-amber-brand"
-              />
-              {shopQuery && (
-                <button
-                  type="button"
-                  onClick={() => setShopQuery("")}
-                  aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-            {shopCategories.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {["all", ...shopCategories].map((c) => {
-                  const activeChip = shopCategory === c;
-                  return (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setShopCategory(c)}
-                      aria-pressed={activeChip}
-                      className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${
-                        activeChip
-                          ? "border-transparent bg-amber-brand text-primary-foreground shadow-cta"
-                          : "border-border text-muted-foreground hover:border-amber-brand hover:text-foreground"
-                      }`}
-                    >
-                      {c === "all" ? "All products" : c}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            <p className="text-xs text-muted-foreground">
-              Showing {visibleProducts.length} of {products.length} products
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {visibleProducts.map((p) => {
-              const img = productImage(p);
-              const out = p.stock_quantity <= 0;
-              return (
-                <div key={p.id} className="card-3d rounded-sm overflow-hidden flex flex-col">
-                  <div className="relative">
-                    <img
-                      src={img}
-                      alt={`${p.name} — pool supply available from Savvy Swim`}
-                      loading="lazy"
-                      width={800}
-                      height={800}
-                      className="aspect-square w-full object-cover"
-                    />
-                    {p.featured && !out && (
-                      <span className="absolute left-3 top-3 rounded-full bg-amber-brand px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
-                        Best seller
-                      </span>
-                    )}
-                    {out && (
-                      <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-background">
-                        Backordered
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="font-bold leading-snug">{p.name}</h3>
-                    <p className="text-xs text-muted-foreground mt-2 mb-4 leading-relaxed">
-                      {p.description}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground mb-4">
-                      SKU {p.sku} ·{" "}
-                      {out ? "Ships in 2–3 weeks" : `${p.stock_quantity} in stock`}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between gap-3">
-                      <span className="flex items-baseline gap-2">
-                        <span className="text-lg font-bold text-gradient-amber">
-                          {money(Number(p.price))}
-                        </span>
-                        {p.compare_at_price ? (
-                          <span className="text-xs text-muted-foreground line-through">
-                            {money(Number(p.compare_at_price))}
-                          </span>
-                        ) : null}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          cart.add({
-                            product_id: p.id,
-                            name: p.name,
-                            sku: p.sku,
-                            price: Number(p.price),
-                            image: img,
-                          })
-                        }
-                        className="inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
-                      >
-                        Add <ShoppingCart className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {products.length > 0 && visibleProducts.length === 0 && (
-            <div className="rounded-sm border border-border p-10 text-center">
-              <p className="font-semibold">No products match your search.</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Try a different keyword or clear the filters.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setShopQuery("");
-                  setShopCategory("all");
-                }}
-                className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-cta hover:brightness-110 transition"
-              >
-                Reset filters
-              </button>
-            </div>
-          )}
-
-
-
-          <p className="mt-8 text-sm text-muted-foreground">
-            Need something not listed? Call{" "}
-            <a href={PHONE_HREF} className="text-amber-brand font-semibold">{PHONE_DISPLAY}</a>{" "}
-            — we source pumps, heaters, tile, and automation from every major brand.
-          </p>
         </div>
       </section>
 
