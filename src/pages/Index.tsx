@@ -424,56 +424,8 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
-                icon: Hammer,
-                title: "Custom Pool Design & Build",
-                desc: "Bespoke gunite pools designed in photoreal 3D, engineered for your lot, lifestyle, and view.",
-                includes: [
-                  "On-site survey & 3D virtual tour",
-                  "Structural engineering & permitting",
-                  "Gunite shell, plumbing & equipment",
-                  "Tile, coping, decking & landscape",
-                ],
-                subject: "Quote — Custom Pool Build",
-              },
-              {
-                icon: Sparkles,
-                title: "Spas & Water Features",
-                desc: "Spillover spas, infinity edges, waterfalls, bubblers, and laminar deck jets that turn water into art.",
-                includes: [
-                  "Spillover & standalone spas",
-                  "Infinity / vanishing edges",
-                  "Waterfalls & sheer descents",
-                  "Laminar jets & bubblers",
-                ],
-                subject: "Quote — Spa & Water Features",
-              },
-              {
-                icon: Flame,
-                title: "Outdoor Living",
-                desc: "Extend the pool experience with kitchens, pergolas, fire bowls, and lounge decks built to entertain.",
-                includes: [
-                  "Outdoor kitchens & bars",
-                  "Pergolas, cabanas & shade",
-                  "Fire bowls & fire pits",
-                  "Travertine & porcelain decking",
-                ],
-                subject: "Quote — Outdoor Living",
-              },
-              {
-                icon: Wrench,
-                title: "Renovation & Resurfacing",
-                desc: "Bring tired pools back to life with new plaster, tile, equipment upgrades, and modern automation.",
-                includes: [
-                  "Plaster & pebble resurfacing",
-                  "Waterline tile & coping",
-                  "Equipment & pump upgrades",
-                  "Salt system conversion",
-                ],
-                subject: "Quote — Renovation",
-              },
-              {
                 icon: Droplets,
-                title: "Weekly Service & Maintenance",
+                title: "Weekly Pool Cleaning",
                 desc: "Crystal-clear water, year-round. Certified techs handle chemistry, cleaning, and equipment checks.",
                 includes: [
                   "Weekly chemistry balance",
@@ -481,19 +433,67 @@ const Index = () => {
                   "Equipment inspection",
                   "Photo report after every visit",
                 ],
-                subject: "Quote — Weekly Service",
+                subject: "Quote — Weekly Cleaning",
+              },
+              {
+                icon: Wrench,
+                title: "Equipment Repair",
+                desc: "Pumps, filters, heaters, and automation diagnosed and repaired — most parts stocked on the truck.",
+                includes: [
+                  "Pump & motor repair",
+                  "Filter cleans & cartridge swaps",
+                  "Heater diagnostics & repair",
+                  "Valve & plumbing leaks",
+                ],
+                subject: "Quote — Equipment Repair",
+              },
+              {
+                icon: Sparkles,
+                title: "Green Pool Recovery",
+                desc: "Algae, storm debris, or a pool left too long — we get it swim-ready fast with a full chemical reset.",
+                includes: [
+                  "Shock & algaecide treatment",
+                  "Deep vacuum & brush-out",
+                  "Filter deep clean",
+                  "Follow-up balance visits",
+                ],
+                subject: "Quote — Green Pool Recovery",
               },
               {
                 icon: Cpu,
-                title: "Smart Pool Automation",
-                desc: "Control your pool from your phone — lights, heat, jets, salt, and chemistry, all in one app.",
+                title: "Salt & Automation Service",
+                desc: "Salt cell cleaning, chlorinator replacement, and smart controls tuned so your system runs hands-free.",
                 includes: [
+                  "Salt cell clean & replace",
                   "Pentair / Jandy / Hayward systems",
-                  "Color-changing LED lighting",
-                  "Variable-speed pumps",
-                  "App control + voice integration",
+                  "Variable-speed pump programming",
+                  "App control setup",
                 ],
-                subject: "Quote — Pool Automation",
+                subject: "Quote — Salt & Automation",
+              },
+              {
+                icon: Sun,
+                title: "Seasonal Openings & Closings",
+                desc: "Get the pool ready for summer or buttoned up for winter — covers, freeze protection, and a full check.",
+                includes: [
+                  "Open & balance for the season",
+                  "Winterize & freeze protection",
+                  "Cover install & removal",
+                  "Full equipment inspection",
+                ],
+                subject: "Quote — Seasonal Service",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Tile, Deck & Surface Care",
+                desc: "Waterline tile scale removal, deck wash-downs, and surface spot care to keep everything looking new.",
+                includes: [
+                  "Waterline tile cleaning",
+                  "Calcium & scale removal",
+                  "Deck & coping wash",
+                  "Stain treatment",
+                ],
+                subject: "Quote — Surface Care",
               },
             ].map((s, i) => (
               <button
