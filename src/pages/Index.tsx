@@ -959,7 +959,6 @@ const Index = () => {
                 <div className="flex items-center gap-3 mb-6">
                   <div className="relative h-12 w-12 rounded-full bg-amber-brand grid place-items-center shadow-cta">
                     <Waves className="h-5 w-5 text-primary-foreground" />
-                    <span className="absolute inset-0 rounded-full border border-white/30 animate-ripple" />
                   </div>
                   <div>
                     <div className="font-bold">Savvy Swim</div>
