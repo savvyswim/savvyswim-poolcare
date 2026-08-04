@@ -41,6 +41,7 @@ import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
+import { MembershipDialog } from "@/components/MembershipDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, money } from "@/hooks/useCart";
 
