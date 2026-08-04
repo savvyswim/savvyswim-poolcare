@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripe, getStripeEnvironment, PAYMENTS_ENABLED } from "@/lib/stripe";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
@@ -32,8 +32,12 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
       return toast.error("Please enter a valid email");
     if (!agreed) return toast.error("Please accept the 12-month membership agreement");
+    if (!PAYMENTS_ENABLED) {
+      return toast.info("Online payment is temporarily unavailable — call (469) 213-8087 to join.");
+    }
 
     setLoading(true);
+
     const { data, error } = await supabase.functions.invoke("create-membership-checkout", {
       body: {
         customerName: form.name.trim(),
