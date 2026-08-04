@@ -79,6 +79,26 @@ const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
 const PHONE_HREF = "tel:+14692138087";
 
+const TICKER_ITEMS: { label: string; live?: boolean }[] = [
+  { label: "Est. Texas — Pool Care Systems" },
+  { label: "Live routes: 24 trucks", live: true },
+  { label: "Now serving — Dallas" },
+  { label: "Plano" },
+  { label: "Frisco" },
+  { label: "McKinney" },
+  { label: "Allen" },
+  { label: "Richardson" },
+  { label: "Highland Park" },
+  { label: "University Park" },
+  { label: "Garland" },
+  { label: "Irving" },
+  { label: "Rockwall" },
+  { label: "Prosper" },
+  { label: "Lat 32.7767 / Lon −96.7970" },
+  { label: "Rev. 04" },
+];
+
+
 const REVIEWS_ROW_1 = [
   { q: "Our green pool was swimmable in four days. I still can't believe the before and after.", a: "Megan R.", c: "Plano, TX" },
   { q: "Tech showed up on time, replaced the pump motor same day, and texted me photos of the work.", a: "Daniel K.", c: "Frisco, TX" },
@@ -274,18 +294,29 @@ const Index = () => {
       <section className="relative bg-canvas pt-32 sm:pt-36">
         <div className="absolute inset-0 tech-grid pointer-events-none" aria-hidden />
 
-        {/* instrumentation strip */}
-        <div className="relative tech-rule">
-          <div className="container-tight flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-3">
-            <span className="tech-label">Est. Texas — Pool Care Systems</span>
-            <span className="tech-label flex items-center gap-2">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
-              Live routes: 24 trucks
-            </span>
-            <span className="tech-label">Lat 32.7767 / Lon −96.7970</span>
-            <span className="tech-label">Rev. 04</span>
+        {/* instrumentation strip — live scrolling ticker */}
+        <div className="relative tech-rule overflow-hidden">
+          <div className="marquee-pause marquee-fade py-3">
+            <div className="flex w-max animate-marquee-slow">
+              {[0, 1].map((dup) => (
+                <div key={dup} className="flex items-center whitespace-nowrap" aria-hidden={dup === 1}>
+                  {TICKER_ITEMS.map((item, i) => (
+                    <span key={`${dup}-${i}`} className="flex items-center">
+                      <span className="tech-label flex items-center gap-2">
+                        {item.live && (
+                          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+                        )}
+                        <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                      </span>
+                      <span className="mx-6 text-primary/20">/</span>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
 
         <div className="relative tech-rule">
           <div className="container-tight grid gap-x-12 gap-y-14 py-16 sm:py-24 lg:grid-cols-12 lg:items-center">
