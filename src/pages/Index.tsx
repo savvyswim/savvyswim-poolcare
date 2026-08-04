@@ -7,16 +7,13 @@ import {
   Sparkles,
   Sun,
   Wrench,
-  Hammer,
   Cpu,
-  Flame,
   ArrowRight,
   CheckCircle2,
   Star,
   MapPin,
   ShieldCheck,
   CalendarCheck,
-  ShoppingCart,
 } from "lucide-react";
 import heroVideo from "@/assets/pool-hero.mp4.asset.json";
 import photoModernPatio from "@/assets/AdobeStock_90446020.jpg.asset.json";
@@ -84,7 +81,6 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { supabase } from "@/integrations/supabase/client";
-import { useCart, money } from "@/hooks/useCart";
 
 
 const EMAIL = "hi@savagepools.us";
@@ -171,7 +167,6 @@ const Index = () => {
   };
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
-  const cart = useCart();
 
 
   useEffect(() => {
@@ -214,8 +209,8 @@ const Index = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Savvy Swim — Pool Cleaning & Custom Pools in Texas"
-        description="Weekly pool cleaning, maintenance and custom pool construction across DFW and Texas. Free quote from Savvy Swim, a Santana & Rivera company."
+        title="Savvy Swim — Pool Cleaning, Service & Repair in Texas"
+        description="Weekly pool cleaning, maintenance, equipment service and repair across DFW and Texas. Free quote from Savvy Swim, a Santana & Rivera company."
         path="/"
         jsonLd={{
           "@context": "https://schema.org",
@@ -230,12 +225,12 @@ const Index = () => {
         {/* Utility bar */}
         <div className="topbar hidden md:block text-[13px]">
           <div className="container-tight flex h-9 items-center justify-between gap-6">
-            <a href="#services" className="font-semibold hover:opacity-80 transition">
-              Also a full custom pool building company — Design &amp; Build →
+            <a href="#cleaning" className="font-semibold hover:opacity-80 transition">
+              Weekly pool cleaning, service &amp; repair — Get a quote →
             </a>
             <div className="flex items-center gap-6">
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-              <a href="/shop" className="hover:opacity-80 transition">Shop</a>
+              <a href="#services" className="hover:opacity-80 transition">Repairs</a>
               <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
@@ -259,9 +254,8 @@ const Index = () => {
             </a>
             <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap text-[13px] font-semibold uppercase tracking-wide text-foreground/80">
               <a href="#cleaning" className="hover:text-primary transition">Pool Cleaning</a>
-              <a href="#services" className="hover:text-primary transition">Design &amp; Build</a>
-              <a href="/shop" className="hover:text-primary transition">Shop</a>
-              <a href="#portfolio" className="hover:text-primary transition">Portfolio</a>
+              <a href="#services" className="hover:text-primary transition">Service &amp; Repair</a>
+              <a href="#portfolio" className="hover:text-primary transition">Our Work</a>
               <a href="#about" className="hover:text-primary transition">About Us</a>
               <a href="#contact" className="hover:text-primary transition">Contact</a>
 
@@ -273,19 +267,6 @@ const Index = () => {
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
-              <button
-                type="button"
-                aria-label="Open cart"
-                onClick={() => cart.setOpen(true)}
-                className="relative inline-flex items-center justify-center rounded-md border border-hairline h-10 w-10 hover:text-primary transition"
-              >
-                <ShoppingCart className="h-4.5 w-4.5" />
-                {cart.count > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-amber-brand px-1 text-[10px] font-bold text-primary-foreground">
-                    {cart.count}
-                  </span>
-                )}
-              </button>
               <button
                 type="button"
                 onClick={() => openBooking()}
@@ -318,8 +299,8 @@ const Index = () => {
 
               <p className="mt-12 text-sm text-primary/40">What We Do</p>
               <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
-                Weekly maintenance is the base of everything we offer. From there we cover repairs, equipment
-                upgrades, and full custom design &amp; build — no contracts required to get started.
+                Weekly maintenance is the base of everything we offer. From there we cover equipment repairs,
+                pump and filter service, and green-pool recovery — no contracts required to get started.
               </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -349,8 +330,8 @@ const Index = () => {
                   "Equipment Repair",
                   "Green Pool Recovery",
                   "Tile &amp; Deck Care",
-                  "Custom Design &amp; Build",
-                  "Remodels &amp; Resurfacing",
+                  "Salt System Service",
+                  "Leak &amp; Plumbing Repair",
                   "Seasonal Openings",
                 ].map((s) => (
                   <li key={s}>
@@ -398,13 +379,13 @@ const Index = () => {
         <div className="flex animate-marquee gap-12 whitespace-nowrap text-sm uppercase tracking-[0.2em] text-muted-foreground">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-12 items-center shrink-0">
-              <span>Infinity Edge</span><span className="text-amber-brand">◆</span>
-              <span>Glass Mosaic</span><span className="text-amber-brand">◆</span>
-              <span>Spa & Hot Tub</span><span className="text-amber-brand">◆</span>
-              <span>Fire Bowls</span><span className="text-amber-brand">◆</span>
-              <span>Outdoor Kitchen</span><span className="text-amber-brand">◆</span>
-              <span>LED Lighting</span><span className="text-amber-brand">◆</span>
-              <span>Smart Automation</span><span className="text-amber-brand">◆</span>
+              <span>Weekly Cleaning</span><span className="text-amber-brand">◆</span>
+              <span>Chemical Balancing</span><span className="text-amber-brand">◆</span>
+              <span>Filter Cleans</span><span className="text-amber-brand">◆</span>
+              <span>Pump Repair</span><span className="text-amber-brand">◆</span>
+              <span>Heater Service</span><span className="text-amber-brand">◆</span>
+              <span>Green Pool Recovery</span><span className="text-amber-brand">◆</span>
+              <span>Salt Systems</span><span className="text-amber-brand">◆</span>
             </div>
           ))}
         </div>
@@ -418,11 +399,11 @@ const Index = () => {
               What we do
             </div>
             <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
-              Everything water, under one roof.
+              Cleaning, service &amp; repair.
             </h2>
             <p className="mt-4 text-muted-foreground text-base leading-relaxed">
-              From custom design and ground-up construction to weekly service
-              and renovations — one team, one warranty, one phone call.
+              Weekly maintenance, equipment repair, and everything in between —
+              one team, one phone call, no contracts.
             </p>
           </div>
 
@@ -430,56 +411,8 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
-                icon: Hammer,
-                title: "Custom Pool Design & Build",
-                desc: "Bespoke gunite pools designed in photoreal 3D, engineered for your lot, lifestyle, and view.",
-                includes: [
-                  "On-site survey & 3D virtual tour",
-                  "Structural engineering & permitting",
-                  "Gunite shell, plumbing & equipment",
-                  "Tile, coping, decking & landscape",
-                ],
-                subject: "Quote — Custom Pool Build",
-              },
-              {
-                icon: Sparkles,
-                title: "Spas & Water Features",
-                desc: "Spillover spas, infinity edges, waterfalls, bubblers, and laminar deck jets that turn water into art.",
-                includes: [
-                  "Spillover & standalone spas",
-                  "Infinity / vanishing edges",
-                  "Waterfalls & sheer descents",
-                  "Laminar jets & bubblers",
-                ],
-                subject: "Quote — Spa & Water Features",
-              },
-              {
-                icon: Flame,
-                title: "Outdoor Living",
-                desc: "Extend the pool experience with kitchens, pergolas, fire bowls, and lounge decks built to entertain.",
-                includes: [
-                  "Outdoor kitchens & bars",
-                  "Pergolas, cabanas & shade",
-                  "Fire bowls & fire pits",
-                  "Travertine & porcelain decking",
-                ],
-                subject: "Quote — Outdoor Living",
-              },
-              {
-                icon: Wrench,
-                title: "Renovation & Resurfacing",
-                desc: "Bring tired pools back to life with new plaster, tile, equipment upgrades, and modern automation.",
-                includes: [
-                  "Plaster & pebble resurfacing",
-                  "Waterline tile & coping",
-                  "Equipment & pump upgrades",
-                  "Salt system conversion",
-                ],
-                subject: "Quote — Renovation",
-              },
-              {
                 icon: Droplets,
-                title: "Weekly Service & Maintenance",
+                title: "Weekly Pool Cleaning",
                 desc: "Crystal-clear water, year-round. Certified techs handle chemistry, cleaning, and equipment checks.",
                 includes: [
                   "Weekly chemistry balance",
@@ -487,19 +420,67 @@ const Index = () => {
                   "Equipment inspection",
                   "Photo report after every visit",
                 ],
-                subject: "Quote — Weekly Service",
+                subject: "Quote — Weekly Cleaning",
+              },
+              {
+                icon: Wrench,
+                title: "Equipment Repair",
+                desc: "Pumps, filters, heaters, and automation diagnosed and repaired — most parts stocked on the truck.",
+                includes: [
+                  "Pump & motor repair",
+                  "Filter cleans & cartridge swaps",
+                  "Heater diagnostics & repair",
+                  "Valve & plumbing leaks",
+                ],
+                subject: "Quote — Equipment Repair",
+              },
+              {
+                icon: Sparkles,
+                title: "Green Pool Recovery",
+                desc: "Algae, storm debris, or a pool left too long — we get it swim-ready fast with a full chemical reset.",
+                includes: [
+                  "Shock & algaecide treatment",
+                  "Deep vacuum & brush-out",
+                  "Filter deep clean",
+                  "Follow-up balance visits",
+                ],
+                subject: "Quote — Green Pool Recovery",
               },
               {
                 icon: Cpu,
-                title: "Smart Pool Automation",
-                desc: "Control your pool from your phone — lights, heat, jets, salt, and chemistry, all in one app.",
+                title: "Salt & Automation Service",
+                desc: "Salt cell cleaning, chlorinator replacement, and smart controls tuned so your system runs hands-free.",
                 includes: [
+                  "Salt cell clean & replace",
                   "Pentair / Jandy / Hayward systems",
-                  "Color-changing LED lighting",
-                  "Variable-speed pumps",
-                  "App control + voice integration",
+                  "Variable-speed pump programming",
+                  "App control setup",
                 ],
-                subject: "Quote — Pool Automation",
+                subject: "Quote — Salt & Automation",
+              },
+              {
+                icon: Sun,
+                title: "Seasonal Openings & Closings",
+                desc: "Get the pool ready for summer or buttoned up for winter — covers, freeze protection, and a full check.",
+                includes: [
+                  "Open & balance for the season",
+                  "Winterize & freeze protection",
+                  "Cover install & removal",
+                  "Full equipment inspection",
+                ],
+                subject: "Quote — Seasonal Service",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Tile, Deck & Surface Care",
+                desc: "Waterline tile scale removal, deck wash-downs, and surface spot care to keep everything looking new.",
+                includes: [
+                  "Waterline tile cleaning",
+                  "Calcium & scale removal",
+                  "Deck & coping wash",
+                  "Stain treatment",
+                ],
+                subject: "Quote — Surface Care",
               },
             ].map((s, i) => (
               <button
@@ -544,7 +525,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PROCESS — 3D design highlight */}
+      {/* PROCESS — how service works */}
       <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="absolute inset-0 water-caustics opacity-40" />
         <div className="container-tight relative">
@@ -554,7 +535,7 @@ const Index = () => {
               <div className="relative rounded-sm overflow-hidden shadow-3d border border-hairline">
                 <img
                   src={poolDesign}
-                  alt="Modern rectangular pool with tanning ledge and spillover spa built by Savvy Swim"
+                  alt="Sparkling clean backyard pool maintained weekly by Savvy Swim"
                   width={1920}
                   height={1280}
                   loading="lazy"
@@ -562,7 +543,7 @@ const Index = () => {
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-brand animate-pulse-glow" />
-                  Recent build
+                  Serviced weekly
                 </div>
 
               </div>
@@ -572,21 +553,21 @@ const Index = () => {
                 How it goes
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
-                See your pool in 3D
-                <span className="text-gradient-amber"> before we break ground.</span>
+                Clean water,
+                <span className="text-gradient-amber"> handled on a schedule.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                Every Savvy Swim project starts with a photoreal 3D rendering
-                and a full virtual walk-through — so you can change the tile,
-                the shape, even the sunset, before a single shovel hits dirt.
+                Every Savvy Swim account starts with a free water test and equipment
+                check — then a certified tech shows up the same day each week and
+                sends you a photo report before they leave.
               </p>
               <ol className="space-y-5">
                 {[
-                  { n: "01", t: "Discovery & site survey", d: "Free on-site consult, lot measurement, and budget alignment." },
-                  { n: "02", t: "3D design & virtual walk-through", d: "Photoreal renders of your pool, deck, and outdoor living." },
-                  { n: "03", t: "Engineering & permits", d: "Structural plans, soil tests, HOA and city permitting handled." },
-                  { n: "04", t: "Build & finish", d: "Excavation, gunite, plumbing, tile, plaster — typical 8–12 weeks." },
-                  { n: "05", t: "Service for life", d: "Optional weekly maintenance and a 25-year structural warranty." },
+                  { n: "01", t: "Free water test & walk-through", d: "We test chemistry, inspect equipment, and quote on the spot." },
+                  { n: "02", t: "Pick your plan", d: "Weekly, bi-weekly, or one-time cleanup — no contracts." },
+                  { n: "03", t: "Same tech, same day", d: "Skim, brush, vacuum, balance, and filter check every visit." },
+                  { n: "04", t: "Photo report after every visit", d: "Chemistry readings and photos texted or emailed to you." },
+                  { n: "05", t: "Repairs when you need them", d: "Pumps, filters, heaters, and salt systems fixed fast." },
                 ].map((p) => (
                   <li key={p.n} className="flex gap-4">
                     <div className="text-amber-brand font-mono font-bold text-sm pt-1">{p.n}</div>
@@ -754,33 +735,33 @@ const Index = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-xl">
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
-                Backyards we've built
+                Pools we take care of
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
-                Pools that turn
+                Water that stays
                 <br />
-                <span className="text-gradient-chrome">heads.</span>
+                <span className="text-gradient-chrome">crystal clear.</span>
               </h2>
             </div>
-            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Full portfolio request")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
-              See full portfolio <ArrowRight className="h-4 w-4" />
+            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Service gallery request")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
+              See more of our work <ArrowRight className="h-4 w-4" />
             </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { img: photoTexasFreeform.url, tag: "Freeform", title: "Hill Country Freeform", desc: "Curved freeform gunite with flagstone coping, raised spa spillway and shaded oak deck.", metric: "gunite · flagstone · spa spillway" },
-              { img: photoSunsetVilla.url, tag: "Pool & Spa", title: "Sunset Villa", desc: "Travertine deck, glass fencing and a raised spa with LED lighting — built for evenings outside.", metric: "spa · LED lighting · travertine" },
-              { img: photoGeometric.url, tag: "Modern Geometric", title: "Clean Lines", desc: "Rectangular pool with tanning ledge, spillover spa and broom-finish concrete surround.", metric: "tanning ledge · spillover spa" },
-              { img: photoWhiteHouse.url, tag: "Lap & Deck Jets", title: "White Modern", desc: "Long lap pool with deck jets, limestone coping and a crisp all-white architectural backdrop.", metric: "lap lane · deck jets · limestone" },
-              { img: photoDeskSunset.url, tag: "Resort Style", title: "Desert Sunset", desc: "Free-form pool with boulder accents, paver decking and warm evening landscape lighting.", metric: "boulders · pavers · night lighting" },
-              { img: photoStoneCourtyard.url, tag: "Courtyard", title: "Stone Courtyard", desc: "Kidney-shape pool wrapped in natural flagstone with an outdoor kitchen and lounge area.", metric: "flagstone · outdoor kitchen" },
+              { img: photoTexasFreeform.url, tag: "Weekly Service", title: "Hill Country Freeform", desc: "Weekly cleaning and chemistry on a large freeform pool shaded by oaks — heavy leaf load, spotless water.", metric: "weekly clean · chemistry · skim" },
+              { img: photoSunsetVilla.url, tag: "Pool & Spa Care", title: "Sunset Villa", desc: "Pool and spa maintained together, with LED and heater checks every visit.", metric: "spa care · heater check · LED" },
+              { img: photoGeometric.url, tag: "Filter Service", title: "Clean Lines", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this modern pool glass-clear.", metric: "filter clean · brush · vacuum" },
+              { img: photoWhiteHouse.url, tag: "Salt System", title: "White Modern", desc: "Salt cell servicing and balanced chemistry for a lap pool used every morning.", metric: "salt cell · balance · vacuum" },
+              { img: photoDeskSunset.url, tag: "Green Pool Recovery", title: "Desert Sunset", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
+              { img: photoStoneCourtyard.url, tag: "Tile & Deck Care", title: "Stone Courtyard", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
 
             ].map((p) => (
               <a
                 key={p.title}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Project inquiry — ${p.title}`)}`}
-                title={`Click to ask about a ${p.tag.toLowerCase()} build like ${p.title}`}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Service inquiry — ${p.title}`)}`}
+                title={`Click to ask about ${p.tag.toLowerCase()} like ${p.title}`}
                 aria-label={`Inquire about ${p.title}`}
                 className="card-3d rounded-sm overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
               >
@@ -796,7 +777,7 @@ const Index = () => {
                     {p.tag}
                   </div>
                   <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground opacity-0 group-hover:opacity-100 transition shadow-cta">
-                    Ask about this build <ArrowRight className="h-3 w-3" />
+                    Ask about this service <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
                 <div className="p-6 sm:p-7 flex flex-col flex-1">
@@ -877,21 +858,20 @@ const Index = () => {
                 Why folks pick us
               </div>
               <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
-                Builders, not brokers —
-                <span className="text-gradient-amber"> in-house from dig to dive.</span>
+                Techs, not middlemen —
+                <span className="text-gradient-amber"> service you can count on.</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                We don't sub out the hard parts. Savvy Swim owns excavation,
-                gunite, plumbing, tile, plaster, and service in-house — so your
-                pool is built by one team, backed by one warranty, and serviced
-                by the people who know it best.
+                We don't sub out your pool. Savvy Swim keeps cleaning, chemistry,
+                and equipment repair in-house — so the same trained tech knows your
+                pool, your equipment, and exactly what it needs.
               </p>
               <ul className="space-y-3">
                 {[
-                  "In-house crews for every trade — no flaky subs",
-                  "25-year structural warranty on every new build",
+                  "Same tech every week — no rotating crews",
+                  "Chemicals and photo reports included",
                   "Licensed, bonded, and insured in Texas",
-                  "Free 3D design for qualified projects",
+                  "Repairs quoted up front, no surprise invoices",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-3 text-sm">
                     <ShieldCheck className="h-5 w-5 text-amber-brand flex-shrink-0 mt-0.5" />
@@ -916,8 +896,8 @@ const Index = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline rounded-sm overflow-hidden">
                   {[
-                    { k: "600+", v: "Pools built", icon: Hammer },
-                    { k: "25 yr", v: "Structural warranty", icon: ShieldCheck },
+                    { k: "1,200+", v: "Pools serviced", icon: Droplets },
+                    { k: "100%", v: "Satisfaction guarantee", icon: ShieldCheck },
                     { k: "4.9★", v: "Avg client rating", icon: Star },
                     { k: "365", v: "Days of service", icon: Sun },
                   ].map((s) => (
@@ -958,19 +938,19 @@ const Index = () => {
               <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
                 Ready to dive in?
                 <br />
-                <span className="text-gradient-amber italic">Let's design your pool.</span>
+                <span className="text-gradient-amber italic">Let's clean your pool.</span>
               </h2>
               <p className="text-foreground/80 text-lg max-w-xl mx-auto mb-8">
-                Book a free on-site consultation and we'll send you a photoreal
-                3D rendering of your pool — no pressure, no obligation.
+                Book a free on-site water test and equipment check — we'll quote
+                your weekly service or repair on the spot. No pressure, no contracts.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   type="button"
-                  onClick={() => openBooking("Custom Pool Design & Build")}
+                  onClick={() => openBooking("Weekly Pool Cleaning")}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
-                  <CalendarCheck className="h-4 w-4" /> Book my free 3D design
+                  <CalendarCheck className="h-4 w-4" /> Book my free water test
                 </button>
                 <a
                   href={PHONE_HREF}
