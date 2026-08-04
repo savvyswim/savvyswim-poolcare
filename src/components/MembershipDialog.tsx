@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripe, getStripeEnvironment, PAYMENTS_ENABLED } from "@/lib/stripe";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
