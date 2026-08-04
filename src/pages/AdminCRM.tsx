@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { logAdminAction } from "@/lib/audit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -220,6 +221,7 @@ export default function AdminCRM() {
       type: "note",
       subject: `Stage → ${stage}`,
     });
+    logAdminAction({ area: "crm", action: `Lead stage → ${stage}`, recordType: "lead", recordId: lead.id });
     load();
   };
 
@@ -227,6 +229,7 @@ export default function AdminCRM() {
     const { error } = await supabase.from("crm_leads").delete().eq("id", id);
     if (error) return toast.error(error.message);
     setOpenLeadId(null);
+    logAdminAction({ area: "crm", action: "Lead deleted", recordType: "lead", recordId: id });
     toast.success("Lead deleted");
     load();
   };
@@ -276,6 +279,7 @@ export default function AdminCRM() {
     });
     setBusy(false);
     if (error) return toast.error(error.message);
+    logAdminAction({ area: "crm", action: "Lead created", recordType: "lead", details: { contact: form.name.trim(), service: form.service.trim() } });
     toast.success("Lead created");
     setNewLeadOpen(false);
     load();
@@ -354,6 +358,14 @@ export default function AdminCRM() {
               className="text-white/85 hover:text-white hover:bg-white/10"
             >
               <Link to="/admin/team">Team</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-white/85 hover:text-white hover:bg-white/10"
+            >
+              <Link to="/admin/activity">Activity log</Link>
             </Button>
             <Button size="sm" onClick={() => setNewLeadOpen(true)} className="font-semibold">
               <Plus className="h-4 w-4 mr-1" /> Create lead

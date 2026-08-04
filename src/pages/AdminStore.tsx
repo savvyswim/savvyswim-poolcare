@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { logAdminAction } from "@/lib/audit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -121,7 +122,10 @@ export default function AdminStore() {
       .eq("id", p.id);
     setSavingId(null);
     if (error) toast.error(error.message);
-    else toast.success(`${p.name} saved`);
+    else {
+      toast.success(`${p.name} saved`);
+      logAdminAction({ area: "store", action: "Product updated", recordType: "product", recordId: p.id, details: { name: p.name, price: p.price } });
+    }
   };
 
   const addProduct = async () => {
@@ -142,13 +146,19 @@ export default function AdminStore() {
       .select("*")
       .single();
     if (error) toast.error(error.message);
-    else setProducts((ps) => [...ps, data as unknown as Product]);
+    else {
+      setProducts((ps) => [...ps, data as unknown as Product]);
+      logAdminAction({ area: "store", action: "Product created", recordType: "product", recordId: (data as { id: string }).id });
+    }
   };
 
   const deleteProduct = async (id: string) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) toast.error(error.message);
-    else setProducts((ps) => ps.filter((p) => p.id !== id));
+    else {
+      setProducts((ps) => ps.filter((p) => p.id !== id));
+      logAdminAction({ area: "store", action: "Product deleted", recordType: "product", recordId: id });
+    }
   };
 
   const updateOrder = async (
@@ -158,13 +168,19 @@ export default function AdminStore() {
     setOrders((os) => os.map((o) => (o.id === id ? { ...o, ...patchData } : o)));
     const { error } = await supabase.from("store_orders").update(patchData).eq("id", id);
     if (error) toast.error(error.message);
-    else toast.success("Order updated");
+    else {
+      toast.success("Order updated");
+      logAdminAction({ area: "store", action: "Order updated", recordType: "order", recordId: id, details: patchData });
+    }
   };
 
   const deleteOrder = async (id: string) => {
     const { error } = await supabase.from("store_orders").delete().eq("id", id);
     if (error) toast.error(error.message);
-    else setOrders((os) => os.filter((o) => o.id !== id));
+    else {
+      setOrders((os) => os.filter((o) => o.id !== id));
+      logAdminAction({ area: "store", action: "Order deleted", recordType: "order", recordId: id });
+    }
   };
 
   if (loading || (user && !isAdmin))

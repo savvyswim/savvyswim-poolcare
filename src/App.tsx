@@ -13,6 +13,7 @@ import AdminDesigns from "./pages/AdminDesigns.tsx";
 import AdminCleaning from "./pages/AdminCleaning.tsx";
 import AdminStore from "./pages/AdminStore.tsx";
 import AdminTeam from "./pages/AdminTeam";
+import AdminActivity from "./pages/AdminActivity";
 import AdminCRM from "./pages/AdminCRM.tsx";
 import Store from "./pages/Store.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/admin/store" element={<AdminStore />} />
             <Route path="/admin/crm" element={<AdminCRM />} />
             <Route path="/admin/team" element={<AdminTeam />} />
+            <Route path="/admin/activity" element={<AdminActivity />} />
             <Route path="/shop" element={<Store />} />
             <Route path="/product/:handle" element={<ProductDetail />} />
             <Route path="/checkout/return" element={<CheckoutReturn />} />
