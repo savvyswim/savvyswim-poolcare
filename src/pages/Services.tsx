@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Seo from "@/components/Seo";
+import { trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
 
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
@@ -157,7 +158,7 @@ const Services = () => {
             <Link to="/#contact" className="hover:text-accent transition">Contact</Link>
           </nav>
           <a
-            href={PHONE_HREF}
+            href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
             className="inline-flex items-center gap-2 text-sm font-semibold hover:text-primary transition"
           >
             <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
@@ -195,7 +196,7 @@ const Services = () => {
                       Start Service <ArrowRight className="h-4 w-4" />
                     </button>
                     <a
-                      href={PHONE_HREF}
+                      href={PHONE_HREF} onClick={() => trackContactClick("call_click", "service_row")}
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -362,7 +363,7 @@ const Services = () => {
                   Request Quote
                 </button>
                 <a
-                  href={PHONE_HREF}
+                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> Call
@@ -381,7 +382,7 @@ const Services = () => {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
             <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
             <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
           </div>
