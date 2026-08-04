@@ -720,11 +720,6 @@ const Index = () => {
                         Swim Club
                       </h3>
                     </div>
-                    <div className="hidden sm:flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-chlorine">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chlorine/20">
-                        <div className="h-8 w-8 rounded-full border border-primary/20" />
-                      </div>
-                    </div>
                   </div>
 
                   <div className="mb-8">
