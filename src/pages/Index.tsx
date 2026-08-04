@@ -387,21 +387,35 @@ const Index = () => {
                 </div>
               </figure>
 
-              <div className="mt-3 grid grid-cols-3 gap-3">
-                {[
-                  { src: photoRescueTube.url, alt: "Savvy Swim rescue tube floating in a clear pool" },
-                  { src: photoSavvyLetters.url, alt: "Inflatable SAVVY letters in blue pool water" },
-                  { src: photoRivieraLoungers.url, alt: "Red and white striped loungers beside a pool" },
-                ].map((p) => (
-                  <img
-                    key={p.src}
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    className="aspect-square w-full border border-primary/10 object-cover"
-                  />
-                ))}
+              <div className="mt-3 border border-primary/15 bg-primary text-primary-foreground">
+                <div className="flex items-center justify-between border-b border-primary-foreground/15 px-4 py-3">
+                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary-foreground/60">
+                    Service Guarantee
+                  </span>
+                  <span className="flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.22em] text-accent">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+                    Active
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 divide-x divide-primary-foreground/15">
+                  {[
+                    { k: "52", v: "Visits / yr" },
+                    { k: "24h", v: "Repair reply" },
+                    { k: "0", v: "Contracts" },
+                  ].map((s) => (
+                    <div key={s.v} className="px-4 py-4">
+                      <div className="font-display text-2xl leading-none">{s.k}</div>
+                      <div className="mt-1.5 font-tech text-[10px] uppercase tracking-[0.18em] text-primary-foreground/60">
+                        {s.v}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="border-t border-primary-foreground/15 px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/75">
+                  Water not clear after a visit? We come back free.
+                </p>
               </div>
+
             </div>
           </div>
         </div>
