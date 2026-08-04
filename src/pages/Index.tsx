@@ -27,6 +27,7 @@ const poolNight = photoRivieraLoungers.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
+import { trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
@@ -78,6 +79,7 @@ import { supabase } from "@/integrations/supabase/client";
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 213-8087";
 const PHONE_HREF = "tel:+14692138087";
+const SMS_HREF = "sms:+14692138087";
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
@@ -273,7 +275,7 @@ const Index = () => {
 
             <div className="flex items-center gap-2">
               <a
-                href={PHONE_HREF}
+                href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
                 className="hidden sm:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
@@ -349,7 +351,7 @@ const Index = () => {
                   <CalendarCheck className="h-4 w-4" /> Start Service
                 </button>
                 <a
-                  href={PHONE_HREF}
+                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "hero")}
                   className="font-tech inline-flex items-center gap-2 border border-primary/20 px-7 py-4 text-primary transition-colors hover:border-primary"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -406,9 +408,27 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="border-t border-primary/10 bg-primary px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/80">
-                  Water not clear after a visit? We come back free — same day.
-                </p>
+                <div className="border-t border-primary/10 bg-primary px-4 py-3">
+                  <p className="text-[13px] leading-relaxed text-primary-foreground/80">
+                    Water not clear after a visit? We come back free — same day.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <a
+                      href={PHONE_HREF}
+                      onClick={() => trackContactClick("call_click", "guarantee")}
+                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+                    >
+                      <Phone className="h-3 w-3" /> Call
+                    </a>
+                    <a
+                      href={SMS_HREF}
+                      onClick={() => trackContactClick("text_click", "guarantee")}
+                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+                    >
+                      Text us
+                    </a>
+                  </div>
+                </div>
               </div>
 
 
@@ -839,7 +859,7 @@ const Index = () => {
               </ul>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href={PHONE_HREF}
+                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "why_savvy")}
                   className="btn-quote inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm text-sm font-bold uppercase tracking-wider"
                 >
                   <Phone className="h-4 w-4" /> Call (469) 213-8087
@@ -1014,7 +1034,7 @@ const Index = () => {
                   <CalendarCheck className="h-4 w-4" /> Book my free water test
                 </button>
                 <a
-                  href={PHONE_HREF}
+                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -1037,7 +1057,7 @@ const Index = () => {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
             <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
             <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
             <a href="/auth" className="hover:text-foreground transition">Admin</a>
