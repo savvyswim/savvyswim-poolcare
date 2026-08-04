@@ -108,31 +108,70 @@
   /* Brand type helpers */
   .font-display { font-family: 'Anton', Impact, system-ui, sans-serif; text-transform: uppercase; }
   .font-badge { font-family: 'Bebas Neue', 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+  /* Editorial serif — chic, classic riviera accents */
+  .font-editorial {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+  .editorial-italic { font-family: 'Cormorant Garamond', serif; font-style: italic; text-transform: none; letter-spacing: 0.01em; }
+  .eyebrow {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
 
   .text-red-brand { color: hsl(var(--lifeguard-red)); }
   .text-orange-brand { color: hsl(var(--cabana-orange)); }
   .text-olive-brand { color: hsl(var(--olive-lounge)); }
+  .text-navy-brand { color: hsl(var(--navy)); }
   .bg-red-brand { background-color: hsl(var(--lifeguard-red)); }
   .bg-orange-brand { background-color: hsl(var(--cabana-orange)); }
   .bg-olive-brand { background-color: hsl(var(--olive-lounge)); }
+  .bg-navy-brand { background-color: hsl(var(--navy)); }
+  .bg-sand-brand { background-color: hsl(var(--sand)); }
 
-  /* Mandatory stripe motif */
+  /* Mandatory stripe motif — wide cabana awning stripes */
   .stripes-red {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--lifeguard-red)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--lifeguard-red)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
   .stripes-orange {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--cabana-orange)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--cabana-orange)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
   .stripes-olive {
     background-image: repeating-linear-gradient(90deg,
-      hsl(var(--olive-lounge)) 0 18px, hsl(var(--canvas)) 18px 36px);
+      hsl(var(--olive-lounge)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
-  .stripe-rule { height: 8px; width: 100%; }
+  .stripes-navy {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--navy)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripe-rule { height: 10px; width: 100%; }
+  /* Hairline pinstripe wash for section backdrops */
+  .pinstripe {
+    background-image: repeating-linear-gradient(90deg,
+      hsl(var(--navy) / 0.05) 0 1px, transparent 1px 14px);
+  }
+  /* Scalloped cabana-umbrella edge */
+  .scallop-edge {
+    height: 14px;
+    width: 100%;
+    background-color: hsl(var(--lifeguard-red));
+    -webkit-mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    -webkit-mask-size: 18px 14px;
+    mask-size: 18px 14px;
+    -webkit-mask-position: 0 14px;
+    mask-position: 0 14px;
+    transform: scaleY(-1);
+  }
 
   .text-gradient-amber { color: hsl(var(--olive-lounge)); }
-  .text-gradient-chrome { color: hsl(90 10% 13%); }
+  .text-gradient-chrome { color: hsl(var(--navy)); }
   .text-gradient-gold { color: hsl(var(--lifeguard-red)); }
 
   .glass {
