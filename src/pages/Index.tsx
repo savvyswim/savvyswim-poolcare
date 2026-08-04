@@ -387,34 +387,33 @@ const Index = () => {
                 </div>
               </figure>
 
-              <div className="mt-3 border border-primary/15 bg-primary text-primary-foreground">
-                <div className="flex items-center justify-between border-b border-primary-foreground/15 px-4 py-3">
-                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary-foreground/60">
-                    Service Guarantee
+              <div className="mt-3 border border-primary/15 bg-background">
+                <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
+                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary/50">
+                    Every visit includes
                   </span>
-                  <span className="flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.22em] text-accent">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
-                    Active
+                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-accent">
+                    No contracts
                   </span>
                 </div>
-                <div className="grid grid-cols-3 divide-x divide-primary-foreground/15">
+                <ul className="divide-y divide-primary/10">
                   {[
-                    { k: "52", v: "Visits / yr" },
-                    { k: "24h", v: "Repair reply" },
-                    { k: "0", v: "Contracts" },
+                    { n: "01", t: "Skim, brush & vacuum" },
+                    { n: "02", t: "Full chemistry balance" },
+                    { n: "03", t: "Baskets & filter check" },
+                    { n: "04", t: "Photo report after each visit" },
                   ].map((s) => (
-                    <div key={s.v} className="px-4 py-4">
-                      <div className="font-display text-2xl leading-none">{s.k}</div>
-                      <div className="mt-1.5 font-tech text-[10px] uppercase tracking-[0.18em] text-primary-foreground/60">
-                        {s.v}
-                      </div>
-                    </div>
+                    <li key={s.n} className="flex items-baseline gap-4 px-4 py-3">
+                      <span className="font-tech text-[10px] tracking-[0.18em] text-accent">{s.n}</span>
+                      <span className="text-[14px] leading-snug text-primary/85">{s.t}</span>
+                    </li>
                   ))}
-                </div>
-                <p className="border-t border-primary-foreground/15 px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/75">
+                </ul>
+                <p className="border-t border-primary/10 bg-primary px-4 py-3 text-[13px] leading-relaxed text-primary-foreground/80">
                   Water not clear after a visit? We come back free.
                 </p>
               </div>
+
 
             </div>
           </div>
