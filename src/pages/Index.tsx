@@ -649,9 +649,9 @@ const Index = () => {
 
           <div className="mb-12 grid gap-4 sm:grid-cols-3">
             {[
-              { src: photoFamilySplash.url, alt: "Family playing in a clean, freshly serviced backyard pool in Dallas–Fort Worth" },
-              { src: photoKidSwim.url, alt: "Child swimming in crystal clear balanced pool water" },
-              { src: photoModernPatio.url, alt: "Modern poolside patio with lounge chairs and shade sail" },
+              { src: photoRescueTube.url, alt: "Savvy Swim rescue tube floating in a sparkling clean pool" },
+              { src: photoSavvyRings.url, alt: "Red and white striped Savvy pool rings floating in clear water" },
+              { src: photoSavvyLetters.url, alt: "Inflatable SAVVY letters floating in a bright blue pool" },
             ].map((p) => (
               <div key={p.src} className="overflow-hidden rounded-sm border border-hairline shadow-card">
                 <img
