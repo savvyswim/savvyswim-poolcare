@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface MembershipDialogProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface MembershipDialogProps {
 
 export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) {
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "" });
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
@@ -29,6 +31,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
     if (form.name.trim().length < 2) return toast.error("Please enter your name");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
       return toast.error("Please enter a valid email");
+    if (!agreed) return toast.error("Please accept the 12-month membership agreement");
 
     setLoading(true);
     const { data, error } = await supabase.functions.invoke("create-membership-checkout", {
@@ -37,6 +40,8 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
         email: form.email.trim(),
         phone: form.phone.trim(),
         address: form.address.trim(),
+        agreementMonths: 12,
+        agreedToTerms: true,
         environment: getStripeEnvironment(),
         returnUrl: `${window.location.origin}/?membership=success`,
       },
@@ -53,6 +58,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
     if (!next) {
       setClientSecret(null);
       setLoading(false);
+      setAgreed(false);
     }
     onOpenChange(next);
   };
@@ -72,7 +78,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
               <DialogTitle>Savvy Membership — $19.99 / month</DialogTitle>
               <DialogDescription>
                 50% off one filter clean (one time), 5% off parts, 7% off installation labor, and
-                24/7 text support. Cancel anytime.
+                24/7 text support. Requires a 12-month agreement, billed monthly.
               </DialogDescription>
             </DialogHeader>
 
@@ -112,8 +118,20 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
               </div>
             </div>
 
+            <label className="flex items-start gap-3 rounded-lg border border-border bg-muted/40 p-3 text-xs leading-relaxed">
+              <Checkbox
+                checked={agreed}
+                onCheckedChange={(v) => setAgreed(v === true)}
+                className="mt-0.5"
+              />
+              <span>
+                I agree to a 12-month Savvy Membership term at $19.99/month. My membership renews
+                monthly during the term and may be cancelled at the end of the 12 months.
+              </span>
+            </label>
+
             <Button className="w-full" onClick={start} disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Join for $19.99 / month"}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Join — 12-month agreement"}
             </Button>
           </>
         )}
