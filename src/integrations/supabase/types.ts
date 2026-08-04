@@ -206,6 +206,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          page_path: string | null
+          placement: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          page_path?: string | null
+          placement?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          placement?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       crm_activities: {
         Row: {
           body: string | null
