@@ -19,12 +19,8 @@ import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
 import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
-import photoMartiniTray from "@/assets/IMG_5504-2.JPG.asset.json";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
-import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
-import photoPoolMartinis from "@/assets/IMG_5496-2.jpg.asset.json";
-import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
