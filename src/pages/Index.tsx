@@ -19,12 +19,8 @@ import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
 import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
-import photoMartiniTray from "@/assets/IMG_5504-2.JPG.asset.json";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
-import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
-import photoPoolMartinis from "@/assets/IMG_5496-2.jpg.asset.json";
-import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
@@ -796,70 +792,98 @@ const Index = () => {
 
 
 
-      {/* PORTFOLIO */}
+      {/* MARKETING */}
       <section id="portfolio" className="py-24 sm:py-32 relative">
         <div className="container-tight">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div className="max-w-xl">
-              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
-                Pools we take care of
-              </div>
-              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
-                Water that stays
-                <br />
-                <span className="text-gradient-chrome">crystal clear.</span>
-              </h2>
+          <div className="max-w-3xl mb-14">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
+              Why Savvy Swim
             </div>
-            <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Service gallery request")}`} className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand hover:gap-3 transition-all">
-              See more of our work <ArrowRight className="h-4 w-4" />
-            </a>
+            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
+              Never think about your pool
+              <br />
+              <span className="text-gradient-chrome">again.</span>
+            </h2>
+            <p className="text-muted-foreground mt-5 text-base sm:text-lg leading-relaxed max-w-2xl">
+              One flat weekly rate. Certified techs, balanced water, working equipment, and a photo
+              report in your inbox after every single visit — so you always know exactly what was
+              done.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {[
-              { img: photoLifeguardChair.url, tag: "Weekly Service", title: "The Lifeguard Stand", desc: "Lane-line pool kept swim-ready year round — weekly cleaning, chemistry, and equipment checks.", metric: "weekly clean · chemistry · skim" },
-              { img: photoRivieraLoungers.url, tag: "Pool & Spa Care", title: "Riviera Terrace", desc: "Pool and spa maintained together, with heater and light checks every visit.", metric: "spa care · heater check · LED" },
-              { img: photoNavyCabana.url, tag: "Filter Service", title: "Navy Cabana", desc: "Quarterly cartridge filter cleans plus weekly brushing keep this pool glass-clear.", metric: "filter clean · brush · vacuum" },
-              { img: photoOliveRings.url, tag: "Salt System", title: "Olive Lounge", desc: "Salt cell servicing and balanced chemistry for a pool used every morning.", metric: "salt cell · balance · vacuum" },
-              { img: photoPoolMartinis.url, tag: "Green Pool Recovery", title: "Poolside Social", desc: "Brought back from full algae bloom to swim-ready in under a week.", metric: "shock · deep vacuum · filter clean" },
-              { img: photoRedUmbrellas.url, tag: "Tile & Deck Care", title: "Cabana Red", desc: "Waterline scale removal and deck wash-downs alongside weekly maintenance.", metric: "tile clean · scale removal · deck" },
-
-            ].map((p) => (
-              <a
-                key={p.title}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Service inquiry — ${p.title}`)}`}
-                title={`Click to ask about ${p.tag.toLowerCase()} like ${p.title}`}
-                aria-label={`Inquire about ${p.title}`}
-                className="card-3d rounded-sm overflow-hidden group tilt-card flex flex-col cursor-pointer hover:border-amber-brand/50 transition-colors"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  <img
-                    src={p.img}
-                    alt={p.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-                  <div className="absolute top-4 left-4 inline-flex rounded-full glass px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
-                    {p.tag}
-                  </div>
-                  <div className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-amber-brand px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground opacity-0 group-hover:opacity-100 transition shadow-cta">
-                    Ask about this service <ArrowRight className="h-3 w-3" />
-                  </div>
-                </div>
-                <div className="p-6 sm:p-7 flex flex-col flex-1">
-                  <h3 className="text-xl font-semibold mb-2 text-gradient-amber">{p.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">{p.desc}</p>
-                  <div className="mt-auto pt-5 border-t border-hairline flex items-center justify-between">
-                    <span className="text-xs font-mono text-foreground/80">{p.metric}</span>
-                    <ArrowRight className="h-4 w-4 text-amber-brand opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition" />
-                  </div>
-                </div>
-              </a>
+              {
+                icon: CalendarCheck,
+                title: "Same tech, same day, every week",
+                desc: "You get a dedicated technician on a fixed schedule — no rotating crews, no surprise skips.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Clear water guaranteed",
+                desc: "If your water isn't swim-ready after a visit, we come back and fix it at no charge.",
+              },
+              {
+                icon: Wrench,
+                title: "Repairs handled in-house",
+                desc: "Pumps, heaters, filters, salt cells and automation — diagnosed and repaired by the same team.",
+              },
+            ].map((b) => (
+              <div key={b.title} className="card-3d rounded-sm p-7 sm:p-8 flex flex-col">
+                <b.icon className="h-6 w-6 text-amber-brand mb-5" />
+                <h3 className="text-lg font-semibold mb-2">{b.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{b.desc}</p>
+              </div>
             ))}
+          </div>
+
+          <div className="card-3d rounded-sm overflow-hidden grid md:grid-cols-2">
+            <div className="relative min-h-[280px]">
+              <img
+                src={photoLifeguardChair.url}
+                alt="Savvy Swim branded umbrella beside a crystal-clear serviced pool"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+            <div className="p-8 sm:p-12 flex flex-col justify-center">
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-brand mb-4">
+                New customer offer
+              </div>
+              <h3 className="text-[1.7rem] sm:text-[2.1rem] leading-[1.1] font-semibold tracking-tight mb-5">
+                First month of weekly service, half off.
+              </h3>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Free on-site water test and equipment inspection",
+                  "Photo report emailed after every visit",
+                  "No contracts on weekly service — cancel anytime",
+                ].map((i) => (
+                  <li key={i} className="flex gap-3 text-sm text-muted-foreground">
+                    <CheckCircle2 className="h-4 w-4 text-amber-brand shrink-0 mt-0.5" />
+                    {i}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={PHONE_HREF}
+                  className="btn-quote inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm text-sm font-bold uppercase tracking-wider"
+                >
+                  <Phone className="h-4 w-4" /> Call (469) 213-8087
+                </a>
+                <a
+                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free pool service quote")}`}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
+                >
+                  Get a free quote <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* TESTIMONIALS */}
       <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
