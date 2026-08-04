@@ -274,14 +274,6 @@ const Index = () => {
               </a>
               <button
                 type="button"
-                aria-label="Open cart"
-                onClick={() => cart.setOpen(true)}
-                className="hidden"
-              >
-                <ShoppingCart className="h-4.5 w-4.5" />
-              </button>
-              <button
-                type="button"
                 onClick={() => openBooking()}
                 className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-5 py-3 text-[13px] font-bold uppercase tracking-wide transition"
               >
@@ -392,13 +384,13 @@ const Index = () => {
         <div className="flex animate-marquee gap-12 whitespace-nowrap text-sm uppercase tracking-[0.2em] text-muted-foreground">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-12 items-center shrink-0">
-              <span>Infinity Edge</span><span className="text-amber-brand">◆</span>
-              <span>Glass Mosaic</span><span className="text-amber-brand">◆</span>
-              <span>Spa & Hot Tub</span><span className="text-amber-brand">◆</span>
-              <span>Fire Bowls</span><span className="text-amber-brand">◆</span>
-              <span>Outdoor Kitchen</span><span className="text-amber-brand">◆</span>
-              <span>LED Lighting</span><span className="text-amber-brand">◆</span>
-              <span>Smart Automation</span><span className="text-amber-brand">◆</span>
+              <span>Weekly Cleaning</span><span className="text-amber-brand">◆</span>
+              <span>Chemical Balancing</span><span className="text-amber-brand">◆</span>
+              <span>Filter Cleans</span><span className="text-amber-brand">◆</span>
+              <span>Pump Repair</span><span className="text-amber-brand">◆</span>
+              <span>Heater Service</span><span className="text-amber-brand">◆</span>
+              <span>Green Pool Recovery</span><span className="text-amber-brand">◆</span>
+              <span>Salt Systems</span><span className="text-amber-brand">◆</span>
             </div>
           ))}
         </div>
@@ -909,8 +901,8 @@ const Index = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-hairline rounded-sm overflow-hidden">
                   {[
-                    { k: "600+", v: "Pools built", icon: Hammer },
-                    { k: "25 yr", v: "Structural warranty", icon: ShieldCheck },
+                    { k: "1,200+", v: "Pools serviced", icon: Droplets },
+                    { k: "100%", v: "Satisfaction guarantee", icon: ShieldCheck },
                     { k: "4.9★", v: "Avg client rating", icon: Star },
                     { k: "365", v: "Days of service", icon: Sun },
                   ].map((s) => (
