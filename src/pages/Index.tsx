@@ -15,6 +15,8 @@ import {
   ShieldCheck,
   CalendarCheck,
 } from "lucide-react";
+import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
+
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
@@ -256,15 +258,18 @@ const Index = () => {
           }`}
         >
           <div className="container-tight flex h-[72px] items-center justify-between">
-            <a href="#" className="flex items-center gap-2.5">
-              <div className="relative h-10 w-10 border border-primary/25 grid place-items-center">
-                <Waves className="h-4 w-4 text-accent" />
-              </div>
+            <a href="#" className="flex items-center gap-3">
+              <img
+                src={logoMark.url}
+                alt="Savvy Swim — on duty, so you don't have to be"
+                className="h-11 w-11 object-cover border border-primary/15"
+              />
               <span className="tracking-tight text-base leading-tight flex flex-col">
                 <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
-                <span className="font-tech text-[8.5px] text-primary/45">A Santana &amp; Rivera Company</span>
+                <span className="font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
               </span>
             </a>
+
             <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
               <a href="/services" className="hover:text-accent transition">Service &amp; Repair</a>

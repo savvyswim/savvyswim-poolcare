@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
 import { Link } from "react-router-dom";
 import {
   Waves,
@@ -142,15 +143,18 @@ const Services = () => {
       {/* NAV */}
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[72px] items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="relative h-10 w-10 border border-primary/25 grid place-items-center">
-              <Waves className="h-4 w-4 text-accent" />
-            </div>
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={logoMark.url}
+              alt="Savvy Swim — on duty, so you don't have to be"
+              className="h-11 w-11 object-cover border border-primary/15"
+            />
             <span className="tracking-tight text-base leading-tight flex flex-col">
               <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
-              <span className="font-tech text-[8.5px] text-primary/45">A Santana &amp; Rivera Company</span>
+              <span className="font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
             </span>
           </Link>
+
           <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
             <Link to="/" className="hover:text-accent transition">Home</Link>
             <Link to="/services" className="text-accent">Services</Link>
