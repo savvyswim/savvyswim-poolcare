@@ -34,7 +34,6 @@ const poolService = photoResortLap.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
-import { CursorFollower } from "@/components/CursorFollower";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
@@ -219,7 +218,6 @@ const Index = () => {
           url: "https://savvyswim.com",
         }}
       />
-      <CursorFollower />
       {/* NAV */}
       <header className="fixed top-0 left-0 right-0 z-50">
         {/* Utility bar */}
