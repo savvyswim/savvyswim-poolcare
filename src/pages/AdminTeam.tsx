@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { logAdminAction } from "@/lib/audit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -97,6 +98,7 @@ export default function AdminTeam() {
       if (error.code === "23505") return toast.error("There is already a pending invite for that email");
       return toast.error(error.message);
     }
+    logAdminAction({ area: "team", action: "Invitation sent", recordType: "invitation", details: { email: clean, roles } });
     toast.success(`Invitation created for ${clean}`);
     setEmail("");
     setNote("");
@@ -106,6 +108,7 @@ export default function AdminTeam() {
   const revoke = async (id: string) => {
     const { error } = await supabase.from("admin_invitations").update({ status: "revoked" }).eq("id", id);
     if (error) return toast.error(error.message);
+    logAdminAction({ area: "team", action: "Invitation revoked", recordType: "invitation", recordId: id });
     toast.success("Invitation revoked");
     load();
   };
