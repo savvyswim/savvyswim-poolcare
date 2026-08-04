@@ -81,7 +81,7 @@ const PHONE_HREF = "tel:+14692138087";
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
-  { label: "Live routes: 24 trucks", live: true },
+  { label: "Jump in, the water's warm.", live: true },
   { label: "Now serving — Dallas" },
   { label: "Plano" },
   { label: "Frisco" },
