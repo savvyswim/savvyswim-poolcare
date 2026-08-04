@@ -347,6 +347,14 @@ export default function AdminCRM() {
                 <ArrowLeft className="h-4 w-4 mr-1" /> Store
               </Link>
             </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-white/85 hover:text-white hover:bg-white/10"
+            >
+              <Link to="/admin/team">Team</Link>
+            </Button>
             <Button size="sm" onClick={() => setNewLeadOpen(true)} className="font-semibold">
               <Plus className="h-4 w-4 mr-1" /> Create lead
             </Button>

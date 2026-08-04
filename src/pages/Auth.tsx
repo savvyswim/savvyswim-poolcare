@@ -11,8 +11,9 @@ import { Waves } from "lucide-react";
 export default function Auth() {
   const nav = useNavigate();
   const { user, loading } = useAuth();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [email, setEmail] = useState("");
+  const inviteEmail = new URLSearchParams(window.location.search).get("invite") ?? "";
+  const [mode, setMode] = useState<"signin" | "signup">(inviteEmail ? "signup" : "signin");
+  const [email, setEmail] = useState(inviteEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
