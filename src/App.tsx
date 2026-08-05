@@ -35,6 +35,7 @@ import EmailCenter from "@/crm/pages/EmailCenter";
 import Reports from "@/crm/pages/Reports";
 import WebsiteConnect from "@/crm/pages/WebsiteConnect";
 import CrmSettings from "@/crm/pages/Settings";
+import { RequireModule } from "@/crm/components/RequireModule";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -62,7 +63,7 @@ const App = () => (
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/crm/login" element={<Auth />} />
-            <Route path="/admin/crm/app" element={<CrmApp />} />
+            <Route path="/admin/crm/app" element={<RequireModule module="console"><CrmApp /></RequireModule>} />
             <Route path="/admin/crm/legacy" element={<AdminCRM />} />
             <Route element={<CrmLayout />}>
               <Route path="/admin/crm" element={<RoutePage />} />
@@ -87,11 +88,11 @@ const App = () => (
             <Route path="/crm" element={<Navigate to="/admin/crm" replace />} />
 
             <Route path="/admin" element={<Navigate to="/admin/crm" replace />} />
-            <Route path="/admin/designs" element={<AdminDesigns />} />
-            <Route path="/admin/cleaning" element={<AdminCleaning />} />
-            <Route path="/admin/store" element={<AdminStore />} />
-            <Route path="/admin/team" element={<AdminTeam />} />
-            <Route path="/admin/activity" element={<AdminActivity />} />
+            <Route path="/admin/designs" element={<RequireModule module="designs"><AdminDesigns /></RequireModule>} />
+            <Route path="/admin/cleaning" element={<RequireModule module="cleaning"><AdminCleaning /></RequireModule>} />
+            <Route path="/admin/store" element={<RequireModule module="store"><AdminStore /></RequireModule>} />
+            <Route path="/admin/team" element={<RequireModule module="team"><AdminTeam /></RequireModule>} />
+            <Route path="/admin/activity" element={<RequireModule module="activity"><AdminActivity /></RequireModule>} />
 
             <Route path="/checkout/return" element={<CheckoutReturn />} />
 

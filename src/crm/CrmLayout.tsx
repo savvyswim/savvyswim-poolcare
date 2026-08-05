@@ -11,31 +11,34 @@ import { PrivacyNotice, TechWatermark, useWindowObscured } from "@/crm/component
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
+import { AccessDenied } from "@/crm/components/RequireModule";
 
-type NavItem = { to: string; label: string; icon: typeof Map; owner?: boolean };
+type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey };
 
 const STAFF_NAV: NavItem[] = [
-  { to: "/admin/crm", label: "Route", icon: Map },
-  { to: "/admin/crm/customers", label: "Customers", icon: Users },
-  { to: "/admin/crm/pipeline", label: "Pipeline", icon: KanbanSquare },
-  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench },
-  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle },
-  { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList },
-  { to: "/admin/crm/products", label: "Products & Services", icon: Package },
-  { to: "/admin/crm/finance", label: "Finance", icon: DollarSign, owner: true },
-  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck },
-  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2 },
-  { to: "/admin/crm/email", label: "Email Center", icon: Mail },
-  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3 },
-  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug },
-  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon },
-  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, owner: true },
-  { to: "/admin/cleaning", label: "Cleaning Plans", icon: Sparkles, owner: true },
-  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, owner: true },
-  { to: "/admin/team", label: "Team & Access", icon: Users, owner: true },
-  { to: "/admin/activity", label: "Activity Log", icon: Activity, owner: true },
-  { to: "/admin/designs", label: "Media Library", icon: BookOpen, owner: true },
+  { to: "/admin/crm", label: "Route", icon: Map, module: "route" },
+  { to: "/admin/crm/customers", label: "Customers", icon: Users, module: "customers" },
+  { to: "/admin/crm/pipeline", label: "Pipeline", icon: KanbanSquare, module: "pipeline" },
+  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs" },
+  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts" },
+  { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList, module: "technicians" },
+  { to: "/admin/crm/products", label: "Products & Services", icon: Package, module: "products" },
+  { to: "/admin/crm/finance", label: "Finance", icon: DollarSign, module: "finance" },
+  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks" },
+  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory" },
+  { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email" },
+  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3, module: "reports" },
+  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect" },
+  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings" },
+  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console" },
+  { to: "/admin/cleaning", label: "Cleaning Plans", icon: Sparkles, module: "cleaning" },
+  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store" },
+  { to: "/admin/team", label: "Team & Access", icon: Users, module: "team" },
+  { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity" },
+  { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs" },
 ];
+
 
 const LEVEL_LABEL: Record<string, string> = {
   owner: "Owner",
@@ -67,10 +70,13 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       .then(({ data }) => setSynced((data?.value as { last_synced?: string })?.last_synced ?? null));
   }, []);
 
-  const items = useMemo(() => {
-    if (id.isTech) return [STAFF_NAV[0]];
-    return STAFF_NAV.filter((i) => !i.owner || id.isOwner);
-  }, [id.isTech, id.isOwner]);
+  const items = useMemo(
+    () => STAFF_NAV.filter((i) => canAccess(id.level, i.module)),
+    [id.level],
+  );
+
+  const allowed = canAccessPath(id.level, loc.pathname);
+
 
   const mobilePrimary = items.slice(0, 4);
 
@@ -191,7 +197,9 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       )}
 
       <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[232px] lg:pr-6">
-        <div className="mx-auto max-w-[1180px]">{children ?? <Outlet />}</div>
+        <div className="mx-auto max-w-[1180px]">
+          {allowed ? children ?? <Outlet /> : <AccessDenied />}
+        </div>
       </main>
 
       {/* mobile bottom tabs */}
