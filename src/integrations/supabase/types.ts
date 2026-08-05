@@ -838,6 +838,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_addons: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          key: string
+          kind: string
+          label: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          key: string
+          kind?: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          key?: string
+          kind?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_alerts: {
         Row: {
           body: string | null
@@ -955,6 +994,213 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_city_rates: {
+        Row: {
+          city: string
+          created_at: string
+          high: number
+          id: string
+          is_active: boolean
+          low: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          city: string
+          created_at?: string
+          high?: number
+          id?: string
+          is_active?: boolean
+          low?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          high?: number
+          id?: string
+          is_active?: boolean
+          low?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_contract_events: {
+        Row: {
+          contract_id: string
+          created_at: string
+          detail: string | null
+          event: string
+          id: string
+          ip: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          detail?: string | null
+          event: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          detail?: string | null
+          event?: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_contract_events_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "ss_contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_contract_templates: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_default: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_contracts: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          declined_at: string | null
+          id: string
+          lead_id: string | null
+          merge_data: Json
+          pdf_path: string | null
+          recipient_email: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          sent_at: string | null
+          signature_data_url: string | null
+          signed_at: string | null
+          signer_ip: string | null
+          signer_name: string | null
+          signer_user_agent: string | null
+          status: string
+          template_id: string | null
+          title: string
+          token: string
+          updated_at: string
+          viewed_at: string | null
+          voided_at: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          declined_at?: string | null
+          id?: string
+          lead_id?: string | null
+          merge_data?: Json
+          pdf_path?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sent_at?: string | null
+          signature_data_url?: string | null
+          signed_at?: string | null
+          signer_ip?: string | null
+          signer_name?: string | null
+          signer_user_agent?: string | null
+          status?: string
+          template_id?: string | null
+          title: string
+          token?: string
+          updated_at?: string
+          viewed_at?: string | null
+          voided_at?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          declined_at?: string | null
+          id?: string
+          lead_id?: string | null
+          merge_data?: Json
+          pdf_path?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sent_at?: string | null
+          signature_data_url?: string | null
+          signed_at?: string | null
+          signer_ip?: string | null
+          signer_name?: string | null
+          signer_user_agent?: string | null
+          status?: string
+          template_id?: string | null
+          title?: string
+          token?: string
+          updated_at?: string
+          viewed_at?: string | null
+          voided_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_contracts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_contracts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_contracts_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_contract_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_custom_fields: {
         Row: {
           created_at: string
@@ -990,6 +1236,9 @@ export type Database = {
           billing_timing: string
           charge_for_chems: boolean
           city: string | null
+          commitment_end: string | null
+          commitment_months: number | null
+          commitment_start: string | null
           created_at: string
           custom_fields: Json
           email: string | null
@@ -1006,6 +1255,9 @@ export type Database = {
           phone: string | null
           pool_type: string
           postal_code: string | null
+          promo_code: string | null
+          rate_override: number | null
+          rate_override_note: string | null
           referral_code: string | null
           route_day: string | null
           route_frequency: string
@@ -1022,6 +1274,9 @@ export type Database = {
           billing_timing?: string
           charge_for_chems?: boolean
           city?: string | null
+          commitment_end?: string | null
+          commitment_months?: number | null
+          commitment_start?: string | null
           created_at?: string
           custom_fields?: Json
           email?: string | null
@@ -1038,6 +1293,9 @@ export type Database = {
           phone?: string | null
           pool_type?: string
           postal_code?: string | null
+          promo_code?: string | null
+          rate_override?: number | null
+          rate_override_note?: string | null
           referral_code?: string | null
           route_day?: string | null
           route_frequency?: string
@@ -1054,6 +1312,9 @@ export type Database = {
           billing_timing?: string
           charge_for_chems?: boolean
           city?: string | null
+          commitment_end?: string | null
+          commitment_months?: number | null
+          commitment_start?: string | null
           created_at?: string
           custom_fields?: Json
           email?: string | null
@@ -1070,6 +1331,9 @@ export type Database = {
           phone?: string | null
           pool_type?: string
           postal_code?: string | null
+          promo_code?: string | null
+          rate_override?: number | null
+          rate_override_note?: string | null
           referral_code?: string | null
           route_day?: string | null
           route_frequency?: string
@@ -1363,6 +1627,7 @@ export type Database = {
           address: string | null
           city: string | null
           cleanup_price: number | null
+          commitment_months: number | null
           condition: string
           converted_customer_id: string | null
           created_at: string
@@ -1374,6 +1639,7 @@ export type Database = {
           phone: string | null
           photo_url: string | null
           pool_size: string | null
+          promo_code: string | null
           service_type: string
           source: string
           spa_addon: number
@@ -1386,6 +1652,7 @@ export type Database = {
           address?: string | null
           city?: string | null
           cleanup_price?: number | null
+          commitment_months?: number | null
           condition?: string
           converted_customer_id?: string | null
           created_at?: string
@@ -1397,6 +1664,7 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           pool_size?: string | null
+          promo_code?: string | null
           service_type?: string
           source?: string
           spa_addon?: number
@@ -1409,6 +1677,7 @@ export type Database = {
           address?: string | null
           city?: string | null
           cleanup_price?: number | null
+          commitment_months?: number | null
           condition?: string
           converted_customer_id?: string | null
           created_at?: string
@@ -1420,6 +1689,7 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           pool_size?: string | null
+          promo_code?: string | null
           service_type?: string
           source?: string
           spa_addon?: number
@@ -1898,6 +2168,112 @@ export type Database = {
             columns: ["lead_staff_id"]
             isOneToOne: false
             referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_promo_codes: {
+        Row: {
+          applies_to: string
+          code: string
+          created_at: string
+          description: string | null
+          discount_type: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_redemptions: number | null
+          min_commitment_months: number
+          times_used: number
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          applies_to?: string
+          code: string
+          created_at?: string
+          description?: string | null
+          discount_type?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          min_commitment_months?: number
+          times_used?: number
+          updated_at?: string
+          value?: number
+        }
+        Update: {
+          applies_to?: string
+          code?: string
+          created_at?: string
+          description?: string | null
+          discount_type?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          min_commitment_months?: number
+          times_used?: number
+          updated_at?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      ss_promo_redemptions: {
+        Row: {
+          code: string
+          commitment_months: number | null
+          created_at: string
+          customer_id: string | null
+          id: string
+          lead_id: string | null
+          monthly_after: number | null
+          monthly_before: number | null
+          promo_id: string | null
+        }
+        Insert: {
+          code: string
+          commitment_months?: number | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          lead_id?: string | null
+          monthly_after?: number | null
+          monthly_before?: number | null
+          promo_id?: string | null
+        }
+        Update: {
+          code?: string
+          commitment_months?: number | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          lead_id?: string | null
+          monthly_after?: number | null
+          monthly_before?: number | null
+          promo_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_promo_redemptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_promo_redemptions_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_promo_redemptions_promo_id_fkey"
+            columns: ["promo_id"]
+            isOneToOne: false
+            referencedRelation: "ss_promo_codes"
             referencedColumns: ["id"]
           },
         ]
