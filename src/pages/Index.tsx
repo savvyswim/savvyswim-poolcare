@@ -366,7 +366,7 @@ const Index = () => {
             fetchPriority="high"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-background/25" />
+          <div className="absolute inset-0 bg-foreground/35" />
         </div>
 
         <div className="relative container-tight pb-10 pt-6 sm:pb-16 sm:pt-10">
