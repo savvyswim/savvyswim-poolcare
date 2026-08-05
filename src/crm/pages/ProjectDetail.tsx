@@ -87,6 +87,8 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [uploadingTo, setUploadingTo] = useState<string | null>(null);
   const [activeStage, setActiveStage] = useState<string | "all">("all");
+  const [staff, setStaff] = useState<{ id: string; full_name: string; email: string | null; level: string }[]>([]);
+
 
   const load = useCallback(async () => {
     if (!id) return;
