@@ -73,8 +73,8 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
 
         <div className="px-4 py-4">
           <p className="font-display uppercase leading-[0.95] tracking-tight text-primary text-[26px]">
-            First month + first
-            <span className="block text-accent">service free.</span>
+            First service
+            <span className="block text-accent">visit free.</span>
           </p>
           <ul className="mt-3 space-y-1.5">
             {[

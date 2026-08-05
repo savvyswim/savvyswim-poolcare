@@ -47,7 +47,7 @@ import {
 const MEMBERSHIP_FAQ = [
   {
     q: "Summer offer — what's free for new customers?",
-    a: "New customers who join the Savvy Swim Club on a 12-month agreement get their first month of membership free plus their first service visit free. Offer applies to new customers only, one per household, and requires the 12-month Swim Club agreement to stay in place. If the agreement is cancelled early, the value of the free visit is billed at standard rates.",
+    a: "New customers who join the Savvy Swim Club on a 12-month agreement get their first service visit free. Offer applies to new customers only, one per household, and requires the 12-month Swim Club agreement to stay in place. If the agreement is cancelled early, the value of the free visit is billed at standard rates.",
   },
   {
     q: "What is the Savvy Swim Club?",
@@ -761,7 +761,7 @@ const Index = () => {
                       </span>
                     </div>
                     <p className="font-display mt-2 text-2xl leading-none text-navy-brand">
-                      First month + first service free
+                      First service visit free
                     </p>
                     <p className="mt-2 text-xs leading-relaxed text-primary/70">
                       For new customers who join the Swim Club bundle on a 12-month agreement. One
@@ -781,7 +781,7 @@ const Index = () => {
 
                   <ul className="mb-10 space-y-4 text-sm text-primary">
                     {[
-                      "First month free + first service free (new customers)",
+                      "First service visit free (new customers)",
                       "50% off one filter clean (one time)",
                       "5% off all parts",
                       "7% off installation labor",
