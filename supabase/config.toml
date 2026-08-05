@@ -15,3 +15,6 @@ verify_jwt = false
 [functions.store-order]
 verify_jwt = false
 
+
+[functions.admin-invite-customer]
+verify_jwt = false

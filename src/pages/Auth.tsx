@@ -15,7 +15,6 @@ export default function Auth() {
   const loc = useLocation();
   const dest = ((loc.state as { from?: string } | null)?.from) || "/admin/crm";
   const inviteEmail = new URLSearchParams(window.location.search).get("invite") ?? "";
-  const [mode, setMode] = useState<"signin" | "signup">(inviteEmail ? "signup" : "signin");
   const [email, setEmail] = useState(inviteEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -29,21 +28,9 @@ export default function Auth() {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/admin/crm` },
-        });
-        if (error) throw error;
-        toast.success("Account created. You can sign in now.");
-        setMode("signin");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        // First-signup admin bootstrap happens automatically via database trigger.
-        nav(dest, { replace: true });
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      nav(dest, { replace: true });
     } catch (err: any) {
       toast.error(err?.message ?? "Authentication failed");
     } finally {
@@ -51,15 +38,27 @@ export default function Auth() {
     }
   };
 
+  const resetPassword = async () => {
+    if (!email) {
+      toast.error("Enter your email first");
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/set-password`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success("Check your email for a reset link.");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="w-full max-w-sm space-y-6">
         <Link to="/" className="flex items-center gap-2 justify-center text-foreground">
           <Waves className="h-5 w-5 text-amber-brand" />
-          <span className="font-semibold">Savvy Swim — Admin</span>
+          <span className="font-semibold">Savvy Swim — Sign in</span>
         </Link>
         <form onSubmit={submit} className="space-y-4 border border-hairline rounded-2xl p-6 bg-card">
-          <h1 className="text-xl font-semibold">{mode === "signin" ? "Sign in" : "Create account"}</h1>
+          <h1 className="text-xl font-semibold">Sign in</h1>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -84,19 +83,20 @@ export default function Auth() {
             </span>
           </label>
           <Button type="submit" className="w-full" disabled={busy}>
-            {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : "Sign in"}
           </Button>
           <button
             type="button"
             className="w-full text-xs text-muted-foreground hover:text-foreground"
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+            onClick={resetPassword}
           >
-            {mode === "signin" ? "No account yet? Create one" : "Already have an account? Sign in"}
+            Forgot your password?
           </button>
         </form>
         <p className="text-[11px] text-muted-foreground text-center">
-          The first account created automatically becomes the owner / admin.
+          Accounts are created by Savvy Swim. Check your email for your invite link.
         </p>
+
       </div>
     </div>
   );

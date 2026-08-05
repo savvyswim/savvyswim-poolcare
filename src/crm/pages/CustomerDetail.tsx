@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Lock, Phone, Mail, MapPin } from "lucide-react";
+import { ArrowLeft, Lock, Phone, Mail, MapPin, Send } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
@@ -11,7 +12,7 @@ type Customer = {
   phone: string | null; email: string | null; status: string; gallons: number;
   gate_code: string | null; internal_notes: string | null; monthly_price: number;
   service_level: string; route_day: string | null; equipment: Record<string, string> | null;
-  custom_fields: Record<string, boolean> | null;
+  custom_fields: Record<string, boolean> | null; user_id: string | null;
 };
 
 type Visit = {
@@ -25,6 +26,9 @@ export default function CustomerDetail() {
   const { id = "" } = useParams();
   const { level } = useSavvyIdentity();
   const [tab, setTab] = useState<(typeof TABS)[number]>("Overview");
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
+  const [invited, setInvited] = useState(false);
 
   const { rows: customers } = useTable<Customer>(`customer-${id}`, async () => {
     const { data } = await supabase.from("ss_customers").select("*").eq("id", id).limit(1);
@@ -55,6 +59,34 @@ export default function CustomerDetail() {
   );
 
   const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.amount), 0), [invoices]);
+
+  const sendInvite = async () => {
+    if (!c) return;
+    const target = (inviteEmail || c.email || "").trim();
+    if (!target) {
+      toast.error("Add an email address for this customer first");
+      return;
+    }
+    setInviting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("admin-invite-customer", {
+        body: {
+          email: target,
+          full_name: c.full_name,
+          customer_id: c.id,
+          origin: window.location.origin,
+        },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      setInvited(true);
+      toast.success(`Login invite emailed to ${target}`);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not send the invite");
+    } finally {
+      setInviting(false);
+    }
+  };
 
   if (!c) return <EmptyState>Loading customer…</EmptyState>;
 
@@ -94,6 +126,37 @@ export default function CustomerDetail() {
           <div className="mt-1">{c.internal_notes}</div>
         </div>
       )}
+
+      {level !== "technician" && (
+        <div className="ss-card p-3.5">
+          <div className="ss-label">Customer login</div>
+          {c.user_id || invited ? (
+            <div className="mt-1 text-[0.8rem] opacity-80">
+              Portal access is active — this customer has their own login.
+            </div>
+          ) : (
+            <>
+              <p className="mt-1 text-[0.78rem] opacity-70">
+                Email an invite so this customer can set their own password and sign in.
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <input
+                  className="ss-input min-w-[220px] flex-1"
+                  type="email"
+                  placeholder={c.email ?? "customer@email.com"}
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                />
+                <button className="ss-btn" onClick={sendInvite} disabled={inviting}>
+                  <Send size={13} /> {inviting ? "Sending…" : "Send login invite"}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+
 
       <div className="flex flex-wrap gap-1.5">
         {TABS.filter((t) => t !== "Billing" || level === "owner").map((t) => (
