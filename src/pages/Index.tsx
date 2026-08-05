@@ -611,7 +611,7 @@ const Index = () => {
 
 
       {/* PROCESS — how service works */}
-      <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="absolute inset-0 water-caustics opacity-40" />
         <div className="container-tight relative">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -670,7 +670,7 @@ const Index = () => {
       </section>
 
       {/* CLEANING PLANS */}
-      <section id="cleaning" className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
+      <section id="cleaning" className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -851,7 +851,7 @@ const Index = () => {
 
 
       {/* MARKETING */}
-      <section id="portfolio" className="py-24 sm:py-32 relative">
+      <section id="portfolio" className="perf-section py-24 sm:py-32 relative">
         <div className="container-tight">
           <div className="max-w-3xl mb-14">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -945,7 +945,7 @@ const Index = () => {
 
 
       {/* TESTIMONIALS */}
-      <section className="py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -1003,7 +1003,7 @@ const Index = () => {
 
 
       {/* CTA */}
-      <section id="contact" className="py-24 sm:py-32 relative overflow-hidden">
+      <section id="contact" className="perf-section py-24 sm:py-32 relative overflow-hidden">
         <div className="container-tight">
           <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">

@@ -252,7 +252,7 @@ const Services = () => {
         </section>
 
         {/* SERVICES */}
-        <section className="py-16 sm:py-24">
+        <section className="perf-section py-16 sm:py-24">
           <div className="container-tight">
             <div className="flex items-end justify-between gap-6 mb-10 border-b border-hairline pb-5">
               <h2 className="font-display text-[1.7rem] sm:text-[2.2rem] uppercase tracking-tight leading-none">
@@ -319,7 +319,7 @@ const Services = () => {
         </section>
 
         {/* PROCESS */}
-        <section className="border-y border-hairline bg-primary/[0.03] py-16 sm:py-20">
+        <section className="perf-section border-y border-hairline bg-primary/[0.03] py-16 sm:py-20">
           <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-5">
               <img
@@ -353,7 +353,7 @@ const Services = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-16 sm:py-24">
+        <section className="perf-section py-16 sm:py-24">
           <div className="container-tight">
             <div className="border border-hairline rounded-sm p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8 justify-between">
               <div>
