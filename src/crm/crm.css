@@ -1,0 +1,194 @@
+/* ===========================================================
+   SAVVY SWIM CRM — Retro Riviera Pool Club
+   All tokens scoped to .savvy-crm so the marketing site is untouched.
+   =========================================================== */
+
+.savvy-crm {
+  --ss-cream: 40 39% 93%;
+  --ss-white: 0 0% 100%;
+  --ss-sand: 40 33% 87%;
+  --ss-burgundy: 351 64% 34%;
+  --ss-burgundy-deep: 353 68% 26%;
+  --ss-aqua: 188 72% 43%;
+  --ss-ink: 202 30% 15%;
+  --ss-gold: 41 91% 57%;
+  --ss-green: 149 76% 32%;
+  --ss-orange: 27 90% 48%;
+  --ss-pink: 330 72% 60%;
+  --ss-grid: 42 40% 90%;
+
+  background: hsl(var(--ss-cream));
+  color: hsl(var(--ss-ink));
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.savvy-crm h1,
+.savvy-crm h2,
+.savvy-crm h3,
+.savvy-crm .ss-head {
+  font-family: "Oswald", "Archivo", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: hsl(var(--ss-ink));
+}
+
+.savvy-crm .ss-logo {
+  font-family: "Anton", "Archivo", sans-serif;
+  text-transform: uppercase;
+  color: hsl(var(--ss-burgundy));
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+}
+
+.savvy-crm .ss-tag {
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: hsl(var(--ss-ink) / 0.62);
+}
+
+.savvy-crm .ss-num {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- cabana stripe band --- */
+.ss-stripe {
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    hsl(var(--ss-burgundy)) 0 24px,
+    hsl(var(--ss-cream)) 24px 42px
+  );
+}
+
+/* --- surfaces --- */
+.savvy-crm .ss-card {
+  background: hsl(var(--ss-white));
+  border: 1px solid hsl(var(--ss-sand));
+  border-radius: 14px;
+}
+
+.savvy-crm .ss-hero {
+  background: linear-gradient(140deg, hsl(var(--ss-burgundy)), hsl(var(--ss-burgundy-deep)));
+  color: hsl(var(--ss-white));
+  border-radius: 16px;
+  border: 1px solid hsl(var(--ss-burgundy-deep));
+}
+.savvy-crm .ss-hero h1,
+.savvy-crm .ss-hero h2,
+.savvy-crm .ss-hero h3,
+.savvy-crm .ss-hero .ss-head { color: hsl(var(--ss-white)); }
+
+.savvy-crm .ss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: linear-gradient(160deg, hsl(var(--ss-burgundy)), hsl(var(--ss-burgundy-deep)));
+  color: hsl(var(--ss-white));
+  border: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.savvy-crm .ss-btn:hover { filter: brightness(1.1); }
+.savvy-crm .ss-btn:active { transform: translateY(1px); }
+.savvy-crm .ss-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.savvy-crm .ss-btn-ghost {
+  background: hsl(var(--ss-white));
+  color: hsl(var(--ss-burgundy));
+  border: 1px solid hsl(var(--ss-sand));
+}
+.savvy-crm .ss-btn-aqua {
+  background: linear-gradient(160deg, hsl(var(--ss-aqua)), hsl(188 74% 34%));
+}
+
+.savvy-crm .ss-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.savvy-crm .ss-input,
+.savvy-crm select.ss-input,
+.savvy-crm textarea.ss-input {
+  width: 100%;
+  background: hsl(var(--ss-white));
+  border: 1px solid hsl(var(--ss-sand));
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
+  color: hsl(var(--ss-ink));
+  outline: none;
+}
+.savvy-crm .ss-input:focus { border-color: hsl(var(--ss-aqua)); box-shadow: 0 0 0 3px hsl(var(--ss-aqua) / 0.15); }
+
+.savvy-crm .ss-label {
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: hsl(var(--ss-ink) / 0.55);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.savvy-crm a { color: hsl(var(--ss-aqua)); }
+
+/* --- tech privacy watermark --- */
+.ss-watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  overflow: hidden;
+  opacity: 0.07;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ss-watermark span {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.3em;
+  transform: rotate(-30deg);
+  white-space: pre-wrap;
+  line-height: 3.2;
+  text-align: center;
+  color: hsl(var(--ss-ink));
+}
+.ss-privacy-blur > *:not(.ss-privacy-notice) { filter: blur(14px); }
+.ss-no-select { user-select: none; -webkit-user-select: none; }
+
+/* --- route life-ring progress --- */
+.ss-ring { transform: rotate(-90deg); }
+
+/* --- kanban --- */
+.ss-kanban { display: flex; gap: 0.85rem; overflow-x: auto; padding-bottom: 0.75rem; scroll-snap-type: x mandatory; }
+.ss-kanban > * { scroll-snap-align: start; }
+
+.savvy-crm ::-webkit-scrollbar { height: 8px; width: 8px; }
+.savvy-crm ::-webkit-scrollbar-thumb { background: hsl(var(--ss-sand)); border-radius: 99px; }
