@@ -24,6 +24,7 @@ export interface TemplateEntry {
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'booking-confirmation': bookingConfirmationTemplate,
   'invoice': invoiceTemplate,
+  'office-new-request': officeNewRequestTemplate,
   'receipt': receiptTemplate,
 }
 
