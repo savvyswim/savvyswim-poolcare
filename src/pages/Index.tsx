@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   CalendarCheck,
   Menu,
+  MessageSquare,
   X,
 } from "lucide-react";
 
