@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
+import logoMark from "@/assets/savvy-swim-logo-red.png.asset.json";
 import { Link } from "react-router-dom";
 import {
   Waves,
