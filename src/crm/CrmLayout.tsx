@@ -10,7 +10,6 @@ import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
 import { PrivacyNotice, useWindowObscured } from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
 
