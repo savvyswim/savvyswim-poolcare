@@ -322,6 +322,34 @@ export default function ProjectDetail() {
         </div>
       </div>
 
+      {missingAll.length > 0 && (
+        <div className="ss-card p-4" style={{ borderColor: "hsl(var(--ss-burgundy) / .45)" }}>
+          <div className="flex items-center gap-2">
+            <AlertTriangle size={15} style={{ color: "hsl(var(--ss-burgundy))" }} />
+            <div className="ss-label">
+              {missingAll.length} open item{missingAll.length === 1 ? "" : "s"}
+              {missingDocs.length ? ` · ${missingDocs.length} document${missingDocs.length === 1 ? "" : "s"} missing` : ""}
+            </div>
+          </div>
+          <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+            {missingAll.slice(0, 8).map((t) => {
+              const stage = stages.find((s) => s.id === t.stage_id);
+              return (
+                <li key={t.id} className="text-[0.76rem] opacity-80">
+                  <button className="text-left underline-offset-2 hover:underline" onClick={() => setActiveStage(t.stage_id)}>
+                    {stage ? `${stage.sort_order}. ${stage.name}` : "Stage"} — {t.label}
+                    {t.kind === "document" ? " (document)" : ""}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {missingAll.length > 8 && (
+            <div className="mt-1 text-[0.72rem] opacity-60">+{missingAll.length - 8} more</div>
+          )}
+        </div>
+      )}
+
       <div className="grid gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
         {/* Stage folders */}
         <div className="space-y-2">
@@ -342,11 +370,13 @@ export default function ProjectDetail() {
           {stages.map((s) => {
             const count = files.filter((f) => f.stage_id === s.id && f.doc_folder === "media").length;
             const complete = s.status === "complete";
+            const checks = stageChecks(s.id);
+            const open = activeStage === s.id;
             return (
               <div
                 key={s.id}
                 className="ss-card p-3"
-                style={{ outline: activeStage === s.id ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
+                style={{ outline: open ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
               >
                 <div className="flex items-start gap-2">
                   <button
@@ -361,20 +391,74 @@ export default function ProjectDetail() {
                   >
                     {complete && <Check size={13} />}
                   </button>
-                  <button className="flex-1 text-left" onClick={() => setActiveStage(s.id)}>
-                    <div className="text-[0.86rem] font-semibold" style={{ textDecoration: complete ? "line-through" : undefined }}>
-                      {s.sort_order}. {s.name}
+                  <button className="flex-1 text-left" onClick={() => setActiveStage(open ? "all" : s.id)}>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-[0.86rem] font-semibold" style={{ textDecoration: complete ? "line-through" : undefined }}>
+                        {s.sort_order}. {s.name}
+                      </div>
+                      {checks.missing.length > 0 && (
+                        <AlertTriangle size={12} style={{ color: "hsl(var(--ss-burgundy))" }} />
+                      )}
                     </div>
-                    <div className="text-[0.72rem] opacity-60">{count} file{count === 1 ? "" : "s"}</div>
+                    <div className="text-[0.72rem] opacity-60">
+                      {count} file{count === 1 ? "" : "s"}
+                      {checks.total ? ` · ${checks.ok}/${checks.total} checks` : ""}
+                    </div>
                   </button>
                   <UploadButton
                     busy={uploadingTo === s.id}
                     onFiles={(fl) => void upload(fl, s.id)}
                   />
                 </div>
+
+                {open && checks.total > 0 && (
+                  <ul className="mt-3 space-y-1.5 border-t pt-2" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                    {checks.list.map((t) => {
+                      const satisfied = isSatisfied(t);
+                      const auto = satisfied && !t.is_done;
+                      return (
+                        <li key={t.id} className="flex items-start gap-2">
+                          <button
+                            aria-label="Toggle checklist item"
+                            onClick={() => void toggleTask(t)}
+                            className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border"
+                            style={{
+                              borderColor: satisfied ? "hsl(var(--ss-burgundy) / .6)" : "hsl(var(--ss-burgundy) / .3)",
+                              background: satisfied ? "hsl(var(--ss-burgundy))" : "transparent",
+                              color: "#fff",
+                            }}
+                          >
+                            {satisfied && <Check size={11} />}
+                          </button>
+                          <div className="flex-1">
+                            <div
+                              className="text-[0.78rem] leading-tight"
+                              style={{ opacity: satisfied ? 0.55 : 1, textDecoration: satisfied ? "line-through" : undefined }}
+                            >
+                              {t.label}
+                            </div>
+                            {t.kind === "document" && (
+                              <button
+                                className="text-[0.68rem] underline-offset-2 hover:underline"
+                                style={{ opacity: 0.6 }}
+                                onClick={() => t.doc_folder && setActiveStage(`doc:${t.doc_folder}`)}
+                              >
+                                {auto ? "Document on file" : "Required document"}
+                                {t.doc_folder
+                                  ? ` · ${DOC_FOLDERS.find((d) => d.key === t.doc_folder)?.label ?? t.doc_folder}`
+                                  : ""}
+                              </button>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
             );
           })}
+
 
           <div className="pt-3">
             <div className="ss-tag">Document vault</div>
