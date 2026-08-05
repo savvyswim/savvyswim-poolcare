@@ -127,6 +127,37 @@ export default function CustomerDetail() {
         </div>
       )}
 
+      {level !== "technician" && (
+        <div className="ss-card p-3.5">
+          <div className="ss-label">Customer login</div>
+          {c.user_id || invited ? (
+            <div className="mt-1 text-[0.8rem] opacity-80">
+              Portal access is active — this customer has their own login.
+            </div>
+          ) : (
+            <>
+              <p className="mt-1 text-[0.78rem] opacity-70">
+                Email an invite so this customer can set their own password and sign in.
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <input
+                  className="ss-input min-w-[220px] flex-1"
+                  type="email"
+                  placeholder={c.email ?? "customer@email.com"}
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                />
+                <button className="ss-btn" onClick={sendInvite} disabled={inviting}>
+                  <Send size={13} /> {inviting ? "Sending…" : "Send login invite"}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+
+
       <div className="flex flex-wrap gap-1.5">
         {TABS.filter((t) => t !== "Billing" || level === "owner").map((t) => (
           <button key={t} className={`ss-btn ${tab === t ? "" : "ss-btn-ghost"}`} onClick={() => setTab(t)}>{t}</button>
