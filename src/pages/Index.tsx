@@ -753,6 +753,22 @@ const Index = () => {
                     </div>
                   </div>
 
+                  <div className="mb-6 border border-lifeguard/40 bg-lifeguard/5 p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-lifeguard animate-blip" />
+                      <span className="font-badge text-sm tracking-[0.2em] text-red-brand">
+                        Summer new customer offer
+                      </span>
+                    </div>
+                    <p className="font-display mt-2 text-2xl leading-none text-navy-brand">
+                      First month + first service free
+                    </p>
+                    <p className="mt-2 text-xs leading-relaxed text-primary/70">
+                      For new customers who join the Swim Club bundle on a 12-month agreement. One
+                      per household. Ends at the close of summer.
+                    </p>
+                  </div>
+
                   <div className="mb-8">
                     <div className="flex items-baseline gap-2">
                       <span className="font-display text-5xl sm:text-6xl text-navy-brand">$19.99</span>
@@ -765,6 +781,7 @@ const Index = () => {
 
                   <ul className="mb-10 space-y-4 text-sm text-primary">
                     {[
+                      "First month free + first service free (new customers)",
                       "50% off one filter clean (one time)",
                       "5% off all parts",
                       "7% off installation labor",
@@ -781,11 +798,12 @@ const Index = () => {
                     onClick={() => setMembershipOpen(true)}
                     className="font-display mt-auto w-full bg-lifeguard py-5 text-xl uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-navy"
                   >
-                    Join the Club
+                    Claim the summer offer
                   </button>
                   <p className="mt-3 text-center text-xs text-muted-foreground">
-                    12-month agreement · Billed monthly at $19.99
+                    12-month agreement · Billed monthly at $19.99 · New customers only
                   </p>
+
                 </div>
               </div>
 
