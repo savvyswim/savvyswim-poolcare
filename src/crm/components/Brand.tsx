@@ -4,7 +4,7 @@ export function SavvyLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const scale = { sm: "1.05rem", md: "1.45rem", lg: "2.4rem" }[size];
   const tag = { sm: "0.42rem", md: "0.5rem", lg: "0.66rem" }[size];
   return (
-    <Link to="/crm" className="block !text-inherit no-underline">
+    <Link to="/admin/crm" className="block !text-inherit no-underline">
       <div className="ss-logo" style={{ fontSize: scale }}>
         SAVVY
         <br />
