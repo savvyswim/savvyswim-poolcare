@@ -36,15 +36,39 @@ export default function Products() {
   const [payingNow, setPayingNow] = useState<string>("");
   const [providerName, setProviderName] = useState<string>("");
   const [providerPlan, setProviderPlan] = useState<string>("");
-
+  const [smsPhone, setSmsPhone] = useState<string>("");
+  const [sending, setSending] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setUndercut(clampUndercut(margins.undercut_pct));
   }, [margins.undercut_pct]);
 
+  // Hydrate the calculator from a shared quote link (?city=…&size=…)
   useEffect(() => {
+    if (hydrated) return;
+    setHydrated(true);
+    const g = (k: string) => params.get(k);
+    if (g("city")) setCity(g("city")!);
+    if (g("size")) setSize(g("size")!);
+    if (g("cond")) setCondition(g("cond")!);
+    if (g("spa")) setSpa(g("spa") as typeof spa);
+    if (g("chemOnly") === "1") setChemOnly(true);
+    if (g("chemIncl") === "1") setChemIncluded(true);
+    if (g("salt") === "1") setSaltCell(true);
+    if (g("undercut")) setUndercut(clampUndercut(Number(g("undercut"))));
+    if (g("override")) setOverride(g("override")!);
+    if (g("now")) setPayingNow(g("now")!);
+    if (g("provider")) setProviderName(g("provider")!);
+    if (g("plan")) setProviderPlan(g("plan")!);
+  }, [hydrated, params]);
+
+  useEffect(() => {
+    if (!hydrated) return;
     if (cities.length && !cities.some((c) => c.city === city)) setCity(cities[0].city);
-  }, [cities, city]);
+  }, [cities, city, hydrated]);
+
 
   const quote = computeQuote(
     {
