@@ -26,7 +26,7 @@ export default function Technicians() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ full_name: "", email: "", phone: "", level: "technician" });
 
-  const { rows, reload } = useTable<Staff>("staff", async () => {
+  const { rows, refetch: reload } = useTable<Staff>("staff", async () => {
     const { data } = await supabase
       .from("ss_staff")
       .select("id,full_name,email,phone,level,initials,is_active")
