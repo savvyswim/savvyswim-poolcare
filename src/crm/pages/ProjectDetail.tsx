@@ -93,16 +93,19 @@ export default function ProjectDetail() {
   const load = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }] = await Promise.all([
+    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }, { data: stf }] = await Promise.all([
       supabase.from("ss_projects").select("*").eq("id", id).maybeSingle(),
       supabase.from("ss_project_stages").select("*").eq("project_id", id).order("sort_order"),
       supabase.from("ss_project_files").select("*").eq("project_id", id).order("created_at", { ascending: false }),
       supabase.from("ss_project_stage_tasks").select("*").eq("project_id", id).order("sort_order"),
+      supabase.from("ss_staff").select("id, full_name, email, level").eq("is_active", true).order("full_name"),
     ]);
     if (error) toast.error(error.message);
     setProject((p ?? null) as Project | null);
     setStages((st ?? []) as Stage[]);
     setTasks((tk ?? []) as StageTask[]);
+    setStaff((stf ?? []) as typeof staff);
+
     const list = (fl ?? []) as ProjectFile[];
     setFiles(list);
 
