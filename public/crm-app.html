@@ -207,14 +207,6 @@ body.techblur main,body.techblur .tabbar{filter:blur(16px);transition:filter .15
 <div id="wmark"></div><div id="modalRoot"></div><div id="toastRoot"></div><div id="menuRoot"></div>
 
 <script>
-/* storage shim: persist prototype state in localStorage */
-window.storage = window.storage || {
-  async get(k){ const v = localStorage.getItem(k); if(v===null) throw new Error('not found'); return {value:v}; },
-  async set(k,v){ localStorage.setItem(k,v); },
-  async delete(k){ localStorage.removeItem(k); }
-};
-</script>
-<script>
 /* ============ ICONS ============ */
 const IC={
 route:'<svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
