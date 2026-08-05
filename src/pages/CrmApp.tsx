@@ -11,9 +11,10 @@ export default function CrmApp() {
       />
       <div className="flex items-center justify-between border-b px-4 py-2 text-xs uppercase tracking-widest">
         <span className="font-semibold">Operations console</span>
-        <Link to="/crm" className="underline underline-offset-4">
+        <Link to="/admin/crm" className="underline underline-offset-4">
           Back to CRM
         </Link>
+
       </div>
       <iframe
         src="/crm-app.html"
