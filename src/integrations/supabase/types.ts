@@ -1716,33 +1716,42 @@ export type Database = {
         Row: {
           completed_at: string | null
           created_at: string
+          duration_days: number
+          end_date: string | null
           id: string
           name: string
           notes: string | null
           project_id: string
           sort_order: number
+          start_date: string | null
           status: string
           updated_at: string
         }
         Insert: {
           completed_at?: string | null
           created_at?: string
+          duration_days?: number
+          end_date?: string | null
           id?: string
           name: string
           notes?: string | null
           project_id: string
           sort_order?: number
+          start_date?: string | null
           status?: string
           updated_at?: string
         }
         Update: {
           completed_at?: string | null
           created_at?: string
+          duration_days?: number
+          end_date?: string | null
           id?: string
           name?: string
           notes?: string | null
           project_id?: string
           sort_order?: number
+          start_date?: string | null
           status?: string
           updated_at?: string
         }

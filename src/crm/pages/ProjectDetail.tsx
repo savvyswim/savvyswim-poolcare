@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricing";
 import { PROJECT_STATUS, statusMeta, type Project } from "@/crm/pages/Projects";
+import { ProjectTimeline } from "@/crm/components/ProjectTimeline";
 
 
 type Stage = {
@@ -19,6 +20,9 @@ type Stage = {
   status: string;
   notes: string | null;
   completed_at: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  duration_days: number;
 };
 
 type ProjectFile = {
@@ -346,6 +350,20 @@ export default function ProjectDetail() {
           ))}
         </div>
       </div>
+
+      <ProjectTimeline
+        stages={stages}
+        projectStart={project.start_date ?? null}
+        targetDate={project.target_date ?? null}
+        onChange={(next) =>
+          setStages((prev) =>
+            prev.map((s) => {
+              const u = next.find((n) => n.id === s.id);
+              return u ? { ...s, ...u } : s;
+            }),
+          )
+        }
+      />
 
       {missingAll.length > 0 && (
         <div className="ss-card p-4" style={{ borderColor: "hsl(var(--ss-burgundy) / .45)" }}>
