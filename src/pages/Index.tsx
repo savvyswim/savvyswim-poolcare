@@ -353,151 +353,127 @@ const Index = () => {
         </div>
       </header>
 
-      {/* HERO — vintage riviera meets instrumentation */}
-      <section className="relative bg-canvas pt-[60px] sm:pt-32 lg:pt-36">
-        <div className="absolute inset-0 tech-grid pointer-events-none" aria-hidden />
-
-        {/* instrumentation strip — live scrolling ticker */}
-        <div className="relative tech-rule overflow-hidden">
-          <div className="marquee-pause marquee-fade py-3">
-            <div className="flex w-max animate-marquee-slow">
-              {[0, 1].map((dup) => (
-                <div key={dup} className="flex items-center whitespace-nowrap" aria-hidden={dup === 1}>
-                  {TICKER_ITEMS.map((item, i) => (
-                    <span key={`${dup}-${i}`} className="flex items-center">
-                      <span className="tech-label flex items-center gap-2">
-                        {item.live && (
-                          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
-                        )}
-                        <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
-                      </span>
-                      <span className="mx-6 text-primary/20">/</span>
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* HERO — cream poster panel floating on a beach backdrop */}
+      <section className="relative pt-[60px] sm:pt-32 lg:pt-36">
+        {/* photo backdrop */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden>
+          <img
+            src={photoRivieraLoungers.url}
+            alt=""
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-background/25" />
         </div>
 
+        <div className="relative container-tight pb-10 pt-6 sm:pb-16 sm:pt-10">
+          <div className="canvas-panel overflow-hidden">
+            {/* ticker inside the panel */}
+            <div className="overflow-hidden border-b border-primary/10">
+              <div className="marquee-pause marquee-fade py-2.5">
+                <div className="flex w-max animate-marquee-slow">
+                  {[0, 1].map((dup) => (
+                    <div key={dup} className="flex items-center whitespace-nowrap" aria-hidden={dup === 1}>
+                      {TICKER_ITEMS.map((item, i) => (
+                        <span key={`${dup}-${i}`} className="flex items-center">
+                          <span className="tech-label flex items-center gap-2 text-[13px]">
+                            {item.live && (
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+                            )}
+                            <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                          </span>
+                          <span className="mx-6 text-primary/20">/</span>
+                        </span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-        <div className="relative tech-rule">
-          <div className="container-tight grid gap-x-12 gap-y-14 py-16 sm:py-24 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-7">
-              <p className="tech-label mb-8">Fig. 01 — Weekly Service Program</p>
-              <h1 className="type-mega text-primary max-w-full" style={{ fontSize: "clamp(2.1rem, 5.2vw, 4rem)" }}>
-                Crystal-clear
-                <span className="block text-accent">water,</span>
-                <span className="block">engineered weekly.</span>
+            <div className="px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+              {/* photo trio */}
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:ml-auto lg:w-[58%]">
+                {[
+                  { src: photoLifeguardChair.url, alt: "Savvy Swim lifeguard chair beside a serviced pool" },
+                  { src: photoSavvyRings.url, alt: "Savvy Swim branded rescue rings" },
+                  { src: photoRescueTube.url, alt: "Savvy Swim rescue tube poolside" },
+                ].map((p) => (
+                  <figure key={p.src} className="photo-tile">
+                    <img
+                      src={p.src}
+                      alt={p.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="aspect-[3/4] w-full object-cover"
+                    />
+                  </figure>
+                ))}
+              </div>
+
+              {/* giant wordmark */}
+              <h1 className="mt-10 sm:mt-14">
+                <span className="type-mega block" style={{ fontSize: "clamp(3.4rem, 15vw, 11rem)" }}>
+                  Savvy
+                  <span className="block">Swim</span>
+                </span>
               </h1>
 
-              <div className="mt-9 inline-flex max-w-full flex-col border-y-2 border-accent/70 py-4 pr-2">
-                <span className="tech-label flex items-center gap-2 text-accent">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
-                  On duty — 24/7
-                </span>
-                <p className="mt-2 font-display uppercase leading-[0.95] tracking-tight text-primary text-[clamp(1.7rem,4.2vw,3.1rem)]">
-                  On duty, so you
-                  <span className="block text-accent">don&apos;t have to be.</span>
-                </p>
-              </div>
-
-
-              <div className="mt-10 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => openBooking("Weekly Service & Maintenance")}
-                  className="font-tech inline-flex items-center gap-2 bg-primary px-7 py-4 text-primary-foreground transition-colors hover:bg-accent"
-                >
-                  <CalendarCheck className="h-4 w-4" /> Start Service
-                </button>
-                <a
-                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "hero")}
-                  className="font-tech inline-flex items-center gap-2 border border-primary/20 px-7 py-4 text-primary transition-colors hover:border-primary"
-                >
-                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
-                </a>
-              </div>
-            </div>
-
-            {/* Photo plate — vintage spec card */}
-            <div className="lg:col-span-5">
-              <figure className="relative border border-primary/15 bg-canvas p-3 shadow-card">
-                <div className="flex items-start justify-between px-1 pb-3">
-                  <span className="tech-label">Plate I — Station 04</span>
-                  <span className="tech-readout text-[11px] text-primary/40">SS-01</span>
-                </div>
-                <div className="relative overflow-hidden border border-primary/10">
-                  <img
-                    src={photoLifeguardChair.url}
-                    alt="Savvy Swim lifeguard chair and red cabana umbrella beside a serviced pool"
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
-                    className="aspect-[4/5] w-full object-cover"
-                  />
-                  <figcaption className="absolute bottom-0 left-0 bg-accent px-3 py-1.5 font-tech text-[10px] uppercase tracking-[0.2em] text-primary-foreground">
-                    On duty
-                  </figcaption>
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-4 border-t border-primary/10 px-1 pt-3">
-                  <div>
-                    <p className="tech-label">Clarity</p>
-                    <p className="tech-readout text-sm text-primary">99.8%</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="tech-label">Cadence</p>
-                    <p className="tech-readout text-sm text-accent">Weekly</p>
-                  </div>
-                </div>
-              </figure>
-
-              <div className="mt-3 border border-primary/15 bg-background">
-                <div className="border-b border-primary/10 px-4 py-3">
-                  <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary/50">
-                    Every visit includes
+              <div className="mt-8 flex flex-col gap-8 border-t border-primary/10 pt-8 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-lg">
+                  <span className="tech-label flex items-center gap-2 text-accent">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
+                    On duty — 24/7
                   </span>
-                </div>
-                <ul className="divide-y divide-primary/10">
-                  {[
-                    { n: "01", t: "Skim, brush & vacuum" },
-                    { n: "02", t: "Full chemistry balance" },
-                    { n: "03", t: "Baskets & filter check" },
-                    { n: "04", t: "Photo report after each visit" },
-                  ].map((s) => (
-                    <li key={s.n} className="flex items-baseline gap-4 px-4 py-3">
-                      <span className="font-tech text-[10px] tracking-[0.18em] text-accent">{s.n}</span>
-                      <span className="text-[14px] leading-snug text-primary/85">{s.t}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t border-primary/10 bg-primary px-4 py-3">
-                  <p className="text-[13px] leading-relaxed text-primary-foreground/80">
-                    Water not clear after a visit? We come back free — same day.
+                  <p className="mt-3 font-editorial text-[clamp(1.3rem,3vw,1.9rem)] leading-tight text-primary">
+                    On duty, so you don&apos;t have to be.
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <a
-                      href={PHONE_HREF}
-                      onClick={() => trackContactClick("call_click", "guarantee")}
-                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
-                    >
-                      <Phone className="h-3 w-3" /> Call
-                    </a>
-                    <a
-                      href={SMS_HREF}
-                      onClick={() => trackContactClick("text_click", "guarantee")}
-                      className="font-tech inline-flex items-center gap-2 border border-primary-foreground/25 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
-                    >
-                      Text us
-                    </a>
-                  </div>
+                  <p className="mt-4 text-[16px] leading-relaxed text-foreground/75">
+                    Weekly pool cleaning, equipment service and repair across Dallas–Fort Worth. Photo report
+                    after every visit — water not clear? We come back free, same day.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => openBooking("Weekly Service & Maintenance")}
+                    className="btn-quote font-tech inline-flex items-center gap-2 px-7 py-3.5"
+                  >
+                    <CalendarCheck className="h-4 w-4" /> Start Service
+                  </button>
+                  <a
+                    href={PHONE_HREF}
+                    onClick={() => trackContactClick("call_click", "hero")}
+                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                  >
+                    <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                  </a>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
+
+        {/* Every visit includes — under the panel */}
+        <div className="relative bg-canvas">
+          <div className="container-tight grid gap-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { n: "01", t: "Skim, brush & vacuum" },
+              { n: "02", t: "Full chemistry balance" },
+              { n: "03", t: "Baskets & filter check" },
+              { n: "04", t: "Photo report after each visit" },
+            ].map((s) => (
+              <div key={s.n} className="card-3d px-5 py-6">
+                <span className="font-display text-[13px] text-accent">{s.n}</span>
+                <p className="mt-2 text-[15px] leading-snug text-primary/85">{s.t}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
 
 
         {/* Spec sheet grid */}
