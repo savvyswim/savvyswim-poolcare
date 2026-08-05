@@ -369,7 +369,22 @@ export default function ProjectDetail() {
             </button>
           ))}
         </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+          <div className="ss-label">Project lead</div>
+          <select
+            className="ss-input max-w-[16rem]"
+            value={(project as { lead_staff_id?: string | null }).lead_staff_id ?? ""}
+            onChange={(e) => void setLead(e.target.value || null)}
+          >
+            <option value="">Unassigned</option>
+            {staff.map((s) => (
+              <option key={s.id} value={s.id}>{s.full_name}{s.email ? ` — ${s.email}` : ""}</option>
+            ))}
+          </select>
+          <span className="text-[0.72rem] opacity-60">Gets missing-item alerts along with the owner.</span>
+        </div>
       </div>
+
 
       <ProjectTimeline
         stages={stages}
