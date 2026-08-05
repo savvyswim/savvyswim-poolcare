@@ -1,7 +1,10 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { logAdminAction } from "@/lib/audit";
+import { useIdleTimeout } from "@/hooks/useIdleTimeout";
+import { clearSessionClock, markActivity, startSessionClock } from "@/lib/sessionSecurity";
 
 type AuthCtx = {
   user: User | null;
