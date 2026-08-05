@@ -1003,6 +1003,31 @@ const Index = () => {
 
 
 
+      {/* LOCAL AREA */}
+      <section className="perf-section py-12 border-t border-hairline">
+        <div className="container-tight flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div>
+            <div className="font-tech text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Areas we serve</div>
+            <p className="mt-2 text-base">
+              Live in Frisco?{" "}
+              <Link
+                to="/pool-cleaning-frisco-tx"
+                className="text-amber-brand font-semibold underline underline-offset-4 hover:brightness-110 transition"
+              >
+                See our Frisco, TX pool cleaning page
+              </Link>{" "}
+              — route days, neighborhoods, and local pricing.
+            </p>
+          </div>
+          <Link
+            to="/pool-cleaning-frisco-tx"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline px-6 py-3 text-sm font-semibold hover:bg-ink-soft transition flex-shrink-0"
+          >
+            Pool Cleaning Frisco TX
+          </Link>
+        </div>
+      </section>
+
       {/* CTA */}
       <section id="contact" className="perf-section py-24 sm:py-32 relative overflow-hidden">
         <div className="container-tight">
