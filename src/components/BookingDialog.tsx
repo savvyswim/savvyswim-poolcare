@@ -161,6 +161,27 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
         /* confirmation email is best effort */
       });
 
+    // 2b) Office alert (best effort, non-blocking)
+    supabase.functions
+      .invoke("notify-office-request", {
+        body: {
+          requestType: "New booking request",
+          name: data.name,
+          email: data.email,
+          phone: data.phone || undefined,
+          address: data.address || undefined,
+          service: data.service,
+          preferredDate: format(data.date, "EEE, MMM d, yyyy"),
+          preferredTime: data.time,
+          notes: data.notes || undefined,
+          sourceUrl: sourceUrl || undefined,
+        },
+      })
+      .catch(() => {
+        /* office alert is best effort */
+      });
+
+
     // 3) Local copy (best effort, non-blocking)
     try {
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
