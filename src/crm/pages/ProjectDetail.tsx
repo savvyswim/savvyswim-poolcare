@@ -378,8 +378,9 @@ export default function ProjectDetail() {
 
           {!visibleFiles.length ? (
             <EmptyState>
-              Nothing here yet. Upload photos, plans or walkthrough videos for this stage — customers
-              and crews see the same file.
+              {docKey(activeStage)
+                ? "No documents filed here yet. Upload PDFs, scans or photos of permits and paperwork — they stay with this project forever."
+                : "Nothing here yet. Upload photos, plans or walkthrough videos for this stage — customers and crews see the same file."}
             </EmptyState>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -393,15 +394,22 @@ export default function ProjectDetail() {
                       <img src={url} alt={f.title} loading="lazy" className="aspect-[3/2] w-full object-cover" />
                     ) : (
                       <div className="flex aspect-[3/2] w-full items-center justify-center" style={{ background: "hsl(var(--ss-sand) / .5)" }}>
-                        {f.media_type === "video" ? <FileVideo size={22} className="opacity-50" /> : <ImageIcon size={22} className="opacity-50" />}
+                        {f.media_type === "video"
+                          ? <FileVideo size={22} className="opacity-50" />
+                          : f.media_type === "document"
+                            ? <FileText size={22} className="opacity-50" />
+                            : <ImageIcon size={22} className="opacity-50" />}
                       </div>
                     )}
                     <div className="p-3">
                       <div className="truncate text-[0.82rem] font-medium">{f.title}</div>
                       <div className="text-[0.7rem] opacity-60">
                         {new Date(f.created_at).toLocaleDateString()} · {prettySize(f.size_bytes)}
-                        {f.stage_id ? ` · ${stages.find((s) => s.id === f.stage_id)?.name ?? ""}` : ""}
+                        {f.doc_folder !== "media"
+                          ? ` · ${DOC_FOLDERS.find((d) => d.key === f.doc_folder)?.label ?? f.doc_folder}`
+                          : f.stage_id ? ` · ${stages.find((s) => s.id === f.stage_id)?.name ?? ""}` : ""}
                       </div>
+
                       <div className="mt-2 flex gap-1.5">
                         <button className="ss-btn ss-btn-ghost flex-1" onClick={() => void download(f)}>
                           <Download size={13} /> Download
