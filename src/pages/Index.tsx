@@ -385,7 +385,7 @@ const Index = () => {
           <div className="container-tight grid gap-x-12 gap-y-14 py-16 sm:py-24 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-7">
               <p className="tech-label mb-8">Fig. 01 — Weekly Service Program</p>
-              <h1 className="type-mega text-primary max-w-full break-words [hyphens:auto] text-[clamp(2.4rem,7.2vw,5.4rem)]">
+              <h1 className="type-mega text-primary max-w-full text-[clamp(2.1rem,5.2vw,4rem)]">
                 Crystal-clear
                 <span className="block text-accent">water,</span>
                 <span className="block">engineered weekly.</span>
