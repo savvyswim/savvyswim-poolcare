@@ -197,7 +197,9 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       )}
 
       <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[232px] lg:pr-6">
-        <div className="mx-auto max-w-[1180px]">{children ?? <Outlet />}</div>
+        <div className="mx-auto max-w-[1180px]">
+          {allowed ? children ?? <Outlet /> : <AccessDenied />}
+        </div>
       </main>
 
       {/* mobile bottom tabs */}
