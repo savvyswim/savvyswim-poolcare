@@ -4,64 +4,64 @@
 
 @layer base {
   :root {
-    /* Savvy Swim — "Leisure, Guarded." classic riviera / high-end lifeguard */
-    --background: 42 34% 96%;      /* Sun-bleached Canvas */
-    --foreground: 213 33% 15%;     /* Deep Cabana Navy ink */
+    /* Savvy Swim — sun-bleached canvas + brick red, classic beach-club */
+    --background: 44 38% 94%;      /* Cream canvas */
+    --foreground: 3 32% 20%;       /* Warm dark red-brown ink */
 
-    --card: 40 40% 99%;
-    --card-foreground: 213 33% 15%;
+    --card: 44 44% 97%;
+    --card-foreground: 3 32% 20%;
 
-    --popover: 40 40% 99%;
-    --popover-foreground: 213 33% 15%;
+    --popover: 44 44% 97%;
+    --popover-foreground: 3 32% 20%;
 
-    --primary: 213 44% 22%;        /* Cabana Navy */
-    --primary-foreground: 42 40% 97%;
+    --primary: 2 68% 38%;          /* Brick red */
+    --primary-foreground: 44 44% 97%;
 
-    --secondary: 40 28% 92%;
-    --secondary-foreground: 213 33% 15%;
+    --secondary: 42 30% 90%;
+    --secondary-foreground: 3 32% 20%;
 
-    --muted: 40 24% 93%;
-    --muted-foreground: 210 12% 40%;
+    --muted: 42 28% 91%;
+    --muted-foreground: 8 14% 40%;
 
-    --accent: 4 62% 44%;           /* Riviera Red */
+    --accent: 2 68% 38%;           /* Brick red */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 4 62% 44%;
+    --destructive: 2 68% 38%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 18% 85%;
-    --input: 40 18% 85%;
-    --ring: 4 62% 44%;
+    --border: 40 20% 84%;
+    --input: 40 20% 84%;
+    --ring: 2 68% 38%;
 
-    --radius: 0.125rem;
+    --radius: 0.85rem;
 
     /* Brand tokens */
-    --ink: 42 34% 96%;
-    --ink-soft: 40 28% 92%;
-    --lifeguard-red: 4 62% 44%;    /* deep classic brick red */
-    --cabana-orange: 18 74% 50%;   /* terracotta */
-    --olive-lounge: 4 62% 44%;     /* was olive — now riviera red */
-    --chlorine: 189 32% 52%;       /* faded pool teal */
-    --navy: 213 44% 22%;           /* cabana navy */
-    --sand: 36 30% 82%;            /* warm sand */
-    --canvas: 42 34% 96%;
+    --ink: 44 38% 94%;
+    --ink-soft: 42 30% 90%;
+    --lifeguard-red: 2 68% 38%;    /* brick red */
+    --cabana-orange: 12 62% 47%;
+    --olive-lounge: 2 68% 38%;
+    --chlorine: 2 68% 38%;
+    --navy: 3 32% 20%;             /* warm ink instead of navy */
+    --sand: 38 34% 84%;
+    --canvas: 44 38% 94%;
 
-    --amber: 189 32% 52%;
-    --amber-deep: 4 62% 44%;
-    --gold: 4 62% 44%;
-    --chrome: 213 33% 15%;
-    --hairline: 40 18% 85%;
+    --amber: 2 68% 38%;
+    --amber-deep: 2 68% 38%;
+    --gold: 2 68% 38%;
+    --chrome: 3 32% 20%;
+    --hairline: 40 20% 84%;
 
-    --gradient-amber: linear-gradient(135deg, hsl(189 34% 58%), hsl(196 30% 38%));
-    --gradient-gold: linear-gradient(135deg, hsl(4 62% 46%), hsl(18 70% 48%));
-    --gradient-ink: linear-gradient(180deg, hsl(42 34% 96%), hsl(40 28% 92%));
-    --gradient-radial: radial-gradient(ellipse at top, hsl(189 40% 60% / 0.12), transparent 62%);
-    --gradient-water: linear-gradient(180deg, hsl(189 45% 62% / 0), hsl(189 38% 48% / 0.18) 40%, hsl(200 35% 26% / 0.34));
-    --shadow-cta: 0 6px 20px -14px hsl(213 40% 15% / 0.5);
-    --shadow-card: 0 1px 2px hsl(213 30% 15% / 0.04), 0 10px 30px -24px hsl(213 30% 15% / 0.35);
-    --shadow-3d: 0 1px 2px hsl(213 30% 15% / 0.04), 0 20px 46px -38px hsl(213 30% 15% / 0.3);
+    --gradient-amber: linear-gradient(135deg, hsl(2 68% 42%), hsl(2 62% 32%));
+    --gradient-gold: linear-gradient(135deg, hsl(2 68% 42%), hsl(12 62% 44%));
+    --gradient-ink: linear-gradient(180deg, hsl(44 38% 94%), hsl(42 30% 90%));
+    --gradient-radial: radial-gradient(ellipse at top, hsl(2 68% 42% / 0.08), transparent 62%);
+    --gradient-water: linear-gradient(180deg, hsl(200 40% 62% / 0), hsl(200 30% 45% / 0.16) 40%, hsl(3 32% 18% / 0.3));
+    --shadow-cta: 0 8px 22px -14px hsl(3 40% 20% / 0.5);
+    --shadow-card: 0 1px 2px hsl(3 30% 20% / 0.05), 0 14px 34px -26px hsl(3 30% 20% / 0.4);
+    --shadow-3d: 0 2px 6px hsl(3 30% 20% / 0.06), 0 30px 60px -40px hsl(3 30% 20% / 0.35);
 
-    --on-media: 40 40% 98%;
+    --on-media: 44 44% 97%;
   }
 }
 
