@@ -280,7 +280,7 @@ const Index = () => {
               />
               <span className="flex flex-col leading-tight tracking-tight">
                 <span className="whitespace-nowrap font-display text-[16px] tracking-[0.02em] sm:text-[19px]">SAVVY SWIM</span>
-                <span className="hidden whitespace-nowrap font-tech text-[8.5px] text-primary/45 sm:block xl:hidden 2xl:block">On duty, so you don&rsquo;t have to be.</span>
+                <span className="hidden whitespace-nowrap font-tech text-[8.5px] text-primary/45 sm:block xl:hidden">On duty, so you don&rsquo;t have to be.</span>
               </span>
             </a>
 
