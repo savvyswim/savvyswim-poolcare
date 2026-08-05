@@ -423,13 +423,17 @@ export default function ProjectDetail() {
 
       {missingAll.length > 0 && (
         <div className="ss-card p-4" style={{ borderColor: "hsl(var(--ss-burgundy) / .45)" }}>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <AlertTriangle size={15} style={{ color: "hsl(var(--ss-burgundy))" }} />
             <div className="ss-label">
               {missingAll.length} open item{missingAll.length === 1 ? "" : "s"}
               {missingDocs.length ? ` · ${missingDocs.length} document${missingDocs.length === 1 ? "" : "s"} missing` : ""}
             </div>
+            <button className="ss-btn ss-btn-ghost ml-auto" onClick={() => void sendMissingDigest()}>
+              Send alert now
+            </button>
           </div>
+
           <ul className="mt-2 grid gap-1 sm:grid-cols-2">
             {missingAll.slice(0, 8).map((t) => {
               const stage = stages.find((s) => s.id === t.stage_id);
