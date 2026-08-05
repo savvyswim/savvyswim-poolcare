@@ -284,7 +284,7 @@ const Index = () => {
               </span>
             </a>
 
-            <nav className="hidden xl:flex min-w-0 items-center gap-5 pl-6 whitespace-nowrap font-tech text-primary/70 2xl:gap-7 2xl:pl-10">
+            <nav className="hidden xl:flex min-w-0 shrink items-center gap-4 pl-4 whitespace-nowrap font-tech text-primary/70 2xl:gap-6 2xl:pl-8">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
               <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
               <a href="#refer" className="hover:text-accent transition">Refer &amp; Save</a>
