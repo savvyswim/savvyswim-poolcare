@@ -88,11 +88,11 @@ const App = () => (
             <Route path="/crm" element={<Navigate to="/admin/crm" replace />} />
 
             <Route path="/admin" element={<Navigate to="/admin/crm" replace />} />
-            <Route path="/admin/designs" element={<AdminDesigns />} />
-            <Route path="/admin/cleaning" element={<AdminCleaning />} />
-            <Route path="/admin/store" element={<AdminStore />} />
-            <Route path="/admin/team" element={<AdminTeam />} />
-            <Route path="/admin/activity" element={<AdminActivity />} />
+            <Route path="/admin/designs" element={<RequireModule module="designs"><AdminDesigns /></RequireModule>} />
+            <Route path="/admin/cleaning" element={<RequireModule module="cleaning"><AdminCleaning /></RequireModule>} />
+            <Route path="/admin/store" element={<RequireModule module="store"><AdminStore /></RequireModule>} />
+            <Route path="/admin/team" element={<RequireModule module="team"><AdminTeam /></RequireModule>} />
+            <Route path="/admin/activity" element={<RequireModule module="activity"><AdminActivity /></RequireModule>} />
 
             <Route path="/checkout/return" element={<CheckoutReturn />} />
 
