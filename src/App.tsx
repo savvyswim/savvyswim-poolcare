@@ -17,6 +17,7 @@ import AdminTeam from "./pages/AdminTeam";
 import AdminActivity from "./pages/AdminActivity";
 import AdminCRM from "./pages/AdminCRM.tsx";
 import CheckoutReturn from "./pages/CheckoutReturn.tsx";
+import CrmApp from "./pages/CrmApp.tsx";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/crm" element={<AdminCRM />} />
             <Route path="/crm/login" element={<Auth />} />
+            <Route path="/crm/app" element={<CrmApp />} />
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
             <Route path="/admin/store" element={<AdminStore />} />
