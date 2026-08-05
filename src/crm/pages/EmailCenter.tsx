@@ -81,6 +81,33 @@ export default function EmailCenter() {
     <div className="space-y-4">
       <SectionTitle title="Email center" sub="Templates, campaigns, and the customer activity feed" />
 
+      <div
+        className="ss-card flex flex-wrap items-center gap-3 p-4"
+        style={{ borderColor: "hsl(var(--ss-aqua))", background: "hsl(var(--ss-aqua) / 0.08)" }}
+      >
+        <Snowflake size={20} style={{ color: "hsl(var(--ss-aqua))" }} />
+        <div className="min-w-[220px] flex-1">
+          <div className="text-[0.9rem] font-semibold">Freeze warning blast</div>
+          <div className="text-[0.75rem] opacity-70">
+            Hard freeze coming? Send every active customer the pump-runs-24/7 equipment protection notice.
+          </div>
+        </div>
+        <button
+          className="ss-btn"
+          onClick={() => {
+            const t = TEMPLATES.find((x) => x.id === "freeze")!;
+            setTemplate(t);
+            setSubject(t.title);
+            setBody(t.body);
+            setAudience("all");
+            toast.info("Freeze warning loaded — review it, then send.");
+          }}
+        >
+          Load freeze warning
+        </button>
+      </div>
+
+
       <div className="grid gap-3 lg:grid-cols-2">
         <div className="ss-card p-4">
           <div className="ss-label mb-2">Compose</div>
