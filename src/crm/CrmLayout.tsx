@@ -133,27 +133,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
               <SavvyLogo size="sm" />
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
-              <div className="ss-tag" style={{ fontSize: "0.5rem" }}>
-                QuickBooks · Last synced
-              </div>
-              <div className="ss-num text-[0.72rem] opacity-70">
-                {synced ? new Date(synced).toLocaleDateString() : "Never"}
-              </div>
-            </div>
-            <button
-              className="ss-btn ss-btn-ghost"
-              onClick={async () => {
-                await supabase.from("ss_settings").update({
-                  value: { last_synced: new Date().toISOString() },
-                }).eq("key", "quickbooks");
-                setSynced(new Date().toISOString());
-              }}
-            >
-              Sync now
-            </button>
-          </div>
+          <div className="flex items-center gap-3" />
+
         </div>
         <StripeBand />
       </header>
