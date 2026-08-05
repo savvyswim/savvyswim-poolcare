@@ -56,8 +56,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const obscured = useWindowObscured();
 
   useEffect(() => {
-    if (!authLoading && !user) nav("/admin/crm/login", { replace: true });
-  }, [authLoading, user, nav]);
+    if (!authLoading && !user) nav("/admin/crm/login", { replace: true, state: { from: loc.pathname } });
+  }, [authLoading, user, nav, loc.pathname]);
 
   useEffect(() => {
     if (!id.loading && id.isCustomer) nav("/portal", { replace: true });

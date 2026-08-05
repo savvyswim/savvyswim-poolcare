@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo } from "@/crm/components/Brand";
@@ -28,10 +28,12 @@ export function RequireModule({ module, children }: { module: ModuleKey; childre
   const { user, loading: authLoading } = useAuth();
   const id = useSavvyIdentity();
   const nav = useNavigate();
+  const loc = useLocation();
 
   useEffect(() => {
-    if (!authLoading && !user) nav("/admin/crm/login", { replace: true });
-  }, [authLoading, user, nav]);
+    if (!authLoading && !user)
+      nav("/admin/crm/login", { replace: true, state: { from: loc.pathname } });
+  }, [authLoading, user, nav, loc.pathname]);
 
   if (authLoading || id.loading) {
     return (

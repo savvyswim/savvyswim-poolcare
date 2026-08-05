@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ import { isSharedDevice, setSharedDevice } from "@/lib/sessionSecurity";
 export default function Auth() {
   const nav = useNavigate();
   const { user, loading } = useAuth();
+  const loc = useLocation();
+  const dest = ((loc.state as { from?: string } | null)?.from) || "/admin/crm";
   const inviteEmail = new URLSearchParams(window.location.search).get("invite") ?? "";
   const [mode, setMode] = useState<"signin" | "signup">(inviteEmail ? "signup" : "signin");
   const [email, setEmail] = useState(inviteEmail);
@@ -20,7 +22,7 @@ export default function Auth() {
   const [shared, setShared] = useState(() => isSharedDevice());
 
   useEffect(() => {
-    if (!loading && user) nav("/admin/crm", { replace: true });
+    if (!loading && user) nav(dest, { replace: true });
   }, [user, loading, nav]);
 
   const submit = async (e: React.FormEvent) => {
@@ -40,7 +42,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         // First-signup admin bootstrap happens automatically via database trigger.
-        nav("/admin/crm", { replace: true });
+        nav(dest, { replace: true });
       }
     } catch (err: any) {
       toast.error(err?.message ?? "Authentication failed");
