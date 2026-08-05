@@ -10,6 +10,8 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricing";
 import { PROJECT_STATUS, statusMeta, type Project } from "@/crm/pages/Projects";
 import { ProjectTimeline } from "@/crm/components/ProjectTimeline";
+import { cascadeSchedule, persistStageDates, toISO } from "@/crm/lib/stageScheduling";
+
 
 
 type Stage = {
