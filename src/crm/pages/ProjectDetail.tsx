@@ -239,15 +239,25 @@ export default function ProjectDetail() {
     }
   }
 
+  async function notifyMissing(stageId: string) {
+    if (!id) return;
+    const { error } = await supabase.functions.invoke("project-stage-alerts", {
+      body: { mode: "stage", project_id: id, stage_id: stageId },
+    });
+    if (error) console.error("stage alert failed", error);
+  }
+
   async function toggleStage(s: Stage) {
     const next = s.status === "complete" ? "pending" : "complete";
+    let missingCount = 0;
     if (next === "complete") {
       const { missing } = stageChecks(s.id);
+      missingCount = missing.length;
       if (missing.length) {
         const ok = window.confirm(
           `${s.name} still has ${missing.length} open item${missing.length === 1 ? "" : "s"}:\n\n` +
             missing.map((m) => `• ${m.label}${m.kind === "document" ? " (document)" : ""}`).join("\n") +
-            "\n\nMark the stage complete anyway?",
+            "\n\nMark the stage complete anyway? An alert will be sent to the owner and project lead.",
         );
         if (!ok) return;
       }
@@ -258,7 +268,12 @@ export default function ProjectDetail() {
       .eq("id", s.id);
     if (error) return toast.error(error.message);
     setStages((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: next } : x)));
+    if (next === "complete" && missingCount) {
+      void notifyMissing(s.id);
+      toast.warning(`Alert sent — ${s.name} completed with ${missingCount} open item${missingCount === 1 ? "" : "s"}`);
+    }
   }
+
 
   async function toggleTask(t: StageTask) {
     const next = !t.is_done;
