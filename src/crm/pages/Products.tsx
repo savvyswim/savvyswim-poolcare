@@ -57,6 +57,14 @@ export default function Products() {
 
   const band = cities.find((c) => c.city === city);
 
+  const currentMonthly = Number(payingNow) > 0 ? Number(payingNow) : 0;
+  const vsCurrent = currentMonthly ? currentMonthly - quote.monthly : 0;
+  const vsCurrentYear = vsCurrent * 12;
+  const vsCurrentPct = currentMonthly
+    ? Math.round((vsCurrent / currentMonthly) * 100)
+    : 0;
+  const vsMarketYear = quote.market.savings * 12;
+
   return (
     <div className="space-y-4">
       <SectionTitle
