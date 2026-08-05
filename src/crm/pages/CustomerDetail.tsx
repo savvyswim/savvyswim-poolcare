@@ -60,6 +60,34 @@ export default function CustomerDetail() {
 
   const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.amount), 0), [invoices]);
 
+  const sendInvite = async () => {
+    if (!c) return;
+    const target = (inviteEmail || c.email || "").trim();
+    if (!target) {
+      toast.error("Add an email address for this customer first");
+      return;
+    }
+    setInviting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("admin-invite-customer", {
+        body: {
+          email: target,
+          full_name: c.full_name,
+          customer_id: c.id,
+          origin: window.location.origin,
+        },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      setInvited(true);
+      toast.success(`Login invite emailed to ${target}`);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not send the invite");
+    } finally {
+      setInviting(false);
+    }
+  };
+
   if (!c) return <EmptyState>Loading customer…</EmptyState>;
 
   return (
