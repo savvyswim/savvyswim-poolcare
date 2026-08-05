@@ -275,7 +275,7 @@ export default function ProjectDetail() {
           </button>
 
           {stages.map((s) => {
-            const count = files.filter((f) => f.stage_id === s.id).length;
+            const count = files.filter((f) => f.stage_id === s.id && f.doc_folder === "media").length;
             const complete = s.status === "complete";
             return (
               <div
@@ -310,19 +310,62 @@ export default function ProjectDetail() {
               </div>
             );
           })}
+
+          <div className="pt-3">
+            <div className="ss-tag">Document vault</div>
+            <p className="mt-1 text-[0.72rem] opacity-60">
+              Permits, contracts, inspections, warranties — every paper for this job in one place.
+            </p>
+          </div>
+
+          {DOC_FOLDERS.map((d) => {
+            const count = files.filter((f) => f.doc_folder === d.key).length;
+            const key = `doc:${d.key}`;
+            return (
+              <div
+                key={d.key}
+                className="ss-card p-3"
+                style={{ outline: activeStage === key ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
+              >
+                <div className="flex items-start gap-2">
+                  <FileText size={15} className="mt-0.5 shrink-0 opacity-50" />
+                  <button className="flex-1 text-left" onClick={() => setActiveStage(key)}>
+                    <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                    <div className="text-[0.72rem] opacity-60">
+                      {count} file{count === 1 ? "" : "s"} · {d.hint}
+                    </div>
+                  </button>
+                  <UploadButton
+                    busy={uploadingTo === d.key}
+                    onFiles={(fl) => void upload(fl, null, d.key)}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Media */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="ss-tag">
-              {activeStage === "all" ? "All media" : stages.find((s) => s.id === activeStage)?.name}
+              {activeStage === "all"
+                ? "All files"
+                : docKey(activeStage)
+                  ? DOC_FOLDERS.find((d) => d.key === docKey(activeStage))?.label
+                  : stages.find((s) => s.id === activeStage)?.name}
             </div>
             <div className="flex gap-2">
               <UploadButton
                 label="Upload"
-                busy={uploadingTo === (activeStage === "all" ? "general" : activeStage)}
-                onFiles={(fl) => void upload(fl, activeStage === "all" ? null : activeStage)}
+                busy={uploadingTo === (activeStage === "all" ? "media" : docKey(activeStage) ?? activeStage)}
+                onFiles={(fl) =>
+                  void upload(
+                    fl,
+                    activeStage === "all" || docKey(activeStage) ? null : activeStage,
+                    docKey(activeStage) ?? "media",
+                  )
+                }
               />
               {visibleFiles.length > 0 && (
                 <button className="ss-btn ss-btn-ghost" onClick={() => void downloadAll()}>
@@ -331,6 +374,7 @@ export default function ProjectDetail() {
               )}
             </div>
           </div>
+
 
           {!visibleFiles.length ? (
             <EmptyState>
