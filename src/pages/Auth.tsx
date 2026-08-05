@@ -50,6 +50,37 @@ export default function Auth() {
     else toast.success("Check your email for a reset link.");
   };
 
+  // ---- Preview-only quick access -------------------------------------------
+  // Only rendered on localhost / the Lovable preview host, never on the live
+  // site, so it can't be used as a shortcut into production.
+  const host = window.location.hostname;
+  const isPreview =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host.endsWith(".lovableproject.com") ||
+    (host.endsWith(".lovable.app") && host.startsWith("id-preview"));
+  const OWNER_EMAIL = "marcus@santanariveragroup.com";
+
+  const magicLink = async (target: string) => {
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: target,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: `${window.location.origin}${dest}`,
+        },
+      });
+      if (error) throw error;
+      toast.success(`Sign-in link sent to ${target} — open it in this browser.`);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not send the sign-in link");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="w-full max-w-sm space-y-6">
@@ -97,7 +128,62 @@ export default function Auth() {
           Accounts are created by Savvy Swim. Check your email for your invite link.
         </p>
 
+        {isPreview && (
+          <div className="border border-dashed border-hairline rounded-2xl p-4 space-y-3 bg-muted/30">
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              Preview only — owner quick access
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Signs you in as <span className="font-medium text-foreground">{OWNER_EMAIL}</span>{" "}
+              (admin + owner). This panel never appears on savvyswim.com.
+            </p>
+            <div className="grid gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                disabled={busy}
+                onClick={() => {
+                  setEmail(OWNER_EMAIL);
+                  setSharedDevice(false);
+                  setShared(false);
+                  toast.info("Owner email filled in — enter your password and sign in.");
+                }}
+              >
+                Fill in owner email
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                disabled={busy}
+                onClick={() => magicLink(OWNER_EMAIL)}
+              >
+                Email me a one-click owner sign-in link
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full text-xs"
+                disabled={busy}
+                onClick={async () => {
+                  const { error } = await supabase.auth.resetPasswordForEmail(OWNER_EMAIL, {
+                    redirectTo: `${window.location.origin}/set-password`,
+                  });
+                  if (error) toast.error(error.message);
+                  else toast.success("Password reset link sent to the owner address.");
+                }}
+              >
+                Forgot the owner password? Send a reset link
+              </Button>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              After signing in you land on the admin portal — walk the sidebar to verify each module.
+            </p>
+          </div>
+        )}
       </div>
+
     </div>
   );
 }
