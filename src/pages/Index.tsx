@@ -938,75 +938,8 @@ const Index = () => {
       </section>
 
 
-      {/* ABOUT */}
-      <section id="about" className="py-24 sm:py-32 relative">
-        <div className="container-tight">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
-                Why folks pick us
-              </div>
-              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
-                Techs, not middlemen —
-                <span className="text-gradient-amber"> service you can count on.</span>
-              </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                We don't sub out your pool. Savvy Swim keeps cleaning, chemistry,
-                and equipment repair in-house — so the same trained tech knows your
-                pool, your equipment, and exactly what it needs.
-              </p>
-              <ul className="space-y-3">
-                {[
-                  "Same tech every week — no rotating crews",
-                  "Chemicals and photo reports included",
-                  "Licensed, bonded, and insured in Texas",
-                  "Repairs quoted up front, no surprise invoices",
-                ].map((b) => (
-                  <li key={b} className="flex items-start gap-3 text-sm">
-                    <ShieldCheck className="h-5 w-5 text-amber-brand flex-shrink-0 mt-0.5" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            <div className="relative">
-              <div className="absolute -inset-8 bg-gradient-radial opacity-70 blur-3xl" />
-              <div className="relative card-3d rounded-sm p-8 shadow-3d">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="relative h-12 w-12 rounded-full bg-amber-brand grid place-items-center shadow-cta">
-                    <Waves className="h-5 w-5 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <div className="font-bold">Savvy Swim</div>
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-[0.18em]">A Santana &amp; Rivera Company</div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-px bg-hairline rounded-sm overflow-hidden">
-                  {[
-                    { k: "1,200+", v: "Pools serviced", icon: Droplets },
-                    { k: "100%", v: "Satisfaction guarantee", icon: ShieldCheck },
-                    { k: "4.9★", v: "Avg client rating", icon: Star },
-                    { k: "365", v: "Days of service", icon: Sun },
-                  ].map((s) => (
-                    <div key={s.v} className="bg-ink-soft p-5">
-                      <s.icon className="h-4 w-4 text-amber-brand mb-3" />
-                      <div className="text-2xl font-bold text-gradient-chrome">{s.k}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 flex items-center gap-1 text-xs text-muted-foreground">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-amber-brand text-amber-brand" />
-                  ))}
-                  <span className="ml-2">Trusted across Austin, Dallas & Houston</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA */}
       <section id="contact" className="py-24 sm:py-32 relative overflow-hidden">
