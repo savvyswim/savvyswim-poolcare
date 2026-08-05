@@ -121,7 +121,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     const sourceUrl = typeof window !== "undefined" ? window.location.href : null;
 
     // 1) Server-side write — this is the source of truth for the lead.
-    const { data: inserted, error } = await supabase.from("bookings").insert({
+    const { error } = await supabase.from("bookings").insert({
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -134,7 +134,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       sms_consent_at: data.smsOptIn ? consentTimestamp : null,
       sms_consent_text: data.smsOptIn ? consentText : null,
       consent_source_url: sourceUrl,
-    }).select("id").maybeSingle();
+    });
 
     if (error) {
       setSubmitting(false);
@@ -148,7 +148,6 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     supabase.functions
       .invoke("send-booking-confirmation", {
         body: {
-          bookingId: inserted?.id,
           name: data.name,
           email: data.email,
           service: data.service,
