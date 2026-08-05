@@ -78,6 +78,7 @@ export default function ProjectDetail() {
   const [customer, setCustomer] = useState<{ id: string; full_name: string } | null>(null);
   const [stages, setStages] = useState<Stage[]>([]);
   const [files, setFiles] = useState<ProjectFile[]>([]);
+  const [tasks, setTasks] = useState<StageTask[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [uploadingTo, setUploadingTo] = useState<string | null>(null);
@@ -86,14 +87,16 @@ export default function ProjectDetail() {
   const load = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    const [{ data: p, error }, { data: st }, { data: fl }] = await Promise.all([
+    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }] = await Promise.all([
       supabase.from("ss_projects").select("*").eq("id", id).maybeSingle(),
       supabase.from("ss_project_stages").select("*").eq("project_id", id).order("sort_order"),
       supabase.from("ss_project_files").select("*").eq("project_id", id).order("created_at", { ascending: false }),
+      supabase.from("ss_project_stage_tasks").select("*").eq("project_id", id).order("sort_order"),
     ]);
     if (error) toast.error(error.message);
     setProject((p ?? null) as Project | null);
     setStages((st ?? []) as Stage[]);
+    setTasks((tk ?? []) as StageTask[]);
     const list = (fl ?? []) as ProjectFile[];
     setFiles(list);
 
@@ -117,6 +120,29 @@ export default function ProjectDetail() {
 
   const done = stages.filter((s) => s.status === "complete").length;
   const pct = stages.length ? Math.round((done / stages.length) * 100) : 0;
+
+  const isSatisfied = useCallback(
+    (t: StageTask) =>
+      t.is_done ||
+      (t.kind === "document" && !!t.doc_folder && files.some((f) => f.doc_folder === t.doc_folder)),
+    [files],
+  );
+
+  const stageChecks = useCallback(
+    (stageId: string) => {
+      const list = tasks.filter((t) => t.stage_id === stageId);
+      const missing = list.filter((t) => t.is_required && !isSatisfied(t));
+      return { list, missing, ok: list.length - missing.length, total: list.length };
+    },
+    [tasks, isSatisfied],
+  );
+
+  const missingAll = useMemo(
+    () => tasks.filter((t) => t.is_required && !isSatisfied(t)),
+    [tasks, isSatisfied],
+  );
+  const missingDocs = missingAll.filter((t) => t.kind === "document");
+
 
   const visibleFiles = useMemo(() => {
     if (activeStage === "all") return files;
