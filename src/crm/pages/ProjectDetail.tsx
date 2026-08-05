@@ -10,6 +10,8 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricing";
 import { PROJECT_STATUS, statusMeta, type Project } from "@/crm/pages/Projects";
 import { ProjectTimeline } from "@/crm/components/ProjectTimeline";
+import { cascadeSchedule, persistStageDates, toISO } from "@/crm/lib/stageScheduling";
+
 
 
 type Stage = {
@@ -23,7 +25,10 @@ type Stage = {
   start_date: string | null;
   end_date: string | null;
   duration_days: number;
+  depends_on_id: string | null;
+  lag_days: number;
 };
+
 
 type ProjectFile = {
   id: string;
@@ -267,17 +272,40 @@ export default function ProjectDetail() {
         if (!ok) return;
       }
     }
+    const completedOn = next === "complete" ? toISO(new Date()) : null;
     const { error } = await supabase
       .from("ss_project_stages")
-      .update({ status: next, completed_at: next === "complete" ? new Date().toISOString() : null })
+      .update({
+        status: next,
+        completed_at: next === "complete" ? new Date().toISOString() : null,
+        ...(completedOn && s.start_date ? { end_date: completedOn } : {}),
+      })
       .eq("id", s.id);
     if (error) return toast.error(error.message);
-    setStages((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: next } : x)));
+
+    // Completing early or late re-anchors every stage linked behind this one.
+    const updated = stages.map((x) =>
+      x.id === s.id
+        ? { ...x, status: next, end_date: completedOn && x.start_date ? completedOn : x.end_date }
+        : x,
+    );
+    const moved = cascadeSchedule(updated);
+    const merged = updated.map((x) => moved.find((m) => m.id === x.id) ?? x);
+    setStages(merged);
+    if (moved.length) {
+      const err = await persistStageDates(moved);
+      if (err) toast.error(err);
+      else
+        toast.success(
+          `${moved.length} linked stage${moved.length === 1 ? "" : "s"} rescheduled`,
+        );
+    }
     if (next === "complete" && missingCount) {
       void notifyMissing(s.id);
       toast.warning(`Alert sent — ${s.name} completed with ${missingCount} open item${missingCount === 1 ? "" : "s"}`);
     }
   }
+
 
 
   async function toggleTask(t: StageTask) {

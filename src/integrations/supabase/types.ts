@@ -1761,9 +1761,11 @@ export type Database = {
         Row: {
           completed_at: string | null
           created_at: string
+          depends_on_id: string | null
           duration_days: number
           end_date: string | null
           id: string
+          lag_days: number
           name: string
           notes: string | null
           project_id: string
@@ -1775,9 +1777,11 @@ export type Database = {
         Insert: {
           completed_at?: string | null
           created_at?: string
+          depends_on_id?: string | null
           duration_days?: number
           end_date?: string | null
           id?: string
+          lag_days?: number
           name: string
           notes?: string | null
           project_id: string
@@ -1789,9 +1793,11 @@ export type Database = {
         Update: {
           completed_at?: string | null
           created_at?: string
+          depends_on_id?: string | null
           duration_days?: number
           end_date?: string | null
           id?: string
+          lag_days?: number
           name?: string
           notes?: string | null
           project_id?: string
@@ -1801,6 +1807,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "ss_project_stages_depends_on_id_fkey"
+            columns: ["depends_on_id"]
+            isOneToOne: false
+            referencedRelation: "ss_project_stages"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ss_project_stages_project_id_fkey"
             columns: ["project_id"]
