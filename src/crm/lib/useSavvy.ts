@@ -43,7 +43,10 @@ export function useSavvyIdentity(): SavvyIdentity {
       level: (staff?.level as SsLevel) ?? null,
       staffId: staff?.id ?? null,
       staffName: staff?.full_name ?? null,
-      initials: staff?.initials ?? (staff?.full_name ?? "").split(" ").map((p) => p[0]).join("").slice(0, 3) || null,
+      initials:
+        staff?.initials ||
+        (staff?.full_name ?? "").split(" ").map((p) => p[0]).join("").slice(0, 3) ||
+        null,
       customerId: cust?.id ?? null,
     });
   }, [user]);
