@@ -334,11 +334,19 @@
 
   .btn-quote {
     background: hsl(var(--lifeguard-red));
-    color: hsl(40 40% 98%);
-    letter-spacing: 0.08em;
+    color: hsl(44 44% 97%);
+    font-family: 'Lora', Georgia, serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    border-radius: 999px;
   }
-  .btn-quote:hover { background: hsl(var(--navy)); }
-  .topbar { background: hsl(var(--navy)); color: hsl(40 40% 98%); letter-spacing: 0.12em; }
+  .btn-quote:hover { background: hsl(2 62% 30%); }
+  .topbar {
+    background: hsl(var(--lifeguard-red));
+    color: hsl(44 44% 97%);
+    font-family: 'Lora', Georgia, serif;
+    letter-spacing: 0.01em;
+  }
 }
 
 /* ── HubSpot-style admin CRM shell (blue tones) ───────────────── */
