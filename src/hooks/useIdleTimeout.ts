@@ -10,6 +10,7 @@ import {
   sessionStart,
   startSessionClock,
 } from "@/lib/sessionSecurity";
+import { LAST_ACTIVITY_KEY, SESSION_START_KEY } from "@/lib/sessionSecurity";
 
 const ACTIVITY_EVENTS = ["pointerdown", "keydown", "scroll", "touchstart", "visibilitychange"];
 
@@ -29,8 +30,22 @@ export function useIdleTimeout(active: boolean, onExpire: (reason: "idle" | "max
       return;
     }
 
+    // A fresh sign-in (or a returning valid session) must not inherit stale
+    // clocks left in storage by a previous visit — otherwise the very first
+    // tick expires the session and bounces the user back to the login page.
+    const now0 = Date.now();
+    const staleIdle = !lastActivity() || now0 - lastActivity() >= idleLimitMs();
+    const staleStart = !sessionStart() || now0 - sessionStart() >= ABSOLUTE_LIMIT_MS;
+    if (staleStart) {
+      try {
+        localStorage.removeItem(SESSION_START_KEY);
+        localStorage.removeItem(LAST_ACTIVITY_KEY);
+      } catch {
+        /* storage unavailable */
+      }
+    }
     startSessionClock();
-    if (!lastActivity()) markActivity();
+    if (staleIdle || staleStart) markActivity();
 
     const bump = () => {
       if (document.visibilityState === "hidden") return;
