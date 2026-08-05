@@ -144,7 +144,24 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       return;
     }
 
-    // 2) Local copy (best effort, non-blocking)
+    // 2) Confirmation email (best effort, non-blocking)
+    supabase.functions
+      .invoke("send-booking-confirmation", {
+        body: {
+          name: data.name,
+          email: data.email,
+          service: data.service,
+          preferredDate: format(data.date, "EEE, MMM d, yyyy"),
+          preferredTime: data.time,
+          address: data.address || undefined,
+          notes: data.notes || undefined,
+        },
+      })
+      .catch(() => {
+        /* confirmation email is best effort */
+      });
+
+    // 3) Local copy (best effort, non-blocking)
     try {
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       existing.push({
