@@ -91,7 +91,10 @@ import { supabase } from "@/integrations/supabase/client";
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
-const SMS_HREF = "sms:+14697440379";
+const HAIL_SMS_BODY =
+  "Hi Savvy Swim — I'd like to schedule a hail damage inspection for my pool and equipment. My address is:";
+// `?&body=` works on both iOS and Android SMS handlers.
+const SMS_HREF = `sms:+14697440379?&body=${encodeURIComponent(HAIL_SMS_BODY)}`;
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
