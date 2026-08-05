@@ -77,7 +77,7 @@
     background-color: hsl(var(--background));
   }
   h1, h2, h3 {
-    font-family: 'Baloo 2', 'Archivo', Helvetica, Arial, system-ui, sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
     text-transform: uppercase;
     letter-spacing: -0.005em;
     font-weight: 800;
@@ -85,7 +85,7 @@
   }
 
   h4, h5, h6 {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
     letter-spacing: 0.005em;
     font-weight: 600;
@@ -107,16 +107,16 @@
   .container-tight { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
 
   /* Brand type helpers — fat rounded display + classic serif */
-  .font-display { font-family: 'Baloo 2', 'Archivo', sans-serif; text-transform: uppercase; font-weight: 800; letter-spacing: -0.005em; }
-  .font-badge { font-family: 'Lora', Georgia, serif; text-transform: none; letter-spacing: 0.02em; font-weight: 600; }
+  .font-display { font-family: 'Archivo', Helvetica, Arial, sans-serif; text-transform: uppercase; font-weight: 800; letter-spacing: -0.005em; }
+  .font-badge { font-family: 'Archivo', Helvetica, Arial, sans-serif; text-transform: none; letter-spacing: 0.02em; font-weight: 600; }
   .font-editorial {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
     letter-spacing: 0;
   }
-  .editorial-italic { font-family: 'Lora', Georgia, serif; font-style: italic; text-transform: none; letter-spacing: 0; }
+  .editorial-italic { font-family: 'Archivo', Helvetica, Arial, sans-serif; font-style: italic; text-transform: none; letter-spacing: 0; }
   .eyebrow {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     font-size: 0.72rem;
@@ -125,7 +125,7 @@
 
   /* Small-label layer (classic serif, replaces the mono instrumentation look) */
   .font-tech {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
     letter-spacing: 0.01em;
     font-size: 0.95rem;
@@ -135,7 +135,7 @@
   .tech-rule { border-top: 1px solid hsl(var(--primary) / 0.14); }
   .tech-grid { background-image: none; }
   .tech-chip {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
     letter-spacing: 0.01em;
     font-size: 0.8rem;
@@ -145,14 +145,14 @@
     color: hsl(var(--primary) / 0.85);
   }
   .tech-readout {
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     font-variant-numeric: tabular-nums;
   }
   @keyframes blip { 0%,100% { opacity: 1 } 50% { opacity: 0.15 } }
   .animate-blip { animation: blip 1.8s steps(1,end) infinite; }
   /* Poster-scale display type */
   .type-mega {
-    font-family: 'Baloo 2', 'Archivo', sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: uppercase;
     font-weight: 800;
     line-height: 0.86;
@@ -161,7 +161,7 @@
     color: hsl(var(--primary));
   }
   .type-mega-alt {
-    font-family: 'Baloo 2', 'Archivo', sans-serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: uppercase;
     font-weight: 800;
     line-height: 0.88;
@@ -335,7 +335,7 @@
   .btn-quote {
     background: hsl(var(--lifeguard-red));
     color: hsl(44 44% 97%);
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     text-transform: none;
     letter-spacing: 0.01em;
     border-radius: 999px !important;
@@ -344,7 +344,7 @@
   .topbar {
     background: hsl(var(--lifeguard-red));
     color: hsl(44 44% 97%);
-    font-family: 'Lora', Georgia, serif;
+    font-family: 'Archivo', Helvetica, Arial, sans-serif;
     letter-spacing: 0.01em;
   }
 }
