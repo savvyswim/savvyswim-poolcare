@@ -464,6 +464,12 @@ const Index = () => {
                   >
                     <MessageSquare className="h-4 w-4" /> Text hail damage inspection
                   </a>
+                  <Link
+                    to={withCampaignParams("/request-inspection")}
+                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                  >
+                    <MessageSquare className="h-4 w-4" /> Request free inspection
+                  </Link>
                 </div>
               </div>
             </div>
