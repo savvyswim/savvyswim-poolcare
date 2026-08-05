@@ -18,6 +18,22 @@ import AdminActivity from "./pages/AdminActivity";
 import AdminCRM from "./pages/AdminCRM.tsx";
 import CheckoutReturn from "./pages/CheckoutReturn.tsx";
 import CrmApp from "./pages/CrmApp.tsx";
+import CrmLayout from "@/crm/CrmLayout";
+import RoutePage from "@/crm/pages/Route";
+import CustomersPage from "@/crm/pages/Customers";
+import CustomerDetail from "@/crm/pages/CustomerDetail";
+import Pipeline from "@/crm/pages/Pipeline";
+import Jobs from "@/crm/pages/Jobs";
+import Alerts from "@/crm/pages/Alerts";
+import Technicians from "@/crm/pages/Technicians";
+import Products from "@/crm/pages/Products";
+import Finance from "@/crm/pages/Finance";
+import Trucks from "@/crm/pages/Trucks";
+import Inventory from "@/crm/pages/Inventory";
+import EmailCenter from "@/crm/pages/EmailCenter";
+import Reports from "@/crm/pages/Reports";
+import WebsiteConnect from "@/crm/pages/WebsiteConnect";
+import CrmSettings from "@/crm/pages/Settings";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
@@ -43,9 +59,27 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/crm" element={<AdminCRM />} />
             <Route path="/crm/login" element={<Auth />} />
             <Route path="/crm/app" element={<CrmApp />} />
+            <Route path="/crm/legacy" element={<AdminCRM />} />
+            <Route element={<CrmLayout />}>
+              <Route path="/crm" element={<RoutePage />} />
+              <Route path="/crm/customers" element={<CustomersPage />} />
+              <Route path="/crm/customers/:id" element={<CustomerDetail />} />
+              <Route path="/crm/pipeline" element={<Pipeline />} />
+              <Route path="/crm/jobs" element={<Jobs />} />
+              <Route path="/crm/alerts" element={<Alerts />} />
+              <Route path="/crm/technicians" element={<Technicians />} />
+              <Route path="/crm/products" element={<Products />} />
+              <Route path="/crm/finance" element={<Finance />} />
+              <Route path="/crm/trucks" element={<Trucks />} />
+              <Route path="/crm/inventory" element={<Inventory />} />
+              <Route path="/crm/email" element={<EmailCenter />} />
+              <Route path="/crm/reports" element={<Reports />} />
+              <Route path="/crm/connect" element={<WebsiteConnect />} />
+              <Route path="/crm/settings" element={<CrmSettings />} />
+            </Route>
+
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
             <Route path="/admin/store" element={<AdminStore />} />

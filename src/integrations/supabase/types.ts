@@ -802,6 +802,948 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_alerts: {
+        Row: {
+          body: string | null
+          created_at: string
+          customer_id: string | null
+          id: string
+          is_resolved: boolean
+          priority: string
+          resolved_at: string | null
+          tech_id: string | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          is_resolved?: boolean
+          priority?: string
+          resolved_at?: string | null
+          tech_id?: string | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          is_resolved?: boolean
+          priority?: string
+          resolved_at?: string | null
+          tech_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_alerts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_alerts_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_broadcasts: {
+        Row: {
+          body: string
+          channels: Json
+          created_at: string
+          id: string
+          recipient_count: number
+          segment: string
+          sent_at: string
+          subject: string
+        }
+        Insert: {
+          body: string
+          channels?: Json
+          created_at?: string
+          id?: string
+          recipient_count?: number
+          segment?: string
+          sent_at?: string
+          subject: string
+        }
+        Update: {
+          body?: string
+          channels?: Json
+          created_at?: string
+          id?: string
+          recipient_count?: number
+          segment?: string
+          sent_at?: string
+          subject?: string
+        }
+        Relationships: []
+      }
+      ss_bundles: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          items: Json
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          items?: Json
+          name: string
+          price?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          items?: Json
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_custom_fields: {
+        Row: {
+          created_at: string
+          field_type: string
+          id: string
+          is_warning: boolean
+          label: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          field_type?: string
+          id?: string
+          is_warning?: boolean
+          label: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          field_type?: string
+          id?: string
+          is_warning?: boolean
+          label?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      ss_customers: {
+        Row: {
+          address: string | null
+          assigned_tech_id: string | null
+          billing_mode: string
+          billing_timing: string
+          charge_for_chems: boolean
+          city: string | null
+          created_at: string
+          custom_fields: Json
+          email: string | null
+          equipment: Json
+          full_name: string
+          gallons: number
+          gate_code: string | null
+          id: string
+          internal_notes: string | null
+          invoice_day: number
+          lat: number | null
+          lng: number | null
+          monthly_price: number
+          phone: string | null
+          pool_type: string
+          postal_code: string | null
+          referral_code: string | null
+          route_day: string | null
+          route_frequency: string
+          service_level: string
+          state: string
+          status: Database["public"]["Enums"]["ss_cust_status"]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          assigned_tech_id?: string | null
+          billing_mode?: string
+          billing_timing?: string
+          charge_for_chems?: boolean
+          city?: string | null
+          created_at?: string
+          custom_fields?: Json
+          email?: string | null
+          equipment?: Json
+          full_name: string
+          gallons?: number
+          gate_code?: string | null
+          id?: string
+          internal_notes?: string | null
+          invoice_day?: number
+          lat?: number | null
+          lng?: number | null
+          monthly_price?: number
+          phone?: string | null
+          pool_type?: string
+          postal_code?: string | null
+          referral_code?: string | null
+          route_day?: string | null
+          route_frequency?: string
+          service_level?: string
+          state?: string
+          status?: Database["public"]["Enums"]["ss_cust_status"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          assigned_tech_id?: string | null
+          billing_mode?: string
+          billing_timing?: string
+          charge_for_chems?: boolean
+          city?: string | null
+          created_at?: string
+          custom_fields?: Json
+          email?: string | null
+          equipment?: Json
+          full_name?: string
+          gallons?: number
+          gate_code?: string | null
+          id?: string
+          internal_notes?: string | null
+          invoice_day?: number
+          lat?: number | null
+          lng?: number | null
+          monthly_price?: number
+          phone?: string | null
+          pool_type?: string
+          postal_code?: string | null
+          referral_code?: string | null
+          route_day?: string | null
+          route_frequency?: string
+          service_level?: string
+          state?: string
+          status?: Database["public"]["Enums"]["ss_cust_status"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_customers_assigned_tech_id_fkey"
+            columns: ["assigned_tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          spent_on: string
+          vendor: string | null
+        }
+        Insert: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          spent_on?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          spent_on?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
+      ss_feed: {
+        Row: {
+          body: string | null
+          created_at: string
+          customer_id: string
+          id: string
+          kind: string
+          sent_by_sms: boolean
+          title: string
+          visit_id: string | null
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          customer_id: string
+          id?: string
+          kind?: string
+          sent_by_sms?: boolean
+          title: string
+          visit_id?: string | null
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          customer_id?: string
+          id?: string
+          kind?: string
+          sent_by_sms?: boolean
+          title?: string
+          visit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_feed_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_feed_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_inventory: {
+        Row: {
+          created_at: string
+          id: string
+          low_threshold: number
+          name: string
+          quantity: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          low_threshold?: number
+          name: string
+          quantity?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          low_threshold?: number
+          name?: string
+          quantity?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_invoices: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string
+          due_date: string | null
+          id: string
+          invoice_number: string
+          issued_on: string
+          kind: string
+          paid_at: string | null
+          status: string
+          stripe_payment_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          customer_id: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issued_on?: string
+          kind?: string
+          paid_at?: string | null
+          status?: string
+          stripe_payment_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issued_on?: string
+          kind?: string
+          paid_at?: string | null
+          status?: string
+          stripe_payment_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_invoices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_jobs: {
+        Row: {
+          auto_flag_source: string | null
+          completed_at: string | null
+          created_at: string
+          customer_id: string
+          details: string | null
+          due_date: string | null
+          id: string
+          price: number
+          status: string
+          tech_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          auto_flag_source?: string | null
+          completed_at?: string | null
+          created_at?: string
+          customer_id: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          price?: number
+          status?: string
+          tech_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          auto_flag_source?: string | null
+          completed_at?: string | null
+          created_at?: string
+          customer_id?: string
+          details?: string | null
+          due_date?: string | null
+          id?: string
+          price?: number
+          status?: string
+          tech_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_jobs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_jobs_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_leads: {
+        Row: {
+          address: string | null
+          city: string | null
+          cleanup_price: number | null
+          condition: string
+          converted_customer_id: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          message: string | null
+          monthly_value: number
+          phone: string | null
+          photo_url: string | null
+          pool_size: string | null
+          service_type: string
+          source: string
+          spa_addon: number
+          spa_option: string
+          stage: Database["public"]["Enums"]["ss_stage"]
+          stage_changed_at: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          cleanup_price?: number | null
+          condition?: string
+          converted_customer_id?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          message?: string | null
+          monthly_value?: number
+          phone?: string | null
+          photo_url?: string | null
+          pool_size?: string | null
+          service_type?: string
+          source?: string
+          spa_addon?: number
+          spa_option?: string
+          stage?: Database["public"]["Enums"]["ss_stage"]
+          stage_changed_at?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          cleanup_price?: number | null
+          condition?: string
+          converted_customer_id?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          message?: string | null
+          monthly_value?: number
+          phone?: string | null
+          photo_url?: string | null
+          pool_size?: string | null
+          service_type?: string
+          source?: string
+          spa_addon?: number
+          spa_option?: string
+          stage?: Database["public"]["Enums"]["ss_stage"]
+          stage_changed_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_leads_converted_customer_id_fkey"
+            columns: ["converted_customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string | null
+          id: string
+          invoice_id: string | null
+          kind: string
+          method: string
+          note: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          invoice_id?: string | null
+          kind?: string
+          method?: string
+          note?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          invoice_id?: string | null
+          kind?: string
+          method?: string
+          note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_price_book: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          price: number
+          recurs_days: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          price?: number
+          recurs_days?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          price?: number
+          recurs_days?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_purchase_orders: {
+        Row: {
+          created_at: string
+          id: string
+          items: Json
+          ordered_at: string | null
+          received_at: string | null
+          status: string
+          total: number
+          updated_at: string
+          vendor: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          items?: Json
+          ordered_at?: string | null
+          received_at?: string | null
+          status?: string
+          total?: number
+          updated_at?: string
+          vendor: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          items?: Json
+          ordered_at?: string | null
+          received_at?: string | null
+          status?: string
+          total?: number
+          updated_at?: string
+          vendor?: string
+        }
+        Relationships: []
+      }
+      ss_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      ss_staff: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          initials: string | null
+          is_active: boolean
+          level: Database["public"]["Enums"]["ss_level"]
+          phone: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          initials?: string | null
+          is_active?: boolean
+          level?: Database["public"]["Enums"]["ss_level"]
+          phone?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          initials?: string | null
+          is_active?: boolean
+          level?: Database["public"]["Enums"]["ss_level"]
+          phone?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_suppression: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          reason?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          reason?: string
+        }
+        Relationships: []
+      }
+      ss_truck_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_stocked: boolean
+          label: string
+          sort_order: number
+          truck_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_stocked?: boolean
+          label: string
+          sort_order?: number
+          truck_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_stocked?: boolean
+          label?: string
+          sort_order?: number
+          truck_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_truck_items_truck_id_fkey"
+            columns: ["truck_id"]
+            isOneToOne: false
+            referencedRelation: "ss_trucks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_trucks: {
+        Row: {
+          assigned_tech_id: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          assigned_tech_id?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          assigned_tech_id?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_trucks_assigned_tech_id_fkey"
+            columns: ["assigned_tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_visits: {
+        Row: {
+          after_photo_url: string | null
+          arrived_at: string | null
+          before_photo_url: string | null
+          checklist: Json
+          chem_cost: number
+          completed_at: string | null
+          created_at: string
+          customer_id: string
+          dosing: Json
+          en_route_at: string | null
+          feedback: string | null
+          id: string
+          issue_reported: string | null
+          minutes_on_site: number | null
+          notes: string | null
+          readings: Json
+          scheduled_date: string
+          started_at: string | null
+          status: string
+          stop_order: number
+          tech_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          after_photo_url?: string | null
+          arrived_at?: string | null
+          before_photo_url?: string | null
+          checklist?: Json
+          chem_cost?: number
+          completed_at?: string | null
+          created_at?: string
+          customer_id: string
+          dosing?: Json
+          en_route_at?: string | null
+          feedback?: string | null
+          id?: string
+          issue_reported?: string | null
+          minutes_on_site?: number | null
+          notes?: string | null
+          readings?: Json
+          scheduled_date?: string
+          started_at?: string | null
+          status?: string
+          stop_order?: number
+          tech_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          after_photo_url?: string | null
+          arrived_at?: string | null
+          before_photo_url?: string | null
+          checklist?: Json
+          chem_cost?: number
+          completed_at?: string | null
+          created_at?: string
+          customer_id?: string
+          dosing?: Json
+          en_route_at?: string | null
+          feedback?: string | null
+          id?: string
+          issue_reported?: string | null
+          minutes_on_site?: number | null
+          notes?: string | null
+          readings?: Json
+          scheduled_date?: string
+          started_at?: string | null
+          status?: string
+          stop_order?: number
+          tech_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_visits_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_visits_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_workflow_tasks: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          is_required: boolean
+          label: string
+          photo_required: boolean
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          is_required?: boolean
+          label: string
+          photo_required?: boolean
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          is_required?: boolean
+          label?: string
+          photo_required?: boolean
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_workflow_tasks_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       store_order_items: {
         Row: {
           created_at: string
@@ -1100,11 +2042,45 @@ export type Database = {
           read_ct: number
         }[]
       }
+      ss_is_office: { Args: never; Returns: boolean }
+      ss_is_owner: { Args: never; Returns: boolean }
+      ss_is_staff: { Args: never; Returns: boolean }
+      ss_my_customer_id: { Args: never; Returns: string }
+      ss_my_level: {
+        Args: { _uid: string }
+        Returns: Database["public"]["Enums"]["ss_level"]
+      }
+      ss_my_pool: {
+        Args: never
+        Returns: {
+          address: string
+          city: string
+          full_name: string
+          gallons: number
+          id: string
+          monthly_price: number
+          pool_type: string
+          referral_code: string
+          route_day: string
+          service_level: string
+          status: Database["public"]["Enums"]["ss_cust_status"]
+        }[]
+      }
+      ss_my_staff_id: { Args: never; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user" | "crm_manager" | "store_manager"
       pool_category: "design" | "plan" | "construction"
       pool_media_type: "image" | "video"
+      ss_cust_status: "active" | "inactive"
+      ss_level: "owner" | "office_manager" | "technician"
+      ss_stage:
+        | "new_lead"
+        | "contacted"
+        | "quote_sent"
+        | "follow_up"
+        | "won"
+        | "lost"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1235,6 +2211,16 @@ export const Constants = {
       app_role: ["admin", "user", "crm_manager", "store_manager"],
       pool_category: ["design", "plan", "construction"],
       pool_media_type: ["image", "video"],
+      ss_cust_status: ["active", "inactive"],
+      ss_level: ["owner", "office_manager", "technician"],
+      ss_stage: [
+        "new_lead",
+        "contacted",
+        "quote_sent",
+        "follow_up",
+        "won",
+        "lost",
+      ],
     },
   },
 } as const
