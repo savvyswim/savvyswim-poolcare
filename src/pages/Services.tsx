@@ -1,5 +1,4 @@
 import { useState } from "react";
-import logoMark from "@/assets/savvy-swim-logo-red.webp";
 import { Link } from "react-router-dom";
 import {
   Instagram,
