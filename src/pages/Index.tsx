@@ -75,6 +75,8 @@ const MEMBERSHIP_FAQ = [
     a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
   },
 ];
+import { Link } from "react-router-dom";
+import { SwimClubPrompt } from "@/components/SwimClubPrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 
@@ -245,8 +247,8 @@ const Index = () => {
             </a>
             <div className="flex items-center gap-6">
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-              <a href="/services" className="hover:opacity-80 transition">Services</a>
-              <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
+              <Link to="/services" className="hover:opacity-80 transition">Services</Link>
+              <Link to="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</Link>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
           </div>
@@ -272,7 +274,7 @@ const Index = () => {
 
             <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
-              <a href="/services" className="hover:text-accent transition">Service &amp; Repair</a>
+              <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
@@ -997,9 +999,9 @@ const Index = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
-            <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
-            <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
-            <a href="/auth" className="hover:text-foreground transition">Admin</a>
+            <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
+            <Link to="/auth" className="hover:text-foreground transition">Admin</Link>
           </div>
         </div>
       </footer>
@@ -1016,6 +1018,7 @@ const Index = () => {
         planName={subscribePlan}
       />
       <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+      <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />
 
 
     </div>

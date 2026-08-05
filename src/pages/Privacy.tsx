@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Seo from "@/components/Seo";
 
 const Privacy = () => (
@@ -8,7 +9,7 @@ const Privacy = () => (
         description="How Savvy Swim (Santana & Rivera) collects, uses, and protects your personal information, including SMS opt-in consent data."
         path="/privacy"
       />
-      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
+      <Link to="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</Link>
       <h1 className="text-3xl font-bold mt-4 mb-2">Privacy Policy</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>

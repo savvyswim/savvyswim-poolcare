@@ -387,8 +387,8 @@ const Services = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
-            <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
-            <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
+            <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
           </div>
         </div>
       </footer>
