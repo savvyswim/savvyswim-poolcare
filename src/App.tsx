@@ -43,9 +43,27 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/crm" element={<AdminCRM />} />
             <Route path="/crm/login" element={<Auth />} />
             <Route path="/crm/app" element={<CrmApp />} />
+            <Route path="/crm/legacy" element={<AdminCRM />} />
+            <Route element={<CrmLayout />}>
+              <Route path="/crm" element={<RoutePage />} />
+              <Route path="/crm/customers" element={<CustomersPage />} />
+              <Route path="/crm/customers/:id" element={<CustomerDetail />} />
+              <Route path="/crm/pipeline" element={<Pipeline />} />
+              <Route path="/crm/jobs" element={<Jobs />} />
+              <Route path="/crm/alerts" element={<Alerts />} />
+              <Route path="/crm/technicians" element={<Technicians />} />
+              <Route path="/crm/products" element={<Products />} />
+              <Route path="/crm/finance" element={<Finance />} />
+              <Route path="/crm/trucks" element={<Trucks />} />
+              <Route path="/crm/inventory" element={<Inventory />} />
+              <Route path="/crm/email" element={<EmailCenter />} />
+              <Route path="/crm/reports" element={<Reports />} />
+              <Route path="/crm/connect" element={<WebsiteConnect />} />
+              <Route path="/crm/settings" element={<CrmSettings />} />
+            </Route>
+
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
             <Route path="/admin/store" element={<AdminStore />} />
