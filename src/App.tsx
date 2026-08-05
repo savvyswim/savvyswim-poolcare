@@ -8,6 +8,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Services from "./pages/Services.tsx";
 import PoolCleaningFrisco from "./pages/PoolCleaningFrisco.tsx";
+import RequestInspection from "./pages/RequestInspection.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import SetPassword from "./pages/SetPassword.tsx";
