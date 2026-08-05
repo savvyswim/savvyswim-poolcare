@@ -5,9 +5,10 @@ import type { Stop } from "@/crm/pages/Route";
 const KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY as string | undefined;
 const CHANNEL = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID as string | undefined;
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare global {
   interface Window {
-    google?: typeof google;
+    google?: any;
     __ssMapReady?: () => void;
   }
 }
@@ -62,9 +63,9 @@ export default function RouteMap({
           zoomControl: true,
         });
         const bounds = new window.google.maps.LatLngBounds();
-        const path: google.maps.LatLngLiteral[] = [];
+        const path: { lat: number; lng: number }[] = [];
 
-        geo.forEach((s) => {
+        geo.forEach((s: Stop) => {
           const pos = { lat: Number(s.ss_customers.lat), lng: Number(s.ss_customers.lng) };
           bounds.extend(pos);
           path.push(pos);
