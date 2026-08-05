@@ -77,17 +77,18 @@
     background-color: hsl(var(--background));
   }
   h1, h2, h3 {
-    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
+    font-family: 'Baloo 2', 'Archivo', Helvetica, Arial, system-ui, sans-serif;
     text-transform: uppercase;
-    letter-spacing: -0.015em;
-    font-weight: 500;
+    letter-spacing: -0.005em;
+    font-weight: 800;
+    color: hsl(var(--primary));
   }
 
   h4, h5, h6 {
-    font-family: 'Archivo', Helvetica, Arial, system-ui, sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 500;
+    font-family: 'Lora', Georgia, serif;
+    text-transform: none;
+    letter-spacing: 0.005em;
+    font-weight: 600;
   }
   p { letter-spacing: 0.005em; }
 }
