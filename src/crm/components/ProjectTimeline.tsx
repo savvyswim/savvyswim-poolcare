@@ -274,6 +274,14 @@ export function ProjectTimeline({
                 <div key={s.id} className="flex items-center gap-2">
                   <div className="w-[40%] shrink-0 truncate text-[0.78rem]">
                     <span className="opacity-50">{s.sort_order}.</span> {s.name}
+                    {s.depends_on_id && (
+                      <Link2
+                        size={11}
+                        className="ml-1 inline opacity-50"
+                        aria-label="Linked to an earlier stage"
+                      />
+                    )}
+
                   </div>
                   <div className="relative h-6 flex-1 rounded-full" style={{ background: "hsl(var(--ss-sand))" }}>
                     {has && (
