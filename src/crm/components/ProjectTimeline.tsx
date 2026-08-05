@@ -80,22 +80,59 @@ export function ProjectTimeline({
   const stagesRef = useRef(stages);
   stagesRef.current = stages;
 
-  /** Applies a local edit, cascades dependents, saves everything that moved. */
+  /** Pending change awaiting the owner's approval in the preview dialog. */
+  const [pending, setPending] = useState<{
+    baseline: TimelineStage[];
+    next: TimelineStage[];
+    moved: TimelineStage[];
+    label: string;
+    commit: () => Promise<string | null>;
+  } | null>(null);
+
+  /**
+   * Applies an edit locally, cascades dependents, and — when anything downstream
+   * moves — shows a preview so nothing is saved until it's approved.
+   */
   const applyAndCascade = useCallback(
-    async (next: TimelineStage[]) => {
+    async (next: TimelineStage[], label: string, commitPrimary?: () => Promise<string | null>) => {
+      const baseline = stagesRef.current;
       const moved = cascadeSchedule(next);
       const merged = next.map((s) => moved.find((m) => m.id === s.id) ?? s);
       onChange(merged);
-      if (moved.length) {
-        const err = await persistStageDates(moved);
+      const commit = async () => {
+        const primaryErr = commitPrimary ? await commitPrimary() : null;
+        if (primaryErr) return primaryErr;
+        return moved.length ? await persistStageDates(moved) : null;
+      };
+      if (!moved.length) {
+        const err = await commit();
         if (err) return toast.error(err);
-        toast.success(
-          `${moved.length} dependent stage${moved.length === 1 ? "" : "s"} rescheduled`,
-        );
+        return;
       }
+      setPending({ baseline, next: merged, moved, label, commit });
     },
     [onChange],
   );
+
+  async function confirmPending() {
+    if (!pending) return;
+    setBusy(true);
+    const err = await pending.commit();
+    setBusy(false);
+    if (err) return toast.error(err);
+    toast.success(
+      `Saved · ${pending.moved.length} dependent stage${pending.moved.length === 1 ? "" : "s"} rescheduled`,
+    );
+    setPending(null);
+  }
+
+  function discardPending() {
+    if (!pending) return;
+    onChange(pending.baseline);
+    setPending(null);
+    toast.info("Change discarded — nothing was saved");
+  }
+
 
   async function autoSchedule() {
     const base = projectStart ?? toISO(new Date());
