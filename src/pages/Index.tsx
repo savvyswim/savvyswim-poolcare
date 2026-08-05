@@ -273,13 +273,15 @@ const Index = () => {
               <img
                 src={logoMark.url}
                 alt="Savvy Swim — on duty, so you don't have to be"
-                width={44}
-                height={44}
-                decoding="async"
-                className="h-9 w-9 shrink-0 border border-primary/15 object-cover sm:h-11 sm:w-11"
+                width={112}
+                height={112}
+                decoding="sync"
+                loading="eager"
+                fetchPriority="high"
+                className="h-11 w-11 shrink-0 rounded-sm bg-background object-contain p-0.5 sm:h-14 sm:w-14"
               />
               <span className="flex flex-col leading-tight tracking-tight">
-                <span className="whitespace-nowrap font-display text-[16px] tracking-[0.02em] sm:text-[19px]">SAVVY SWIM</span>
+                <span className="whitespace-nowrap font-display text-[17px] tracking-[0.02em] sm:text-[21px]">SAVVY SWIM</span>
                 <span className="hidden whitespace-nowrap font-tech text-[8.5px] text-primary/45 sm:block xl:hidden">On duty, so you don&rsquo;t have to be.</span>
               </span>
             </a>
