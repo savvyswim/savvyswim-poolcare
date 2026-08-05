@@ -50,6 +50,37 @@ export default function Auth() {
     else toast.success("Check your email for a reset link.");
   };
 
+  // ---- Preview-only quick access -------------------------------------------
+  // Only rendered on localhost / the Lovable preview host, never on the live
+  // site, so it can't be used as a shortcut into production.
+  const host = window.location.hostname;
+  const isPreview =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host.endsWith(".lovableproject.com") ||
+    (host.endsWith(".lovable.app") && host.startsWith("id-preview"));
+  const OWNER_EMAIL = "marcus@santanariveragroup.com";
+
+  const magicLink = async (target: string) => {
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: target,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: `${window.location.origin}${dest}`,
+        },
+      });
+      if (error) throw error;
+      toast.success(`Sign-in link sent to ${target} — open it in this browser.`);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not send the sign-in link");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="w-full max-w-sm space-y-6">
