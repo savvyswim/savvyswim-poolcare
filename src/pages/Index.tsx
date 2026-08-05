@@ -287,6 +287,7 @@ const Index = () => {
             <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
               <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
+              <a href="#refer" className="hover:text-accent transition">Refer &amp; Save</a>
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
