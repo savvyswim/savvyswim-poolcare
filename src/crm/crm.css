@@ -170,3 +170,14 @@
 
 .savvy-crm ::-webkit-scrollbar { height: 8px; width: 8px; }
 .savvy-crm ::-webkit-scrollbar-thumb { background: hsl(var(--ss-sand)); border-radius: 99px; }
+
+/* Modal shell used by the pricing setup wizard and contract dialogs */
+.ss-modal-backdrop {
+  position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+  background: hsl(var(--ss-ink) / 0.55); padding: 1rem; backdrop-filter: blur(2px);
+}
+.ss-modal {
+  width: 100%; max-width: 34rem; max-height: 88vh; overflow-y: auto; border-radius: 0.75rem;
+  border: 1px solid hsl(var(--ss-sand)); background: hsl(var(--ss-cream)); padding: 1rem;
+  box-shadow: 0 24px 60px -18px hsl(var(--ss-ink) / 0.45);
+}
