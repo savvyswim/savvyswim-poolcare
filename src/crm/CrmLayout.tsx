@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
-import { PrivacyNotice, TechWatermark, useWindowObscured } from "@/crm/components/TechPrivacy";
+import { PrivacyNotice, useWindowObscured } from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -115,7 +115,6 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       }`}
       onContextMenu={techLocked ? (e) => e.preventDefault() : undefined}
     >
-      {techLocked && <TechWatermark initials={id.initials ?? "SS"} />}
       {techLocked && obscured && <PrivacyNotice />}
 
       {/* sticky header */}
