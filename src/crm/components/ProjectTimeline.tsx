@@ -40,8 +40,18 @@ export function ProjectTimeline({
 }) {
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [drag, setDrag] = useState<{ id: string; offsetDays: number } | null>(null);
+  const dragRef = useRef<{
+    id: string;
+    startX: number;
+    pxPerDay: number;
+    baseStart: number;
+    baseEnd: number;
+    offsetDays: number;
+  } | null>(null);
 
   const scheduled = stages.filter((s) => s.start_date && s.end_date);
+
 
   const bounds = useMemo(() => {
     const dates: number[] = [];
