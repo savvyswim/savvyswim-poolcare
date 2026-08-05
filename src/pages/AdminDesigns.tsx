@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Waves, LogOut, Download, Copy, Mail, MessageSquare, ArrowLeft } from "lucide-react";
+import { Waves, LogOut, Download, Copy, Mail, MessageSquare, ArrowLeft, Hammer } from "lucide-react";
 
 type Category = "design" | "plan" | "construction";
 type MediaType = "image" | "video";
@@ -216,17 +216,28 @@ export default function AdminDesigns() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-hairline">
-        <div className="container-tight flex items-center justify-between py-4">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="container-tight flex flex-wrap items-center justify-between gap-3 py-4">
+          <Link to="/admin/crm" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
             <Waves className="h-5 w-5 text-amber-brand" />
             <span className="font-semibold">Pool Design Gallery</span>
           </Link>
-          <Button variant="ghost" size="sm" onClick={() => signOut().then(() => nav("/"))}>
-            <LogOut className="h-4 w-4 mr-2" /> Sign out
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="secondary" size="sm">
+              <Link to="/admin/crm">Back to CRM</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/admin/crm/projects">
+                <Hammer className="h-4 w-4 mr-2" /> Construction &amp; Remodel
+              </Link>
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => signOut().then(() => nav("/"))}>
+              <LogOut className="h-4 w-4 mr-2" /> Sign out
+            </Button>
+          </div>
         </div>
       </header>
+
 
       <main className="container-tight py-8">
         <div className="mb-6">
@@ -234,6 +245,14 @@ export default function AdminDesigns() {
           <p className="text-sm text-muted-foreground">
             {grouped.design.length} designs · {grouped.plan.length} blueprint plans · {grouped.construction.length} 3D construction stage videos. Use Copy / Email / Text to share with customers.
           </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Building or remodeling a pool?{" "}
+            <Link to="/admin/crm/projects" className="underline">
+              Open Construction &amp; Remodel
+            </Link>{" "}
+            — each job gets its own project file with every build stage, photos, plans and videos you can download.
+          </p>
+
         </div>
 
         {loadingData ? (

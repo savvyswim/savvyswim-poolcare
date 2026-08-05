@@ -26,6 +26,8 @@ import CustomersPage from "@/crm/pages/Customers";
 import CustomerDetail from "@/crm/pages/CustomerDetail";
 import Pipeline from "@/crm/pages/Pipeline";
 import Jobs from "@/crm/pages/Jobs";
+import Projects from "@/crm/pages/Projects";
+import ProjectDetail from "@/crm/pages/ProjectDetail";
 import Alerts from "@/crm/pages/Alerts";
 import Technicians from "@/crm/pages/Technicians";
 import Products from "@/crm/pages/Products";
@@ -73,6 +75,8 @@ const App = () => (
               <Route path="/admin/crm/customers/:id" element={<CustomerDetail />} />
               <Route path="/admin/crm/pipeline" element={<Pipeline />} />
               <Route path="/admin/crm/jobs" element={<Jobs />} />
+              <Route path="/admin/crm/projects" element={<Projects />} />
+              <Route path="/admin/crm/projects/:id" element={<ProjectDetail />} />
               <Route path="/admin/crm/alerts" element={<Alerts />} />
               <Route path="/admin/crm/technicians" element={<Technicians />} />
               <Route path="/admin/crm/products" element={<Products />} />

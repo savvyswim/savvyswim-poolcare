@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
-  Activity, BookOpen, LayoutDashboard, ShoppingBag, Sparkles,
+  Activity, BookOpen, LayoutDashboard, ShoppingBag, Sparkles, Hammer,
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
@@ -24,6 +24,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts" },
   { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList, module: "technicians" },
   { to: "/admin/crm/products", label: "Products & Services", icon: Package, module: "products" },
+  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects" },
   { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance" },
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory" },
