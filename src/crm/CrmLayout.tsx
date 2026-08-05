@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
@@ -36,7 +36,7 @@ const LEVEL_LABEL: Record<string, string> = {
   technician: "Technician",
 };
 
-export default function CrmLayout({ children }: { children: React.ReactNode }) {
+export default function CrmLayout({ children }: { children?: React.ReactNode }) {
   const id = useSavvyIdentity();
   const { user, loading: authLoading, signOut } = useAuth();
   const nav = useNavigate();
@@ -184,7 +184,7 @@ export default function CrmLayout({ children }: { children: React.ReactNode }) {
       )}
 
       <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[232px] lg:pr-6">
-        <div className="mx-auto max-w-[1180px]">{children}</div>
+        <div className="mx-auto max-w-[1180px]">{children ?? <Outlet />}</div>
       </main>
 
       {/* mobile bottom tabs */}
