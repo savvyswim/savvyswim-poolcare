@@ -22,6 +22,7 @@ import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
+import photoPoolWater from "@/assets/pool-water.jpg.asset.json";
 import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
