@@ -358,7 +358,7 @@ const Index = () => {
         {/* photo backdrop */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden>
           <img
-            src={photoRivieraLoungers.url}
+            src={photoPoolWater.url}
             alt=""
             loading="eager"
             decoding="async"
