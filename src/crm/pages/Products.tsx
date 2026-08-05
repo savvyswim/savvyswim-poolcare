@@ -388,6 +388,35 @@ export default function Products() {
             </div>
 
             <div className="ss-card p-4">
+              <div className="ss-label mb-2">Text this quote</div>
+              <div className="flex flex-wrap items-end gap-2">
+                <div className="min-w-[10rem] flex-1">
+                  <label className="ss-label">Send to phone</label>
+                  <input
+                    type="tel"
+                    className="ss-input ss-num"
+                    placeholder="(214) 555-0142"
+                    value={smsPhone}
+                    onChange={(e) => setSmsPhone(e.target.value)}
+                  />
+                </div>
+                <button className="ss-btn" onClick={sendSms} disabled={sending}>
+                  {sending ? "SENDING…" : "SEND SMS"}
+                </button>
+                <button className="ss-btn ss-btn-ghost" onClick={copyLink}>
+                  COPY LINK
+                </button>
+              </div>
+              <div className="mt-3 whitespace-pre-line rounded-md bg-black/5 p-2 text-[0.75rem] opacity-80">
+                {summaryText}
+                {"\n\nView & edit: "}
+                <span className="break-all">{shareLink}</span>
+              </div>
+            </div>
+
+
+
+            <div className="ss-card p-4">
               <div className="ss-label mb-2">Regional benchmark · {city}</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
