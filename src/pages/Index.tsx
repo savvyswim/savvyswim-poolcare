@@ -269,11 +269,11 @@ const Index = () => {
           }`}
         >
           <div className="container-tight flex h-[64px] items-center justify-between gap-2 sm:h-[76px] sm:gap-4">
-            <a href="#" className="flex min-w-0 shrink-0 items-center gap-3">
-              <span className="whitespace-nowrap font-display text-[1.35rem] uppercase leading-none tracking-tight text-accent sm:text-[1.7rem] lg:text-[1.9rem]">
+            <a href="#" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+              <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
                 Savvy Swim
               </span>
-              <span className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/45 md:block xl:hidden">
+              <span aria-hidden="true" className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/60 lg:block xl:hidden">
                 On duty, so you don&rsquo;t have to be.
               </span>
             </a>
