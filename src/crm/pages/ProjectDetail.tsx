@@ -104,17 +104,19 @@ export default function ProjectDetail() {
   const done = stages.filter((s) => s.status === "complete").length;
   const pct = stages.length ? Math.round((done / stages.length) * 100) : 0;
 
-  const visibleFiles = useMemo(
-    () => (activeStage === "all" ? files : files.filter((f) => f.stage_id === activeStage)),
-    [files, activeStage],
-  );
+  const visibleFiles = useMemo(() => {
+    if (activeStage === "all") return files;
+    const dk = docKey(activeStage);
+    if (dk) return files.filter((f) => f.doc_folder === dk);
+    return files.filter((f) => f.stage_id === activeStage && f.doc_folder === "media");
+  }, [files, activeStage]);
 
-  async function upload(fileList: FileList | null, stageId: string | null) {
+  async function upload(fileList: FileList | null, stageId: string | null, folder = "media") {
     if (!fileList?.length || !id) return;
-    setUploadingTo(stageId ?? "general");
+    setUploadingTo(stageId ?? folder);
     for (const file of Array.from(fileList)) {
       const clean = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-      const path = `projects/${id}/${stageId ?? "general"}/${Date.now()}-${clean}`;
+      const path = `projects/${id}/${stageId ?? folder}/${Date.now()}-${clean}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: false });
       if (upErr) { toast.error(upErr.message); continue; }
       const { error: rowErr } = await supabase.from("ss_project_files").insert({
@@ -122,15 +124,17 @@ export default function ProjectDetail() {
         stage_id: stageId,
         title: file.name,
         storage_path: path,
+        doc_folder: folder,
         media_type: file.type.startsWith("video") ? "video" : file.type.startsWith("image") ? "image" : "document",
         size_bytes: file.size,
       });
       if (rowErr) toast.error(rowErr.message);
     }
     setUploadingTo(null);
-    toast.success("Media added to the project file");
+    toast.success(folder === "media" ? "Media added to the project file" : "Document filed");
     void load();
   }
+
 
   async function removeFile(f: ProjectFile) {
     await supabase.storage.from(BUCKET).remove([f.storage_path]);
