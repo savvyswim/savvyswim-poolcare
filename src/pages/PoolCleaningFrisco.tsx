@@ -50,7 +50,7 @@ const SERVICES = [
 const FAQ = [
   {
     q: "How much does pool cleaning in Frisco, TX cost?",
-    a: "Most Frisco pools land between $220 and $280 a month for full weekly service, including chemicals. Size, spa, and pool condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.",
+    a: "Frisco weekly service starts at $129.99 a month, including chemicals. Size, spa, and pool condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.",
   },
   {
     q: "What day do you service Frisco pools?",
@@ -89,7 +89,7 @@ const FriscoPoolCleaning = () => {
         priceCurrency: "USD",
         priceSpecification: {
           "@type": "PriceSpecification",
-          minPrice: 220,
+          minPrice: 129.99,
           maxPrice: 280,
           priceCurrency: "USD",
         },
@@ -110,7 +110,7 @@ const FriscoPoolCleaning = () => {
     <div className="min-h-screen overflow-x-hidden">
       <Seo
         title="Pool Cleaning Frisco TX — Weekly Service & Repair | Savvy Swim"
-        description="Pool cleaning in Frisco, TX from $220/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
+        description="Pool cleaning in Frisco, TX from $129.99/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
         path="/pool-cleaning-frisco-tx"
         jsonLd={jsonLd}
       />
@@ -205,7 +205,7 @@ const FriscoPoolCleaning = () => {
           <div className="container-tight grid grid-cols-2 md:grid-cols-4 divide-x divide-hairline">
             {[
               ["Frisco route day", "Fixed weekly"],
-              ["Starting at", "$220 / month"],
+              ["Starting at", "$129.99 / month"],
               ["Photo report", "Every visit"],
               ["Clear water", "Guaranteed"],
             ].map(([label, value]) => (
