@@ -4,12 +4,12 @@ import { CITY_PRICING, CHEM_ONLY_FACTOR, CONDITIONS, POOL_SIZES, SPA_OPTIONS, co
 
 export default function Products() {
   const [city, setCity] = useState("Dallas");
-  const [size, setSize] = useState(POOL_SIZES[0].key);
-  const [condition, setCondition] = useState(CONDITIONS[0].key);
-  const [spa, setSpa] = useState(SPA_OPTIONS[0].key);
+  const [size, setSize] = useState(POOL_SIZES[1].id);
+  const [condition, setCondition] = useState(CONDITIONS[0].id);
+  const [spa, setSpa] = useState(SPA_OPTIONS[0].id);
   const [chemOnly, setChemOnly] = useState(false);
 
-  const quote = computeQuote({ city, poolSize: size, condition, spa, chemOnly });
+  const quote = computeQuote({ city, poolSize: size, condition, spa, serviceType: chemOnly ? "chem_only" : "full" });
 
   return (
     <div className="space-y-4">
@@ -28,19 +28,19 @@ export default function Products() {
             <div>
               <label className="ss-label">Pool size</label>
               <select className="ss-input" value={size} onChange={(e) => setSize(e.target.value)}>
-                {POOL_SIZES.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+                {POOL_SIZES.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
               </select>
             </div>
             <div>
               <label className="ss-label">Condition</label>
               <select className="ss-input" value={condition} onChange={(e) => setCondition(e.target.value)}>
-                {CONDITIONS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+                {CONDITIONS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
               </select>
             </div>
             <div>
               <label className="ss-label">Spa</label>
               <select className="ss-input" value={spa} onChange={(e) => setSpa(e.target.value)}>
-                {SPA_OPTIONS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+                {SPA_OPTIONS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
               </select>
             </div>
           </div>
