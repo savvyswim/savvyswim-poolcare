@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import PricingTab from "@/crm/components/PricingTab";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import {
   CONDITIONS,
   POOL_SIZES,
@@ -13,6 +16,7 @@ import {
   money,
   useRateCard,
 } from "@/crm/lib/pricingEngine";
+
 
 const TABS = ["Quote", "Pricing"] as const;
 
