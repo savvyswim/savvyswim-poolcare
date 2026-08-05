@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin } from "lucide-react";
+import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin } from "lucide-react";
 import logoMark from "@/assets/savvy-swim-logo-red.webp";
 import Seo from "@/components/Seo";
 import { trackContactClick } from "@/lib/contactTracking";
@@ -333,6 +333,7 @@ const FriscoPoolCleaning = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "frisco_footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href="https://www.instagram.com/hi.savvyswim/" target="_blank" rel="noopener noreferrer" aria-label="Savvy Swim on Instagram" className="inline-flex items-center gap-1.5 hover:text-foreground transition"><Instagram className="h-4 w-4" />Instagram</a>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
           </div>
