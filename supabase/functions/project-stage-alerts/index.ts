@@ -85,7 +85,7 @@ async function raise(opts: {
   console.log(`[stage-alerts] ${opts.title} -> ${emails.join(", ") || "no recipients"}`);
 }
 
-async function scanProject(projectId: string, stageFilter?: string) {
+async function scanProject(projectId: string, stageFilter?: string, force = false) {
   const [{ data: project }, { data: stages }, { data: tasks }, { data: files }] = await Promise.all([
     admin.from("ss_projects").select("id, title, customer_id, lead_staff_id, status").eq("id", projectId).maybeSingle(),
     admin.from("ss_project_stages").select("id, name, status, sort_order, end_date").eq("project_id", projectId).order("sort_order"),
@@ -107,10 +107,10 @@ async function scanProject(projectId: string, stageFilter?: string) {
 
     const overdue = !!stage.end_date && stage.end_date < today;
     const active = stage.status === "in_progress" || stage.status === "complete";
-    if (!stageFilter && !active && !overdue) continue;
+    if (!stageFilter && !force && !active && !overdue) continue;
 
     const alertKey = `stage-missing:${stage.id}:${missing.length}`;
-    if (await alreadySent(projectId, alertKey, stageFilter ? 1 : 20)) continue;
+    if (await alreadySent(projectId, alertKey, stageFilter || force ? 1 : 20)) continue;
 
     const docs = missing.filter((m) => m.kind === "document");
     const checks = missing.filter((m) => m.kind !== "document");
@@ -146,10 +146,11 @@ Deno.serve(async (req) => {
     const mode = body.mode === "stage" ? "stage" : "digest";
 
     if (mode === "stage") {
-      if (typeof body.project_id !== "string" || typeof body.stage_id !== "string") {
-        return json({ error: "project_id and stage_id are required" }, 400);
+      if (typeof body.project_id !== "string") {
+        return json({ error: "project_id is required" }, 400);
       }
-      const res = await scanProject(body.project_id, body.stage_id);
+      const stageId = typeof body.stage_id === "string" ? body.stage_id : undefined;
+      const res = await scanProject(body.project_id, stageId, !stageId);
       return json({ ok: true, alerts: res.alerts });
     }
 

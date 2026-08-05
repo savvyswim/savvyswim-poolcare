@@ -318,7 +318,7 @@ export default function ProjectDetail() {
   async function sendMissingDigest() {
     if (!id) return;
     const { error } = await supabase.functions.invoke("project-stage-alerts", {
-      body: { mode: "stage", project_id: id, stage_id: stages[0]?.id },
+      body: { mode: "stage", project_id: id },
     });
     if (error) return toast.error("Could not send the alert");
     toast.success("Alert sent to the owner and project lead");
