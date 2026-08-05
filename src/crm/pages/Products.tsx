@@ -42,8 +42,9 @@ export default function Products() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    if (params.get("undercut")) return;
     setUndercut(clampUndercut(margins.undercut_pct));
-  }, [margins.undercut_pct]);
+  }, [margins.undercut_pct, params]);
 
   // Hydrate the calculator from a shared quote link (?city=…&size=…)
   useEffect(() => {
