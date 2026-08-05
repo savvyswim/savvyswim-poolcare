@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CalendarRange, Loader2, Wand2 } from "lucide-react";
+import { CalendarRange, Link2, Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { cascadeSchedule, persistStageDates } from "@/crm/lib/stageScheduling";
 
 
 export type TimelineStage = {
@@ -12,7 +13,10 @@ export type TimelineStage = {
   start_date: string | null;
   end_date: string | null;
   duration_days: number;
+  depends_on_id: string | null;
+  lag_days: number;
 };
+
 
 const DAY = 86400000;
 
