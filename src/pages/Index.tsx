@@ -18,7 +18,6 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import logoMark from "@/assets/savvy-swim-logo-red.webp";
 
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
@@ -271,16 +270,9 @@ const Index = () => {
         >
           <div className="container-tight flex h-[64px] items-center justify-between gap-2 sm:h-[76px] sm:gap-4">
             <a href="#" className="flex min-w-0 shrink-0 items-center gap-3">
-              <img
-                src={logoMark}
-                alt="Savvy Swim — on duty, so you don't have to be"
-                width={640}
-                height={700}
-                decoding="sync"
-                loading="eager"
-                fetchPriority="high"
-                className="h-9 w-auto shrink-0 object-contain sm:h-11 lg:h-12"
-              />
+              <span className="whitespace-nowrap font-display text-[1.35rem] uppercase leading-none tracking-tight text-accent sm:text-[1.7rem] lg:text-[1.9rem]">
+                Savvy Swim
+              </span>
               <span className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/45 md:block xl:hidden">
                 On duty, so you don&rsquo;t have to be.
               </span>
