@@ -42,7 +42,8 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   reports: OFFICE,
   connect: OFFICE,
   settings: OFFICE,
-  finance: OWNER,
+  // Owner plus any office manager the owner assigns runs the books.
+  finance: OFFICE,
   console: OWNER,
   cleaning: OWNER,
   store: OWNER,

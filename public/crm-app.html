@@ -404,7 +404,7 @@ function openMenu(){
       <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:7px;letter-spacing:.13em;color:#C8DDE1;opacity:.75;margin-top:3px;">ON DUTY, SO YOU DON'T HAVE TO BE.</div>
       <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
         <span style="width:8px;height:8px;border-radius:50%;background:#2FD07E;box-shadow:0 0 6px #2FD07E;"></span>
-        <span style="font-size:10px;color:#9DBCC5;">QuickBooks · Last synced ${esc(S.qbSync)}</span>
+        <span style="font-size:10px;color:#9DBCC5;">Savvy Ledger · Updated ${esc(S.qbSync)}</span>
       </div>
     </div>
     ${items.map((it,i)=>`<div class="mi" onclick="__menuGo(${i})">${it[0]}</div>`).join('')}
@@ -563,8 +563,8 @@ function vReportsAdmin(){
   return `${adminBack()}<h2 style="margin-top:10px;">Reports</h2>
   <div class="card" style="display:flex;align-items:center;gap:9px;padding:10px 14px;">
     <span style="width:9px;height:9px;border-radius:50%;background:#188A54;box-shadow:0 0 6px #188A54;"></span>
-    <div style="flex:1;"><b style="font-size:12.5px;">QuickBooks connected</b><div class="muted" style="font-size:10.5px;">Last synced ${esc(S.qbSync)}</div></div>
-    <button class="tiny" onclick="S.qbSync='just now';save();render();toast('QuickBooks sync complete')">Sync now</button>
+    <div style="flex:1;"><b style="font-size:12.5px;">Savvy Ledger (in-house books)</b><div class="muted" style="font-size:10.5px;">Updated ${esc(S.qbSync)}</div></div>
+    <button class="tiny" onclick="S.qbSync='just now';save();render();toast('Ledger refreshed')">Sync now</button>
   </div>
   <div class="g2" style="margin-bottom:4px;">
     <div class="stat"><b>${active}</b><i>Active customers</i></div>
@@ -661,7 +661,7 @@ function vFinance(){
     <div style="display:flex;justify-content:center;gap:7px;align-items:baseline;padding:8px 6px;"><b class="mono" style="font-size:15px;color:${color};">${ct}</b><span class="mono muted" style="font-size:11px;">$${amt.toLocaleString(undefined,{maximumFractionDigits:0})}</span></div></div>`;
   return `${adminBack()}<h2 style="margin-top:10px;">Finance</h2>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-    <div class="sub" style="margin:0;">Synced with QuickBooks (${esc(S.qbSync)})</div>
+    <div class="sub" style="margin:0;">Savvy Ledger — your own books (${esc(S.qbSync)})</div>
     <div class="rangeseg" style="margin:0;">
       ${[[1,'1 MO'],[3,'3 MO'],[12,'YTD']].map(([v,l])=>`<button class="${finRange===v?'on':''}" onclick="finRange=${v};render()">${l}</button>`).join('')}
     </div></div>

@@ -24,7 +24,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts" },
   { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList, module: "technicians" },
   { to: "/admin/crm/products", label: "Products & Services", icon: Package, module: "products" },
-  { to: "/admin/crm/finance", label: "Finance", icon: DollarSign, module: "finance" },
+  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance" },
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory" },
   { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email" },
