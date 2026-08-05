@@ -492,6 +492,71 @@ export default function ProjectDetail() {
             </p>
           </div>
 
+          {docsTotal > 0 && (
+            <div className="ss-card p-3">
+              <div className="flex items-center justify-between">
+                <div className="ss-label">Permit &amp; document checklist</div>
+                <div className="ss-num text-[0.72rem] opacity-70">{docsCollected}/{docsTotal} collected</div>
+              </div>
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full" style={{ background: "hsl(var(--ss-sand))" }}>
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{
+                    width: `${docsTotal ? Math.round((docsCollected / docsTotal) * 100) : 0}%`,
+                    background: "hsl(var(--ss-burgundy))",
+                  }}
+                />
+              </div>
+              <div className="mt-3 space-y-2.5">
+                {docChecklist.filter((g) => g.items.length > 0).map((g) => (
+                  <div key={g.folder.key}>
+                    <button
+                      className="flex w-full items-center justify-between text-left"
+                      onClick={() => setActiveStage(`doc:${g.folder.key}`)}
+                    >
+                      <span className="text-[0.78rem] font-semibold">{g.folder.label}</span>
+                      <span className="text-[0.68rem] opacity-60">
+                        {g.missing ? `${g.missing} missing` : "Complete"} · {g.fileCount} file{g.fileCount === 1 ? "" : "s"}
+                      </span>
+                    </button>
+                    <ul className="mt-1 space-y-1">
+                      {g.items.map((t) => (
+                        <li key={t.id} className="flex items-start gap-2">
+                          <button
+                            aria-label="Toggle document collected"
+                            onClick={() => void toggleTask(t)}
+                            className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border"
+                            style={{
+                              borderColor: t.collected ? "hsl(var(--ss-burgundy) / .6)" : "hsl(var(--ss-burgundy) / .3)",
+                              background: t.collected ? "hsl(var(--ss-burgundy))" : "transparent",
+                              color: "#fff",
+                            }}
+                          >
+                            {t.collected ? <Check size={11} /> : null}
+                          </button>
+                          <div className="flex-1">
+                            <div
+                              className="text-[0.76rem] leading-tight"
+                              style={{ opacity: t.collected ? 0.55 : 1, textDecoration: t.collected ? "line-through" : undefined }}
+                            >
+                              {t.label}
+                            </div>
+                            <div className="text-[0.66rem] opacity-55">
+                              {t.stage ? `${t.stage.sort_order}. ${t.stage.name}` : "Project"}
+                              {t.collected ? " · collected" : " · missing"}
+                            </div>
+                          </div>
+                          {!t.collected && <AlertTriangle size={11} className="mt-1" style={{ color: "hsl(var(--ss-burgundy))" }} />}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+
           {DOC_FOLDERS.map((d) => {
             const count = files.filter((f) => f.doc_folder === d.key).length;
             const key = `doc:${d.key}`;
