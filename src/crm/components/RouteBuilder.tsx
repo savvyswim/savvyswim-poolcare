@@ -8,7 +8,7 @@ type Cust = {
   id: string; full_name: string; address: string | null; city: string | null;
   route_day: string | null; assigned_tech_id: string | null; status: string;
 };
-type Tech = { id: string; full_name: string; level: string };
+type Tech = { id: string; full_name: string };
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
