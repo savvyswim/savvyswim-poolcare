@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
+  AlertTriangle, ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
   Upload, UserRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricing";
 import { PROJECT_STATUS, statusMeta, type Project } from "@/crm/pages/Projects";
+
 
 type Stage = {
   id: string;
