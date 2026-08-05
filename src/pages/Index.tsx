@@ -625,8 +625,6 @@ const Index = () => {
                   decoding="async"
                   width={1920}
                   height={1280}
-                  loading="lazy"
-                  decoding="async"
                   className="w-full h-auto"
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
