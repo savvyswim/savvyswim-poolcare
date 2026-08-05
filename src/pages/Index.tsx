@@ -271,7 +271,7 @@ const Index = () => {
           <div className="container-tight flex h-[64px] items-center justify-between gap-2 sm:h-[76px] sm:gap-4">
             <a href="#" className="flex min-w-0 shrink-0 items-center gap-3">
               <img
-                src={logoMark.url}
+                src={logoMark}
                 alt="Savvy Swim — on duty, so you don't have to be"
                 width={640}
                 height={700}

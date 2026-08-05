@@ -119,7 +119,7 @@ const FriscoPoolCleaning = () => {
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
           <Link to="/" className="flex shrink-0 items-center gap-3">
             <img
-              src={logoMark.url}
+              src={logoMark}
               alt="Savvy Swim — on duty, so you don't have to be"
               width={640}
               height={700}
