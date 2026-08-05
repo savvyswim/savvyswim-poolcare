@@ -116,6 +116,25 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
     setSubmitting(false);
 
     if (error) return toast.error(error.message || "Could not send your request");
+
+    // Office alert (best effort, non-blocking)
+    supabase.functions
+      .invoke("notify-office-request", {
+        body: {
+          requestType: "New quote request",
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim() || undefined,
+          address: form.address.trim() || undefined,
+          service: serviceLabel,
+          notes: form.notes.trim() || undefined,
+          sourceUrl: window.location.href,
+        },
+      })
+      .catch(() => {
+        /* office alert is best effort */
+      });
+
     setDone(true);
   };
 
