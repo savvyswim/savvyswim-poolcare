@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
   if (!EMAIL_RE.test(email)) return json({ error: "Enter a valid email address" }, 400);
 
   const { data: invited, error: inviteErr } = await admin.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${origin}/account/welcome`,
+    redirectTo: `${origin}/set-password`,
     data: { full_name: fullName || undefined, role: "customer" },
   });
 
