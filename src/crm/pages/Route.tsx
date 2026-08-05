@@ -6,6 +6,7 @@ import { Chip, EmptyState, RouteRing, SectionTitle } from "@/crm/components/Bran
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import VisitSheet from "@/crm/components/VisitSheet";
 import RouteMap from "@/crm/components/RouteMap";
+import RouteBuilder from "@/crm/components/RouteBuilder";
 import { useGeofence } from "@/crm/lib/useGeofence";
 
 export type Stop = {
