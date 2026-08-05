@@ -169,9 +169,8 @@ export function ProjectTimeline({
         return toast.error(error.message);
       }
     }
-    await applyAndCascade(next);
+    await applyAndCascade(next, "Linked stages in sequence");
     setBusy(false);
-    toast.success("Stages linked — later stages now follow the one before them");
   }
 
   async function patch(id: string, field: "start_date" | "end_date" | "duration_days", value: string) {
@@ -183,9 +182,11 @@ export function ProjectTimeline({
         : field === "start_date"
           ? { start_date: val as string | null }
           : { end_date: val as string | null };
-    const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
-    if (error) return toast.error(error.message);
-    await applyAndCascade(next);
+    const label = `${stages.find((s) => s.id === id)?.name ?? "Stage"} · date edit`;
+    await applyAndCascade(next, label, async () => {
+      const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
+      return error?.message ?? null;
+    });
   }
 
   async function setDependency(id: string, dependsOn: string | null, lag?: number) {
@@ -199,7 +200,7 @@ export function ProjectTimeline({
       .update({ depends_on_id: dependsOn, ...(lag != null ? { lag_days: lag } : {}) })
       .eq("id", id);
     if (error) return toast.error(error.message);
-    await applyAndCascade(next);
+    await applyAndCascade(next, `${stages.find((s) => s.id === id)?.name ?? "Stage"} · dependency change`);
   }
 
   const shiftStage = useCallback(
@@ -211,16 +212,21 @@ export function ProjectTimeline({
       const next = stagesRef.current.map((x) =>
         x.id === id ? { ...x, start_date: start, end_date: end } : x,
       );
-      onChange(next);
-      const { error } = await supabase
-        .from("ss_project_stages")
-        .update({ start_date: start, end_date: end })
-        .eq("id", id);
-      if (error) return toast.error(error.message);
-      await applyAndCascade(next);
+      await applyAndCascade(
+        next,
+        `${s.name} · moved ${days > 0 ? "+" : ""}${days} day${Math.abs(days) === 1 ? "" : "s"}`,
+        async () => {
+          const { error } = await supabase
+            .from("ss_project_stages")
+            .update({ start_date: start, end_date: end })
+            .eq("id", id);
+          return error?.message ?? null;
+        },
+      );
     },
-    [onChange, applyAndCascade],
+    [applyAndCascade],
   );
+
 
 
   useEffect(() => {
