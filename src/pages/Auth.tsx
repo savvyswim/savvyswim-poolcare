@@ -17,6 +17,7 @@ export default function Auth() {
   const [email, setEmail] = useState(inviteEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [shared, setShared] = useState(() => isSharedDevice());
 
   useEffect(() => {
     if (!loading && user) nav("/admin/designs", { replace: true });
