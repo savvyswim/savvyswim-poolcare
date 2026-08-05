@@ -802,6 +802,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_accounts: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_alerts: {
         Row: {
           body: string | null
@@ -1161,6 +1197,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_invoice_items: {
+        Row: {
+          account_id: string | null
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string
+          line_total: number
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          account_id?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          invoice_id: string
+          line_total?: number
+          quantity?: number
+          unit_price?: number
+        }
+        Update: {
+          account_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string
+          line_total?: number
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_invoice_items_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "ss_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_invoices: {
         Row: {
           amount: number
@@ -1348,6 +1432,69 @@ export type Database = {
           {
             foreignKeyName: "ss_leads_converted_customer_id_fkey"
             columns: ["converted_customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_ledger: {
+        Row: {
+          account_id: string | null
+          created_at: string
+          created_by: string | null
+          credit: number
+          customer_id: string | null
+          debit: number
+          entry_date: string
+          id: string
+          memo: string
+          ref_id: string | null
+          reference: string | null
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit?: number
+          customer_id?: string | null
+          debit?: number
+          entry_date?: string
+          id?: string
+          memo: string
+          ref_id?: string | null
+          reference?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          credit?: number
+          customer_id?: string | null
+          debit?: number
+          entry_date?: string
+          id?: string
+          memo?: string
+          ref_id?: string | null
+          reference?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_ledger_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "ss_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_ledger_customer_id_fkey"
+            columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "ss_customers"
             referencedColumns: ["id"]
