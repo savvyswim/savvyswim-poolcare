@@ -29,6 +29,7 @@ export default function Products() {
   const [saltCell, setSaltCell] = useState(false);
   const [undercut, setUndercut] = useState(15);
   const [override, setOverride] = useState<string>("");
+  const [payingNow, setPayingNow] = useState<string>("");
 
   useEffect(() => {
     setUndercut(clampUndercut(margins.undercut_pct));
@@ -151,6 +152,16 @@ export default function Products() {
                   placeholder="Auto"
                   value={override}
                   onChange={(e) => setOverride(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="ss-label">What they pay now / mo</label>
+                <input
+                  type="number"
+                  className="ss-input ss-num"
+                  placeholder="e.g. 240"
+                  value={payingNow}
+                  onChange={(e) => setPayingNow(e.target.value)}
                 />
               </div>
             </div>
