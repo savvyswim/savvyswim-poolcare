@@ -1002,6 +1002,8 @@ export type Database = {
           id: string
           is_active: boolean
           low: number
+          market_avg: number
+          market_note: string | null
           sort_order: number
           updated_at: string
         }
@@ -1012,6 +1014,8 @@ export type Database = {
           id?: string
           is_active?: boolean
           low?: number
+          market_avg?: number
+          market_note?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -1022,6 +1026,8 @@ export type Database = {
           id?: string
           is_active?: boolean
           low?: number
+          market_avg?: number
+          market_note?: string | null
           sort_order?: number
           updated_at?: string
         }
