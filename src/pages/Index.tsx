@@ -268,25 +268,24 @@ const Index = () => {
             scrolled ? "shadow-card" : ""
           }`}
         >
-          <div className="container-tight flex h-[60px] items-center justify-between gap-3 sm:h-[72px]">
-            <a href="#" className="flex shrink-0 items-center gap-2.5 sm:gap-3">
+          <div className="container-tight flex h-[64px] items-center justify-between gap-2 sm:h-[76px] sm:gap-4">
+            <a href="#" className="flex min-w-0 shrink-0 items-center gap-3">
               <img
                 src={logoMark.url}
                 alt="Savvy Swim — on duty, so you don't have to be"
-                width={112}
-                height={112}
+                width={640}
+                height={700}
                 decoding="sync"
                 loading="eager"
                 fetchPriority="high"
-                className="h-11 w-11 shrink-0 rounded-sm bg-background object-contain p-0.5 sm:h-14 sm:w-14"
+                className="h-9 w-auto shrink-0 object-contain sm:h-11 lg:h-12"
               />
-              <span className="flex flex-col leading-tight tracking-tight">
-                <span className="whitespace-nowrap font-display text-[17px] tracking-[0.02em] sm:text-[21px]">SAVVY SWIM</span>
-                <span className="hidden whitespace-nowrap font-tech text-[8.5px] text-primary/45 sm:block xl:hidden">On duty, so you don&rsquo;t have to be.</span>
+              <span className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/45 md:block xl:hidden">
+                On duty, so you don&rsquo;t have to be.
               </span>
             </a>
 
-            <nav className="hidden xl:flex min-w-0 shrink items-center gap-4 pl-4 whitespace-nowrap font-tech text-primary/70">
+            <nav className="hidden min-w-0 shrink items-center gap-5 whitespace-nowrap font-tech text-primary/70 xl:flex 2xl:gap-7">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
               <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
               <a href="#refer" className="hover:text-accent transition">Refer &amp; Save</a>
@@ -294,6 +293,7 @@ const Index = () => {
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
             </nav>
+
 
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <a
