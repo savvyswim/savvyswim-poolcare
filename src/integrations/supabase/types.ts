@@ -1652,6 +1652,66 @@ export type Database = {
           },
         ]
       }
+      ss_project_stage_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          doc_folder: string | null
+          id: string
+          is_done: boolean
+          is_required: boolean
+          kind: string
+          label: string
+          project_id: string
+          sort_order: number
+          stage_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          doc_folder?: string | null
+          id?: string
+          is_done?: boolean
+          is_required?: boolean
+          kind?: string
+          label: string
+          project_id: string
+          sort_order?: number
+          stage_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          doc_folder?: string | null
+          id?: string
+          is_done?: boolean
+          is_required?: boolean
+          kind?: string
+          label?: string
+          project_id?: string
+          sort_order?: number
+          stage_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_project_stage_tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "ss_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_project_stage_tasks_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "ss_project_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_project_stages: {
         Row: {
           completed_at: string | null
@@ -2394,6 +2454,10 @@ export type Database = {
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
+      ss_seed_stage_items: {
+        Args: { p_name: string; p_project: string; p_stage: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user" | "crm_manager" | "store_manager"

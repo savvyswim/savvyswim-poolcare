@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
+  AlertTriangle, ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
   Upload, UserRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricing";
 import { PROJECT_STATUS, statusMeta, type Project } from "@/crm/pages/Projects";
+
 
 type Stage = {
   id: string;
@@ -31,6 +32,19 @@ type ProjectFile = {
   size_bytes: number | null;
   created_at: string;
 };
+
+type StageTask = {
+  id: string;
+  project_id: string;
+  stage_id: string;
+  kind: string;
+  label: string;
+  doc_folder: string | null;
+  is_required: boolean;
+  is_done: boolean;
+  sort_order: number;
+};
+
 
 const BUCKET = "pool-designs";
 
@@ -64,6 +78,7 @@ export default function ProjectDetail() {
   const [customer, setCustomer] = useState<{ id: string; full_name: string } | null>(null);
   const [stages, setStages] = useState<Stage[]>([]);
   const [files, setFiles] = useState<ProjectFile[]>([]);
+  const [tasks, setTasks] = useState<StageTask[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [uploadingTo, setUploadingTo] = useState<string | null>(null);
@@ -72,14 +87,16 @@ export default function ProjectDetail() {
   const load = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    const [{ data: p, error }, { data: st }, { data: fl }] = await Promise.all([
+    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }] = await Promise.all([
       supabase.from("ss_projects").select("*").eq("id", id).maybeSingle(),
       supabase.from("ss_project_stages").select("*").eq("project_id", id).order("sort_order"),
       supabase.from("ss_project_files").select("*").eq("project_id", id).order("created_at", { ascending: false }),
+      supabase.from("ss_project_stage_tasks").select("*").eq("project_id", id).order("sort_order"),
     ]);
     if (error) toast.error(error.message);
     setProject((p ?? null) as Project | null);
     setStages((st ?? []) as Stage[]);
+    setTasks((tk ?? []) as StageTask[]);
     const list = (fl ?? []) as ProjectFile[];
     setFiles(list);
 
@@ -103,6 +120,29 @@ export default function ProjectDetail() {
 
   const done = stages.filter((s) => s.status === "complete").length;
   const pct = stages.length ? Math.round((done / stages.length) * 100) : 0;
+
+  const isSatisfied = useCallback(
+    (t: StageTask) =>
+      t.is_done ||
+      (t.kind === "document" && !!t.doc_folder && files.some((f) => f.doc_folder === t.doc_folder)),
+    [files],
+  );
+
+  const stageChecks = useCallback(
+    (stageId: string) => {
+      const list = tasks.filter((t) => t.stage_id === stageId);
+      const missing = list.filter((t) => t.is_required && !isSatisfied(t));
+      return { list, missing, ok: list.length - missing.length, total: list.length };
+    },
+    [tasks, isSatisfied],
+  );
+
+  const missingAll = useMemo(
+    () => tasks.filter((t) => t.is_required && !isSatisfied(t)),
+    [tasks, isSatisfied],
+  );
+  const missingDocs = missingAll.filter((t) => t.kind === "document");
+
 
   const visibleFiles = useMemo(() => {
     if (activeStage === "all") return files;
@@ -172,6 +212,17 @@ export default function ProjectDetail() {
 
   async function toggleStage(s: Stage) {
     const next = s.status === "complete" ? "pending" : "complete";
+    if (next === "complete") {
+      const { missing } = stageChecks(s.id);
+      if (missing.length) {
+        const ok = window.confirm(
+          `${s.name} still has ${missing.length} open item${missing.length === 1 ? "" : "s"}:\n\n` +
+            missing.map((m) => `• ${m.label}${m.kind === "document" ? " (document)" : ""}`).join("\n") +
+            "\n\nMark the stage complete anyway?",
+        );
+        if (!ok) return;
+      }
+    }
     const { error } = await supabase
       .from("ss_project_stages")
       .update({ status: next, completed_at: next === "complete" ? new Date().toISOString() : null })
@@ -179,6 +230,20 @@ export default function ProjectDetail() {
     if (error) return toast.error(error.message);
     setStages((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: next } : x)));
   }
+
+  async function toggleTask(t: StageTask) {
+    const next = !t.is_done;
+    setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, is_done: next } : x)));
+    const { error } = await supabase
+      .from("ss_project_stage_tasks")
+      .update({ is_done: next, completed_at: next ? new Date().toISOString() : null })
+      .eq("id", t.id);
+    if (error) {
+      toast.error(error.message);
+      setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, is_done: !next } : x)));
+    }
+  }
+
 
   async function addStage() {
     const name = window.prompt("Stage name");
@@ -257,6 +322,34 @@ export default function ProjectDetail() {
         </div>
       </div>
 
+      {missingAll.length > 0 && (
+        <div className="ss-card p-4" style={{ borderColor: "hsl(var(--ss-burgundy) / .45)" }}>
+          <div className="flex items-center gap-2">
+            <AlertTriangle size={15} style={{ color: "hsl(var(--ss-burgundy))" }} />
+            <div className="ss-label">
+              {missingAll.length} open item{missingAll.length === 1 ? "" : "s"}
+              {missingDocs.length ? ` · ${missingDocs.length} document${missingDocs.length === 1 ? "" : "s"} missing` : ""}
+            </div>
+          </div>
+          <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+            {missingAll.slice(0, 8).map((t) => {
+              const stage = stages.find((s) => s.id === t.stage_id);
+              return (
+                <li key={t.id} className="text-[0.76rem] opacity-80">
+                  <button className="text-left underline-offset-2 hover:underline" onClick={() => setActiveStage(t.stage_id)}>
+                    {stage ? `${stage.sort_order}. ${stage.name}` : "Stage"} — {t.label}
+                    {t.kind === "document" ? " (document)" : ""}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {missingAll.length > 8 && (
+            <div className="mt-1 text-[0.72rem] opacity-60">+{missingAll.length - 8} more</div>
+          )}
+        </div>
+      )}
+
       <div className="grid gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
         {/* Stage folders */}
         <div className="space-y-2">
@@ -277,11 +370,13 @@ export default function ProjectDetail() {
           {stages.map((s) => {
             const count = files.filter((f) => f.stage_id === s.id && f.doc_folder === "media").length;
             const complete = s.status === "complete";
+            const checks = stageChecks(s.id);
+            const open = activeStage === s.id;
             return (
               <div
                 key={s.id}
                 className="ss-card p-3"
-                style={{ outline: activeStage === s.id ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
+                style={{ outline: open ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
               >
                 <div className="flex items-start gap-2">
                   <button
@@ -296,20 +391,74 @@ export default function ProjectDetail() {
                   >
                     {complete && <Check size={13} />}
                   </button>
-                  <button className="flex-1 text-left" onClick={() => setActiveStage(s.id)}>
-                    <div className="text-[0.86rem] font-semibold" style={{ textDecoration: complete ? "line-through" : undefined }}>
-                      {s.sort_order}. {s.name}
+                  <button className="flex-1 text-left" onClick={() => setActiveStage(open ? "all" : s.id)}>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-[0.86rem] font-semibold" style={{ textDecoration: complete ? "line-through" : undefined }}>
+                        {s.sort_order}. {s.name}
+                      </div>
+                      {checks.missing.length > 0 && (
+                        <AlertTriangle size={12} style={{ color: "hsl(var(--ss-burgundy))" }} />
+                      )}
                     </div>
-                    <div className="text-[0.72rem] opacity-60">{count} file{count === 1 ? "" : "s"}</div>
+                    <div className="text-[0.72rem] opacity-60">
+                      {count} file{count === 1 ? "" : "s"}
+                      {checks.total ? ` · ${checks.ok}/${checks.total} checks` : ""}
+                    </div>
                   </button>
                   <UploadButton
                     busy={uploadingTo === s.id}
                     onFiles={(fl) => void upload(fl, s.id)}
                   />
                 </div>
+
+                {open && checks.total > 0 && (
+                  <ul className="mt-3 space-y-1.5 border-t pt-2" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                    {checks.list.map((t) => {
+                      const satisfied = isSatisfied(t);
+                      const auto = satisfied && !t.is_done;
+                      return (
+                        <li key={t.id} className="flex items-start gap-2">
+                          <button
+                            aria-label="Toggle checklist item"
+                            onClick={() => void toggleTask(t)}
+                            className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border"
+                            style={{
+                              borderColor: satisfied ? "hsl(var(--ss-burgundy) / .6)" : "hsl(var(--ss-burgundy) / .3)",
+                              background: satisfied ? "hsl(var(--ss-burgundy))" : "transparent",
+                              color: "#fff",
+                            }}
+                          >
+                            {satisfied && <Check size={11} />}
+                          </button>
+                          <div className="flex-1">
+                            <div
+                              className="text-[0.78rem] leading-tight"
+                              style={{ opacity: satisfied ? 0.55 : 1, textDecoration: satisfied ? "line-through" : undefined }}
+                            >
+                              {t.label}
+                            </div>
+                            {t.kind === "document" && (
+                              <button
+                                className="text-[0.68rem] underline-offset-2 hover:underline"
+                                style={{ opacity: 0.6 }}
+                                onClick={() => t.doc_folder && setActiveStage(`doc:${t.doc_folder}`)}
+                              >
+                                {auto ? "Document on file" : "Required document"}
+                                {t.doc_folder
+                                  ? ` · ${DOC_FOLDERS.find((d) => d.key === t.doc_folder)?.label ?? t.doc_folder}`
+                                  : ""}
+                              </button>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
             );
           })}
+
 
           <div className="pt-3">
             <div className="ss-tag">Document vault</div>
