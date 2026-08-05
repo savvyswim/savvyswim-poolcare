@@ -23,7 +23,10 @@ type Stage = {
   start_date: string | null;
   end_date: string | null;
   duration_days: number;
+  depends_on_id: string | null;
+  lag_days: number;
 };
+
 
 type ProjectFile = {
   id: string;
