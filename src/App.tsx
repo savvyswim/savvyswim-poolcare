@@ -12,6 +12,8 @@ import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import SetPassword from "./pages/SetPassword.tsx";
 import Auth from "./pages/Auth.tsx";
+import Portal from "./pages/Portal.tsx";
+import { isAppHost } from "@/hooks/useAppHost";
 import AdminDesigns from "./pages/AdminDesigns.tsx";
 import AdminCleaning from "./pages/AdminCleaning.tsx";
 import AdminStore from "./pages/AdminStore.tsx";
