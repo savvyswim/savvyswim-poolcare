@@ -228,10 +228,14 @@ export function ProjectTimeline({
           <button className="ss-btn ss-btn-ghost" onClick={() => setEditing((v) => !v)}>
             {editing ? "Done editing" : "Edit dates"}
           </button>
+          <button className="ss-btn ss-btn-ghost" onClick={() => void linkInSequence()} disabled={busy}>
+            <Link2 size={13} /> Link in sequence
+          </button>
           <button className="ss-btn" onClick={() => void autoSchedule()} disabled={busy}>
             {busy ? <Loader2 size={13} className="animate-spin" /> : <Wand2 size={13} />} Auto-schedule
           </button>
         </div>
+
       </div>
 
       <div className="mt-1 text-[0.72rem] opacity-60">
