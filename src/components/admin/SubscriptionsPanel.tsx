@@ -6,7 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type PricingRow = {
   id: string;
@@ -49,6 +60,7 @@ export function SubscriptionsPanel() {
   const [subs, setSubs] = useState<SubRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -79,6 +91,15 @@ export function SubscriptionsPanel() {
     setSavingId(null);
     if (error) return toast.error(error.message);
     toast.success(`${row.sku} saved`);
+  };
+
+  const deleteSub = async (id: string) => {
+    setDeletingId(id);
+    const { error } = await supabase.from("subscriptions").delete().eq("id", id);
+    setDeletingId(null);
+    if (error) return toast.error(error.message);
+    setSubs((prev) => prev.filter((s) => s.id !== id));
+    toast.success("Subscriber removed");
   };
 
   if (loading) {
@@ -169,13 +190,47 @@ export function SubscriptionsPanel() {
                     <div className="font-medium">{s.customer_name ?? "—"}</div>
                     <div className="text-sm text-muted-foreground">{s.email}</div>
                   </div>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      statusTone[s.status] ?? "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {s.cancel_at_period_end ? "canceling" : s.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        statusTone[s.status] ?? "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {s.cancel_at_period_end ? "canceling" : s.status}
+                    </span>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          aria-label="Delete subscriber"
+                        >
+                          {deletingId === s.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete this subscriber record?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This removes {s.customer_name ?? s.email ?? "this record"} from your
+                            subscriber list. It does not cancel their billing with the payment
+                            provider — cancel there first if the plan is still active.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Keep</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => deleteSub(s.id)}>
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
                 <div className="mt-3 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2">
                   <div>Plan: {s.plan_name ?? "—"}</div>
