@@ -401,7 +401,7 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+            <div className="px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16 xl:px-20 xl:py-24">
               {/* photo trio */}
               <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:ml-auto lg:w-[58%]">
                 {[
@@ -438,7 +438,7 @@ const Index = () => {
                   <p className="mt-3 font-editorial text-[clamp(1.3rem,3vw,1.9rem)] leading-tight text-primary">
                     On duty, so you don&apos;t have to be.
                   </p>
-                  <p className="mt-4 text-[16px] leading-relaxed text-foreground/75">
+                  <p className="mt-4 text-[16px] lg:text-[1.1rem] leading-relaxed lg:leading-[1.7] text-foreground/75">
                     Weekly pool cleaning, equipment service and repair across Dallas–Fort Worth. Photo report
                     after every visit — water not clear? We come back free, same day.
                   </p>
@@ -467,16 +467,16 @@ const Index = () => {
 
         {/* Every visit includes — under the panel */}
         <div className="relative bg-canvas">
-          <div className="container-tight grid gap-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="container-tight grid gap-6 py-12 lg:gap-8 lg:py-16 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { n: "01", t: "Skim, brush & vacuum" },
               { n: "02", t: "Full chemistry balance" },
               { n: "03", t: "Baskets & filter check" },
               { n: "04", t: "Photo report after each visit" },
             ].map((s) => (
-              <div key={s.n} className="card-3d px-5 py-6">
+              <div key={s.n} className="card-3d px-5 py-6 lg:px-7 lg:py-8">
                 <span className="font-display text-[13px] text-accent">{s.n}</span>
-                <p className="mt-2 text-[15px] leading-snug text-primary/85">{s.t}</p>
+                <p className="mt-2 text-[15px] lg:text-base leading-snug lg:leading-relaxed text-primary/85">{s.t}</p>
               </div>
             ))}
           </div>
@@ -486,15 +486,15 @@ const Index = () => {
 
         {/* Spec sheet grid */}
         <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
-          <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:grid-cols-12">
+          <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:gap-x-14 lg:py-24 xl:py-28 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <p className="tech-label">§ 01 — Method</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary-foreground">
+              <p className="mt-6 max-w-xl text-[17px] lg:text-[1.15rem] leading-relaxed lg:leading-[1.75] text-primary-foreground">
                 Licensed technicians, calibrated chemistry, and monitored equipment. Every visit is logged,
                 photographed, and time-stamped — classic pool craft, run like a control room.
               </p>
               <p className="mt-10 tech-label">§ 02 — Scope</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary-foreground">
+              <p className="mt-6 max-w-xl text-[17px] lg:text-[1.15rem] leading-relaxed lg:leading-[1.75] text-primary-foreground">
                 Weekly maintenance is the baseline. From there: equipment repair, pump and filter service,
                 salt and automation tuning, and green-pool recovery. No contracts.
               </p>
@@ -596,7 +596,7 @@ const Index = () => {
 
 
       {/* PROCESS — how service works */}
-      <section className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="absolute inset-0 water-caustics opacity-40" />
         <div className="container-tight relative">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -623,11 +623,11 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
                 How it goes
               </div>
-              <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-6">
+              <h2 className="text-[2rem] sm:text-[2.6rem] lg:text-[3.05rem] xl:text-[3.35rem] leading-[1.12] lg:leading-[1.07] font-semibold tracking-tight mb-6">
                 Clean water,
                 <span className="text-gradient-amber"> handled on a schedule.</span>
               </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              <p className="text-muted-foreground text-lg lg:text-[1.175rem] leading-relaxed lg:leading-[1.75] mb-8">
                 Every Savvy Swim account starts with a free water test and equipment
                 check — then a certified tech shows up the same day each week and
                 sends you a photo report before they leave.
@@ -655,17 +655,17 @@ const Index = () => {
       </section>
 
       {/* CLEANING PLANS */}
-      <section id="cleaning" className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline">
+      <section id="cleaning" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Keeping it clean
             </div>
-            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight mb-4">
+            <h2 className="text-[2rem] sm:text-[2.6rem] lg:text-[3.05rem] xl:text-[3.35rem] leading-[1.12] lg:leading-[1.07] font-semibold tracking-tight mb-4">
               Weekly cleaning
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed">
+            <p className="text-muted-foreground text-lg lg:text-[1.175rem] leading-relaxed lg:leading-[1.75]">
               Licensed, insured techs. Chemicals included. Every visit ends with a photo
               report in your inbox — no guessing, no surprise invoices.
             </p>
@@ -852,17 +852,17 @@ const Index = () => {
       </section>
 
       {/* REFERRAL */}
-      <section id="refer" className="perf-section relative border-y border-hairline bg-navy-brand py-20 sm:py-28">
+      <section id="refer" className="perf-section relative border-y border-hairline bg-navy-brand py-20 sm:py-28 lg:py-32 xl:py-40">
         <div className="container-tight">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             <div>
               <div className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-chlorine">
                 Refer a neighbor
               </div>
-              <h2 className="font-editorial text-[2.2rem] italic leading-[1.05] text-canvas sm:text-[3rem]">
+              <h2 className="font-editorial text-[2.2rem] italic leading-[1.05] text-canvas sm:text-[3rem] lg:text-[3.5rem]">
                 Get a free month.
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-canvas/70">
+              <p className="mt-5 max-w-xl text-base lg:text-[1.1rem] leading-relaxed lg:leading-[1.75] text-canvas/70">
                 For every neighbor who signs up for 12 months of full service with your code, you get
                 a free month of service. They get 20% off their first month.
               </p>
@@ -913,18 +913,18 @@ const Index = () => {
 
 
       {/* MARKETING */}
-      <section id="portfolio" className="perf-section py-24 sm:py-32 relative">
+      <section id="portfolio" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative">
         <div className="container-tight">
           <div className="max-w-3xl mb-14">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Why Savvy Swim
             </div>
-            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
+            <h2 className="text-[2rem] sm:text-[2.6rem] lg:text-[3.05rem] xl:text-[3.35rem] leading-[1.12] lg:leading-[1.07] font-semibold tracking-tight">
               Never think about your pool
               <br />
               <span className="text-gradient-chrome">again.</span>
             </h2>
-            <p className="text-muted-foreground mt-5 text-base sm:text-lg leading-relaxed max-w-2xl">
+            <p className="text-muted-foreground mt-5 text-base sm:text-lg lg:text-[1.175rem] leading-relaxed lg:leading-[1.75] max-w-2xl">
               One flat weekly rate. Certified techs, balanced water, working equipment, and a photo
               report in your inbox after every single visit — so you always know exactly what was
               done.
@@ -952,7 +952,7 @@ const Index = () => {
               <div key={b.title} className="card-3d rounded-sm p-7 sm:p-8 flex flex-col">
                 <b.icon className="h-6 w-6 text-amber-brand mb-5" />
                 <h3 className="text-lg font-semibold mb-2">{b.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{b.desc}</p>
+                <p className="text-sm lg:text-[0.98rem] text-muted-foreground leading-relaxed lg:leading-[1.7]">{b.desc}</p>
               </div>
             ))}
           </div>
@@ -971,7 +971,7 @@ const Index = () => {
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-brand mb-4">
                 New customer offer
               </div>
-              <h3 className="text-[1.7rem] sm:text-[2.1rem] leading-[1.1] font-semibold tracking-tight mb-5">
+              <h3 className="text-[1.7rem] sm:text-[2.1rem] lg:text-[2.5rem] leading-[1.1] lg:leading-[1.08] font-semibold tracking-tight mb-5">
                 First month of weekly service, half off.
               </h3>
               <ul className="space-y-3 mb-8">
@@ -1007,13 +1007,13 @@ const Index = () => {
 
 
       {/* TESTIMONIALS */}
-      <section className="perf-section py-24 sm:py-32 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
               Neighbors talking
             </div>
-            <h2 className="text-[2rem] sm:text-[2.6rem] leading-[1.12] font-semibold tracking-tight">
+            <h2 className="text-[2rem] sm:text-[2.6rem] lg:text-[3.05rem] xl:text-[3.35rem] leading-[1.12] lg:leading-[1.07] font-semibold tracking-tight">
               Loved by neighbors
               <span className="text-gradient-amber"> across DFW.</span>
             </h2>
@@ -1041,7 +1041,7 @@ const Index = () => {
                       <Star key={s} className="h-4 w-4 fill-amber-brand text-amber-brand" />
                     ))}
                   </div>
-                  <p className="text-sm text-foreground/90 leading-relaxed mb-6">"{t.q}"</p>
+                  <p className="text-sm lg:text-base text-foreground/90 leading-relaxed lg:leading-[1.75] mb-6">"{t.q}"</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-hairline">
                     <div className="h-9 w-9 rounded-full bg-amber-brand/15 grid place-items-center text-amber-brand font-bold text-sm">
                       {t.a[0]}
@@ -1090,7 +1090,7 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section id="contact" className="perf-section py-24 sm:py-32 relative overflow-hidden">
+      <section id="contact" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative overflow-hidden">
         <div className="container-tight">
           <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">
@@ -1103,7 +1103,7 @@ const Index = () => {
               <div className="mx-auto mb-6 relative h-16 w-16 rounded-full bg-amber-brand grid place-items-center shadow-cta animate-float">
                 <Waves className="h-7 w-7 text-primary-foreground" />
               </div>
-              <h2 className="text-[2.25rem] sm:text-[3rem] leading-[1.1] font-semibold tracking-tight mb-4">
+              <h2 className="text-[2.25rem] sm:text-[3rem] lg:text-[3.6rem] xl:text-[4rem] leading-[1.1] lg:leading-[1.05] font-semibold tracking-tight mb-4">
                 Ready to dive in?
                 <br />
                 <span className="text-gradient-amber italic">Let's clean your pool.</span>
