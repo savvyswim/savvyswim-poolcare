@@ -333,6 +333,7 @@ const Index = () => {
                 {[
                   { label: "Pool Cleaning", href: "#cleaning" },
                   { label: "Swim Club", href: "#membership" },
+                  { label: "Refer & Save", href: "#refer" },
                   { label: "Our Work", href: "#portfolio" },
                   { label: "About Us", href: "#about" },
                   { label: "Contact", href: "#contact" },
