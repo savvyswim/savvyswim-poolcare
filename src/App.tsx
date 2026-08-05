@@ -62,7 +62,7 @@ const App = () => (
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/crm/login" element={<Auth />} />
-            <Route path="/admin/crm/app" element={<CrmApp />} />
+            <Route path="/admin/crm/app" element={<RequireModule module="console"><CrmApp /></RequireModule>} />
             <Route path="/admin/crm/legacy" element={<AdminCRM />} />
             <Route element={<CrmLayout />}>
               <Route path="/admin/crm" element={<RoutePage />} />
