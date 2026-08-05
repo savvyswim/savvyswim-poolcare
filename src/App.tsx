@@ -35,6 +35,7 @@ import EmailCenter from "@/crm/pages/EmailCenter";
 import Reports from "@/crm/pages/Reports";
 import WebsiteConnect from "@/crm/pages/WebsiteConnect";
 import CrmSettings from "@/crm/pages/Settings";
+import { RequireModule } from "@/crm/components/RequireModule";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
