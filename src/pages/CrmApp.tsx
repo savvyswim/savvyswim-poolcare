@@ -7,6 +7,7 @@ export default function CrmApp() {
       <Seo
         title="Savvy Swim Operations CRM"
         description="Internal Savvy Swim operations console for routes, customers, techs and finance."
+        path="/crm/app"
       />
       <div className="flex items-center justify-between border-b px-4 py-2 text-xs uppercase tracking-widest">
         <span className="font-semibold">Operations console</span>
