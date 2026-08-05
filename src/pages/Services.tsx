@@ -15,7 +15,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import Seo from "@/components/Seo";
-import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
+import { buildSmsHref, trackContactClick, withCampaignParams } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
 
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
