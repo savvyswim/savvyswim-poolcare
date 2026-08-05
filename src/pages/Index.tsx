@@ -46,9 +46,14 @@ import {
 
 const MEMBERSHIP_FAQ = [
   {
+    q: "Summer offer — what's free for new customers?",
+    a: "New customers who join the Savvy Swim Club on a 12-month agreement get their first month of membership free plus their first service visit free. Offer applies to new customers only, one per household, and requires the 12-month Swim Club agreement to stay in place. If the agreement is cancelled early, the value of the free visit is billed at standard rates.",
+  },
+  {
     q: "What is the Savvy Swim Club?",
     a: "It's our $19.99/month membership for pool owners in DFW. Members get discounted pricing on parts and labor, a half-price filter clean, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
   },
+
   {
     q: "What do members get, exactly?",
     a: "One filter clean at 50% off (one time per membership), 5% off all parts we supply, 7% off installation and repair labor, priority booking on the service calendar, and unlimited 24/7 text support for water chemistry and equipment questions.",
