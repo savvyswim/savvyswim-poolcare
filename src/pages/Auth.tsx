@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Waves } from "lucide-react";
+import { isSharedDevice, setSharedDevice } from "@/lib/sessionSecurity";
 
 export default function Auth() {
   const nav = useNavigate();
@@ -16,6 +17,7 @@ export default function Auth() {
   const [email, setEmail] = useState(inviteEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [shared, setShared] = useState(() => isSharedDevice());
 
   useEffect(() => {
     if (!loading && user) nav("/admin/designs", { replace: true });
@@ -64,6 +66,21 @@ export default function Auth() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
+          <label className="flex items-start gap-2 text-xs text-muted-foreground cursor-pointer">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 accent-current"
+              checked={shared}
+              onChange={(e) => {
+                setShared(e.target.checked);
+                setSharedDevice(e.target.checked);
+              }}
+            />
+            <span>
+              This is a shared or public device — sign me out after 10 minutes idle and when I close
+              the tab.
+            </span>
+          </label>
           <Button type="submit" className="w-full" disabled={busy}>
             {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
           </Button>
