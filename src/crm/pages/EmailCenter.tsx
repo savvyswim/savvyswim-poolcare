@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { Snowflake } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
@@ -10,12 +11,31 @@ type FeedRow = {
   ss_customers: { full_name: string; email: string | null } | null;
 };
 
+const FREEZE_BODY = `A hard freeze is headed our way. Please protect your pool equipment tonight:
+
+1. LEAVE YOUR PUMP RUNNING 24/7 until temperatures stay above freezing. Moving water does not freeze. This is the single most important step.
+2. Do NOT shut off the breaker to the pool equipment.
+3. Open all valves and set your system to circulate normally.
+4. Run any spa, waterfall, or water feature lines for a few minutes each hour, or leave them circulating.
+5. Keep the water level at normal height — skimmers crack when the level drops.
+6. If you lose power, drain the pump, filter, and heater so trapped water cannot expand and crack the housings.
+7. Remove and store any exposed cleaner or floating chlorinator.
+
+If your equipment stops running, ices over, or you hear it straining, call us right away at (469) 425-6242 — do not restart it yourself.
+
+We may reschedule routes during the freeze for our techs' safety. Your service day will be made up as soon as roads are clear, at no extra charge.
+
+On duty, so you don't have to be.
+— Savvy Swim`;
+
 const TEMPLATES = [
   { id: "welcome", title: "Welcome to Savvy Swim", body: "Your service starts this week. Your tech will text on the way." },
   { id: "reminder", title: "Service tomorrow", body: "Please unlock the gate and secure pets before your visit." },
   { id: "green", title: "Green pool recovery plan", body: "Here's the clean-up plan and timeline for your pool." },
   { id: "invoice", title: "Invoice ready", body: "Your monthly invoice is available in your portal." },
+  { id: "freeze", title: "FREEZE WARNING — protect your pool tonight", body: FREEZE_BODY },
 ];
+
 
 export default function EmailCenter() {
   const [template, setTemplate] = useState(TEMPLATES[0]);
@@ -60,6 +80,33 @@ export default function EmailCenter() {
   return (
     <div className="space-y-4">
       <SectionTitle title="Email center" sub="Templates, campaigns, and the customer activity feed" />
+
+      <div
+        className="ss-card flex flex-wrap items-center gap-3 p-4"
+        style={{ borderColor: "hsl(var(--ss-aqua))", background: "hsl(var(--ss-aqua) / 0.08)" }}
+      >
+        <Snowflake size={20} style={{ color: "hsl(var(--ss-aqua))" }} />
+        <div className="min-w-[220px] flex-1">
+          <div className="text-[0.9rem] font-semibold">Freeze warning blast</div>
+          <div className="text-[0.75rem] opacity-70">
+            Hard freeze coming? Send every active customer the pump-runs-24/7 equipment protection notice.
+          </div>
+        </div>
+        <button
+          className="ss-btn"
+          onClick={() => {
+            const t = TEMPLATES.find((x) => x.id === "freeze")!;
+            setTemplate(t);
+            setSubject(t.title);
+            setBody(t.body);
+            setAudience("all");
+            toast.info("Freeze warning loaded — review it, then send.");
+          }}
+        >
+          Load freeze warning
+        </button>
+      </div>
+
 
       <div className="grid gap-3 lg:grid-cols-2">
         <div className="ss-card p-4">
