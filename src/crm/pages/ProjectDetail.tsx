@@ -212,6 +212,17 @@ export default function ProjectDetail() {
 
   async function toggleStage(s: Stage) {
     const next = s.status === "complete" ? "pending" : "complete";
+    if (next === "complete") {
+      const { missing } = stageChecks(s.id);
+      if (missing.length) {
+        const ok = window.confirm(
+          `${s.name} still has ${missing.length} open item${missing.length === 1 ? "" : "s"}:\n\n` +
+            missing.map((m) => `• ${m.label}${m.kind === "document" ? " (document)" : ""}`).join("\n") +
+            "\n\nMark the stage complete anyway?",
+        );
+        if (!ok) return;
+      }
+    }
     const { error } = await supabase
       .from("ss_project_stages")
       .update({ status: next, completed_at: next === "complete" ? new Date().toISOString() : null })
@@ -219,6 +230,20 @@ export default function ProjectDetail() {
     if (error) return toast.error(error.message);
     setStages((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: next } : x)));
   }
+
+  async function toggleTask(t: StageTask) {
+    const next = !t.is_done;
+    setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, is_done: next } : x)));
+    const { error } = await supabase
+      .from("ss_project_stage_tasks")
+      .update({ is_done: next, completed_at: next ? new Date().toISOString() : null })
+      .eq("id", t.id);
+    if (error) {
+      toast.error(error.message);
+      setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, is_done: !next } : x)));
+    }
+  }
+
 
   async function addStage() {
     const name = window.prompt("Stage name");
