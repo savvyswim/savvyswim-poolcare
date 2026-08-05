@@ -10,7 +10,6 @@ import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
 import { PrivacyNotice, useWindowObscured } from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
 
@@ -53,7 +52,6 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const nav = useNavigate();
   const loc = useLocation();
   const [drawer, setDrawer] = useState(false);
-  const [synced, setSynced] = useState<string | null>(null);
   const obscured = useWindowObscured();
 
   useEffect(() => {
@@ -66,10 +64,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
   useEffect(() => setDrawer(false), [loc.pathname]);
 
-  useEffect(() => {
-    supabase.from("ss_settings").select("value").eq("key", "quickbooks").maybeSingle()
-      .then(({ data }) => setSynced((data?.value as { last_synced?: string })?.last_synced ?? null));
-  }, []);
+
+
 
   const items = useMemo(
     () => STAFF_NAV.filter((i) => canAccess(id.level, i.module)),
@@ -133,27 +129,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
               <SavvyLogo size="sm" />
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
-              <div className="ss-tag" style={{ fontSize: "0.5rem" }}>
-                QuickBooks · Last synced
-              </div>
-              <div className="ss-num text-[0.72rem] opacity-70">
-                {synced ? new Date(synced).toLocaleDateString() : "Never"}
-              </div>
-            </div>
-            <button
-              className="ss-btn ss-btn-ghost"
-              onClick={async () => {
-                await supabase.from("ss_settings").update({
-                  value: { last_synced: new Date().toISOString() },
-                }).eq("key", "quickbooks");
-                setSynced(new Date().toISOString());
-              }}
-            >
-              Sync now
-            </button>
-          </div>
+          <div className="flex items-center gap-3" />
+
         </div>
         <StripeBand />
       </header>
