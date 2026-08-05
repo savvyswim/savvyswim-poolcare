@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Services from "./pages/Services.tsx";
+import PoolCleaningFrisco from "./pages/PoolCleaningFrisco.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Auth from "./pages/Auth.tsx";
@@ -54,6 +55,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/pool-cleaning-frisco-tx" element={<PoolCleaningFrisco />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
