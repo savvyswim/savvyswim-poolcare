@@ -13,14 +13,16 @@ type Lead = {
   stage_changed_at: string | null; created_at: string;
 };
 
-const STAGES = [
-  { key: "new", label: "New" },
+type Stage = "new_lead" | "contacted" | "quote_sent" | "follow_up" | "won" | "lost";
+
+const STAGES: { key: Stage; label: string }[] = [
+  { key: "new_lead", label: "New" },
   { key: "contacted", label: "Contacted" },
-  { key: "quoted", label: "Quoted" },
-  { key: "scheduled", label: "Scheduled" },
+  { key: "quote_sent", label: "Quoted" },
+  { key: "follow_up", label: "Follow-up" },
   { key: "won", label: "Won" },
   { key: "lost", label: "Lost" },
-] as const;
+];
 
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
@@ -45,7 +47,7 @@ export default function Pipeline() {
     [rows],
   );
 
-  async function move(lead: Lead, stage: string) {
+  async function move(lead: Lead, stage: Stage) {
     const { error } = await supabase
       .from("ss_leads")
       .update({ stage, stage_changed_at: new Date().toISOString() })
