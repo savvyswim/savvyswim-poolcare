@@ -59,7 +59,8 @@ const App = () => (
           <ScrollToTop />
           <CartDrawer />
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={isAppHost() ? <Navigate to="/portal" replace /> : <Index />} />
+            <Route path="/portal" element={<Portal />} />
             <Route path="/services" element={<Services />} />
             <Route path="/pool-cleaning-frisco-tx" element={<PoolCleaningFrisco />} />
             <Route path="/set-password" element={<SetPassword />} />
