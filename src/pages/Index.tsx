@@ -1002,6 +1002,12 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> Call (469) 744-0379
                 </a>
                 <a
+                  href={SMS_HREF} onClick={() => trackContactClick("text_click", "why_savvy_hail")}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
+                >
+                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                </a>
+                <a
                   href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free pool service quote")}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
                 >
