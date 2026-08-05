@@ -454,6 +454,65 @@ export function ProjectTimeline({
 
         </div>
       )}
+
+      {pending && (
+        <div className="ss-modal-backdrop" role="dialog" aria-modal="true" aria-label="Preview downstream date shifts">
+          <div className="ss-modal max-w-lg">
+            <div className="ss-label">Review downstream shifts</div>
+            <div className="mt-1 text-[0.78rem] opacity-70">
+              {pending.label} — {pending.moved.length} dependent stage
+              {pending.moved.length === 1 ? "" : "s"} will move. Nothing is saved until you confirm.
+            </div>
+            <div className="mt-3 max-h-[45vh] space-y-1.5 overflow-y-auto">
+              {[...pending.moved]
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((m) => {
+                  const before = pending.baseline.find((b) => b.id === m.id);
+                  const shift = before?.start_date && m.start_date
+                    ? Math.round(
+                        (parse(m.start_date)!.getTime() - parse(before.start_date)!.getTime()) / DAY,
+                      )
+                    : 0;
+                  return (
+                    <div
+                      key={m.id}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-md px-2 py-1.5 text-[0.75rem]"
+                      style={{ background: "hsl(var(--ss-sand) / .5)" }}
+                    >
+                      <span className="truncate">
+                        <span className="opacity-50">{m.sort_order}.</span> {m.name}
+                      </span>
+                      <span className="flex items-center gap-1.5 whitespace-nowrap">
+                        <span className="line-through opacity-50">
+                          {fmt(before?.start_date ?? null)} – {fmt(before?.end_date ?? null)}
+                        </span>
+                        <span aria-hidden>→</span>
+                        <span style={{ color: "hsl(var(--ss-burgundy))" }}>
+                          {fmt(m.start_date)} – {fmt(m.end_date)}
+                        </span>
+                        {shift !== 0 && (
+                          <span className="opacity-60">
+                            ({shift > 0 ? "+" : ""}
+                            {shift}d)
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="mt-4 flex justify-end gap-2">
+              <button className="ss-btn ss-btn-ghost" onClick={discardPending} disabled={busy}>
+                Discard
+              </button>
+              <button className="ss-btn" onClick={() => void confirmPending()} disabled={busy}>
+                {busy ? <Loader2 size={13} className="animate-spin" /> : null} Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }
