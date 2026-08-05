@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   ArrowRight,
+  MessageSquare,
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { trackContactClick } from "@/lib/contactTracking";
