@@ -3,6 +3,7 @@ import { template as bookingConfirmationTemplate } from './booking-confirmation.
 import { template as invoiceTemplate } from './invoice.tsx'
 import { template as officeNewRequestTemplate } from './office-new-request.tsx'
 import { template as receiptTemplate } from './receipt.tsx'
+import { template as visitReminderTemplate } from './visit-reminder.tsx'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -26,5 +27,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'invoice': invoiceTemplate,
   'office-new-request': officeNewRequestTemplate,
   'receipt': receiptTemplate,
+  'visit-reminder': visitReminderTemplate,
 }
 
