@@ -10,8 +10,8 @@ import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
 import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
 import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
 
-const PHONE_DISPLAY = "(469) 213-8087";
-const PHONE_HREF = "tel:+14692138087";
+const PHONE_DISPLAY = "(469) 744-0379";
+const PHONE_HREF = "tel:+14697440379";
 const EMAIL = "hello@savvyswim.com";
 
 const NEIGHBORHOODS = [
@@ -77,7 +77,7 @@ const FriscoPoolCleaning = () => {
       provider: {
         "@type": "LocalBusiness",
         name: "Savvy Swim",
-        telephone: "+1-469-213-8087",
+        telephone: "+1-469-744-0379",
         email: EMAIL,
         url: "https://savvyswim.com",
         areaServed: { "@type": "City", name: "Frisco", addressRegion: "TX" },

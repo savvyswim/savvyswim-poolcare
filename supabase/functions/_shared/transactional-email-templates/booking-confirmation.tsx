@@ -76,8 +76,8 @@ export const BookingConfirmationEmail = ({
 
         <Text style={text}>
           Need to change something? Call or text us at{' '}
-          <Link href="tel:+14692138087" style={link}>
-            (469) 213-8087
+          <Link href="tel:+14697440379" style={link}>
+            (469) 744-0379
           </Link>
           .
         </Text>

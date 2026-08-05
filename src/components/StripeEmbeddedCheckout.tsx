@@ -13,8 +13,8 @@ export function StripeEmbeddedCheckout({ orderNumber, returnUrl }: StripeEmbedde
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
         Online card payment is temporarily unavailable. Your order{" "}
         <span className="font-semibold text-foreground">{orderNumber}</span> is saved — call{" "}
-        <a href="tel:+14692138087" className="font-semibold text-foreground">
-          (469) 213-8087
+        <a href="tel:+14697440379" className="font-semibold text-foreground">
+          (469) 744-0379
         </a>{" "}
         and we'll take payment or send an invoice.
       </div>

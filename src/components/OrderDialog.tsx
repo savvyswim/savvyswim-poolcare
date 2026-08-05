@@ -81,7 +81,7 @@ export const OrderDialog = ({
     });
     setSubmitting(false);
     if (error) {
-      toast.error("We couldn't send your request. Please call us at (469) 213-8087.");
+      toast.error("We couldn't send your request. Please call us at (469) 744-0379.");
       return;
     }
     setDone(true);

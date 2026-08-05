@@ -127,7 +127,7 @@ export const CartDrawer = () => {
 
     setSubmitting(false);
     if (error || !orderNumber) {
-      toast.error("We couldn't place your order. Call (469) 213-8087 and we'll take it by phone.");
+      toast.error("We couldn't place your order. Call (469) 744-0379 and we'll take it by phone.");
       return;
     }
 
@@ -154,8 +154,8 @@ export const CartDrawer = () => {
             <StripeEmbeddedCheckout orderNumber={placed} />
             <p className="text-xs text-muted-foreground pb-6">
               Prefer to pay later? Your order {placed} is already saved — call{" "}
-              <a href="tel:+14692138087" className="font-semibold text-foreground">
-                (469) 213-8087
+              <a href="tel:+14697440379" className="font-semibold text-foreground">
+                (469) 744-0379
               </a>{" "}
               and we'll invoice you instead.
             </p>

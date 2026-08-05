@@ -34,7 +34,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
       return toast.error("Please enter a valid email");
     if (!agreed) return toast.error("Please accept the 12-month Swim Club agreement");
     if (!PAYMENTS_ENABLED) {
-      return toast.info("Online payment is temporarily unavailable — call (469) 213-8087 to join.");
+      return toast.info("Online payment is temporarily unavailable — call (469) 744-0379 to join.");
     }
 
     setLoading(true);
