@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CalendarRange, Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+
 
 export type TimelineStage = {
   id: string;
@@ -39,8 +40,18 @@ export function ProjectTimeline({
 }) {
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [drag, setDrag] = useState<{ id: string; offsetDays: number } | null>(null);
+  const dragRef = useRef<{
+    id: string;
+    startX: number;
+    pxPerDay: number;
+    baseStart: number;
+    baseEnd: number;
+    offsetDays: number;
+  } | null>(null);
 
   const scheduled = stages.filter((s) => s.start_date && s.end_date);
+
 
   const bounds = useMemo(() => {
     const dates: number[] = [];
@@ -103,6 +114,54 @@ export function ProjectTimeline({
     if (error) toast.error(error.message);
   }
 
+  const stagesRef = useRef(stages);
+  stagesRef.current = stages;
+
+  const shiftStage = useCallback(
+    async (id: string, days: number) => {
+      const s = stagesRef.current.find((x) => x.id === id);
+      if (!s || !s.start_date || !s.end_date || !days) return;
+      const start = toISO(new Date(parse(s.start_date)!.getTime() + days * DAY));
+      const end = toISO(new Date(parse(s.end_date)!.getTime() + days * DAY));
+      onChange(
+        stagesRef.current.map((x) => (x.id === id ? { ...x, start_date: start, end_date: end } : x)),
+      );
+      const { error } = await supabase
+        .from("ss_project_stages")
+        .update({ start_date: start, end_date: end })
+        .eq("id", id);
+      if (error) toast.error(error.message);
+    },
+    [onChange],
+  );
+
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const days = Math.round((e.clientX - d.startX) / d.pxPerDay);
+      if (days !== d.offsetDays) {
+        d.offsetDays = days;
+        setDrag({ id: d.id, offsetDays: days });
+      }
+    };
+    const up = () => {
+      const d = dragRef.current;
+      dragRef.current = null;
+      setDrag(null);
+      if (d && d.offsetDays) void shiftStage(d.id, d.offsetDays);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [drag, shiftStage]);
+
   const finish = scheduled.length
     ? scheduled.reduce((m, s) => (parse(s.end_date)!.getTime() > m ? parse(s.end_date)!.getTime() : m), 0)
     : null;
@@ -146,15 +205,16 @@ export function ProjectTimeline({
           {[...stages]
             .sort((a, b) => a.sort_order - b.sort_order)
             .map((s) => {
+              const dragDays = drag?.id === s.id ? drag.offsetDays : 0;
               const sd = parse(s.start_date);
               const ed = parse(s.end_date);
               const has = sd && ed;
-              const left = has ? ((sd!.getTime() - bounds.min) / bounds.span) * 100 : 0;
-              const width = has
-                ? Math.max(((ed!.getTime() - sd!.getTime() + DAY) / bounds.span) * 100, 2)
-                : 0;
+              const sdT = has ? sd!.getTime() + dragDays * DAY : 0;
+              const edT = has ? ed!.getTime() + dragDays * DAY : 0;
+              const left = has ? ((sdT - bounds.min) / bounds.span) * 100 : 0;
+              const width = has ? Math.max(((edT - sdT + DAY) / bounds.span) * 100, 2) : 0;
               const complete = s.status === "complete";
-              const late = has && !complete && ed!.getTime() < Date.now();
+              const late = has && !complete && edT < Date.now();
               return (
                 <div key={s.id} className="flex items-center gap-2">
                   <div className="w-[40%] shrink-0 truncate text-[0.78rem]">
@@ -163,8 +223,32 @@ export function ProjectTimeline({
                   <div className="relative h-6 flex-1 rounded-full" style={{ background: "hsl(var(--ss-sand))" }}>
                     {has && (
                       <div
-                        className="absolute inset-y-0 rounded-full transition-all"
-                        title={`${fmt(s.start_date)} → ${fmt(s.end_date)}`}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Drag to reschedule ${s.name}`}
+                        className={`absolute inset-y-0 touch-none select-none rounded-full ${
+                          drag?.id === s.id ? "cursor-grabbing ring-1 ring-offset-1" : "cursor-grab transition-all"
+                        }`}
+                        title={`${fmt(toISO(new Date(sdT)))} → ${fmt(toISO(new Date(edT)))} · drag to reschedule`}
+                        onPointerDown={(e) => {
+                          const track = e.currentTarget.parentElement as HTMLElement;
+                          const pxPerDay = (track.getBoundingClientRect().width * DAY) / bounds.span;
+                          if (!pxPerDay) return;
+                          e.preventDefault();
+                          dragRef.current = {
+                            id: s.id,
+                            startX: e.clientX,
+                            pxPerDay,
+                            baseStart: sd!.getTime(),
+                            baseEnd: ed!.getTime(),
+                            offsetDays: 0,
+                          };
+                          setDrag({ id: s.id, offsetDays: 0 });
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "ArrowLeft") { e.preventDefault(); void shiftStage(s.id, -1); }
+                          if (e.key === "ArrowRight") { e.preventDefault(); void shiftStage(s.id, 1); }
+                        }}
                         style={{
                           left: `${left}%`,
                           width: `${width}%`,
@@ -178,12 +262,17 @@ export function ProjectTimeline({
                     )}
                   </div>
                   <div className="hidden w-[130px] shrink-0 text-right text-[0.7rem] opacity-60 sm:block">
-                    {fmt(s.start_date)} – {fmt(s.end_date)}
+                    {has ? `${fmt(toISO(new Date(sdT)))} – ${fmt(toISO(new Date(edT)))}` : "— – —"}
                   </div>
                 </div>
               );
             })}
+          <div className="pt-1 text-[0.7rem] opacity-55">
+            Drag any bar sideways to reschedule that stage — its length stays the same and overdue
+            stages re-flag instantly.
+          </div>
         </div>
+
       )}
 
       {editing && (
