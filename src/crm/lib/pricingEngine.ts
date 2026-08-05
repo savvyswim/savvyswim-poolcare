@@ -6,6 +6,8 @@ export type CityRate = {
   city: string;
   low: number;
   high: number;
+  market_avg: number;
+  market_note: string | null;
   is_active: boolean;
   sort_order: number;
 };
@@ -24,6 +26,8 @@ export type Addon = {
 export type Margins = {
   chem_cost_basis: number;
   margin_multiplier: number;
+  /** How far below the regional market average we quote, in percent (10–20). */
+  undercut_pct: number;
   wizard_done: boolean;
 };
 
@@ -44,6 +48,7 @@ export type PromoCode = {
 export const DEFAULT_MARGINS: Margins = {
   chem_cost_basis: 38,
   margin_multiplier: 3,
+  undercut_pct: 15,
   wizard_done: false,
 };
 
@@ -54,10 +59,31 @@ export const money2 = (n: number | null | undefined) =>
   `$${Number(n ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export const POOL_SIZES = [
-  { id: "small", label: "Small" },
-  { id: "avg", label: "Average" },
-  { id: "large", label: "Large" },
+  { id: "small", label: "Small · under 12k gal", gallons: 10000, factor: 0.88 },
+  { id: "avg", label: "Average · 12–20k gal", gallons: 16000, factor: 1 },
+  { id: "large", label: "Large · 20–30k gal", gallons: 25000, factor: 1.14 },
+  { id: "xl", label: "Oversized · 30k+ gal", gallons: 35000, factor: 1.3 },
 ] as const;
+
+export const UNDERCUT_MIN = 10;
+export const UNDERCUT_MAX = 20;
+
+export const clampUndercut = (n: number) =>
+  Math.min(UNDERCUT_MAX, Math.max(UNDERCUT_MIN, Math.round(Number(n) || UNDERCUT_MIN)));
+
+/** Regional market average for a city, falling back to the band midpoint plus a market premium. */
+export function marketAverage(band: { low: number; high: number; market_avg?: number } | undefined) {
+  if (!band) return 0;
+  const stored = Number(band.market_avg ?? 0);
+  if (stored > 0) return Math.round(stored);
+  return Math.round(((Number(band.low) + Number(band.high)) / 2) * 1.12);
+}
+
+/** What we should quote to land a set percentage under the regional average. */
+export function undercutTarget(marketAvg: number, pct: number, floor = 0) {
+  const raw = marketAvg * (1 - clampUndercut(pct) / 100);
+  return Math.max(Math.round(raw / 5) * 5, floor);
+}
 
 export const CONDITIONS = [
   { id: "clean", label: "Clean", cleanupLow: 0, cleanupHigh: 0 },
@@ -76,6 +102,7 @@ export async function fetchRateCard() {
       ...c,
       low: Number(c.low),
       high: Number(c.high),
+      market_avg: Number(c.market_avg ?? 0),
     })),
     addons: ((addons.data ?? []) as Addon[]).map((a) => ({ ...a, amount: Number(a.amount) })),
     margins: { ...DEFAULT_MARGINS, ...((settings.data?.value as Partial<Margins>) ?? {}) },
