@@ -15,6 +15,20 @@ import {
 
 type Line = { description: string; quantity: number; unit_price: number };
 
+/** Fires the invoice/receipt email. Best effort — never blocks the ledger write. */
+async function emailFinanceDoc(body: {
+  type: "invoice" | "receipt";
+  invoiceId: string;
+  paymentAmount?: number;
+  method?: string;
+}) {
+  try {
+    await supabase.functions.invoke("send-finance-email", { body });
+  } catch {
+    /* email delivery is best effort */
+  }
+}
+
 const emptyLine = (): Line => ({ description: "", quantity: 1, unit_price: 0 });
 
 export default function Invoices({ data }: { data: FinanceSlice }) {
@@ -96,7 +110,11 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
         reference: number,
       });
 
-      toast.success(`Invoice ${number} created`);
+      void emailFinanceDoc({ type: "invoice", invoiceId: inv.id });
+
+      toast.success(`Invoice ${number} created`, {
+        description: "Emailed to the customer if they have an address on file.",
+      });
       setCreating(false);
       setLines([emptyLine()]);
       setCustomerId("");
@@ -140,7 +158,16 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
         ref_id: inv.id,
         reference: inv.invoice_number,
       });
-      toast.success(`${money2(amount)} recorded`);
+      void emailFinanceDoc({
+        type: "receipt",
+        invoiceId: inv.id,
+        paymentAmount: amount,
+        method: "Manual",
+      });
+
+      toast.success(`${money2(amount)} recorded`, {
+        description: "Receipt emailed to the customer.",
+      });
       await reload();
     } catch (err: any) {
       toast.error(err?.message ?? "Could not record the payment");
