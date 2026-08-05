@@ -87,20 +87,25 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [uploadingTo, setUploadingTo] = useState<string | null>(null);
   const [activeStage, setActiveStage] = useState<string | "all">("all");
+  const [staff, setStaff] = useState<{ id: string; full_name: string; email: string | null; level: string }[]>([]);
+
 
   const load = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }] = await Promise.all([
+    const [{ data: p, error }, { data: st }, { data: fl }, { data: tk }, { data: stf }] = await Promise.all([
       supabase.from("ss_projects").select("*").eq("id", id).maybeSingle(),
       supabase.from("ss_project_stages").select("*").eq("project_id", id).order("sort_order"),
       supabase.from("ss_project_files").select("*").eq("project_id", id).order("created_at", { ascending: false }),
       supabase.from("ss_project_stage_tasks").select("*").eq("project_id", id).order("sort_order"),
+      supabase.from("ss_staff").select("id, full_name, email, level").eq("is_active", true).order("full_name"),
     ]);
     if (error) toast.error(error.message);
     setProject((p ?? null) as Project | null);
     setStages((st ?? []) as Stage[]);
     setTasks((tk ?? []) as StageTask[]);
+    setStaff((stf ?? []) as typeof staff);
+
     const list = (fl ?? []) as ProjectFile[];
     setFiles(list);
 
@@ -239,15 +244,25 @@ export default function ProjectDetail() {
     }
   }
 
+  async function notifyMissing(stageId: string) {
+    if (!id) return;
+    const { error } = await supabase.functions.invoke("project-stage-alerts", {
+      body: { mode: "stage", project_id: id, stage_id: stageId },
+    });
+    if (error) console.error("stage alert failed", error);
+  }
+
   async function toggleStage(s: Stage) {
     const next = s.status === "complete" ? "pending" : "complete";
+    let missingCount = 0;
     if (next === "complete") {
       const { missing } = stageChecks(s.id);
+      missingCount = missing.length;
       if (missing.length) {
         const ok = window.confirm(
           `${s.name} still has ${missing.length} open item${missing.length === 1 ? "" : "s"}:\n\n` +
             missing.map((m) => `• ${m.label}${m.kind === "document" ? " (document)" : ""}`).join("\n") +
-            "\n\nMark the stage complete anyway?",
+            "\n\nMark the stage complete anyway? An alert will be sent to the owner and project lead.",
         );
         if (!ok) return;
       }
@@ -258,7 +273,12 @@ export default function ProjectDetail() {
       .eq("id", s.id);
     if (error) return toast.error(error.message);
     setStages((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: next } : x)));
+    if (next === "complete" && missingCount) {
+      void notifyMissing(s.id);
+      toast.warning(`Alert sent — ${s.name} completed with ${missingCount} open item${missingCount === 1 ? "" : "s"}`);
+    }
   }
+
 
   async function toggleTask(t: StageTask) {
     const next = !t.is_done;
@@ -283,6 +303,27 @@ export default function ProjectDetail() {
     if (error) return toast.error(error.message);
     void load();
   }
+
+  async function setLead(leadId: string | null) {
+    if (!id) return;
+    const { error } = await supabase
+      .from("ss_projects")
+      .update({ lead_staff_id: leadId } as never)
+      .eq("id", id);
+    if (error) return toast.error(error.message);
+    setProject((p) => (p ? ({ ...p, lead_staff_id: leadId } as Project) : p));
+    toast.success(leadId ? "Project lead updated" : "Project lead cleared");
+  }
+
+  async function sendMissingDigest() {
+    if (!id) return;
+    const { error } = await supabase.functions.invoke("project-stage-alerts", {
+      body: { mode: "stage", project_id: id },
+    });
+    if (error) return toast.error("Could not send the alert");
+    toast.success("Alert sent to the owner and project lead");
+  }
+
 
   async function setStatus(status: string) {
     if (!id) return;
@@ -349,7 +390,22 @@ export default function ProjectDetail() {
             </button>
           ))}
         </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+          <div className="ss-label">Project lead</div>
+          <select
+            className="ss-input max-w-[16rem]"
+            value={(project as { lead_staff_id?: string | null }).lead_staff_id ?? ""}
+            onChange={(e) => void setLead(e.target.value || null)}
+          >
+            <option value="">Unassigned</option>
+            {staff.map((s) => (
+              <option key={s.id} value={s.id}>{s.full_name}{s.email ? ` — ${s.email}` : ""}</option>
+            ))}
+          </select>
+          <span className="text-[0.72rem] opacity-60">Gets missing-item alerts along with the owner.</span>
+        </div>
       </div>
+
 
       <ProjectTimeline
         stages={stages}
@@ -367,13 +423,17 @@ export default function ProjectDetail() {
 
       {missingAll.length > 0 && (
         <div className="ss-card p-4" style={{ borderColor: "hsl(var(--ss-burgundy) / .45)" }}>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <AlertTriangle size={15} style={{ color: "hsl(var(--ss-burgundy))" }} />
             <div className="ss-label">
               {missingAll.length} open item{missingAll.length === 1 ? "" : "s"}
               {missingDocs.length ? ` · ${missingDocs.length} document${missingDocs.length === 1 ? "" : "s"} missing` : ""}
             </div>
+            <button className="ss-btn ss-btn-ghost ml-auto" onClick={() => void sendMissingDigest()}>
+              Send alert now
+            </button>
           </div>
+
           <ul className="mt-2 grid gap-1 sm:grid-cols-2">
             {missingAll.slice(0, 8).map((t) => {
               const stage = stages.find((s) => s.id === t.stage_id);

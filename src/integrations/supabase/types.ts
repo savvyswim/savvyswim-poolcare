@@ -1585,6 +1585,51 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_project_alert_log: {
+        Row: {
+          alert_key: string
+          channel: string
+          created_at: string
+          id: string
+          project_id: string
+          recipients: string[]
+          stage_id: string | null
+        }
+        Insert: {
+          alert_key: string
+          channel?: string
+          created_at?: string
+          id?: string
+          project_id: string
+          recipients?: string[]
+          stage_id?: string | null
+        }
+        Update: {
+          alert_key?: string
+          channel?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+          recipients?: string[]
+          stage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_project_alert_log_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "ss_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_project_alert_log_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "ss_project_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_project_files: {
         Row: {
           created_at: string
@@ -1776,6 +1821,7 @@ export type Database = {
           id: string
           kind: string
           lead_id: string | null
+          lead_staff_id: string | null
           notes: string | null
           start_date: string | null
           status: string
@@ -1793,6 +1839,7 @@ export type Database = {
           id?: string
           kind?: string
           lead_id?: string | null
+          lead_staff_id?: string | null
           notes?: string | null
           start_date?: string | null
           status?: string
@@ -1810,6 +1857,7 @@ export type Database = {
           id?: string
           kind?: string
           lead_id?: string | null
+          lead_staff_id?: string | null
           notes?: string | null
           start_date?: string | null
           status?: string
@@ -1830,6 +1878,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_projects_lead_staff_id_fkey"
+            columns: ["lead_staff_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
             referencedColumns: ["id"]
           },
         ]
