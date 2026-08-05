@@ -253,10 +253,15 @@ export default function Products() {
                 <>
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div>
-                      <div className="ss-label">They pay now</div>
+                      <div className="ss-label">
+                        {providerName.trim() ? providerName.trim() : "They pay now"}
+                      </div>
                       <div className="ss-num text-[1.05rem] font-bold">
                         {money(currentMonthly)}/mo
                       </div>
+                      {providerPlan.trim() && (
+                        <div className="text-[0.68rem] opacity-70">{providerPlan.trim()}</div>
+                      )}
                     </div>
                     <div>
                       <div className="ss-label">With Savvy Swim</div>
@@ -273,9 +278,14 @@ export default function Products() {
                   </div>
                   <div className="mt-3 text-[0.85rem] font-bold">
                     {vsCurrent > 0
-                      ? `They save ${money(vsCurrentYear)} over 12 months (${vsCurrentPct}% less than today)`
-                      : "Our rate is at or above what they pay today — adjust the rate or lead with service value"}
+                      ? `Switching from ${providerName.trim() || "their current provider"}${
+                          providerPlan.trim() ? ` (${providerPlan.trim()})` : ""
+                        } saves ${money(vsCurrentYear)} over 12 months — ${vsCurrentPct}% less than today`
+                      : `Our rate is at or above what ${
+                          providerName.trim() || "their current provider"
+                        } charges today — adjust the rate or lead with service value`}
                   </div>
+
                 </>
               ) : (
                 <div className="text-[0.8rem] opacity-70">
