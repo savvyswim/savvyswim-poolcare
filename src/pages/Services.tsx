@@ -147,6 +147,9 @@ const Services = () => {
             <img
               src={logoMark.url}
               alt="Savvy Swim — on duty, so you don't have to be"
+              width={44}
+              height={44}
+              decoding="async"
               className="h-11 w-11 object-cover border border-primary/15"
             />
             <span className="tracking-tight text-base leading-tight flex flex-col">
@@ -216,6 +219,8 @@ const Services = () => {
                     alt="Savvy Swim lifeguard chair with a red striped umbrella beside a pool"
                     className="w-full aspect-[4/5] object-cover rounded-sm"
                     loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
                   />
                   <figcaption className="mt-3 flex items-center justify-between font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     <span>Plate I — On duty</span>
@@ -272,6 +277,7 @@ const Services = () => {
                       src={s.photo}
                       alt={s.alt}
                       loading="lazy"
+                  decoding="async"
                       className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute top-3 left-3 font-tech text-[10px] tracking-[0.2em] bg-background/85 px-2 py-1 rounded-sm">
@@ -320,6 +326,7 @@ const Services = () => {
                 src={photoRedUmbrellas.url}
                 alt="Red and white striped fringed umbrellas against a blue sky"
                 loading="lazy"
+                  decoding="async"
                 className="w-full aspect-[5/4] object-cover rounded-sm"
               />
             </div>

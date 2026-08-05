@@ -267,6 +267,9 @@ const Index = () => {
               <img
                 src={logoMark.url}
                 alt="Savvy Swim — on duty, so you don't have to be"
+                width={44}
+                height={44}
+                decoding="async"
                 className="h-9 w-9 shrink-0 border border-primary/15 object-cover sm:h-11 sm:w-11"
               />
               <span className="flex min-w-0 flex-col leading-tight tracking-tight">
@@ -429,6 +432,8 @@ const Index = () => {
                     src={photoLifeguardChair.url}
                     alt="Savvy Swim lifeguard chair and red cabana umbrella beside a serviced pool"
                     loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
                     className="aspect-[4/5] w-full object-cover"
                   />
                   <figcaption className="absolute bottom-0 left-0 bg-accent px-3 py-1.5 font-tech text-[10px] uppercase tracking-[0.2em] text-primary-foreground">
@@ -616,9 +621,12 @@ const Index = () => {
                 <img
                   src={poolDesign}
                   alt="Sparkling clean backyard pool maintained weekly by Savvy Swim"
+                  loading="lazy"
+                  decoding="async"
                   width={1920}
                   height={1280}
                   loading="lazy"
+                  decoding="async"
                   className="w-full h-auto"
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
@@ -691,6 +699,7 @@ const Index = () => {
                   src={p.src}
                   alt={p.alt}
                   loading="lazy"
+                  decoding="async"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-105"
                 />
               </div>
@@ -894,6 +903,7 @@ const Index = () => {
                 src={photoLifeguardChair.url}
                 alt="Savvy Swim branded umbrella beside a crystal-clear serviced pool"
                 loading="lazy"
+                  decoding="async"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
@@ -999,7 +1009,7 @@ const Index = () => {
         <div className="container-tight">
           <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">
-              <img src={poolNight} alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" />
+              <img src={poolNight} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-25" />
             </div>
             <div className="absolute inset-0 bg-gradient-radial opacity-90" />
             <div className="absolute inset-0 water-caustics opacity-50" />
