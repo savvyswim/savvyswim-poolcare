@@ -114,6 +114,54 @@ export function ProjectTimeline({
     if (error) toast.error(error.message);
   }
 
+  const stagesRef = useRef(stages);
+  stagesRef.current = stages;
+
+  const shiftStage = useCallback(
+    async (id: string, days: number) => {
+      const s = stagesRef.current.find((x) => x.id === id);
+      if (!s || !s.start_date || !s.end_date || !days) return;
+      const start = toISO(new Date(parse(s.start_date)!.getTime() + days * DAY));
+      const end = toISO(new Date(parse(s.end_date)!.getTime() + days * DAY));
+      onChange(
+        stagesRef.current.map((x) => (x.id === id ? { ...x, start_date: start, end_date: end } : x)),
+      );
+      const { error } = await supabase
+        .from("ss_project_stages")
+        .update({ start_date: start, end_date: end })
+        .eq("id", id);
+      if (error) toast.error(error.message);
+    },
+    [onChange],
+  );
+
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const days = Math.round((e.clientX - d.startX) / d.pxPerDay);
+      if (days !== d.offsetDays) {
+        d.offsetDays = days;
+        setDrag({ id: d.id, offsetDays: days });
+      }
+    };
+    const up = () => {
+      const d = dragRef.current;
+      dragRef.current = null;
+      setDrag(null);
+      if (d && d.offsetDays) void shiftStage(d.id, d.offsetDays);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [drag, shiftStage]);
+
   const finish = scheduled.length
     ? scheduled.reduce((m, s) => (parse(s.end_date)!.getTime() > m ? parse(s.end_date)!.getTime() : m), 0)
     : null;
