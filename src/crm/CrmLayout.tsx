@@ -66,10 +66,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
   useEffect(() => setDrawer(false), [loc.pathname]);
 
-  useEffect(() => {
-    supabase.from("ss_settings").select("value").eq("key", "quickbooks").maybeSingle()
-      .then(({ data }) => setSynced((data?.value as { last_synced?: string })?.last_synced ?? null));
-  }, []);
+
+
 
   const items = useMemo(
     () => STAFF_NAV.filter((i) => canAccess(id.level, i.module)),
