@@ -457,7 +457,7 @@ function UploadButton({
         ref={ref}
         type="file"
         multiple
-        accept="image/*,video/*,application/pdf"
+        accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.rtf,.heic,.zip"
         className="hidden"
         onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }}
       />
