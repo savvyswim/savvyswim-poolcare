@@ -33,7 +33,7 @@ const poolNight = photoRivieraLoungers.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
-import { trackContactClick } from "@/lib/contactTracking";
+import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
@@ -92,10 +92,7 @@ import { supabase } from "@/integrations/supabase/client";
 const EMAIL = "hi@savagepools.us";
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
-const HAIL_SMS_BODY =
-  "Hi Savvy Swim — I'd like to schedule a hail damage inspection for my pool and equipment. My address is:";
-// `?&body=` works on both iOS and Android SMS handlers.
-const SMS_HREF = `sms:+14697440379?&body=${encodeURIComponent(HAIL_SMS_BODY)}`;
+const SMS_PHONE = "+14697440379";
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
@@ -461,7 +458,7 @@ const Index = () => {
                     <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                   </a>
                   <a
-                    href={SMS_HREF}
+                    href={buildSmsHref(SMS_PHONE)}
                     onClick={() => trackContactClick("text_click", "hero_hail")}
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
@@ -1002,7 +999,7 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> Call (469) 744-0379
                 </a>
                 <a
-                  href={SMS_HREF} onClick={() => trackContactClick("text_click", "why_savvy_hail")}
+                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "why_savvy_hail")}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
                 >
                   <MessageSquare className="h-4 w-4" /> Text hail damage inspection
@@ -1141,7 +1138,7 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
                 <a
-                  href={SMS_HREF} onClick={() => trackContactClick("text_click", "final_cta_hail")}
+                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "final_cta_hail")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <MessageSquare className="h-4 w-4" /> Text hail damage inspection
