@@ -1,6 +1,7 @@
 import type { ComponentType } from 'npm:react@18.3.1'
 import { template as bookingConfirmationTemplate } from './booking-confirmation.tsx'
 import { template as invoiceTemplate } from './invoice.tsx'
+import { template as officeNewRequestTemplate } from './office-new-request.tsx'
 import { template as receiptTemplate } from './receipt.tsx'
 
 export interface TemplateEntry {
