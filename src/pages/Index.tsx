@@ -478,16 +478,16 @@ const Index = () => {
 
 
         {/* Spec sheet grid */}
-        <div className="relative tech-rule">
+        <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <p className="tech-label">§ 01 — Method</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary-foreground">
                 Licensed technicians, calibrated chemistry, and monitored equipment. Every visit is logged,
                 photographed, and time-stamped — classic pool craft, run like a control room.
               </p>
               <p className="mt-10 tech-label">§ 02 — Scope</p>
-              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary/90">
+              <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-primary-foreground">
                 Weekly maintenance is the baseline. From there: equipment repair, pump and filter service,
                 salt and automation tuning, and green-pool recovery. No contracts.
               </p>
@@ -496,7 +496,7 @@ const Index = () => {
             {/* Readouts */}
             <div className="lg:col-span-3">
               <p className="tech-label">Water Readout</p>
-              <dl className="mt-6 divide-y divide-primary/10 border-y border-primary/10">
+              <dl className="mt-6 divide-y divide-primary-foreground/25 border-y border-primary-foreground/25">
                 {[
                   ["pH", "7.40"],
                   ["Free Cl", "3.0 ppm"],
@@ -505,8 +505,8 @@ const Index = () => {
                   ["Cyanuric", "50 ppm"],
                 ].map(([k, v]) => (
                   <div key={k} className="flex items-center justify-between py-2.5">
-                    <dt className="font-tech text-primary/50">{k}</dt>
-                    <dd className="tech-readout text-sm text-primary">{v}</dd>
+                    <dt className="font-tech text-primary-foreground/70">{k}</dt>
+                    <dd className="tech-readout text-sm text-primary-foreground">{v}</dd>
                   </div>
                 ))}
               </dl>
@@ -514,7 +514,7 @@ const Index = () => {
 
             <div className="lg:col-span-3 lg:col-start-10">
               <p className="tech-label">Index of Services</p>
-              <ul className="mt-6 space-y-2.5 text-[15px] text-primary">
+              <ul className="mt-6 space-y-2.5 text-[15px] text-primary-foreground">
                 {[
                   "Weekly Pool Cleaning",
                   "Chemical Balancing",
@@ -527,10 +527,10 @@ const Index = () => {
                   "Seasonal Openings",
                 ].map((s, i) => (
                   <li key={s} className="flex gap-3">
-                    <span className="tech-readout text-[11px] pt-1 text-primary/35">
+                    <span className="tech-readout text-[11px] pt-1 text-primary-foreground/55">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <a href="#services" className="hover:text-accent transition-colors">{s}</a>
+                    <a href="#services" className="transition-opacity hover:opacity-70">{s}</a>
                   </li>
                 ))}
               </ul>
@@ -538,7 +538,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="relative tech-rule">
+        <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="container-tight grid max-w-4xl grid-cols-3 gap-6 py-12">
             {[
               { k: "1,200+", v: "Pools serviced" },
@@ -546,12 +546,13 @@ const Index = () => {
               { k: "52", v: "Visits per year" },
             ].map((s) => (
               <div key={s.v}>
-                <div className="font-editorial italic text-primary text-4xl sm:text-5xl">{s.k}</div>
+                <div className="font-editorial italic text-primary-foreground text-4xl sm:text-5xl">{s.k}</div>
                 <div className="mt-2 tech-label">{s.v}</div>
               </div>
             ))}
           </div>
         </div>
+
       </section>
 
       {/* Side quote tab */}
