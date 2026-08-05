@@ -23,7 +23,7 @@ export type ModuleKey =
   | "activity"
   | "designs";
 
-const ALL: SsLevel[] = ["owner", "office_manager", "technician"];
+const ALL: SsLevel[] = ["owner", "office_manager", "technician", "contractor"];
 const OFFICE: SsLevel[] = ["owner", "office_manager"];
 const OWNER: SsLevel[] = ["owner"];
 

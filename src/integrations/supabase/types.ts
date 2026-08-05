@@ -2220,7 +2220,7 @@ export type Database = {
       pool_category: "design" | "plan" | "construction"
       pool_media_type: "image" | "video"
       ss_cust_status: "active" | "inactive"
-      ss_level: "owner" | "office_manager" | "technician"
+      ss_level: "owner" | "office_manager" | "technician" | "contractor"
       ss_stage:
         | "new_lead"
         | "contacted"
@@ -2359,7 +2359,7 @@ export const Constants = {
       pool_category: ["design", "plan", "construction"],
       pool_media_type: ["image", "video"],
       ss_cust_status: ["active", "inactive"],
-      ss_level: ["owner", "office_manager", "technician"],
+      ss_level: ["owner", "office_manager", "technician", "contractor"],
       ss_stage: [
         "new_lead",
         "contacted",

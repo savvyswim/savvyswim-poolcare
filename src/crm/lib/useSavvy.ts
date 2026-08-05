@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-export type SsLevel = "owner" | "office_manager" | "technician";
+export type SsLevel = "owner" | "office_manager" | "technician" | "contractor";
 
 export type SavvyIdentity = {
   loading: boolean;
@@ -14,6 +14,7 @@ export type SavvyIdentity = {
   isOwner: boolean;
   isOffice: boolean;
   isTech: boolean;
+  isContractor: boolean;
   isCustomer: boolean;
   refresh: () => Promise<void>;
 };
@@ -63,7 +64,8 @@ export function useSavvyIdentity(): SavvyIdentity {
     loading: authLoading || state.loading,
     isOwner: state.level === "owner",
     isOffice: state.level === "owner" || state.level === "office_manager",
-    isTech: state.level === "technician",
+    isTech: state.level === "technician" || state.level === "contractor",
+    isContractor: state.level === "contractor",
     isCustomer: !state.level && !!state.customerId,
     refresh: load,
   };
