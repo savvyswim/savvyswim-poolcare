@@ -26,8 +26,8 @@ import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
 import photoOliveRings from "@/assets/IMG_5494.JPG.asset.json";
 import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
 
-const PHONE_DISPLAY = "(469) 213-8087";
-const PHONE_HREF = "tel:+14692138087";
+const PHONE_DISPLAY = "(469) 744-0379";
+const PHONE_HREF = "tel:+14697440379";
 const EMAIL = "hello@savvyswim.com";
 
 const SERVICES = [

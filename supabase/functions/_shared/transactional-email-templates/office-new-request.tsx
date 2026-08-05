@@ -186,7 +186,7 @@ export const template: TemplateEntry = {
     requestType: 'New booking request',
     name: 'Marcus Rivera',
     email: 'marcus@example.com',
-    phone: '(469) 213-8087',
+    phone: '(469) 744-0379',
     address: '1201 Legacy Dr, Frisco, TX',
     service: 'Weekly pool cleaning',
     preferredDate: 'Fri, Aug 14, 2026',

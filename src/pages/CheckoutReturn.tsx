@@ -20,8 +20,8 @@ export default function CheckoutReturn() {
         </p>
         <p className="text-sm text-muted-foreground">
           Questions? Call{" "}
-          <a href="tel:+14692138087" className="font-semibold text-foreground">
-            (469) 213-8087
+          <a href="tel:+14697440379" className="font-semibold text-foreground">
+            (469) 744-0379
           </a>
           .
         </p>

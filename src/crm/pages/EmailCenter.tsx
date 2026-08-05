@@ -21,7 +21,7 @@ const FREEZE_BODY = `A hard freeze is headed our way. Please protect your pool e
 6. If you lose power, drain the pump, filter, and heater so trapped water cannot expand and crack the housings.
 7. Remove and store any exposed cleaner or floating chlorinator.
 
-If your equipment stops running, ices over, or you hear it straining, call us right away at (469) 425-6242 — do not restart it yourself.
+If your equipment stops running, ices over, or you hear it straining, call us right away at (469) 744-0379 — do not restart it yourself.
 
 We may reschedule routes during the freeze for our techs' safety. Your service day will be made up as soon as roads are clear, at no extra charge.
 

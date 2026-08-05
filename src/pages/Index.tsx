@@ -89,9 +89,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 
 const EMAIL = "hi@savagepools.us";
-const PHONE_DISPLAY = "(469) 213-8087";
-const PHONE_HREF = "tel:+14692138087";
-const SMS_HREF = "sms:+14692138087";
+const PHONE_DISPLAY = "(469) 744-0379";
+const PHONE_HREF = "tel:+14697440379";
+const SMS_HREF = "sms:+14697440379";
 
 const TICKER_ITEMS: { label: string; live?: boolean }[] = [
   { label: "Est. Texas — Pool Care Systems" },
@@ -988,7 +988,7 @@ const Index = () => {
                   href={PHONE_HREF} onClick={() => trackContactClick("call_click", "why_savvy")}
                   className="btn-quote inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm text-sm font-bold uppercase tracking-wider"
                 >
-                  <Phone className="h-4 w-4" /> Call (469) 213-8087
+                  <Phone className="h-4 w-4" /> Call (469) 744-0379
                 </a>
                 <a
                   href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free pool service quote")}`}
