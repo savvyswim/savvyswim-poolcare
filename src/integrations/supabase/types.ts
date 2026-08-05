@@ -1585,6 +1585,183 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_project_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          design_id: string | null
+          id: string
+          media_type: string
+          project_id: string
+          size_bytes: number | null
+          stage_id: string | null
+          storage_path: string
+          title: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          design_id?: string | null
+          id?: string
+          media_type?: string
+          project_id: string
+          size_bytes?: number | null
+          stage_id?: string | null
+          storage_path: string
+          title: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          design_id?: string | null
+          id?: string
+          media_type?: string
+          project_id?: string
+          size_bytes?: number | null
+          stage_id?: string | null
+          storage_path?: string
+          title?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_project_files_design_id_fkey"
+            columns: ["design_id"]
+            isOneToOne: false
+            referencedRelation: "pool_designs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_project_files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "ss_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_project_files_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "ss_project_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_project_stages: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          project_id: string
+          sort_order: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          project_id: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          project_id?: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_project_stages_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "ss_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_projects: {
+        Row: {
+          address: string | null
+          budget_high: number | null
+          budget_low: number | null
+          city: string | null
+          created_at: string
+          customer_id: string | null
+          id: string
+          kind: string
+          lead_id: string | null
+          notes: string | null
+          start_date: string | null
+          status: string
+          target_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          budget_high?: number | null
+          budget_low?: number | null
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          kind?: string
+          lead_id?: string | null
+          notes?: string | null
+          start_date?: string | null
+          status?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          budget_high?: number | null
+          budget_low?: number | null
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          kind?: string
+          lead_id?: string | null
+          notes?: string | null
+          start_date?: string | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_projects_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_projects_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_purchase_orders: {
         Row: {
           created_at: string
