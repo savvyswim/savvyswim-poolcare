@@ -83,10 +83,12 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
             <DialogHeader>
               <DialogTitle>Savvy Swim Club — $19.99 / month</DialogTitle>
               <DialogDescription>
-                50% off one filter clean (one time), 5% off parts, 7% off installation labor, and
-                24/7 text support. Requires a 12-month agreement, billed monthly.
+                Summer offer: new customers get their first month free plus their first service
+                visit free on a 12-month agreement. Members also get 50% off one filter clean, 5%
+                off parts, 7% off installation labor, and 24/7 text support. Billed monthly.
               </DialogDescription>
             </DialogHeader>
+
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
