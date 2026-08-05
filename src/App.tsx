@@ -20,6 +20,7 @@ import CheckoutReturn from "./pages/CheckoutReturn.tsx";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
+          <ScrollToTop />
           <CartDrawer />
           <Routes>
             <Route path="/" element={<Index />} />
