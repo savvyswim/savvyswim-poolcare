@@ -12,7 +12,7 @@ type Customer = {
   phone: string | null; email: string | null; status: string; gallons: number;
   gate_code: string | null; internal_notes: string | null; monthly_price: number;
   service_level: string; route_day: string | null; equipment: Record<string, string> | null;
-  custom_fields: Record<string, boolean> | null;
+  custom_fields: Record<string, boolean> | null; user_id: string | null;
 };
 
 type Visit = {
@@ -26,6 +26,9 @@ export default function CustomerDetail() {
   const { id = "" } = useParams();
   const { level } = useSavvyIdentity();
   const [tab, setTab] = useState<(typeof TABS)[number]>("Overview");
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
+  const [invited, setInvited] = useState(false);
 
   const { rows: customers } = useTable<Customer>(`customer-${id}`, async () => {
     const { data } = await supabase.from("ss_customers").select("*").eq("id", id).limit(1);
