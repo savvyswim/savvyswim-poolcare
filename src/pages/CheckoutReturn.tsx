@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
+import { trackContactClick } from "@/lib/contactTracking";
 
 export default function CheckoutReturn() {
   const [params] = useSearchParams();
@@ -20,7 +21,7 @@ export default function CheckoutReturn() {
         </p>
         <p className="text-sm text-muted-foreground">
           Questions? Call{" "}
-          <a href="tel:+14697440379" className="font-semibold text-foreground">
+          <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "checkout_return")} className="font-semibold text-foreground">
             (469) 744-0379
           </a>
           .

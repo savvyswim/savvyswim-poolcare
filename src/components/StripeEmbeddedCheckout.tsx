@@ -1,6 +1,7 @@
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { getStripe, getStripeEnvironment, PAYMENTS_ENABLED } from "@/lib/stripe";
 import { supabase } from "@/integrations/supabase/client";
+import { trackContactClick } from "@/lib/contactTracking";
 
 interface StripeEmbeddedCheckoutProps {
   orderNumber: string;
@@ -13,7 +14,7 @@ export function StripeEmbeddedCheckout({ orderNumber, returnUrl }: StripeEmbedde
       <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
         Online card payment is temporarily unavailable. Your order{" "}
         <span className="font-semibold text-foreground">{orderNumber}</span> is saved — call{" "}
-        <a href="tel:+14697440379" className="font-semibold text-foreground">
+        <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "stripe_checkout")} className="font-semibold text-foreground">
           (469) 744-0379
         </a>{" "}
         and we'll take payment or send an invoice.

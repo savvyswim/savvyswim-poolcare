@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
-import { trackContactClick } from "@/lib/contactTracking";
+import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
 
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
@@ -13,9 +13,7 @@ import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 const EMAIL = "hello@savvyswim.com";
-const HAIL_SMS_BODY =
-  "Hi Savvy Swim — I'd like to schedule a hail damage inspection for my pool and equipment. My address is:";
-const SMS_HREF = `sms:+14697440379?&body=${encodeURIComponent(HAIL_SMS_BODY)}`;
+const SMS_PHONE = "+14697440379";
 
 const NEIGHBORHOODS = [
   "Starwood", "Newman Village", "Phillips Creek Ranch", "Panther Creek",
@@ -315,7 +313,7 @@ const FriscoPoolCleaning = () => {
                   <Phone className="h-4 w-4" /> Call
                 </a>
                 <a
-                  href={SMS_HREF}
+                  href={buildSmsHref(SMS_PHONE)}
                   onClick={() => trackContactClick("text_click", "frisco_final_cta_hail")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >

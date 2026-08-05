@@ -8,6 +8,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Services from "./pages/Services.tsx";
 import PoolCleaningFrisco from "./pages/PoolCleaningFrisco.tsx";
+import RequestInspection from "./pages/RequestInspection.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import SetPassword from "./pages/SetPassword.tsx";
@@ -63,6 +64,8 @@ const App = () => (
             <Route path="/portal" element={<Portal />} />
             <Route path="/services" element={<Services />} />
             <Route path="/pool-cleaning-frisco-tx" element={<PoolCleaningFrisco />} />
+            <Route path="/request-inspection" element={<RequestInspection />} />
+            <Route path="/free-inspection" element={<RequestInspection />} />
             <Route path="/set-password" element={<SetPassword />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Privacy />} />

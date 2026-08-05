@@ -25,6 +25,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { trackContactClick } from "@/lib/contactTracking";
 
 
 const EMAIL = "hi@savagepools.us";
@@ -233,7 +234,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
               <a
-                href="tel:+14697440379"
+                href="tel:+14697440379" onClick={() => trackContactClick("call_click", "booking_dialog")}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
               >
                 <Phone className="h-4 w-4" /> Call us now
@@ -417,7 +418,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                   )}
                 </Button>
                 <a
-                  href="tel:+14697440379"
+                  href="tel:+14697440379" onClick={() => trackContactClick("call_click", "booking_dialog")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-5 h-12 text-sm font-semibold text-foreground hover:bg-ink-soft transition"
                 >
                   <Phone className="h-4 w-4" /> Call instead

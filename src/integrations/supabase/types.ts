@@ -208,34 +208,55 @@ export type Database = {
       }
       contact_events: {
         Row: {
+          campaign_id: string | null
           created_at: string
           event_type: string
           id: string
+          landing_page: string | null
           page_path: string | null
           placement: string | null
           referrer: string | null
           session_id: string | null
           user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
+          campaign_id?: string | null
           created_at?: string
           event_type: string
           id?: string
+          landing_page?: string | null
           page_path?: string | null
           placement?: string | null
           referrer?: string | null
           session_id?: string | null
           user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
+          campaign_id?: string | null
           created_at?: string
           event_type?: string
           id?: string
+          landing_page?: string | null
           page_path?: string | null
           placement?: string | null
           referrer?: string | null
           session_id?: string | null
           user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Relationships: []
       }
@@ -550,6 +571,90 @@ export type Database = {
           id?: string
           token?: string
           used_at?: string | null
+        }
+        Relationships: []
+      }
+      inspection_requests: {
+        Row: {
+          address: string
+          campaign_id: string | null
+          created_at: string
+          email: string
+          full_name: string
+          hail_date: string | null
+          id: string
+          landing_page: string | null
+          notes: string | null
+          page_path: string | null
+          phone: string
+          postal_code: string
+          preferred_contact_time: string | null
+          reference_number: string
+          referrer: string | null
+          session_id: string | null
+          sms_opt_in: boolean
+          status: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          vehicle_details: string | null
+        }
+        Insert: {
+          address: string
+          campaign_id?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          hail_date?: string | null
+          id?: string
+          landing_page?: string | null
+          notes?: string | null
+          page_path?: string | null
+          phone: string
+          postal_code: string
+          preferred_contact_time?: string | null
+          reference_number?: string
+          referrer?: string | null
+          session_id?: string | null
+          sms_opt_in?: boolean
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          vehicle_details?: string | null
+        }
+        Update: {
+          address?: string
+          campaign_id?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          hail_date?: string | null
+          id?: string
+          landing_page?: string | null
+          notes?: string | null
+          page_path?: string | null
+          phone?: string
+          postal_code?: string
+          preferred_contact_time?: string | null
+          reference_number?: string
+          referrer?: string | null
+          session_id?: string | null
+          sms_opt_in?: boolean
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          vehicle_details?: string | null
         }
         Relationships: []
       }
