@@ -53,7 +53,6 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const nav = useNavigate();
   const loc = useLocation();
   const [drawer, setDrawer] = useState(false);
-  const [synced, setSynced] = useState<string | null>(null);
   const obscured = useWindowObscured();
 
   useEffect(() => {
