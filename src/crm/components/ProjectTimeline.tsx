@@ -267,8 +267,12 @@ export function ProjectTimeline({
                 </div>
               );
             })}
-
+          <div className="pt-1 text-[0.7rem] opacity-55">
+            Drag any bar sideways to reschedule that stage — its length stays the same and overdue
+            stages re-flag instantly.
+          </div>
         </div>
+
       )}
 
       {editing && (
