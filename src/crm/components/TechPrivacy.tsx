@@ -1,28 +1,5 @@
 import { useEffect, useState } from "react";
 
-/**
- * Technician privacy shield — full-screen diagonal watermark with the tech's
- * initials + a live timestamp (refreshed every 60s), plus content blur when the
- * window loses focus. Text selection / context menu are disabled by the caller.
- */
-export function TechWatermark({ initials }: { initials: string }) {
-  const [stamp, setStamp] = useState(() => new Date().toLocaleString());
-
-  useEffect(() => {
-    const t = setInterval(() => setStamp(new Date().toLocaleString()), 60_000);
-    return () => clearInterval(t);
-  }, []);
-
-  const cell = `${initials} · ${stamp}`;
-  const rows = Array.from({ length: 14 }, () => Array.from({ length: 4 }, () => cell).join("     "));
-
-  return (
-    <div className="ss-watermark" aria-hidden="true">
-      <span>{rows.join("\n")}</span>
-    </div>
-  );
-}
-
 /** Returns true when the window is blurred / tab hidden. */
 export function useWindowObscured() {
   const [obscured, setObscured] = useState(false);
