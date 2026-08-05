@@ -29,6 +29,7 @@ export default function Products() {
   const [saltCell, setSaltCell] = useState(false);
   const [undercut, setUndercut] = useState(15);
   const [override, setOverride] = useState<string>("");
+  const [payingNow, setPayingNow] = useState<string>("");
 
   useEffect(() => {
     setUndercut(clampUndercut(margins.undercut_pct));
@@ -55,6 +56,14 @@ export default function Products() {
   );
 
   const band = cities.find((c) => c.city === city);
+
+  const currentMonthly = Number(payingNow) > 0 ? Number(payingNow) : 0;
+  const vsCurrent = currentMonthly ? currentMonthly - quote.monthly : 0;
+  const vsCurrentYear = vsCurrent * 12;
+  const vsCurrentPct = currentMonthly
+    ? Math.round((vsCurrent / currentMonthly) * 100)
+    : 0;
+  const vsMarketYear = quote.market.savings * 12;
 
   return (
     <div className="space-y-4">
@@ -153,6 +162,16 @@ export default function Products() {
                   onChange={(e) => setOverride(e.target.value)}
                 />
               </div>
+              <div>
+                <label className="ss-label">What they pay now / mo</label>
+                <input
+                  type="number"
+                  className="ss-input ss-num"
+                  placeholder="e.g. 240"
+                  value={payingNow}
+                  onChange={(e) => setPayingNow(e.target.value)}
+                />
+              </div>
             </div>
             <div className="mt-2 flex flex-wrap gap-3 text-[0.78rem]">
               <label className="flex items-center gap-2">
@@ -202,6 +221,45 @@ export default function Products() {
               {quote.cleanupLabel && (
                 <div className="mt-1 text-[0.78rem] opacity-75">
                   One-time cleanup {quote.cleanupLabel}
+                </div>
+              )}
+            </div>
+
+            <div className="ss-card p-4">
+              <div className="ss-label mb-2">12-month savings</div>
+              {currentMonthly ? (
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <div className="ss-label">They pay now</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {money(currentMonthly)}/mo
+                      </div>
+                    </div>
+                    <div>
+                      <div className="ss-label">With Savvy Swim</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {money(quote.monthly)}/mo
+                      </div>
+                    </div>
+                    <div>
+                      <div className="ss-label">Saved / mo</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {vsCurrent > 0 ? money(vsCurrent) : "—"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-[0.85rem] font-bold">
+                    {vsCurrent > 0
+                      ? `They save ${money(vsCurrentYear)} over 12 months (${vsCurrentPct}% less than today)`
+                      : "Our rate is at or above what they pay today — adjust the rate or lead with service value"}
+                  </div>
+                </>
+              ) : (
+                <div className="text-[0.8rem] opacity-70">
+                  Enter what they pay today to show their 12-month savings. Versus the
+                  regional average this quote saves{" "}
+                  <strong className="ss-num">{money(vsMarketYear)}</strong> a year.
                 </div>
               )}
             </div>
