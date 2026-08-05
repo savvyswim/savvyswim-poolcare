@@ -201,7 +201,9 @@ export default function RoutePage() {
             ))}
           </select>
         )}
+        {!id.isTech && <RouteBuilder techs={techs} onBuilt={load} />}
       </div>
+
 
       {view === "map" ? (
         <RouteMap stops={stops} onSelect={setActiveVisit} />
