@@ -17,6 +17,7 @@ import AdminTeam from "./pages/AdminTeam";
 import AdminActivity from "./pages/AdminActivity";
 import AdminCRM from "./pages/AdminCRM.tsx";
 import CheckoutReturn from "./pages/CheckoutReturn.tsx";
+import CrmApp from "./pages/CrmApp.tsx";
 
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
