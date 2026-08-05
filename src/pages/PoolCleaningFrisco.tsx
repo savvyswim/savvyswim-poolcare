@@ -13,6 +13,9 @@ import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 const EMAIL = "hello@savvyswim.com";
+const HAIL_SMS_BODY =
+  "Hi Savvy Swim — I'd like to schedule a hail damage inspection for my pool and equipment. My address is:";
+const SMS_HREF = `sms:+14697440379?&body=${encodeURIComponent(HAIL_SMS_BODY)}`;
 
 const NEIGHBORHOODS = [
   "Starwood", "Newman Village", "Phillips Creek Ranch", "Panther Creek",
