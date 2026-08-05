@@ -378,6 +378,12 @@ const Services = () => {
                 >
                   <Phone className="h-4 w-4" /> Call
                 </a>
+                <a
+                  href={SMS_HREF} onClick={() => trackContactClick("text_click", "services_final_cta_hail")}
+                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                >
+                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                </a>
               </div>
             </div>
           </div>
