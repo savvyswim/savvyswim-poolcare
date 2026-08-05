@@ -80,22 +80,59 @@ export function ProjectTimeline({
   const stagesRef = useRef(stages);
   stagesRef.current = stages;
 
-  /** Applies a local edit, cascades dependents, saves everything that moved. */
+  /** Pending change awaiting the owner's approval in the preview dialog. */
+  const [pending, setPending] = useState<{
+    baseline: TimelineStage[];
+    next: TimelineStage[];
+    moved: TimelineStage[];
+    label: string;
+    commit: () => Promise<string | null>;
+  } | null>(null);
+
+  /**
+   * Applies an edit locally, cascades dependents, and — when anything downstream
+   * moves — shows a preview so nothing is saved until it's approved.
+   */
   const applyAndCascade = useCallback(
-    async (next: TimelineStage[]) => {
+    async (next: TimelineStage[], label: string, commitPrimary?: () => Promise<string | null>) => {
+      const baseline = stagesRef.current;
       const moved = cascadeSchedule(next);
       const merged = next.map((s) => moved.find((m) => m.id === s.id) ?? s);
       onChange(merged);
-      if (moved.length) {
-        const err = await persistStageDates(moved);
+      const commit = async () => {
+        const primaryErr = commitPrimary ? await commitPrimary() : null;
+        if (primaryErr) return primaryErr;
+        return moved.length ? await persistStageDates(moved) : null;
+      };
+      if (!moved.length) {
+        const err = await commit();
         if (err) return toast.error(err);
-        toast.success(
-          `${moved.length} dependent stage${moved.length === 1 ? "" : "s"} rescheduled`,
-        );
+        return;
       }
+      setPending({ baseline, next: merged, moved, label, commit });
     },
     [onChange],
   );
+
+  async function confirmPending() {
+    if (!pending) return;
+    setBusy(true);
+    const err = await pending.commit();
+    setBusy(false);
+    if (err) return toast.error(err);
+    toast.success(
+      `Saved · ${pending.moved.length} dependent stage${pending.moved.length === 1 ? "" : "s"} rescheduled`,
+    );
+    setPending(null);
+  }
+
+  function discardPending() {
+    if (!pending) return;
+    onChange(pending.baseline);
+    setPending(null);
+    toast.info("Change discarded — nothing was saved");
+  }
+
 
   async function autoSchedule() {
     const base = projectStart ?? toISO(new Date());
@@ -132,9 +169,8 @@ export function ProjectTimeline({
         return toast.error(error.message);
       }
     }
-    await applyAndCascade(next);
+    await applyAndCascade(next, "Linked stages in sequence");
     setBusy(false);
-    toast.success("Stages linked — later stages now follow the one before them");
   }
 
   async function patch(id: string, field: "start_date" | "end_date" | "duration_days", value: string) {
@@ -146,9 +182,11 @@ export function ProjectTimeline({
         : field === "start_date"
           ? { start_date: val as string | null }
           : { end_date: val as string | null };
-    const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
-    if (error) return toast.error(error.message);
-    await applyAndCascade(next);
+    const label = `${stages.find((s) => s.id === id)?.name ?? "Stage"} · date edit`;
+    await applyAndCascade(next, label, async () => {
+      const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
+      return error?.message ?? null;
+    });
   }
 
   async function setDependency(id: string, dependsOn: string | null, lag?: number) {
@@ -162,7 +200,7 @@ export function ProjectTimeline({
       .update({ depends_on_id: dependsOn, ...(lag != null ? { lag_days: lag } : {}) })
       .eq("id", id);
     if (error) return toast.error(error.message);
-    await applyAndCascade(next);
+    await applyAndCascade(next, `${stages.find((s) => s.id === id)?.name ?? "Stage"} · dependency change`);
   }
 
   const shiftStage = useCallback(
@@ -174,16 +212,21 @@ export function ProjectTimeline({
       const next = stagesRef.current.map((x) =>
         x.id === id ? { ...x, start_date: start, end_date: end } : x,
       );
-      onChange(next);
-      const { error } = await supabase
-        .from("ss_project_stages")
-        .update({ start_date: start, end_date: end })
-        .eq("id", id);
-      if (error) return toast.error(error.message);
-      await applyAndCascade(next);
+      await applyAndCascade(
+        next,
+        `${s.name} · moved ${days > 0 ? "+" : ""}${days} day${Math.abs(days) === 1 ? "" : "s"}`,
+        async () => {
+          const { error } = await supabase
+            .from("ss_project_stages")
+            .update({ start_date: start, end_date: end })
+            .eq("id", id);
+          return error?.message ?? null;
+        },
+      );
     },
-    [onChange, applyAndCascade],
+    [applyAndCascade],
   );
+
 
 
   useEffect(() => {
@@ -411,6 +454,65 @@ export function ProjectTimeline({
 
         </div>
       )}
+
+      {pending && (
+        <div className="ss-modal-backdrop" role="dialog" aria-modal="true" aria-label="Preview downstream date shifts">
+          <div className="ss-modal max-w-lg">
+            <div className="ss-label">Review downstream shifts</div>
+            <div className="mt-1 text-[0.78rem] opacity-70">
+              {pending.label} — {pending.moved.length} dependent stage
+              {pending.moved.length === 1 ? "" : "s"} will move. Nothing is saved until you confirm.
+            </div>
+            <div className="mt-3 max-h-[45vh] space-y-1.5 overflow-y-auto">
+              {[...pending.moved]
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((m) => {
+                  const before = pending.baseline.find((b) => b.id === m.id);
+                  const shift = before?.start_date && m.start_date
+                    ? Math.round(
+                        (parse(m.start_date)!.getTime() - parse(before.start_date)!.getTime()) / DAY,
+                      )
+                    : 0;
+                  return (
+                    <div
+                      key={m.id}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-md px-2 py-1.5 text-[0.75rem]"
+                      style={{ background: "hsl(var(--ss-sand) / .5)" }}
+                    >
+                      <span className="truncate">
+                        <span className="opacity-50">{m.sort_order}.</span> {m.name}
+                      </span>
+                      <span className="flex items-center gap-1.5 whitespace-nowrap">
+                        <span className="line-through opacity-50">
+                          {fmt(before?.start_date ?? null)} – {fmt(before?.end_date ?? null)}
+                        </span>
+                        <span aria-hidden>→</span>
+                        <span style={{ color: "hsl(var(--ss-burgundy))" }}>
+                          {fmt(m.start_date)} – {fmt(m.end_date)}
+                        </span>
+                        {shift !== 0 && (
+                          <span className="opacity-60">
+                            ({shift > 0 ? "+" : ""}
+                            {shift}d)
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="mt-4 flex justify-end gap-2">
+              <button className="ss-btn ss-btn-ghost" onClick={discardPending} disabled={busy}>
+                Discard
+              </button>
+              <button className="ss-btn" onClick={() => void confirmPending()} disabled={busy}>
+                {busy ? <Loader2 size={13} className="animate-spin" /> : null} Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }
