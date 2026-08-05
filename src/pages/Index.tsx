@@ -1140,6 +1140,12 @@ const Index = () => {
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
+                <a
+                  href={SMS_HREF} onClick={() => trackContactClick("text_click", "final_cta_hail")}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
+                >
+                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                </a>
               </div>
               <p className="mt-5 text-xs text-muted-foreground">
                 Licensed · Bonded · Insured · Mon–Sat 7a–7p CT
