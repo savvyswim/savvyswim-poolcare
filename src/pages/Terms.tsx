@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Seo from "@/components/Seo";
 
 const Terms = () => (
@@ -8,7 +9,7 @@ const Terms = () => (
         description="Terms and conditions for Savvy Swim pool cleaning, service, and repair, including SMS program and payment terms."
         path="/terms"
       />
-      <a href="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</a>
+      <Link to="/" className="text-amber-brand text-sm">&larr; Back to Savvy Swim</Link>
       <h1 className="text-3xl font-bold mt-4 mb-2">Terms and Conditions</h1>
       <p className="text-sm text-muted-foreground mb-1"><strong>Effective Date:</strong> June 23, 2026</p>
       <p className="text-sm text-muted-foreground mb-1"><strong>Last Updated:</strong> June 23, 2026</p>
@@ -28,7 +29,7 @@ const Terms = () => (
         By accessing our website (https://savvyswim.com) or utilizing the services provided by
         Santana &amp; Rivera ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
         Terms and Conditions ("Terms") and our{" "}
-        <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a>. If you do not
+        <Link to="/privacy-policy" className="text-amber-brand">Privacy Policy</Link>. If you do not
         agree with any part of these Terms, you must not use our website or services.
       </p>
 
@@ -98,7 +99,7 @@ const Terms = () => (
           <strong>No Sharing:</strong> We will not share, sell, or trade your mobile telephone
           number or SMS consent data with any third parties or affiliates for marketing or
           promotional purposes. See our{" "}
-          <a href="/privacy-policy" className="text-amber-brand">Privacy Policy</a> for details.
+          <Link to="/privacy-policy" className="text-amber-brand">Privacy Policy</Link> for details.
         </li>
         <li>
           <strong>Eligibility:</strong> The SMS program is available to U.S. residents who are at

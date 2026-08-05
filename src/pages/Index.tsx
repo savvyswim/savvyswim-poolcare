@@ -14,6 +14,8 @@ import {
   MapPin,
   ShieldCheck,
   CalendarCheck,
+  Menu,
+  X,
 } from "lucide-react";
 import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
 
@@ -75,6 +77,8 @@ const MEMBERSHIP_FAQ = [
     a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
   },
 ];
+import { Link } from "react-router-dom";
+import { SwimClubPrompt } from "@/components/SwimClubPrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 
@@ -166,6 +170,7 @@ const CLEANING_PLANS: CleaningPlan[] = [
 
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
@@ -245,8 +250,8 @@ const Index = () => {
             </a>
             <div className="flex items-center gap-6">
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
-              <a href="/services" className="hover:opacity-80 transition">Services</a>
-              <a href="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</a>
+              <Link to="/services" className="hover:opacity-80 transition">Services</Link>
+              <Link to="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</Link>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
           </div>
@@ -257,48 +262,96 @@ const Index = () => {
             scrolled ? "shadow-card" : ""
           }`}
         >
-          <div className="container-tight flex h-[72px] items-center justify-between">
-            <a href="#" className="flex items-center gap-3">
+          <div className="container-tight flex h-[60px] items-center justify-between gap-3 sm:h-[72px]">
+            <a href="#" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
               <img
                 src={logoMark.url}
                 alt="Savvy Swim — on duty, so you don't have to be"
-                className="h-11 w-11 object-cover border border-primary/15"
+                className="h-9 w-9 shrink-0 border border-primary/15 object-cover sm:h-11 sm:w-11"
               />
-              <span className="tracking-tight text-base leading-tight flex flex-col">
-                <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
-                <span className="font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
+              <span className="flex min-w-0 flex-col leading-tight tracking-tight">
+                <span className="font-display text-[16px] tracking-[0.02em] sm:text-[19px]">SAVVY SWIM</span>
+                <span className="hidden font-tech text-[8.5px] text-primary/45 sm:block">On duty, so you don&rsquo;t have to be.</span>
               </span>
             </a>
 
             <nav className="hidden xl:flex items-center gap-7 whitespace-nowrap font-tech text-primary/70">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
-              <a href="/services" className="hover:text-accent transition">Service &amp; Repair</a>
+              <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <a
                 href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
-                className="hidden sm:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
+                className="hidden lg:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
+              </a>
+              <a
+                href={PHONE_HREF}
+                onClick={() => trackContactClick("call_click", "header_mobile")}
+                aria-label={`Call ${PHONE_DISPLAY}`}
+                className="inline-flex items-center justify-center border border-primary/20 p-2.5 text-primary transition-colors hover:border-primary lg:hidden"
+              >
+                <Phone className="h-4 w-4" />
               </a>
               <button
                 type="button"
                 onClick={() => openBooking()}
-                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-5 py-3 text-[13px] font-bold uppercase tracking-wide transition"
+                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition sm:px-5 sm:py-3 sm:text-[13px]"
               >
-                Request Quote
+                <span className="sm:hidden">Quote</span>
+                <span className="hidden sm:inline">Request Quote</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+                className="inline-flex items-center justify-center border border-primary/20 p-2.5 text-primary transition-colors hover:border-primary xl:hidden"
+              >
+                {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
             </div>
           </div>
+
+          {menuOpen && (
+            <nav className="border-t border-hairline bg-background xl:hidden">
+              <div className="container-tight flex flex-col divide-y divide-primary/10 font-tech text-primary/80">
+                {[
+                  { label: "Pool Cleaning", href: "#cleaning" },
+                  { label: "Swim Club", href: "#membership" },
+                  { label: "Our Work", href: "#portfolio" },
+                  { label: "About Us", href: "#about" },
+                  { label: "Contact", href: "#contact" },
+                ].map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="py-3.5 text-[13px] uppercase tracking-[0.14em] transition-colors hover:text-accent"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+                <Link
+                  to="/services"
+                  onClick={() => setMenuOpen(false)}
+                  className="py-3.5 text-[13px] uppercase tracking-[0.14em] transition-colors hover:text-accent"
+                >
+                  Service &amp; Repair
+                </Link>
+              </div>
+            </nav>
+          )}
         </div>
       </header>
 
       {/* HERO — vintage riviera meets instrumentation */}
-      <section className="relative bg-canvas pt-32 sm:pt-36">
+      <section className="relative bg-canvas pt-[60px] sm:pt-32 lg:pt-36">
         <div className="absolute inset-0 tech-grid pointer-events-none" aria-hidden />
 
         {/* instrumentation strip — live scrolling ticker */}
@@ -997,9 +1050,9 @@ const Index = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
-            <a href="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</a>
-            <a href="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</a>
-            <a href="/auth" className="hover:text-foreground transition">Admin</a>
+            <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
+            <Link to="/auth" className="hover:text-foreground transition">Admin</Link>
           </div>
         </div>
       </footer>
@@ -1016,6 +1069,7 @@ const Index = () => {
         planName={subscribePlan}
       />
       <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+      <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />
 
 
     </div>
