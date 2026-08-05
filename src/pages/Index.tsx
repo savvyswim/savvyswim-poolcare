@@ -22,7 +22,7 @@ import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
 import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
 import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
 import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
-import photoPoolWater from "@/assets/pool-water.jpg.asset.json";
+import photoPoolWater from "@/assets/pool-water-hd.jpg.asset.json";
 import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
@@ -368,10 +368,12 @@ const Index = () => {
           <img
             src={photoPoolWater.url}
             alt=""
+            width={1920}
+            height={1280}
             loading="eager"
-            decoding="async"
+            decoding="sync"
             fetchPriority="high"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-center [image-rendering:auto] [transform:translateZ(0)]"
           />
           <div className="absolute inset-0 bg-foreground/35" />
         </div>
@@ -546,15 +548,15 @@ const Index = () => {
         </div>
 
         <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
-          <div className="container-tight grid max-w-4xl grid-cols-3 gap-6 py-12">
+          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
             {[
               { k: "1,200+", v: "Pools serviced" },
               { k: "4.9★", v: "Avg client rating" },
               { k: "52", v: "Visits per year" },
             ].map((s) => (
-              <div key={s.v}>
-                <div className="font-editorial italic text-primary-foreground text-4xl sm:text-5xl">{s.k}</div>
-                <div className="mt-2 tech-label">{s.v}</div>
+              <div key={s.v} className="flex flex-col items-center">
+                <div className="font-editorial italic leading-none text-primary-foreground text-4xl sm:text-5xl lg:text-6xl">{s.k}</div>
+                <div className="mt-3 tech-label">{s.v}</div>
               </div>
             ))}
           </div>
