@@ -67,10 +67,10 @@ export const CartDrawer = () => {
     const code = promoInput.trim();
     if (!code) return;
     setCheckingPromo(true);
-    const { data, error } = await supabase.rpc("check_promo_code", {
-      p_code: code,
-      p_subtotal: subtotal,
+    const { data, error } = await supabase.functions.invoke("store-order", {
+      body: { action: "check_promo", code, subtotal },
     });
+
     setCheckingPromo(false);
     const result = data as { valid?: boolean; code?: string; discount?: number; message?: string } | null;
     if (error || !result?.valid) {
