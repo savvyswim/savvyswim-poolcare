@@ -70,10 +70,13 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       .then(({ data }) => setSynced((data?.value as { last_synced?: string })?.last_synced ?? null));
   }, []);
 
-  const items = useMemo(() => {
-    if (id.isTech) return [STAFF_NAV[0]];
-    return STAFF_NAV.filter((i) => !i.owner || id.isOwner);
-  }, [id.isTech, id.isOwner]);
+  const items = useMemo(
+    () => STAFF_NAV.filter((i) => canAccess(id.level, i.module)),
+    [id.level],
+  );
+
+  const allowed = canAccessPath(id.level, loc.pathname);
+
 
   const mobilePrimary = items.slice(0, 4);
 
