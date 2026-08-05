@@ -304,6 +304,27 @@ export default function ProjectDetail() {
     void load();
   }
 
+  async function setLead(leadId: string | null) {
+    if (!id) return;
+    const { error } = await supabase
+      .from("ss_projects")
+      .update({ lead_staff_id: leadId } as never)
+      .eq("id", id);
+    if (error) return toast.error(error.message);
+    setProject((p) => (p ? ({ ...p, lead_staff_id: leadId } as Project) : p));
+    toast.success(leadId ? "Project lead updated" : "Project lead cleared");
+  }
+
+  async function sendMissingDigest() {
+    if (!id) return;
+    const { error } = await supabase.functions.invoke("project-stage-alerts", {
+      body: { mode: "stage", project_id: id, stage_id: stages[0]?.id },
+    });
+    if (error) return toast.error("Could not send the alert");
+    toast.success("Alert sent to the owner and project lead");
+  }
+
+
   async function setStatus(status: string) {
     if (!id) return;
     const { error } = await supabase.from("ss_projects").update({ status }).eq("id", id);
