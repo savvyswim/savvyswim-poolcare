@@ -15,7 +15,7 @@ type Customer = {
 };
 
 type Visit = {
-  id: string; scheduled_for: string; status: string; minutes_on_site: number | null;
+  id: string; scheduled_date: string; status: string; minutes_on_site: number | null;
   notes: string | null; readings: Record<string, number> | null; chem_cost: number | null;
 };
 
@@ -35,26 +35,26 @@ export default function CustomerDetail() {
   const { rows: visits } = useTable<Visit>(`visits-${id}`, async () => {
     const { data } = await supabase
       .from("ss_visits")
-      .select("id,scheduled_for,status,minutes_on_site,notes,readings,chem_cost")
+      .select("id,scheduled_date,status,minutes_on_site,notes,readings,chem_cost")
       .eq("customer_id", id)
-      .order("scheduled_for", { ascending: false })
+      .order("scheduled_date", { ascending: false })
       .limit(40);
-    return (data ?? []) as Visit[];
+    return (data ?? []) as unknown as Visit[];
   });
 
-  const { rows: invoices } = useTable<{ id: string; number: string; total: number; status: string; issued_on: string }>(
+  const { rows: invoices } = useTable<{ id: string; invoice_number: string; amount: number; status: string; issued_on: string }>(
     `invoices-${id}`,
     async () => {
       const { data } = await supabase
         .from("ss_invoices")
-        .select("id,number,total,status,issued_on")
+        .select("id,invoice_number,amount,status,issued_on")
         .eq("customer_id", id)
         .order("issued_on", { ascending: false });
       return data ?? [];
     },
   );
 
-  const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.total), 0), [invoices]);
+  const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.amount), 0), [invoices]);
 
   if (!c) return <EmptyState>Loading customer…</EmptyState>;
 
@@ -115,7 +115,7 @@ export default function CustomerDetail() {
           {visits.map((v) => (
             <div key={v.id} className="ss-card p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="ss-num text-[0.82rem] font-semibold">{new Date(v.scheduled_for).toLocaleDateString()}</span>
+                <span className="ss-num text-[0.82rem] font-semibold">{new Date(v.scheduled_date).toLocaleDateString()}</span>
                 <Chip tone={v.status === "completed" ? "green" : v.status === "skipped" ? "orange" : "aqua"}>{v.status}</Chip>
               </div>
               <div className="mt-1 text-[0.76rem] opacity-70">
@@ -152,12 +152,12 @@ export default function CustomerDetail() {
           {invoices.map((i) => (
             <div key={i.id} className="ss-card flex items-center justify-between p-3">
               <div>
-                <div className="ss-num text-[0.85rem] font-semibold">{i.number}</div>
+                <div className="ss-num text-[0.85rem] font-semibold">{i.invoice_number}</div>
                 <div className="text-[0.72rem] opacity-60">{new Date(i.issued_on).toLocaleDateString()}</div>
               </div>
               <div className="flex items-center gap-2">
                 <Chip tone={i.status === "paid" ? "green" : i.status === "overdue" ? "burgundy" : "gold"}>{i.status}</Chip>
-                <span className="ss-num font-bold">{money(i.total)}</span>
+                <span className="ss-num font-bold">{money(i.amount)}</span>
               </div>
             </div>
           ))}
