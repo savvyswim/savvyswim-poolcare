@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart, money } from "@/hooks/useCart";
+import { trackContactClick } from "@/lib/contactTracking";
 
 const schema = z.object({
   customer_name: z.string().trim().min(2, "Enter your full name").max(120),
@@ -154,7 +155,7 @@ export const CartDrawer = () => {
             <StripeEmbeddedCheckout orderNumber={placed} />
             <p className="text-xs text-muted-foreground pb-6">
               Prefer to pay later? Your order {placed} is already saved — call{" "}
-              <a href="tel:+14697440379" className="font-semibold text-foreground">
+              <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "cart_drawer")} className="font-semibold text-foreground">
                 (469) 744-0379
               </a>{" "}
               and we'll invoice you instead.

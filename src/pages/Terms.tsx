@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Seo from "@/components/Seo";
+import { trackContactClick } from "@/lib/contactTracking";
 
 const Terms = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">
@@ -21,7 +22,7 @@ const Terms = () => (
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
         <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a>{" "}·{" "}
-        <a href="tel:+14697440379" className="text-amber-brand">(469) 744-0379</a>
+        <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(469) 744-0379</a>
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
@@ -83,7 +84,7 @@ const Terms = () => (
           <strong>Help (HELP):</strong> If you need assistance, reply <strong>HELP</strong> to any
           message and you will receive a message with our contact information, or contact us at{" "}
           <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a> or{" "}
-          <a href="tel:+14697440379" className="text-amber-brand">(469) 744-0379</a>.
+          <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(469) 744-0379</a>.
         </li>
         <li>
           <strong>Sample Message:</strong> "Savvy Swim: Hi Jane, this is a reminder of your pool
@@ -199,7 +200,7 @@ const Terms = () => (
       <h2 className="text-xl font-semibold mt-8 mb-2">13. Contact Us</h2>
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
-      <p className="mb-1">Phone: <a href="tel:+14697440379" className="text-amber-brand">(469) 744-0379</a></p>
+      <p className="mb-1">Phone: <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(469) 744-0379</a></p>
       <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
   </main>
