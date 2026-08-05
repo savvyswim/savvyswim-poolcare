@@ -93,7 +93,13 @@ export function ProjectTimeline({
   async function patch(id: string, field: "start_date" | "end_date" | "duration_days", value: string) {
     const val = field === "duration_days" ? Math.max(1, Number(value) || 1) : value || null;
     onChange(stages.map((s) => (s.id === id ? { ...s, [field]: val } as TimelineStage : s)));
-    const { error } = await supabase.from("ss_project_stages").update({ [field]: val }).eq("id", id);
+    const payload =
+      field === "duration_days"
+        ? { duration_days: val as number }
+        : field === "start_date"
+          ? { start_date: val as string | null }
+          : { end_date: val as string | null };
+    const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
     if (error) toast.error(error.message);
   }
 
