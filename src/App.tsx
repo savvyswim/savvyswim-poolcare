@@ -64,6 +64,8 @@ const App = () => (
             <Route path="/portal" element={<Portal />} />
             <Route path="/services" element={<Services />} />
             <Route path="/pool-cleaning-frisco-tx" element={<PoolCleaningFrisco />} />
+            <Route path="/request-inspection" element={<RequestInspection />} />
+            <Route path="/free-inspection" element={<RequestInspection />} />
             <Route path="/set-password" element={<SetPassword />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Privacy />} />
