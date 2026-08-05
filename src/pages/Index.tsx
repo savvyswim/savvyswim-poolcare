@@ -1059,6 +1059,7 @@ const Index = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <Link to="/pool-cleaning-frisco-tx" className="hover:text-foreground transition">Pool Cleaning Frisco TX</Link>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
             <Link to="/auth" className="hover:text-foreground transition">Admin</Link>
