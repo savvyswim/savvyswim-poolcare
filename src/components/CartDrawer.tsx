@@ -67,10 +67,10 @@ export const CartDrawer = () => {
     const code = promoInput.trim();
     if (!code) return;
     setCheckingPromo(true);
-    const { data, error } = await supabase.rpc("check_promo_code", {
-      p_code: code,
-      p_subtotal: subtotal,
+    const { data, error } = await supabase.functions.invoke("store-order", {
+      body: { action: "check_promo", code, subtotal },
     });
+
     setCheckingPromo(false);
     const result = data as { valid?: boolean; code?: string; discount?: number; message?: string } | null;
     if (error || !result?.valid) {
@@ -107,18 +107,23 @@ export const CartDrawer = () => {
     if (!lines.length) return;
     setSubmitting(true);
 
-    const { data: orderNumber, error } = await supabase.rpc("place_store_order", {
-      p_customer_name: parsed.data.customer_name,
-      p_email: parsed.data.email,
-      p_phone: parsed.data.phone ?? null,
-      p_address: parsed.data.address ?? null,
-      p_city: parsed.data.city ?? null,
-      p_state: parsed.data.state ?? null,
-      p_postal_code: parsed.data.postal_code ?? null,
-      p_notes: parsed.data.notes ?? null,
-      p_items: lines.map((l) => ({ product_id: l.product_id, quantity: l.quantity })),
-      p_promo_code: promo?.code ?? null,
+    const { data, error } = await supabase.functions.invoke("store-order", {
+      body: {
+        action: "place_order",
+        customer_name: parsed.data.customer_name,
+        email: parsed.data.email,
+        phone: parsed.data.phone ?? null,
+        address: parsed.data.address ?? null,
+        city: parsed.data.city ?? null,
+        state: parsed.data.state ?? null,
+        postal_code: parsed.data.postal_code ?? null,
+        notes: parsed.data.notes ?? null,
+        items: lines.map((l) => ({ product_id: l.product_id, quantity: l.quantity })),
+        promo_code: promo?.code ?? null,
+      },
     });
+
+    const orderNumber = (data as { order_number?: string } | null)?.order_number;
 
     setSubmitting(false);
     if (error || !orderNumber) {
@@ -126,10 +131,11 @@ export const CartDrawer = () => {
       return;
     }
 
-    setPlaced(orderNumber as string);
+    setPlaced(orderNumber);
     clear();
     removePromo();
     toast.success(`Order ${orderNumber} received — pay securely below`);
+
   };
 
   return (
