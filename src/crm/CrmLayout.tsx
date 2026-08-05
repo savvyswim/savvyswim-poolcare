@@ -11,6 +11,8 @@ import { PrivacyNotice, TechWatermark, useWindowObscured } from "@/crm/component
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
+import { AccessDenied } from "@/crm/components/RequireModule";
 
 type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey };
 
