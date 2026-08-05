@@ -143,6 +143,31 @@ export default function ProjectDetail() {
   );
   const missingDocs = missingAll.filter((t) => t.kind === "document");
 
+  // Permit & document checklist: every required document across the build, grouped by vault folder.
+  const docChecklist = useMemo(() => {
+    const docTasks = tasks.filter((t) => t.kind === "document");
+    return DOC_FOLDERS.map((d) => {
+      const items = docTasks
+        .filter((t) => t.doc_folder === d.key)
+        .map((t) => ({
+          ...t,
+          collected: t.is_done || files.some((f) => f.doc_folder === d.key),
+          stage: stages.find((s) => s.id === t.stage_id) ?? null,
+        }));
+      return {
+        folder: d,
+        items,
+        collected: items.filter((i) => i.collected).length,
+        missing: items.filter((i) => !i.collected).length,
+        fileCount: files.filter((f) => f.doc_folder === d.key).length,
+      };
+    }).filter((g) => g.items.length > 0 || g.fileCount > 0);
+  }, [tasks, files, stages]);
+
+  const docsCollected = docChecklist.reduce((n, g) => n + g.collected, 0);
+  const docsTotal = docChecklist.reduce((n, g) => n + g.items.length, 0);
+
+
 
   const visibleFiles = useMemo(() => {
     if (activeStage === "all") return files;
