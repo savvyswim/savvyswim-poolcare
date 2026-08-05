@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin } from "lucide-react";
-import logoMark from "@/assets/savvy-swim-logo.png.asset.json";
+import logoMark from "@/assets/savvy-swim-logo-red.webp";
 import Seo from "@/components/Seo";
 import { trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
@@ -116,19 +116,19 @@ const FriscoPoolCleaning = () => {
       />
 
       <header className="border-b border-hairline bg-background">
-        <div className="container-tight flex h-[72px] items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
+        <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
+          <Link to="/" className="flex shrink-0 items-center gap-3">
             <img
-              src={logoMark.url}
+              src={logoMark}
               alt="Savvy Swim — on duty, so you don't have to be"
-              width={44}
-              height={44}
-              decoding="async"
-              className="h-11 w-11 object-cover border border-primary/15"
+              width={640}
+              height={700}
+              decoding="sync"
+              loading="eager"
+              className="h-9 w-auto shrink-0 object-contain sm:h-11 lg:h-12"
             />
-            <span className="tracking-tight text-base leading-tight flex shrink-0 flex-col">
-              <span className="whitespace-nowrap font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
-              <span className="whitespace-nowrap font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
+            <span className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/45 md:block xl:hidden">
+              On duty, so you don&rsquo;t have to be.
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
