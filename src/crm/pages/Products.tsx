@@ -226,6 +226,45 @@ export default function Products() {
             </div>
 
             <div className="ss-card p-4">
+              <div className="ss-label mb-2">12-month savings</div>
+              {currentMonthly ? (
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <div className="ss-label">They pay now</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {money(currentMonthly)}/mo
+                      </div>
+                    </div>
+                    <div>
+                      <div className="ss-label">With Savvy Swim</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {money(quote.monthly)}/mo
+                      </div>
+                    </div>
+                    <div>
+                      <div className="ss-label">Saved / mo</div>
+                      <div className="ss-num text-[1.05rem] font-bold">
+                        {vsCurrent > 0 ? money(vsCurrent) : "—"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-[0.85rem] font-bold">
+                    {vsCurrent > 0
+                      ? `They save ${money(vsCurrentYear)} over 12 months (${vsCurrentPct}% less than today)`
+                      : "Our rate is at or above what they pay today — adjust the rate or lead with service value"}
+                  </div>
+                </>
+              ) : (
+                <div className="text-[0.8rem] opacity-70">
+                  Enter what they pay today to show their 12-month savings. Versus the
+                  regional average this quote saves{" "}
+                  <strong className="ss-num">{money(vsMarketYear)}</strong> a year.
+                </div>
+              )}
+            </div>
+
+            <div className="ss-card p-4">
               <div className="ss-label mb-2">Regional benchmark · {city}</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
