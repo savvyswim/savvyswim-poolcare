@@ -30,6 +30,9 @@ export default function Products() {
   const [undercut, setUndercut] = useState(15);
   const [override, setOverride] = useState<string>("");
   const [payingNow, setPayingNow] = useState<string>("");
+  const [providerName, setProviderName] = useState<string>("");
+  const [providerPlan, setProviderPlan] = useState<string>("");
+
 
   useEffect(() => {
     setUndercut(clampUndercut(margins.undercut_pct));
@@ -172,7 +175,26 @@ export default function Products() {
                   onChange={(e) => setPayingNow(e.target.value)}
                 />
               </div>
+              <div>
+                <label className="ss-label">Current provider (optional)</label>
+                <input
+                  className="ss-input"
+                  placeholder="e.g. Blue Wave Pools"
+                  value={providerName}
+                  onChange={(e) => setProviderName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="ss-label">Their rate plan (optional)</label>
+                <input
+                  className="ss-input"
+                  placeholder="e.g. Weekly full service"
+                  value={providerPlan}
+                  onChange={(e) => setProviderPlan(e.target.value)}
+                />
+              </div>
             </div>
+
             <div className="mt-2 flex flex-wrap gap-3 text-[0.78rem]">
               <label className="flex items-center gap-2">
                 <input
