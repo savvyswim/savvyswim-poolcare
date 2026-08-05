@@ -163,6 +163,8 @@ export type QuoteInput = {
   chemIncluded?: boolean;
   saltCell?: boolean;
   rateOverride?: number | null;
+  /** Percent below the regional market average we want to land (10–20). */
+  undercutPct?: number;
 };
 
 export type QuoteLine = { label: string; amount: number; note?: string };
@@ -176,14 +178,18 @@ export function computeQuote(
   const low = band ? Number(band.low) : 0;
   const high = band ? Number(band.high) : 0;
   const mid = Math.round((low + high) / 2);
+  const size = POOL_SIZES.find((p) => p.id === input.poolSize) ?? POOL_SIZES[1];
+  const marketAvg = marketAverage(band);
+  const pct = clampUndercut(input.undercutPct ?? 15);
+  const marketAvgSized = Math.round(marketAvg * size.factor);
+  const targetSized = undercutTarget(marketAvgSized, pct);
   const base =
     input.rateOverride != null && input.rateOverride > 0
       ? Number(input.rateOverride)
-      : input.poolSize === "small"
-        ? low
-        : input.poolSize === "large"
-          ? high
-          : mid;
+      : Math.min(
+          Math.max(Math.round((mid * size.factor) / 5) * 5, low),
+          Math.max(targetSized, low),
+        );
 
   const lines: QuoteLine[] = [];
   let monthly = base;
@@ -227,6 +233,20 @@ export function computeQuote(
     cleanup,
     cleanupLabel: cond.cleanupHigh ? `$${cond.cleanupLow}–${cond.cleanupHigh}` : null,
     band: { low, mid, high },
+    market: {
+      /** Regional average for this city at this pool size. */
+      avg: marketAvgSized,
+      /** What we quote to sit `pct` under that average. */
+      target: targetSized,
+      pct,
+      /** Dollars per month the customer saves vs the regional average. */
+      savings: Math.max(marketAvgSized - monthly, 0),
+      /** Percent under the regional average this quote actually lands. */
+      savingsPct: marketAvgSized
+        ? Math.round(((marketAvgSized - monthly) / marketAvgSized) * 100)
+        : 0,
+    },
+    size,
   };
 }
 
