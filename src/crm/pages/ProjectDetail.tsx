@@ -560,6 +560,7 @@ export default function ProjectDetail() {
           {DOC_FOLDERS.map((d) => {
             const count = files.filter((f) => f.doc_folder === d.key).length;
             const key = `doc:${d.key}`;
+            const group = docChecklist.find((g) => g.folder.key === d.key);
             return (
               <div
                 key={d.key}
@@ -569,11 +570,19 @@ export default function ProjectDetail() {
                 <div className="flex items-start gap-2">
                   <FileText size={15} className="mt-0.5 shrink-0 opacity-50" />
                   <button className="flex-1 text-left" onClick={() => setActiveStage(key)}>
-                    <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                      {group && group.missing > 0 && (
+                        <span className="ss-num text-[0.62rem]" style={{ color: "hsl(var(--ss-burgundy))" }}>
+                          {group.missing} missing
+                        </span>
+                      )}
+                    </div>
                     <div className="text-[0.72rem] opacity-60">
                       {count} file{count === 1 ? "" : "s"} · {d.hint}
                     </div>
                   </button>
+
                   <UploadButton
                     busy={uploadingTo === d.key}
                     onFiles={(fl) => void upload(fl, null, d.key)}
