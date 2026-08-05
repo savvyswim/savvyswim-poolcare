@@ -242,23 +242,19 @@
   .card-3d {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--hairline));
+    border-radius: 1.1rem;
     box-shadow: var(--shadow-card);
     position: relative;
     transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
   .card-3d:hover {
     border-color: hsl(var(--lifeguard-red) / 0.35);
-    box-shadow: 0 2px 4px hsl(213 30% 15% / 0.05), 0 26px 50px -34px hsl(213 30% 15% / 0.38);
+    box-shadow: 0 2px 4px hsl(3 30% 20% / 0.05), 0 26px 50px -34px hsl(3 30% 20% / 0.38);
   }
 
   .rule-top { border-top: 2px solid hsl(var(--lifeguard-red)); }
 
-  .grid-bg {
-    background-image:
-      linear-gradient(hsl(213 44% 22% / 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(213 44% 22% / 0.04) 1px, transparent 1px);
-    background-size: 120px 120px;
-  }
+  .grid-bg { background-image: none; }
 
 
 
