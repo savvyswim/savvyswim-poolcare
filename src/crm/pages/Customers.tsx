@@ -81,7 +81,7 @@ export default function CustomersPage() {
         sub={`${rows.length} records`}
         right={
           <div className="flex gap-2">
-            <Link to="/crm/pipeline" className="ss-btn ss-btn-ghost !no-underline">Pipeline →</Link>
+            <Link to="/admin/crm/pipeline" className="ss-btn ss-btn-ghost !no-underline">Pipeline →</Link>
             <button className="ss-btn" onClick={() => setAdding(true)}><Plus size={13} /> New</button>
           </div>
         }

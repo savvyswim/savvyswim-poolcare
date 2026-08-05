@@ -14,20 +14,20 @@ import { supabase } from "@/integrations/supabase/client";
 type NavItem = { to: string; label: string; icon: typeof Map; owner?: boolean };
 
 const STAFF_NAV: NavItem[] = [
-  { to: "/crm", label: "Route", icon: Map },
-  { to: "/crm/customers", label: "Customers", icon: Users },
-  { to: "/crm/pipeline", label: "Pipeline", icon: KanbanSquare },
-  { to: "/crm/jobs", label: "Jobs", icon: Wrench },
-  { to: "/crm/alerts", label: "Alerts", icon: AlertTriangle },
-  { to: "/crm/technicians", label: "Technicians", icon: ClipboardList },
-  { to: "/crm/products", label: "Products & Services", icon: Package },
-  { to: "/crm/finance", label: "Finance", icon: DollarSign, owner: true },
-  { to: "/crm/trucks", label: "Trucks & Tools", icon: Truck },
-  { to: "/crm/inventory", label: "Inventory", icon: Building2 },
-  { to: "/crm/email", label: "Email Center", icon: Mail },
-  { to: "/crm/reports", label: "Reports", icon: BarChart3 },
-  { to: "/crm/connect", label: "Website Connect", icon: Plug },
-  { to: "/crm/settings", label: "Settings", icon: SettingsIcon },
+  { to: "/admin/crm", label: "Route", icon: Map },
+  { to: "/admin/crm/customers", label: "Customers", icon: Users },
+  { to: "/admin/crm/pipeline", label: "Pipeline", icon: KanbanSquare },
+  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench },
+  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle },
+  { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList },
+  { to: "/admin/crm/products", label: "Products & Services", icon: Package },
+  { to: "/admin/crm/finance", label: "Finance", icon: DollarSign, owner: true },
+  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck },
+  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2 },
+  { to: "/admin/crm/email", label: "Email Center", icon: Mail },
+  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3 },
+  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug },
+  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 const LEVEL_LABEL: Record<string, string> = {
@@ -46,7 +46,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const obscured = useWindowObscured();
 
   useEffect(() => {
-    if (!authLoading && !user) nav("/crm/login", { replace: true });
+    if (!authLoading && !user) nav("/admin/crm/login", { replace: true });
   }, [authLoading, user, nav]);
 
   useEffect(() => {

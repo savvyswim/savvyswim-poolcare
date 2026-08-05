@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -61,33 +61,38 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/crm/login" element={<Auth />} />
-            <Route path="/crm/app" element={<CrmApp />} />
-            <Route path="/crm/legacy" element={<AdminCRM />} />
+            <Route path="/admin/crm/login" element={<Auth />} />
+            <Route path="/admin/crm/app" element={<CrmApp />} />
+            <Route path="/admin/crm/legacy" element={<AdminCRM />} />
             <Route element={<CrmLayout />}>
-              <Route path="/crm" element={<RoutePage />} />
-              <Route path="/crm/customers" element={<CustomersPage />} />
-              <Route path="/crm/customers/:id" element={<CustomerDetail />} />
-              <Route path="/crm/pipeline" element={<Pipeline />} />
-              <Route path="/crm/jobs" element={<Jobs />} />
-              <Route path="/crm/alerts" element={<Alerts />} />
-              <Route path="/crm/technicians" element={<Technicians />} />
-              <Route path="/crm/products" element={<Products />} />
-              <Route path="/crm/finance" element={<Finance />} />
-              <Route path="/crm/trucks" element={<Trucks />} />
-              <Route path="/crm/inventory" element={<Inventory />} />
-              <Route path="/crm/email" element={<EmailCenter />} />
-              <Route path="/crm/reports" element={<Reports />} />
-              <Route path="/crm/connect" element={<WebsiteConnect />} />
-              <Route path="/crm/settings" element={<CrmSettings />} />
+              <Route path="/admin/crm" element={<RoutePage />} />
+              <Route path="/admin/crm/customers" element={<CustomersPage />} />
+              <Route path="/admin/crm/customers/:id" element={<CustomerDetail />} />
+              <Route path="/admin/crm/pipeline" element={<Pipeline />} />
+              <Route path="/admin/crm/jobs" element={<Jobs />} />
+              <Route path="/admin/crm/alerts" element={<Alerts />} />
+              <Route path="/admin/crm/technicians" element={<Technicians />} />
+              <Route path="/admin/crm/products" element={<Products />} />
+              <Route path="/admin/crm/finance" element={<Finance />} />
+              <Route path="/admin/crm/trucks" element={<Trucks />} />
+              <Route path="/admin/crm/inventory" element={<Inventory />} />
+              <Route path="/admin/crm/email" element={<EmailCenter />} />
+              <Route path="/admin/crm/reports" element={<Reports />} />
+              <Route path="/admin/crm/connect" element={<WebsiteConnect />} />
+              <Route path="/admin/crm/settings" element={<CrmSettings />} />
             </Route>
 
+            {/* Legacy /crm/* URLs redirect into the admin area */}
+            <Route path="/crm/*" element={<Navigate to="/admin/crm" replace />} />
+            <Route path="/crm" element={<Navigate to="/admin/crm" replace />} />
+
+            <Route path="/admin" element={<Navigate to="/admin/crm" replace />} />
             <Route path="/admin/designs" element={<AdminDesigns />} />
             <Route path="/admin/cleaning" element={<AdminCleaning />} />
             <Route path="/admin/store" element={<AdminStore />} />
-            <Route path="/admin/crm" element={<AdminCRM />} />
             <Route path="/admin/team" element={<AdminTeam />} />
             <Route path="/admin/activity" element={<AdminActivity />} />
+
             <Route path="/checkout/return" element={<CheckoutReturn />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

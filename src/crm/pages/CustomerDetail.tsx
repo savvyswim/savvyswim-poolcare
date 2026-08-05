@@ -60,7 +60,7 @@ export default function CustomerDetail() {
 
   return (
     <div className="space-y-4">
-      <Link to="/crm/customers" className="inline-flex items-center gap-1.5 text-[0.78rem] !no-underline opacity-70">
+      <Link to="/admin/crm/customers" className="inline-flex items-center gap-1.5 text-[0.78rem] !no-underline opacity-70">
         <ArrowLeft size={13} /> All customers
       </Link>
 
