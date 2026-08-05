@@ -138,7 +138,7 @@ export default function CustomersPage() {
         <div className="space-y-2">
           {!filtered.length && <EmptyState>No customers match.</EmptyState>}
           {filtered.map((r) => (
-            <Link key={r.id} to={`/crm/customers/${r.id}`} className="ss-card flex flex-wrap items-center gap-3 p-3 !no-underline !text-inherit">
+            <Link key={r.id} to={`/admin/crm/customers/${r.id}`} className="ss-card flex flex-wrap items-center gap-3 p-3 !no-underline !text-inherit">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="text-[0.92rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{r.full_name}</span>

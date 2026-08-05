@@ -20,7 +20,7 @@ export default function Auth() {
   const [shared, setShared] = useState(() => isSharedDevice());
 
   useEffect(() => {
-    if (!loading && user) nav("/admin/designs", { replace: true });
+    if (!loading && user) nav("/admin/crm", { replace: true });
   }, [user, loading, nav]);
 
   const submit = async (e: React.FormEvent) => {
@@ -31,7 +31,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin/designs` },
+          options: { emailRedirectTo: `${window.location.origin}/admin/crm` },
         });
         if (error) throw error;
         toast.success("Account created. You can sign in now.");
@@ -40,7 +40,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         // First-signup admin bootstrap happens automatically via database trigger.
-        nav("/admin/designs", { replace: true });
+        nav("/admin/crm", { replace: true });
       }
     } catch (err: any) {
       toast.error(err?.message ?? "Authentication failed");

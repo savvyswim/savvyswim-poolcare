@@ -19,7 +19,7 @@ export type SavvyIdentity = {
 };
 
 export function useSavvyIdentity(): SavvyIdentity {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [state, setState] = useState({
     loading: true,
     level: null as SsLevel | null,
@@ -40,16 +40,18 @@ export function useSavvyIdentity(): SavvyIdentity {
     ]);
     setState({
       loading: false,
-      level: (staff?.level as SsLevel) ?? null,
+      // Legacy admins may predate the ss_staff roster. Treat their verified
+      // database admin role as owner access so the admin portal never appears empty.
+      level: (staff?.level as SsLevel) ?? (isAdmin ? "owner" : null),
       staffId: staff?.id ?? null,
-      staffName: staff?.full_name ?? null,
+      staffName: staff?.full_name ?? (isAdmin ? user.email ?? "Administrator" : null),
       initials:
         staff?.initials ||
         (staff?.full_name ?? "").split(" ").map((p) => p[0]).join("").slice(0, 3) ||
         null,
       customerId: cust?.id ?? null,
     });
-  }, [user]);
+  }, [user, isAdmin]);
 
   useEffect(() => {
     if (authLoading) return;
