@@ -33,6 +33,19 @@ type ProjectFile = {
   created_at: string;
 };
 
+type StageTask = {
+  id: string;
+  project_id: string;
+  stage_id: string;
+  kind: string;
+  label: string;
+  doc_folder: string | null;
+  is_required: boolean;
+  is_done: boolean;
+  sort_order: number;
+};
+
+
 const BUCKET = "pool-designs";
 
 const DOC_FOLDERS: { key: string; label: string; hint: string }[] = [
