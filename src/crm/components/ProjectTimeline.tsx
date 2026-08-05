@@ -361,12 +361,46 @@ export function ProjectTimeline({
                   />
                   days
                 </div>
+                <div className="flex flex-wrap items-center gap-1 text-[0.72rem] opacity-70 sm:col-span-4">
+                  <Link2 size={12} /> After
+                  <select
+                    className="ss-input"
+                    value={s.depends_on_id ?? ""}
+                    onChange={(e) => void setDependency(s.id, e.target.value || null)}
+                  >
+                    <option value="">— nothing (fixed date)</option>
+                    {stages
+                      .filter((o) => o.id !== s.id)
+                      .sort((a, b) => a.sort_order - b.sort_order)
+                      .map((o) => (
+                        <option key={o.id} value={o.id}>
+                          {o.sort_order}. {o.name}
+                        </option>
+                      ))}
+                  </select>
+                  {s.depends_on_id && (
+                    <>
+                      + lag
+                      <input
+                        type="number"
+                        min={0}
+                        className="ss-input w-14"
+                        value={s.lag_days}
+                        onChange={(e) =>
+                          void setDependency(s.id, s.depends_on_id, Math.max(0, Number(e.target.value) || 0))
+                        }
+                      />
+                      days
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           <div className="text-[0.7rem] opacity-60">
-            Days drive Auto-schedule — set them once and rebuild the timeline any time the start
-            date moves.
+            Linked stages start the day after the stage they follow (plus any lag), so completing or
+            moving earlier work slides everything downstream automatically.
           </div>
+
         </div>
       )}
     </div>
