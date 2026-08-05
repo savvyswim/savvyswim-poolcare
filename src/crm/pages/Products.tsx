@@ -96,6 +96,69 @@ export default function Products() {
     : 0;
   const vsMarketYear = quote.market.savings * 12;
 
+  const quoteParams = () => {
+    const p = new URLSearchParams({
+      city,
+      size,
+      cond: condition,
+      spa,
+      undercut: String(undercut),
+    });
+    if (chemOnly) p.set("chemOnly", "1");
+    if (chemIncluded) p.set("chemIncl", "1");
+    if (saltCell) p.set("salt", "1");
+    if (override) p.set("override", override);
+    if (payingNow) p.set("now", payingNow);
+    if (providerName.trim()) p.set("provider", providerName.trim());
+    if (providerPlan.trim()) p.set("plan", providerPlan.trim());
+    return p;
+  };
+
+  const shareLink = `${window.location.origin}/admin/crm/products?${quoteParams().toString()}`;
+
+  const summaryText = [
+    `Savvy Swim quote — ${city}`,
+    `${quote.size.label} pool · ${money(quote.monthly)}/mo`,
+    quote.cleanupLabel ? `One-time cleanup ${quote.cleanupLabel}` : null,
+    currentMonthly && vsCurrent > 0
+      ? `Saves ${money(vsCurrent)}/mo vs ${providerName.trim() || "their current provider"} — ${money(vsCurrentYear)} over 12 months`
+      : `Regional average ${money(quote.market.avg)}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const sendSms = async () => {
+    if (!smsPhone.trim()) {
+      toast({ title: "Add a phone number", description: "Enter the number to text this quote to." });
+      return;
+    }
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-quote-sms", {
+        body: { phone: smsPhone.trim(), message: summaryText, link: shareLink },
+      });
+      if (error) throw error;
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      toast({ title: "Quote sent", description: `Texted to ${smsPhone.trim()}` });
+    } catch (e) {
+      toast({
+        title: "Could not send the text",
+        description: e instanceof Error ? e.message : "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(shareLink);
+    setParams(quoteParams(), { replace: true });
+    toast({ title: "Quote link copied" });
+  };
+
+
+
   return (
     <div className="space-y-4">
       <SectionTitle
