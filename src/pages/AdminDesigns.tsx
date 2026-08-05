@@ -245,6 +245,14 @@ export default function AdminDesigns() {
           <p className="text-sm text-muted-foreground">
             {grouped.design.length} designs · {grouped.plan.length} blueprint plans · {grouped.construction.length} 3D construction stage videos. Use Copy / Email / Text to share with customers.
           </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Building or remodeling a pool?{" "}
+            <Link to="/admin/crm/projects" className="underline">
+              Open Construction &amp; Remodel
+            </Link>{" "}
+            — each job gets its own project file with every build stage, photos, plans and videos you can download.
+          </p>
+
         </div>
 
         {loadingData ? (
