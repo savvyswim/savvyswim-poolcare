@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        xs: "400px",
+      },
       fontFamily: {
         display: ["Archivo", "Helvetica", "Arial", "sans-serif"],
         badge: ["Archivo", "Helvetica", "Arial", "sans-serif"],
