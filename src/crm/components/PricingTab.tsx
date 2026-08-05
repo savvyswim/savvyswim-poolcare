@@ -7,8 +7,13 @@ import {
   type Addon,
   type CityRate,
   type Margins,
+  UNDERCUT_MAX,
+  UNDERCUT_MIN,
+  clampUndercut,
   marginFloor,
+  marketAverage,
   money,
+  undercutTarget,
   recommendRate,
   saveMargins,
   useRateCard,
@@ -83,7 +88,13 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
     if (!city) return;
     const { error } = await supabase
       .from("ss_city_rates")
-      .insert({ city, low: floor, high: Math.round(floor * 1.3), sort_order: cities.length + 1 });
+      .insert({
+        city,
+        low: floor,
+        high: Math.round(floor * 1.3),
+        market_avg: Math.round(floor * 1.3),
+        sort_order: cities.length + 1,
+      });
     if (error) return toast.error(error.message);
     void refresh();
   };
@@ -115,7 +126,7 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
         }
       />
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-4">
         <div className="ss-card p-3">
           <div className="ss-label">Chemical cost basis / month</div>
           <input
@@ -137,6 +148,25 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
             onChange={(e) => saveMarginSettings({ margin_multiplier: Number(e.target.value) })}
           />
         </div>
+        <div className="ss-card p-3">
+          <div className="ss-label">Undercut market by (%)</div>
+          <div className="mt-1 flex items-center gap-2">
+            <input
+              type="range"
+              min={UNDERCUT_MIN}
+              max={UNDERCUT_MAX}
+              step={1}
+              className="w-full"
+              disabled={!isOwner}
+              value={clampUndercut(margins.undercut_pct)}
+              onChange={(e) => saveMarginSettings({ undercut_pct: clampUndercut(Number(e.target.value)) })}
+            />
+            <span className="ss-num text-[0.9rem] font-bold">{clampUndercut(margins.undercut_pct)}%</span>
+          </div>
+          <div className="mt-1 text-[0.66rem] opacity-65">
+            Estimates aim this far below the regional average
+          </div>
+        </div>
         <div className="ss-hero p-3">
           <div className="ss-tag" style={{ fontSize: "0.55rem", color: "rgba(255,255,255,.7)" }}>
             Margin floor
@@ -150,7 +180,9 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
 
       <div className="ss-card overflow-x-auto p-3">
         <div className="mb-2 flex items-center justify-between">
-          <div className="ss-label">City monthly rate table</div>
+          <div className="ss-label">
+            City monthly rate table · regional average vs our quote target
+          </div>
           {isOwner && (
             <button className="ss-btn ss-btn-ghost" onClick={addCity}>
               <Plus size={13} /> Add city
@@ -163,6 +195,8 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
               <th className="p-1.5 text-left">City</th>
               <th className="p-1.5 text-right">Low</th>
               <th className="p-1.5 text-right">High</th>
+              <th className="p-1.5 text-right">Regional avg</th>
+              <th className="p-1.5 text-right">Quote target</th>
               <th className="p-1.5 text-right">Won avg</th>
               <th className="p-1.5 text-left">Recommendation</th>
             </tr>
@@ -190,6 +224,20 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
                       value={c.high}
                       onChange={(e) => patchCity(c.id, { high: Number(e.target.value) })}
                     />
+                  </td>
+                  <td className="p-1.5 text-right">
+                    <input
+                      type="number"
+                      className="ss-input ss-num w-24 text-right"
+                      disabled={!isOwner}
+                      value={c.market_avg ?? 0}
+                      onChange={(e) => patchCity(c.id, { market_avg: Number(e.target.value) })}
+                    />
+                  </td>
+                  <td className="ss-num p-1.5 text-right font-semibold">
+                    {money(
+                      undercutTarget(marketAverage(c), clampUndercut(margins.undercut_pct), floor),
+                    )}
                   </td>
                   <td className="ss-num p-1.5 text-right opacity-70">
                     {rec.wonAvg ? money(rec.wonAvg) : "—"}
