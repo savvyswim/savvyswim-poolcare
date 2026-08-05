@@ -279,8 +279,8 @@ const Index = () => {
                 className="h-9 w-9 shrink-0 border border-primary/15 object-cover sm:h-11 sm:w-11"
               />
               <span className="flex min-w-0 flex-col leading-tight tracking-tight">
-                <span className="font-display text-[16px] tracking-[0.02em] sm:text-[19px]">SAVVY SWIM</span>
-                <span className="hidden font-tech text-[8.5px] text-primary/45 sm:block">On duty, so you don&rsquo;t have to be.</span>
+                <span className="whitespace-nowrap font-display text-[16px] tracking-[0.02em] sm:text-[19px]">SAVVY SWIM</span>
+                <span className="hidden whitespace-nowrap font-tech text-[8.5px] text-primary/45 sm:block">On duty, so you don&rsquo;t have to be.</span>
               </span>
             </a>
 
