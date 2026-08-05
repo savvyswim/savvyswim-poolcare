@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
+  Activity, BookOpen, LayoutDashboard, ShoppingBag, Sparkles,
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
@@ -28,6 +29,12 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/reports", label: "Reports", icon: BarChart3 },
   { to: "/admin/crm/connect", label: "Website Connect", icon: Plug },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon },
+  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, owner: true },
+  { to: "/admin/cleaning", label: "Cleaning Plans", icon: Sparkles, owner: true },
+  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, owner: true },
+  { to: "/admin/team", label: "Team & Access", icon: Users, owner: true },
+  { to: "/admin/activity", label: "Activity Log", icon: Activity, owner: true },
+  { to: "/admin/designs", label: "Media Library", icon: BookOpen, owner: true },
 ];
 
 const LEVEL_LABEL: Record<string, string> = {
@@ -153,7 +160,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         <SavvyLogo size="md" />
         <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
           {items.map((i) => (
-            <NavRow key={i.to} item={i} active={loc.pathname === i.to} />
+            <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
           ))}
         </nav>
         <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
@@ -175,7 +182,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
             </div>
             <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
               {items.map((i) => (
-                <NavRow key={i.to} item={i} active={loc.pathname === i.to} />
+                <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
               ))}
             </nav>
             <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
