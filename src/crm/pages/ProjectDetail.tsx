@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Check, Download, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2, Upload, UserRound,
+  ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
+  Upload, UserRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
@@ -26,17 +27,35 @@ type ProjectFile = {
   title: string;
   storage_path: string;
   media_type: string;
+  doc_folder: string;
   size_bytes: number | null;
   created_at: string;
 };
 
 const BUCKET = "pool-designs";
 
+const DOC_FOLDERS: { key: string; label: string; hint: string }[] = [
+  { key: "permits", label: "Permits", hint: "City permits, applications, approvals" },
+  { key: "plans", label: "Plans & engineering", hint: "Blueprints, structural, soil reports" },
+  { key: "contracts", label: "Contracts", hint: "Signed agreements & change orders" },
+  { key: "inspections", label: "Inspections", hint: "Inspection reports & sign-offs" },
+  { key: "insurance", label: "Insurance & licenses", hint: "COIs, bonds, sub licenses" },
+  { key: "invoices", label: "Invoices & receipts", hint: "Vendor bills, material receipts" },
+  { key: "warranties", label: "Warranties & manuals", hint: "Equipment warranties, manuals" },
+  { key: "hoa", label: "HOA & utilities", hint: "HOA approvals, utility locates" },
+  { key: "other", label: "Other documents", hint: "Anything else worth keeping" },
+];
+
+function docKey(active: string) {
+  return active.startsWith("doc:") ? active.slice(4) : null;
+}
+
 function prettySize(bytes: number | null) {
   if (!bytes) return "—";
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
+
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -85,17 +104,19 @@ export default function ProjectDetail() {
   const done = stages.filter((s) => s.status === "complete").length;
   const pct = stages.length ? Math.round((done / stages.length) * 100) : 0;
 
-  const visibleFiles = useMemo(
-    () => (activeStage === "all" ? files : files.filter((f) => f.stage_id === activeStage)),
-    [files, activeStage],
-  );
+  const visibleFiles = useMemo(() => {
+    if (activeStage === "all") return files;
+    const dk = docKey(activeStage);
+    if (dk) return files.filter((f) => f.doc_folder === dk);
+    return files.filter((f) => f.stage_id === activeStage && f.doc_folder === "media");
+  }, [files, activeStage]);
 
-  async function upload(fileList: FileList | null, stageId: string | null) {
+  async function upload(fileList: FileList | null, stageId: string | null, folder = "media") {
     if (!fileList?.length || !id) return;
-    setUploadingTo(stageId ?? "general");
+    setUploadingTo(stageId ?? folder);
     for (const file of Array.from(fileList)) {
       const clean = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-      const path = `projects/${id}/${stageId ?? "general"}/${Date.now()}-${clean}`;
+      const path = `projects/${id}/${stageId ?? folder}/${Date.now()}-${clean}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: false });
       if (upErr) { toast.error(upErr.message); continue; }
       const { error: rowErr } = await supabase.from("ss_project_files").insert({
@@ -103,15 +124,17 @@ export default function ProjectDetail() {
         stage_id: stageId,
         title: file.name,
         storage_path: path,
+        doc_folder: folder,
         media_type: file.type.startsWith("video") ? "video" : file.type.startsWith("image") ? "image" : "document",
         size_bytes: file.size,
       });
       if (rowErr) toast.error(rowErr.message);
     }
     setUploadingTo(null);
-    toast.success("Media added to the project file");
+    toast.success(folder === "media" ? "Media added to the project file" : "Document filed");
     void load();
   }
+
 
   async function removeFile(f: ProjectFile) {
     await supabase.storage.from(BUCKET).remove([f.storage_path]);
@@ -252,7 +275,7 @@ export default function ProjectDetail() {
           </button>
 
           {stages.map((s) => {
-            const count = files.filter((f) => f.stage_id === s.id).length;
+            const count = files.filter((f) => f.stage_id === s.id && f.doc_folder === "media").length;
             const complete = s.status === "complete";
             return (
               <div
@@ -287,19 +310,62 @@ export default function ProjectDetail() {
               </div>
             );
           })}
+
+          <div className="pt-3">
+            <div className="ss-tag">Document vault</div>
+            <p className="mt-1 text-[0.72rem] opacity-60">
+              Permits, contracts, inspections, warranties — every paper for this job in one place.
+            </p>
+          </div>
+
+          {DOC_FOLDERS.map((d) => {
+            const count = files.filter((f) => f.doc_folder === d.key).length;
+            const key = `doc:${d.key}`;
+            return (
+              <div
+                key={d.key}
+                className="ss-card p-3"
+                style={{ outline: activeStage === key ? "2px solid hsl(var(--ss-burgundy))" : undefined }}
+              >
+                <div className="flex items-start gap-2">
+                  <FileText size={15} className="mt-0.5 shrink-0 opacity-50" />
+                  <button className="flex-1 text-left" onClick={() => setActiveStage(key)}>
+                    <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                    <div className="text-[0.72rem] opacity-60">
+                      {count} file{count === 1 ? "" : "s"} · {d.hint}
+                    </div>
+                  </button>
+                  <UploadButton
+                    busy={uploadingTo === d.key}
+                    onFiles={(fl) => void upload(fl, null, d.key)}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Media */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="ss-tag">
-              {activeStage === "all" ? "All media" : stages.find((s) => s.id === activeStage)?.name}
+              {activeStage === "all"
+                ? "All files"
+                : docKey(activeStage)
+                  ? DOC_FOLDERS.find((d) => d.key === docKey(activeStage))?.label
+                  : stages.find((s) => s.id === activeStage)?.name}
             </div>
             <div className="flex gap-2">
               <UploadButton
                 label="Upload"
-                busy={uploadingTo === (activeStage === "all" ? "general" : activeStage)}
-                onFiles={(fl) => void upload(fl, activeStage === "all" ? null : activeStage)}
+                busy={uploadingTo === (activeStage === "all" ? "media" : docKey(activeStage) ?? activeStage)}
+                onFiles={(fl) =>
+                  void upload(
+                    fl,
+                    activeStage === "all" || docKey(activeStage) ? null : activeStage,
+                    docKey(activeStage) ?? "media",
+                  )
+                }
               />
               {visibleFiles.length > 0 && (
                 <button className="ss-btn ss-btn-ghost" onClick={() => void downloadAll()}>
@@ -309,10 +375,12 @@ export default function ProjectDetail() {
             </div>
           </div>
 
+
           {!visibleFiles.length ? (
             <EmptyState>
-              Nothing here yet. Upload photos, plans or walkthrough videos for this stage — customers
-              and crews see the same file.
+              {docKey(activeStage)
+                ? "No documents filed here yet. Upload PDFs, scans or photos of permits and paperwork — they stay with this project forever."
+                : "Nothing here yet. Upload photos, plans or walkthrough videos for this stage — customers and crews see the same file."}
             </EmptyState>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -326,15 +394,22 @@ export default function ProjectDetail() {
                       <img src={url} alt={f.title} loading="lazy" className="aspect-[3/2] w-full object-cover" />
                     ) : (
                       <div className="flex aspect-[3/2] w-full items-center justify-center" style={{ background: "hsl(var(--ss-sand) / .5)" }}>
-                        {f.media_type === "video" ? <FileVideo size={22} className="opacity-50" /> : <ImageIcon size={22} className="opacity-50" />}
+                        {f.media_type === "video"
+                          ? <FileVideo size={22} className="opacity-50" />
+                          : f.media_type === "document"
+                            ? <FileText size={22} className="opacity-50" />
+                            : <ImageIcon size={22} className="opacity-50" />}
                       </div>
                     )}
                     <div className="p-3">
                       <div className="truncate text-[0.82rem] font-medium">{f.title}</div>
                       <div className="text-[0.7rem] opacity-60">
                         {new Date(f.created_at).toLocaleDateString()} · {prettySize(f.size_bytes)}
-                        {f.stage_id ? ` · ${stages.find((s) => s.id === f.stage_id)?.name ?? ""}` : ""}
+                        {f.doc_folder !== "media"
+                          ? ` · ${DOC_FOLDERS.find((d) => d.key === f.doc_folder)?.label ?? f.doc_folder}`
+                          : f.stage_id ? ` · ${stages.find((s) => s.id === f.stage_id)?.name ?? ""}` : ""}
                       </div>
+
                       <div className="mt-2 flex gap-1.5">
                         <button className="ss-btn ss-btn-ghost flex-1" onClick={() => void download(f)}>
                           <Download size={13} /> Download
@@ -382,7 +457,7 @@ function UploadButton({
         ref={ref}
         type="file"
         multiple
-        accept="image/*,video/*,application/pdf"
+        accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.rtf,.heic,.zip"
         className="hidden"
         onChange={(e) => { onFiles(e.target.files); e.target.value = ""; }}
       />

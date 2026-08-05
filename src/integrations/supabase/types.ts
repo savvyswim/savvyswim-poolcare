@@ -1590,6 +1590,7 @@ export type Database = {
           created_at: string
           description: string | null
           design_id: string | null
+          doc_folder: string
           id: string
           media_type: string
           project_id: string
@@ -1603,6 +1604,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           design_id?: string | null
+          doc_folder?: string
           id?: string
           media_type?: string
           project_id: string
@@ -1616,6 +1618,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           design_id?: string | null
+          doc_folder?: string
           id?: string
           media_type?: string
           project_id?: string
