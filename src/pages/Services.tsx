@@ -152,9 +152,9 @@ const Services = () => {
               decoding="async"
               className="h-11 w-11 object-cover border border-primary/15"
             />
-            <span className="tracking-tight text-base leading-tight flex flex-col">
-              <span className="font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
-              <span className="font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
+            <span className="tracking-tight text-base leading-tight flex shrink-0 flex-col">
+              <span className="whitespace-nowrap font-display text-[19px] tracking-[0.02em]">SAVVY SWIM</span>
+              <span className="whitespace-nowrap font-tech text-[8.5px] text-primary/45">On duty, so you don&rsquo;t have to be.</span>
             </span>
           </Link>
 
