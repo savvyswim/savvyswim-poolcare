@@ -143,6 +143,31 @@ export default function ProjectDetail() {
   );
   const missingDocs = missingAll.filter((t) => t.kind === "document");
 
+  // Permit & document checklist: every required document across the build, grouped by vault folder.
+  const docChecklist = useMemo(() => {
+    const docTasks = tasks.filter((t) => t.kind === "document");
+    return DOC_FOLDERS.map((d) => {
+      const items = docTasks
+        .filter((t) => t.doc_folder === d.key)
+        .map((t) => ({
+          ...t,
+          collected: t.is_done || files.some((f) => f.doc_folder === d.key),
+          stage: stages.find((s) => s.id === t.stage_id) ?? null,
+        }));
+      return {
+        folder: d,
+        items,
+        collected: items.filter((i) => i.collected).length,
+        missing: items.filter((i) => !i.collected).length,
+        fileCount: files.filter((f) => f.doc_folder === d.key).length,
+      };
+    }).filter((g) => g.items.length > 0 || g.fileCount > 0);
+  }, [tasks, files, stages]);
+
+  const docsCollected = docChecklist.reduce((n, g) => n + g.collected, 0);
+  const docsTotal = docChecklist.reduce((n, g) => n + g.items.length, 0);
+
+
 
   const visibleFiles = useMemo(() => {
     if (activeStage === "all") return files;
@@ -467,9 +492,75 @@ export default function ProjectDetail() {
             </p>
           </div>
 
+          {docsTotal > 0 && (
+            <div className="ss-card p-3">
+              <div className="flex items-center justify-between">
+                <div className="ss-label">Permit &amp; document checklist</div>
+                <div className="ss-num text-[0.72rem] opacity-70">{docsCollected}/{docsTotal} collected</div>
+              </div>
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full" style={{ background: "hsl(var(--ss-sand))" }}>
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{
+                    width: `${docsTotal ? Math.round((docsCollected / docsTotal) * 100) : 0}%`,
+                    background: "hsl(var(--ss-burgundy))",
+                  }}
+                />
+              </div>
+              <div className="mt-3 space-y-2.5">
+                {docChecklist.filter((g) => g.items.length > 0).map((g) => (
+                  <div key={g.folder.key}>
+                    <button
+                      className="flex w-full items-center justify-between text-left"
+                      onClick={() => setActiveStage(`doc:${g.folder.key}`)}
+                    >
+                      <span className="text-[0.78rem] font-semibold">{g.folder.label}</span>
+                      <span className="text-[0.68rem] opacity-60">
+                        {g.missing ? `${g.missing} missing` : "Complete"} · {g.fileCount} file{g.fileCount === 1 ? "" : "s"}
+                      </span>
+                    </button>
+                    <ul className="mt-1 space-y-1">
+                      {g.items.map((t) => (
+                        <li key={t.id} className="flex items-start gap-2">
+                          <button
+                            aria-label="Toggle document collected"
+                            onClick={() => void toggleTask(t)}
+                            className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border"
+                            style={{
+                              borderColor: t.collected ? "hsl(var(--ss-burgundy) / .6)" : "hsl(var(--ss-burgundy) / .3)",
+                              background: t.collected ? "hsl(var(--ss-burgundy))" : "transparent",
+                              color: "#fff",
+                            }}
+                          >
+                            {t.collected ? <Check size={11} /> : null}
+                          </button>
+                          <div className="flex-1">
+                            <div
+                              className="text-[0.76rem] leading-tight"
+                              style={{ opacity: t.collected ? 0.55 : 1, textDecoration: t.collected ? "line-through" : undefined }}
+                            >
+                              {t.label}
+                            </div>
+                            <div className="text-[0.66rem] opacity-55">
+                              {t.stage ? `${t.stage.sort_order}. ${t.stage.name}` : "Project"}
+                              {t.collected ? " · collected" : " · missing"}
+                            </div>
+                          </div>
+                          {!t.collected && <AlertTriangle size={11} className="mt-1" style={{ color: "hsl(var(--ss-burgundy))" }} />}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+
           {DOC_FOLDERS.map((d) => {
             const count = files.filter((f) => f.doc_folder === d.key).length;
             const key = `doc:${d.key}`;
+            const group = docChecklist.find((g) => g.folder.key === d.key);
             return (
               <div
                 key={d.key}
@@ -479,11 +570,19 @@ export default function ProjectDetail() {
                 <div className="flex items-start gap-2">
                   <FileText size={15} className="mt-0.5 shrink-0 opacity-50" />
                   <button className="flex-1 text-left" onClick={() => setActiveStage(key)}>
-                    <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-[0.86rem] font-semibold">{d.label}</div>
+                      {group && group.missing > 0 && (
+                        <span className="ss-num text-[0.62rem]" style={{ color: "hsl(var(--ss-burgundy))" }}>
+                          {group.missing} missing
+                        </span>
+                      )}
+                    </div>
                     <div className="text-[0.72rem] opacity-60">
                       {count} file{count === 1 ? "" : "s"} · {d.hint}
                     </div>
                   </button>
+
                   <UploadButton
                     busy={uploadingTo === d.key}
                     onFiles={(fl) => void upload(fl, null, d.key)}
