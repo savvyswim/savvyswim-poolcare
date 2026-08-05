@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  ArrowLeft, Check, Download, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2, Upload, UserRound,
+  ArrowLeft, Check, Download, FileText, FileVideo, Image as ImageIcon, Loader2, Plus, Trash2,
+  Upload, UserRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
@@ -26,17 +27,35 @@ type ProjectFile = {
   title: string;
   storage_path: string;
   media_type: string;
+  doc_folder: string;
   size_bytes: number | null;
   created_at: string;
 };
 
 const BUCKET = "pool-designs";
 
+const DOC_FOLDERS: { key: string; label: string; hint: string }[] = [
+  { key: "permits", label: "Permits", hint: "City permits, applications, approvals" },
+  { key: "plans", label: "Plans & engineering", hint: "Blueprints, structural, soil reports" },
+  { key: "contracts", label: "Contracts", hint: "Signed agreements & change orders" },
+  { key: "inspections", label: "Inspections", hint: "Inspection reports & sign-offs" },
+  { key: "insurance", label: "Insurance & licenses", hint: "COIs, bonds, sub licenses" },
+  { key: "invoices", label: "Invoices & receipts", hint: "Vendor bills, material receipts" },
+  { key: "warranties", label: "Warranties & manuals", hint: "Equipment warranties, manuals" },
+  { key: "hoa", label: "HOA & utilities", hint: "HOA approvals, utility locates" },
+  { key: "other", label: "Other documents", hint: "Anything else worth keeping" },
+];
+
+function docKey(active: string) {
+  return active.startsWith("doc:") ? active.slice(4) : null;
+}
+
 function prettySize(bytes: number | null) {
   if (!bytes) return "—";
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
+
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
