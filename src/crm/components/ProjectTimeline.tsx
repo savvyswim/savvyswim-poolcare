@@ -77,6 +77,26 @@ export function ProjectTimeline({
     return ((t - bounds.min) / bounds.span) * 100;
   }, [bounds]);
 
+  const stagesRef = useRef(stages);
+  stagesRef.current = stages;
+
+  /** Applies a local edit, cascades dependents, saves everything that moved. */
+  const applyAndCascade = useCallback(
+    async (next: TimelineStage[]) => {
+      const moved = cascadeSchedule(next);
+      const merged = next.map((s) => moved.find((m) => m.id === s.id) ?? s);
+      onChange(merged);
+      if (moved.length) {
+        const err = await persistStageDates(moved);
+        if (err) return toast.error(err);
+        toast.success(
+          `${moved.length} dependent stage${moved.length === 1 ? "" : "s"} rescheduled`,
+        );
+      }
+    },
+    [onChange],
+  );
+
   async function autoSchedule() {
     const base = projectStart ?? toISO(new Date());
     setBusy(true);
@@ -89,25 +109,37 @@ export function ProjectTimeline({
       next.push({ ...s, start_date: toISO(start), end_date: toISO(end) });
       cursor = end.getTime() + DAY;
     }
+    const err = await persistStageDates(next);
+    setBusy(false);
+    if (err) return toast.error(err);
+    onChange(next);
+    toast.success("Timeline built from the project start date");
+  }
+
+  /** Chains every stage to the previous one so later work follows automatically. */
+  async function linkInSequence() {
+    const ordered = [...stages].sort((a, b) => a.sort_order - b.sort_order);
+    setBusy(true);
+    const next = ordered.map((s, i) => ({ ...s, depends_on_id: i === 0 ? null : ordered[i - 1].id }));
     for (const s of next) {
       // eslint-disable-next-line no-await-in-loop
       const { error } = await supabase
         .from("ss_project_stages")
-        .update({ start_date: s.start_date, end_date: s.end_date })
+        .update({ depends_on_id: s.depends_on_id })
         .eq("id", s.id);
       if (error) {
         setBusy(false);
         return toast.error(error.message);
       }
     }
+    await applyAndCascade(next);
     setBusy(false);
-    onChange(next);
-    toast.success("Timeline built from the project start date");
+    toast.success("Stages linked — later stages now follow the one before them");
   }
 
   async function patch(id: string, field: "start_date" | "end_date" | "duration_days", value: string) {
     const val = field === "duration_days" ? Math.max(1, Number(value) || 1) : value || null;
-    onChange(stages.map((s) => (s.id === id ? { ...s, [field]: val } as TimelineStage : s)));
+    const next = stages.map((s) => (s.id === id ? ({ ...s, [field]: val } as TimelineStage) : s));
     const payload =
       field === "duration_days"
         ? { duration_days: val as number }
@@ -115,11 +147,23 @@ export function ProjectTimeline({
           ? { start_date: val as string | null }
           : { end_date: val as string | null };
     const { error } = await supabase.from("ss_project_stages").update(payload).eq("id", id);
-    if (error) toast.error(error.message);
+    if (error) return toast.error(error.message);
+    await applyAndCascade(next);
   }
 
-  const stagesRef = useRef(stages);
-  stagesRef.current = stages;
+  async function setDependency(id: string, dependsOn: string | null, lag?: number) {
+    const next = stages.map((s) =>
+      s.id === id
+        ? { ...s, depends_on_id: dependsOn, lag_days: lag ?? s.lag_days }
+        : s,
+    );
+    const { error } = await supabase
+      .from("ss_project_stages")
+      .update({ depends_on_id: dependsOn, ...(lag != null ? { lag_days: lag } : {}) })
+      .eq("id", id);
+    if (error) return toast.error(error.message);
+    await applyAndCascade(next);
+  }
 
   const shiftStage = useCallback(
     async (id: string, days: number) => {
@@ -127,17 +171,20 @@ export function ProjectTimeline({
       if (!s || !s.start_date || !s.end_date || !days) return;
       const start = toISO(new Date(parse(s.start_date)!.getTime() + days * DAY));
       const end = toISO(new Date(parse(s.end_date)!.getTime() + days * DAY));
-      onChange(
-        stagesRef.current.map((x) => (x.id === id ? { ...x, start_date: start, end_date: end } : x)),
+      const next = stagesRef.current.map((x) =>
+        x.id === id ? { ...x, start_date: start, end_date: end } : x,
       );
+      onChange(next);
       const { error } = await supabase
         .from("ss_project_stages")
         .update({ start_date: start, end_date: end })
         .eq("id", id);
-      if (error) toast.error(error.message);
+      if (error) return toast.error(error.message);
+      await applyAndCascade(next);
     },
-    [onChange],
+    [onChange, applyAndCascade],
   );
+
 
   useEffect(() => {
     if (!drag) return;
