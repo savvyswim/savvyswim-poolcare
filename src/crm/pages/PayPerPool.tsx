@@ -252,7 +252,7 @@ export default function PayPerPool() {
     <div className="space-y-6 print:space-y-4">
       <SectionTitle
         title={canManage ? "Pay Per Pool" : "My Pay"}
-        subtitle={
+        sub={
           canManage
             ? "Set what each pool pays the tech, watch the day add up, and see what the company keeps after pay, chems, bonus and commission."
             : "Every completed pool adds to your day. Your invoice is ready when the period closes."
@@ -395,7 +395,7 @@ export default function PayPerPool() {
                         {g.totals.pools} pools · {money(g.totals.techTotal)} owed
                       </div>
                     </div>
-                    <Chip tone={g.totals.marginPct >= 45 ? "good" : "warn"}>
+                    <Chip tone={g.totals.marginPct >= 45 ? "green" : "orange"}>
                       {g.totals.marginPct.toFixed(0)}% margin
                     </Chip>
                   </div>
@@ -504,7 +504,7 @@ export default function PayPerPool() {
                               </td>
                             )}
                             <td className="px-3 py-2">
-                              <Chip tone={l.payStatus === "paid" ? "good" : l.payStatus === "invoiced" ? "info" : "warn"}>
+                              <Chip tone={l.payStatus === "paid" ? "green" : l.payStatus === "invoiced" ? "aqua" : "orange"}>
                                 {l.locked && <Lock className="mr-1 inline h-3 w-3" />}
                                 {l.payStatus}
                               </Chip>
@@ -590,7 +590,7 @@ export default function PayPerPool() {
                 </div>
                 <div className="text-right">
                   <div className="text-[1.15rem] font-semibold">{money(Number(p.total_pay))}</div>
-                  <Chip tone={p.status === "paid" ? "good" : "info"}>{p.status}</Chip>
+                  <Chip tone={p.status === "paid" ? "green" : "aqua"}>{p.status}</Chip>
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2 text-[0.75rem] sm:grid-cols-4">
