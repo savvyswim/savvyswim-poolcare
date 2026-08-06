@@ -2553,6 +2553,81 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_qc_reviews: {
+        Row: {
+          action_required: string | null
+          average_score: number | null
+          created_at: string
+          development_area: string | null
+          id: string
+          items_failed: number
+          notes: Json
+          pools_reviewed: number | null
+          reviewer_id: string | null
+          reviewer_name: string | null
+          scores: Json
+          signed_off_at: string | null
+          signed_off_by: string | null
+          tech_id: string
+          top_strength: string | null
+          updated_at: string
+          week_of: string
+        }
+        Insert: {
+          action_required?: string | null
+          average_score?: number | null
+          created_at?: string
+          development_area?: string | null
+          id?: string
+          items_failed?: number
+          notes?: Json
+          pools_reviewed?: number | null
+          reviewer_id?: string | null
+          reviewer_name?: string | null
+          scores?: Json
+          signed_off_at?: string | null
+          signed_off_by?: string | null
+          tech_id: string
+          top_strength?: string | null
+          updated_at?: string
+          week_of: string
+        }
+        Update: {
+          action_required?: string | null
+          average_score?: number | null
+          created_at?: string
+          development_area?: string | null
+          id?: string
+          items_failed?: number
+          notes?: Json
+          pools_reviewed?: number | null
+          reviewer_id?: string | null
+          reviewer_name?: string | null
+          scores?: Json
+          signed_off_at?: string | null
+          signed_off_by?: string | null
+          tech_id?: string
+          top_strength?: string | null
+          updated_at?: string
+          week_of?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_qc_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qc_reviews_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_review_requests: {
         Row: {
           clicked_at: string | null
