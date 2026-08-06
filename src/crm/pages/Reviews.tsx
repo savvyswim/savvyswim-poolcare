@@ -28,8 +28,12 @@ export default function Reviews() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState(
-    "Thanks for letting Savvy Swim take care of your pool. Here are photos from today's visit — if the water looks good, a quick Google review means the world to our crew.",
+    "{name}, thank you for trusting Savvy Swim with your pool. Here are photos from today's visit — your water is dialed in. If it looks as good to you as it does to us, {first} , would you leave us a quick Google review? It takes 20 seconds and it means everything to the crew that services your pool.",
   );
+
+  const firstName = name.trim().split(/\s+/)[0] ?? "";
+  const personalize = (text: string) =>
+    text.replace(/\{name\}/g, name.trim()).replace(/\{first\}/g, firstName);
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
