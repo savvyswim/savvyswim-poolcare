@@ -58,7 +58,10 @@ type Visit = {
   notes: string | null;
   photos: VisitPhoto[] | null;
   after_photo_url: string | null;
+  is_locked: boolean | null;
+  rain_hold: boolean | null;
 };
+
 
 type Invoice = {
   id: string;
