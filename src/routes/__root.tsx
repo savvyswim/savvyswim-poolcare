@@ -106,6 +106,8 @@ function RootComponent() {
           <AuthProvider>
             <CartProvider>
               <ScrollToTop />
+              <PerfMonitor />
+
               <CartDrawer />
               <Outlet />
             </CartProvider>
