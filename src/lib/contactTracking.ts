@@ -125,16 +125,15 @@ export const POOL_SMS_TEMPLATE = [
 export const HAIL_SMS_TEMPLATE = POOL_SMS_TEMPLATE;
 
 /**
- * Builds an sms: link with the prefilled inspection message plus the campaign
- * reference, so replies can be matched to the page and campaign.
+ * Builds an sms: link with the prefilled inspection message. The body is kept
+ * deterministic (no per-visitor campaign id) so the server-rendered href
+ * matches the client's and hydration stays clean — campaign attribution is
+ * recorded by trackContactClick() instead.
  */
 export function buildSmsHref(phoneE164: string, message = POOL_SMS_TEMPLATE): string {
-  const a = getAttribution();
-  const body = `${message}\n\nRef: ${a.campaignId}${
-    a.landingPage ? ` (${a.landingPage.split("?")[0]})` : ""
-  }`;
-  return `sms:${phoneE164}?&body=${encodeURIComponent(body)}`;
+  return `sms:${phoneE164}?&body=${encodeURIComponent(message)}`;
 }
+
 
 /**
  * Fire-and-forget logging of a click-to-call / click-to-text interaction.
