@@ -53,6 +53,7 @@ export default function Finance() {
           {tab === "Expenses" && <Expenses data={data} />}
           {tab === "Ledger" && <LedgerTab data={data} />}
           {tab === "Accounts" && <Accounts data={data} />}
+          {tab === "Margins" && <MarginsTab />}
           {tab === "Reports" && <ReportsTab data={data} />}
         </>
       )}
