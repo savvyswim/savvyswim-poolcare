@@ -54,6 +54,16 @@ const STATUS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgun
   voided: "burgundy",
 };
 
+const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
+  queued: "gold",
+  accepted: "gold",
+  sending: "aqua",
+  sent: "aqua",
+  delivered: "green",
+  undelivered: "orange",
+  failed: "burgundy",
+};
+
 const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : null);
 
 export default function CustomerContracts({ customer }: { customer: CustomerLite }) {
@@ -261,6 +271,17 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 <Send size={12} /> {busy === k.id ? "Sending…" : k.sent_at ? "Resend email" : "Send for signature"}
               </button>
             )}
+            {k.status !== "signed" && k.status !== "voided" && (
+              <button
+                className="ss-btn ss-btn-ghost"
+                onClick={() => {
+                  setSmsFor(smsFor === k.id ? null : k.id);
+                  setSmsPhone(k.recipient_phone ?? customer.phone ?? "");
+                }}
+              >
+                <MessageSquare size={12} /> Text link
+              </button>
+            )}
             <button className="ss-btn ss-btn-ghost" onClick={() => copyLink(k)}>
               <Link2 size={12} /> Copy link
             </button>
@@ -273,6 +294,40 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
               <ExternalLink size={12} /> {k.status === "signed" ? "View signed copy" : "Preview"}
             </a>
           </div>
+
+          {smsFor === k.id && (
+            <div className="mt-2.5 flex flex-wrap items-end gap-2 border-t border-black/10 pt-2.5">
+              <label className="block min-w-[180px] flex-1">
+                <span className="ss-label">Mobile number</span>
+                <input
+                  className="ss-input mt-1 w-full"
+                  type="tel"
+                  placeholder="(469) 744-0379"
+                  value={smsPhone}
+                  onChange={(e) => setSmsPhone(e.target.value)}
+                />
+              </label>
+              <button className="ss-btn" onClick={() => text(k)} disabled={busy === k.id}>
+                <Send size={12} /> {busy === k.id ? "Sending…" : "Send text"}
+              </button>
+            </div>
+          )}
+
+          {smsLog.filter((m) => m.contract_id === k.id).length > 0 && (
+            <div className="mt-2.5 space-y-1 border-t border-black/10 pt-2.5">
+              <div className="ss-label">SMS delivery</div>
+              {smsLog
+                .filter((m) => m.contract_id === k.id)
+                .map((m) => (
+                  <div key={m.id} className="flex flex-wrap items-center gap-2 text-[0.7rem] opacity-80">
+                    <Chip tone={SMS_TONE[m.status] ?? "aqua"}>{m.status}</Chip>
+                    <span>{m.to_phone}</span>
+                    <span className="opacity-60">{new Date(m.created_at).toLocaleString()}</span>
+                    {m.error_message && <span className="text-[0.68rem] opacity-70">· {m.error_message}</span>}
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
       ))}
     </div>
