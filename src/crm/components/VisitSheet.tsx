@@ -9,6 +9,16 @@ import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
 
+export type VisitPhoto = { label: string; path: string; url: string };
+
+const EVIDENCE_KINDS = [
+  { tag: "water", label: "Pool water" },
+  { tag: "equipment", label: "Equipment" },
+  { tag: "filter", label: "Filter / pump" },
+  { tag: "other", label: "Other" },
+] as const;
+
+
 async function compress(file: File, max = 1400, quality = 0.72): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
