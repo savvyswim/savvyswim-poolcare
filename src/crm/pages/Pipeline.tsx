@@ -90,6 +90,21 @@ export default function Pipeline() {
         sub={`${rows.length} leads · ${money(pipelineValue)}/mo open value`}
       />
 
+      <div className="ss-card p-4">
+        <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+          {SERVICE_PLANS.map((p) => (
+            <div key={p.id} className="rounded-md border p-2.5" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[0.83rem] font-semibold">{p.name}</span>
+                <span className="ss-num text-[0.78rem] opacity-70">{planCounts[p.id] ?? 0}</span>
+              </div>
+              <div className="mt-0.5 text-[0.7rem] opacity-65">{p.tagline}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
         {STAGES.map((s) => (
           <div key={s.key} className="space-y-2">
@@ -104,6 +119,11 @@ export default function Pipeline() {
                 <div className="text-[0.72rem] opacity-65">{l.city ?? "—"} · {l.pool_size ?? "—"}</div>
                 <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                   <Chip tone="green">{money(l.monthly_value)}/mo</Chip>
+                  {l.plan_id && (
+                    <Chip tone={PLAN_STATUS[l.plan_status ?? "recommended"]?.tone ?? "gold"}>
+                      {findServicePlan(l.plan_id)?.name ?? l.plan_id}
+                    </Chip>
+                  )}
                   {l.cleanup_price ? <Chip tone="gold">Clean-up {money(l.cleanup_price)}</Chip> : null}
                   {l.source && <Chip tone="aqua">{l.source}</Chip>}
                 </div>
@@ -112,6 +132,7 @@ export default function Pipeline() {
           </div>
         ))}
       </div>
+
 
       {detail && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
