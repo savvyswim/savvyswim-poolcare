@@ -44,7 +44,15 @@ type Pool = {
   monthly_price: number;
   referral_code: string | null;
   status: string;
+  last_filter_clean_at: string | null;
+  filter_interval_days: number;
 };
+
+function filterDue(p: Pool): number | null {
+  if (!p.last_filter_clean_at) return null;
+  const days = Math.floor((Date.now() - new Date(p.last_filter_clean_at).getTime()) / 86400000);
+  return days > (p.filter_interval_days || 90) ? days : null;
+}
 
 type VisitPhoto = { label?: string; url?: string; path?: string };
 
@@ -463,6 +471,24 @@ export default function Portal() {
 
             {pool && (
               <>
+                {filterDue(pool) != null && (
+                  <section className="mt-6 border border-accent bg-accent/10 p-5">
+                    <p className="font-tech text-[10px] uppercase tracking-widest text-accent">
+                      Filter cleaning due
+                    </p>
+                    <p className="mt-2 font-display text-xl uppercase leading-tight">
+                      It&rsquo;s been {filterDue(pool)} days since your last deep filter clean
+                    </p>
+                    <p className="mt-2 font-tech text-xs text-primary/70">
+                      We recommend a full filter cleaning every {pool.filter_interval_days || 90} days
+                      to protect your equipment and keep water crystal clear. Text or call{" "}
+                      <a href="sms:+14697440379" className="text-accent underline">
+                        (469) 744-0379
+                      </a>{" "}
+                      to book it.
+                    </p>
+                  </section>
+                )}
                 <section className="mt-10 grid gap-4 sm:grid-cols-3">
                   <div className="border border-hairline p-5">
                     <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Service plan</p>
