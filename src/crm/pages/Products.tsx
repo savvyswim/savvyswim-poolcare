@@ -34,10 +34,26 @@ export default function Products() {
   const [payingNow, setPayingNow] = useState<string>("");
   const [providerName, setProviderName] = useState<string>("");
   const [providerPlan, setProviderPlan] = useState<string>("");
+  const [planId, setPlanId] = useState<string>("signature");
   const [smsPhone, setSmsPhone] = useState<string>("");
   const [sending, setSending] = useState(false);
   const [params, setParams] = useSearchParams();
   const [hydrated, setHydrated] = useState(false);
+
+  const plan = findServicePlan(planId);
+
+  /** Selecting a service plan pre-fills the estimate's pricing fields and scope. */
+  const applyPlan = (id: string) => {
+    setPlanId(id);
+    const p = findServicePlan(id);
+    if (!p) return;
+    setChemOnly(p.defaults.chemOnly);
+    setChemIncluded(p.defaults.chemIncluded);
+    setSaltCell(p.defaults.saltCell);
+    setCondition(p.defaults.condition);
+    if (p.defaults.undercutPct) setUndercut(clampUndercut(p.defaults.undercutPct));
+    setOverride("");
+  };
 
   useEffect(() => {
     if (params.get("undercut")) return;
@@ -49,6 +65,7 @@ export default function Products() {
     if (hydrated) return;
     setHydrated(true);
     const g = (k: string) => params.get(k);
+    if (g("plan_id")) applyPlan(g("plan_id")!);
     if (g("city")) setCity(g("city")!);
     if (g("size")) setSize(g("size")!);
     if (g("cond")) setCondition(g("cond")!);
@@ -61,7 +78,9 @@ export default function Products() {
     if (g("now")) setPayingNow(g("now")!);
     if (g("provider")) setProviderName(g("provider")!);
     if (g("plan")) setProviderPlan(g("plan")!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, params]);
+
 
   useEffect(() => {
     if (!hydrated) return;
