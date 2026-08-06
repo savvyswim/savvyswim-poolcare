@@ -2584,6 +2584,7 @@ export type Database = {
           issue_reported: string | null
           minutes_on_site: number | null
           notes: string | null
+          photos: Json
           readings: Json
           scheduled_date: string
           started_at: string | null
@@ -2608,6 +2609,7 @@ export type Database = {
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
+          photos?: Json
           readings?: Json
           scheduled_date?: string
           started_at?: string | null
@@ -2632,6 +2634,7 @@ export type Database = {
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
+          photos?: Json
           readings?: Json
           scheduled_date?: string
           started_at?: string | null
