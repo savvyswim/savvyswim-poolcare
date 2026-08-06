@@ -52,7 +52,7 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [busy, setBusy] = useState<string | null>(null);
   const sendEmail = useServerFn(sendContractEmail);
 
-  const { rows: contracts, refresh } = useTable<Contract>(`contracts-${customer.id}`, async () => {
+  const { rows: contracts, refetch } = useTable<Contract>(`contracts-${customer.id}`, async () => {
     const { data } = await supabase
       .from("ss_contracts")
       .select("id,title,status,token,recipient_email,sent_at,viewed_at,signed_at,signer_name,created_at")
@@ -110,7 +110,7 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
     }
     toast.success("Contract created — send it when ready");
     setCreating(false);
-    refresh();
+    refetch();
   };
 
   const send = async (contract: Contract) => {
@@ -122,7 +122,7 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
     try {
       await sendEmail({ data: { contractId: contract.id, origin: window.location.origin } });
       toast.success(`Contract emailed to ${contract.recipient_email}`);
-      refresh();
+      refetch();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not send the contract");
     } finally {
