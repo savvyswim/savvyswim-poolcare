@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { FileSignature, Link2, Send, ExternalLink, Plus } from "lucide-react";
+import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
-import { sendContractEmail } from "@/lib/contracts.functions";
+import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
 
 type Contract = {
   id: string;
@@ -14,11 +14,22 @@ type Contract = {
   status: string;
   token: string;
   recipient_email: string | null;
+  recipient_phone: string | null;
   sent_at: string | null;
   viewed_at: string | null;
   signed_at: string | null;
   signer_name: string | null;
   created_at: string;
+};
+
+type SmsLog = {
+  id: string;
+  contract_id: string;
+  to_phone: string;
+  status: string;
+  error_message: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 type Template = { id: string; name: string; body: string; is_default: boolean };
@@ -29,6 +40,7 @@ type CustomerLite = {
   address: string | null;
   city: string | null;
   email: string | null;
+  phone: string | null;
   monthly_price: number;
   service_level: string;
 };
@@ -51,11 +63,14 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [busy, setBusy] = useState<string | null>(null);
   const sendEmail = useServerFn(sendContractEmail);
+  const sendSms = useServerFn(sendContractSms);
+  const [smsFor, setSmsFor] = useState<string | null>(null);
+  const [smsPhone, setSmsPhone] = useState("");
 
   const { rows: contracts, refetch } = useTable<Contract>(`contracts-${customer.id}`, async () => {
     const { data } = await supabase
       .from("ss_contracts")
-      .select("id,title,status,token,recipient_email,sent_at,viewed_at,signed_at,signer_name,created_at")
+      .select("id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signed_at,signer_name,created_at")
       .eq("customer_id", customer.id)
       .order("created_at", { ascending: false });
     return (data ?? []) as Contract[];
@@ -68,6 +83,14 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       .eq("is_active", true)
       .order("created_at");
     return (data ?? []) as Template[];
+  });
+
+  const { rows: smsLog, refetch: refetchSms } = useTable<SmsLog>(`contract-sms-${customer.id}`, async () => {
+    const { data } = await supabase
+      .from("ss_contract_sms")
+      .select("id,contract_id,to_phone,status,error_message,created_at,updated_at")
+      .order("created_at", { ascending: false });
+    return (data ?? []) as SmsLog[];
   });
 
   const selectedTemplate = useMemo(
@@ -101,6 +124,7 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       status: "draft",
       recipient_name: customer.full_name,
       recipient_email: customer.email,
+      recipient_phone: customer.phone,
       merge_data: { term_months: termMonths, start_date: startDate, monthly_price: customer.monthly_price },
     });
     setBusy(null);
@@ -125,6 +149,27 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       refetch();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not send the contract");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const text = async (contract: Contract) => {
+    const phone = smsPhone.trim();
+    if (!phone) {
+      toast.error("Enter a mobile number");
+      return;
+    }
+    setBusy(contract.id);
+    try {
+      const res = await sendSms({ data: { contractId: contract.id, phone, origin: window.location.origin } });
+      toast.success(`Signing link texted to ${res.to}`);
+      setSmsFor(null);
+      refetch();
+      refetchSms();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send the text");
+      refetchSms();
     } finally {
       setBusy(null);
     }
