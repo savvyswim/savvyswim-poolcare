@@ -15,18 +15,24 @@ export default function Auth() {
   const { user, loading } = useAuth();
   const loc = useLocation();
   const dest = ((loc.state as { from?: string } | null)?.from) || "/admin/crm";
-  const inviteEmail =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("invite") ?? ""
-      : "";
-  const [email, setEmail] = useState(inviteEmail);
+  const [mounted, setMounted] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [shared, setShared] = useState(() => isSharedDevice());
+  const [shared, setShared] = useState(false);
+
+  // Browser-only state is read after hydration so SSR and client markup match.
+  useEffect(() => {
+    setMounted(true);
+    const invite = new URLSearchParams(window.location.search).get("invite");
+    if (invite) setEmail((prev) => prev || invite);
+    setShared(isSharedDevice());
+  }, []);
 
   useEffect(() => {
     if (!loading && user) nav(dest, { replace: true });
   }, [user, loading, nav]);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
