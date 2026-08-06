@@ -9,6 +9,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Link,
   Preview,
   Row,
@@ -33,6 +34,11 @@ export interface ServiceReportTreatment {
   reason: string
 }
 
+export interface ServiceReportPhoto {
+  label: string
+  url: string
+}
+
 export interface ServiceReportProps {
   name: string
   visitDate: string
@@ -44,6 +50,7 @@ export interface ServiceReportProps {
   metrics: ServiceReportMetric[]
   treatments?: ServiceReportTreatment[]
   tasksCompleted?: number
+  photos?: ServiceReportPhoto[]
   notes?: string
 }
 
@@ -64,6 +71,7 @@ export const ServiceReportEmail = ({
   metrics,
   treatments = [],
   tasksCompleted,
+  photos = [],
   notes,
 }: ServiceReportProps) => (
   <Html lang="en" dir="ltr">
@@ -132,6 +140,25 @@ export const ServiceReportEmail = ({
           </Section>
         )}
 
+        {photos.length ? (
+          <>
+            <Text style={sectionTitle}>PHOTOS FROM THIS VISIT</Text>
+            <Section style={card}>
+              {photos.slice(0, 6).map((p, i) => (
+                <Text key={i} style={{ ...row, textAlign: 'center' as const }}>
+                  <Img
+                    src={p.url}
+                    alt={`${p.label} — pool service photo`}
+                    width="520"
+                    style={photoImg}
+                  />
+                  <span style={muted}>{p.label}</span>
+                </Text>
+              ))}
+            </Section>
+          </>
+        ) : null}
+
         <Section style={card}>
           {techName ? (
             <Text style={row}>
@@ -176,6 +203,15 @@ export const ServiceReportEmail = ({
 )
 
 export default ServiceReportEmail
+
+const photoImg = {
+  width: '100%',
+  maxWidth: '520px',
+  borderRadius: '10px',
+  border: '1px solid #E4DDCC',
+  display: 'block',
+  margin: '0 0 6px',
+}
 
 const main = {
   backgroundColor: '#F4EFE3',
