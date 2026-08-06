@@ -44,7 +44,13 @@ async function emailFinanceDoc(body: {
   }
 }
 
-const emptyLine = (): Line => ({ description: "", quantity: 1, unit_price: 0 });
+const emptyLine = (): Line => ({
+  description: "",
+  quantity: 1,
+  unit_price: 0,
+  is_upsell: false,
+  unit_cost: 0,
+});
 
 export default function Invoices({ data }: { data: FinanceSlice }) {
   const { invoices, payments, customers, accounts, reload } = data;
@@ -57,9 +63,41 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
   const [issuedOn, setIssuedOn] = useState(todayIso());
   const [dueDate, setDueDate] = useState("");
   const [lines, setLines] = useState<Line[]>([emptyLine()]);
+  const [visitOptions, setVisitOptions] = useState<VisitOption[]>([]);
+  const [visitId, setVisitId] = useState("");
+
+  // Recent visits for the selected pool — upsell lines get attributed to one
+  // so the tech who sold it earns commission automatically.
+  useEffect(() => {
+    let cancelled = false;
+    if (!customerId) {
+      setVisitOptions([]);
+      setVisitId("");
+      return;
+    }
+    void (async () => {
+      const { data: rows } = await supabase
+        .from("ss_visits")
+        .select("id,scheduled_date,tech_id,payout_id")
+        .eq("customer_id", customerId)
+        .order("scheduled_date", { ascending: false })
+        .limit(15);
+      if (cancelled) return;
+      const list = (rows ?? []) as VisitOption[];
+      setVisitOptions(list);
+      setVisitId((cur) => (list.some((v) => v.id === cur) ? cur : (list[0]?.id ?? "")));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [customerId]);
 
   const nameOf = (id: string) => customers.find((c) => c.id === id)?.full_name ?? "—";
   const total = lines.reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_price || 0), 0);
+  const upsellTotal = lines
+    .filter((l) => l.is_upsell)
+    .reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_price || 0), 0);
+  const lineCost = lines.reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_cost || 0), 0);
   const paidOn = useMemo(() => {
     const m: Record<string, number> = {};
     for (const p of payments) if (p.invoice_id) m[p.invoice_id] = (m[p.invoice_id] ?? 0) + Number(p.amount);
