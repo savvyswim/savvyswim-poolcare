@@ -1180,6 +1180,107 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_canary_incidents: {
+        Row: {
+          body_snippet: string | null
+          created_at: string
+          duration_ms: number
+          http_status: number | null
+          id: string
+          kind: string
+          message: string | null
+          occurred_at: string
+          round: number
+          route: string
+          run_id: string
+          stack: string | null
+          url: string
+        }
+        Insert: {
+          body_snippet?: string | null
+          created_at?: string
+          duration_ms?: number
+          http_status?: number | null
+          id?: string
+          kind: string
+          message?: string | null
+          occurred_at?: string
+          round?: number
+          route: string
+          run_id: string
+          stack?: string | null
+          url: string
+        }
+        Update: {
+          body_snippet?: string | null
+          created_at?: string
+          duration_ms?: number
+          http_status?: number | null
+          id?: string
+          kind?: string
+          message?: string | null
+          occurred_at?: string
+          round?: number
+          route?: string
+          run_id?: string
+          stack?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_canary_incidents_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "ss_canary_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_canary_runs: {
+        Row: {
+          alert_result: string | null
+          created_at: string
+          failures: number
+          finished_at: string | null
+          id: string
+          requests: number
+          rounds: number
+          slowest_ms: number
+          source: string
+          started_at: string
+          status: string
+          target: string
+        }
+        Insert: {
+          alert_result?: string | null
+          created_at?: string
+          failures?: number
+          finished_at?: string | null
+          id?: string
+          requests?: number
+          rounds?: number
+          slowest_ms?: number
+          source?: string
+          started_at?: string
+          status?: string
+          target: string
+        }
+        Update: {
+          alert_result?: string | null
+          created_at?: string
+          failures?: number
+          finished_at?: string | null
+          id?: string
+          requests?: number
+          rounds?: number
+          slowest_ms?: number
+          source?: string
+          started_at?: string
+          status?: string
+          target?: string
+        }
+        Relationships: []
+      }
       ss_city_rates: {
         Row: {
           city: string
