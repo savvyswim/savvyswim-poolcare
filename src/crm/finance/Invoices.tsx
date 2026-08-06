@@ -13,7 +13,22 @@ import {
   type FinanceSlice,
 } from "@/crm/finance/shared";
 
-type Line = { description: string; quantity: number; unit_price: number };
+type Line = {
+  description: string;
+  quantity: number;
+  unit_price: number;
+  /** Internal only — never shown to the customer. Drives tech commission. */
+  is_upsell: boolean;
+  /** Internal only — our cost for the line, used for job margin. */
+  unit_cost: number;
+};
+
+type VisitOption = {
+  id: string;
+  scheduled_date: string;
+  tech_id: string | null;
+  payout_id: string | null;
+};
 
 /** Fires the invoice/receipt email. Best effort — never blocks the ledger write. */
 async function emailFinanceDoc(body: {
