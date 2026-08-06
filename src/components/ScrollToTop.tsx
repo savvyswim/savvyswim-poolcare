@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router-compat";
 
 /** Instantly jumps to the top on route change so page transitions feel immediate. */
 export function ScrollToTop() {

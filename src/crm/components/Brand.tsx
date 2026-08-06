@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 export function SavvyLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const scale = { sm: "1.05rem", md: "1.45rem", lg: "2.4rem" }[size];

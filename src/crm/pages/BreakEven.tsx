@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Gauge, RotateCcw } from "lucide-react";
 import { SectionTitle, StatTile } from "@/crm/components/Brand";
 import { loadModel, STORAGE_KEY, type PricingModel } from "@/crm/pages/PricingMatrix";

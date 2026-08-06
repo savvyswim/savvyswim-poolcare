@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "@/lib/router-compat";
 import { CheckCircle2 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
 

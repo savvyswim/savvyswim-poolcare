@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "@/lib/router-compat";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import MarginCalculator from "@/crm/components/MarginCalculator";
 import { MaintenanceSchedule, ServiceEstimate } from "@/crm/components/EstimateScheduler";

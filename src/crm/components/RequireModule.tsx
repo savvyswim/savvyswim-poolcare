@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "@/lib/router-compat";
 import { Lock } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo } from "@/crm/components/Brand";
