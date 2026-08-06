@@ -235,11 +235,11 @@ const Services = () => {
             {[
               ["Visits / year", "52"],
               ["Clarity target", "99.8%"],
-              ["Contracts", "None"],
+              ["Commitment", "Month to month"],
               ["Response", "24 hrs"],
             ].map(([label, value]) => (
               <div key={label} className="px-4 py-6 first:pl-0">
-                <div className="font-display text-2xl sm:text-3xl tracking-tight">{value}</div>
+                <div className="font-display text-xl sm:text-2xl md:text-3xl tracking-tight leading-tight text-balance">{value}</div>
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1">
                   {label}
                 </div>
