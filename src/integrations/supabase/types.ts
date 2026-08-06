@@ -1814,6 +1814,44 @@ export type Database = {
           },
         ]
       }
+      ss_lead_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          detail: string | null
+          event_type: string
+          id: string
+          label: string
+          lead_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          event_type: string
+          id?: string
+          label: string
+          lead_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          event_type?: string
+          id?: string
+          label?: string
+          lead_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_lead_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_leads: {
         Row: {
           address: string | null
