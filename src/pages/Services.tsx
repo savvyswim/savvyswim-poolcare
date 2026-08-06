@@ -235,7 +235,7 @@ const Services = () => {
             {[
               ["Visits / year", "52"],
               ["Clarity target", "99.8%"],
-              ["Contracts", "None"],
+              ["Commitment", "Month to month"],
               ["Response", "24 hrs"],
             ].map(([label, value]) => (
               <div key={label} className="px-4 py-6 first:pl-0">
