@@ -33,7 +33,7 @@ const poolNight = photoRivieraLoungers.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
-import { buildSmsHref, trackContactClick, withCampaignParams } from "@/lib/contactTracking";
+import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
