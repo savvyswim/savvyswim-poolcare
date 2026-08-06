@@ -176,7 +176,9 @@ export default function VisitSheet({
             reason: t.reason,
           })),
           tasksCompleted: checklist.filter((t) => t.done).length,
+          photos: allPhotos.filter((p) => p.url).slice(0, 6).map((p) => ({ label: p.label, url: p.url })),
           notes: notes || undefined,
+
         },
       });
     }
