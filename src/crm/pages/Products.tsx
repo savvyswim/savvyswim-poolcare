@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
   CONDITIONS,
   POOL_SIZES,
+  SERVICE_PLANS,
   UNDERCUT_MAX,
   UNDERCUT_MIN,
   clampUndercut,
   computeQuote,
+  findServicePlan,
   marketAverage,
   money,
   useRateCard,
 } from "@/crm/lib/pricingEngine";
+
 
 
 
@@ -31,10 +34,26 @@ export default function Products() {
   const [payingNow, setPayingNow] = useState<string>("");
   const [providerName, setProviderName] = useState<string>("");
   const [providerPlan, setProviderPlan] = useState<string>("");
+  const [planId, setPlanId] = useState<string>("signature");
   const [smsPhone, setSmsPhone] = useState<string>("");
   const [sending, setSending] = useState(false);
   const [params, setParams] = useSearchParams();
   const [hydrated, setHydrated] = useState(false);
+
+  const plan = findServicePlan(planId);
+
+  /** Selecting a service plan pre-fills the estimate's pricing fields and scope. */
+  const applyPlan = (id: string) => {
+    setPlanId(id);
+    const p = findServicePlan(id);
+    if (!p) return;
+    setChemOnly(p.defaults.chemOnly);
+    setChemIncluded(p.defaults.chemIncluded);
+    setSaltCell(p.defaults.saltCell);
+    setCondition(p.defaults.condition);
+    if (p.defaults.undercutPct) setUndercut(clampUndercut(p.defaults.undercutPct));
+    setOverride("");
+  };
 
   useEffect(() => {
     if (params.get("undercut")) return;
@@ -46,6 +65,7 @@ export default function Products() {
     if (hydrated) return;
     setHydrated(true);
     const g = (k: string) => params.get(k);
+    if (g("plan_id")) applyPlan(g("plan_id")!);
     if (g("city")) setCity(g("city")!);
     if (g("size")) setSize(g("size")!);
     if (g("cond")) setCondition(g("cond")!);
@@ -58,7 +78,9 @@ export default function Products() {
     if (g("now")) setPayingNow(g("now")!);
     if (g("provider")) setProviderName(g("provider")!);
     if (g("plan")) setProviderPlan(g("plan")!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, params]);
+
 
   useEffect(() => {
     if (!hydrated) return;
@@ -100,6 +122,7 @@ export default function Products() {
       spa,
       undercut: String(undercut),
     });
+    if (planId) p.set("plan_id", planId);
     if (chemOnly) p.set("chemOnly", "1");
     if (chemIncluded) p.set("chemIncl", "1");
     if (saltCell) p.set("salt", "1");
@@ -114,7 +137,9 @@ export default function Products() {
 
   const summaryText = [
     `Savvy Swim quote — ${city}`,
-    `${quote.size.label} pool · ${money(quote.monthly)}/mo`,
+    plan ? `${plan.name} · ${money(quote.monthly)}/mo` : `${money(quote.monthly)}/mo`,
+    `${quote.size.label} pool`,
+    plan ? `Includes: ${plan.scope.slice(0, 3).join(" · ")}` : null,
     quote.cleanupLabel ? `One-time cleanup ${quote.cleanupLabel}` : null,
     currentMonthly && vsCurrent > 0
       ? `Saves ${money(vsCurrent)}/mo vs ${providerName.trim() || "their current provider"} — ${money(vsCurrentYear)} over 12 months`
@@ -122,6 +147,7 @@ export default function Products() {
   ]
     .filter(Boolean)
     .join("\n");
+
 
   const sendSms = async () => {
     if (!smsPhone.trim()) {
@@ -168,7 +194,37 @@ export default function Products() {
 
         <div className="grid gap-3 lg:grid-cols-2">
           <div className="ss-card p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="ss-label">Service plan</div>
+              <Link to="/admin/crm/service-plans" className="ss-label underline opacity-70">
+                Edit plans
+              </Link>
+            </div>
+            <div className="mb-4 grid gap-2 sm:grid-cols-2">
+              {SERVICE_PLANS.map((p) => {
+                const active = p.id === planId;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => applyPlan(p.id)}
+                    className="rounded-md border p-2 text-left transition"
+                    style={{
+                      borderColor: active
+                        ? "hsl(var(--ss-burgundy))"
+                        : "hsl(var(--ss-sand))",
+                      background: active ? "hsl(var(--ss-burgundy) / 0.06)" : "transparent",
+                    }}
+                  >
+                    <div className="text-[0.85rem] font-bold">{p.name}</div>
+                    <div className="text-[0.7rem] opacity-70">{p.tagline}</div>
+                  </button>
+                );
+              })}
+            </div>
+
             <div className="ss-label mb-2">Quote calculator</div>
+
             <div className="grid gap-2.5 sm:grid-cols-2">
               <div>
                 <label className="ss-label">City / region</label>
@@ -303,7 +359,7 @@ export default function Products() {
                 className="ss-tag"
                 style={{ fontSize: "0.55rem", color: "rgba(255,255,255,.7)" }}
               >
-                Our monthly price
+                {plan ? plan.name : "Our monthly price"}
               </div>
               <div className="ss-num mt-1 text-[2rem] font-bold leading-none">
                 {money(quote.monthly)}
@@ -320,6 +376,21 @@ export default function Products() {
                 </div>
               )}
             </div>
+
+            {plan && (
+              <div className="ss-card p-4">
+                <div className="ss-label mb-2">What {plan.name} includes</div>
+                <ul className="space-y-1 text-[0.8rem]">
+                  {plan.scope.map((s) => (
+                    <li key={s} className="flex gap-2">
+                      <span className="opacity-40">—</span>
+                      <span className="opacity-85">{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
 
             <div className="ss-card p-4">
               <div className="ss-label mb-2">12-month savings</div>
