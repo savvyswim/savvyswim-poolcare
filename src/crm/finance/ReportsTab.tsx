@@ -108,7 +108,9 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
           </button>
         ))}
         <span className="flex-1" />
-        <button className="ss-btn ss-btn-ghost" onClick={exportCurrent}><Download size={13} /> Export CSV</button>
+        {report !== "upsell" && (
+          <button className="ss-btn ss-btn-ghost" onClick={exportCurrent}><Download size={13} /> Export CSV</button>
+        )}
       </div>
 
       <p className="text-[0.75rem] opacity-60">{REPORTS.find((r) => r.key === report)?.sub}</p>
