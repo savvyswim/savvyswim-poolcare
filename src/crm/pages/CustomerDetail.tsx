@@ -13,7 +13,11 @@ type Customer = {
   gate_code: string | null; internal_notes: string | null; monthly_price: number;
   service_level: string; route_day: string | null; equipment: Record<string, string> | null;
   custom_fields: Record<string, boolean> | null; user_id: string | null;
+  last_filter_clean_at: string | null; filter_interval_days: number;
 };
+
+const daysSince = (d: string | null) =>
+  d ? Math.floor((Date.now() - new Date(d).getTime()) / 86400000) : null;
 
 type Visit = {
   id: string; scheduled_date: string; status: string; minutes_on_site: number | null;
@@ -111,6 +115,30 @@ export default function CustomerDetail() {
               {c.route_day && <Chip tone="aqua">{c.route_day}</Chip>}
               {c.gate_code && <Chip tone="gold"><Lock size={9} /> Gate {c.gate_code}</Chip>}
               {Object.entries(c.custom_fields ?? {}).filter(([, v]) => v).map(([k]) => <Chip key={k} tone="pink">{k}</Chip>)}
+              {(daysSince(c.last_filter_clean_at) ?? 0) > (c.filter_interval_days || 90) && (
+                <Chip tone="burgundy">Filter due — {daysSince(c.last_filter_clean_at)}d</Chip>
+              )}
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-[0.72rem] opacity-85">
+              <span className="ss-tag">Last filter clean</span>
+              <input
+                type="date"
+                className="ss-input !w-auto !py-0.5 text-[0.72rem]"
+                value={c.last_filter_clean_at ?? ""}
+                onChange={async (e) => {
+                  const v = e.target.value || null;
+                  const { error } = await supabase
+                    .from("ss_customers")
+                    .update({ last_filter_clean_at: v })
+                    .eq("id", c.id);
+                  if (error) toast.error(error.message);
+                  else {
+                    toast.success("Filter clean date saved");
+                    c.last_filter_clean_at = v;
+                  }
+                }}
+              />
+              <span className="opacity-60">every {c.filter_interval_days || 90} days</span>
             </div>
           </div>
           <div className="text-right">
