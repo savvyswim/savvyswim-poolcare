@@ -20,15 +20,26 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
+// Verify middleware dependencies before the server accepts traffic. This runs
+// at module init, never throws, and records results for /api/public/health.
+const startupHealth = verifyStartupHealth({
+  createStart,
+  createMiddleware,
+  createCsrfMiddleware,
+  attachSupabaseAuth,
+  renderErrorPage,
+});
+
 // Start installs this automatically when src/start.ts is absent; defining the
 // file opts out, so re-add it explicitly to keep server functions protected
 // from cross-site requests. Older deployed builds of the framework don't ship
 // this helper — calling it there crashes SSR at module init and every page
-// renders the fallback error screen, so only wire it up when it exists.
-const csrfMiddleware =
-  typeof createCsrfMiddleware === "function"
-    ? createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "serverFn" })
-    : undefined;
+// renders the fallback error screen, so only wire it up when the startup
+// health check confirmed it exists.
+const csrfMiddleware = startupHealth.checks.find((c) => c.name === "createCsrfMiddleware")?.ok
+  ? createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "serverFn" })
+  : undefined;
+
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
