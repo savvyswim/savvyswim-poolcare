@@ -21,6 +21,7 @@ export type ModuleKey =
   | "scorecard"
   | "qcReview"
   | "margin"
+  | "payPerPool"
   | "waterLab"
   | "settings"
   | "console"
@@ -42,6 +43,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   route: ALL,
   jobs: ALL,
   waterLab: ALL,
+  payPerPool: ALL,
   alerts: ALL,
   customers: OFFICE,
   pipeline: OFFICE,
@@ -86,6 +88,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/pricing-matrix": "finance",
   "/admin/crm/break-even": "finance",
   "/admin/crm/margin": "margin",
+  "/admin/crm/pay-per-pool": "payPerPool",
   "/admin/crm/projects": "projects",
   "/admin/crm/trucks": "trucks",
   "/admin/crm/inventory": "inventory",
