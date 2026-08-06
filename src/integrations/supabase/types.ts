@@ -1456,6 +1456,8 @@ export type Database = {
           service_level: string
           state: string
           status: Database["public"]["Enums"]["ss_cust_status"]
+          tech_pay_rate: number | null
+          tech_upsell_pct: number | null
           updated_at: string
           user_id: string | null
         }
@@ -1494,6 +1496,8 @@ export type Database = {
           service_level?: string
           state?: string
           status?: Database["public"]["Enums"]["ss_cust_status"]
+          tech_pay_rate?: number | null
+          tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
         }
@@ -1532,6 +1536,8 @@ export type Database = {
           service_level?: string
           state?: string
           status?: Database["public"]["Enums"]["ss_cust_status"]
+          tech_pay_rate?: number | null
+          tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
         }
@@ -2748,6 +2754,71 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_tech_payouts: {
+        Row: {
+          adjustments: number
+          base_pay: number
+          bonus_pay: number
+          commission_pay: number
+          created_at: string
+          id: string
+          invoice_number: string
+          notes: string | null
+          paid_at: string | null
+          period_end: string
+          period_start: string
+          pools_count: number
+          status: string
+          tech_id: string
+          total_pay: number
+          updated_at: string
+        }
+        Insert: {
+          adjustments?: number
+          base_pay?: number
+          bonus_pay?: number
+          commission_pay?: number
+          created_at?: string
+          id?: string
+          invoice_number?: string
+          notes?: string | null
+          paid_at?: string | null
+          period_end: string
+          period_start: string
+          pools_count?: number
+          status?: string
+          tech_id: string
+          total_pay?: number
+          updated_at?: string
+        }
+        Update: {
+          adjustments?: number
+          base_pay?: number
+          bonus_pay?: number
+          commission_pay?: number
+          created_at?: string
+          id?: string
+          invoice_number?: string
+          notes?: string | null
+          paid_at?: string | null
+          period_end?: string
+          period_start?: string
+          pools_count?: number
+          status?: string
+          tech_id?: string
+          total_pay?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_tech_payouts_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_time_standards: {
         Row: {
           created_at: string
@@ -2878,6 +2949,8 @@ export type Database = {
           issue_reported: string | null
           minutes_on_site: number | null
           notes: string | null
+          pay_status: string
+          payout_id: string | null
           photos: Json
           rain_hold: boolean
           readings: Json
@@ -2885,8 +2958,12 @@ export type Database = {
           started_at: string | null
           status: string
           stop_order: number
+          tech_bonus: number
           tech_id: string | null
+          tech_pay: number
           updated_at: string
+          upsell_amount: number
+          upsell_commission: number
         }
         Insert: {
           after_photo_url?: string | null
@@ -2905,6 +2982,8 @@ export type Database = {
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
+          pay_status?: string
+          payout_id?: string | null
           photos?: Json
           rain_hold?: boolean
           readings?: Json
@@ -2912,8 +2991,12 @@ export type Database = {
           started_at?: string | null
           status?: string
           stop_order?: number
+          tech_bonus?: number
           tech_id?: string | null
+          tech_pay?: number
           updated_at?: string
+          upsell_amount?: number
+          upsell_commission?: number
         }
         Update: {
           after_photo_url?: string | null
@@ -2932,6 +3015,8 @@ export type Database = {
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
+          pay_status?: string
+          payout_id?: string | null
           photos?: Json
           rain_hold?: boolean
           readings?: Json
@@ -2939,8 +3024,12 @@ export type Database = {
           started_at?: string | null
           status?: string
           stop_order?: number
+          tech_bonus?: number
           tech_id?: string | null
+          tech_pay?: number
           updated_at?: string
+          upsell_amount?: number
+          upsell_commission?: number
         }
         Relationships: [
           {
