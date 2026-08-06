@@ -246,6 +246,10 @@ export default function Pipeline() {
               )}
             </div>
 
+            <LeadTimeline key={`${detail.id}-${detail.plan_id ?? "none"}`} leadId={detail.id} />
+
+
+
             <div className="mt-4">
               <div className="ss-label mb-1.5">Move to stage</div>
               <div className="flex flex-wrap gap-1.5">
