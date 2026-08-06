@@ -234,11 +234,10 @@ export function MaintenanceSchedule({ monthly }: { monthly: number }) {
             <div>
               <div className="ss-label">Per invoice</div>
               <div className="ss-num text-[1.05rem] font-bold">
-                {billing === "fixed_price"
-                  ? money(monthly)
-                  : money(monthly / Math.max(1, sched.perMonth / (sched.perMonth || 1)))}
+                {money(perInvoice)}
               </div>
             </div>
+
             <div>
               <div className="ss-label">Contract value</div>
               <div className="ss-num text-[1.05rem] font-bold">{money(contractValue)}</div>
