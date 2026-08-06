@@ -365,8 +365,6 @@ export default function MarginCalculator({ compact = false }: { compact?: boolea
           </div>
         </div>
       )}
-        </div>
-      )}
 
       {!compact && (
         <div className="ss-card overflow-x-auto p-0">
