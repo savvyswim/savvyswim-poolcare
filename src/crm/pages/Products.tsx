@@ -186,10 +186,24 @@ export default function Products() {
     <div className="space-y-4">
       <SectionTitle
         title="Savvy Estimate"
-        sub="Quote calculator — sized by pool, benchmarked against the regional average. Plan tiers and rates live in Service plans."
+        sub="Quote maintenance plans or one-off service work — each priced on its own model and margin-checked against Savvy Ledger."
       />
 
-      {loading ? (
+      <div className="flex flex-wrap gap-1.5">
+        {(["maintenance", "service"] as const).map((k) => (
+          <button
+            key={k}
+            className={`ss-btn ${kind === k ? "" : "ss-btn-ghost"}`}
+            onClick={() => setKind(k)}
+          >
+            {k === "maintenance" ? "MAINTENANCE · RECURRING" : "SERVICE · ONE-OFF"}
+          </button>
+        ))}
+      </div>
+
+      {kind === "service" ? (
+        <ServiceEstimate />
+      ) : loading ? (
         <div className="ss-card p-6 text-[0.85rem] opacity-60">Loading rate card…</div>
       ) : (
 
