@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, BarChart3, Building2, ClipboardList, DollarSign, LogOut, Mail,
+  AlertTriangle, BarChart3, Building2, ClipboardCheck, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
   Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, Star, FlaskConical,
   TrendingUp,
@@ -37,6 +37,7 @@ const STAFF_NAV: NavItem[] = [
   // Operations
   { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Operations" },
   { to: "/admin/crm/scorecard", label: "Tech Scorecard", icon: Timer, module: "scorecard", group: "Operations" },
+  { to: "/admin/crm/qc-review", label: "Weekly QC Review", icon: ClipboardCheck, module: "qcReview", group: "Operations" },
   { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Operations" },
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },

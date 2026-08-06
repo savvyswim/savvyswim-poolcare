@@ -19,6 +19,7 @@ export type ModuleKey =
   | "connect"
   | "reviews"
   | "scorecard"
+  | "qcReview"
   | "waterLab"
   | "settings"
   | "console"
@@ -53,6 +54,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   connect: OFFICE,
   reviews: OFFICE,
   scorecard: OFFICE,
+  qcReview: OFFICE,
   settings: OFFICE,
   // Owner plus any office manager the owner assigns runs the books.
   finance: OFFICE,
@@ -89,6 +91,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/connect": "connect",
   "/admin/crm/reviews": "reviews",
   "/admin/crm/scorecard": "scorecard",
+  "/admin/crm/qc-review": "qcReview",
   "/admin/crm/water-lab": "waterLab",
   "/admin/crm/settings": "settings",
   "/admin/crm/security": "security",
