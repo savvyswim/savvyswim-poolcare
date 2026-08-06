@@ -35,6 +35,9 @@ export default function VisitSheet({
   const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
   const [after, setAfter] = useState<{ url: string; path: string } | null>(null);
+  const [evidence, setEvidence] = useState<VisitPhoto[]>([]);
+  const [uploadingTag, setUploadingTag] = useState<string | null>(null);
+
   const [notes, setNotes] = useState("");
   const [issue, setIssue] = useState("");
   const [saving, setSaving] = useState(false);
