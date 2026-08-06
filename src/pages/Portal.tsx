@@ -111,8 +111,9 @@ export default function Portal() {
           supabase
             .from("ss_visits")
             .select(
-              "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url",
+              "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url,is_locked,rain_hold",
             )
+
             .in("customer_id", ids)
             .gte("scheduled_date", since)
             .order("scheduled_date", { ascending: false }),
