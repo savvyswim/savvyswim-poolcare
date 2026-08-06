@@ -45,6 +45,7 @@ import CrmSettings from "@/crm/pages/Settings";
 import SecurityPage from "@/crm/pages/Security";
 import ReviewsPage from "@/crm/pages/Reviews";
 import TechScorecard from "@/crm/pages/TechScorecard";
+import WaterLab from "@/crm/pages/WaterLab";
 import ReviewLink from "@/pages/ReviewLink";
 
 import { RequireModule } from "@/crm/components/RequireModule";
