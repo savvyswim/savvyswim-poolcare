@@ -98,7 +98,7 @@ export default function CustomersPage() {
         <div className="ss-card flex flex-1 items-center gap-2 px-3">
           <Search size={14} className="opacity-50" />
           <input
-            className="w-full bg-transparent py-2 text-[0.88rem] outline-none"
+            className="w-full bg-transparent py-2 text-[0.88rem] outline-hidden"
             placeholder="Search name, address, email, phone"
             value={q}
             onChange={(e) => setQ(e.target.value)}

@@ -68,7 +68,7 @@ function NumInput({
         step={step}
         value={Number.isFinite(value) ? value : 0}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-none"
+        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-hidden"
       />
     </div>
   );
@@ -210,7 +210,7 @@ export default function RevenueGrowth() {
                     <input
                       value={r.name}
                       onChange={(e) => patchAddOn(r.id, { name: e.target.value })}
-                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-none focus:border-[hsl(var(--ss-ink)/0.2)]"
+                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-hidden focus:border-[hsl(var(--ss-ink)/0.2)]"
                     />
                   </td>
                   <td className="w-[130px] py-1.5 pr-2">

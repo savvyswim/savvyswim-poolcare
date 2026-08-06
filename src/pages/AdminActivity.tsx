@@ -138,7 +138,7 @@ export default function AdminActivity() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border bg-white shadow-xs">
           {loadingData ? (
             <div className="grid place-items-center py-16">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />

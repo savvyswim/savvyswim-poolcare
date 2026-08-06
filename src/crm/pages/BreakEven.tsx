@@ -82,7 +82,7 @@ function NumInput({
         step={step}
         value={Number.isFinite(value) ? value : 0}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-none"
+        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-hidden"
       />
       {suffix && <span className="text-[0.7rem] opacity-50">{suffix}</span>}
     </div>
