@@ -37,6 +37,7 @@ const STAFF_NAV: NavItem[] = [
   // Operations
   { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Operations" },
   { to: "/admin/crm/scorecard", label: "Tech Scorecard", icon: Timer, module: "scorecard", group: "Operations" },
+  { to: "/admin/crm/qc-review", label: "Weekly QC Review", icon: ClipboardCheck, module: "qcReview", group: "Operations" },
   { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Operations" },
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },
