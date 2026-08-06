@@ -141,6 +141,8 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
             ? accountByCode(accounts, "4200")
             : accountByCode(accounts, "4100");
 
+      const attributedVisit = visitOptions.find((v) => v.id === visitId) ?? null;
+
       await supabase.from("ss_invoice_items").insert(
         clean.map((l) => ({
           invoice_id: inv.id,
@@ -149,8 +151,14 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
           unit_price: l.unit_price,
           line_total: l.quantity * l.unit_price,
           account_id: revenue?.id ?? null,
+          // Internal fields — office only, never returned to the customer.
+          is_upsell: l.is_upsell,
+          unit_cost: l.unit_cost || 0,
+          visit_id: l.is_upsell ? (attributedVisit?.id ?? null) : null,
+          sold_by_tech_id: l.is_upsell ? (attributedVisit?.tech_id ?? null) : null,
         })),
       );
+
 
       await postLedger({
         entry_date: issuedOn,
