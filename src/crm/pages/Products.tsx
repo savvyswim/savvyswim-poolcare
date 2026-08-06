@@ -530,6 +530,10 @@ export default function Products() {
         </div>
       )}
 
+      {kind === "maintenance" && !loading && <MaintenanceSchedule monthly={quote.monthly} />}
+
+
+
       <div className="ss-card p-4">
         <div className="mb-1 text-[1rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
           Parts &amp; services margin calculator
