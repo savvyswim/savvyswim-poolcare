@@ -5,10 +5,10 @@ import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
 
-import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
-import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
-import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
-import photoRedUmbrellas from "@/assets/IMG_5497-2.jpg.asset.json";
+import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
+import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
+import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
+import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
