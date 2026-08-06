@@ -459,10 +459,10 @@ const Index = () => {
                   </a>
                   <a
                     href={buildSmsHref(SMS_PHONE)}
-                    onClick={() => trackContactClick("text_click", "hero_hail")}
+                    onClick={() => trackContactClick("text_click", "hero_text")}
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
-                    <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                    <MessageSquare className="h-4 w-4" /> Text for a free pool quote
                   </a>
                   <Link
                     to={withCampaignParams("/request-inspection")}
@@ -1005,10 +1005,10 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> Call (469) 744-0379
                 </a>
                 <a
-                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "why_savvy_hail")}
+                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "why_savvy_text")}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
                 >
-                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
                 </a>
                 <a
                   href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free pool service quote")}`}
@@ -1144,10 +1144,10 @@ const Index = () => {
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
                 <a
-                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "final_cta_hail")}
+                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "final_cta_text")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
-                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
                 </a>
               </div>
               <p className="mt-5 text-xs text-muted-foreground">

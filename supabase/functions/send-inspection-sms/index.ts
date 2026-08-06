@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
       `Reference: ${record.reference_number}`,
       "",
       "Next steps:",
-      "1. A tech reviews your address and hail date (within 1 business day).",
+      "1. A tech reviews your address and service address (within 1 business day).",
       "2. We text you 2 inspection windows to pick from.",
       "3. Inspection takes ~30 min, no cost, no obligation.",
       "",

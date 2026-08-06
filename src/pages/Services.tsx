@@ -377,10 +377,10 @@ const Services = () => {
                   <Phone className="h-4 w-4" /> Call
                 </a>
                 <a
-                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "services_final_cta_hail")}
+                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "services_final_cta_text")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
-                  <MessageSquare className="h-4 w-4" /> Text hail damage inspection
+                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
                 </a>
                 <Link
                   to={withCampaignParams("/request-inspection")}
