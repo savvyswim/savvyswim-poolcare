@@ -43,6 +43,8 @@ import Reports from "@/crm/pages/Reports";
 import WebsiteConnect from "@/crm/pages/WebsiteConnect";
 import CrmSettings from "@/crm/pages/Settings";
 import SecurityPage from "@/crm/pages/Security";
+import ReviewsPage from "@/crm/pages/Reviews";
+import ReviewLink from "@/pages/ReviewLink";
 
 import { RequireModule } from "@/crm/components/RequireModule";
 
@@ -75,6 +77,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/terms-and-conditions" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/review/:token" element={<ReviewLink />} />
             <Route path="/admin/crm/login" element={<Auth />} />
             <Route path="/admin/crm/app" element={<RequireModule module="console"><CrmApp /></RequireModule>} />
             <Route path="/admin/crm/legacy" element={<AdminCRM />} />
@@ -96,6 +99,7 @@ const App = () => (
               <Route path="/admin/crm/email" element={<EmailCenter />} />
               <Route path="/admin/crm/reports" element={<Reports />} />
               <Route path="/admin/crm/connect" element={<WebsiteConnect />} />
+              <Route path="/admin/crm/reviews" element={<ReviewsPage />} />
               <Route path="/admin/crm/settings" element={<CrmSettings />} />
               <Route path="/admin/crm/security" element={<SecurityPage />} />
 

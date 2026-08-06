@@ -42,6 +42,7 @@ const STAFF_NAV: NavItem[] = [
 
   // Marketing & website
   { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email", group: "Marketing" },
+  { to: "/admin/crm/reviews", label: "Google Reviews", icon: Star, module: "reviews", group: "Marketing" },
   { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect", group: "Marketing" },
   { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Marketing" },
   { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs", group: "Marketing" },
