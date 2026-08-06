@@ -181,8 +181,8 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
         </div>
       </div>
 
-      <div className="ss-card overflow-x-auto p-3">
-        <div className="mb-2 flex items-center justify-between">
+      <div className="ss-card p-3">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <div className="ss-label">
             City monthly rate table · regional average vs our quote target
           </div>
@@ -192,9 +192,19 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
             </button>
           )}
         </div>
-        <table className="w-full text-[0.8rem]">
+        <div className="-mx-3 overflow-x-auto px-3">
+        <table className="w-full min-w-[880px] table-fixed text-[0.8rem]">
+          <colgroup>
+            <col className="w-[150px]" />
+            <col className="w-[104px]" />
+            <col className="w-[104px]" />
+            <col className="w-[116px]" />
+            <col className="w-[110px]" />
+            <col className="w-[96px]" />
+            <col />
+          </colgroup>
           <thead>
-            <tr className="ss-label">
+            <tr className="ss-label [&>th]:whitespace-nowrap">
               <th className="p-1.5 text-left">City</th>
               <th className="p-1.5 text-right">Low</th>
               <th className="p-1.5 text-right">High</th>
@@ -204,6 +214,7 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
               <th className="p-1.5 text-left">Recommendation</th>
             </tr>
           </thead>
+
           <tbody>
             {cities.map((c) => {
               const rec = recommendRate(c, wonAvg[c.city] ?? null, floor);
