@@ -181,11 +181,9 @@ export default function PayPerPool() {
     toast.success("Pool pay rate saved");
   }
 
-  async function setUpsell(visitId: string, amount: number) {
-    const { error } = await supabase.from("ss_visits").update({ upsell_amount: amount }).eq("id", visitId);
-    if (error) return toast.error(error.message);
-    void reloadVisits();
-  }
+  // Upsell totals are derived from the invoice line items marked as upsells,
+  // so there is nothing to type in here — the ledger is the source of truth.
+
 
   async function generateInvoice(techId: string) {
     const group = byTech.find((g) => g.techId === techId);
