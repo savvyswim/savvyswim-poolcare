@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Waves } from "lucide-react";
+import Seo from "@/components/Seo";
 import { isSharedDevice, setSharedDevice } from "@/lib/sessionSecurity";
 
 export default function Auth() {
@@ -83,6 +84,12 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <Seo
+        title="Sign In | Savvy Swim"
+        description="Secure sign-in for Savvy Swim customers and team members to view pool service reports, billing, and route details."
+        path="/auth"
+        noindex
+      />
       <div className="w-full max-w-sm space-y-6">
         <Link to="/" className="flex items-center gap-2 justify-center text-foreground">
           <Waves className="h-5 w-5 text-amber-brand" />
