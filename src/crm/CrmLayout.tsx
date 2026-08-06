@@ -66,6 +66,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
+  { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
 ];
 
 
