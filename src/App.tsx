@@ -44,6 +44,7 @@ import WebsiteConnect from "@/crm/pages/WebsiteConnect";
 import CrmSettings from "@/crm/pages/Settings";
 import SecurityPage from "@/crm/pages/Security";
 import ReviewsPage from "@/crm/pages/Reviews";
+import TechScorecard from "@/crm/pages/TechScorecard";
 import ReviewLink from "@/pages/ReviewLink";
 
 import { RequireModule } from "@/crm/components/RequireModule";
@@ -100,6 +101,7 @@ const App = () => (
               <Route path="/admin/crm/reports" element={<Reports />} />
               <Route path="/admin/crm/connect" element={<WebsiteConnect />} />
               <Route path="/admin/crm/reviews" element={<ReviewsPage />} />
+              <Route path="/admin/crm/scorecard" element={<TechScorecard />} />
               <Route path="/admin/crm/settings" element={<CrmSettings />} />
               <Route path="/admin/crm/security" element={<SecurityPage />} />
 

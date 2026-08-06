@@ -2673,6 +2673,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_time_standards: {
+        Row: {
+          created_at: string
+          id: string
+          is_commercial: boolean
+          label: string
+          max_drive_minutes: number
+          max_gallons: number | null
+          min_gallons: number
+          notes: string | null
+          size_key: string
+          sort_order: number
+          target_max_minutes: number
+          target_min_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_commercial?: boolean
+          label: string
+          max_drive_minutes?: number
+          max_gallons?: number | null
+          min_gallons?: number
+          notes?: string | null
+          size_key: string
+          sort_order?: number
+          target_max_minutes?: number
+          target_min_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_commercial?: boolean
+          label?: string
+          max_drive_minutes?: number
+          max_gallons?: number | null
+          min_gallons?: number
+          notes?: string | null
+          size_key?: string
+          sort_order?: number
+          target_max_minutes?: number
+          target_min_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_truck_items: {
         Row: {
           created_at: string
