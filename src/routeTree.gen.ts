@@ -42,6 +42,7 @@ import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/in
 import { Route as CrmAdminCrmAlertsRouteImport } from './routes/_crm/admin/crm/alerts'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
 import { Route as CrmAdminCrmConnectRouteImport } from './routes/_crm/admin/crm/connect'
+import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
@@ -234,6 +235,11 @@ const CrmAdminCrmConnectRoute = CrmAdminCrmConnectRouteImport.update({
   path: '/admin/crm/connect',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmDeployHealthRoute = CrmAdminCrmDeployHealthRouteImport.update({
+  id: '/admin/crm/deploy-health',
+  path: '/admin/crm/deploy-health',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmEmailRoute = CrmAdminCrmEmailRouteImport.update({
   id: '/admin/crm/email',
   path: '/admin/crm/email',
@@ -408,6 +414,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -469,6 +476,7 @@ export interface FileRoutesByTo {
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -532,6 +540,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -595,6 +604,7 @@ export interface FileRouteTypes {
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
+    | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
     | '/admin/crm/inventory'
@@ -656,6 +666,7 @@ export interface FileRouteTypes {
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
+    | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
     | '/admin/crm/inventory'
@@ -718,6 +729,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/alerts'
     | '/_crm/admin/crm/break-even'
     | '/_crm/admin/crm/connect'
+    | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
     | '/_crm/admin/crm/finance'
     | '/_crm/admin/crm/inventory'
@@ -1015,6 +1027,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmConnectRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/deploy-health': {
+      id: '/_crm/admin/crm/deploy-health'
+      path: '/admin/crm/deploy-health'
+      fullPath: '/admin/crm/deploy-health'
+      preLoaderRoute: typeof CrmAdminCrmDeployHealthRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/email': {
       id: '/_crm/admin/crm/email'
       path: '/admin/crm/email'
@@ -1211,6 +1230,7 @@ interface CrmRouteChildren {
   CrmAdminCrmAlertsRoute: typeof CrmAdminCrmAlertsRoute
   CrmAdminCrmBreakEvenRoute: typeof CrmAdminCrmBreakEvenRoute
   CrmAdminCrmConnectRoute: typeof CrmAdminCrmConnectRoute
+  CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
@@ -1243,6 +1263,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmAlertsRoute: CrmAdminCrmAlertsRoute,
   CrmAdminCrmBreakEvenRoute: CrmAdminCrmBreakEvenRoute,
   CrmAdminCrmConnectRoute: CrmAdminCrmConnectRoute,
+  CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
