@@ -122,7 +122,11 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     const sourceUrl = typeof window !== "undefined" ? window.location.href : null;
 
     // 1) Server-side write — this is the source of truth for the lead.
-    const { error } = await supabase.from("bookings").insert({
+    const bookingId = crypto.randomUUID();
+    const { error } = await supabase
+      .from("bookings")
+      .insert({
+      id: bookingId,
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -135,7 +139,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
       sms_consent_at: data.smsOptIn ? consentTimestamp : null,
       sms_consent_text: data.smsOptIn ? consentText : null,
       consent_source_url: sourceUrl,
-    });
+      });
 
     if (error) {
       setSubmitting(false);
@@ -148,15 +152,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     // 2) Confirmation email (best effort, non-blocking)
     supabase.functions
       .invoke("send-booking-confirmation", {
-        body: {
-          name: data.name,
-          email: data.email,
-          service: data.service,
-          preferredDate: format(data.date, "EEE, MMM d, yyyy"),
-          preferredTime: data.time,
-          address: data.address || undefined,
-          notes: data.notes || undefined,
-        },
+        body: { bookingId },
       })
       .catch(() => {
         /* confirmation email is best effort */
@@ -166,6 +162,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     supabase.functions
       .invoke("notify-office-request", {
         body: {
+          bookingId,
           requestType: "New booking request",
           name: data.name,
           email: data.email,

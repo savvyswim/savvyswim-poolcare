@@ -102,7 +102,11 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
       .filter(Boolean)
       .join(" · ");
 
-    const { error } = await supabase.from("bookings").insert({
+    const bookingId = crypto.randomUUID();
+    const { error } = await supabase
+      .from("bookings")
+      .insert({
+      id: bookingId,
       name: form.name.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
@@ -112,7 +116,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
       preferred_time: "Anytime",
       notes: form.notes.trim() || null,
       consent_source_url: window.location.href,
-    });
+      });
     setSubmitting(false);
 
     if (error) return toast.error(error.message || "Could not send your request");
@@ -121,6 +125,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
     supabase.functions
       .invoke("notify-office-request", {
         body: {
+          bookingId,
           requestType: "New quote request",
           name: form.name.trim(),
           email: form.email.trim(),

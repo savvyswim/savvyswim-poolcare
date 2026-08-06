@@ -4,6 +4,7 @@ import { z } from 'npm:zod@3.23.8'
 import { sendTemplateEmail } from '../_shared/transactional-email-templates/send-email.ts'
 
 const BodySchema = z.object({
+  bookingId: z.string().uuid().optional(),
   requestId: z.string().uuid().optional(),
   requestType: z.string().min(1).max(80).default('New booking request'),
   name: z.string().min(1).max(120),
@@ -73,7 +74,50 @@ Deno.serve(async (req) => {
       })
     }
 
-    const { requestId, ...data } = parsed.data
+    const { bookingId, requestId, ...body } = parsed.data
+
+    // An office alert may only be raised for a real booking row, or by a
+    // signed-in customer/staff member (portal requests). Anonymous callers
+    // cannot push arbitrary content into staff inboxes.
+    let data = body
+    let sourceId = requestId
+    if (bookingId) {
+      const { data: booking } = await admin
+        .from('bookings')
+        .select('id, name, email, phone, address, service, preferred_date, preferred_time, notes')
+        .eq('id', bookingId)
+        .maybeSingle()
+      if (!booking) {
+        return new Response(JSON.stringify({ error: 'Booking not found' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+      data = {
+        requestType: body.requestType,
+        name: booking.name,
+        email: booking.email,
+        phone: booking.phone ?? undefined,
+        address: booking.address ?? undefined,
+        service: booking.service,
+        preferredDate: booking.preferred_date ?? undefined,
+        preferredTime: booking.preferred_time ?? undefined,
+        notes: booking.notes ?? undefined,
+        sourceUrl: body.sourceUrl,
+      }
+      sourceId = booking.id
+    } else {
+      const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '')
+      const { data: userData } = token
+        ? await admin.auth.getUser(token)
+        : { data: { user: null } }
+      if (!userData?.user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+    }
     const submittedAt = new Date().toLocaleString('en-US', {
       timeZone: 'America/Chicago',
       dateStyle: 'medium',
@@ -88,7 +132,7 @@ Deno.serve(async (req) => {
         const result = await sendTemplateEmail('office-new-request', to, {
           templateData: { ...data, submittedAt },
           replyTo: data.email,
-          idempotencyKey: requestId ? `office-new-request:${requestId}:${to}` : undefined,
+          idempotencyKey: sourceId ? `office-new-request:${sourceId}:${to}` : undefined,
         })
         results[to] = result.sent ? 'sent' : result.reason
       } catch (err) {
