@@ -80,13 +80,13 @@ Deno.serve(async (req) => {
 
     const firstName = (record.full_name ?? "").split(" ")[0] || "there";
     const message = [
-      `Hi ${firstName} — Savvy Swim here. We got your free inspection request.`,
+      `Hi ${firstName} — Savvy Swim here. We got your free pool service request.`,
       `Reference: ${record.reference_number}`,
       "",
       "Next steps:",
-      "1. A tech reviews your address and hail date (within 1 business day).",
-      "2. We text you 2 inspection windows to pick from.",
-      "3. Inspection takes ~30 min, no cost, no obligation.",
+      "1. A tech reviews your address and service address (within 1 business day).",
+      "2. We text you 2 visit windows to pick from.",
+      "3. The pool visit takes ~30 min, no cost, no obligation.",
       "",
       "Reply here anytime or call (469) 744-0379.",
     ].join("\n");
