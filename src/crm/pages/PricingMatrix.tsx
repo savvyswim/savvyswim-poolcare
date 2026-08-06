@@ -31,7 +31,7 @@ export const DEFAULT_MODEL: PricingModel = {
   ].map(([label, monthly]) => ({ id: uid(), label: label as string, monthly: monthly as number })),
   margin: 40,
   tierPct: { good: 85, better: 100, best: 135 },
-  names: { good: "Basic Care", better: "Pro Care", best: "Platinum Care" },
+  names: { good: "Chemical Only", better: "Weekly Service", best: "Swim Club" },
   prices: { good: 134, better: 158, best: 213 },
   annualPools: 40,
   features: [

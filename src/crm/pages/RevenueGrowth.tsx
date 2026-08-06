@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, RotateCcw, Trash2, TrendingUp } from "lucide-react";
 import { SectionTitle, StatTile } from "@/crm/components/Brand";
 
-type AddOn = { id: string; name: string; price: number; jobs: number };
+type Cadence = "one-time" | "recurring";
+type AddOn = { id: string; name: string; price: number; jobs: number; cadence?: Cadence; intervalDays?: number };
 
 type Model = {
   pools: number;
@@ -28,7 +29,14 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 const DEFAULT_MODEL: Model = {
   pools: 0,
   avgPrice: 0,
-  addOns: DEFAULT_ADDONS.map((name) => ({ id: uid(), name, price: 0, jobs: 0 })),
+  addOns: DEFAULT_ADDONS.map((name) => ({
+    id: uid(),
+    name,
+    price: 0,
+    jobs: 0,
+    cadence: (name.startsWith("Filter") ? "recurring" : "one-time") as Cadence,
+    intervalDays: name.startsWith("Filter") ? 90 : undefined,
+  })),
 };
 
 const STORAGE_KEY = "ss-revenue-growth-calculator";
@@ -181,7 +189,7 @@ export default function RevenueGrowth() {
               onClick={() =>
                 setModel((m) => ({
                   ...m,
-                  addOns: [...m.addOns, { id: uid(), name: "New service", price: 0, jobs: 0 }],
+                  addOns: [...m.addOns, { id: uid(), name: "New service", price: 0, jobs: 0, cadence: "one-time" as Cadence }],
                 }))
               }
               className="ss-chip flex items-center gap-1"
@@ -196,6 +204,7 @@ export default function RevenueGrowth() {
             <thead>
               <tr className="text-left">
                 <th className="ss-tag pb-2">Service / add-on</th>
+                <th className="ss-tag pb-2">Schedule</th>
                 <th className="ss-tag pb-2 text-right">Price per job</th>
                 <th className="ss-tag pb-2 text-right">Jobs per month</th>
                 <th className="ss-tag pb-2 text-right">Monthly revenue</th>
@@ -212,6 +221,33 @@ export default function RevenueGrowth() {
                       onChange={(e) => patchAddOn(r.id, { name: e.target.value })}
                       className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-hidden focus:border-[hsl(var(--ss-ink)/0.2)]"
                     />
+                  </td>
+                  <td className="w-[190px] py-1.5 pr-2">
+                    <div className="flex items-center gap-1.5">
+                      <select
+                        aria-label={`Schedule for ${r.name}`}
+                        value={r.cadence ?? "one-time"}
+                        onChange={(e) => patchAddOn(r.id, { cadence: e.target.value as Cadence, intervalDays: e.target.value === "recurring" ? (r.intervalDays ?? 90) : undefined })}
+                        className="rounded-md border border-[hsl(var(--ss-ink)/0.15)] bg-[hsl(48_44%_97%)] px-1.5 py-1 text-[0.72rem] outline-hidden"
+                      >
+                        <option value="one-time">One-time</option>
+                        <option value="recurring">Maintenance</option>
+                      </select>
+                      {(r.cadence ?? "one-time") === "recurring" && (
+                        <span className="flex items-center gap-1 text-[0.68rem] opacity-70">
+                          every
+                          <input
+                            type="number"
+                            min={1}
+                            aria-label={`Interval days for ${r.name}`}
+                            value={r.intervalDays ?? 90}
+                            onChange={(e) => patchAddOn(r.id, { intervalDays: parseInt(e.target.value) || 90 })}
+                            className="ss-num w-[52px] rounded-md border border-[hsl(var(--ss-ink)/0.15)] bg-[hsl(48_44%_97%)] px-1 py-0.5 text-right outline-hidden"
+                          />
+                          days
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="w-[130px] py-1.5 pr-2">
                     <NumInput
@@ -244,6 +280,7 @@ export default function RevenueGrowth() {
             <tfoot>
               <tr className="border-t-2 border-[hsl(var(--ss-burgundy)/0.35)]">
                 <td className="ss-tag py-2">Total upsell revenue</td>
+                <td />
                 <td />
                 <td />
                 <td className="ss-num py-2 text-right font-bold">{money(calc.upsellMonthly)}</td>
