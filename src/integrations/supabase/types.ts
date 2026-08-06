@@ -3021,6 +3021,10 @@ export type Database = {
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
+      ss_request_visit_reschedule: {
+        Args: { p_customer_id: string; p_date: string; p_note?: string }
+        Returns: Json
+      }
       ss_seed_stage_items: {
         Args: { p_name: string; p_project: string; p_stage: string }
         Returns: undefined
