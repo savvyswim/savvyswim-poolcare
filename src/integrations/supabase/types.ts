@@ -2581,10 +2581,12 @@ export type Database = {
           en_route_at: string | null
           feedback: string | null
           id: string
+          is_locked: boolean
           issue_reported: string | null
           minutes_on_site: number | null
           notes: string | null
           photos: Json
+          rain_hold: boolean
           readings: Json
           scheduled_date: string
           started_at: string | null
@@ -2606,10 +2608,12 @@ export type Database = {
           en_route_at?: string | null
           feedback?: string | null
           id?: string
+          is_locked?: boolean
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
           photos?: Json
+          rain_hold?: boolean
           readings?: Json
           scheduled_date?: string
           started_at?: string | null
@@ -2631,10 +2635,12 @@ export type Database = {
           en_route_at?: string | null
           feedback?: string | null
           id?: string
+          is_locked?: boolean
           issue_reported?: string | null
           minutes_on_site?: number | null
           notes?: string | null
           photos?: Json
+          rain_hold?: boolean
           readings?: Json
           scheduled_date?: string
           started_at?: string | null
@@ -3028,6 +3034,10 @@ export type Database = {
       ss_seed_stage_items: {
         Args: { p_name: string; p_project: string; p_stage: string }
         Returns: undefined
+      }
+      ss_set_visit_flag: {
+        Args: { p_customer_id: string; p_flag: string; p_value: boolean }
+        Returns: Json
       }
     }
     Enums: {
