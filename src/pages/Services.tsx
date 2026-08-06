@@ -414,7 +414,7 @@ const Services = () => {
       <BookingDialog
         open={bookingOpen}
         onOpenChange={setBookingOpen}
-        defaultService={bookingService}
+        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
       />
     </div>
   );

@@ -75,12 +75,14 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
       .insert({ key, label: "New add-on", amount: 0, sort_order: addons.length + 10 });
     if (error) return toast.error(error.message);
     void refresh();
+    return undefined;
   };
 
   const removeAddon = async (id: string) => {
     const { error } = await supabase.from("ss_addons").delete().eq("id", id);
     if (error) return toast.error(error.message);
     setAddons((prev) => prev.filter((a) => a.id !== id));
+    return undefined;
   };
 
   const addCity = async () => {
@@ -97,6 +99,7 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
       });
     if (error) return toast.error(error.message);
     void refresh();
+    return undefined;
   };
 
   const saveMarginSettings = async (patch: Partial<Margins>) => {

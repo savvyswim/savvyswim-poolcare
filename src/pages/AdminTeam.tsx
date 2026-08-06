@@ -82,8 +82,14 @@ export default function AdminTeam() {
 
   const invite = async () => {
     const clean = email.trim().toLowerCase();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) return toast.error("Enter a valid email");
-    if (roles.length === 0) return toast.error("Pick at least one role");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) {
+      toast.error("Enter a valid email");
+      return;
+    }
+    if (roles.length === 0) {
+      toast.error("Pick at least one role");
+      return;
+    }
 
     setBusy(true);
     const { error } = await supabase.from("admin_invitations").insert({
@@ -95,8 +101,12 @@ export default function AdminTeam() {
     setBusy(false);
 
     if (error) {
-      if (error.code === "23505") return toast.error("There is already a pending invite for that email");
-      return toast.error(error.message);
+      if (error.code === "23505") {
+        toast.error("There is already a pending invite for that email");
+        return;
+      }
+      toast.error(error.message);
+      return;
     }
     logAdminAction({ area: "team", action: "Invitation sent", recordType: "invitation", details: { email: clean, roles } });
     toast.success(`Invitation created for ${clean}`);
@@ -107,7 +117,10 @@ export default function AdminTeam() {
 
   const revoke = async (id: string) => {
     const { error } = await supabase.from("admin_invitations").update({ status: "revoked" }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     logAdminAction({ area: "team", action: "Invitation revoked", recordType: "invitation", recordId: id });
     toast.success("Invitation revoked");
     load();
@@ -115,7 +128,10 @@ export default function AdminTeam() {
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("admin_invitations").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     load();
   };
 

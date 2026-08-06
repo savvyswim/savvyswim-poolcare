@@ -50,12 +50,12 @@ export type QuoteInput = {
 };
 
 export function computeQuote(input: QuoteInput) {
-  const band = CITY_PRICING[input.city] ?? CITY_PRICING.Dallas;
+  const band = CITY_PRICING[input.city] ?? CITY_PRICING["Dallas"]!;
   const sizeKey = POOL_SIZES.find((s) => s.id === input.poolSize)?.key ?? "mid";
   let base = band[sizeKey];
   if (input.serviceType === "chem_only") base = Math.round(base * CHEM_ONLY_FACTOR);
-  const spa = SPA_OPTIONS.find((s) => s.id === input.spa) ?? SPA_OPTIONS[0];
-  const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];
+  const spa = SPA_OPTIONS.find((s) => s.id === input.spa) ?? SPA_OPTIONS[0]!;
+  const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0]!;
   const cleanup = cond.cleanupHigh
     ? Math.round((cond.cleanupLow + cond.cleanupHigh) / 2)
     : 0;

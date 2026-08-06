@@ -30,7 +30,7 @@ export default function Inventory() {
   async function adjust(item: Item, delta: number) {
     const next = Math.max(0, item.quantity + delta);
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void refetch();
   }
 

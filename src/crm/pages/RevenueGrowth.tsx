@@ -3,7 +3,7 @@ import { Plus, RotateCcw, Trash2, TrendingUp } from "lucide-react";
 import { SectionTitle, StatTile } from "@/crm/components/Brand";
 
 type Cadence = "one-time" | "recurring";
-type AddOn = { id: string; name: string; price: number; jobs: number; cadence?: Cadence; intervalDays?: number };
+type AddOn = { id: string; name: string; price: number; jobs: number; cadence?: Cadence | undefined; intervalDays?: number | undefined };
 
 type Model = {
   pools: number;

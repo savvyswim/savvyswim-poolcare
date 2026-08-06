@@ -210,7 +210,7 @@ export default function Portal() {
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
       p_date: resched.date,
-      p_note: resched.note || null,
+      ...(resched.note ? { p_note: resched.note } : {}),
     });
     setSaving(false);
     if (error) {
@@ -227,11 +227,11 @@ export default function Portal() {
       .invoke("notify-office-request", {
         body: {
           requestType: "Portal reschedule request",
-          name: String(info.customer_name ?? "Customer"),
-          email: String(info.email ?? user?.email ?? "no-reply@savvyswim.com"),
-          phone: info.phone ? String(info.phone) : undefined,
-          address: info.address ? String(info.address) : undefined,
-          service: `Weekly pool service — ${String(info.service_level ?? "service")}`,
+          name: String(info["customer_name"] ?? "Customer"),
+          email: String(info["email"] ?? user?.email ?? "no-reply@savvyswim.com"),
+          phone: info["phone"] ? String(info["phone"]) : undefined,
+          address: info["address"] ? String(info["address"]) : undefined,
+          service: `Weekly pool service — ${String(info["service_level"] ?? "service")}`,
           preferredDate: when,
           notes: resched.note || "Rescheduled from the customer portal.",
           sourceUrl: window.location.href,
@@ -335,9 +335,17 @@ export default function Portal() {
       </header>
 
       <main className="container-tight py-10 sm:py-14">
-        <h1 className="font-display text-3xl uppercase leading-none tracking-tight sm:text-5xl">
-          {pools.length > 1 ? "My pools" : "My pool"}
-        </h1>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <h1 className="font-display text-3xl uppercase leading-none tracking-tight sm:text-5xl">
+            {pools.length > 1 ? "My pools" : "My pool"}
+          </h1>
+          <Link
+            to="/portal/maintenance"
+            className="inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+          >
+            <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" /> Maintenance schedule
+          </Link>
+        </div>
 
         {busy && <p className="mt-6 font-tech text-sm text-primary/60">Loading your pools…</p>}
 

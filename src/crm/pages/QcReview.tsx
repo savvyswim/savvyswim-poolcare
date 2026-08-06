@@ -80,7 +80,7 @@ export default function QcReview() {
   );
 
   useEffect(() => {
-    if (!techId && techs.length) setTechId(techs[0].id);
+    if (!techId && techs.length) setTechId(techs[0]!.id);
   }, [techs, techId]);
 
   const range = useMemo(() => weekRange(week), [week]);
@@ -240,7 +240,7 @@ export default function QcReview() {
                 <div className="flex items-center gap-1 text-[0.78rem]">
                   <Droplets size={13} className="opacity-50" />
                   <span className="ss-num">
-                    pH {v.readings?.ph ?? "—"} · Cl {v.readings?.chlorine ?? "—"}
+                    pH {v.readings?.["ph"] ?? "—"} · Cl {v.readings?.["chlorine"] ?? "—"}
                   </span>
                 </div>
                 <Chip tone={checklistDone(v) === null ? "ink" : checklistDone(v)! >= 15 ? "green" : "gold"}>

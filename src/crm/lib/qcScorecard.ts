@@ -48,7 +48,7 @@ export function qcAverage(scores: QcScores): number | null {
 
 export function qcFailedItems(scores: QcScores): QcCriterion[] {
   return QC_CRITERIA.filter((c) => {
-    const v = scores[String(c.n)];
+    const v = scores[String(c.n)] ?? 0;
     return Number.isFinite(v) && v > 0 && v < PASS_THRESHOLD;
   });
 }

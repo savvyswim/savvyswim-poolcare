@@ -218,14 +218,14 @@ export default function ProjectDetail() {
   async function removeFile(f: ProjectFile) {
     await supabase.storage.from(BUCKET).remove([f.storage_path]);
     const { error } = await supabase.from("ss_project_files").delete().eq("id", f.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Removed");
     void load();
   }
 
   async function download(f: ProjectFile) {
     const url = urls[f.storage_path];
-    if (!url) return toast.error("Preparing link — try again in a second");
+    if (!url) { toast.error("Preparing link — try again in a second"); return; }
     try {
       const res = await fetch(url);
       const blob = await res.blob();
@@ -281,7 +281,7 @@ export default function ProjectDetail() {
         ...(completedOn && s.start_date ? { end_date: completedOn } : {}),
       })
       .eq("id", s.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
 
     // Completing early or late re-anchors every stage linked behind this one.
     const updated = stages.map((x) =>
@@ -328,7 +328,7 @@ export default function ProjectDetail() {
     const { error } = await supabase.from("ss_project_stages").insert({
       project_id: id, name, sort_order: (stages.at(-1)?.sort_order ?? 0) + 1,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void load();
   }
 
@@ -338,7 +338,7 @@ export default function ProjectDetail() {
       .from("ss_projects")
       .update({ lead_staff_id: leadId } as never)
       .eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setProject((p) => (p ? ({ ...p, lead_staff_id: leadId } as Project) : p));
     toast.success(leadId ? "Project lead updated" : "Project lead cleared");
   }
@@ -348,7 +348,7 @@ export default function ProjectDetail() {
     const { error } = await supabase.functions.invoke("project-stage-alerts", {
       body: { mode: "stage", project_id: id },
     });
-    if (error) return toast.error("Could not send the alert");
+    if (error) { toast.error("Could not send the alert"); return; }
     toast.success("Alert sent to the owner and project lead");
   }
 
@@ -356,14 +356,14 @@ export default function ProjectDetail() {
   async function setStatus(status: string) {
     if (!id) return;
     const { error } = await supabase.from("ss_projects").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setProject((p) => (p ? { ...p, status } : p));
   }
 
   async function removeProject() {
     if (!id || !window.confirm("Delete this project file and all of its media records?")) return;
     const { error } = await supabase.from("ss_projects").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Project file deleted");
     nav("/admin/crm/projects");
   }

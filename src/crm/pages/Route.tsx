@@ -121,7 +121,7 @@ export default function RoutePage() {
       .map((s) => [s.ss_customers.address, s.ss_customers.city, "TX"].filter(Boolean).join(", "))
       .filter(Boolean);
     if (!addrs.length) return null;
-    const dest = encodeURIComponent(addrs[addrs.length - 1]);
+    const dest = encodeURIComponent(addrs[addrs.length - 1]!);
     const way = addrs.slice(0, -1).map(encodeURIComponent).join("|");
     return `https://www.google.com/maps/dir/?api=1&destination=${dest}${way ? `&waypoints=${way}` : ""}&travelmode=driving`;
   }, [pending]);

@@ -36,7 +36,7 @@ export default function Jobs() {
       .from("ss_jobs")
       .update({ status, completed_at: status === "completed" ? new Date().toISOString() : null })
       .eq("id", job.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void refetch();
   }
 

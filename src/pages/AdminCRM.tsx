@@ -234,7 +234,10 @@ export default function AdminCRM() {
 
   const deleteLead = async (id: string) => {
     const { error } = await supabase.from("crm_leads").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setOpenLeadId(null);
     logAdminAction({ area: "crm", action: "Lead deleted", recordType: "lead", recordId: id });
     toast.success("Lead deleted");
@@ -250,7 +253,10 @@ export default function AdminCRM() {
     estimated: string;
     notes: string;
   }) => {
-    if (form.name.trim().length < 2) return toast.error("Enter a contact name");
+    if (form.name.trim().length < 2) {
+      toast.error("Enter a contact name");
+      return;
+    }
     setBusy(true);
     let contactId: string | null = null;
     const existing = contacts.find(
@@ -271,7 +277,8 @@ export default function AdminCRM() {
         .single();
       if (error) {
         setBusy(false);
-        return toast.error(error.message);
+        toast.error(error.message);
+        return;
       }
       contactId = data.id;
     }
@@ -285,7 +292,10 @@ export default function AdminCRM() {
       source: "manual",
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     logAdminAction({ area: "crm", action: "Lead created", recordType: "lead", details: { contact: form.name.trim(), service: form.service.trim() } });
     toast.success("Lead created");
     setNewLeadOpen(false);
@@ -301,7 +311,10 @@ export default function AdminCRM() {
       subject: subject || null,
       body: body || null,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     load();
   };
 
@@ -313,7 +326,10 @@ export default function AdminCRM() {
       title: title.trim(),
       due_date: due || null,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     load();
   };
 
@@ -322,7 +338,10 @@ export default function AdminCRM() {
       .from("crm_tasks")
       .update({ is_done: !task.is_done, completed_at: task.is_done ? null : new Date().toISOString() })
       .eq("id", task.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     load();
   };
 

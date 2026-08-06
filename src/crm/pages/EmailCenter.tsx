@@ -38,9 +38,9 @@ const TEMPLATES = [
 
 
 export default function EmailCenter() {
-  const [template, setTemplate] = useState(TEMPLATES[0]);
-  const [subject, setSubject] = useState(TEMPLATES[0].title);
-  const [body, setBody] = useState(TEMPLATES[0].body);
+  const [template, setTemplate] = useState(TEMPLATES[0]!);
+  const [subject, setSubject] = useState(TEMPLATES[0]!.title);
+  const [body, setBody] = useState(TEMPLATES[0]!.body);
   const [audience, setAudience] = useState<"all" | "routed" | "leads">("all");
   const [sending, setSending] = useState(false);
 
@@ -67,13 +67,13 @@ export default function EmailCenter() {
   }, [customers, audience]);
 
   async function send() {
-    if (!subject.trim() || !body.trim()) return toast.error("Subject and body are required");
+    if (!subject.trim() || !body.trim()) { toast.error("Subject and body are required"); return; }
     setSending(true);
     const { error } = await supabase.functions.invoke("send-campaign-email", {
       body: { subject, body, customerIds: recipients.map((r) => r.id) },
     });
     setSending(false);
-    if (error) return toast.error("Send failed — check the email function logs");
+    if (error) { toast.error("Send failed — check the email function logs"); return; }
     toast.success(`Queued for ${recipients.length} recipients`);
   }
 

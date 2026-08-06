@@ -105,7 +105,10 @@ export default function AdminDesigns() {
 
   const shareItem = async (d: Design, channel: "copy" | "email" | "sms") => {
     const url = urls[d.image_path];
-    if (!url) return toast.error("Media not ready");
+    if (!url) {
+      toast.error("Media not ready");
+      return;
+    }
     const priceTxt =
       d.est_price_low && d.est_price_high
         ? ` Estimated investment: $${d.est_price_low.toLocaleString()}–$${d.est_price_high.toLocaleString()}.`

@@ -52,7 +52,8 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
         if (error) return toast.error("Could not load service options");
         const list = (data ?? []) as PricingRow[];
         setRows(list);
-        if (list.length) setSize((s) => s || list[0].pool_size);
+        if (list.length) setSize((s) => s || list[0]?.pool_size || s);
+        return undefined;
       });
   }, [open]);
 
@@ -81,7 +82,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
 
   useEffect(() => {
     if (vegOptions.length && !vegOptions.some((v) => v.vegetation_level === veg)) {
-      setVeg(vegOptions[0].vegetation_level);
+      setVeg(vegOptions[0]?.vegetation_level ?? "");
     }
   }, [vegOptions, veg]);
 
@@ -141,6 +142,7 @@ export function SubscribeDialog({ open, onOpenChange, planName }: SubscribeDialo
       });
 
     setDone(true);
+    return undefined;
   };
 
   return (

@@ -57,8 +57,10 @@ export default function Expenses({ data }: { data: FinanceSlice }) {
       setAmount("");
       setAdding(false);
       await reload();
+      return undefined;
     } catch (err: any) {
       toast.error(err?.message ?? "Could not save the expense");
+      return undefined;
     } finally {
       setBusy(false);
     }

@@ -33,7 +33,7 @@ export const PROJECT_STATUS: { key: string; label: string; tone: "ink" | "aqua" 
 ];
 
 export function statusMeta(key: string) {
-  return PROJECT_STATUS.find((s) => s.key === key) ?? PROJECT_STATUS[0];
+  return PROJECT_STATUS.find((s) => s.key === key) ?? PROJECT_STATUS[0]!;
 }
 
 type Counts = Record<string, { files: number; done: number; total: number }>;
@@ -65,10 +65,12 @@ export default function Projects() {
       ]);
       const map: Counts = {};
       for (const id of ids) map[id] = { files: 0, done: 0, total: 0 };
-      (files ?? []).forEach((f) => { map[f.project_id].files += 1; });
+      (files ?? []).forEach((f) => { const entry = map[f.project_id]; if (entry) entry.files += 1; });
       (stages ?? []).forEach((s) => {
-        map[s.project_id].total += 1;
-        if (s.status === "complete") map[s.project_id].done += 1;
+        const entry = map[s.project_id];
+        if (!entry) return;
+        entry.total += 1;
+        if (s.status === "complete") entry.done += 1;
       });
       setCounts(map);
     } else {
@@ -208,7 +210,7 @@ function NewProjectDialog({
   });
 
   async function save() {
-    if (form.title.trim().length < 2) return toast.error("Give the project a name");
+    if (form.title.trim().length < 2) { toast.error("Give the project a name"); return; }
     setSaving(true);
     const { error } = await supabase.from("ss_projects").insert({
       title: form.title.trim(),
@@ -223,7 +225,7 @@ function NewProjectDialog({
       notes: form.notes || null,
     });
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Project file created with its build stages");
     onCreated();
   }

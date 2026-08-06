@@ -110,6 +110,7 @@ export function ProjectTimeline({
         return;
       }
       setPending({ baseline, next: merged, moved, label, commit });
+      return undefined;
     },
     [onChange],
   );
@@ -124,6 +125,7 @@ export function ProjectTimeline({
       `Saved · ${pending.moved.length} dependent stage${pending.moved.length === 1 ? "" : "s"} rescheduled`,
     );
     setPending(null);
+    return undefined;
   }
 
   function discardPending() {
@@ -151,13 +153,14 @@ export function ProjectTimeline({
     if (err) return toast.error(err);
     onChange(next);
     toast.success("Timeline built from the project start date");
+    return undefined;
   }
 
   /** Chains every stage to the previous one so later work follows automatically. */
   async function linkInSequence() {
     const ordered = [...stages].sort((a, b) => a.sort_order - b.sort_order);
     setBusy(true);
-    const next = ordered.map((s, i) => ({ ...s, depends_on_id: i === 0 ? null : ordered[i - 1].id }));
+    const next = ordered.map((s, i) => ({ ...s, depends_on_id: i === 0 ? null : ordered[i - 1]!.id }));
     for (const s of next) {
       // eslint-disable-next-line no-await-in-loop
       const { error } = await supabase
@@ -171,6 +174,7 @@ export function ProjectTimeline({
     }
     await applyAndCascade(next, "Linked stages in sequence");
     setBusy(false);
+    return undefined;
   }
 
   async function patch(id: string, field: "start_date" | "end_date" | "duration_days", value: string) {
@@ -201,6 +205,7 @@ export function ProjectTimeline({
       .eq("id", id);
     if (error) return toast.error(error.message);
     await applyAndCascade(next, `${stages.find((s) => s.id === id)?.name ?? "Stage"} · dependency change`);
+    return undefined;
   }
 
   const shiftStage = useCallback(

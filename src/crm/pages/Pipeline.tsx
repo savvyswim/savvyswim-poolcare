@@ -129,7 +129,7 @@ export default function Pipeline() {
       .from("ss_leads")
       .update({ stage, stage_changed_at: new Date().toISOString() })
       .eq("id", lead.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`${lead.full_name} → ${stage}`);
     setDetail(null);
     void refetch();
@@ -137,7 +137,7 @@ export default function Pipeline() {
 
   async function setPlan(lead: Lead, planId: string) {
     const { error } = await supabase.from("ss_leads").update({ plan_id: planId }).eq("id", lead.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setDetail({ ...lead, plan_id: planId });
     toast.success(`Plan set to ${findServicePlan(planId)?.name ?? planId}`);
     void refetch();

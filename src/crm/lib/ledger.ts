@@ -77,7 +77,7 @@ export const thisMonthKey = () => new Date().toISOString().slice(0, 7);
 
 export function monthLabel(key: string) {
   const [y, m] = key.split("-").map(Number);
-  return new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  return new Date(y ?? 0, (m ?? 1) - 1, 1).toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
 /** Last `count` month keys, most recent first. */

@@ -210,8 +210,8 @@ export default function CustomerDetail() {
                 <Chip tone={v.status === "completed" ? "green" : v.status === "skipped" ? "orange" : "aqua"}>{v.status}</Chip>
               </div>
               <div className="mt-1 text-[0.76rem] opacity-70">
-                {v.readings?.fc != null && <>FC {v.readings.fc} ppm · </>}
-                {v.readings?.ph != null && <>pH {v.readings.ph} · </>}
+                {v.readings?.["fc"] != null && <>FC {v.readings["fc"]} ppm · </>}
+                {v.readings?.["ph"] != null && <>pH {v.readings["ph"]} · </>}
                 {v.minutes_on_site ? `${v.minutes_on_site} min on site` : "—"}
               </div>
               {v.notes && <div className="mt-1 text-[0.8rem]">{v.notes}</div>}
