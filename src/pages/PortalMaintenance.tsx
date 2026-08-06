@@ -106,7 +106,7 @@ export default function PortalMaintenance() {
       recurring: boolean;
       due: Date | null;
       overdue: boolean;
-      note?: string;
+      note?: string | undefined;
     }[] = [];
 
     // Next weekly service visit
