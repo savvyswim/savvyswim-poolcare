@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { EmptyState, SectionTitle, StatTile } from "@/crm/components/Brand";
+import { EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { VITAL_THRESHOLDS, formatVital, vitalRating } from "@/lib/webVitals";
 
