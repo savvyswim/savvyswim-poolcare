@@ -209,6 +209,8 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
           </p>
         </div>
       )}
+
+      {report === "upsell" && <UpsellReconciliation />}
     </div>
   );
 }
