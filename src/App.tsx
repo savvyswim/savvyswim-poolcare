@@ -47,6 +47,7 @@ import ReviewsPage from "@/crm/pages/Reviews";
 import TechScorecard from "@/crm/pages/TechScorecard";
 import WaterLab from "@/crm/pages/WaterLab";
 import RevenueGrowth from "@/crm/pages/RevenueGrowth";
+import PricingMatrix from "@/crm/pages/PricingMatrix";
 import ReviewLink from "@/pages/ReviewLink";
 
 import { RequireModule } from "@/crm/components/RequireModule";
@@ -100,6 +101,7 @@ const App = () => (
               <Route path="/admin/crm/service-plans" element={<ServicePlans />} />
               <Route path="/admin/crm/finance" element={<Finance />} />
               <Route path="/admin/crm/revenue-growth" element={<RevenueGrowth />} />
+              <Route path="/admin/crm/pricing-matrix" element={<PricingMatrix />} />
               <Route path="/admin/crm/trucks" element={<Trucks />} />
               <Route path="/admin/crm/inventory" element={<Inventory />} />
               <Route path="/admin/crm/email" element={<EmailCenter />} />
