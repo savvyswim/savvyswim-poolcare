@@ -4,6 +4,7 @@ import { ArrowLeft, Lock, Phone, Mail, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
+import CustomerContracts from "@/crm/components/CustomerContracts";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 
@@ -24,7 +25,7 @@ type Visit = {
   notes: string | null; readings: Record<string, number> | null; chem_cost: number | null;
 };
 
-const TABS = ["Overview", "Timeline", "Equipment", "Billing"] as const;
+const TABS = ["Overview", "Timeline", "Equipment", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -187,7 +188,7 @@ export default function CustomerDetail() {
 
 
       <div className="flex flex-wrap gap-1.5">
-        {TABS.filter((t) => t !== "Billing" || level === "owner").map((t) => (
+        {TABS.filter((t) => (t !== "Billing" || level === "owner") && (t !== "Contracts" || level !== "technician")).map((t) => (
           <button key={t} className={`ss-btn ${tab === t ? "" : "ss-btn-ghost"}`} onClick={() => setTab(t)}>{t}</button>
         ))}
       </div>
@@ -236,6 +237,8 @@ export default function CustomerDetail() {
           )}
         </div>
       )}
+
+      {tab === "Contracts" && level !== "technician" && <CustomerContracts customer={c} />}
 
       {tab === "Billing" && level === "owner" && (
         <div className="space-y-2">
