@@ -133,7 +133,7 @@ hr.d{border:none;border-top:1px dashed var(--line);margin:10px 0;}
 body.techlock{-webkit-user-select:none;user-select:none;}
 body.techlock img{pointer-events:none;}
 #wmark{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden;display:none;}
-body.techlock #wmark{display:block;}
+body.techlock #wmark{display:none;}
 #wmark span{position:absolute;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:rgba(142,31,44,.07);white-space:nowrap;transform:rotate(-28deg);}
 body.techblur main,body.techblur .tabbar{filter:blur(16px);transition:filter .15s;}
 .donewrap{opacity:.75;}
@@ -352,8 +352,7 @@ let curTech=null;
 function drawWatermark(){
   const t=S.techs.find(x=>x.id===curTech)||S.techs[0];
   const stamp=(t?t.init:'--')+' · SAVVY SWIM · '+new Date().toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
-  let h='';for(let r=0;r<14;r++)for(let c2=0;c2<3;c2++)h+=`<span style="top:${r*90-20}px;left:${c2*34-6}%;">${stamp}</span>`;
-  $('wmark').innerHTML=h;
+  $('wmark').innerHTML='';
 }
 function setMode(m){mode=m;tab=(m==='co'||m==='tech')?'route':'home';custView=null;adminView='';if(m!=='tech')stopGeoWatch();
   $('tgCo').classList.toggle('on',m==='co');$('tgTech').classList.toggle('on',m==='tech');$('tgCu').classList.toggle('on',m==='cu');render();}
@@ -1019,7 +1018,7 @@ function vTechRoute(){
     <span style="font-size:15px;">📍</span>
     <div class="muted" style="font-size:10.5px;flex:1;">Location automation ON — arriving at a stop texts the customer, and the visit auto-starts after ${S.autoStartMin} min on site. Finishing a stop auto-texts “On my way” to the next. (⚡ = demo arrival)</div>
   </div>
-  <div class="muted" style="font-size:10px;text-align:center;margin-top:10px;">Access level: ${LEVELS[curLevel()].split(' — ')[0]} · Screen watermarked · customer data confidential</div>`;
+  <div class="muted" style="font-size:10px;text-align:center;margin-top:10px;">Access level: ${LEVELS[curLevel()].split(' — ')[0]} · customer data confidential</div>`;
 }
 /* ---- Guided visit ---- */
 let vr={};
