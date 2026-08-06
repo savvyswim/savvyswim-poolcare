@@ -1,4 +1,4 @@
-import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
+import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
 import { verifyStartupHealth } from "./lib/startup-health";
@@ -25,23 +25,11 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 const startupHealth = verifyStartupHealth({
   createStart,
   createMiddleware,
-  createCsrfMiddleware,
   attachSupabaseAuth,
   renderErrorPage,
 });
 
-// Start installs this automatically when src/start.ts is absent; defining the
-// file opts out, so re-add it explicitly to keep server functions protected
-// from cross-site requests. Older deployed builds of the framework don't ship
-// this helper — calling it there crashes SSR at module init and every page
-// renders the fallback error screen, so only wire it up when the startup
-// health check confirmed it exists.
-const csrfMiddleware = startupHealth.checks.find((c) => c.name === "createCsrfMiddleware")?.ok
-  ? createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "serverFn" })
-  : undefined;
-
-
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: csrfMiddleware ? [errorMiddleware, csrfMiddleware] : [errorMiddleware],
+  requestMiddleware: [errorMiddleware],
 }));
