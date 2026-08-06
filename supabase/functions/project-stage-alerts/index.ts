@@ -18,6 +18,23 @@ const admin = createClient(
   { auth: { persistSession: false } },
 );
 
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+/** Service-role (scheduled digest) or an active owner / office manager. */
+async function isAuthorized(req: Request): Promise<boolean> {
+  const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+  if (token === SERVICE_ROLE_KEY) return true;
+  const { data: userData } = await admin.auth.getUser(token);
+  if (!userData?.user) return false;
+  const { data: staff } = await admin
+    .from("ss_staff")
+    .select("level, is_active")
+    .eq("user_id", userData.user.id)
+    .maybeSingle();
+  return !!staff?.is_active && ["owner", "office_manager"].includes(staff.level);
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -142,6 +159,8 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
+    if (!(await isAuthorized(req))) return json({ error: "Unauthorized" }, 401);
+
     const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
     const mode = body.mode === "stage" ? "stage" : "digest";
 
