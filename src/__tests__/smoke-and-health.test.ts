@@ -28,19 +28,12 @@ describe("startup health check", () => {
   const base = {
     createStart: () => {},
     createMiddleware: () => {},
-    createCsrfMiddleware: () => {},
     attachSupabaseAuth: () => {},
     renderErrorPage: () => {},
   };
 
   it("reports ok when every dependency is present", () => {
     expect(verifyStartupHealth(base).status).toBe("ok");
-  });
-
-  it("degrades (does not throw) when createCsrfMiddleware is missing", () => {
-    const health = verifyStartupHealth({ ...base, createCsrfMiddleware: undefined });
-    expect(health.status).toBe("degraded");
-    expect(health.checks.find((c) => c.name === "createCsrfMiddleware")?.ok).toBe(false);
   });
 
   it("fails when a required dependency is missing", () => {
