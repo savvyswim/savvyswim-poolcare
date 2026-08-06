@@ -271,7 +271,9 @@ export default function PricingTab({ isOwner }: { isOwner: boolean }) {
             })}
           </tbody>
         </table>
+        </div>
       </div>
+
 
       <div className="ss-card p-3">
         <div className="mb-2 flex items-center justify-between">
