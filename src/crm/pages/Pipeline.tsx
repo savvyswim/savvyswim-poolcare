@@ -27,13 +27,12 @@ const STAGES: { key: Stage; label: string }[] = [
   { key: "lost", label: "Lost" },
 ];
 
-const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "green" | "red" }> = {
+const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "green" | "burgundy" }> = {
   recommended: { label: "Plan matched", tone: "gold" },
   quoted: { label: "Plan quoted", tone: "aqua" },
   won: { label: "Plan active", tone: "green" },
-  lost: { label: "Plan lost", tone: "red" },
+  lost: { label: "Plan lost", tone: "burgundy" },
 };
-
 
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
@@ -41,7 +40,7 @@ export default function Pipeline() {
   const { rows, refetch } = useTable<Lead>("pipeline", async () => {
     const { data } = await supabase
       .from("ss_leads")
-      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at")
+      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at,plan_id,plan_status")
       .order("created_at", { ascending: false });
     return (data ?? []) as Lead[];
   });
@@ -58,6 +57,12 @@ export default function Pipeline() {
     [rows],
   );
 
+  const planCounts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const r of rows) if (r.plan_id) m[r.plan_id] = (m[r.plan_id] ?? 0) + 1;
+    return m;
+  }, [rows]);
+
   async function move(lead: Lead, stage: Stage) {
     const { error } = await supabase
       .from("ss_leads")
@@ -68,6 +73,15 @@ export default function Pipeline() {
     setDetail(null);
     void refetch();
   }
+
+  async function setPlan(lead: Lead, planId: string) {
+    const { error } = await supabase.from("ss_leads").update({ plan_id: planId }).eq("id", lead.id);
+    if (error) return toast.error(error.message);
+    setDetail({ ...lead, plan_id: planId });
+    toast.success(`Plan set to ${findServicePlan(planId)?.name ?? planId}`);
+    void refetch();
+  }
+
 
   return (
     <div className="space-y-4">
