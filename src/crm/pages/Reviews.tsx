@@ -206,10 +206,20 @@ export default function Reviews() {
           <div className="ss-label mt-3 mb-1">Note on the page</div>
           <textarea
             className="ss-input"
-            rows={4}
+            rows={5}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
+          <p className="mt-1 text-[0.72rem] opacity-60">
+            Use <code>{"{name}"}</code> for the full name and <code>{"{first}"}</code> for the first
+            name — they're swapped in automatically.
+          </p>
+          {name.trim() && (
+            <div className="mt-2 rounded-md p-2 text-[0.78rem]" style={{ background: "hsl(var(--ss-sand) / .5)" }}>
+              <span className="ss-label">Preview</span>
+              <div className="mt-1">{personalize(note)}</div>
+            </div>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             <button className="ss-btn" disabled={busy} onClick={() => void createRequest(true)}>
               <Send size={13} /> Text photos + review link
