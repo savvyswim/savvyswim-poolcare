@@ -155,8 +155,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       {techLocked && obscured && <PrivacyNotice />}
 
       {/* sticky header */}
-      <header className="sticky top-0 z-40" style={{ background: "hsl(var(--ss-cream))" }}>
-        <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:pl-[232px]">
+      <header className="sticky top-0 z-40 lg:ml-[216px]" style={{ background: "hsl(var(--ss-cream))" }}>
+        <div className="flex items-center justify-between gap-3 px-4 py-2.5">>
           <div className="flex items-center gap-3">
             <button
               className="lg:hidden"
