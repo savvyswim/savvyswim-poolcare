@@ -387,15 +387,74 @@ export default function Portal() {
                           ? `next ${new Date(upcoming.scheduled_date).toLocaleDateString()}`
                           : "next visit scheduling"}
                       </p>
-                      <button
-                        type="button"
-                        onClick={() => openReschedule(p, upcoming?.scheduled_date ?? null)}
-                        className="mt-2 inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
-                      >
-                        <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
-                        {upcoming ? "Reschedule visit" : "Schedule visit"}
-                      </button>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => openReschedule(p, upcoming?.scheduled_date ?? null)}
+                          disabled={!!upcoming?.is_locked}
+                          className="inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-45"
+                        >
+                          <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                          {upcoming ? "Reschedule visit" : "Schedule visit"}
+                        </button>
+                        {last && (
+                          <button
+                            type="button"
+                            onClick={() => downloadReport(p, last)}
+                            className="inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <Download className="h-3.5 w-3.5" aria-hidden="true" /> Report PDF
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Holds */}
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          disabled={!upcoming}
+                          onClick={() => toggleFlag(p, "lock", !upcoming?.is_locked)}
+                          aria-pressed={!!upcoming?.is_locked}
+                          className={`flex items-center gap-2 border px-3 py-2 text-left font-tech text-[10px] uppercase tracking-widest disabled:opacity-40 ${
+                            upcoming?.is_locked
+                              ? "border-accent bg-accent/10 text-accent"
+                              : "border-hairline text-primary/60 hover:border-primary/40"
+                          }`}
+                        >
+                          {upcoming?.is_locked ? (
+                            <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          ) : (
+                            <Unlock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          )}
+                          {upcoming?.is_locked ? "Locked" : "Lock date"}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={!upcoming}
+                          onClick={() => toggleFlag(p, "rain", !upcoming?.rain_hold)}
+                          aria-pressed={!!upcoming?.rain_hold}
+                          className={`flex items-center gap-2 border px-3 py-2 text-left font-tech text-[10px] uppercase tracking-widest disabled:opacity-40 ${
+                            upcoming?.rain_hold
+                              ? "border-accent bg-accent/10 text-accent"
+                              : "border-hairline text-primary/60 hover:border-primary/40"
+                          }`}
+                        >
+                          <CloudRain className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          {upcoming?.rain_hold ? "Rain day" : "Rain day?"}
+                        </button>
+                      </div>
+                      {upcoming?.is_locked && (
+                        <p className="mt-2 font-tech text-[10px] uppercase tracking-widest text-primary/45">
+                          Locked — unlock to move this visit
+                        </p>
+                      )}
+                      {upcoming?.rain_hold && (
+                        <p className="mt-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                          Can&rsquo;t be performed — office notified
+                        </p>
+                      )}
                     </div>
+
                   </div>
                 );
               })}
