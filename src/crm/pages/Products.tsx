@@ -19,7 +19,7 @@ import {
 
 
 export default function Products() {
-  const { isOwner } = useSavvyIdentity();
+  useSavvyIdentity();
   const { cities, addons, margins, loading } = useRateCard();
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
