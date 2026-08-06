@@ -22,7 +22,9 @@ export type ModuleKey =
   | "team"
   | "activity"
   | "projects"
+  | "security"
   | "designs";
+
 
 const ALL: SsLevel[] = ["owner", "office_manager", "technician", "contractor"];
 const OFFICE: SsLevel[] = ["owner", "office_manager"];
