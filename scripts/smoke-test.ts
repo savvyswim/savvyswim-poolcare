@@ -107,9 +107,6 @@ async function probeCritical(route: string): Promise<Result> {
     if (looksLikeCrash(body)) {
       return { route: `${route} [critical]`, status: 200, ok: false, note: "SSR crash payload" };
     }
-    if (body.length < MIN_HTML_BYTES || !body.includes("<div id=\"root\"") === false ? false : false) {
-      // placeholder — real checks below
-    }
     if (body.length < MIN_HTML_BYTES) {
       return { route: `${route} [critical]`, status: 200, ok: false, note: `blank response (${body.length} bytes)` };
     }
