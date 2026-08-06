@@ -88,7 +88,7 @@ export default function Products() {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (cities.length && !cities.some((c) => c.city === city)) setCity(cities[0].city);
+    if (cities.length && !cities.some((c) => c.city === city)) setCity(cities[0]!.city);
   }, [cities, city, hydrated]);
 
 

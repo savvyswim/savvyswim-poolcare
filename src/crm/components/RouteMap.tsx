@@ -58,7 +58,7 @@ export default function RouteMap({
         if (cancelled || !ref.current || !window.google) return;
         const map = new window.google.maps.Map(ref.current, {
           zoom: 10,
-          center: { lat: Number(geo[0].ss_customers.lat), lng: Number(geo[0].ss_customers.lng) },
+          center: { lat: Number(geo[0]!.ss_customers.lat), lng: Number(geo[0]!.ss_customers.lng) },
           disableDefaultUI: true,
           zoomControl: true,
         });

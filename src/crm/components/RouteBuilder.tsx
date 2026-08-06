@@ -42,6 +42,7 @@ export default function RouteBuilder({ techs, onBuilt }: { techs: Tech[]; onBuil
     const rows = (data ?? []) as Cust[];
     setCustomers(rows);
     setPicked(Object.fromEntries(rows.map((r) => [r.id, true])));
+    return undefined;
   };
 
   const openPanel = async () => {
@@ -76,8 +77,10 @@ export default function RouteBuilder({ techs, onBuilt }: { techs: Tech[]; onBuil
       toast.success(`${rows.length} stops added to ${new Date(`${date}T12:00:00`).toLocaleDateString()}`);
       setOpen(false);
       onBuilt();
+      return undefined;
     } catch (err: any) {
       toast.error(err?.message ?? "Could not build the route");
+      return undefined;
     } finally {
       setSaving(false);
     }

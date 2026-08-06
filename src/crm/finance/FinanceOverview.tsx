@@ -149,7 +149,7 @@ export default function FinanceOverview({ data }: { data: FinanceSlice }) {
                     <div
                       className="h-full rounded-full"
                       style={{
-                        width: `${Math.round((aging[b] / Math.max(...Object.values(aging))) * 100)}%`,
+                        width: `${Math.round((aging[b]! / Math.max(...Object.values(aging))) * 100)}%`,
                         background: b === "90+" ? "hsl(var(--ss-burgundy))" : "hsl(var(--ss-gold))",
                       }}
                     />
@@ -174,7 +174,7 @@ export default function FinanceOverview({ data }: { data: FinanceSlice }) {
                 <div
                   className="h-full rounded-full"
                   style={{
-                    width: `${Math.round((amt / byCategory[0][1]) * 100)}%`,
+                    width: `${Math.round((amt / byCategory[0]![1]) * 100)}%`,
                     background: "hsl(var(--ss-burgundy))",
                   }}
                 />

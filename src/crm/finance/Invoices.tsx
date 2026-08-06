@@ -181,8 +181,10 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
       setCustomerId("");
       setDueDate("");
       await reload();
+      return undefined;
     } catch (err: any) {
       toast.error(err?.message ?? "Could not create the invoice");
+      return undefined;
     } finally {
       setBusy(false);
     }
@@ -230,8 +232,10 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
         description: "Receipt emailed to the customer.",
       });
       await reload();
+      return undefined;
     } catch (err: any) {
       toast.error(err?.message ?? "Could not record the payment");
+      return undefined;
     }
   };
 

@@ -64,7 +64,8 @@ export default function CustomersPage() {
     const text = await file.text();
     const lines = text.trim().split(/\r?\n/).slice(1);
     const payload = lines.map((line) => {
-      const [full_name, address, city, phone, email] = line.split(",").map((s) => s?.trim());
+      const parts = line.split(",").map((s) => (s ?? "").trim());
+      const full_name = parts[0] ?? "", address = parts[1] ?? "", city = parts[2] ?? "", phone = parts[3] ?? "", email = parts[4] ?? "";
       return { full_name, address, city, phone, email, status: "active" as const };
     }).filter((r) => r.full_name);
     if (!payload.length) { toast.error("No rows found"); return; }

@@ -174,7 +174,7 @@ export default function PayPerPool() {
 
   /* --------------------------------------------------------------- actions */
   async function savePoolRate(poolId: string, patch: Partial<PoolRate>) {
-    const { error } = await supabase.from("ss_customers").update(patch).eq("id", poolId);
+    const { error } = await supabase.from("ss_customers").update(patch as never).eq("id", poolId);
     if (error) { toast.error(error.message); return; }
     void reloadPools();
     void reloadVisits();

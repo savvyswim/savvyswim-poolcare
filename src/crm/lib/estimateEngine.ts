@@ -177,7 +177,7 @@ export const FREQUENCIES: { id: Frequency; label: string; perMonth: number; days
 ];
 
 export const findFrequency = (id: Frequency) =>
-  FREQUENCIES.find((f) => f.id === id) ?? FREQUENCIES[1];
+  FREQUENCIES.find((f) => f.id === id) ?? FREQUENCIES[1]!;
 
 export type Recurrence = {
   startDate: string;

@@ -22,7 +22,7 @@ export default function Settings() {
   async function save(key: string) {
     let parsed: unknown;
     try {
-      parsed = JSON.parse(draft[key]);
+      parsed = JSON.parse(draft[key] ?? "");
     } catch {
       { toast.error("Invalid JSON"); return; }
     }

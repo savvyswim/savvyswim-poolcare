@@ -80,7 +80,7 @@ export default function QcReview() {
   );
 
   useEffect(() => {
-    if (!techId && techs.length) setTechId(techs[0].id);
+    if (!techId && techs.length) setTechId(techs[0]!.id);
   }, [techs, techId]);
 
   const range = useMemo(() => weekRange(week), [week]);

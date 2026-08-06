@@ -33,8 +33,10 @@ export default function Accounts({ data }: { data: FinanceSlice }) {
       setName("");
       setAdding(false);
       await reload();
+      return undefined;
     } catch (err: any) {
       toast.error(err?.message ?? "Could not add the account");
+      return undefined;
     } finally {
       setBusy(false);
     }

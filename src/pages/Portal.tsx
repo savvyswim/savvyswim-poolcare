@@ -210,7 +210,7 @@ export default function Portal() {
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
       p_date: resched.date,
-      p_note: resched.note || undefined,
+      ...(resched.note ? { p_note: resched.note } : {}),
     });
     setSaving(false);
     if (error) {

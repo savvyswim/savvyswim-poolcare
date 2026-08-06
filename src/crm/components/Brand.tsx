@@ -38,7 +38,7 @@ export function Chip({
   tone?: keyof typeof CHIP_TONES;
   children: React.ReactNode;
 }) {
-  const t = CHIP_TONES[tone] ?? CHIP_TONES.ink;
+  const t = CHIP_TONES[tone] ?? CHIP_TONES["ink"]!;
   return (
     <span className="ss-chip" style={{ background: t.bg, color: t.fg, borderColor: t.bd }}>
       {children}

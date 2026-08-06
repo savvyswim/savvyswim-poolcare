@@ -59,7 +59,7 @@ export function useGeofence({ enabled, stops, radiusFeet, dwellMinutes, onArrive
           dwellStart.current[stop.id] ??= now;
           if (
             !dwelled.current.has(stop.id) &&
-            now - dwellStart.current[stop.id] >= dwellMinutes * 60_000
+            now - dwellStart.current[stop.id]! >= dwellMinutes * 60_000
           ) {
             dwelled.current.add(stop.id);
             onDwell(stop);

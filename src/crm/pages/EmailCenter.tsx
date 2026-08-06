@@ -38,9 +38,9 @@ const TEMPLATES = [
 
 
 export default function EmailCenter() {
-  const [template, setTemplate] = useState(TEMPLATES[0]);
-  const [subject, setSubject] = useState(TEMPLATES[0].title);
-  const [body, setBody] = useState(TEMPLATES[0].body);
+  const [template, setTemplate] = useState(TEMPLATES[0]!);
+  const [subject, setSubject] = useState(TEMPLATES[0]!.title);
+  const [body, setBody] = useState(TEMPLATES[0]!.body);
   const [audience, setAudience] = useState<"all" | "routed" | "leads">("all");
   const [sending, setSending] = useState(false);
 

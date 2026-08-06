@@ -45,16 +45,11 @@ export default function WaterLab() {
   };
 
   const gallons = num("gallons") ?? 0;
-  const readings: Readings = {
-    fc: num("fc"),
-    ph: num("ph"),
-    ta: num("ta"),
-    ch: num("ch"),
-    cyc: num("cyc"),
-    salt: num("salt"),
-    psi: num("psi"),
-    temp: num("temp"),
-  };
+  const readings: Readings = {};
+  for (const k of ["fc", "ph", "ta", "ch", "cyc", "salt", "psi", "temp"] as const) {
+    const v = num(k);
+    if (v !== undefined) readings[k] = v;
+  }
 
   const result = useMemo(() => evaluate(readings, gallons), [JSON.stringify(readings), gallons]);
   const saltPool = (num("salt") ?? 0) > 0;
@@ -160,7 +155,7 @@ export default function WaterLab() {
           {/* Per-parameter readout */}
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
             {result.metrics.map((m) => {
-              const s = STATUS_STYLE[m.status];
+              const s = STATUS_STYLE[m.status] ?? STATUS_STYLE["unknown"]!;
               return (
                 <div
                   key={m.key}
@@ -188,8 +183,8 @@ export default function WaterLab() {
                   className="ss-card p-3"
                   style={
                     a.status === "good"
-                      ? { background: STATUS_STYLE.good.bg, borderColor: STATUS_STYLE.good.border }
-                      : { background: STATUS_STYLE.high.bg, borderColor: STATUS_STYLE.high.border }
+                      ? { background: STATUS_STYLE["good"]!.bg, borderColor: STATUS_STYLE["good"]!.border }
+                      : { background: STATUS_STYLE["high"]!.bg, borderColor: STATUS_STYLE["high"]!.border }
                   }
                 >
                   <div className="text-[0.8rem] font-semibold">{i === 0 ? "Phosphates" : "Total dissolved solids"}</div>
