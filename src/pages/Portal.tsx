@@ -1,6 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Droplets, FileText, LogOut, MapPin, Receipt, Waves } from "lucide-react";
+import {
+  CalendarClock,
+  CloudRain,
+  Download,
+  Droplets,
+  FileText,
+  Lock,
+  LogOut,
+  MapPin,
+  Receipt,
+  Share2,
+  Unlock,
+  Waves,
+} from "lucide-react";
+import { toast } from "sonner";
 import {
   CartesianGrid,
   Line,
@@ -15,6 +29,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
+import { buildWaterReportPdf } from "@/lib/waterReportPdf";
+
 
 type Pool = {
   id: string;
@@ -42,7 +58,10 @@ type Visit = {
   notes: string | null;
   photos: VisitPhoto[] | null;
   after_photo_url: string | null;
+  is_locked: boolean | null;
+  rain_hold: boolean | null;
 };
+
 
 type Invoice = {
   id: string;
@@ -69,6 +88,9 @@ export default function Portal() {
   const [busy, setBusy] = useState(true);
   const [days, setDays] = useState<(typeof RANGES)[number]>(90);
   const [metric, setMetric] = useState<MetricKey>("fc");
+  const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
+  const [saving, setSaving] = useState(false);
+
 
   useEffect(() => {
     if (!loading && !user) navigate("/auth?next=/portal", { replace: true });
@@ -92,8 +114,9 @@ export default function Portal() {
           supabase
             .from("ss_visits")
             .select(
-              "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url",
+              "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url,is_locked,rain_hold",
             )
+
             .in("customer_id", ids)
             .gte("scheduled_date", since)
             .order("scheduled_date", { ascending: false }),
@@ -151,6 +174,131 @@ export default function Portal() {
       .sort((a, b) => a.ts - b.ts);
   }, [poolVisits, days, metric]);
 
+  // ---- Visit scheduling / holds -------------------------------------------
+  async function refreshVisits() {
+    if (!pools.length) return;
+    const since = new Date(Date.now() - 400 * 86400000).toISOString().slice(0, 10);
+    const { data } = await supabase
+      .from("ss_visits")
+      .select(
+        "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url,is_locked,rain_hold",
+      )
+      .in(
+        "customer_id",
+        pools.map((p) => p.id),
+      )
+      .gte("scheduled_date", since)
+      .order("scheduled_date", { ascending: false });
+    setVisits((data as unknown as Visit[]) ?? []);
+  }
+
+  function openReschedule(p: Pool, current: string | null) {
+    setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
+  }
+
+  async function submitReschedule() {
+    if (!resched) return;
+    setSaving(true);
+    const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
+      p_customer_id: resched.pool.id,
+      p_date: resched.date,
+      p_note: resched.note || null,
+    });
+    setSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const info = (data ?? {}) as Record<string, unknown>;
+    const when = new Date(`${resched.date}T12:00:00`).toLocaleDateString();
+    setResched(null);
+    await refreshVisits();
+    toast.success(`Visit set for ${when} — confirmation sent to the office.`);
+
+    supabase.functions
+      .invoke("notify-office-request", {
+        body: {
+          requestType: "Portal reschedule request",
+          name: String(info.customer_name ?? "Customer"),
+          email: String(info.email ?? user?.email ?? "no-reply@savvyswim.com"),
+          phone: info.phone ? String(info.phone) : undefined,
+          address: info.address ? String(info.address) : undefined,
+          service: `Weekly pool service — ${String(info.service_level ?? "service")}`,
+          preferredDate: when,
+          notes: resched.note || "Rescheduled from the customer portal.",
+          sourceUrl: window.location.href,
+        },
+      })
+      .catch(() => undefined);
+  }
+
+  async function toggleFlag(p: Pool, flag: "lock" | "rain", value: boolean) {
+    const { error } = await supabase.rpc("ss_set_visit_flag", {
+      p_customer_id: p.id,
+      p_flag: flag,
+      p_value: value,
+    });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    await refreshVisits();
+    toast.success(
+      flag === "lock"
+        ? value
+          ? "Visit locked — the date won't change."
+          : "Visit unlocked."
+        : value
+          ? "Rain day flagged — we'll reschedule and confirm."
+          : "Rain day cleared.",
+    );
+  }
+
+  // ---- Branded PDF report --------------------------------------------------
+  function reportPdf(p: Pool, visit: Visit) {
+    return buildWaterReportPdf({
+      address: p.address ?? p.full_name,
+      city: p.city,
+      customerName: p.full_name,
+      servicePlan: p.service_level,
+      gallons: p.gallons,
+      visitDate: visit.scheduled_date,
+      readings: (visit.readings ?? {}) as Readings,
+      notes: visit.notes,
+    });
+  }
+
+  function downloadReport(p: Pool, visit: Visit) {
+    const { blob, filename } = reportPdf(p, visit);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  async function shareReport(p: Pool, visit: Visit) {
+    const { blob, filename } = reportPdf(p, visit);
+    const file = new File([blob], filename, { type: "application/pdf" });
+    const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+    if (nav.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Savvy Swim water report",
+          text: `Water chemistry report for ${p.address ?? p.full_name}`,
+        });
+        return;
+      } catch {
+        /* user cancelled */
+      }
+    }
+    downloadReport(p, visit);
+    toast.success("Report downloaded — attach it to share.");
+  }
+
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="border-b border-hairline bg-background">
@@ -201,33 +349,116 @@ export default function Portal() {
                 const last = visits.find(
                   (v) => v.customer_id === p.id && v.status === "completed" && v.readings,
                 );
+                const upcoming = [...visits]
+                  .reverse()
+                  .find((v) => v.customer_id === p.id && v.status !== "completed");
                 const step = nextStepFor(last?.readings ?? null, p.gallons);
                 const isActive = p.id === activeId;
                 return (
-                  <button
+                  <div
                     key={p.id}
-                    type="button"
-                    onClick={() => setActiveId(p.id)}
-                    aria-pressed={isActive}
-                    className={`border p-5 text-left transition-colors ${
+                    className={`border transition-colors ${
                       isActive ? "border-accent bg-accent/5" : "border-hairline hover:border-primary/40"
                     }`}
                   >
-                    <p className="flex items-center gap-1.5 font-tech text-[10px] uppercase tracking-widest text-primary/50">
-                      <MapPin className="h-3 w-3" aria-hidden="true" />
-                      {p.city ?? "Pool"}
-                    </p>
-                    <p className="mt-2 font-display text-lg uppercase leading-tight">
-                      {p.address ?? p.full_name}
-                    </p>
-                    <p className="mt-2 font-tech text-xs text-primary/60">
-                      Last report{" "}
-                      {last ? new Date(last.scheduled_date).toLocaleDateString() : "—"}
-                    </p>
-                    <p className="mt-1 font-tech text-xs text-accent">{step.headline}</p>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveId(p.id)}
+                      aria-pressed={isActive}
+                      className="block w-full p-5 text-left"
+                    >
+                      <p className="flex items-center gap-1.5 font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                        <MapPin className="h-3 w-3" aria-hidden="true" />
+                        {p.city ?? "Pool"}
+                      </p>
+                      <p className="mt-2 font-display text-lg uppercase leading-tight">
+                        {p.address ?? p.full_name}
+                      </p>
+                      <p className="mt-2 font-tech text-xs text-primary/60">
+                        Last report{" "}
+                        {last ? new Date(last.scheduled_date).toLocaleDateString() : "—"}
+                      </p>
+                      <p className="mt-1 font-tech text-xs text-accent">{step.headline}</p>
+                    </button>
+                    <div className="border-t border-hairline px-5 py-3">
+                      <p className="font-tech text-[11px] text-primary/55">
+                        {p.route_day ? `${p.route_day}s, weekly` : "Weekly service"} ·{" "}
+                        {upcoming
+                          ? `next ${new Date(upcoming.scheduled_date).toLocaleDateString()}`
+                          : "next visit scheduling"}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => openReschedule(p, upcoming?.scheduled_date ?? null)}
+                          disabled={!!upcoming?.is_locked}
+                          className="inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-45"
+                        >
+                          <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                          {upcoming ? "Reschedule visit" : "Schedule visit"}
+                        </button>
+                        {last && (
+                          <button
+                            type="button"
+                            onClick={() => downloadReport(p, last)}
+                            className="inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <Download className="h-3.5 w-3.5" aria-hidden="true" /> Report PDF
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Holds */}
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          disabled={!upcoming}
+                          onClick={() => toggleFlag(p, "lock", !upcoming?.is_locked)}
+                          aria-pressed={!!upcoming?.is_locked}
+                          className={`flex items-center gap-2 border px-3 py-2 text-left font-tech text-[10px] uppercase tracking-widest disabled:opacity-40 ${
+                            upcoming?.is_locked
+                              ? "border-accent bg-accent/10 text-accent"
+                              : "border-hairline text-primary/60 hover:border-primary/40"
+                          }`}
+                        >
+                          {upcoming?.is_locked ? (
+                            <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          ) : (
+                            <Unlock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          )}
+                          {upcoming?.is_locked ? "Locked" : "Lock date"}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={!upcoming}
+                          onClick={() => toggleFlag(p, "rain", !upcoming?.rain_hold)}
+                          aria-pressed={!!upcoming?.rain_hold}
+                          className={`flex items-center gap-2 border px-3 py-2 text-left font-tech text-[10px] uppercase tracking-widest disabled:opacity-40 ${
+                            upcoming?.rain_hold
+                              ? "border-accent bg-accent/10 text-accent"
+                              : "border-hairline text-primary/60 hover:border-primary/40"
+                          }`}
+                        >
+                          <CloudRain className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                          {upcoming?.rain_hold ? "Rain day" : "Rain day?"}
+                        </button>
+                      </div>
+                      {upcoming?.is_locked && (
+                        <p className="mt-2 font-tech text-[10px] uppercase tracking-widest text-primary/45">
+                          Locked — unlock to move this visit
+                        </p>
+                      )}
+                      {upcoming?.rain_hold && (
+                        <p className="mt-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                          Can&rsquo;t be performed — office notified
+                        </p>
+                      )}
+                    </div>
+
+                  </div>
                 );
               })}
+
             </section>
 
             {pool && (
@@ -281,7 +512,26 @@ export default function Portal() {
                       </>
                     );
                   })()}
+                  {lastReport && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => downloadReport(pool, lastReport)}
+                        className="inline-flex items-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                      >
+                        <Download className="h-3.5 w-3.5" aria-hidden="true" /> Download PDF report
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => shareReport(pool, lastReport)}
+                        className="inline-flex items-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                      >
+                        <Share2 className="h-3.5 w-3.5" aria-hidden="true" /> Share
+                      </button>
+                    </div>
+                  )}
                 </section>
+
 
                 {/* Reading history */}
                 <section className="mt-12">
@@ -391,10 +641,31 @@ export default function Portal() {
                             <p className="font-tech text-sm font-semibold">
                               {new Date(v.scheduled_date).toLocaleDateString()}
                             </p>
-                            <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
-                              {v.status}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
+                                {v.status}
+                              </span>
+                              {v.status === "completed" && v.readings && (
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={() => downloadReport(pool, v)}
+                                    className="inline-flex items-center gap-1.5 border border-primary/20 px-2.5 py-1.5 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" aria-hidden="true" /> PDF
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => shareReport(pool, v)}
+                                    className="inline-flex items-center gap-1.5 border border-primary/20 px-2.5 py-1.5 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                                  >
+                                    <Share2 className="h-3 w-3" aria-hidden="true" /> Share
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           </div>
+
                           {v.readings && Object.keys(v.readings).length > 0 && (
                             <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-tech text-xs text-primary/70">
                               {Object.entries(v.readings).map(([k, val]) => (
@@ -480,9 +751,76 @@ export default function Portal() {
           </>
         )}
       </main>
+
+      {resched && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Schedule visit"
+          onClick={() => !saving && setResched(null)}
+        >
+          <div
+            className="w-full max-w-md border border-hairline bg-background p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+              {resched.pool.address ?? resched.pool.full_name}
+            </p>
+            <h2 className="mt-1 font-display text-2xl uppercase leading-tight">Set next visit</h2>
+            <p className="mt-2 font-tech text-xs text-primary/60">
+              Service runs weekly on {resched.pool.route_day ?? "your route day"}. Pick a new date only if you
+              need this week moved — we&rsquo;ll confirm with the office.
+            </p>
+
+            <label className="mt-5 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
+              New date
+              <input
+                type="date"
+                value={resched.date}
+                min={new Date().toISOString().slice(0, 10)}
+                onChange={(e) => setResched({ ...resched, date: e.target.value })}
+                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
+              />
+            </label>
+
+            <label className="mt-4 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
+              Note for the tech (optional)
+              <textarea
+                rows={3}
+                value={resched.note}
+                maxLength={500}
+                onChange={(e) => setResched({ ...resched, note: e.target.value })}
+                placeholder="Gate code changed, dog in the yard, party Saturday…"
+                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
+              />
+            </label>
+
+            <div className="mt-6 flex gap-2">
+              <button
+                type="button"
+                disabled={saving}
+                onClick={submitReschedule}
+                className="btn-quote flex-1 rounded-md px-4 py-3 text-[11px] font-bold uppercase tracking-wide disabled:opacity-60"
+              >
+                {saving ? "Sending…" : "Confirm visit"}
+              </button>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => setResched(null)}
+                className="border border-primary/25 px-4 py-3 font-tech text-[11px] uppercase tracking-wide text-primary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 function nextStepFor(readings: Readings | null, gallons: number) {
   if (!readings || Object.keys(readings).length === 0) {
