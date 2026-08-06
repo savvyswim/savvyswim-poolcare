@@ -80,6 +80,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/finance": "finance",
   "/admin/crm/revenue-growth": "finance",
   "/admin/crm/pricing-matrix": "finance",
+  "/admin/crm/break-even": "finance",
   "/admin/crm/projects": "projects",
   "/admin/crm/trucks": "trucks",
   "/admin/crm/inventory": "inventory",
