@@ -1,0 +1,23 @@
+{
+  "functions": [
+    { "name": "admin-invite-customer", "classification": "internal-only", "signal": "invoked from src/crm/pages/CustomerDetail.tsx; uses Auth admin API whose invite emails route through auth-email-hook", "outcome": "left" },
+    { "name": "admin-invite-staff", "classification": "internal-only", "signal": "invoked from src/crm/pages/Technicians.tsx; same auth-email-hook coupling", "outcome": "left" },
+    { "name": "auth-email-hook", "classification": "webhook receiver", "signal": "Supabase Auth email hook (fixed URL, verifyWebhookRequest); Lovable email scaffolding", "outcome": "left" },
+    { "name": "create-checkout", "classification": "internal-only", "signal": "invoked from StripeEmbeddedCheckout.tsx; shares _shared/stripe.ts runtime with payments-webhook", "outcome": "left" },
+    { "name": "create-membership-checkout", "classification": "internal-only", "signal": "invoked from MembershipDialog.tsx; shares Stripe runtime with payments-webhook", "outcome": "left" },
+    { "name": "create-subscription-checkout", "classification": "internal-only", "signal": "invoked from SubscribeDialog.tsx and Portal.tsx; shares Stripe runtime with payments-webhook", "outcome": "left" },
+    { "name": "notify-office-request", "classification": "internal-only", "signal": "invoked from BookingDialog/RequestInspection; depends on integration-managed _shared transactional-email templates (Deno)", "outcome": "left" },
+    { "name": "payments-webhook", "classification": "webhook receiver", "signal": "verifies Stripe signature (fixed URL configured in Stripe)", "outcome": "left" },
+    { "name": "preview-transactional-email", "classification": "MCP server", "signal": "Lovable email-template preview infrastructure (integration-managed)", "outcome": "left" },
+    { "name": "process-email-queue", "classification": "cron target", "signal": "driven by email_queue_dispatch/pg_net queue infra in the database", "outcome": "left" },
+    { "name": "project-stage-alerts", "classification": "cron target", "signal": "pg_cron job daily-project-stage-alerts hits its URL daily at 12:00 UTC", "outcome": "left" },
+    { "name": "security-audit", "classification": "cron target", "signal": "pg_cron job service-photo-permission-audit hits its URL daily; also invoked from Security.tsx", "outcome": "left" },
+    { "name": "send-booking-confirmation", "classification": "internal-only", "signal": "invoked from BookingDialog.tsx; depends on integration-managed _shared email templates (Deno)", "outcome": "left" },
+    { "name": "send-finance-email", "classification": "internal-only", "signal": "invoked from finance/Invoices.tsx; depends on integration-managed _shared email templates (Deno)", "outcome": "left" },
+    { "name": "send-inspection-sms", "classification": "internal-only", "signal": "invoked from RequestInspection.tsx; Twilio secrets provisioned in edge runtime", "outcome": "left" },
+    { "name": "send-quote-sms", "classification": "internal-only", "signal": "invoked from Products.tsx and Reviews.tsx; Twilio secrets provisioned in edge runtime", "outcome": "left" },
+    { "name": "send-service-report", "classification": "internal-only", "signal": "invoked from VisitSheet.tsx; depends on integration-managed _shared email templates (Deno)", "outcome": "left" },
+    { "name": "send-visit-reminders", "classification": "cron target", "signal": "pg_cron job send-visit-reminders hits its URL daily at 14:00 UTC", "outcome": "left" },
+    { "name": "store-order", "classification": "internal-only", "signal": "invoked from CartDrawer.tsx; calls place_store_order + shares Stripe/email infra", "outcome": "left" }
+  ]
+}
