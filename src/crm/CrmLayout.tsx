@@ -167,11 +167,12 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         style={{ borderColor: "hsl(var(--ss-sand))", background: "hsl(var(--ss-white))" }}
       >
         <SavvyLogo size="md" />
-        <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
-          {items.map((i) => (
-            <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
+        <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+          {groups.map((g) => (
+            <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
           ))}
         </nav>
+
         <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
       </aside>
 
@@ -189,11 +190,12 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
                 <X size={18} />
               </button>
             </div>
-            <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
-              {items.map((i) => (
-                <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
+            <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+              {groups.map((g) => (
+                <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
               ))}
             </nav>
+
             <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
           </div>
         </div>
