@@ -122,6 +122,7 @@ export default function Products() {
       spa,
       undercut: String(undercut),
     });
+    if (planId) p.set("plan_id", planId);
     if (chemOnly) p.set("chemOnly", "1");
     if (chemIncluded) p.set("chemIncl", "1");
     if (saltCell) p.set("salt", "1");
@@ -136,7 +137,9 @@ export default function Products() {
 
   const summaryText = [
     `Savvy Swim quote — ${city}`,
-    `${quote.size.label} pool · ${money(quote.monthly)}/mo`,
+    plan ? `${plan.name} · ${money(quote.monthly)}/mo` : `${money(quote.monthly)}/mo`,
+    `${quote.size.label} pool`,
+    plan ? `Includes: ${plan.scope.slice(0, 3).join(" · ")}` : null,
     quote.cleanupLabel ? `One-time cleanup ${quote.cleanupLabel}` : null,
     currentMonthly && vsCurrent > 0
       ? `Saves ${money(vsCurrent)}/mo vs ${providerName.trim() || "their current provider"} — ${money(vsCurrentYear)} over 12 months`
@@ -144,6 +147,7 @@ export default function Products() {
   ]
     .filter(Boolean)
     .join("\n");
+
 
   const sendSms = async () => {
     if (!smsPhone.trim()) {
