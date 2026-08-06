@@ -3,10 +3,9 @@
  *
  * Runs once at server module init (imported from src/start.ts) and verifies
  * that the framework/middleware dependencies the app relies on actually exist
- * in the deployed build. Missing exports (e.g. `createCsrfMiddleware` in older
- * framework builds) used to crash SSR at module init and take down every page;
- * now they are recorded as degraded checks instead, and surfaced through
- * /api/public/health so a deploy smoke test can catch it.
+ * in the deployed build. Missing framework exports used to crash SSR at module
+ * init and take down every page; required dependencies are now recorded and
+ * surfaced through /api/public/health so a deploy smoke test can catch them.
  */
 
 export type HealthCheck = {
@@ -78,7 +77,6 @@ function runChecks(deps: DependencySpec[]): StartupHealth {
 export function verifyStartupHealth(candidates: {
   createStart: unknown;
   createMiddleware: unknown;
-  createCsrfMiddleware: unknown;
   attachSupabaseAuth: unknown;
   renderErrorPage: unknown;
 }): StartupHealth {
@@ -92,12 +90,6 @@ export function verifyStartupHealth(candidates: {
       name: "createMiddleware",
       required: true,
       probe: () => typeof candidates.createMiddleware === "function",
-    },
-    {
-      name: "createCsrfMiddleware",
-      required: false,
-      probe: () => typeof candidates.createCsrfMiddleware === "function",
-      optionalNote: "not exported by this framework build — CSRF middleware skipped",
     },
     {
       name: "attachSupabaseAuth",
