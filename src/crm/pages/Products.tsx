@@ -163,7 +163,7 @@ export default function Products() {
   return (
     <div className="space-y-4">
       <SectionTitle
-        title="Products & services"
+        title="Savvy Estimate"
         sub="Rate card, quote calculator and pricing engine — sized by pool, benchmarked against the regional average"
       />
 
