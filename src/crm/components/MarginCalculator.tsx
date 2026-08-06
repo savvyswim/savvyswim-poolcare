@@ -111,10 +111,38 @@ export default function MarginCalculator({ compact = false }: { compact?: boolea
       const ls = sellFromMargin(num(l.cost), num(l.margin)) * Math.max(1, num(l.qty) || 1);
       return { ...l, lineCost: lc, lineSell: ls, profit: ls - lc };
     });
-    const totalCost = rows.reduce((a, r) => a + r.lineCost, 0);
-    const totalSell = rows.reduce((a, r) => a + r.lineSell, 0);
-    return { rows, totalCost, totalSell, profit: totalSell - totalCost, margin: marginPct(totalCost, totalSell) };
-  }, [lines]);
+    const partsCost = rows.reduce((a, r) => a + r.lineCost, 0);
+    const partsSell = rows.reduce((a, r) => a + r.lineSell, 0);
+
+    // Labor is billed by the hour: your loaded cost vs. what the customer pays.
+    const hrs = num(laborHours);
+    const laborCost = hrs * num(laborCostRate);
+    const laborSell = hrs * num(laborBillRate);
+
+    // Service / trip fees are usually near-pure margin but can carry a cost.
+    const feeCost = num(feeCostAmt);
+    const feeSell = num(feeChargeAmt);
+
+    const totalCost = partsCost + laborCost + feeCost;
+    const preTaxTotal = partsSell + laborSell + feeSell;
+
+    // Sales tax is a pass-through — it never counts toward margin.
+    const taxBase = taxLabor ? preTaxTotal : partsSell;
+    const tax = taxBase * (num(taxRate) / 100);
+    const customerTotal = preTaxTotal + tax;
+
+    return {
+      rows,
+      partsCost, partsSell,
+      laborCost, laborSell, laborMargin: marginPct(laborCost, laborSell),
+      feeCost, feeSell,
+      totalCost,
+      totalSell: preTaxTotal,
+      tax, taxBase, customerTotal,
+      profit: preTaxTotal - totalCost,
+      margin: marginPct(totalCost, preTaxTotal),
+    };
+  }, [lines, laborHours, laborCostRate, laborBillRate, feeCostAmt, feeChargeAmt, taxRate, taxLabor]);
 
   return (
     <div className="space-y-4">
