@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +6,67 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { SERVICE_PLANS, findServicePlan } from "@/crm/lib/pricingEngine";
+
+type LeadEvent = {
+  id: string; event_type: string; label: string; detail: string | null; created_at: string;
+};
+
+const EVENT_TONE: Record<string, string> = {
+  created: "var(--ss-sand)",
+  plan_matched: "var(--ss-gold)",
+  plan_quoted: "var(--ss-aqua)",
+  plan_status: "var(--ss-aqua)",
+  stage: "var(--ss-burgundy)",
+};
+
+function LeadTimeline({ leadId }: { leadId: string }) {
+  const [events, setEvents] = useState<LeadEvent[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    void (async () => {
+      const { data } = await supabase
+        .from("ss_lead_events")
+        .select("id,event_type,label,detail,created_at")
+        .eq("lead_id", leadId)
+        .order("created_at", { ascending: false });
+      if (alive) setEvents((data ?? []) as LeadEvent[]);
+    })();
+    return () => { alive = false; };
+  }, [leadId]);
+
+  return (
+    <div className="mt-4 rounded-md border p-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+      <div className="ss-label mb-2">Audit timeline</div>
+      {events === null && <div className="text-[0.75rem] opacity-60">Loading…</div>}
+      {events?.length === 0 && <div className="text-[0.75rem] opacity-60">No activity recorded yet.</div>}
+      {!!events?.length && (
+        <ol className="max-h-56 space-y-2.5 overflow-y-auto pr-1">
+          {events.map((e) => (
+            <li key={e.id} className="flex gap-2.5">
+              <span
+                className="mt-[6px] h-2 w-2 shrink-0 rounded-full"
+                style={{ background: `hsl(${EVENT_TONE[e.event_type] ?? "var(--ss-sand)"})` }}
+              />
+              <div className="min-w-0">
+                <div className="text-[0.8rem] font-semibold">{e.label}</div>
+                {e.detail && (
+                  <div className="text-[0.72rem] opacity-70">
+                    {findServicePlan(e.detail)?.name ?? e.detail}
+                  </div>
+                )}
+                <div className="ss-num text-[0.68rem] opacity-55">
+                  {new Date(e.created_at).toLocaleString()}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  );
+}
+
 
 type Lead = {
   id: string; full_name: string; phone: string | null; email: string | null;
