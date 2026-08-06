@@ -94,7 +94,11 @@ export function verifyStartupHealth(candidates: {
     {
       name: "attachSupabaseAuth",
       required: true,
-      probe: () => typeof candidates.attachSupabaseAuth === "function",
+      // Middleware objects are not functions — just require a defined value.
+      probe: () =>
+        candidates.attachSupabaseAuth != null &&
+        ["function", "object"].includes(typeof candidates.attachSupabaseAuth),
+
     },
     {
       name: "renderErrorPage",
