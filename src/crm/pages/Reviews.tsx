@@ -107,7 +107,7 @@ export default function Reviews() {
       const { error: smsErr } = await supabase.functions.invoke("send-quote-sms", {
         body: {
           phone: phone.trim(),
-          message: `Hi ${firstName}, it's the Savvy Swim crew — your pool at is done and the photos from today's visit are here. ${firstName}, if we earned it, would you leave ${firstName ? "us" : "us"} a quick Google review? Takes 20 seconds:`,
+          message: `Hi ${firstName}, it's the Savvy Swim crew — your pool is done and today's photos are ready. ${firstName}, if we earned it, would you leave us a quick Google review? Takes 20 seconds:`,
           link: url,
         },
       });
