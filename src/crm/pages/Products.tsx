@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
-import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -19,7 +18,6 @@ import {
 
 
 export default function Products() {
-  useSavvyIdentity();
   const { cities, addons, margins, loading } = useRateCard();
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
