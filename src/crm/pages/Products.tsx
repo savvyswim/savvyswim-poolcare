@@ -512,6 +512,16 @@ export default function Products() {
           </div>
         </div>
       )}
+
+      <div className="ss-card p-4">
+        <div className="mb-1 text-[1rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+          Parts &amp; services margin calculator
+        </div>
+        <div className="mb-3 text-[0.82rem] opacity-70">
+          Price your pumps, chemicals, equipment &amp; services with confidence. Know your numbers. Protect your profit.
+        </div>
+        <MarginCalculator />
+      </div>
     </div>
   );
 }
