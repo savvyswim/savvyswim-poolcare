@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
+import { SERVICE_PLANS, findServicePlan } from "@/crm/lib/pricingEngine";
 
 type Lead = {
   id: string; full_name: string; phone: string | null; email: string | null;
@@ -11,6 +13,7 @@ type Lead = {
   pool_size: string | null; condition: string | null; service_type: string | null;
   cleanup_price: number | null; message: string | null; source: string | null;
   stage_changed_at: string | null; created_at: string;
+  plan_id: string | null; plan_status: string | null;
 };
 
 type Stage = "new_lead" | "contacted" | "quote_sent" | "follow_up" | "won" | "lost";
@@ -23,6 +26,14 @@ const STAGES: { key: Stage; label: string }[] = [
   { key: "won", label: "Won" },
   { key: "lost", label: "Lost" },
 ];
+
+const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "green" | "red" }> = {
+  recommended: { label: "Plan matched", tone: "gold" },
+  quoted: { label: "Plan quoted", tone: "aqua" },
+  won: { label: "Plan active", tone: "green" },
+  lost: { label: "Plan lost", tone: "red" },
+};
+
 
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
