@@ -3,7 +3,7 @@ import { AlertTriangle, Camera, Check, Lock, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
-import { doseFor, lsiVerdict, READING_FIELDS, type Readings } from "@/crm/lib/chem";
+import { doseFor, evaluate, lsiVerdict, READING_FIELDS, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { money2 } from "@/crm/lib/pricing";
 import type { Stop } from "@/crm/pages/Route";
 
@@ -42,6 +42,7 @@ export default function VisitSheet({
 
   const c = stop.ss_customers;
   const dose = useMemo(() => doseFor(readings, c.gallons), [readings, c.gallons]);
+  const report = useMemo(() => evaluate(readings, c.gallons), [readings, c.gallons]);
   const verdict = lsiVerdict(dose.lsi);
 
   useEffect(() => {
@@ -123,6 +124,42 @@ export default function VisitSheet({
       });
     }
 
+    if (c.email) {
+      void supabase.functions.invoke("send-service-report", {
+        body: {
+          visitId: stop.id,
+          email: c.email,
+          name: c.full_name?.split(" ")[0] ?? "there",
+          visitDate: new Date().toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          }),
+          address: [c.address, c.city].filter(Boolean).join(", ") || undefined,
+          minutes,
+          summary: report.summary,
+          allGood: report.allGood,
+          metrics: report.metrics
+            .filter((m) => m.status !== "unknown")
+            .map((m) => ({
+              label: m.label,
+              value: m.value,
+              unit: m.unit,
+              range: m.range,
+              status: m.status,
+              purpose: m.purpose,
+            })),
+          treatments: report.treatments.map((t) => ({
+            chemical: t.chemical,
+            amount: t.amount,
+            reason: t.reason,
+          })),
+          tasksCompleted: checklist.filter((t) => t.done).length,
+          notes: notes || undefined,
+        },
+      });
+    }
+
     void supabase.functions.invoke("send-sms", {
       body: {
         to: c.phone,
@@ -195,10 +232,26 @@ export default function VisitSheet({
           {step === 1 && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2.5">
-                {READING_FIELDS.map((f) => (
+                {READING_FIELDS.map((f) => {
+                  const st = f.key === "temp" ? "unknown" : statusFor(f.key as MetricKey, (readings as Record<string, number | undefined>)[f.key]);
+                  return (
                   <div key={f.key}>
-                    <label className="ss-label">
-                      {f.label} <span className="opacity-50">{f.target}</span>
+                    <label className="ss-label flex items-center justify-between gap-1">
+                      <span>
+                        {f.label} <span className="opacity-50">{f.target}</span>
+                      </span>
+                      {st !== "unknown" && (
+                        <span
+                          className="rounded-full px-1.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-wide"
+                          style={
+                            st === "good"
+                              ? { background: "hsl(152 55% 90%)", color: "hsl(152 60% 24%)" }
+                              : { background: "hsl(var(--ss-burgundy) / .12)", color: "hsl(var(--ss-burgundy))" }
+                          }
+                        >
+                          {st === "good" ? "OK" : st}
+                        </span>
+                      )}
                     </label>
                     <input
                       className="ss-input ss-num"
@@ -214,7 +267,8 @@ export default function VisitSheet({
                       }
                     />
                   </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="ss-hero p-3.5">
@@ -310,8 +364,51 @@ export default function VisitSheet({
                   onChange={(e) => setIssue(e.target.value)}
                 />
               </div>
+              <div className="ss-card p-3">
+                <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                  Water report
+                </div>
+                <p className="mt-1 text-[0.82rem] font-semibold">{report.summary}</p>
+                <div className="mt-2 space-y-1">
+                  {report.tested.map((m) => (
+                    <div key={m.key} className="flex items-center justify-between gap-2 text-[0.76rem]">
+                      <span className="opacity-75">
+                        {m.label} <span className="opacity-50">({m.range})</span>
+                      </span>
+                      <span
+                        className="ss-num font-semibold"
+                        style={{
+                          color:
+                            m.status === "good" ? "hsl(152 60% 28%)" : "hsl(var(--ss-burgundy))",
+                        }}
+                      >
+                        {m.value}
+                        {m.unit ? ` ${m.unit}` : ""} · {m.status === "good" ? "in range" : m.status}
+                      </span>
+                    </div>
+                  ))}
+                  {!report.tested.length && <p className="text-[0.76rem] opacity-60">No readings entered yet.</p>}
+                </div>
+                {!!report.treatments.length && (
+                  <div className="mt-3 border-t pt-2" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                    <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                      Add these chemicals
+                    </div>
+                    {report.treatments.map((t) => (
+                      <div key={t.metric} className="mt-1.5 text-[0.78rem]">
+                        <strong>
+                          {t.chemical} — {t.amount}
+                        </strong>
+                        <div className="opacity-65">{t.reason}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <div className="ss-card p-3 text-[0.78rem] opacity-75">
-                Time on site is captured automatically and sent as proof-of-service.
+                Time on site is captured automatically and this report is emailed to the customer
+                when you complete the visit.
               </div>
             </div>
           )}
