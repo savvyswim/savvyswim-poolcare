@@ -172,7 +172,8 @@ async function probeHealth(): Promise<Result> {
 
 async function main() {
   const routes = collectRoutes(readFileSync(routeTreePath, "utf8"));
-  console.log(`Smoke testing ${routes.length + 1} endpoints against ${BASE_URL}\n`);
+  const total = routes.length + CRITICAL_ADMIN_ROUTES.length + 2;
+  console.log(`Smoke testing ${total} endpoints against ${BASE_URL}\n`);
 
   const results: Result[] = [];
   const queue = [...routes];
@@ -184,6 +185,8 @@ async function main() {
       }
     }),
   );
+  for (const route of CRITICAL_ADMIN_ROUTES) results.push(await probeCritical(route));
+  results.push(await probeErrorPage());
   results.push(await probeHealth());
   results.sort((a, b) => a.route.localeCompare(b.route));
 
@@ -197,6 +200,22 @@ async function main() {
   if (failures.length) {
     console.error(`\n${failures.length} endpoint(s) failed:`);
     for (const f of failures) console.error(`  ${f.route} -> ${f.status ?? "no response"} ${f.note}`);
+
+    // Failing smoke test -> emit the rollback checklist so you know exactly
+    // which version to restore from the deployment history.
+    const checklist = buildRollbackChecklist(
+      [{ checkedAt: new Date().toISOString(), status: "failed", bootId: null, failed: failures.map((f) => f.route) }],
+      failures.map((f) => f.route),
+    );
+    const markdown = renderRollbackChecklistMarkdown(checklist);
+    console.error(`\n${markdown}\n`);
+    try {
+      mkdirSync(path.resolve(here, "../.lovable"), { recursive: true });
+      writeFileSync(path.resolve(here, "../.lovable/rollback-checklist.md"), markdown);
+      console.error("Checklist written to .lovable/rollback-checklist.md (also shown in CRM > Deploy Health).");
+    } catch {
+      /* non-fatal */
+    }
     process.exit(1);
   }
 }
