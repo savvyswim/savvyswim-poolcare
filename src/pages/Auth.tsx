@@ -63,12 +63,14 @@ export default function Auth() {
   // ---- Preview-only quick access -------------------------------------------
   // Only rendered on localhost / the Lovable preview host, never on the live
   // site, so it can't be used as a shortcut into production.
-  const host = typeof window !== "undefined" ? window.location.hostname : "";
+  const host = mounted ? window.location.hostname : "";
   const isPreview =
-    host === "localhost" ||
-    host === "127.0.0.1" ||
-    host.endsWith(".lovableproject.com") ||
-    (host.endsWith(".lovable.app") && host.startsWith("id-preview"));
+    mounted &&
+    (host === "localhost" ||
+      host === "127.0.0.1" ||
+      host.endsWith(".lovableproject.com") ||
+      (host.endsWith(".lovable.app") && host.startsWith("id-preview")));
+
   const OWNER_EMAIL = "marcus@santanariveragroup.com";
 
   const magicLink = async (target: string) => {
