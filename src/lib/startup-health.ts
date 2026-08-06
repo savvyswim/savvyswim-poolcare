@@ -19,10 +19,17 @@ export type HealthCheck = {
 export type StartupHealth = {
   status: "ok" | "degraded" | "failed";
   checkedAt: string;
+  /** Unique per server isolate — lets you tell one boot's logs from another. */
+  bootId: string;
   checks: HealthCheck[];
 };
 
 let cached: StartupHealth | undefined;
+
+const BOOT_ID =
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID().slice(0, 8)
+    : Math.random().toString(16).slice(2, 10);
 
 type DependencySpec = {
   name: string;
