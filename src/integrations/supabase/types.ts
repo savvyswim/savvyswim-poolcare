@@ -3418,6 +3418,18 @@ export type Database = {
         }[]
       }
       ss_default_upsell_pct: { Args: never; Returns: number }
+      ss_get_contract: {
+        Args: { _token: string }
+        Returns: {
+          body: string
+          recipient_name: string
+          sent_at: string
+          signed_at: string
+          signer_name: string
+          status: string
+          title: string
+        }[]
+      }
       ss_get_review_request: {
         Args: { _token: string }
         Returns: {
@@ -3486,6 +3498,15 @@ export type Database = {
       }
       ss_set_visit_flag: {
         Args: { p_customer_id: string; p_flag: string; p_value: boolean }
+        Returns: Json
+      }
+      ss_sign_contract: {
+        Args: {
+          _signature_data_url: string
+          _signer_name: string
+          _token: string
+          _user_agent?: string
+        }
         Returns: Json
       }
     }
