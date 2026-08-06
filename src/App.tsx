@@ -34,6 +34,7 @@ import ProjectDetail from "@/crm/pages/ProjectDetail";
 import Alerts from "@/crm/pages/Alerts";
 import Technicians from "@/crm/pages/Technicians";
 import Products from "@/crm/pages/Products";
+import ServicePlans from "@/crm/pages/ServicePlans";
 import Finance from "@/crm/pages/Finance";
 import Trucks from "@/crm/pages/Trucks";
 import Inventory from "@/crm/pages/Inventory";
@@ -88,6 +89,7 @@ const App = () => (
               <Route path="/admin/crm/alerts" element={<Alerts />} />
               <Route path="/admin/crm/technicians" element={<Technicians />} />
               <Route path="/admin/crm/products" element={<Products />} />
+              <Route path="/admin/crm/service-plans" element={<ServicePlans />} />
               <Route path="/admin/crm/finance" element={<Finance />} />
               <Route path="/admin/crm/trucks" element={<Trucks />} />
               <Route path="/admin/crm/inventory" element={<Inventory />} />

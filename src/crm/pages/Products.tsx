@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
-import PricingTab from "@/crm/components/PricingTab";
-import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -18,12 +16,9 @@ import {
 } from "@/crm/lib/pricingEngine";
 
 
-const TABS = ["Quote", "Pricing"] as const;
 
 export default function Products() {
-  const { isOwner } = useSavvyIdentity();
   const { cities, addons, margins, loading } = useRateCard();
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Quote");
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
   const [condition, setCondition] = useState<string>(CONDITIONS[0].id);
@@ -164,26 +159,13 @@ export default function Products() {
     <div className="space-y-4">
       <SectionTitle
         title="Savvy Estimate"
-        sub="Rate card, quote calculator and pricing engine — sized by pool, benchmarked against the regional average"
+        sub="Quote calculator — sized by pool, benchmarked against the regional average. Plan tiers and rates live in Service plans."
       />
 
-      <div className="flex flex-wrap gap-1.5">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={t === tab ? "ss-btn" : "ss-btn ss-btn-ghost"}
-          >
-            {t.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      {tab === "Pricing" ? (
-        <PricingTab isOwner={isOwner} />
-      ) : loading ? (
+      {loading ? (
         <div className="ss-card p-6 text-[0.85rem] opacity-60">Loading rate card…</div>
       ) : (
+
         <div className="grid gap-3 lg:grid-cols-2">
           <div className="ss-card p-4">
             <div className="ss-label mb-2">Quote calculator</div>

@@ -13,33 +13,48 @@ import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
 
-type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey };
+type NavGroup = "Today" | "Sales" | "Operations" | "Money" | "Marketing" | "Admin";
+type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey; group: NavGroup };
+
+const GROUP_ORDER: NavGroup[] = ["Today", "Sales", "Operations", "Money", "Marketing", "Admin"];
 
 const STAFF_NAV: NavItem[] = [
-  { to: "/admin/crm", label: "Route", icon: Map, module: "route" },
-  { to: "/admin/crm/customers", label: "Customers", icon: Users, module: "customers" },
-  { to: "/admin/crm/pipeline", label: "Pipeline", icon: KanbanSquare, module: "pipeline" },
-  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs" },
-  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts" },
-  { to: "/admin/crm/technicians", label: "Technicians", icon: ClipboardList, module: "technicians" },
-  { to: "/admin/crm/products", label: "Savvy Estimate", icon: Package, module: "products" },
-  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects" },
-  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance" },
-  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks" },
-  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory" },
-  { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email" },
-  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3, module: "reports" },
-  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect" },
-  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings" },
-  { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security" },
+  // Today
+  { to: "/admin/crm", label: "Today's Route", icon: Map, module: "route", group: "Today" },
+  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
+  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
 
-  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console" },
-  { to: "/admin/cleaning", label: "Cleaning Plans", icon: Sparkles, module: "cleaning" },
-  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store" },
-  { to: "/admin/team", label: "Team & Access", icon: Users, module: "team" },
-  { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity" },
-  { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs" },
+  // Sales
+  { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
+  { to: "/admin/crm/products", label: "Savvy Estimate", icon: Package, module: "products", group: "Sales" },
+  { to: "/admin/crm/service-plans", label: "Service Plans", icon: ClipboardList, module: "servicePlans", group: "Sales" },
+  { to: "/admin/crm/customers", label: "Customers", icon: Users, module: "customers", group: "Sales" },
+
+  // Operations
+  { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Operations" },
+  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Operations" },
+  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
+  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },
+
+  // Money
+  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Money" },
+  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store", group: "Money" },
+
+  // Marketing & website
+  { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email", group: "Marketing" },
+  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect", group: "Marketing" },
+  { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Marketing" },
+  { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs", group: "Marketing" },
+
+  // Admin
+  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3, module: "reports", group: "Admin" },
+  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console", group: "Admin" },
+  { to: "/admin/team", label: "Team & Access", icon: Users, module: "team", group: "Admin" },
+  { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
+  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
+  { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
 ];
+
 
 
 const LEVEL_LABEL: Record<string, string> = {
@@ -74,10 +89,19 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
     [id.level],
   );
 
+  const groups = useMemo(
+    () =>
+      GROUP_ORDER.map((g) => ({ group: g, items: items.filter((i) => i.group === g) })).filter(
+        (g) => g.items.length > 0,
+      ),
+    [items],
+  );
+
   const allowed = canAccessPath(id.level, loc.pathname);
 
 
   const mobilePrimary = items.slice(0, 4);
+
 
   if (authLoading || id.loading) {
     return (
@@ -143,11 +167,12 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         style={{ borderColor: "hsl(var(--ss-sand))", background: "hsl(var(--ss-white))" }}
       >
         <SavvyLogo size="md" />
-        <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
-          {items.map((i) => (
-            <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
+        <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+          {groups.map((g) => (
+            <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
           ))}
         </nav>
+
         <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
       </aside>
 
@@ -165,11 +190,12 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
                 <X size={18} />
               </button>
             </div>
-            <nav className="mt-6 flex-1 space-y-0.5 overflow-y-auto">
-              {items.map((i) => (
-                <NavRow key={i.to} item={i} active={loc.pathname === i.to || (i.to !== "/admin/crm" && loc.pathname.startsWith(`${i.to}/`))} />
+            <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+              {groups.map((g) => (
+                <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
               ))}
             </nav>
+
             <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
           </div>
         </div>
@@ -219,6 +245,32 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
     </div>
   );
 }
+
+function NavGroupBlock({
+  group,
+  items,
+  pathname,
+}: {
+  group: NavGroup;
+  items: NavItem[];
+  pathname: string;
+}) {
+  return (
+    <div className="space-y-0.5">
+      <div className="ss-tag px-2.5" style={{ fontSize: "0.5rem", opacity: 0.5 }}>
+        {group}
+      </div>
+      {items.map((i) => (
+        <NavRow
+          key={i.to}
+          item={i}
+          active={pathname === i.to || (i.to !== "/admin/crm" && pathname.startsWith(`${i.to}/`))}
+        />
+      ))}
+    </div>
+  );
+}
+
 
 function NavRow({ item, active }: { item: NavItem; active: boolean }) {
   const Icon = item.icon;
