@@ -814,6 +814,87 @@ export type Database = {
         }
         Relationships: []
       }
+      security_check_runs: {
+        Row: {
+          check_key: string
+          created_at: string
+          details: Json
+          id: string
+          passed: boolean
+          summary: string
+          triggered_by: string
+        }
+        Insert: {
+          check_key: string
+          created_at?: string
+          details?: Json
+          id?: string
+          passed: boolean
+          summary: string
+          triggered_by?: string
+        }
+        Update: {
+          check_key?: string
+          created_at?: string
+          details?: Json
+          id?: string
+          passed?: boolean
+          summary?: string
+          triggered_by?: string
+        }
+        Relationships: []
+      }
+      security_findings: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          approved_by_email: string | null
+          created_at: string
+          description: string | null
+          id: string
+          internal_id: string
+          remediation: string | null
+          resolved_at: string | null
+          scanner: string
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          approved_by_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          internal_id: string
+          remediation?: string | null
+          resolved_at?: string | null
+          scanner?: string
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          approved_by_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          internal_id?: string
+          remediation?: string | null
+          resolved_at?: string | null
+          scanner?: string
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_pricing: {
         Row: {
           created_at: string
@@ -2957,6 +3038,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      audit_service_photo_rules: { Args: never; Returns: Json }
       check_promo_code: {
         Args: { p_code: string; p_subtotal: number }
         Returns: Json
