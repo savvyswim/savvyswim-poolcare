@@ -34,7 +34,7 @@ export default function Reviews() {
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const { rows, reload } = useTable<ReviewRow>("review-requests", async () => {
+  const { rows, refetch } = useTable<ReviewRow>("review-requests", async () => {
     const { data } = await supabase
       .from("ss_review_requests")
       .select("*")
@@ -118,14 +118,14 @@ export default function Reviews() {
     setPhone("");
     setPhotos([]);
     setBusy(false);
-    void reload();
+    void refetch();
   }
 
   async function remove(id: string) {
     const { error } = await supabase.from("ss_review_requests").delete().eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Removed");
-    void reload();
+    void refetch();
   }
 
   return (
