@@ -48,6 +48,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // Stops iOS/Safari from auto-linking phone numbers, which breaks hydration.
       { name: "format-detection", content: "telephone=no" },
       { name: "theme-color", content: "#06141c" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Savvy Swim" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "application-name", content: "Savvy Swim" },
       { name: "google-site-verification", content: "gG7n9rWUtSYPZ63aEOvuErjGt8T79b1dLm8JuZdzk0s" },
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESCRIPTION },
@@ -65,6 +70,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png?v=3", type: "image/png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=3" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
