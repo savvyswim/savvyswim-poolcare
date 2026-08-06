@@ -86,7 +86,7 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
         ["Customer", "Lifetime paid"],
         ...byCustomer.map(([id, amt]) => [nameOf(id), amt.toFixed(2)]),
       ]);
-    } else {
+    } else if (report === "tax") {
       downloadCsv(`savvy-tax-summary-${tax.year}.csv`, [
         ["Line", "Amount"],
         ["Gross income", tax.income.toFixed(2)],
