@@ -89,10 +89,19 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
     [id.level],
   );
 
+  const groups = useMemo(
+    () =>
+      GROUP_ORDER.map((g) => ({ group: g, items: items.filter((i) => i.group === g) })).filter(
+        (g) => g.items.length > 0,
+      ),
+    [items],
+  );
+
   const allowed = canAccessPath(id.level, loc.pathname);
 
 
   const mobilePrimary = items.slice(0, 4);
+
 
   if (authLoading || id.loading) {
     return (
