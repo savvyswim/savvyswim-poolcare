@@ -1,0 +1,265 @@
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "@/lib/router-compat";
+import { supabase } from "@/integrations/supabase/client";
+import { CheckCircle2, Eraser, PenLine } from "lucide-react";
+
+type ContractView = {
+  title: string;
+  body: string;
+  status: string;
+  recipient_name: string | null;
+  signer_name: string | null;
+  signed_at: string | null;
+  sent_at: string | null;
+};
+
+export default function SignContract() {
+  const { token = "" } = useParams();
+  const [contract, setContract] = useState<ContractView | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [signerName, setSignerName] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [justSigned, setJustSigned] = useState(false);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drawing = useRef(false);
+  const [hasInk, setHasInk] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data, error: rpcError } = await supabase.rpc("ss_get_contract", { _token: token });
+      if (cancelled) return;
+      const row = (data as ContractView[] | null)?.[0];
+      if (rpcError || !row) setNotFound(true);
+      else {
+        setContract(row);
+        setSignerName(row.recipient_name ?? "");
+      }
+      setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !contract || contract.status === "signed") return;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+      ctx.lineWidth = 2.25;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#2b2320";
+    }
+  }, [contract]);
+
+  const pos = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const startDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drawing.current = true;
+    const ctx = e.currentTarget.getContext("2d");
+    if (!ctx) return;
+    const { x, y } = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const moveDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!drawing.current) return;
+    e.preventDefault();
+    const ctx = e.currentTarget.getContext("2d");
+    if (!ctx) return;
+    const { x, y } = pos(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    setHasInk(true);
+  };
+
+  const endDraw = () => {
+    drawing.current = false;
+  };
+
+  const clearPad = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setHasInk(false);
+  };
+
+  const submit = async () => {
+    if (!canvasRef.current) return;
+    setError(null);
+    if (signerName.trim().length < 2) {
+      setError("Please type your full legal name.");
+      return;
+    }
+    if (!hasInk) {
+      setError("Please draw your signature in the box.");
+      return;
+    }
+    if (!agreed) {
+      setError("Please confirm you agree to the terms.");
+      return;
+    }
+    setSubmitting(true);
+    const { error: rpcError } = await supabase.rpc("ss_sign_contract", {
+      _token: token,
+      _signer_name: signerName.trim(),
+      _signature_data_url: canvasRef.current.toDataURL("image/png"),
+      _user_agent: navigator.userAgent,
+    });
+    setSubmitting(false);
+    if (rpcError) {
+      setError(rpcError.message);
+      return;
+    }
+    setJustSigned(true);
+    setContract((c) => (c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: new Date().toISOString() } : c));
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="font-tech text-xs tracking-[0.2em] uppercase text-muted-foreground">Loading agreement…</p>
+      </div>
+    );
+  }
+
+  if (notFound || !contract) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-6">
+        <div className="max-w-md text-center">
+          <p className="font-display text-3xl text-primary">Link not found</p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            This signing link is invalid or no longer active. Call or text us at{" "}
+            <a className="underline" href="tel:+14697440379">(469) 744-0379</a> and we’ll resend it.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const signed = contract.status === "signed";
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-3xl px-6 py-5">
+          <div className="font-display text-xl tracking-tight">SAVVY SWIM</div>
+          <div className="font-tech text-[0.65rem] tracking-[0.25em] uppercase opacity-80 mt-0.5">
+            Service agreement · E-signature
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-3xl px-6 py-10">
+        {signed && (
+          <div className="mb-8 rounded-xl border border-border bg-card p-6 flex items-start gap-3">
+            <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary shrink-0" />
+            <div>
+              <p className="font-semibold text-foreground">
+                {justSigned ? "Thank you — your agreement is signed." : "This agreement has been signed."}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Signed by {contract.signer_name}
+                {contract.signed_at ? ` on ${new Date(contract.signed_at).toLocaleDateString()}` : ""}.
+                A copy is kept on file with your customer account.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <h1 className="font-display text-2xl sm:text-3xl text-foreground">{contract.title}</h1>
+
+        <article className="mt-6 rounded-xl border border-border bg-card p-6 sm:p-8">
+          <pre className="whitespace-pre-wrap font-body text-[0.9rem] leading-relaxed text-foreground">
+            {contract.body}
+          </pre>
+        </article>
+
+        {!signed && (
+          <section className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8">
+            <h2 className="font-tech text-xs tracking-[0.2em] uppercase text-muted-foreground flex items-center gap-2">
+              <PenLine className="h-3.5 w-3.5" /> Sign below
+            </h2>
+
+            <label className="mt-5 block text-sm font-medium text-foreground">
+              Full legal name
+              <input
+                className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"
+                value={signerName}
+                onChange={(e) => setSignerName(e.target.value)}
+                placeholder="Type your full name"
+                maxLength={120}
+              />
+            </label>
+
+            <div className="mt-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-foreground">Draw your signature</span>
+                <button
+                  type="button"
+                  onClick={clearPad}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  <Eraser className="h-3.5 w-3.5" /> Clear
+                </button>
+              </div>
+              <canvas
+                ref={canvasRef}
+                className="mt-1.5 h-40 w-full touch-none rounded-md border border-dashed border-input bg-background"
+                onPointerDown={startDraw}
+                onPointerMove={moveDraw}
+                onPointerUp={endDraw}
+                onPointerLeave={endDraw}
+              />
+            </div>
+
+            <label className="mt-5 flex items-start gap-2.5 text-sm text-foreground">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+              />
+              <span>
+                I have read and agree to the terms of this agreement, and I intend my electronic
+                signature to be legally binding.
+              </span>
+            </label>
+
+            {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+
+            <button
+              type="button"
+              onClick={submit}
+              disabled={submitting}
+              className="mt-6 w-full rounded-full bg-primary px-8 py-3.5 font-tech text-sm font-semibold tracking-wide text-primary-foreground disabled:opacity-60"
+            >
+              {submitting ? "Signing…" : "Sign agreement"}
+            </button>
+          </section>
+        )}
+
+        <p className="mt-8 text-center text-xs text-muted-foreground">
+          Savvy Swim · (469) 744-0379 · Dallas–Fort Worth
+        </p>
+      </main>
+    </div>
+  );
+}
