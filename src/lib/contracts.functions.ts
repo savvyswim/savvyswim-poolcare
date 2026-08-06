@@ -97,7 +97,7 @@ Savvy Swim · savvyswim.com`;
 
     await supabase.from("ss_contract_events").insert({
       contract_id: contract.id,
-      event_type: "sent",
+      event: "sent",
       detail: `Emailed to ${contract.recipient_email}`,
     });
 
