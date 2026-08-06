@@ -19,6 +19,7 @@ export type ModuleKey =
   | "connect"
   | "reviews"
   | "scorecard"
+  | "waterLab"
   | "settings"
   | "console"
   | "cleaning"
