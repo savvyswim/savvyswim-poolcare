@@ -12,4 +12,14 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      watch: {
+        // Env files are rewritten by the platform on every sync. Watching them
+        // makes Vite full-restart the dev server, which drops in-flight requests
+        // and makes the preview intermittently fail to load.
+        ignored: ["**/.env", "**/.env.*"],
+      },
+    },
+  },
 });
