@@ -386,7 +386,7 @@ const Services = () => {
                   to={withCampaignParams("/request-inspection")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
-                  Request free inspection
+                  Request free pool visit
                 </Link>
               </div>
             </div>

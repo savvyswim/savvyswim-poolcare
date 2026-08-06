@@ -468,7 +468,7 @@ const Index = () => {
                     to={withCampaignParams("/request-inspection")}
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
-                    <MessageSquare className="h-4 w-4" /> Request free inspection
+                    <MessageSquare className="h-4 w-4" /> Request free pool visit
                   </Link>
                 </div>
               </div>
