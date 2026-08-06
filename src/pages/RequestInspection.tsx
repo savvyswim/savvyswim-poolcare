@@ -112,8 +112,8 @@ const RequestInspection = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Request a Free Hail Damage Inspection | Savvy Swim"
-        description="Book a free hail damage inspection for your pool, equipment, and vehicles. Certified techs across DFW — no cost, no obligation."
+        title="Request a Free Pool Service Visit | Savvy Swim"
+        description="Book a free pool service visit and water assessment. Cleaning, repairs and water care by certified techs across DFW — no cost, no obligation."
         path="/request-inspection"
       />
 
@@ -152,7 +152,7 @@ const RequestInspection = () => {
               Your reference number is{" "}
               <span className="font-tech text-foreground">{reference}</span>. We just texted you a
               confirmation with next steps — a tech reviews your address within one business day and
-              sends two inspection windows to choose from.
+              sends two visit windows to choose from.
             </p>
             <a
               href={PHONE_HREF}
@@ -170,12 +170,12 @@ const RequestInspection = () => {
                   No cost, no obligation
                 </div>
                 <h1 className="font-display text-[2.4rem] uppercase leading-[0.94] tracking-tight sm:text-[3.4rem]">
-                  Request free <span className="text-accent">inspection.</span>
+                  Request free <span className="text-accent">pool visit.</span>
                 </h1>
                 <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
-                  Tell us where you are and when the storm hit. We inspect the pool, equipment pad,
-                  and any vehicles for hail damage — then send a written report you can hand to your
-                  insurer.
+                  Tell us where your pool is and when you'd like us out. We check the water, the
+                  equipment pad, and the surfaces — then send a written report with exactly what
+                  your pool needs and what it costs.
                 </p>
               </div>
             </div>
@@ -210,7 +210,7 @@ const RequestInspection = () => {
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="hail_date">Date of hail storm</Label>
+                  <Label htmlFor="hail_date">Preferred service date</Label>
                   <Input id="hail_date" name="hail_date" type="date" />
                 </div>
                 <div className="space-y-2">
@@ -231,12 +231,12 @@ const RequestInspection = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="vehicle_details">Vehicle details (year, make, model)</Label>
+                <Label htmlFor="vehicle_details">Pool details (size, type, equipment)</Label>
                 <Input
                   id="vehicle_details"
                   name="vehicle_details"
                   maxLength={500}
-                  placeholder="2021 Ford F-150, 2019 Honda CR-V"
+                  placeholder="15,000 gal gunite, salt system, Pentair pump"
                 />
               </div>
 
@@ -251,7 +251,7 @@ const RequestInspection = () => {
                 className="btn-quote inline-flex items-center gap-2 rounded-md px-7 py-3.5 text-[13px] font-bold uppercase tracking-wide transition disabled:opacity-60"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-                {submitting ? "Sending" : "Request free inspection"}
+                {submitting ? "Sending" : "Request free pool visit"}
               </button>
 
               <p className="text-xs text-muted-foreground">
