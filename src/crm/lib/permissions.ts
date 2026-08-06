@@ -40,6 +40,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   route: ALL,
   jobs: ALL,
   waterLab: ALL,
+  alerts: ALL,
   customers: OFFICE,
   pipeline: OFFICE,
   technicians: OFFICE,
