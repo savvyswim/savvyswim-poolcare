@@ -110,22 +110,25 @@ export function withCampaignParams(path: string): string {
   }
 }
 
-export const HAIL_SMS_TEMPLATE = [
-  "Hi Savvy Swim — I'd like to schedule a free hail damage inspection.",
+export const POOL_SMS_TEMPLATE = [
+  "Hi Savvy Swim — I'd like a free pool service quote / visit.",
   "",
   "Name:",
   "Address:",
   "ZIP:",
-  "Date of hail storm:",
-  "Vehicle / equipment details:",
+  "Pool size (gallons or sq ft):",
+  "Service needed (cleaning / repair / water care):",
   "Best time to reach me:",
 ].join("\n");
+
+/** @deprecated use POOL_SMS_TEMPLATE */
+export const HAIL_SMS_TEMPLATE = POOL_SMS_TEMPLATE;
 
 /**
  * Builds an sms: link with the prefilled inspection message plus the campaign
  * reference, so replies can be matched to the page and campaign.
  */
-export function buildSmsHref(phoneE164: string, message = HAIL_SMS_TEMPLATE): string {
+export function buildSmsHref(phoneE164: string, message = POOL_SMS_TEMPLATE): string {
   const a = getAttribution();
   const body = `${message}\n\nRef: ${a.campaignId}${
     a.landingPage ? ` (${a.landingPage.split("?")[0]})` : ""
