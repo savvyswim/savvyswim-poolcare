@@ -9,6 +9,16 @@ import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
 
+export type VisitPhoto = { label: string; path: string; url: string };
+
+const EVIDENCE_KINDS = [
+  { tag: "water", label: "Pool water" },
+  { tag: "equipment", label: "Equipment" },
+  { tag: "filter", label: "Filter / pump" },
+  { tag: "other", label: "Other" },
+] as const;
+
+
 async function compress(file: File, max = 1400, quality = 0.72): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
@@ -35,6 +45,9 @@ export default function VisitSheet({
   const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
   const [after, setAfter] = useState<{ url: string; path: string } | null>(null);
+  const [evidence, setEvidence] = useState<VisitPhoto[]>([]);
+  const [uploadingTag, setUploadingTag] = useState<string | null>(null);
+
   const [notes, setNotes] = useState("");
   const [issue, setIssue] = useState("");
   const [saving, setSaving] = useState(false);
@@ -85,6 +98,12 @@ export default function VisitSheet({
       photo: taskPhotos[t.id] ?? null,
     }));
 
+    const allPhotos: VisitPhoto[] = [
+      ...(before ? [{ label: "Before", path: before.path, url: before.url }] : []),
+      ...(after ? [{ label: "After", path: after.path, url: after.url }] : []),
+      ...evidence,
+    ];
+
     await supabase
       .from("ss_visits")
       .update({
@@ -95,8 +114,10 @@ export default function VisitSheet({
         dosing: { chlorine_oz: dose.chlorine_oz, acid_oz: dose.acid_oz, lsi: dose.lsi } as never,
         chem_cost: dose.cost,
         checklist: checklist as never,
+        photos: allPhotos as never,
         before_photo_url: before?.path ?? null,
         after_photo_url: after?.path ?? null,
+
         notes: notes || null,
         issue_reported: issue || null,
       })
@@ -155,7 +176,9 @@ export default function VisitSheet({
             reason: t.reason,
           })),
           tasksCompleted: checklist.filter((t) => t.done).length,
+          photos: allPhotos.filter((p) => p.url).slice(0, 6).map((p) => ({ label: p.label, url: p.url })),
           notes: notes || undefined,
+
         },
       });
     }
@@ -350,6 +373,70 @@ export default function VisitSheet({
                 <PhotoTile label="Before" tone="#1C2A33" value={before} onPick={async (f) => setBefore(await upload(f, "before"))} />
                 <PhotoTile label="After" tone="#8E1F2C" value={after} onPick={async (f) => setAfter(await upload(f, "after"))} />
               </div>
+
+              <div className="ss-card p-3">
+                <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                  Visual evidence (added to the customer report)
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {EVIDENCE_KINDS.map((k) => (
+                    <label
+                      key={k.tag}
+                      className="ss-chip cursor-pointer"
+                      style={{ background: "hsl(var(--ss-white))" }}
+                    >
+                      <Camera size={10} />
+                      {uploadingTag === k.tag ? "Uploading…" : k.label}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        multiple
+                        className="hidden"
+                        onChange={async (e) => {
+                          const files = Array.from(e.target.files ?? []);
+                          e.target.value = "";
+                          if (!files.length) return;
+                          setUploadingTag(k.tag);
+                          for (const f of files) {
+                            const up = await upload(f, k.tag);
+                            if (up) setEvidence((s) => [...s, { label: k.label, path: up.path, url: up.url }]);
+                          }
+                          setUploadingTag(null);
+                        }}
+                      />
+                    </label>
+                  ))}
+                </div>
+                {evidence.length > 0 ? (
+                  <div className="mt-2.5 grid grid-cols-3 gap-2">
+                    {evidence.map((p) => (
+                      <div key={p.path} className="relative overflow-hidden rounded-[10px]">
+                        <img src={p.url} alt={p.label} className="aspect-square w-full object-cover" />
+                        <span
+                          className="ss-chip absolute bottom-1 left-1"
+                          style={{ background: "rgba(0,0,0,.62)", color: "#fff", borderColor: "transparent", fontSize: "0.5rem" }}
+                        >
+                          {p.label}
+                        </span>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${p.label} photo`}
+                          className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white"
+                          onClick={() => setEvidence((s) => s.filter((x) => x.path !== p.path))}
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-2 text-[0.74rem] opacity-60">
+                    Snap the water clarity and any equipment you touched — these ride along with the measurements.
+                  </p>
+                )}
+              </div>
+
               <div>
                 <label className="ss-label">Visit notes (shared with customer)</label>
                 <textarea className="ss-input" rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />

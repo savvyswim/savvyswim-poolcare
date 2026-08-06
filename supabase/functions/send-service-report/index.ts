@@ -46,6 +46,7 @@ Deno.serve(async (req) => {
       metrics,
       treatments,
       tasksCompleted,
+      photos,
       notes,
     } = body ?? {}
 
@@ -69,6 +70,12 @@ Deno.serve(async (req) => {
         metrics,
         treatments: treatments ?? [],
         tasksCompleted,
+        photos: Array.isArray(photos)
+          ? photos
+              .filter((p: { url?: string }) => typeof p?.url === 'string' && p.url.length > 0)
+              .slice(0, 6)
+              .map((p: { label?: string; url: string }) => ({ label: p.label ?? 'Visit photo', url: p.url }))
+          : [],
         notes,
       },
     })
