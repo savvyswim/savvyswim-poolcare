@@ -20,7 +20,7 @@ export type Stop = {
   customer_id: string;
   ss_customers: {
     id: string; full_name: string; address: string | null; city: string | null;
-    phone: string | null; gallons: number; gate_code: string | null;
+    phone: string | null; email: string | null; gallons: number; gate_code: string | null;
     internal_notes: string | null; custom_fields: Record<string, unknown>;
     pool_type: string; lat: number | null; lng: number | null;
   };
@@ -42,7 +42,7 @@ export default function RoutePage() {
       .from("ss_visits")
       .select(
         "id,status,stop_order,minutes_on_site,completed_at,en_route_at,tech_id,customer_id," +
-          "ss_customers(id,full_name,address,city,phone,gallons,gate_code,internal_notes,custom_fields,pool_type,lat,lng)",
+          "ss_customers(id,full_name,address,city,phone,email,gallons,gate_code,internal_notes,custom_fields,pool_type,lat,lng)",
       )
       .eq("scheduled_date", new Date().toISOString().slice(0, 10))
       .order("stop_order");
