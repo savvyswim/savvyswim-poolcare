@@ -43,6 +43,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0, viewport-fit=cover" },
+      // Stops iOS/Safari from auto-linking phone numbers, which breaks hydration.
+      { name: "format-detection", content: "telephone=no" },
       { name: "theme-color", content: "#06141c" },
       { name: "google-site-verification", content: "gG7n9rWUtSYPZ63aEOvuErjGt8T79b1dLm8JuZdzk0s" },
       { title: SITE_TITLE },

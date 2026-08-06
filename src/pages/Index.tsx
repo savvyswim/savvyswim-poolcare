@@ -20,13 +20,13 @@ import {
   X,
 } from "lucide-react";
 
-import photoLifeguardChair from "@/assets/IMG_5512.PNG.asset.json";
-import photoNavyCabana from "@/assets/IMG_5507-2.JPG.asset.json";
-import photoRivieraLoungers from "@/assets/IMG_5508-2.JPG.asset.json";
-import photoPoolWater from "@/assets/pool-water-hd.jpg.asset.json";
-import photoSavvyRings from "@/assets/IMG_5518.PNG.asset.json";
+import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
+import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
+import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
+import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
+import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
-import photoSavvyLetters from "@/assets/IMG_5502.PNG.asset.json";
+import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
