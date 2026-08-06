@@ -25,6 +25,7 @@ import {
 
 export default function Products() {
   const { cities, addons, margins, loading } = useRateCard();
+  const [kind, setKind] = useState<EstimateKind>("maintenance");
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
   const [condition, setCondition] = useState<string>(CONDITIONS[0].id);
