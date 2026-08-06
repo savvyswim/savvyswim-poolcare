@@ -26,10 +26,10 @@ export type StartupHealth = {
 
 let cached: StartupHealth | undefined;
 
-const BOOT_ID =
-  typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? crypto.randomUUID().slice(0, 8)
-    : Math.random().toString(16).slice(2, 10);
+// Server modules are evaluated outside a request in production. Random APIs
+// are not allowed during that phase and can prevent the entire worker from
+// booting, so keep the startup identifier deterministic and dependency-free.
+const BOOT_ID = "server-start";
 
 type DependencySpec = {
   name: string;
