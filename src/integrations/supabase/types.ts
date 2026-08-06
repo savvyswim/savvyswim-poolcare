@@ -1257,6 +1257,50 @@ export type Database = {
           },
         ]
       }
+      ss_contract_sms: {
+        Row: {
+          contract_id: string
+          created_at: string
+          error_message: string | null
+          id: string
+          message_sid: string | null
+          sent_by: string | null
+          status: string
+          to_phone: string
+          updated_at: string
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_sid?: string | null
+          sent_by?: string | null
+          status?: string
+          to_phone: string
+          updated_at?: string
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_sid?: string | null
+          sent_by?: string | null
+          status?: string
+          to_phone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_contract_sms_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "ss_contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_contract_templates: {
         Row: {
           body: string
