@@ -581,14 +581,15 @@ export type Database = {
           created_at: string
           email: string
           full_name: string
-          hail_date: string | null
           id: string
           landing_page: string | null
           notes: string | null
           page_path: string | null
           phone: string
+          pool_details: string | null
           postal_code: string
           preferred_contact_time: string | null
+          preferred_date: string | null
           reference_number: string
           referrer: string | null
           session_id: string | null
@@ -600,7 +601,6 @@ export type Database = {
           utm_medium: string | null
           utm_source: string | null
           utm_term: string | null
-          vehicle_details: string | null
         }
         Insert: {
           address: string
@@ -608,14 +608,15 @@ export type Database = {
           created_at?: string
           email: string
           full_name: string
-          hail_date?: string | null
           id?: string
           landing_page?: string | null
           notes?: string | null
           page_path?: string | null
           phone: string
+          pool_details?: string | null
           postal_code: string
           preferred_contact_time?: string | null
+          preferred_date?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -627,7 +628,6 @@ export type Database = {
           utm_medium?: string | null
           utm_source?: string | null
           utm_term?: string | null
-          vehicle_details?: string | null
         }
         Update: {
           address?: string
@@ -635,14 +635,15 @@ export type Database = {
           created_at?: string
           email?: string
           full_name?: string
-          hail_date?: string | null
           id?: string
           landing_page?: string | null
           notes?: string | null
           page_path?: string | null
           phone?: string
+          pool_details?: string | null
           postal_code?: string
           preferred_contact_time?: string | null
+          preferred_date?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -654,7 +655,6 @@ export type Database = {
           utm_medium?: string | null
           utm_source?: string | null
           utm_term?: string | null
-          vehicle_details?: string | null
         }
         Relationships: []
       }
