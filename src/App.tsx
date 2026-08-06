@@ -46,6 +46,7 @@ import SecurityPage from "@/crm/pages/Security";
 import ReviewsPage from "@/crm/pages/Reviews";
 import TechScorecard from "@/crm/pages/TechScorecard";
 import QcReview from "@/crm/pages/QcReview";
+import MarginCalculatorPage from "@/crm/pages/MarginCalculatorPage";
 import WaterLab from "@/crm/pages/WaterLab";
 import RevenueGrowth from "@/crm/pages/RevenueGrowth";
 import PricingMatrix from "@/crm/pages/PricingMatrix";
@@ -113,6 +114,7 @@ const App = () => (
               <Route path="/admin/crm/reviews" element={<ReviewsPage />} />
               <Route path="/admin/crm/scorecard" element={<TechScorecard />} />
               <Route path="/admin/crm/qc-review" element={<QcReview />} />
+              <Route path="/admin/crm/margin" element={<MarginCalculatorPage />} />
               <Route path="/admin/crm/settings" element={<CrmSettings />} />
               <Route path="/admin/crm/security" element={<SecurityPage />} />
 
