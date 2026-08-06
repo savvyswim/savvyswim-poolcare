@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      _rls_probe: {
+        Row: {
+          id: string
+          v: string | null
+        }
+        Insert: {
+          id?: string
+          v?: string | null
+        }
+        Update: {
+          id?: string
+          v?: string | null
+        }
+        Relationships: []
+      }
       admin_audit_log: {
         Row: {
           action: string
@@ -3127,6 +3142,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _probe_fn: { Args: never; Returns: boolean }
       audit_service_photo_rules: { Args: never; Returns: Json }
       check_promo_code: {
         Args: { p_code: string; p_subtotal: number }
