@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.ss_tg_lead_events() FROM PUBLIC, anon, authenticated;
