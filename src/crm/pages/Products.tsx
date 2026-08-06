@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
-import PricingTab from "@/crm/components/PricingTab";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -18,12 +17,10 @@ import {
 } from "@/crm/lib/pricingEngine";
 
 
-const TABS = ["Quote", "Pricing"] as const;
 
 export default function Products() {
   const { isOwner } = useSavvyIdentity();
   const { cities, addons, margins, loading } = useRateCard();
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Quote");
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
   const [condition, setCondition] = useState<string>(CONDITIONS[0].id);
