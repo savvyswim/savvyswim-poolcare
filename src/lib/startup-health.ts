@@ -65,6 +65,7 @@ function runChecks(deps: DependencySpec[]): StartupHealth {
   return {
     status: failedRequired ? "failed" : failedOptional ? "degraded" : "ok",
     checkedAt: new Date().toISOString(),
+    bootId: BOOT_ID,
     checks,
   };
 }
