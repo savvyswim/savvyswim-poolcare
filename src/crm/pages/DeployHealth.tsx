@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { buildRollbackChecklist, type DeployPing } from "@/lib/rollback-checklist";
+import CanaryPanel from "@/crm/pages/CanaryPanel";
 
 type Row = {
   id: string;
@@ -165,6 +166,8 @@ export default function DeployHealth() {
           </p>
         )}
       </section>
+
+      <CanaryPanel />
 
       {/* History */}
       <section className="crm-card p-4">
