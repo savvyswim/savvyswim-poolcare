@@ -512,7 +512,26 @@ export default function Portal() {
                       </>
                     );
                   })()}
+                  {lastReport && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => downloadReport(pool, lastReport)}
+                        className="inline-flex items-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                      >
+                        <Download className="h-3.5 w-3.5" aria-hidden="true" /> Download PDF report
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => shareReport(pool, lastReport)}
+                        className="inline-flex items-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                      >
+                        <Share2 className="h-3.5 w-3.5" aria-hidden="true" /> Share
+                      </button>
+                    </div>
+                  )}
                 </section>
+
 
                 {/* Reading history */}
                 <section className="mt-12">
