@@ -4,5 +4,5 @@ import { Navigate } from "@/lib/router-compat";
 import { isAppHost } from "@/hooks/useAppHost";
 
 export const Route = createFileRoute("/")({
-  component: () => (isAppHost() ? <Navigate to="/portal" replace /> : <Index />),
+  component: () => (isAppHost() ? <Navigate to="/app" replace /> : <Index />),
 });
