@@ -13,14 +13,18 @@ import {
   todayIso,
   type FinanceSlice,
 } from "@/crm/finance/shared";
+import UpsellReconciliation from "@/crm/finance/UpsellReconciliation";
 
-type Report = "pl" | "aging" | "customers" | "tax";
+
+
+type Report = "pl" | "aging" | "customers" | "tax" | "upsell";
 
 const REPORTS: { key: Report; label: string; sub: string }[] = [
   { key: "pl", label: "Profit & loss", sub: "Income vs. expenses by month" },
   { key: "aging", label: "A/R aging", sub: "Who owes you and for how long" },
   { key: "customers", label: "Revenue by customer", sub: "Your best accounts" },
   { key: "tax", label: "Tax summary", sub: "Year-to-date totals for your accountant" },
+  { key: "upsell", label: "Upsell reconciliation", sub: "Commission booked vs. upsell lines on invoices — mismatches flagged" },
 ];
 
 export default function ReportsTab({ data }: { data: FinanceSlice }) {
@@ -82,7 +86,7 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
         ["Customer", "Lifetime paid"],
         ...byCustomer.map(([id, amt]) => [nameOf(id), amt.toFixed(2)]),
       ]);
-    } else {
+    } else if (report === "tax") {
       downloadCsv(`savvy-tax-summary-${tax.year}.csv`, [
         ["Line", "Amount"],
         ["Gross income", tax.income.toFixed(2)],
@@ -104,7 +108,9 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
           </button>
         ))}
         <span className="flex-1" />
-        <button className="ss-btn ss-btn-ghost" onClick={exportCurrent}><Download size={13} /> Export CSV</button>
+        {report !== "upsell" && (
+          <button className="ss-btn ss-btn-ghost" onClick={exportCurrent}><Download size={13} /> Export CSV</button>
+        )}
       </div>
 
       <p className="text-[0.75rem] opacity-60">{REPORTS.find((r) => r.key === report)?.sub}</p>
@@ -203,6 +209,8 @@ export default function ReportsTab({ data }: { data: FinanceSlice }) {
           </p>
         </div>
       )}
+
+      {report === "upsell" && <UpsellReconciliation />}
     </div>
   );
 }
