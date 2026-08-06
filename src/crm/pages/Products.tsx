@@ -194,7 +194,37 @@ export default function Products() {
 
         <div className="grid gap-3 lg:grid-cols-2">
           <div className="ss-card p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="ss-label">Service plan</div>
+              <Link to="/admin/crm/service-plans" className="ss-label underline opacity-70">
+                Edit plans
+              </Link>
+            </div>
+            <div className="mb-4 grid gap-2 sm:grid-cols-2">
+              {SERVICE_PLANS.map((p) => {
+                const active = p.id === planId;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => applyPlan(p.id)}
+                    className="rounded-md border p-2 text-left transition"
+                    style={{
+                      borderColor: active
+                        ? "hsl(var(--ss-burgundy))"
+                        : "hsl(var(--ss-sand))",
+                      background: active ? "hsl(var(--ss-burgundy) / 0.06)" : "transparent",
+                    }}
+                  >
+                    <div className="text-[0.85rem] font-bold">{p.name}</div>
+                    <div className="text-[0.7rem] opacity-70">{p.tagline}</div>
+                  </button>
+                );
+              })}
+            </div>
+
             <div className="ss-label mb-2">Quote calculator</div>
+
             <div className="grid gap-2.5 sm:grid-cols-2">
               <div>
                 <label className="ss-label">City / region</label>
