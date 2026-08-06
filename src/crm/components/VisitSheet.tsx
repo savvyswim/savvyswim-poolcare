@@ -98,6 +98,12 @@ export default function VisitSheet({
       photo: taskPhotos[t.id] ?? null,
     }));
 
+    const allPhotos: VisitPhoto[] = [
+      ...(before ? [{ label: "Before", path: before.path, url: before.url }] : []),
+      ...(after ? [{ label: "After", path: after.path, url: after.url }] : []),
+      ...evidence,
+    ];
+
     await supabase
       .from("ss_visits")
       .update({
@@ -108,8 +114,10 @@ export default function VisitSheet({
         dosing: { chlorine_oz: dose.chlorine_oz, acid_oz: dose.acid_oz, lsi: dose.lsi } as never,
         chem_cost: dose.cost,
         checklist: checklist as never,
+        photos: allPhotos as never,
         before_photo_url: before?.path ?? null,
         after_photo_url: after?.path ?? null,
+
         notes: notes || null,
         issue_reported: issue || null,
       })
