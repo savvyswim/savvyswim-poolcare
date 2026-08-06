@@ -31,6 +31,7 @@ export type ModuleKey =
   | "activity"
   | "projects"
   | "security"
+  | "siteSpeed"
   | "designs";
 
 
@@ -64,6 +65,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   finance: OFFICE,
   projects: OFFICE,
   security: OWNER,
+  siteSpeed: OWNER,
   console: OWNER,
 
   cleaning: OWNER,
@@ -101,6 +103,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/water-lab": "waterLab",
   "/admin/crm/settings": "settings",
   "/admin/crm/security": "security",
+  "/admin/crm/site-speed": "siteSpeed",
   "/admin/crm/app": "console",
 
   "/admin/cleaning": "cleaning",

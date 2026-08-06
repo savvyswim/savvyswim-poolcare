@@ -17,6 +17,8 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { PerfMonitor } from "@/components/PerfMonitor";
+
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import appCss from "../styles.css?url";
@@ -104,6 +106,8 @@ function RootComponent() {
           <AuthProvider>
             <CartProvider>
               <ScrollToTop />
+              <PerfMonitor />
+
               <CartDrawer />
               <Outlet />
             </CartProvider>

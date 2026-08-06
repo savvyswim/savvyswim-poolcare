@@ -3410,6 +3410,42 @@ export type Database = {
         }
         Relationships: []
       }
+      web_vitals: {
+        Row: {
+          connection: string | null
+          created_at: string
+          device: string | null
+          id: string
+          metric: string
+          nav_type: string | null
+          path: string
+          rating: string | null
+          value: number
+        }
+        Insert: {
+          connection?: string | null
+          created_at?: string
+          device?: string | null
+          id?: string
+          metric: string
+          nav_type?: string | null
+          path: string
+          rating?: string | null
+          value: number
+        }
+        Update: {
+          connection?: string | null
+          created_at?: string
+          device?: string | null
+          id?: string
+          metric?: string
+          nav_type?: string | null
+          path?: string
+          rating?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

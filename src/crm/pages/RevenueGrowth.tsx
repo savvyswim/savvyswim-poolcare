@@ -200,9 +200,18 @@ export default function RevenueGrowth() {
         />
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[680px] border-collapse text-[0.82rem]">
+          <table className="w-full min-w-[860px] table-fixed border-collapse text-[0.82rem]">
+            <colgroup>
+              <col className="w-[240px]" />
+              <col className="w-[210px]" />
+              <col className="w-[120px]" />
+              <col className="w-[110px]" />
+              <col className="w-[120px]" />
+              <col className="w-[120px]" />
+              <col className="w-[34px]" />
+            </colgroup>
             <thead>
-              <tr className="text-left">
+              <tr className="text-left [&>th]:whitespace-nowrap">
                 <th className="ss-tag pb-2">Service / add-on</th>
                 <th className="ss-tag pb-2">Schedule</th>
                 <th className="ss-tag pb-2 text-right">Price per job</th>
@@ -212,6 +221,7 @@ export default function RevenueGrowth() {
                 <th />
               </tr>
             </thead>
+
             <tbody>
               {calc.rows.map((r) => (
                 <tr key={r.id} className="border-t border-[hsl(var(--ss-ink)/0.1)]">

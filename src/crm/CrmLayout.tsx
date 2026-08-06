@@ -66,6 +66,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
+  { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
 ];
 
 
@@ -321,7 +322,10 @@ function SidebarFooter({
       <div className="ss-tag" style={{ fontSize: "0.5rem" }}>
         {LEVEL_LABEL[level] ?? level} access
       </div>
-      <div className="mt-0.5 text-[0.82rem] font-medium">{name}</div>
+      <div className="mt-0.5 truncate text-[0.82rem] font-medium" title={name ?? undefined}>
+        {name}
+      </div>
+
       <button
         className="ss-btn ss-btn-ghost mt-2 w-full"
         onClick={() => void onSignOut()}

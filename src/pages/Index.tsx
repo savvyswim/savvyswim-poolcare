@@ -33,7 +33,7 @@ const poolNight = photoRivieraLoungers.url;
 
 import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
-import { buildSmsHref, trackContactClick, withCampaignParams } from "@/lib/contactTracking";
+import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
 import { SubscribeDialog } from "@/components/SubscribeDialog";
@@ -457,19 +457,13 @@ const Index = () => {
                   >
                     <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                   </a>
-                  <a
-                    href={buildSmsHref(SMS_PHONE)}
-                    onClick={() => trackContactClick("text_click", "hero_text")}
-                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
-                  >
-                    <MessageSquare className="h-4 w-4" /> Text for a free pool quote
-                  </a>
                   <Link
-                    to={withCampaignParams("/request-inspection")}
+                    to="/request-inspection"
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
                     <MessageSquare className="h-4 w-4" /> Request free pool visit
                   </Link>
+
                 </div>
               </div>
             </div>
