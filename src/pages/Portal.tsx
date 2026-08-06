@@ -641,10 +641,31 @@ export default function Portal() {
                             <p className="font-tech text-sm font-semibold">
                               {new Date(v.scheduled_date).toLocaleDateString()}
                             </p>
-                            <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
-                              {v.status}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
+                                {v.status}
+                              </span>
+                              {v.status === "completed" && v.readings && (
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={() => downloadReport(pool, v)}
+                                    className="inline-flex items-center gap-1.5 border border-primary/20 px-2.5 py-1.5 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                                  >
+                                    <Download className="h-3 w-3" aria-hidden="true" /> PDF
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => shareReport(pool, v)}
+                                    className="inline-flex items-center gap-1.5 border border-primary/20 px-2.5 py-1.5 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                                  >
+                                    <Share2 className="h-3 w-3" aria-hidden="true" /> Share
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           </div>
+
                           {v.readings && Object.keys(v.readings).length > 0 && (
                             <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-tech text-xs text-primary/70">
                               {Object.entries(v.readings).map(([k, val]) => (
