@@ -1601,6 +1601,42 @@ export type Database = {
           },
         ]
       }
+      ss_deploy_health_checks: {
+        Row: {
+          alert_result: string | null
+          boot_id: string | null
+          checked_at: string
+          detail: string | null
+          failed_checks: string[]
+          http_status: number | null
+          id: string
+          source: string
+          status: string
+        }
+        Insert: {
+          alert_result?: string | null
+          boot_id?: string | null
+          checked_at?: string
+          detail?: string | null
+          failed_checks?: string[]
+          http_status?: number | null
+          id?: string
+          source?: string
+          status: string
+        }
+        Update: {
+          alert_result?: string | null
+          boot_id?: string | null
+          checked_at?: string
+          detail?: string | null
+          failed_checks?: string[]
+          http_status?: number | null
+          id?: string
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
       ss_expenses: {
         Row: {
           amount: number

@@ -42,6 +42,7 @@ import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/in
 import { Route as CrmAdminCrmAlertsRouteImport } from './routes/_crm/admin/crm/alerts'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
 import { Route as CrmAdminCrmConnectRouteImport } from './routes/_crm/admin/crm/connect'
+import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
@@ -63,6 +64,7 @@ import { Route as CrmAdminCrmSiteSpeedRouteImport } from './routes/_crm/admin/cr
 import { Route as CrmAdminCrmTechniciansRouteImport } from './routes/_crm/admin/crm/technicians'
 import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/trucks'
 import { Route as CrmAdminCrmWaterLabRouteImport } from './routes/_crm/admin/crm/water-lab'
+import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as CrmAdminCrmCustomersIndexRouteImport } from './routes/_crm/admin/crm/customers/index'
 import { Route as CrmAdminCrmCustomersIdRouteImport } from './routes/_crm/admin/crm/customers/$id'
@@ -233,6 +235,11 @@ const CrmAdminCrmConnectRoute = CrmAdminCrmConnectRouteImport.update({
   path: '/admin/crm/connect',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmDeployHealthRoute = CrmAdminCrmDeployHealthRouteImport.update({
+  id: '/admin/crm/deploy-health',
+  path: '/admin/crm/deploy-health',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmEmailRoute = CrmAdminCrmEmailRouteImport.update({
   id: '/admin/crm/email',
   path: '/admin/crm/email',
@@ -340,6 +347,12 @@ const CrmAdminCrmWaterLabRoute = CrmAdminCrmWaterLabRouteImport.update({
   path: '/admin/crm/water-lab',
   getParentRoute: () => CrmRoute,
 } as any)
+const ApiPublicHooksHealthWatchRoute =
+  ApiPublicHooksHealthWatchRouteImport.update({
+    id: '/api/public/hooks/health-watch',
+    path: '/api/public/hooks/health-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicTwilioContractSmsStatusRoute =
   ApiPublicTwilioContractSmsStatusRouteImport.update({
     id: '/api/public/twilio/contract-sms-status',
@@ -401,6 +414,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -422,6 +436,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -461,6 +476,7 @@ export interface FileRoutesByTo {
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -482,6 +498,7 @@ export interface FileRoutesByTo {
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -523,6 +540,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
+  '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
@@ -544,6 +562,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/_crm/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/_crm/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/_crm/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/_crm/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -585,6 +604,7 @@ export interface FileRouteTypes {
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
+    | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
     | '/admin/crm/inventory'
@@ -606,6 +626,7 @@ export interface FileRouteTypes {
     | '/admin/crm/technicians'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/api/public/hooks/health-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/admin/crm/'
     | '/admin/crm/customers/$id'
@@ -645,6 +666,7 @@ export interface FileRouteTypes {
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
+    | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
     | '/admin/crm/inventory'
@@ -666,6 +688,7 @@ export interface FileRouteTypes {
     | '/admin/crm/technicians'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/api/public/hooks/health-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/admin/crm'
     | '/admin/crm/customers/$id'
@@ -706,6 +729,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/alerts'
     | '/_crm/admin/crm/break-even'
     | '/_crm/admin/crm/connect'
+    | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
     | '/_crm/admin/crm/finance'
     | '/_crm/admin/crm/inventory'
@@ -727,6 +751,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/technicians'
     | '/_crm/admin/crm/trucks'
     | '/_crm/admin/crm/water-lab'
+    | '/api/public/hooks/health-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/_crm/admin/crm/'
     | '/_crm/admin/crm/customers/$id'
@@ -765,6 +790,7 @@ export interface RootRouteChildren {
   AdminCrmLegacyRoute: typeof AdminCrmLegacyRoute
   AdminCrmLoginRoute: typeof AdminCrmLoginRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
+  ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
 }
 
@@ -1001,6 +1027,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmConnectRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/deploy-health': {
+      id: '/_crm/admin/crm/deploy-health'
+      path: '/admin/crm/deploy-health'
+      fullPath: '/admin/crm/deploy-health'
+      preLoaderRoute: typeof CrmAdminCrmDeployHealthRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/email': {
       id: '/_crm/admin/crm/email'
       path: '/admin/crm/email'
@@ -1148,6 +1181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmWaterLabRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/api/public/hooks/health-watch': {
+      id: '/api/public/hooks/health-watch'
+      path: '/api/public/hooks/health-watch'
+      fullPath: '/api/public/hooks/health-watch'
+      preLoaderRoute: typeof ApiPublicHooksHealthWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/twilio/contract-sms-status': {
       id: '/api/public/twilio/contract-sms-status'
       path: '/api/public/twilio/contract-sms-status'
@@ -1190,6 +1230,7 @@ interface CrmRouteChildren {
   CrmAdminCrmAlertsRoute: typeof CrmAdminCrmAlertsRoute
   CrmAdminCrmBreakEvenRoute: typeof CrmAdminCrmBreakEvenRoute
   CrmAdminCrmConnectRoute: typeof CrmAdminCrmConnectRoute
+  CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
@@ -1222,6 +1263,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmAlertsRoute: CrmAdminCrmAlertsRoute,
   CrmAdminCrmBreakEvenRoute: CrmAdminCrmBreakEvenRoute,
   CrmAdminCrmConnectRoute: CrmAdminCrmConnectRoute,
+  CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
@@ -1282,6 +1324,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmLegacyRoute: AdminCrmLegacyRoute,
   AdminCrmLoginRoute: AdminCrmLoginRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
+  ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
 }
 export const routeTree = rootRouteImport

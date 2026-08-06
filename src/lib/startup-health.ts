@@ -19,10 +19,17 @@ export type HealthCheck = {
 export type StartupHealth = {
   status: "ok" | "degraded" | "failed";
   checkedAt: string;
+  /** Unique per server isolate — lets you tell one boot's logs from another. */
+  bootId: string;
   checks: HealthCheck[];
 };
 
 let cached: StartupHealth | undefined;
+
+const BOOT_ID =
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID().slice(0, 8)
+    : Math.random().toString(16).slice(2, 10);
 
 type DependencySpec = {
   name: string;
@@ -58,6 +65,7 @@ function runChecks(deps: DependencySpec[]): StartupHealth {
   return {
     status: failedRequired ? "failed" : failedOptional ? "degraded" : "ok",
     checkedAt: new Date().toISOString(),
+    bootId: BOOT_ID,
     checks,
   };
 }
@@ -108,15 +116,41 @@ export function verifyStartupHealth(candidates: {
   ]);
 
   cached = health;
+  logStartupHealth(health);
+
+  return health;
+}
+
+/**
+ * One structured JSON line per boot plus one line per failing dependency, so
+ * server logs answer "which middleware failed?" without guesswork.
+ */
+export function logStartupHealth(health: StartupHealth): void {
+  const summary = {
+    tag: "ssr-boot",
+    bootId: health.bootId,
+    status: health.status,
+    checkedAt: health.checkedAt,
+    deps: Object.fromEntries(health.checks.map((c) => [c.name, c.ok ? "ok" : "missing"])),
+    failed: health.checks.filter((c) => !c.ok).map((c) => c.name),
+  };
+  const line = JSON.stringify(summary);
+  if (health.status === "failed") console.error(line);
+  else if (health.status === "degraded") console.warn(line);
+  else console.log(line);
 
   for (const check of health.checks) {
     if (check.ok) continue;
-    const message = `[startup-health] ${check.name}: ${check.detail}`;
+    const message = JSON.stringify({
+      tag: "ssr-boot-dep",
+      bootId: health.bootId,
+      dep: check.name,
+      required: check.required,
+      detail: check.detail,
+    });
     if (check.required) console.error(message);
     else console.warn(message);
   }
-
-  return health;
 }
 
 export function getStartupHealth(): StartupHealth {
@@ -124,6 +158,7 @@ export function getStartupHealth(): StartupHealth {
     cached ?? {
       status: "degraded",
       checkedAt: new Date().toISOString(),
+      bootId: BOOT_ID,
       checks: [
         {
           name: "startup-check",
