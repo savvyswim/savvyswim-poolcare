@@ -2553,6 +2553,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_review_requests: {
+        Row: {
+          clicked_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_name: string
+          google_url: string
+          id: string
+          message: string | null
+          opened_at: string | null
+          phone: string | null
+          photos: Json
+          token: string
+        }
+        Insert: {
+          clicked_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name: string
+          google_url: string
+          id?: string
+          message?: string | null
+          opened_at?: string | null
+          phone?: string | null
+          photos?: Json
+          token?: string
+        }
+        Update: {
+          clicked_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name?: string
+          google_url?: string
+          id?: string
+          message?: string | null
+          opened_at?: string | null
+          phone?: string | null
+          photos?: Json
+          token?: string
+        }
+        Relationships: []
+      }
       ss_settings: {
         Row: {
           key: string
@@ -3131,9 +3173,19 @@ export type Database = {
           read_ct: number
         }[]
       }
+      ss_get_review_request: {
+        Args: { _token: string }
+        Returns: {
+          customer_name: string
+          google_url: string
+          message: string
+          photos: Json
+        }[]
+      }
       ss_is_office: { Args: never; Returns: boolean }
       ss_is_owner: { Args: never; Returns: boolean }
       ss_is_staff: { Args: never; Returns: boolean }
+      ss_mark_review_clicked: { Args: { _token: string }; Returns: undefined }
       ss_match_service_plan: {
         Args: {
           p_condition: string
