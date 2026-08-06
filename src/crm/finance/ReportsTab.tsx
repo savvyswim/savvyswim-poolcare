@@ -14,13 +14,14 @@ import {
   type FinanceSlice,
 } from "@/crm/finance/shared";
 
-type Report = "pl" | "aging" | "customers" | "tax";
+type Report = "pl" | "aging" | "customers" | "tax" | "upsell";
 
 const REPORTS: { key: Report; label: string; sub: string }[] = [
   { key: "pl", label: "Profit & loss", sub: "Income vs. expenses by month" },
   { key: "aging", label: "A/R aging", sub: "Who owes you and for how long" },
   { key: "customers", label: "Revenue by customer", sub: "Your best accounts" },
   { key: "tax", label: "Tax summary", sub: "Year-to-date totals for your accountant" },
+  { key: "upsell", label: "Upsell reconciliation", sub: "Commission booked vs. upsell lines on invoices — mismatches flagged" },
 ];
 
 export default function ReportsTab({ data }: { data: FinanceSlice }) {
