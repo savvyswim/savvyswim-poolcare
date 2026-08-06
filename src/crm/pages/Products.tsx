@@ -359,7 +359,7 @@ export default function Products() {
                 className="ss-tag"
                 style={{ fontSize: "0.55rem", color: "rgba(255,255,255,.7)" }}
               >
-                Our monthly price
+                {plan ? plan.name : "Our monthly price"}
               </div>
               <div className="ss-num mt-1 text-[2rem] font-bold leading-none">
                 {money(quote.monthly)}
@@ -376,6 +376,21 @@ export default function Products() {
                 </div>
               )}
             </div>
+
+            {plan && (
+              <div className="ss-card p-4">
+                <div className="ss-label mb-2">What {plan.name} includes</div>
+                <ul className="space-y-1 text-[0.8rem]">
+                  {plan.scope.map((s) => (
+                    <li key={s} className="flex gap-2">
+                      <span className="opacity-40">—</span>
+                      <span className="opacity-85">{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
 
             <div className="ss-card p-4">
               <div className="ss-label mb-2">12-month savings</div>
