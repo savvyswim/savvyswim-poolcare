@@ -1435,12 +1435,14 @@ export type Database = {
           custom_fields: Json
           email: string | null
           equipment: Json
+          filter_interval_days: number
           full_name: string
           gallons: number
           gate_code: string | null
           id: string
           internal_notes: string | null
           invoice_day: number
+          last_filter_clean_at: string | null
           lat: number | null
           lng: number | null
           monthly_price: number
@@ -1475,12 +1477,14 @@ export type Database = {
           custom_fields?: Json
           email?: string | null
           equipment?: Json
+          filter_interval_days?: number
           full_name: string
           gallons?: number
           gate_code?: string | null
           id?: string
           internal_notes?: string | null
           invoice_day?: number
+          last_filter_clean_at?: string | null
           lat?: number | null
           lng?: number | null
           monthly_price?: number
@@ -1515,12 +1519,14 @@ export type Database = {
           custom_fields?: Json
           email?: string | null
           equipment?: Json
+          filter_interval_days?: number
           full_name?: string
           gallons?: number
           gate_code?: string | null
           id?: string
           internal_notes?: string | null
           invoice_day?: number
+          last_filter_clean_at?: string | null
           lat?: number | null
           lng?: number | null
           monthly_price?: number
@@ -3452,9 +3458,11 @@ export type Database = {
         Returns: {
           address: string
           city: string
+          filter_interval_days: number
           full_name: string
           gallons: number
           id: string
+          last_filter_clean_at: string
           monthly_price: number
           pool_type: string
           referral_code: string

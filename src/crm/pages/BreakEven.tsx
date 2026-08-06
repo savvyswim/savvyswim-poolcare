@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Gauge, RotateCcw } from "lucide-react";
 import { SectionTitle, StatTile } from "@/crm/components/Brand";
 import { loadModel, STORAGE_KEY, type PricingModel } from "@/crm/pages/PricingMatrix";
@@ -82,7 +82,7 @@ function NumInput({
         step={step}
         value={Number.isFinite(value) ? value : 0}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-none"
+        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-hidden"
       />
       {suffix && <span className="text-[0.7rem] opacity-50">{suffix}</span>}
     </div>

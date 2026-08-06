@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,10 @@ export default function Auth() {
   const { user, loading } = useAuth();
   const loc = useLocation();
   const dest = ((loc.state as { from?: string } | null)?.from) || "/admin/crm";
-  const inviteEmail = new URLSearchParams(window.location.search).get("invite") ?? "";
+  const inviteEmail =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("invite") ?? ""
+      : "";
   const [email, setEmail] = useState(inviteEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -54,7 +57,7 @@ export default function Auth() {
   // ---- Preview-only quick access -------------------------------------------
   // Only rendered on localhost / the Lovable preview host, never on the live
   // site, so it can't be used as a shortcut into production.
-  const host = window.location.hostname;
+  const host = typeof window !== "undefined" ? window.location.hostname : "";
   const isPreview =
     host === "localhost" ||
     host === "127.0.0.1" ||

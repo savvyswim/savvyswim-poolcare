@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { toast } from "sonner";
 import { FolderPlus, Hammer, Images, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import PricingTab from "@/crm/components/PricingTab";
 import { SectionTitle } from "@/crm/components/Brand";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";

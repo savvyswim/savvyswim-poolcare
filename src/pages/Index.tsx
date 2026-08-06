@@ -84,7 +84,7 @@ const MEMBERSHIP_FAQ = [
     a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
   },
 ];
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { SwimClubPrompt } from "@/components/SwimClubPrompt";
 import { supabase } from "@/integrations/supabase/client";
 

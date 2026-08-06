@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { logAdminAction } from "@/lib/audit";
@@ -155,7 +155,7 @@ export default function AdminTeam() {
       </header>
 
       <main className="container mx-auto px-4 py-6 grid gap-6 lg:grid-cols-[380px_1fr]">
-        <section className="rounded-xl border border-border bg-card p-5 shadow-sm h-fit">
+        <section className="rounded-xl border border-border bg-card p-5 shadow-xs h-fit">
           <div className="flex items-center gap-2">
             <UserPlus className="h-4 w-4 text-primary" />
             <h2 className="font-semibold">Invite a teammate</h2>
@@ -213,7 +213,7 @@ export default function AdminTeam() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <section className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
           <div className="px-5 py-4 border-b border-border">
             <h2 className="font-semibold">Invitations</h2>
             <p className="text-sm text-muted-foreground">

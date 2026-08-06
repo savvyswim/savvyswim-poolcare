@@ -1,0 +1,793 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Savvy Swim design system — ported from the Classic src/index.css (Tailwind v3)
+ * and tailwind.config.ts into Tailwind v4.
+ *
+ * Tokens are kept as HSL triplets (as in the original) and registered with
+ * @theme inline via hsl(var(--x)) so scoped overrides like .crm-scope keep working.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --breakpoint-xs: 400px;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-ring-offset-background: hsl(var(--background));
+
+  /* Brand color scale (from tailwind.config.ts extend.colors) */
+  --color-lifeguard: hsl(var(--lifeguard-red));
+  --color-cabana: hsl(var(--cabana-orange));
+  --color-olive: hsl(var(--olive-lounge));
+  --color-chlorine: hsl(var(--chlorine));
+  --color-canvas: hsl(var(--canvas));
+  --color-navy: hsl(var(--navy));
+  --color-sand: hsl(var(--sand));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Font families (from tailwind.config.ts extend.fontFamily) */
+  --font-display: "Archivo", Helvetica, Arial, sans-serif;
+  --font-badge: "Archivo", Helvetica, Arial, sans-serif;
+  --font-body: "Archivo", Helvetica, Arial, sans-serif;
+  --font-editorial: "Archivo", Helvetica, Arial, sans-serif;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* v3 container config: center + 2rem padding + 2xl:1400px */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  width: 100%;
+  @media (min-width: 1400px) {
+    max-width: 1400px;
+  }
+}
+
+:root {
+  /* Savvy Swim — sun-bleached canvas + brick red, classic beach-club */
+  --background: 44 38% 94%; /* Cream canvas */
+  --foreground: 3 32% 20%; /* Warm dark red-brown ink */
+
+  --card: 44 44% 97%;
+  --card-foreground: 3 32% 20%;
+
+  --popover: 44 44% 97%;
+  --popover-foreground: 3 32% 20%;
+
+  --primary: 2 68% 38%; /* Brick red */
+  --primary-foreground: 44 44% 97%;
+
+  --secondary: 42 30% 90%;
+  --secondary-foreground: 3 32% 20%;
+
+  --muted: 42 28% 91%;
+  --muted-foreground: 8 14% 40%;
+
+  --accent: 2 68% 38%; /* Brick red */
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 2 68% 38%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 40 20% 84%;
+  --input: 40 20% 84%;
+  --ring: 2 68% 38%;
+
+  --radius: 0.85rem;
+
+  /* Sidebar (shadcn sidebar component tokens) */
+  --sidebar-background: 44 44% 97%;
+  --sidebar-foreground: 3 32% 20%;
+  --sidebar-primary: 2 68% 38%;
+  --sidebar-primary-foreground: 44 44% 97%;
+  --sidebar-accent: 42 30% 90%;
+  --sidebar-accent-foreground: 3 32% 20%;
+  --sidebar-border: 40 20% 84%;
+  --sidebar-ring: 2 68% 38%;
+
+  /* Brand tokens */
+  --ink: 44 38% 94%;
+  --ink-soft: 42 30% 90%;
+  --lifeguard-red: 2 68% 38%; /* brick red */
+  --cabana-orange: 12 62% 47%;
+  --olive-lounge: 2 68% 38%;
+  --chlorine: 2 68% 38%;
+  --navy: 3 32% 20%; /* warm ink instead of navy */
+  --sand: 38 34% 84%;
+  --canvas: 44 38% 94%;
+
+  --amber: 2 68% 38%;
+  --amber-deep: 2 68% 38%;
+  --gold: 2 68% 38%;
+  --chrome: 3 32% 20%;
+  --hairline: 40 20% 84%;
+
+  --gradient-amber: linear-gradient(135deg, hsl(2 68% 42%), hsl(2 62% 32%));
+  --gradient-gold: linear-gradient(135deg, hsl(2 68% 42%), hsl(12 62% 44%));
+  --gradient-ink: linear-gradient(180deg, hsl(44 38% 94%), hsl(42 30% 90%));
+  --gradient-radial: radial-gradient(ellipse at top, hsl(2 68% 42% / 0.08), transparent 62%);
+  --gradient-water: linear-gradient(180deg, hsl(200 40% 62% / 0), hsl(200 30% 45% / 0.16) 40%, hsl(3 32% 18% / 0.3));
+  --shadow-cta: 0 8px 22px -14px hsl(3 40% 20% / 0.5);
+  --shadow-card: 0 1px 2px hsl(3 30% 20% / 0.05), 0 14px 34px -26px hsl(3 30% 20% / 0.4);
+  --shadow-3d: 0 2px 6px hsl(3 30% 20% / 0.06), 0 30px 60px -40px hsl(3 30% 20% / 0.35);
+
+  --on-media: 44 44% 97%;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    font-family: "Archivo", Helvetica, Arial, system-ui, sans-serif;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: "Archivo", Helvetica, Arial, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    font-weight: 800;
+    color: hsl(var(--primary));
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.005em;
+    font-weight: 600;
+  }
+  p {
+    letter-spacing: 0.005em;
+  }
+}
+
+@layer utilities {
+  .bg-ink {
+    background-color: hsl(var(--ink));
+  }
+  .bg-ink-soft {
+    background-color: hsl(var(--ink-soft));
+  }
+  .text-amber-brand {
+    color: hsl(var(--chlorine));
+  }
+  .text-gold {
+    color: hsl(var(--lifeguard-red));
+  }
+  .bg-amber-brand {
+    background: hsl(var(--chlorine));
+  }
+  .bg-gold-brand {
+    background: var(--gradient-gold);
+  }
+  .border-hairline {
+    border-color: hsl(var(--hairline));
+  }
+  .shadow-cta {
+    box-shadow: var(--shadow-cta);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-3d {
+    box-shadow: var(--shadow-3d);
+  }
+  .container-tight {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-tight {
+      padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-tight {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1536px) {
+    .container-tight {
+      padding-inline: 3.5rem;
+      max-width: 1240px;
+    }
+  }
+
+  /* Brand type helpers — fat rounded display + classic serif */
+  .font-display {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: -0.005em;
+  }
+  .font-badge {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+  }
+  .font-editorial {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .editorial-italic {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .eyebrow {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  /* Small-label layer (classic serif, replaces the mono instrumentation look) */
+  .font-tech {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .tech-label {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: hsl(var(--primary) / 0.6);
+  }
+  .tech-rule {
+    border-top: 1px solid hsl(var(--primary) / 0.14);
+  }
+  .tech-grid {
+    background-image: none;
+  }
+  .tech-chip {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 0.8rem;
+    border: 1px solid hsl(var(--primary) / 0.25);
+    border-radius: 999px !important;
+    padding: 0.28rem 0.75rem;
+    color: hsl(var(--primary) / 0.85);
+  }
+  .tech-readout {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  @keyframes blip {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.15;
+    }
+  }
+  .animate-blip {
+    animation: blip 1.8s steps(1, end) infinite;
+  }
+  /* Poster-scale display type */
+  .type-mega {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    font-size: clamp(3.2rem, 11vw, 10rem);
+    color: hsl(var(--primary));
+  }
+  .type-mega-alt {
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    font-size: clamp(2.6rem, 9vw, 8rem);
+  }
+
+  /* Floating cream panel over a photo backdrop */
+  .canvas-panel {
+    background: hsl(var(--card));
+    border-radius: 1.25rem;
+    box-shadow: 0 30px 80px -40px hsl(3 40% 18% / 0.5);
+  }
+  .photo-tile {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .text-red-brand {
+    color: hsl(var(--lifeguard-red));
+  }
+  .text-orange-brand {
+    color: hsl(var(--cabana-orange));
+  }
+  .text-olive-brand {
+    color: hsl(var(--olive-lounge));
+  }
+  .text-navy-brand {
+    color: hsl(var(--navy));
+  }
+  .bg-red-brand {
+    background-color: hsl(var(--lifeguard-red));
+  }
+  .bg-orange-brand {
+    background-color: hsl(var(--cabana-orange));
+  }
+  .bg-olive-brand {
+    background-color: hsl(var(--olive-lounge));
+  }
+  .bg-navy-brand {
+    background-color: hsl(var(--navy));
+  }
+  .bg-sand-brand {
+    background-color: hsl(var(--sand));
+  }
+
+  /* Mandatory stripe motif — wide cabana awning stripes */
+  .stripes-red {
+    background-image: repeating-linear-gradient(90deg, hsl(var(--lifeguard-red)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripes-orange {
+    background-image: repeating-linear-gradient(90deg, hsl(var(--cabana-orange)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripes-olive {
+    background-image: repeating-linear-gradient(90deg, hsl(var(--olive-lounge)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripes-navy {
+    background-image: repeating-linear-gradient(90deg, hsl(var(--navy)) 0 26px, hsl(40 40% 97%) 26px 52px);
+  }
+  .stripe-rule {
+    height: 10px;
+    width: 100%;
+  }
+  /* Hairline pinstripe wash for section backdrops */
+  .pinstripe {
+    background-image: repeating-linear-gradient(90deg, hsl(var(--navy) / 0.05) 0 1px, transparent 1px 14px);
+  }
+  /* Scalloped cabana-umbrella edge */
+  .scallop-edge {
+    height: 14px;
+    width: 100%;
+    background-color: hsl(var(--lifeguard-red));
+    -webkit-mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    mask-image: radial-gradient(circle 9px at 9px 0, transparent 99%, #000 100%);
+    -webkit-mask-size: 18px 14px;
+    mask-size: 18px 14px;
+    -webkit-mask-position: 0 14px;
+    mask-position: 0 14px;
+    transform: scaleY(-1);
+  }
+
+  .text-gradient-amber {
+    color: hsl(var(--olive-lounge));
+  }
+  .text-gradient-chrome {
+    color: hsl(var(--navy));
+  }
+  .text-gradient-gold {
+    color: hsl(var(--lifeguard-red));
+  }
+
+  .glass {
+    background: hsl(42 34% 96% / 0.86);
+    backdrop-filter: blur(14px) saturate(1.05);
+    border: 1px solid hsl(40 18% 82% / 0.9);
+  }
+
+  .card-3d {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--hairline));
+    border-radius: 1.1rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+  .card-3d:hover {
+    border-color: hsl(var(--lifeguard-red) / 0.35);
+    box-shadow:
+      0 2px 4px hsl(3 30% 20% / 0.05),
+      0 26px 50px -34px hsl(3 30% 20% / 0.38);
+  }
+
+  .rule-top {
+    border-top: 2px solid hsl(var(--lifeguard-red));
+  }
+
+  .grid-bg {
+    background-image: none;
+  }
+
+  /* Soft evening light drifting over the water */
+  .water-caustics {
+    background:
+      radial-gradient(ellipse 45% 32% at 30% 40%, hsl(192 90% 62% / 0.22), transparent 62%),
+      radial-gradient(ellipse 50% 35% at 70% 70%, hsl(204 85% 50% / 0.16), transparent 66%),
+      radial-gradient(ellipse 32% 22% at 50% 20%, hsl(186 90% 70% / 0.14), transparent 62%);
+    filter: blur(26px);
+    animation: caustics 16s ease-in-out infinite;
+  }
+
+  @keyframes caustics {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.7;
+    }
+    33% {
+      transform: translate(2%, -1%) scale(1.05);
+      opacity: 0.9;
+    }
+    66% {
+      transform: translate(-1%, 2%) scale(0.98);
+      opacity: 0.8;
+    }
+  }
+
+  /* Slow ripple */
+  @keyframes ripple {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+  .animate-ripple {
+    animation: ripple 3.5s ease-out infinite;
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-14px) rotate(2deg);
+    }
+  }
+  .animate-float {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  @keyframes marquee-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  .animate-marquee-slow {
+    animation: marquee 55s linear infinite;
+  }
+  .animate-marquee-slow-reverse {
+    animation: marquee-reverse 65s linear infinite;
+  }
+  .marquee-pause:hover .animate-marquee-slow,
+  .marquee-pause:hover .animate-marquee-slow-reverse {
+    animation-play-state: paused;
+  }
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee-slow,
+    .animate-marquee-slow-reverse {
+      animation: none;
+    }
+  }
+
+  /* subtle lift, no gimmicky 3D rotation */
+  .tilt-card {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .tilt-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@layer utilities {
+  /* Text sitting on top of photos/video */
+  .text-on-media {
+    color: hsl(var(--on-media));
+    text-shadow: 0 1px 3px hsl(213 45% 8% / 0.4);
+  }
+  .hero-scrim {
+    background:
+      linear-gradient(180deg, hsl(213 45% 10% / 0.5) 0%, hsl(213 45% 10% / 0.22) 38%, hsl(213 45% 10% / 0.55) 100%),
+      radial-gradient(ellipse 70% 55% at 50% 50%, hsl(36 30% 60% / 0.1), hsl(213 45% 10% / 0.42));
+  }
+
+  .btn-quote {
+    background: hsl(var(--lifeguard-red));
+    color: hsl(44 44% 97%);
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    border-radius: 999px !important;
+  }
+  .btn-quote:hover {
+    background: hsl(2 62% 30%);
+  }
+  .topbar {
+    background: hsl(var(--lifeguard-red));
+    color: hsl(44 44% 97%);
+    font-family: "Archivo", Helvetica, Arial, sans-serif;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* ── HubSpot-style admin CRM shell (blue tones) ───────────────── */
+@layer utilities {
+  .crm-scope {
+    --background: 206 40% 97%;
+    --foreground: 210 42% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 42% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 42% 16%;
+    --primary: 205 88% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 206 40% 95%;
+    --secondary-foreground: 210 42% 16%;
+    --muted: 206 38% 95%;
+    --muted-foreground: 208 16% 46%;
+    --accent: 205 88% 40%;
+    --accent-foreground: 0 0% 100%;
+    --border: 206 26% 88%;
+    --input: 206 26% 88%;
+    --ring: 205 88% 40%;
+    --radius: 0.5rem;
+  }
+
+  .crm-topbar {
+    background: linear-gradient(90deg, hsl(211 58% 15%), hsl(207 64% 24%));
+    color: hsl(0 0% 100%);
+    border-bottom: 1px solid hsl(207 40% 22%);
+  }
+  .crm-topbar .crm-sub {
+    color: hsl(205 45% 78%);
+  }
+
+  .crm-panel {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.6rem;
+    box-shadow:
+      0 1px 2px hsl(210 40% 20% / 0.06),
+      0 6px 16px -14px hsl(210 40% 20% / 0.5);
+  }
+
+  .crm-stat {
+    border-left: 3px solid hsl(var(--primary));
+  }
+
+  .crm-tabs {
+    background: transparent;
+    border-bottom: 1px solid hsl(var(--border));
+    border-radius: 0;
+    padding: 0;
+    height: auto;
+    gap: 0.25rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .crm-tabs [data-state] {
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+  }
+  .crm-tabs [data-state="active"] {
+    background: transparent;
+    box-shadow: none;
+    color: hsl(var(--primary));
+    border-bottom-color: hsl(var(--primary));
+  }
+
+  .crm-col-head {
+    background: hsl(206 45% 94%);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+  }
+  .crm-lead-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-left: 3px solid hsl(205 60% 78%);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px hsl(210 40% 20% / 0.06);
+    transition:
+      box-shadow 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.18s ease;
+  }
+  .crm-lead-card:hover {
+    border-left-color: hsl(var(--primary));
+    box-shadow: 0 6px 18px -10px hsl(210 50% 25% / 0.35);
+    transform: translateY(-1px);
+  }
+}
+
+/* ---- Quality pass: crisp rendering, readability, performance ---- */
+@layer base {
+  html {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-synthesis-weight: none;
+    font-size: 16.5px;
+    line-height: 1.62;
+  }
+  @media (min-width: 1024px) {
+    body {
+      font-size: 17px;
+    }
+  }
+  p,
+  li {
+    text-wrap: pretty;
+    color: hsl(var(--foreground) / 0.82);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  h1 {
+    line-height: 0.94;
+  }
+  h2 {
+    line-height: 1.02;
+  }
+  img,
+  video {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+  ::selection {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Skip painting offscreen heavy sections until needed */
+  .perf-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

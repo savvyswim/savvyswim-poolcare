@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "@/lib/router-compat";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";

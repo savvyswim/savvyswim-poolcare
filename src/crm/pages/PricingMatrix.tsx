@@ -31,7 +31,7 @@ export const DEFAULT_MODEL: PricingModel = {
   ].map(([label, monthly]) => ({ id: uid(), label: label as string, monthly: monthly as number })),
   margin: 40,
   tierPct: { good: 85, better: 100, best: 135 },
-  names: { good: "Basic Care", better: "Pro Care", best: "Platinum Care" },
+  names: { good: "Chemical Only", better: "Weekly Service", best: "Swim Club" },
   prices: { good: 134, better: 158, best: 213 },
   annualPools: 40,
   features: [
@@ -95,7 +95,7 @@ function NumInput({
         step={step}
         value={Number.isFinite(value) ? value : 0}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-none"
+        className="ss-num w-full bg-transparent text-right text-[0.85rem] outline-hidden"
       />
       {suffix && <span className="text-[0.7rem] opacity-50">{suffix}</span>}
     </div>
@@ -213,7 +213,7 @@ export default function PricingMatrix() {
                     <input
                       value={r.label}
                       onChange={(e) => patchCost(r.id, { label: e.target.value })}
-                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-none focus:border-[hsl(var(--ss-ink)/0.2)]"
+                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-hidden focus:border-[hsl(var(--ss-ink)/0.2)]"
                     />
                   </td>
                   <td className="w-[140px] py-1.5 pr-2">
@@ -297,7 +297,7 @@ export default function PricingMatrix() {
                 onChange={(e) =>
                   setModel((m) => ({ ...m, names: { ...m.names, [t.key]: e.target.value } }))
                 }
-                className="mt-1 w-full rounded-md border border-transparent bg-transparent text-[1rem] font-semibold outline-none focus:border-[hsl(var(--ss-ink)/0.2)]"
+                className="mt-1 w-full rounded-md border border-transparent bg-transparent text-[1rem] font-semibold outline-hidden focus:border-[hsl(var(--ss-ink)/0.2)]"
               />
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <label className="block">
@@ -397,7 +397,7 @@ export default function PricingMatrix() {
                     <input
                       value={f.label}
                       onChange={(e) => patchFeature(f.id, { label: e.target.value })}
-                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-none focus:border-[hsl(var(--ss-ink)/0.2)]"
+                      className="w-full rounded-md border border-transparent bg-transparent px-1 py-1 outline-hidden focus:border-[hsl(var(--ss-ink)/0.2)]"
                     />
                   </td>
                   {TIERS.map((t) => (
