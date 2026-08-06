@@ -39,6 +39,26 @@ export function collectRoutes(routeTreeSource: string): string[] {
 
 type Result = { route: string; status: number | null; ok: boolean; note: string };
 
+/** Admin/CRM screens that must SSR a real page (200, non-blank, no crash body). */
+const CRITICAL_ADMIN_ROUTES = [
+  "/admin/crm",
+  "/admin/crm/customers",
+  "/admin/crm/jobs",
+  "/admin/crm/finance",
+  "/admin/crm/pipeline",
+  "/admin/crm/projects",
+  "/admin/crm/reports",
+  "/admin/crm/settings",
+  "/admin/crm/deploy-health",
+  "/portal",
+];
+
+const MIN_HTML_BYTES = 500;
+
+function looksLikeCrash(body: string): boolean {
+  return body.includes('"unhandled":true') || body.includes("HTTPError");
+}
+
 async function probe(route: string): Promise<Result> {
   const url = `${BASE_URL}${route}`;
   const controller = new AbortController();
@@ -62,6 +82,77 @@ async function probe(route: string): Promise<Result> {
     };
   } finally {
     clearTimeout(timer);
+  }
+}
+
+/**
+ * Critical admin/CRM screens: must be 200 (no redirect away), must return real
+ * HTML, and must not be the SSR crash payload or a blank shell.
+ */
+async function probeCritical(route: string): Promise<Result> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${BASE_URL}${route}`, { redirect: "manual", signal: controller.signal });
+    const body = await res.text();
+    if (res.status !== 200) {
+      const dest = res.headers.get("location");
+      return {
+        route: `${route} [critical]`,
+        status: res.status,
+        ok: false,
+        note: dest ? `redirected to ${dest} instead of rendering` : "did not return 200",
+      };
+    }
+    if (looksLikeCrash(body)) {
+      return { route: `${route} [critical]`, status: 200, ok: false, note: "SSR crash payload" };
+    }
+    if (body.length < MIN_HTML_BYTES || !body.includes("<div id=\"root\"") === false ? false : false) {
+      // placeholder — real checks below
+    }
+    if (body.length < MIN_HTML_BYTES) {
+      return { route: `${route} [critical]`, status: 200, ok: false, note: `blank response (${body.length} bytes)` };
+    }
+    if (!/<body[\s>]/i.test(body)) {
+      return { route: `${route} [critical]`, status: 200, ok: false, note: "no HTML document returned" };
+    }
+    return { route: `${route} [critical]`, status: 200, ok: true, note: `${body.length} bytes` };
+  } catch (error) {
+    return {
+      route: `${route} [critical]`,
+      status: null,
+      ok: false,
+      note: error instanceof Error ? error.message : String(error),
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Unknown URLs must render the branded not-found/error page, not a blank 500. */
+async function probeErrorPage(): Promise<Result> {
+  const route = "/__smoke__/this-route-does-not-exist";
+  try {
+    const res = await fetch(`${BASE_URL}${route}`, { redirect: "manual" });
+    const body = await res.text();
+    const rendered =
+      body.length > 200 &&
+      /<body[\s>]/i.test(body) &&
+      !looksLikeCrash(body) &&
+      /(404|not found|page|savvy)/i.test(body);
+    return {
+      route: "error page (unknown URL)",
+      status: res.status,
+      ok: (res.status === 404 || res.status === 200) && rendered,
+      note: rendered ? `rendered ${body.length} bytes` : "did not render an error page",
+    };
+  } catch (error) {
+    return {
+      route: "error page (unknown URL)",
+      status: null,
+      ok: false,
+      note: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 
