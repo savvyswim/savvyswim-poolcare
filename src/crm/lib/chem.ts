@@ -6,17 +6,31 @@ export type Readings = {
 
 export const CHEM_COST = { chlorinePerOz: 0.05, acidPerOz: 0.045 };
 
-/** Liquid chlorine 12.5%: oz = (3 - FC) x gallons/10000 x 10.7 */
+/** Savvy Swim water chemistry targets. */
+export const TARGETS = {
+  fc: { min: 1, max: 3, ideal: 2, label: "Chlorine", unit: "ppm", purpose: "Sanitation" },
+  ph: { min: 7.4, max: 7.6, ideal: 7.5, label: "pH", unit: "", purpose: "Comfort & equipment" },
+  ta: { min: 80, max: 120, ideal: 100, label: "Alkalinity", unit: "ppm", purpose: "Stability" },
+  ch: { min: 200, max: 400, ideal: 250, label: "Hardness", unit: "ppm", purpose: "Surface protection" },
+  cyc: { min: 30, max: 50, ideal: 40, label: "CYA", unit: "ppm", purpose: "Chlorine shield" },
+  psi: { min: 8, max: 15, ideal: 12, label: "Filter PSI", unit: "psi", purpose: "Circulation" },
+  salt: { min: 3000, max: 3400, ideal: 3200, label: "Salt", unit: "ppm", purpose: "Cell output" },
+} as const;
+
+export type MetricKey = keyof typeof TARGETS;
+
+/** Liquid chlorine 12.5% — only dosed when free chlorine is below 1 ppm; raises to 2 ppm. */
 export function chlorineOz(fc: number | undefined, gallons: number) {
   if (fc === undefined || Number.isNaN(fc)) return 0;
-  const oz = (3 - fc) * (gallons / 10000) * 10.7;
+  if (fc >= TARGETS.fc.min) return 0;
+  const oz = (TARGETS.fc.ideal - fc) * (gallons / 10000) * 10.7;
   return oz > 0 ? Math.round(oz * 10) / 10 : 0;
 }
 
 /** Muriatic acid: oz = (pH - 7.5)/0.1 x 5 x gallons/10000, only when pH > 7.6 */
 export function acidOz(ph: number | undefined, gallons: number) {
-  if (ph === undefined || Number.isNaN(ph) || ph <= 7.6) return 0;
-  const oz = ((ph - 7.5) / 0.1) * 5 * (gallons / 10000);
+  if (ph === undefined || Number.isNaN(ph) || ph <= TARGETS.ph.max) return 0;
+  const oz = ((ph - TARGETS.ph.ideal) / 0.1) * 5 * (gallons / 10000);
   return Math.round(oz * 10) / 10;
 }
 
@@ -58,12 +72,198 @@ export function doseFor(readings: Readings, gallons: number) {
 }
 
 export const READING_FIELDS = [
-  { key: "fc", label: "Free Cl", unit: "ppm", target: "2–4", step: 0.1 },
+  { key: "fc", label: "Free Cl", unit: "ppm", target: "1–3", step: 0.1 },
   { key: "ph", label: "pH", unit: "", target: "7.4–7.6", step: 0.1 },
   { key: "ta", label: "Alkalinity", unit: "ppm", target: "80–120", step: 1 },
   { key: "ch", label: "Hardness", unit: "ppm", target: "200–400", step: 1 },
   { key: "cyc", label: "CYA", unit: "ppm", target: "30–50", step: 1 },
-  { key: "psi", label: "Filter PSI", unit: "psi", target: "10–15", step: 1 },
+  { key: "psi", label: "Filter PSI", unit: "psi", target: "8–15", step: 1 },
   { key: "temp", label: "Water Temp", unit: "°F", target: "—", step: 1 },
   { key: "salt", label: "Salt", unit: "ppm", target: "3000–3400", step: 10 },
 ] as const;
+
+/* ────────────────────────────────────────────────────────────────
+   Report engine — anything inside range is good; anything outside
+   gets an exact chemical + amount so the tech never has to think.
+   ──────────────────────────────────────────────────────────────── */
+
+export type Status = "good" | "low" | "high" | "unknown";
+
+export type MetricResult = {
+  key: MetricKey;
+  label: string;
+  unit: string;
+  purpose: string;
+  value: number | null;
+  range: string;
+  status: Status;
+};
+
+export type Treatment = {
+  metric: MetricKey;
+  chemical: string;
+  amount: string;
+  reason: string;
+};
+
+const round1 = (n: number) => Math.round(n * 10) / 10;
+const lbs = (n: number) => (n < 1 ? `${round1(n * 16)} oz` : `${round1(n)} lb`);
+const per10k = (g: number) => g / 10000;
+
+export function statusFor(key: MetricKey, value: number | undefined): Status {
+  if (value === undefined || Number.isNaN(value)) return "unknown";
+  const t = TARGETS[key];
+  if (value < t.min) return "low";
+  if (value > t.max) return "high";
+  return "good";
+}
+
+export function evaluate(readings: Readings, gallons: number) {
+  const metrics: MetricResult[] = (Object.keys(TARGETS) as MetricKey[]).map((key) => {
+    const t = TARGETS[key];
+    const value = (readings as Record<string, number | undefined>)[key];
+    return {
+      key,
+      label: t.label,
+      unit: t.unit,
+      purpose: t.purpose,
+      value: value === undefined || Number.isNaN(value) ? null : value,
+      range: `${t.min}–${t.max}${t.unit ? ` ${t.unit}` : ""}`,
+      status: statusFor(key, value),
+    };
+  });
+
+  const g = per10k(gallons || 0);
+  const treatments: Treatment[] = [];
+  const { fc, ph, ta, ch, cyc, psi, salt } = readings;
+
+  if (statusFor("fc", fc) === "low") {
+    treatments.push({
+      metric: "fc",
+      chemical: "Liquid chlorine 12.5%",
+      amount: `${chlorineOz(fc, gallons)} oz`,
+      reason: `Free chlorine ${fc} ppm is below the 1–3 ppm sanitation range.`,
+    });
+  } else if (statusFor("fc", fc) === "high") {
+    treatments.push({
+      metric: "fc",
+      chemical: "No chlorine added",
+      amount: "Hold 24–48 hrs",
+      reason: `Free chlorine ${fc} ppm is above 3 ppm — let it burn off before swimming.`,
+    });
+  }
+
+  if (statusFor("ph", ph) === "high") {
+    treatments.push({
+      metric: "ph",
+      chemical: "Muriatic acid 31.45%",
+      amount: `${acidOz(ph, gallons)} oz`,
+      reason: `pH ${ph} is above 7.6 — scaling and cloudy water risk.`,
+    });
+  } else if (statusFor("ph", ph) === "low" && ph !== undefined) {
+    treatments.push({
+      metric: "ph",
+      chemical: "Soda ash (sodium carbonate)",
+      amount: lbs(((TARGETS.ph.ideal - ph) / 0.1) * 0.4 * g),
+      reason: `pH ${ph} is below 7.4 — corrosive to plaster and equipment.`,
+    });
+  }
+
+  if (statusFor("ta", ta) === "low" && ta !== undefined) {
+    treatments.push({
+      metric: "ta",
+      chemical: "Sodium bicarbonate (alkalinity up)",
+      amount: lbs(((TARGETS.ta.ideal - ta) / 10) * 1.5 * g),
+      reason: `Alkalinity ${ta} ppm is below 80 ppm — pH will bounce.`,
+    });
+  } else if (statusFor("ta", ta) === "high" && ta !== undefined) {
+    treatments.push({
+      metric: "ta",
+      chemical: "Muriatic acid 31.45% (slug dose)",
+      amount: lbs(((ta - TARGETS.ta.ideal) / 10) * 0.16 * g),
+      reason: `Alkalinity ${ta} ppm is above 120 ppm — lower slowly over the next visits.`,
+    });
+  }
+
+  if (statusFor("ch", ch) === "low" && ch !== undefined) {
+    treatments.push({
+      metric: "ch",
+      chemical: "Calcium chloride (hardness up)",
+      amount: lbs(((TARGETS.ch.ideal - ch) / 10) * 1.25 * g),
+      reason: `Calcium hardness ${ch} ppm is low — water will pull calcium from the surface.`,
+    });
+  } else if (statusFor("ch", ch) === "high" && ch !== undefined) {
+    treatments.push({
+      metric: "ch",
+      chemical: "Partial drain & refill",
+      amount: "Dilute ~25%",
+      reason: `Calcium hardness ${ch} ppm is high — scaling risk on tile and cell.`,
+    });
+  }
+
+  if (statusFor("cyc", cyc) === "low" && cyc !== undefined) {
+    treatments.push({
+      metric: "cyc",
+      chemical: "Cyanuric acid (stabilizer)",
+      amount: lbs(((TARGETS.cyc.ideal - cyc) / 10) * 0.83 * g),
+      reason: `CYA ${cyc} ppm is low — sunlight burns off chlorine fast.`,
+    });
+  } else if (statusFor("cyc", cyc) === "high" && cyc !== undefined) {
+    treatments.push({
+      metric: "cyc",
+      chemical: "Partial drain & refill",
+      amount: "Dilute to 30–50 ppm",
+      reason: `CYA ${cyc} ppm is above 50 ppm — chlorine gets locked up.`,
+    });
+  }
+
+  if (statusFor("salt", salt) === "low" && salt !== undefined) {
+    treatments.push({
+      metric: "salt",
+      chemical: "Pool salt",
+      amount: lbs(((TARGETS.salt.ideal - salt) * (gallons || 0) * 8.34) / 1_000_000),
+      reason: `Salt ${salt} ppm is below 3000 ppm — cell output drops.`,
+    });
+  } else if (statusFor("salt", salt) === "high" && salt !== undefined) {
+    treatments.push({
+      metric: "salt",
+      chemical: "Partial drain & refill",
+      amount: "Dilute to 3000–3400 ppm",
+      reason: `Salt ${salt} ppm is above range — corrosion risk.`,
+    });
+  }
+
+  if (statusFor("psi", psi) === "high" && psi !== undefined) {
+    treatments.push({
+      metric: "psi",
+      chemical: "Backwash / clean filter",
+      amount: "On site",
+      reason: `Filter pressure ${psi} psi is high — flow restricted.`,
+    });
+  } else if (statusFor("psi", psi) === "low" && psi !== undefined) {
+    treatments.push({
+      metric: "psi",
+      chemical: "Check water level & pump basket",
+      amount: "On site",
+      reason: `Filter pressure ${psi} psi is low — possible suction-side air or low water.`,
+    });
+  }
+
+  const tested = metrics.filter((m) => m.status !== "unknown");
+  const outOfRange = tested.filter((m) => m.status !== "good");
+  const allGood = tested.length > 0 && outOfRange.length === 0;
+
+  return {
+    metrics,
+    treatments,
+    tested,
+    outOfRange,
+    allGood,
+    lsi: lsi(readings),
+    summary: allGood
+      ? "All tested levels are within Savvy Swim targets — water is balanced and swim-ready."
+      : outOfRange.length
+        ? `${outOfRange.length} level${outOfRange.length > 1 ? "s" : ""} outside target — corrected on site.`
+        : "No readings recorded on this visit.",
+  };
+}
