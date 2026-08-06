@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { FileSignature, Link2, Send, ExternalLink, Plus } from "lucide-react";
+import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
-import { sendContractEmail } from "@/lib/contracts.functions";
+import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
 
 type Contract = {
   id: string;
@@ -14,11 +14,22 @@ type Contract = {
   status: string;
   token: string;
   recipient_email: string | null;
+  recipient_phone: string | null;
   sent_at: string | null;
   viewed_at: string | null;
   signed_at: string | null;
   signer_name: string | null;
   created_at: string;
+};
+
+type SmsLog = {
+  id: string;
+  contract_id: string;
+  to_phone: string;
+  status: string;
+  error_message: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 type Template = { id: string; name: string; body: string; is_default: boolean };
@@ -29,6 +40,7 @@ type CustomerLite = {
   address: string | null;
   city: string | null;
   email: string | null;
+  phone: string | null;
   monthly_price: number;
   service_level: string;
 };
@@ -42,6 +54,16 @@ const STATUS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgun
   voided: "burgundy",
 };
 
+const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
+  queued: "gold",
+  accepted: "gold",
+  sending: "aqua",
+  sent: "aqua",
+  delivered: "green",
+  undelivered: "orange",
+  failed: "burgundy",
+};
+
 const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : null);
 
 export default function CustomerContracts({ customer }: { customer: CustomerLite }) {
@@ -51,11 +73,14 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [busy, setBusy] = useState<string | null>(null);
   const sendEmail = useServerFn(sendContractEmail);
+  const sendSms = useServerFn(sendContractSms);
+  const [smsFor, setSmsFor] = useState<string | null>(null);
+  const [smsPhone, setSmsPhone] = useState("");
 
   const { rows: contracts, refetch } = useTable<Contract>(`contracts-${customer.id}`, async () => {
     const { data } = await supabase
       .from("ss_contracts")
-      .select("id,title,status,token,recipient_email,sent_at,viewed_at,signed_at,signer_name,created_at")
+      .select("id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signed_at,signer_name,created_at")
       .eq("customer_id", customer.id)
       .order("created_at", { ascending: false });
     return (data ?? []) as Contract[];
@@ -68,6 +93,14 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       .eq("is_active", true)
       .order("created_at");
     return (data ?? []) as Template[];
+  });
+
+  const { rows: smsLog, refetch: refetchSms } = useTable<SmsLog>(`contract-sms-${customer.id}`, async () => {
+    const { data } = await supabase
+      .from("ss_contract_sms")
+      .select("id,contract_id,to_phone,status,error_message,created_at,updated_at")
+      .order("created_at", { ascending: false });
+    return (data ?? []) as SmsLog[];
   });
 
   const selectedTemplate = useMemo(
@@ -101,6 +134,7 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       status: "draft",
       recipient_name: customer.full_name,
       recipient_email: customer.email,
+      recipient_phone: customer.phone,
       merge_data: { term_months: termMonths, start_date: startDate, monthly_price: customer.monthly_price },
     });
     setBusy(null);
@@ -125,6 +159,27 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       refetch();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not send the contract");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const text = async (contract: Contract) => {
+    const phone = smsPhone.trim();
+    if (!phone) {
+      toast.error("Enter a mobile number");
+      return;
+    }
+    setBusy(contract.id);
+    try {
+      const res = await sendSms({ data: { contractId: contract.id, phone, origin: window.location.origin } });
+      toast.success(`Signing link texted to ${res.to}`);
+      setSmsFor(null);
+      refetch();
+      refetchSms();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send the text");
+      refetchSms();
     } finally {
       setBusy(null);
     }
@@ -216,6 +271,17 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 <Send size={12} /> {busy === k.id ? "Sending…" : k.sent_at ? "Resend email" : "Send for signature"}
               </button>
             )}
+            {k.status !== "signed" && k.status !== "voided" && (
+              <button
+                className="ss-btn ss-btn-ghost"
+                onClick={() => {
+                  setSmsFor(smsFor === k.id ? null : k.id);
+                  setSmsPhone(k.recipient_phone ?? customer.phone ?? "");
+                }}
+              >
+                <MessageSquare size={12} /> Text link
+              </button>
+            )}
             <button className="ss-btn ss-btn-ghost" onClick={() => copyLink(k)}>
               <Link2 size={12} /> Copy link
             </button>
@@ -228,6 +294,40 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
               <ExternalLink size={12} /> {k.status === "signed" ? "View signed copy" : "Preview"}
             </a>
           </div>
+
+          {smsFor === k.id && (
+            <div className="mt-2.5 flex flex-wrap items-end gap-2 border-t border-black/10 pt-2.5">
+              <label className="block min-w-[180px] flex-1">
+                <span className="ss-label">Mobile number</span>
+                <input
+                  className="ss-input mt-1 w-full"
+                  type="tel"
+                  placeholder="(469) 744-0379"
+                  value={smsPhone}
+                  onChange={(e) => setSmsPhone(e.target.value)}
+                />
+              </label>
+              <button className="ss-btn" onClick={() => text(k)} disabled={busy === k.id}>
+                <Send size={12} /> {busy === k.id ? "Sending…" : "Send text"}
+              </button>
+            </div>
+          )}
+
+          {smsLog.filter((m) => m.contract_id === k.id).length > 0 && (
+            <div className="mt-2.5 space-y-1 border-t border-black/10 pt-2.5">
+              <div className="ss-label">SMS delivery</div>
+              {smsLog
+                .filter((m) => m.contract_id === k.id)
+                .map((m) => (
+                  <div key={m.id} className="flex flex-wrap items-center gap-2 text-[0.7rem] opacity-80">
+                    <Chip tone={SMS_TONE[m.status] ?? "aqua"}>{m.status}</Chip>
+                    <span>{m.to_phone}</span>
+                    <span className="opacity-60">{new Date(m.created_at).toLocaleString()}</span>
+                    {m.error_message && <span className="text-[0.68rem] opacity-70">· {m.error_message}</span>}
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

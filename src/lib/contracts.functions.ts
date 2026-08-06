@@ -103,3 +103,112 @@ Savvy Swim · savvyswim.com`;
 
     return { sent: true, signUrl };
   });
+
+export const sendContractSms = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        contractId: z.string().uuid(),
+        phone: z.string().min(7).max(24),
+        origin: z.string().url().max(200),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+
+    const { data: isOffice, error: roleError } = await supabase.rpc("ss_is_office");
+    if (roleError || !isOffice) throw new Error("Only office staff can send contracts");
+
+    const { normalizePhone } = await import("./phone");
+    const to = normalizePhone(data.phone);
+    if (!to) throw new Error("Enter a valid phone number");
+
+    const { data: contract, error } = await supabase
+      .from("ss_contracts")
+      .select("id, title, token, status, recipient_name")
+      .eq("id", data.contractId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!contract) throw new Error("Contract not found");
+    if (contract.status === "signed") throw new Error("This contract is already signed");
+    if (contract.status === "voided") throw new Error("This contract was voided");
+
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    const twilioKey = process.env["TWILIO_API_KEY"];
+    if (!apiKey || !twilioKey) throw new Error("SMS sending is not configured");
+
+    const origin = new URL(data.origin).origin;
+    const signUrl = `${origin}/sign/${contract.token}`;
+    const firstName = (contract.recipient_name ?? "there").split(" ")[0];
+    const body = `Hi ${firstName}, your Savvy Swim service agreement is ready to sign: ${signUrl}\n\nQuestions? Call or text (469) 744-0379.`;
+
+    const { data: logRow, error: logError } = await supabase
+      .from("ss_contract_sms")
+      .insert({ contract_id: contract.id, to_phone: to, status: "queued", sent_by: userId })
+      .select("id")
+      .single();
+    if (logError) throw new Error(logError.message);
+
+    const gwHeaders = {
+      Authorization: `Bearer ${apiKey}`,
+      "X-Connection-Api-Key": twilioKey,
+    };
+    const GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
+
+    const fail = async (message: string) => {
+      await supabase
+        .from("ss_contract_sms")
+        .update({ status: "failed", error_message: message.slice(0, 500) })
+        .eq("id", logRow.id);
+      throw new Error(message);
+    };
+
+    const numbersRes = await fetch(`${GATEWAY_URL}/IncomingPhoneNumbers.json?PageSize=1`, { headers: gwHeaders });
+    if (!numbersRes.ok) {
+      const details = await numbersRes.text();
+      console.error(`Twilio numbers lookup failed [${numbersRes.status}]: ${details}`);
+      await fail(`Could not reach Twilio [${numbersRes.status}]`);
+    }
+    const numbers = (await numbersRes.json()) as { incoming_phone_numbers?: { phone_number?: string }[] };
+    const from = numbers.incoming_phone_numbers?.[0]?.phone_number;
+    if (!from) await fail("No Twilio phone number is available on the connected account");
+
+    const params = new URLSearchParams({ To: to, From: from!, Body: body });
+    if (origin.startsWith("https://")) {
+      params.set("StatusCallback", `${origin}/api/public/twilio/contract-sms-status`);
+    }
+
+    const sendRes = await fetch(`${GATEWAY_URL}/Messages.json`, {
+      method: "POST",
+      headers: { ...gwHeaders, "Content-Type": "application/x-www-form-urlencoded" },
+      body: params,
+    });
+    if (!sendRes.ok) {
+      const details = await sendRes.text();
+      console.error(`Twilio send failed [${sendRes.status}]: ${details}`);
+      await fail(`Twilio rejected the message [${sendRes.status}]: ${details.slice(0, 200)}`);
+    }
+    const sent = (await sendRes.json()) as { sid?: string; status?: string };
+
+    await supabase
+      .from("ss_contract_sms")
+      .update({ message_sid: sent.sid ?? null, status: sent.status ?? "sent" })
+      .eq("id", logRow.id);
+
+    if (contract.status === "draft") {
+      await supabase
+        .from("ss_contracts")
+        .update({ status: "sent", sent_at: new Date().toISOString() })
+        .eq("id", contract.id);
+    }
+
+    await supabase.from("ss_contract_events").insert({
+      contract_id: contract.id,
+      event: "sent",
+      detail: `Texted to ${to}`,
+    });
+
+    return { sent: true, to, signUrl, sid: sent.sid ?? null };
+  });

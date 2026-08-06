@@ -61,6 +61,7 @@ import { Route as CrmAdminCrmSettingsRouteImport } from './routes/_crm/admin/crm
 import { Route as CrmAdminCrmTechniciansRouteImport } from './routes/_crm/admin/crm/technicians'
 import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/trucks'
 import { Route as CrmAdminCrmWaterLabRouteImport } from './routes/_crm/admin/crm/water-lab'
+import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as CrmAdminCrmCustomersIndexRouteImport } from './routes/_crm/admin/crm/customers/index'
 import { Route as CrmAdminCrmCustomersIdRouteImport } from './routes/_crm/admin/crm/customers/$id'
 import { Route as CrmAdminCrmProjectsIndexRouteImport } from './routes/_crm/admin/crm/projects/index'
@@ -327,6 +328,12 @@ const CrmAdminCrmWaterLabRoute = CrmAdminCrmWaterLabRouteImport.update({
   path: '/admin/crm/water-lab',
   getParentRoute: () => CrmRoute,
 } as any)
+const ApiPublicTwilioContractSmsStatusRoute =
+  ApiPublicTwilioContractSmsStatusRouteImport.update({
+    id: '/api/public/twilio/contract-sms-status',
+    path: '/api/public/twilio/contract-sms-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CrmAdminCrmCustomersIndexRoute =
   CrmAdminCrmCustomersIndexRouteImport.update({
     id: '/admin/crm/customers/',
@@ -401,6 +408,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -458,6 +466,7 @@ export interface FileRoutesByTo {
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -517,6 +526,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
   '/_crm/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/_crm/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/_crm/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/_crm/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/_crm/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -576,6 +586,7 @@ export interface FileRouteTypes {
     | '/admin/crm/technicians'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/api/public/twilio/contract-sms-status'
     | '/admin/crm/'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -633,6 +644,7 @@ export interface FileRouteTypes {
     | '/admin/crm/technicians'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/api/public/twilio/contract-sms-status'
     | '/admin/crm'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -691,6 +703,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/technicians'
     | '/_crm/admin/crm/trucks'
     | '/_crm/admin/crm/water-lab'
+    | '/api/public/twilio/contract-sms-status'
     | '/_crm/admin/crm/'
     | '/_crm/admin/crm/customers/$id'
     | '/_crm/admin/crm/projects/$id'
@@ -727,6 +740,7 @@ export interface RootRouteChildren {
   AdminCrmAppRoute: typeof AdminCrmAppRoute
   AdminCrmLegacyRoute: typeof AdminCrmLegacyRoute
   AdminCrmLoginRoute: typeof AdminCrmLoginRoute
+  ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1095,6 +1109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmWaterLabRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/api/public/twilio/contract-sms-status': {
+      id: '/api/public/twilio/contract-sms-status'
+      path: '/api/public/twilio/contract-sms-status'
+      fullPath: '/api/public/twilio/contract-sms-status'
+      preLoaderRoute: typeof ApiPublicTwilioContractSmsStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_crm/admin/crm/customers/': {
       id: '/_crm/admin/crm/customers/'
       path: '/admin/crm/customers'
@@ -1219,17 +1240,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmAppRoute: AdminCrmAppRoute,
   AdminCrmLegacyRoute: AdminCrmLegacyRoute,
   AdminCrmLoginRoute: AdminCrmLoginRoute,
+  ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
