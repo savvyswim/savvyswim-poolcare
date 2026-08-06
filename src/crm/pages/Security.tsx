@@ -3,7 +3,7 @@ import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, ShieldCheck } from "lu
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
-import { useSavvyIdentity } from "@/crm/lib/useSavvy";
+import { useAuth } from "@/hooks/useAuth";
 
 type Finding = {
   id: string;
@@ -33,13 +33,13 @@ type CheckRun = {
 const STATUSES = ["open", "in_progress", "fixed", "ignored", "monitoring"] as const;
 
 const statusTone = (s: string) =>
-  s === "fixed" ? "aqua" : s === "ignored" || s === "monitoring" ? "sand" : "burgundy";
+  s === "fixed" ? "aqua" : s === "ignored" || s === "monitoring" ? "ink" : "burgundy";
 
 const when = (v: string | null) =>
   v ? new Date(v).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) : "—";
 
 export default function Security() {
-  const id = useSavvyIdentity();
+  const { user } = useAuth();
   const [findings, setFindings] = useState<Finding[]>([]);
   const [runs, setRuns] = useState<CheckRun[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export default function Security() {
   async function patch(f: Finding, changes: Partial<Finding>) {
     const next = { ...changes } as Record<string, unknown>;
     if (changes.status && ["fixed", "ignored"].includes(changes.status)) {
-      next.approved_by_email = id.email ?? null;
+      next.approved_by_email = user?.email ?? null;
       next.approved_at = new Date().toISOString();
       next.resolved_at = new Date().toISOString();
     }
@@ -180,8 +180,8 @@ export default function Security() {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-1.5">
                 <Chip tone={statusTone(f.status)}>{f.status.replace("_", " ")}</Chip>
-                <Chip tone="sand">{f.severity}</Chip>
-                <Chip tone="sand">{f.scanner}</Chip>
+                <Chip tone="ink">{f.severity}</Chip>
+                <Chip tone="ink">{f.scanner}</Chip>
               </div>
               <h2 className="mt-1.5 text-[0.95rem] leading-tight">{f.title}</h2>
               <code className="text-[0.7rem] opacity-60">{f.internal_id}</code>
