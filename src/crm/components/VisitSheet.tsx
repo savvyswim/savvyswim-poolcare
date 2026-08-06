@@ -4,12 +4,23 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { doseFor, evaluate, lsiVerdict, READING_FIELDS, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
+import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
 
+type Step = {
+  id: string;
+  label: string;
+  hint?: string;
+  is_required: boolean;
+  photo: ChecklistPhoto;
+  custom: boolean;
+};
+
 export type VisitPhoto = { label: string; path: string; url: string };
+
 
 const EVIDENCE_KINDS = [
   { tag: "water", label: "Pool water" },
@@ -85,18 +96,44 @@ export default function VisitSheet({
     [c.id, stop.id],
   );
 
-  const blockingTasks = tasks.filter(
-    (t) => (t.is_required && !checked[t.id]) || (t.photo_required && checked[t.id] && !taskPhotos[t.id]),
+  /** Signature checklist first, then anything specific to this pool. */
+  const steps: Step[] = useMemo(
+    () => [
+      ...SIGNATURE_CHECKLIST.map((s) => ({
+        id: s.id,
+        label: s.label,
+        hint: s.hint,
+        is_required: s.is_required,
+        photo: s.photo,
+        custom: false,
+      })),
+      ...tasks.map((t) => ({
+        id: t.id,
+        label: t.label,
+        is_required: t.is_required,
+        photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+        custom: true,
+      })),
+    ],
+    [tasks],
   );
+
+  const blockingTasks = steps.filter(
+    (t) =>
+      (t.is_required && !checked[t.id]) ||
+      (t.photo === "required" && checked[t.id] && !taskPhotos[t.id]),
+  );
+  const doneCount = steps.filter((t) => checked[t.id]).length;
 
   async function finish() {
     setSaving(true);
     const minutes = Math.max(1, Math.round((Date.now() - startedAt.current) / 60000));
-    const checklist = tasks.map((t) => ({
+    const checklist = steps.map((t) => ({
       label: t.label,
       done: !!checked[t.id],
       photo: taskPhotos[t.id] ?? null,
     }));
+
 
     const allPhotos: VisitPhoto[] = [
       ...(before ? [{ label: "Before", path: before.path, url: before.url }] : []),
@@ -320,44 +357,81 @@ export default function VisitSheet({
 
           {step === 2 && (
             <div className="space-y-2">
-              {!tasks.length && <p className="text-[0.85rem] opacity-60">No workflow tasks configured.</p>}
-              {tasks.map((t) => (
-                <div key={t.id} className="ss-card p-3">
-                  <label className="flex items-start gap-2.5">
-                    <input
-                      type="checkbox"
-                      className="mt-1"
-                      checked={!!checked[t.id]}
-                      onChange={(e) => setChecked((s) => ({ ...s, [t.id]: e.target.checked }))}
-                    />
-                    <span className="flex-1 text-[0.87rem]">
-                      {t.label}
-                      <span className="ml-1.5 inline-flex gap-1 align-middle">
-                        {t.is_required && <Chip tone="burgundy">Required</Chip>}
-                        {t.photo_required && <Chip tone="aqua">Photo</Chip>}
-                      </span>
-                    </span>
-                  </label>
-                  {t.photo_required && checked[t.id] && (
-                    <label className="ss-btn ss-btn-ghost mt-2 w-full cursor-pointer">
-                      <Camera size={13} />
-                      {taskPhotos[t.id] ? "Photo attached ✓" : "Capture photo"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        className="hidden"
-                        onChange={async (e) => {
-                          const f = e.target.files?.[0];
-                          if (!f) return;
-                          const up = await upload(f, `task-${t.id}`);
-                          if (up) setTaskPhotos((s) => ({ ...s, [t.id]: up.path }));
-                        }}
-                      />
-                    </label>
-                  )}
+              <div className="ss-card flex items-center justify-between gap-3 p-3">
+                <div>
+                  <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                    Signature service checklist
+                  </div>
+                  <p className="mt-0.5 text-[0.74rem] opacity-65">
+                    Tick each step as you go. Add a photo wherever it helps the report.
+                  </p>
                 </div>
-              ))}
+                <span className="ss-num text-[1.05rem] font-bold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+                  {doneCount}/{steps.length}
+                </span>
+              </div>
+
+              {steps.map((t, i) => {
+                const first = t.custom && !steps[i - 1]?.custom;
+                return (
+                  <div key={t.id}>
+                    {first && (
+                      <div className="ss-tag px-1 pb-1 pt-3" style={{ fontSize: "0.55rem" }}>
+                        Specific to this pool
+                      </div>
+                    )}
+                    <div className="ss-card p-3">
+                      <label className="flex items-start gap-2.5">
+                        <input
+                          type="checkbox"
+                          className="mt-1"
+                          checked={!!checked[t.id]}
+                          onChange={(e) => setChecked((s) => ({ ...s, [t.id]: e.target.checked }))}
+                        />
+                        <span className="flex-1">
+                          <span className="text-[0.87rem] font-medium">
+                            {!t.custom && (
+                              <span className="ss-num mr-1.5 opacity-45">{String(i + 1).padStart(2, "0")}</span>
+                            )}
+                            {t.label}
+                          </span>
+                          <span className="ml-1.5 inline-flex gap-1 align-middle">
+                            {t.is_required && <Chip tone="burgundy">Required</Chip>}
+                            {t.photo === "required" && <Chip tone="aqua">Photo</Chip>}
+                          </span>
+                          {t.hint && <span className="mt-0.5 block text-[0.74rem] opacity-60">{t.hint}</span>}
+                        </span>
+                      </label>
+                      {checked[t.id] && t.photo !== "none" && (
+                        <label className="ss-btn ss-btn-ghost mt-2 w-full cursor-pointer">
+                          <Camera size={13} />
+                          {taskPhotos[t.id]
+                            ? "Photo attached ✓"
+                            : t.photo === "required"
+                              ? "Capture photo"
+                              : "Add photo (optional)"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const f = e.target.files?.[0];
+                              if (!f) return;
+                              const up = await upload(f, `task-${t.id}`);
+                              if (up) {
+                                setTaskPhotos((s) => ({ ...s, [t.id]: up.path }));
+                                setEvidence((s) => [...s, { label: t.label, path: up.path, url: up.url }]);
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
               {!!blockingTasks.length && (
                 <div className="ss-card p-3 text-[0.78rem]" style={{ borderColor: "hsl(var(--ss-orange) / .4)" }}>
                   <AlertTriangle size={13} className="mr-1 inline" style={{ color: "hsl(var(--ss-orange))" }} />

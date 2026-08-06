@@ -22,7 +22,9 @@ export type ModuleKey =
   | "team"
   | "activity"
   | "projects"
+  | "security"
   | "designs";
+
 
 const ALL: SsLevel[] = ["owner", "office_manager", "technician", "contractor"];
 const OFFICE: SsLevel[] = ["owner", "office_manager"];
@@ -46,7 +48,9 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   // Owner plus any office manager the owner assigns runs the books.
   finance: OFFICE,
   projects: OFFICE,
+  security: OWNER,
   console: OWNER,
+
   cleaning: OWNER,
   store: OWNER,
   team: OWNER,
@@ -71,7 +75,9 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/reports": "reports",
   "/admin/crm/connect": "connect",
   "/admin/crm/settings": "settings",
+  "/admin/crm/security": "security",
   "/admin/crm/app": "console",
+
   "/admin/cleaning": "cleaning",
   "/admin/store": "store",
   "/admin/team": "team",
