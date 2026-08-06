@@ -177,7 +177,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
       {/* desktop sidebar */}
       <aside
-        className="fixed left-0 top-0 hidden h-screen w-[216px] flex-col border-r p-4 lg:flex"
+        className="fixed left-0 top-0 z-50 hidden h-screen w-[216px] min-w-0 flex-col overflow-hidden border-r p-4 lg:flex"
         style={{ borderColor: "hsl(var(--ss-sand))", background: "hsl(var(--ss-white))" }}
       >
         <SavvyLogo size="md" />
@@ -195,7 +195,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setDrawer(false)} />
           <div
-            className="absolute left-0 top-0 flex h-full w-[264px] flex-col p-4"
+            className="absolute left-0 top-0 flex h-full w-[min(84vw,264px)] min-w-0 flex-col overflow-hidden p-4"
             style={{ background: "hsl(var(--ss-white))" }}
           >
             <div className="flex items-start justify-between">
@@ -291,19 +291,21 @@ function NavRow({ item, active }: { item: NavItem; active: boolean }) {
   return (
     <Link
       to={item.to}
-      className="flex items-center gap-2.5 rounded-[9px] px-2.5 py-2 !no-underline"
+      className="flex min-w-0 items-center gap-2.5 rounded-[9px] px-2.5 py-2 !no-underline"
+      title={item.label}
       style={{
         background: active ? "hsl(var(--ss-burgundy) / .1)" : "transparent",
         color: active ? "hsl(var(--ss-burgundy))" : "hsl(var(--ss-ink) / .78)",
         fontFamily: "Oswald, sans-serif",
-        fontSize: "0.76rem",
+        fontSize: "0.72rem",
         fontWeight: 600,
-        letterSpacing: "0.05em",
+        letterSpacing: "0.04em",
+        lineHeight: 1.2,
         textTransform: "uppercase",
       }}
     >
-      <Icon size={15} />
-      {item.label}
+      <Icon size={15} className="shrink-0" />
+      <span className="min-w-0 flex-1 truncate">{item.label}</span>
     </Link>
   );
 }
