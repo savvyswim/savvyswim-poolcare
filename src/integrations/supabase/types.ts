@@ -1830,6 +1830,9 @@ export type Database = {
           monthly_value: number
           phone: string | null
           photo_url: string | null
+          plan_assigned_at: string | null
+          plan_id: string | null
+          plan_status: string
           pool_size: string | null
           promo_code: string | null
           service_type: string
@@ -1855,6 +1858,9 @@ export type Database = {
           monthly_value?: number
           phone?: string | null
           photo_url?: string | null
+          plan_assigned_at?: string | null
+          plan_id?: string | null
+          plan_status?: string
           pool_size?: string | null
           promo_code?: string | null
           service_type?: string
@@ -1880,6 +1886,9 @@ export type Database = {
           monthly_value?: number
           phone?: string | null
           photo_url?: string | null
+          plan_assigned_at?: string | null
+          plan_id?: string | null
+          plan_status?: string
           pool_size?: string | null
           promo_code?: string | null
           service_type?: string
@@ -3087,6 +3096,14 @@ export type Database = {
       ss_is_office: { Args: never; Returns: boolean }
       ss_is_owner: { Args: never; Returns: boolean }
       ss_is_staff: { Args: never; Returns: boolean }
+      ss_match_service_plan: {
+        Args: {
+          p_condition: string
+          p_pool_size: string
+          p_service_type: string
+        }
+        Returns: string
+      }
       ss_my_customer_id: { Args: never; Returns: string }
       ss_my_level: {
         Args: { _uid: string }
