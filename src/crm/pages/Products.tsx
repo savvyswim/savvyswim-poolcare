@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
   CONDITIONS,
   POOL_SIZES,
+  SERVICE_PLANS,
   UNDERCUT_MAX,
   UNDERCUT_MIN,
   clampUndercut,
   computeQuote,
+  findServicePlan,
   marketAverage,
   money,
   useRateCard,
 } from "@/crm/lib/pricingEngine";
+
 
 
 
