@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, BarChart3, Building2, ClipboardCheck, ClipboardList, DollarSign, LogOut, Mail,
+  AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
   Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, Star, FlaskConical,
   TrendingUp,
@@ -44,6 +44,7 @@ const STAFF_NAV: NavItem[] = [
 
   // Savvy FinOps
   { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
+  { to: "/admin/crm/margin", label: "Margin Calculator", icon: Percent, module: "margin", group: "Savvy FinOps" },
   { to: "/admin/crm/revenue-growth", label: "Revenue Growth", icon: TrendingUp, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/pricing-matrix", label: "Pricing Matrix", icon: Grid3x3, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/break-even", label: "Break-Even & Profit", icon: Gauge, module: "finance", group: "Savvy FinOps" },

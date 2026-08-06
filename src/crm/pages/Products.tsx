@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
+import MarginCalculator from "@/crm/components/MarginCalculator";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
