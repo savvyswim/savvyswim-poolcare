@@ -301,23 +301,70 @@ export default function MarginCalculator({ compact = false }: { compact?: boolea
             <Plus size={14} className="mr-1 inline" /> Add item
           </button>
 
-          <div className="grid gap-2 md:grid-cols-4">
-            <Result label="Quote total" big={money(multi.totalSell)} sub={`Blended margin ${multi.margin.toFixed(1)}%`} />
-            <div className="ss-card p-3">
-              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Total cost</div>
-              <div className="ss-num text-[1.2rem] font-bold">{money(multi.totalCost)}</div>
+          {/* Labor & service fees */}
+          <div className="ss-card grid gap-3 p-4 md:grid-cols-3">
+            <div className="md:col-span-3 text-[0.8rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+              Labor & service fees
             </div>
+            <Field label="Labor hours" value={laborHours} onChange={setLaborHours} placeholder="0" />
+            <Field label="Your cost / hour" prefix="$" value={laborCostRate} onChange={setLaborCostRate} />
+            <Field label="Billed rate / hour" prefix="$" value={laborBillRate} onChange={setLaborBillRate} />
             <div className="ss-card p-3">
-              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Gross profit</div>
-              <div className="ss-num text-[1.2rem] font-bold" style={{ color: "hsl(var(--ss-green))" }}>
-                {money(multi.profit)}
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Labor charged</div>
+              <div className="ss-num text-[1.05rem] font-bold">{money(multi.laborSell)}</div>
+              <div className="text-[0.7rem] opacity-65">
+                cost {money(multi.laborCost)} · {multi.laborMargin.toFixed(0)}% margin
+              </div>
+            </div>
+            <Field label="Trip / service fee cost" prefix="$" value={feeCostAmt} onChange={setFeeCostAmt} />
+            <Field label="Trip / service fee charged" prefix="$" value={feeChargeAmt} onChange={setFeeChargeAmt} />
+          </div>
+
+          {/* Tax */}
+          <div className="ss-card grid gap-3 p-4 md:grid-cols-3 md:items-end">
+            <div className="md:col-span-3 text-[0.8rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+              Sales tax <span className="font-normal opacity-60">— pass-through, never counted in margin</span>
+            </div>
+            <Field label="Tax rate" suffix="%" value={taxRate} onChange={setTaxRate} />
+            <label className="flex items-center gap-2 pb-2 text-[0.8rem]">
+              <input type="checkbox" checked={taxLabor} onChange={(e) => setTaxLabor(e.target.checked)} />
+              Tax labor & fees too
+            </label>
+            <div className="ss-card p-3">
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Tax collected</div>
+              <div className="ss-num text-[1.05rem] font-bold">{money(multi.tax)}</div>
+              <div className="text-[0.7rem] opacity-65">on {money(multi.taxBase)}</div>
+            </div>
+          </div>
+
+          <div className="grid gap-2 md:grid-cols-4">
+            <Result
+              label="Customer total (with tax)"
+              big={money(multi.customerTotal)}
+              sub={`Subtotal ${money(multi.totalSell)} + tax ${money(multi.tax)}`}
+            />
+            <div className="ss-card p-3">
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Job cost</div>
+              <div className="ss-num text-[1.2rem] font-bold">{money(multi.totalCost)}</div>
+              <div className="text-[0.7rem] opacity-65">
+                parts {money(multi.partsCost)} · labor {money(multi.laborCost)}
               </div>
             </div>
             <div className="ss-card p-3">
-              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Items</div>
-              <div className="ss-num text-[1.2rem] font-bold">{multi.rows.length}</div>
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Job profit</div>
+              <div className="ss-num text-[1.2rem] font-bold" style={{ color: "hsl(var(--ss-green))" }}>
+                {money(multi.profit)}
+              </div>
+              <div className="text-[0.7rem] opacity-65">parts + labor + fees, pre-tax</div>
+            </div>
+            <div className="ss-card p-3">
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>True job margin</div>
+              <div className="ss-num text-[1.2rem] font-bold">{multi.margin.toFixed(1)}%</div>
+              <div className="text-[0.7rem] opacity-65">{multi.rows.length} parts lines</div>
             </div>
           </div>
+        </div>
+      )}
         </div>
       )}
 
