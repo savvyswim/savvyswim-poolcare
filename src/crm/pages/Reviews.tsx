@@ -28,8 +28,12 @@ export default function Reviews() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState(
-    "Thanks for letting Savvy Swim take care of your pool. Here are photos from today's visit — if the water looks good, a quick Google review means the world to our crew.",
+    "{name}, thank you for trusting Savvy Swim with your pool. Here are photos from today's visit — your water is dialed in. If it looks as good to you as it does to us, {first} , would you leave us a quick Google review? It takes 20 seconds and it means everything to the crew that services your pool.",
   );
+
+  const firstName = name.trim().split(/\s+/)[0] ?? "";
+  const personalize = (text: string) =>
+    text.replace(/\{name\}/g, name.trim()).replace(/\{first\}/g, firstName);
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -85,7 +89,7 @@ export default function Reviews() {
       .insert({
         customer_name: name.trim(),
         phone: phone.trim() || null,
-        message: note.trim() || null,
+        message: personalize(note).trim() || null,
         photos,
         google_url: googleUrl.trim(),
       })
@@ -103,7 +107,7 @@ export default function Reviews() {
       const { error: smsErr } = await supabase.functions.invoke("send-quote-sms", {
         body: {
           phone: phone.trim(),
-          message: `Savvy Swim — thanks ${name.trim()}! Here are photos from your pool service. If you're happy, a quick Google review helps a lot:`,
+          message: `Hi ${firstName}, it's the Savvy Swim crew — your pool is done and today's photos are ready. ${firstName}, if we earned it, would you leave us a quick Google review? Takes 20 seconds:`,
           link: url,
         },
       });
@@ -202,10 +206,20 @@ export default function Reviews() {
           <div className="ss-label mt-3 mb-1">Note on the page</div>
           <textarea
             className="ss-input"
-            rows={4}
+            rows={5}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
+          <p className="mt-1 text-[0.72rem] opacity-60">
+            Use <code>{"{name}"}</code> for the full name and <code>{"{first}"}</code> for the first
+            name — they're swapped in automatically.
+          </p>
+          {name.trim() && (
+            <div className="mt-2 rounded-md p-2 text-[0.78rem]" style={{ background: "hsl(var(--ss-sand) / .5)" }}>
+              <span className="ss-label">Preview</span>
+              <div className="mt-1">{personalize(note)}</div>
+            </div>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             <button className="ss-btn" disabled={busy} onClick={() => void createRequest(true)}>
               <Send size={13} /> Text photos + review link
