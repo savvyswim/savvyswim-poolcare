@@ -6,6 +6,7 @@ import {
   Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, Star, FlaskConical,
   TrendingUp,
   Grid3x3,
+  Gauge,
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
@@ -44,6 +45,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/revenue-growth", label: "Revenue Growth", icon: TrendingUp, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/pricing-matrix", label: "Pricing Matrix", icon: Grid3x3, module: "finance", group: "Savvy FinOps" },
+  { to: "/admin/crm/break-even", label: "Break-Even & Profit", icon: Gauge, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store", group: "Savvy FinOps" },
 
   // Marketing & website

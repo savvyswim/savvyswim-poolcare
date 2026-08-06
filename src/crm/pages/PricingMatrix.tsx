@@ -5,7 +5,7 @@ import { SectionTitle, StatTile } from "@/crm/components/Brand";
 type CostRow = { id: string; label: string; monthly: number };
 type FeatureRow = { id: string; label: string; good: boolean; better: boolean; best: boolean };
 
-type Model = {
+export type PricingModel = {
   pools: number;
   costs: CostRow[];
   margin: number;
@@ -18,7 +18,7 @@ type Model = {
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-const DEFAULT_MODEL: Model = {
+export const DEFAULT_MODEL: PricingModel = {
   pools: 75,
   costs: [
     ["Labor (your time or tech wages)", 3200],
@@ -53,7 +53,7 @@ const DEFAULT_MODEL: Model = {
   })),
 };
 
-const STORAGE_KEY = "ss-pricing-matrix-builder";
+export const STORAGE_KEY = "ss-pricing-matrix-builder";
 const TIERS = ["good", "better", "best"] as const;
 type Tier = (typeof TIERS)[number];
 const TIER_LABEL: Record<Tier, string> = { good: "GOOD", better: "BETTER", best: "BEST" };
@@ -61,11 +61,11 @@ const TIER_LABEL: Record<Tier, string> = { good: "GOOD", better: "BETTER", best:
 const money = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
-function loadModel(): Model {
+export function loadModel(): PricingModel {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_MODEL;
-    const p = JSON.parse(raw) as Model;
+    const p = JSON.parse(raw) as PricingModel;
     if (!p || !Array.isArray(p.costs) || !Array.isArray(p.features)) return DEFAULT_MODEL;
     return { ...DEFAULT_MODEL, ...p };
   } catch {
@@ -103,7 +103,7 @@ function NumInput({
 }
 
 export default function PricingMatrix() {
-  const [model, setModel] = useState<Model>(loadModel);
+  const [model, setModel] = useState<PricingModel>(loadModel);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(model));
