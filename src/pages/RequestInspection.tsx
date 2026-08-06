@@ -26,8 +26,8 @@ const schema = z.object({
   phone: z.string().trim().min(10, "Enter a valid phone number").max(40),
   address: z.string().trim().min(4, "Enter the property address").max(300),
   postal_code: z.string().trim().min(5, "Enter your ZIP code").max(20),
-  hail_date: z.string().optional(),
-  vehicle_details: z.string().trim().max(500).optional(),
+  preferred_date: z.string().optional(),
+  pool_details: z.string().trim().max(500).optional(),
   preferred_contact_time: z.string().trim().max(60).optional(),
   notes: z.string().trim().max(1000).optional(),
 });
@@ -53,8 +53,8 @@ const RequestInspection = () => {
       phone: String(fd.get("phone") ?? ""),
       address: String(fd.get("address") ?? ""),
       postal_code: String(fd.get("postal_code") ?? ""),
-      hail_date: String(fd.get("hail_date") ?? ""),
-      vehicle_details: String(fd.get("vehicle_details") ?? ""),
+      preferred_date: String(fd.get("preferred_date") ?? ""),
+      pool_details: String(fd.get("pool_details") ?? ""),
       preferred_contact_time: contactTime,
       notes: String(fd.get("notes") ?? ""),
     };
@@ -75,8 +75,8 @@ const RequestInspection = () => {
         phone: parsed.data.phone,
         address: parsed.data.address,
         postal_code: parsed.data.postal_code,
-        hail_date: parsed.data.hail_date || null,
-        vehicle_details: parsed.data.vehicle_details || null,
+        preferred_date: parsed.data.preferred_date || null,
+        pool_details: parsed.data.pool_details || null,
         preferred_contact_time: parsed.data.preferred_contact_time || null,
         notes: parsed.data.notes || null,
         campaign_id: a.campaignId,
@@ -210,8 +210,8 @@ const RequestInspection = () => {
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="hail_date">Preferred service date</Label>
-                  <Input id="hail_date" name="hail_date" type="date" />
+                  <Label htmlFor="preferred_date">Preferred service date</Label>
+                  <Input id="preferred_date" name="preferred_date" type="date" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="preferred_contact_time">Best time to reach you</Label>
@@ -231,10 +231,10 @@ const RequestInspection = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="vehicle_details">Pool details (size, type, equipment)</Label>
+                <Label htmlFor="pool_details">Pool details (size, type, equipment)</Label>
                 <Input
-                  id="vehicle_details"
-                  name="vehicle_details"
+                  id="pool_details"
+                  name="pool_details"
                   maxLength={500}
                   placeholder="15,000 gal gunite, salt system, Pentair pump"
                 />
