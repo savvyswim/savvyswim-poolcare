@@ -143,11 +143,11 @@ export default function SiteSpeed() {
       {loading && <div className="ss-card p-4 text-[0.85rem] opacity-70">Loading measurements…</div>}
 
       {!loading && !scoped.length && (
-        <EmptyState
-          title="No measurements yet"
-          sub="Samples appear here as visitors load the site. Open the page in a browser to record the first one."
-        />
+        <EmptyState>
+          No measurements yet — samples appear here as visitors load the site.
+        </EmptyState>
       )}
+
 
       {!!scoped.length && (
         <>
