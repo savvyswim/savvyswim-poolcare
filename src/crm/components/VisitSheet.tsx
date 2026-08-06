@@ -96,18 +96,44 @@ export default function VisitSheet({
     [c.id, stop.id],
   );
 
-  const blockingTasks = tasks.filter(
-    (t) => (t.is_required && !checked[t.id]) || (t.photo_required && checked[t.id] && !taskPhotos[t.id]),
+  /** Signature checklist first, then anything specific to this pool. */
+  const steps: Step[] = useMemo(
+    () => [
+      ...SIGNATURE_CHECKLIST.map((s) => ({
+        id: s.id,
+        label: s.label,
+        hint: s.hint,
+        is_required: s.is_required,
+        photo: s.photo,
+        custom: false,
+      })),
+      ...tasks.map((t) => ({
+        id: t.id,
+        label: t.label,
+        is_required: t.is_required,
+        photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+        custom: true,
+      })),
+    ],
+    [tasks],
   );
+
+  const blockingTasks = steps.filter(
+    (t) =>
+      (t.is_required && !checked[t.id]) ||
+      (t.photo === "required" && checked[t.id] && !taskPhotos[t.id]),
+  );
+  const doneCount = steps.filter((t) => checked[t.id]).length;
 
   async function finish() {
     setSaving(true);
     const minutes = Math.max(1, Math.round((Date.now() - startedAt.current) / 60000));
-    const checklist = tasks.map((t) => ({
+    const checklist = steps.map((t) => ({
       label: t.label,
       done: !!checked[t.id],
       photo: taskPhotos[t.id] ?? null,
     }));
+
 
     const allPhotos: VisitPhoto[] = [
       ...(before ? [{ label: "Before", path: before.path, url: before.url }] : []),
