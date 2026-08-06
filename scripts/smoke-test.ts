@@ -28,11 +28,12 @@ export function collectRoutes(routeTreeSource: string): string[] {
   let match: RegExpExecArray | null;
   while ((match = re.exec(routeTreeSource)) !== null) {
     const route = match[1];
-    if (!route.startsWith("/")) continue;
+    if (!route || !route.startsWith("/")) continue;
     if (route.includes("$")) continue; // dynamic params — no safe fixture
     if (route.startsWith("/api/")) continue; // exercised separately
     found.add(route.length > 1 ? route.replace(/\/$/, "") : "/");
   }
+
   return [...found].sort();
 }
 
