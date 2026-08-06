@@ -791,3 +791,22 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Square-corner site aesthetic (public marketing site only; CRM keeps its own radii) */
+@layer utilities {
+  body:not(:has(.savvy-crm)) {
+    --radius: 0rem;
+  }
+  body:not(:has(.savvy-crm))
+    :where(div, section, article, aside, header, footer, nav, main, a, button, img, video, input, textarea, select, li, table, figure, form, label, dialog)[class*="rounded"] {
+    border-radius: 0 !important;
+  }
+  body:not(:has(.savvy-crm)) .canvas-panel,
+  body:not(:has(.savvy-crm)) .photo-tile,
+  body:not(:has(.savvy-crm)) .card-3d,
+  body:not(:has(.savvy-crm)) .tech-chip,
+  body:not(:has(.savvy-crm)) .btn-quote,
+  body:not(:has(.savvy-crm)) .glass {
+    border-radius: 0 !important;
+  }
+}
