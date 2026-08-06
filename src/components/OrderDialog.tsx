@@ -62,7 +62,7 @@ export const OrderDialog = ({
     if (!item) return;
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
     setSubmitting(true);

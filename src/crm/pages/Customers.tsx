@@ -67,9 +67,9 @@ export default function CustomersPage() {
       const [full_name, address, city, phone, email] = line.split(",").map((s) => s?.trim());
       return { full_name, address, city, phone, email, status: "active" as const };
     }).filter((r) => r.full_name);
-    if (!payload.length) return toast.error("No rows found");
+    if (!payload.length) { toast.error("No rows found"); return; }
     const { error } = await supabase.from("ss_customers").insert(payload);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Imported ${payload.length} customers`);
     void refetch();
   }, [refetch]);
@@ -208,7 +208,7 @@ function NewCustomer({ onDone }: { onDone: () => void }) {
             setSaving(true);
             const { error } = await supabase.from("ss_customers").insert(f);
             setSaving(false);
-            if (error) return toast.error(error.message);
+            if (error) { toast.error(error.message); return; }
             toast.success("Customer created");
             onDone();
           }}>Create</button>

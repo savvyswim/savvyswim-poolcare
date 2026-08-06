@@ -76,10 +76,10 @@ export default function Reviews() {
   }
 
   async function createRequest(send: boolean) {
-    if (!name.trim()) return toast.error("Add the customer name");
+    if (!name.trim()) { toast.error("Add the customer name"); return; }
     if (!/^https?:\/\//.test(googleUrl.trim()))
-      return toast.error("Add your Google review link first");
-    if (send && !phone.trim()) return toast.error("Add a phone number to text the link");
+      { toast.error("Add your Google review link first"); return; }
+    if (send && !phone.trim()) { toast.error("Add a phone number to text the link"); return; }
 
     setBusy(true);
     localStorage.setItem(GOOGLE_KEY, googleUrl.trim());
@@ -98,7 +98,7 @@ export default function Reviews() {
 
     if (error || !data) {
       setBusy(false);
-      return toast.error(error?.message ?? "Could not create the review link");
+      { toast.error(error?.message ?? "Could not create the review link"); return; }
     }
 
     const url = linkFor(data.token);
@@ -127,7 +127,7 @@ export default function Reviews() {
 
   async function remove(id: string) {
     const { error } = await supabase.from("ss_review_requests").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Removed");
     void refetch();
   }

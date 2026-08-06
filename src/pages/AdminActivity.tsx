@@ -165,7 +165,7 @@ export default function AdminActivity() {
                     <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">{fmt(r.created_at)}</td>
                     <td className="px-4 py-3">{r.user_email ?? "—"}</td>
                     <td className="px-4 py-3">
-                      <Badge variant="secondary" className={AREA_STYLE[r.area] ?? AREA_STYLE.general}>
+                      <Badge variant="secondary" className={AREA_STYLE[r.area] ?? AREA_STYLE["general"]}>
                         {r.area}
                       </Badge>
                     </td>

@@ -34,7 +34,7 @@ export default function Alerts() {
       .from("ss_alerts")
       .update({ is_resolved: true, resolved_at: new Date().toISOString() })
       .eq("id", a.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Alert resolved");
     void refetch();
   }

@@ -21,7 +21,7 @@ export default function Trucks() {
       .from("ss_trucks")
       .update({ assigned_tech_id: techId || null })
       .eq("id", truck.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Truck assignment updated");
     void refetch();
   }

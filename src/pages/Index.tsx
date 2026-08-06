@@ -1180,13 +1180,13 @@ const Index = () => {
       <BookingDialog
         open={bookingOpen}
         onOpenChange={setBookingOpen}
-        defaultService={bookingService}
+        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
       />
       <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
       <SubscribeDialog
         open={subscribeOpen}
         onOpenChange={setSubscribeOpen}
-        planName={subscribePlan}
+        {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
       />
       <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
       <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />

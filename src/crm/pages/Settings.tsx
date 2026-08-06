@@ -24,10 +24,10 @@ export default function Settings() {
     try {
       parsed = JSON.parse(draft[key]);
     } catch {
-      return toast.error("Invalid JSON");
+      { toast.error("Invalid JSON"); return; }
     }
     const { error } = await supabase.from("ss_settings").update({ value: parsed as never }).eq("key", key);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`${key} saved`);
   }
 

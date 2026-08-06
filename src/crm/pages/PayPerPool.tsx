@@ -78,7 +78,7 @@ export default function PayPerPool() {
       .from("ss_settings")
       .upsert({ key: PAY_SETTINGS_KEY, value: liveCfg as never }, { onConflict: "key" });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setCfgDraft({});
     void reloadSettings();
     toast.success("Pay rules saved");
@@ -175,7 +175,7 @@ export default function PayPerPool() {
   /* --------------------------------------------------------------- actions */
   async function savePoolRate(poolId: string, patch: Partial<PoolRate>) {
     const { error } = await supabase.from("ss_customers").update(patch).eq("id", poolId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void reloadPools();
     void reloadVisits();
     toast.success("Pool pay rate saved");
@@ -189,7 +189,7 @@ export default function PayPerPool() {
     const group = byTech.find((g) => g.techId === techId);
     if (!group) return;
     const open = group.lines.filter((l) => !l.locked);
-    if (!open.length) return toast.error("No unpaid pools in this period");
+    if (!open.length) { toast.error("No unpaid pools in this period"); return; }
     setBusy(true);
     const t = sumLines(open);
     const { data, error } = await supabase
@@ -209,7 +209,7 @@ export default function PayPerPool() {
       .single();
     if (error || !data) {
       setBusy(false);
-      return toast.error(error?.message ?? "Could not create invoice");
+      { toast.error(error?.message ?? "Could not create invoice"); return; }
     }
     // Freeze each visit's pay so later rate edits never rewrite history.
     for (const l of open) {
@@ -236,7 +236,7 @@ export default function PayPerPool() {
       .from("ss_tech_payouts")
       .update({ status: "paid", paid_at: new Date().toISOString() })
       .eq("id", p.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await supabase.from("ss_visits").update({ pay_status: "paid" }).eq("payout_id", p.id);
     void reloadPayouts();
     void reloadVisits();

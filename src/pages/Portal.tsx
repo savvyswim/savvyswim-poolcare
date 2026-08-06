@@ -210,7 +210,7 @@ export default function Portal() {
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
       p_date: resched.date,
-      p_note: resched.note || null,
+      p_note: resched.note || undefined,
     });
     setSaving(false);
     if (error) {
@@ -227,11 +227,11 @@ export default function Portal() {
       .invoke("notify-office-request", {
         body: {
           requestType: "Portal reschedule request",
-          name: String(info.customer_name ?? "Customer"),
-          email: String(info.email ?? user?.email ?? "no-reply@savvyswim.com"),
-          phone: info.phone ? String(info.phone) : undefined,
-          address: info.address ? String(info.address) : undefined,
-          service: `Weekly pool service — ${String(info.service_level ?? "service")}`,
+          name: String(info["customer_name"] ?? "Customer"),
+          email: String(info["email"] ?? user?.email ?? "no-reply@savvyswim.com"),
+          phone: info["phone"] ? String(info["phone"]) : undefined,
+          address: info["address"] ? String(info["address"]) : undefined,
+          service: `Weekly pool service — ${String(info["service_level"] ?? "service")}`,
           preferredDate: when,
           notes: resched.note || "Rescheduled from the customer portal.",
           sourceUrl: window.location.href,

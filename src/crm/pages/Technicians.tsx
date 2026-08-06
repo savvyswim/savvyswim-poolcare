@@ -38,7 +38,7 @@ export default function Technicians() {
   });
 
   const save = async () => {
-    if (form.full_name.trim().length < 2) return toast.error("Enter the person's full name");
+    if (form.full_name.trim().length < 2) { toast.error("Enter the person's full name"); return; }
     setSaving(true);
     try {
       const { error } = await supabase.from("ss_staff").insert({
@@ -61,7 +61,7 @@ export default function Technicians() {
   };
 
   const sendLogin = async (s: Staff) => {
-    if (!s.email) return toast.error("Add an email to that team member first");
+    if (!s.email) { toast.error("Add an email to that team member first"); return; }
     setInviting(s.id);
     try {
       const { data, error } = await supabase.functions.invoke("admin-invite-staff", {
@@ -80,7 +80,7 @@ export default function Technicians() {
 
   const toggleActive = async (s: Staff) => {
     const { error } = await supabase.from("ss_staff").update({ is_active: !s.is_active }).eq("id", s.id);
-    if (error) return toast.error("Could not update that member");
+    if (error) { toast.error("Could not update that member"); return; }
     await reload();
   };
 
@@ -89,7 +89,7 @@ export default function Technicians() {
       .from("ss_staff")
       .update({ level: level as never })
       .eq("id", s.id);
-    if (error) return toast.error("Could not change that role");
+    if (error) { toast.error("Could not change that role"); return; }
     toast.success(`${s.full_name} is now ${level.replace("_", " ")}`);
     await reload();
   };

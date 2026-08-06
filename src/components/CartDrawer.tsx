@@ -102,7 +102,7 @@ export const CartDrawer = () => {
     e.preventDefault();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
-      toast.error(parsed.error.errors[0].message);
+      toast.error(parsed.error.errors[0]?.message ?? "Invalid input");
       return;
     }
     if (!lines.length) return;

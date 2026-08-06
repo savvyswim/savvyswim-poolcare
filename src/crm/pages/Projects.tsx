@@ -208,7 +208,7 @@ function NewProjectDialog({
   });
 
   async function save() {
-    if (form.title.trim().length < 2) return toast.error("Give the project a name");
+    if (form.title.trim().length < 2) { toast.error("Give the project a name"); return; }
     setSaving(true);
     const { error } = await supabase.from("ss_projects").insert({
       title: form.title.trim(),
@@ -223,7 +223,7 @@ function NewProjectDialog({
       notes: form.notes || null,
     });
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Project file created with its build stages");
     onCreated();
   }

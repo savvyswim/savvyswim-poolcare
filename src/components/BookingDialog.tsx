@@ -261,7 +261,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
 
             <form onSubmit={onSubmit} className="space-y-4 mt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Field label="Full name" error={errors.name}>
+                <Field label="Full name" error={errors["name"]}>
                   <Input
                     autoComplete="name"
                     value={values.name ?? ""}
@@ -269,7 +269,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                     placeholder="Jane Doe"
                   />
                 </Field>
-                <Field label="Phone" error={errors.phone}>
+                <Field label="Phone" error={errors["phone"]}>
                   <Input
                     type="tel"
                     autoComplete="tel"
@@ -300,7 +300,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 </span>
               </label>
 
-              <Field label="Email" error={errors.email}>
+              <Field label="Email" error={errors["email"]}>
                 <Input
                   type="email"
                   autoComplete="email"
@@ -310,7 +310,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 />
               </Field>
 
-              <Field label="Property address" error={errors.address}>
+              <Field label="Property address" error={errors["address"]}>
                 <Input
                   autoComplete="street-address"
                   value={values.address ?? ""}
@@ -319,7 +319,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 />
               </Field>
 
-              <Field label="Service" error={errors.service}>
+              <Field label="Service" error={errors["service"]}>
                 <Select
                   value={values.service ?? ""}
                   onValueChange={(v) => set("service", v)}
@@ -338,7 +338,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
               </Field>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Field label="Preferred date" error={errors.date}>
+                <Field label="Preferred date" error={errors["date"]}>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -369,7 +369,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                     </PopoverContent>
                   </Popover>
                 </Field>
-                <Field label="Preferred time" error={errors.time}>
+                <Field label="Preferred time" error={errors["time"]}>
                   <Select
                     value={values.time ?? ""}
                     onValueChange={(v) => set("time", v)}
@@ -388,7 +388,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 </Field>
               </div>
 
-              <Field label="Project notes (optional)" error={errors.notes}>
+              <Field label="Project notes (optional)" error={errors["notes"]}>
                 <Textarea
                   rows={3}
                   value={values.notes ?? ""}
@@ -438,7 +438,7 @@ const Field = ({
   children,
 }: {
   label: string;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
 }) => (
   <div className="space-y-1.5">
