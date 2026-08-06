@@ -321,7 +321,10 @@ function SidebarFooter({
       <div className="ss-tag" style={{ fontSize: "0.5rem" }}>
         {LEVEL_LABEL[level] ?? level} access
       </div>
-      <div className="mt-0.5 text-[0.82rem] font-medium">{name}</div>
+      <div className="mt-0.5 truncate text-[0.82rem] font-medium" title={name ?? undefined}>
+        {name}
+      </div>
+
       <button
         className="ss-btn ss-btn-ghost mt-2 w-full"
         onClick={() => void onSignOut()}
