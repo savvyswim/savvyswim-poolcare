@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Download } from "lucide-react";
+import { Plus, Trash2, Download, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
 import { money2 } from "@/crm/lib/pricing";
