@@ -88,6 +88,9 @@ export default function Portal() {
   const [busy, setBusy] = useState(true);
   const [days, setDays] = useState<(typeof RANGES)[number]>(90);
   const [metric, setMetric] = useState<MetricKey>("fc");
+  const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
+  const [saving, setSaving] = useState(false);
+
 
   useEffect(() => {
     if (!loading && !user) navigate("/auth?next=/portal", { replace: true });
