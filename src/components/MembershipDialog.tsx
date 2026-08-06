@@ -57,6 +57,7 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
       return toast.error(data?.error || error?.message || "Could not start checkout");
     }
     setClientSecret(data.clientSecret);
+    return undefined;
   };
 
   const handleOpenChange = (next: boolean) => {
