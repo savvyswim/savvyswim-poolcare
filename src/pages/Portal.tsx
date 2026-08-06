@@ -171,6 +171,131 @@ export default function Portal() {
       .sort((a, b) => a.ts - b.ts);
   }, [poolVisits, days, metric]);
 
+  // ---- Visit scheduling / holds -------------------------------------------
+  async function refreshVisits() {
+    if (!pools.length) return;
+    const since = new Date(Date.now() - 400 * 86400000).toISOString().slice(0, 10);
+    const { data } = await supabase
+      .from("ss_visits")
+      .select(
+        "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url,is_locked,rain_hold",
+      )
+      .in(
+        "customer_id",
+        pools.map((p) => p.id),
+      )
+      .gte("scheduled_date", since)
+      .order("scheduled_date", { ascending: false });
+    setVisits((data as unknown as Visit[]) ?? []);
+  }
+
+  function openReschedule(p: Pool, current: string | null) {
+    setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
+  }
+
+  async function submitReschedule() {
+    if (!resched) return;
+    setSaving(true);
+    const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
+      p_customer_id: resched.pool.id,
+      p_date: resched.date,
+      p_note: resched.note || null,
+    });
+    setSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const info = (data ?? {}) as Record<string, unknown>;
+    const when = new Date(`${resched.date}T12:00:00`).toLocaleDateString();
+    setResched(null);
+    await refreshVisits();
+    toast.success(`Visit set for ${when} — confirmation sent to the office.`);
+
+    supabase.functions
+      .invoke("notify-office-request", {
+        body: {
+          requestType: "Portal reschedule request",
+          name: String(info.customer_name ?? "Customer"),
+          email: String(info.email ?? user?.email ?? "no-reply@savvyswim.com"),
+          phone: info.phone ? String(info.phone) : undefined,
+          address: info.address ? String(info.address) : undefined,
+          service: `Weekly pool service — ${String(info.service_level ?? "service")}`,
+          preferredDate: when,
+          notes: resched.note || "Rescheduled from the customer portal.",
+          sourceUrl: window.location.href,
+        },
+      })
+      .catch(() => undefined);
+  }
+
+  async function toggleFlag(p: Pool, flag: "lock" | "rain", value: boolean) {
+    const { error } = await supabase.rpc("ss_set_visit_flag", {
+      p_customer_id: p.id,
+      p_flag: flag,
+      p_value: value,
+    });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    await refreshVisits();
+    toast.success(
+      flag === "lock"
+        ? value
+          ? "Visit locked — the date won't change."
+          : "Visit unlocked."
+        : value
+          ? "Rain day flagged — we'll reschedule and confirm."
+          : "Rain day cleared.",
+    );
+  }
+
+  // ---- Branded PDF report --------------------------------------------------
+  function reportPdf(p: Pool, visit: Visit) {
+    return buildWaterReportPdf({
+      address: p.address ?? p.full_name,
+      city: p.city,
+      customerName: p.full_name,
+      servicePlan: p.service_level,
+      gallons: p.gallons,
+      visitDate: visit.scheduled_date,
+      readings: (visit.readings ?? {}) as Readings,
+      notes: visit.notes,
+    });
+  }
+
+  function downloadReport(p: Pool, visit: Visit) {
+    const { blob, filename } = reportPdf(p, visit);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  async function shareReport(p: Pool, visit: Visit) {
+    const { blob, filename } = reportPdf(p, visit);
+    const file = new File([blob], filename, { type: "application/pdf" });
+    const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+    if (nav.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Savvy Swim water report",
+          text: `Water chemistry report for ${p.address ?? p.full_name}`,
+        });
+        return;
+      } catch {
+        /* user cancelled */
+      }
+    }
+    downloadReport(p, visit);
+    toast.success("Report downloaded — attach it to share.");
+  }
+
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="border-b border-hairline bg-background">
