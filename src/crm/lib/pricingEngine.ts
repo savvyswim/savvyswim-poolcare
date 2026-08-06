@@ -344,3 +344,80 @@ export function recommendRate(
     floor,
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Service plan tiers — the bridge between Service plans and Savvy Estimate */
+/* ------------------------------------------------------------------ */
+
+export type ServicePlan = {
+  id: string;
+  name: string;
+  tagline: string;
+  /** Estimate fields this plan pre-fills. */
+  defaults: {
+    chemOnly: boolean;
+    chemIncluded: boolean;
+    saltCell: boolean;
+    condition: string;
+    undercutPct?: number;
+  };
+  /** What the visit includes — carried into the quote summary. */
+  scope: string[];
+};
+
+export const SERVICE_PLANS: ServicePlan[] = [
+  {
+    id: "chem-check",
+    name: "Chem Check",
+    tagline: "Weekly water balance only — customer brushes and nets",
+    defaults: { chemOnly: true, chemIncluded: false, saltCell: false, condition: "clean" },
+    scope: [
+      "Weekly water test — chlorine, pH, alkalinity, stabilizer",
+      "Chemical dosing to target ranges",
+      "Salt / chlorinator output check",
+      "Digital water report after every visit",
+    ],
+  },
+  {
+    id: "signature",
+    name: "Signature Weekly",
+    tagline: "Our core full-service route stop — the 15-step checklist",
+    defaults: { chemOnly: false, chemIncluded: false, saltCell: false, condition: "clean" },
+    scope: [
+      "Full 15-step Savvy Swim service checklist",
+      "Skim, brush walls and steps, vacuum as needed",
+      "Empty skimmer and pump baskets",
+      "Water test + dosing to target ranges",
+      "Equipment and pressure check",
+      "Before / after photos and water report",
+    ],
+  },
+  {
+    id: "complete",
+    name: "Complete Care",
+    tagline: "Everything in Signature with chemicals and salt system included",
+    defaults: { chemOnly: false, chemIncluded: true, saltCell: true, condition: "clean" },
+    scope: [
+      "Everything in Signature Weekly",
+      "All standard chemicals included — no chem billing",
+      "Salt cell monitoring, cleaning and output tuning",
+      "Filter pressure tracking with clean scheduled for you",
+      "Priority scheduling and same-day Clear Water Guarantee",
+    ],
+  },
+  {
+    id: "recovery",
+    name: "Green-to-Clean Recovery",
+    tagline: "Neglected or green pool brought back, then onto weekly service",
+    defaults: { chemOnly: false, chemIncluded: true, saltCell: false, condition: "green" },
+    scope: [
+      "Multi-visit algae recovery until the water is clear",
+      "Heavy debris removal and filter deep clean",
+      "Shock, flocculent and stabilizer program",
+      "Rolls into Signature Weekly once clear",
+    ],
+  },
+];
+
+export const findServicePlan = (id: string | null | undefined) =>
+  SERVICE_PLANS.find((p) => p.id === id) ?? null;
