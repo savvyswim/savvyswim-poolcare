@@ -1,9 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Droplets, FileText, LogOut, Receipt, Waves } from "lucide-react";
+import { Droplets, FileText, LogOut, MapPin, Receipt, Waves } from "lucide-react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ReferenceArea,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
+import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 
 type Pool = {
   id: string;
@@ -19,18 +30,23 @@ type Pool = {
   status: string;
 };
 
+type VisitPhoto = { label?: string; url?: string; path?: string };
+
 type Visit = {
   id: string;
+  customer_id: string;
   scheduled_date: string;
   status: string;
   completed_at: string | null;
-  readings: Record<string, unknown> | null;
+  readings: Readings | null;
   notes: string | null;
+  photos: VisitPhoto[] | null;
   after_photo_url: string | null;
 };
 
 type Invoice = {
   id: string;
+  customer_id: string;
   invoice_number: string;
   amount: number;
   status: string;
@@ -40,14 +56,19 @@ type Invoice = {
 };
 
 const money = (n: number) => `$${Number(n || 0).toFixed(2)}`;
+const RANGES = [30, 60, 90] as const;
+const CHART_METRICS: MetricKey[] = ["fc", "ph", "ta", "ch", "cyc", "psi"];
 
 export default function Portal() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [pool, setPool] = useState<Pool | null>(null);
+  const [pools, setPools] = useState<Pool[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [busy, setBusy] = useState(true);
+  const [days, setDays] = useState<(typeof RANGES)[number]>(90);
+  const [metric, setMetric] = useState<MetricKey>("fc");
 
   useEffect(() => {
     if (!loading && !user) navigate("/auth?next=/portal", { replace: true });
@@ -59,25 +80,33 @@ export default function Portal() {
     (async () => {
       setBusy(true);
       const { data: poolRows } = await supabase.rpc("ss_my_pool");
-      const mine = (poolRows as Pool[] | null)?.[0] ?? null;
+      const mine = ((poolRows as Pool[] | null) ?? []).filter(Boolean);
       if (!alive) return;
-      setPool(mine);
-      if (mine) {
+      setPools(mine);
+      setActiveId((prev) => prev ?? mine[0]?.id ?? null);
+
+      if (mine.length) {
+        const ids = mine.map((p) => p.id);
+        const since = new Date(Date.now() - 400 * 86400000).toISOString().slice(0, 10);
         const [{ data: v }, { data: inv }] = await Promise.all([
           supabase
             .from("ss_visits")
-            .select("id,scheduled_date,status,completed_at,readings,notes,after_photo_url")
-            .order("scheduled_date", { ascending: false })
-            .limit(12),
+            .select(
+              "id,customer_id,scheduled_date,status,completed_at,readings,notes,photos,after_photo_url",
+            )
+            .in("customer_id", ids)
+            .gte("scheduled_date", since)
+            .order("scheduled_date", { ascending: false }),
           supabase
             .from("ss_invoices")
-            .select("id,invoice_number,amount,status,issued_on,due_date,stripe_payment_url")
+            .select("id,customer_id,invoice_number,amount,status,issued_on,due_date,stripe_payment_url")
+            .in("customer_id", ids)
             .order("issued_on", { ascending: false })
-            .limit(12),
+            .limit(50),
         ]);
         if (!alive) return;
-        setVisits((v as Visit[]) ?? []);
-        setInvoices((inv as Invoice[]) ?? []);
+        setVisits((v as unknown as Visit[]) ?? []);
+        setInvoices((inv as unknown as Invoice[]) ?? []);
       }
       setBusy(false);
     })();
@@ -86,20 +115,47 @@ export default function Portal() {
     };
   }, [user]);
 
-  const nextVisit = useMemo(
-    () => [...visits].reverse().find((v) => v.status !== "completed") ?? null,
-    [visits],
+  const pool = useMemo(() => pools.find((p) => p.id === activeId) ?? null, [pools, activeId]);
+  const poolVisits = useMemo(
+    () => visits.filter((v) => v.customer_id === activeId),
+    [visits, activeId],
   );
+  const poolInvoices = useMemo(
+    () => invoices.filter((i) => i.customer_id === activeId),
+    [invoices, activeId],
+  );
+
   const balance = useMemo(
-    () => invoices.filter((i) => i.status !== "paid").reduce((s, i) => s + Number(i.amount || 0), 0),
-    [invoices],
+    () => poolInvoices.filter((i) => i.status !== "paid").reduce((s, i) => s + Number(i.amount || 0), 0),
+    [poolInvoices],
   );
+  const nextVisit = useMemo(
+    () => [...poolVisits].reverse().find((v) => v.status !== "completed") ?? null,
+    [poolVisits],
+  );
+  const lastReport = useMemo(
+    () => poolVisits.find((v) => v.status === "completed" && v.readings) ?? null,
+    [poolVisits],
+  );
+
+  const chartData = useMemo(() => {
+    const cutoff = Date.now() - days * 86400000;
+    return poolVisits
+      .filter((v) => v.readings && new Date(v.scheduled_date).getTime() >= cutoff)
+      .map((v) => ({
+        date: new Date(v.scheduled_date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        ts: new Date(v.scheduled_date).getTime(),
+        value: (v.readings as Record<string, number | undefined>)?.[metric] ?? null,
+      }))
+      .filter((d) => typeof d.value === "number")
+      .sort((a, b) => a.ts - b.ts);
+  }, [poolVisits, days, metric]);
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-16 items-center justify-between gap-3 sm:h-[76px]">
-          <Link to="/portal" aria-label="Savvy Swim — my pool" className="flex min-w-0 items-center">
+          <Link to="/portal" aria-label="Savvy Swim — my pools" className="flex min-w-0 items-center">
             <span className="truncate font-display text-[1.25rem] uppercase leading-none tracking-tight text-accent sm:text-[1.7rem]">
               Savvy Swim
             </span>
@@ -123,11 +179,13 @@ export default function Portal() {
       </header>
 
       <main className="container-tight py-10 sm:py-14">
-        <h1 className="font-display text-3xl uppercase leading-none tracking-tight sm:text-5xl">My pool</h1>
+        <h1 className="font-display text-3xl uppercase leading-none tracking-tight sm:text-5xl">
+          {pools.length > 1 ? "My pools" : "My pool"}
+        </h1>
 
-        {busy && <p className="mt-6 font-tech text-sm text-primary/60">Loading your pool…</p>}
+        {busy && <p className="mt-6 font-tech text-sm text-primary/60">Loading your pools…</p>}
 
-        {!busy && !pool && (
+        {!busy && !pools.length && (
           <div className="mt-8 border border-hairline p-6">
             <p className="font-tech text-sm text-primary/70">
               We couldn&rsquo;t find a pool linked to this account yet. Call the office and we&rsquo;ll connect it.
@@ -135,111 +193,316 @@ export default function Portal() {
           </div>
         )}
 
-        {!busy && pool && (
+        {!busy && pools.length > 0 && (
           <>
-            <section className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="border border-hairline p-5">
-                <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Service plan</p>
-                <p className="mt-2 font-display text-2xl uppercase leading-none">{pool.service_level}</p>
-                <p className="mt-2 font-tech text-xs text-primary/60">
-                  {money(pool.monthly_price)}/mo · {pool.route_day ?? "Day TBD"}
-                </p>
-              </div>
-              <div className="border border-hairline p-5">
-                <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Next visit</p>
-                <p className="mt-2 font-display text-2xl uppercase leading-none">
-                  {nextVisit ? new Date(nextVisit.scheduled_date).toLocaleDateString() : "Scheduling"}
-                </p>
-                <p className="mt-2 font-tech text-xs text-primary/60">{pool.city ?? ""}</p>
-              </div>
-              <div className="border border-hairline p-5">
-                <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Balance</p>
-                <p className="mt-2 font-display text-2xl uppercase leading-none">{money(balance)}</p>
-                <p className="mt-2 font-tech text-xs text-primary/60">
-                  {pool.pool_type} · {pool.gallons.toLocaleString()} gal
-                </p>
-              </div>
+            {/* Address switcher */}
+            <section className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {pools.map((p) => {
+                const last = visits.find(
+                  (v) => v.customer_id === p.id && v.status === "completed" && v.readings,
+                );
+                const step = nextStepFor(last?.readings ?? null, p.gallons);
+                const isActive = p.id === activeId;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setActiveId(p.id)}
+                    aria-pressed={isActive}
+                    className={`border p-5 text-left transition-colors ${
+                      isActive ? "border-accent bg-accent/5" : "border-hairline hover:border-primary/40"
+                    }`}
+                  >
+                    <p className="flex items-center gap-1.5 font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                      <MapPin className="h-3 w-3" aria-hidden="true" />
+                      {p.city ?? "Pool"}
+                    </p>
+                    <p className="mt-2 font-display text-lg uppercase leading-tight">
+                      {p.address ?? p.full_name}
+                    </p>
+                    <p className="mt-2 font-tech text-xs text-primary/60">
+                      Last report{" "}
+                      {last ? new Date(last.scheduled_date).toLocaleDateString() : "—"}
+                    </p>
+                    <p className="mt-1 font-tech text-xs text-accent">{step.headline}</p>
+                  </button>
+                );
+              })}
             </section>
 
-            <section className="mt-12">
-              <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
-                <Waves className="h-4 w-4 text-accent" aria-hidden="true" /> Service reports
-              </h2>
-              <div className="mt-4 divide-y divide-primary/10 border border-hairline">
-                {visits.length === 0 && (
-                  <p className="p-5 font-tech text-sm text-primary/60">No visits logged yet.</p>
-                )}
-                {visits.map((v) => (
-                  <article key={v.id} className="p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="font-tech text-sm font-semibold">
-                        {new Date(v.scheduled_date).toLocaleDateString()}
-                      </p>
-                      <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
-                        {v.status}
-                      </span>
-                    </div>
-                    {v.readings && Object.keys(v.readings).length > 0 && (
-                      <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-tech text-xs text-primary/70">
-                        {Object.entries(v.readings).map(([k, val]) => (
-                          <li key={k} className="flex items-center gap-1.5">
-                            <Droplets className="h-3 w-3 text-accent" aria-hidden="true" />
-                            {k}: {String(val)}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {v.notes && <p className="mt-3 text-sm text-primary/75">{v.notes}</p>}
-                    {v.after_photo_url && (
-                      <img
-                        src={v.after_photo_url}
-                        alt={`Pool after service on ${new Date(v.scheduled_date).toLocaleDateString()}`}
-                        loading="lazy"
-                        className="mt-3 aspect-video w-full max-w-sm rounded-md object-cover"
-                      />
-                    )}
-                  </article>
-                ))}
-              </div>
-            </section>
+            {pool && (
+              <>
+                <section className="mt-10 grid gap-4 sm:grid-cols-3">
+                  <div className="border border-hairline p-5">
+                    <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Service plan</p>
+                    <p className="mt-2 font-display text-2xl uppercase leading-none">{pool.service_level}</p>
+                    <p className="mt-2 font-tech text-xs text-primary/60">
+                      {money(pool.monthly_price)}/mo · {pool.route_day ?? "Day TBD"}
+                    </p>
+                  </div>
+                  <div className="border border-hairline p-5">
+                    <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Next visit</p>
+                    <p className="mt-2 font-display text-2xl uppercase leading-none">
+                      {nextVisit ? new Date(nextVisit.scheduled_date).toLocaleDateString() : "Scheduling"}
+                    </p>
+                    <p className="mt-2 font-tech text-xs text-primary/60">{pool.city ?? ""}</p>
+                  </div>
+                  <div className="border border-hairline p-5">
+                    <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Balance</p>
+                    <p className="mt-2 font-display text-2xl uppercase leading-none">{money(balance)}</p>
+                    <p className="mt-2 font-tech text-xs text-primary/60">
+                      {pool.pool_type} · {pool.gallons.toLocaleString()} gal
+                    </p>
+                  </div>
+                </section>
 
-            <section className="mt-12">
-              <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
-                <Receipt className="h-4 w-4 text-accent" aria-hidden="true" /> Billing
-              </h2>
-              <div className="mt-4 divide-y divide-primary/10 border border-hairline">
-                {invoices.length === 0 && (
-                  <p className="p-5 font-tech text-sm text-primary/60">No invoices yet.</p>
-                )}
-                {invoices.map((i) => (
-                  <div key={i.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
-                    <div className="min-w-0">
-                      <p className="font-tech text-sm font-semibold">
-                        <FileText className="mr-1.5 inline h-3.5 w-3.5 text-accent" aria-hidden="true" />
-                        {i.invoice_number}
-                      </p>
-                      <p className="font-tech text-xs text-primary/60">
-                        Issued {new Date(i.issued_on).toLocaleDateString()} · {i.status}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-display text-lg">{money(i.amount)}</span>
-                      {i.status !== "paid" && i.stripe_payment_url && (
-                        <a
-                          href={i.stripe_payment_url}
-                          className="btn-quote rounded-md px-4 py-2 text-[11px] font-bold uppercase tracking-wide"
+                {/* Latest report + next recommended step */}
+                <section className="mt-10 border border-hairline p-6">
+                  <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                    Latest report ·{" "}
+                    {lastReport ? new Date(lastReport.scheduled_date).toLocaleDateString() : "no visits yet"}
+                  </p>
+                  {(() => {
+                    const step = nextStepFor(lastReport?.readings ?? null, pool.gallons);
+                    return (
+                      <>
+                        <h2 className="mt-2 font-display text-2xl uppercase leading-tight">{step.headline}</h2>
+                        <p className="mt-2 max-w-2xl text-sm text-primary/75">{step.detail}</p>
+                        {step.items.length > 0 && (
+                          <ul className="mt-4 space-y-1.5 font-tech text-xs text-primary/75">
+                            {step.items.map((it) => (
+                              <li key={it} className="flex gap-2">
+                                <Droplets className="mt-0.5 h-3 w-3 shrink-0 text-accent" aria-hidden="true" />
+                                {it}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </>
+                    );
+                  })()}
+                </section>
+
+                {/* Reading history */}
+                <section className="mt-12">
+                  <div className="flex flex-wrap items-end justify-between gap-3">
+                    <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+                      <Waves className="h-4 w-4 text-accent" aria-hidden="true" /> Reading history
+                    </h2>
+                    <div className="flex gap-1.5">
+                      {RANGES.map((d) => (
+                        <button
+                          key={d}
+                          type="button"
+                          onClick={() => setDays(d)}
+                          aria-pressed={days === d}
+                          className={`border px-3 py-1.5 font-tech text-[11px] uppercase ${
+                            days === d ? "border-accent text-accent" : "border-hairline text-primary/60"
+                          }`}
                         >
-                          Pay
-                        </a>
-                      )}
+                          {d} days
+                        </button>
+                      ))}
                     </div>
                   </div>
-                ))}
-              </div>
-            </section>
+
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {CHART_METRICS.map((k) => (
+                      <button
+                        key={k}
+                        type="button"
+                        onClick={() => setMetric(k)}
+                        aria-pressed={metric === k}
+                        className={`border px-3 py-1.5 font-tech text-[11px] uppercase ${
+                          metric === k ? "border-accent text-accent" : "border-hairline text-primary/60"
+                        }`}
+                      >
+                        {TARGETS[k].label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 border border-hairline p-4">
+                    <p className="font-tech text-xs text-primary/60">
+                      {TARGETS[metric].label} · target {TARGETS[metric].min}–{TARGETS[metric].max}
+                      {TARGETS[metric].unit ? ` ${TARGETS[metric].unit}` : ""} · {TARGETS[metric].purpose}
+                    </p>
+                    {chartData.length < 2 ? (
+                      <p className="py-10 text-center font-tech text-sm text-primary/55">
+                        Not enough {TARGETS[metric].label.toLowerCase()} readings in the last {days} days to chart a
+                        trend yet.
+                      </p>
+                    ) : (
+                      <div className="mt-3 h-64 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
+                            <CartesianGrid stroke="hsl(var(--primary) / 0.08)" vertical={false} />
+                            <ReferenceArea
+                              y1={TARGETS[metric].min}
+                              y2={TARGETS[metric].max}
+                              fill="hsl(var(--accent))"
+                              fillOpacity={0.08}
+                            />
+                            <XAxis
+                              dataKey="date"
+                              tick={{ fontSize: 11 }}
+                              stroke="hsl(var(--primary) / 0.35)"
+                              tickLine={false}
+                            />
+                            <YAxis
+                              tick={{ fontSize: 11 }}
+                              stroke="hsl(var(--primary) / 0.35)"
+                              tickLine={false}
+                              axisLine={false}
+                              domain={["auto", "auto"]}
+                            />
+                            <Tooltip
+                              formatter={(v: number) => [`${v} ${TARGETS[metric].unit}`.trim(), TARGETS[metric].label]}
+                              contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="value"
+                              stroke="hsl(var(--accent))"
+                              strokeWidth={2}
+                              dot={{ r: 3 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+                  </div>
+                </section>
+
+                {/* Service reports */}
+                <section className="mt-12">
+                  <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+                    <Waves className="h-4 w-4 text-accent" aria-hidden="true" /> Service reports
+                  </h2>
+                  <div className="mt-4 divide-y divide-primary/10 border border-hairline">
+                    {poolVisits.length === 0 && (
+                      <p className="p-5 font-tech text-sm text-primary/60">No visits logged yet.</p>
+                    )}
+                    {poolVisits.map((v) => {
+                      const photos = (v.photos ?? []).filter((p) => p?.url);
+                      return (
+                        <article key={v.id} className="p-5">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="font-tech text-sm font-semibold">
+                              {new Date(v.scheduled_date).toLocaleDateString()}
+                            </p>
+                            <span className="font-tech text-[10px] uppercase tracking-widest text-primary/55">
+                              {v.status}
+                            </span>
+                          </div>
+                          {v.readings && Object.keys(v.readings).length > 0 && (
+                            <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-tech text-xs text-primary/70">
+                              {Object.entries(v.readings).map(([k, val]) => (
+                                <li key={k} className="flex items-center gap-1.5">
+                                  <Droplets className="h-3 w-3 text-accent" aria-hidden="true" />
+                                  {(TARGETS as Record<string, { label: string }>)[k]?.label ?? k}: {String(val)}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                          {v.notes && <p className="mt-3 text-sm text-primary/75">{v.notes}</p>}
+                          {photos.length > 0 ? (
+                            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                              {photos.map((p, i) => (
+                                <figure key={`${v.id}-${i}`} className="overflow-hidden rounded-md">
+                                  <img
+                                    src={p.url}
+                                    alt={`${p.label ?? "Visit"} photo from service on ${new Date(
+                                      v.scheduled_date,
+                                    ).toLocaleDateString()}`}
+                                    loading="lazy"
+                                    className="aspect-square w-full object-cover"
+                                  />
+                                  <figcaption className="mt-1 font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                                    {p.label ?? "Visit"}
+                                  </figcaption>
+                                </figure>
+                              ))}
+                            </div>
+                          ) : (
+                            v.after_photo_url && (
+                              <img
+                                src={v.after_photo_url}
+                                alt={`Pool after service on ${new Date(v.scheduled_date).toLocaleDateString()}`}
+                                loading="lazy"
+                                className="mt-3 aspect-video w-full max-w-sm rounded-md object-cover"
+                              />
+                            )
+                          )}
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Billing */}
+                <section className="mt-12">
+                  <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+                    <Receipt className="h-4 w-4 text-accent" aria-hidden="true" /> Billing
+                  </h2>
+                  <div className="mt-4 divide-y divide-primary/10 border border-hairline">
+                    {poolInvoices.length === 0 && (
+                      <p className="p-5 font-tech text-sm text-primary/60">No invoices yet.</p>
+                    )}
+                    {poolInvoices.map((i) => (
+                      <div key={i.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
+                        <div className="min-w-0">
+                          <p className="font-tech text-sm font-semibold">
+                            <FileText className="mr-1.5 inline h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                            {i.invoice_number}
+                          </p>
+                          <p className="font-tech text-xs text-primary/60">
+                            Issued {new Date(i.issued_on).toLocaleDateString()} · {i.status}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-display text-lg">{money(i.amount)}</span>
+                          {i.status !== "paid" && i.stripe_payment_url && (
+                            <a
+                              href={i.stripe_payment_url}
+                              className="btn-quote rounded-md px-4 py-2 text-[11px] font-bold uppercase tracking-wide"
+                            >
+                              Pay
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </>
+            )}
           </>
         )}
       </main>
     </div>
   );
+}
+
+function nextStepFor(readings: Readings | null, gallons: number) {
+  if (!readings || Object.keys(readings).length === 0) {
+    return {
+      headline: "Awaiting first water test",
+      detail: "Your next scheduled visit will log full chemistry and start your history.",
+      items: [] as string[],
+    };
+  }
+  const report = evaluate(readings, gallons || 0);
+  if (report.allGood) {
+    return {
+      headline: "Water balanced — swim away",
+      detail: "Every tested level was inside target at the last visit. No action needed from you.",
+      items: [] as string[],
+    };
+  }
+  return {
+    headline: "Correction scheduled",
+    detail: report.summary,
+    items: report.treatments.map((t) => `${t.chemical} — ${t.amount}. ${t.reason}`),
+  };
 }
