@@ -4,6 +4,7 @@ import { ArrowLeft, Lock, Phone, Mail, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
+import CustomerContracts from "@/crm/components/CustomerContracts";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 
@@ -24,7 +25,7 @@ type Visit = {
   notes: string | null; readings: Record<string, number> | null; chem_cost: number | null;
 };
 
-const TABS = ["Overview", "Timeline", "Equipment", "Billing"] as const;
+const TABS = ["Overview", "Timeline", "Equipment", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
