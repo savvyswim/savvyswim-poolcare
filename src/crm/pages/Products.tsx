@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import MarginCalculator from "@/crm/components/MarginCalculator";
+import { MaintenanceSchedule, ServiceEstimate } from "@/crm/components/EstimateScheduler";
+import type { EstimateKind } from "@/crm/lib/estimateEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -23,6 +25,7 @@ import {
 
 export default function Products() {
   const { cities, addons, margins, loading } = useRateCard();
+  const [kind, setKind] = useState<EstimateKind>("maintenance");
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
   const [condition, setCondition] = useState<string>(CONDITIONS[0].id);
@@ -186,10 +189,24 @@ export default function Products() {
     <div className="space-y-4">
       <SectionTitle
         title="Savvy Estimate"
-        sub="Quote calculator — sized by pool, benchmarked against the regional average. Plan tiers and rates live in Service plans."
+        sub="Quote maintenance plans or one-off service work — each priced on its own model and margin-checked against Savvy Ledger."
       />
 
-      {loading ? (
+      <div className="flex flex-wrap gap-1.5">
+        {(["maintenance", "service"] as const).map((k) => (
+          <button
+            key={k}
+            className={`ss-btn ${kind === k ? "" : "ss-btn-ghost"}`}
+            onClick={() => setKind(k)}
+          >
+            {k === "maintenance" ? "MAINTENANCE · RECURRING" : "SERVICE · ONE-OFF"}
+          </button>
+        ))}
+      </div>
+
+      {kind === "service" ? (
+        <ServiceEstimate />
+      ) : loading ? (
         <div className="ss-card p-6 text-[0.85rem] opacity-60">Loading rate card…</div>
       ) : (
 
@@ -512,6 +529,10 @@ export default function Products() {
           </div>
         </div>
       )}
+
+      {kind === "maintenance" && !loading && <MaintenanceSchedule monthly={quote.monthly} />}
+
+
 
       <div className="ss-card p-4">
         <div className="mb-1 text-[1rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>

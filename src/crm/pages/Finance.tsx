@@ -9,8 +9,9 @@ import Expenses from "@/crm/finance/Expenses";
 import LedgerTab from "@/crm/finance/LedgerTab";
 import Accounts from "@/crm/finance/Accounts";
 import ReportsTab from "@/crm/finance/ReportsTab";
+import MarginsTab from "@/crm/finance/MarginsTab";
 
-const TABS = ["Overview", "Invoices", "Expenses", "Ledger", "Accounts", "Reports"] as const;
+const TABS = ["Overview", "Invoices", "Expenses", "Ledger", "Accounts", "Margins", "Reports"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Finance() {
@@ -52,6 +53,7 @@ export default function Finance() {
           {tab === "Expenses" && <Expenses data={data} />}
           {tab === "Ledger" && <LedgerTab data={data} />}
           {tab === "Accounts" && <Accounts data={data} />}
+          {tab === "Margins" && <MarginsTab />}
           {tab === "Reports" && <ReportsTab data={data} />}
         </>
       )}
