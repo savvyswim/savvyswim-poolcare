@@ -188,7 +188,7 @@ export default function CustomerDetail() {
 
 
       <div className="flex flex-wrap gap-1.5">
-        {TABS.filter((t) => t !== "Billing" || level === "owner").map((t) => (
+        {TABS.filter((t) => (t !== "Billing" || level === "owner") && (t !== "Contracts" || level !== "technician")).map((t) => (
           <button key={t} className={`ss-btn ${tab === t ? "" : "ss-btn-ghost"}`} onClick={() => setTab(t)}>{t}</button>
         ))}
       </div>
@@ -237,6 +237,8 @@ export default function CustomerDetail() {
           )}
         </div>
       )}
+
+      {tab === "Contracts" && level !== "technician" && <CustomerContracts customer={c} />}
 
       {tab === "Billing" && level === "owner" && (
         <div className="space-y-2">
