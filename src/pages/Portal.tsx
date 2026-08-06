@@ -1,6 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Droplets, FileText, LogOut, MapPin, Receipt, Waves } from "lucide-react";
+import {
+  CalendarClock,
+  CloudRain,
+  Download,
+  Droplets,
+  FileText,
+  Lock,
+  LogOut,
+  MapPin,
+  Receipt,
+  Share2,
+  Unlock,
+  Waves,
+} from "lucide-react";
+import { toast } from "sonner";
 import {
   CartesianGrid,
   Line,
@@ -15,6 +29,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
+import { buildWaterReportPdf } from "@/lib/waterReportPdf";
+
 
 type Pool = {
   id: string;
