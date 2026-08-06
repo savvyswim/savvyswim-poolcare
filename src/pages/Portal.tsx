@@ -201,33 +201,57 @@ export default function Portal() {
                 const last = visits.find(
                   (v) => v.customer_id === p.id && v.status === "completed" && v.readings,
                 );
+                const upcoming = [...visits]
+                  .reverse()
+                  .find((v) => v.customer_id === p.id && v.status !== "completed");
                 const step = nextStepFor(last?.readings ?? null, p.gallons);
                 const isActive = p.id === activeId;
                 return (
-                  <button
+                  <div
                     key={p.id}
-                    type="button"
-                    onClick={() => setActiveId(p.id)}
-                    aria-pressed={isActive}
-                    className={`border p-5 text-left transition-colors ${
+                    className={`border transition-colors ${
                       isActive ? "border-accent bg-accent/5" : "border-hairline hover:border-primary/40"
                     }`}
                   >
-                    <p className="flex items-center gap-1.5 font-tech text-[10px] uppercase tracking-widest text-primary/50">
-                      <MapPin className="h-3 w-3" aria-hidden="true" />
-                      {p.city ?? "Pool"}
-                    </p>
-                    <p className="mt-2 font-display text-lg uppercase leading-tight">
-                      {p.address ?? p.full_name}
-                    </p>
-                    <p className="mt-2 font-tech text-xs text-primary/60">
-                      Last report{" "}
-                      {last ? new Date(last.scheduled_date).toLocaleDateString() : "—"}
-                    </p>
-                    <p className="mt-1 font-tech text-xs text-accent">{step.headline}</p>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveId(p.id)}
+                      aria-pressed={isActive}
+                      className="block w-full p-5 text-left"
+                    >
+                      <p className="flex items-center gap-1.5 font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                        <MapPin className="h-3 w-3" aria-hidden="true" />
+                        {p.city ?? "Pool"}
+                      </p>
+                      <p className="mt-2 font-display text-lg uppercase leading-tight">
+                        {p.address ?? p.full_name}
+                      </p>
+                      <p className="mt-2 font-tech text-xs text-primary/60">
+                        Last report{" "}
+                        {last ? new Date(last.scheduled_date).toLocaleDateString() : "—"}
+                      </p>
+                      <p className="mt-1 font-tech text-xs text-accent">{step.headline}</p>
+                    </button>
+                    <div className="border-t border-hairline px-5 py-3">
+                      <p className="font-tech text-[11px] text-primary/55">
+                        {p.route_day ? `${p.route_day}s, weekly` : "Weekly service"} ·{" "}
+                        {upcoming
+                          ? `next ${new Date(upcoming.scheduled_date).toLocaleDateString()}`
+                          : "next visit scheduling"}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => openReschedule(p, upcoming?.scheduled_date ?? null)}
+                        className="mt-2 inline-flex items-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                      >
+                        <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                        {upcoming ? "Reschedule visit" : "Schedule visit"}
+                      </button>
+                    </div>
+                  </div>
                 );
               })}
+
             </section>
 
             {pool && (
