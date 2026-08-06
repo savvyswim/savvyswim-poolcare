@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
-    "test:smoke": "bunx tsx scripts/smoke-test.ts"
+    "test:smoke": "bunx tsx scripts/smoke-test.ts",
+    "canary": "bunx tsx scripts/canary.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
