@@ -181,11 +181,9 @@ export default function PayPerPool() {
     toast.success("Pool pay rate saved");
   }
 
-  async function setUpsell(visitId: string, amount: number) {
-    const { error } = await supabase.from("ss_visits").update({ upsell_amount: amount }).eq("id", visitId);
-    if (error) return toast.error(error.message);
-    void reloadVisits();
-  }
+  // Upsell totals are derived from the invoice line items marked as upsells,
+  // so there is nothing to type in here — the ledger is the source of truth.
+
 
   async function generateInvoice(techId: string) {
     const group = byTech.find((g) => g.techId === techId);
@@ -478,23 +476,10 @@ export default function PayPerPool() {
                             )}
                             <td className="px-3 py-2">{money(l.basePay)}</td>
                             <td className="px-3 py-2">{l.bonus ? money(l.bonus) : "—"}</td>
-                            <td className="px-3 py-2">
-                              {l.locked ? (
-                                l.upsellAmount ? money(l.upsellAmount) : "—"
-                              ) : (
-                                <input
-                                  type="number"
-                                  step="1"
-                                  className="ss-input w-20"
-                                  defaultValue={l.upsellAmount || ""}
-                                  placeholder="0"
-                                  onBlur={(e) => {
-                                    const v = Number(e.target.value || 0);
-                                    if (v !== l.upsellAmount) void setUpsell(l.visitId, v);
-                                  }}
-                                />
-                              )}
+                            <td className="px-3 py-2" title="From the upsell lines on this visit's invoice">
+                              {l.upsellAmount ? money(l.upsellAmount) : "—"}
                             </td>
+
                             <td className="px-3 py-2">{l.commission ? money(l.commission) : "—"}</td>
                             <td className="px-3 py-2 font-semibold">{money(l.techTotal)}</td>
                             {canManage && <td className="px-3 py-2 opacity-70">{money(l.chemCost)}</td>}

@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Download } from "lucide-react";
+import { Plus, Trash2, Download, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
 import { money2 } from "@/crm/lib/pricing";
@@ -13,7 +13,22 @@ import {
   type FinanceSlice,
 } from "@/crm/finance/shared";
 
-type Line = { description: string; quantity: number; unit_price: number };
+type Line = {
+  description: string;
+  quantity: number;
+  unit_price: number;
+  /** Internal only — never shown to the customer. Drives tech commission. */
+  is_upsell: boolean;
+  /** Internal only — our cost for the line, used for job margin. */
+  unit_cost: number;
+};
+
+type VisitOption = {
+  id: string;
+  scheduled_date: string;
+  tech_id: string | null;
+  payout_id: string | null;
+};
 
 /** Fires the invoice/receipt email. Best effort — never blocks the ledger write. */
 async function emailFinanceDoc(body: {
@@ -29,7 +44,13 @@ async function emailFinanceDoc(body: {
   }
 }
 
-const emptyLine = (): Line => ({ description: "", quantity: 1, unit_price: 0 });
+const emptyLine = (): Line => ({
+  description: "",
+  quantity: 1,
+  unit_price: 0,
+  is_upsell: false,
+  unit_cost: 0,
+});
 
 export default function Invoices({ data }: { data: FinanceSlice }) {
   const { invoices, payments, customers, accounts, reload } = data;
@@ -42,9 +63,41 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
   const [issuedOn, setIssuedOn] = useState(todayIso());
   const [dueDate, setDueDate] = useState("");
   const [lines, setLines] = useState<Line[]>([emptyLine()]);
+  const [visitOptions, setVisitOptions] = useState<VisitOption[]>([]);
+  const [visitId, setVisitId] = useState("");
+
+  // Recent visits for the selected pool — upsell lines get attributed to one
+  // so the tech who sold it earns commission automatically.
+  useEffect(() => {
+    let cancelled = false;
+    if (!customerId) {
+      setVisitOptions([]);
+      setVisitId("");
+      return;
+    }
+    void (async () => {
+      const { data: rows } = await supabase
+        .from("ss_visits")
+        .select("id,scheduled_date,tech_id,payout_id")
+        .eq("customer_id", customerId)
+        .order("scheduled_date", { ascending: false })
+        .limit(15);
+      if (cancelled) return;
+      const list = (rows ?? []) as VisitOption[];
+      setVisitOptions(list);
+      setVisitId((cur) => (list.some((v) => v.id === cur) ? cur : (list[0]?.id ?? "")));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [customerId]);
 
   const nameOf = (id: string) => customers.find((c) => c.id === id)?.full_name ?? "—";
   const total = lines.reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_price || 0), 0);
+  const upsellTotal = lines
+    .filter((l) => l.is_upsell)
+    .reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_price || 0), 0);
+  const lineCost = lines.reduce((s, l) => s + Number(l.quantity || 0) * Number(l.unit_cost || 0), 0);
   const paidOn = useMemo(() => {
     const m: Record<string, number> = {};
     for (const p of payments) if (p.invoice_id) m[p.invoice_id] = (m[p.invoice_id] ?? 0) + Number(p.amount);
@@ -88,6 +141,8 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
             ? accountByCode(accounts, "4200")
             : accountByCode(accounts, "4100");
 
+      const attributedVisit = visitOptions.find((v) => v.id === visitId) ?? null;
+
       await supabase.from("ss_invoice_items").insert(
         clean.map((l) => ({
           invoice_id: inv.id,
@@ -96,8 +151,14 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
           unit_price: l.unit_price,
           line_total: l.quantity * l.unit_price,
           account_id: revenue?.id ?? null,
+          // Internal fields — office only, never returned to the customer.
+          is_upsell: l.is_upsell,
+          unit_cost: l.unit_cost || 0,
+          visit_id: l.is_upsell ? (attributedVisit?.id ?? null) : null,
+          sold_by_tech_id: l.is_upsell ? (attributedVisit?.tech_id ?? null) : null,
         })),
       );
+
 
       await postLedger({
         entry_date: issuedOn,
@@ -233,9 +294,44 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
             <input className="ss-input" type="date" value={dueDate} placeholder="Due" onChange={(e) => setDueDate(e.target.value)} />
           </div>
 
+          <div className="flex flex-wrap items-center gap-2 rounded-md bg-black/[0.03] px-3 py-2 text-[0.72rem]">
+            <EyeOff size={12} className="opacity-60" />
+            <span className="opacity-70">
+              Internal only — cost and upsell flags never appear on the customer&apos;s invoice.
+            </span>
+            <span className="flex-1" />
+            <span className="ss-label">Attribute upsells to visit</span>
+            <select
+              className="ss-input w-auto"
+              value={visitId}
+              onChange={(e) => setVisitId(e.target.value)}
+              disabled={!visitOptions.length}
+            >
+              {!visitOptions.length && <option value="">No visits on file</option>}
+              {visitOptions.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.scheduled_date}
+                  {v.payout_id ? " (paid out — locked)" : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="space-y-2">
+            <div
+              className="ss-label grid gap-2 px-1"
+              style={{ gridTemplateColumns: "1fr 70px 100px 100px 64px 90px 32px" }}
+            >
+              <span>Description</span>
+              <span>Qty</span>
+              <span>Rate</span>
+              <span>Our cost</span>
+              <span>Upsell</span>
+              <span className="text-right">Line</span>
+              <span />
+            </div>
             {lines.map((l, idx) => (
-              <div key={idx} className="grid gap-2" style={{ gridTemplateColumns: "1fr 70px 100px 90px 32px" }}>
+              <div key={idx} className="grid gap-2" style={{ gridTemplateColumns: "1fr 70px 100px 100px 64px 90px 32px" }}>
                 <input
                   className="ss-input"
                   placeholder="Description (e.g. Weekly service — August)"
@@ -259,6 +355,23 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
                   value={l.unit_price || ""}
                   onChange={(e) => setLine(idx, { unit_price: Number(e.target.value) })}
                 />
+                <input
+                  className="ss-input ss-num"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  placeholder="Cost"
+                  value={l.unit_cost || ""}
+                  onChange={(e) => setLine(idx, { unit_cost: Number(e.target.value) })}
+                />
+                <label className="flex items-center justify-center self-center">
+                  <input
+                    type="checkbox"
+                    checked={l.is_upsell}
+                    onChange={(e) => setLine(idx, { is_upsell: e.target.checked })}
+                    aria-label="Mark line as an upsell"
+                  />
+                </label>
                 <div className="ss-num self-center text-right text-[0.8rem] font-semibold">
                   {money2(l.quantity * l.unit_price)}
                 </div>
@@ -275,8 +388,21 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
             </button>
           </div>
 
-          <div className="flex items-center justify-between border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
-            <span className="ss-label">Total <span className="ss-num text-[1rem]">{money2(total)}</span></span>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+            <span className="flex flex-wrap items-center gap-4">
+              <span className="ss-label">Total <span className="ss-num text-[1rem]">{money2(total)}</span></span>
+              {upsellTotal > 0 && (
+                <span className="ss-label opacity-70">
+                  Upsell lines <span className="ss-num">{money2(upsellTotal)}</span> — commission is calculated
+                  automatically for the tech on the selected visit
+                </span>
+              )}
+              {lineCost > 0 && (
+                <span className="ss-label opacity-70">
+                  Job margin <span className="ss-num">{money2(total - lineCost)}</span>
+                </span>
+              )}
+            </span>
             <span className="flex gap-2">
               <button className="ss-btn ss-btn-ghost" onClick={() => setCreating(false)}>Cancel</button>
               <button className="ss-btn" disabled={busy} onClick={createInvoice}>
@@ -284,6 +410,7 @@ export default function Invoices({ data }: { data: FinanceSlice }) {
               </button>
             </span>
           </div>
+
         </div>
       )}
 

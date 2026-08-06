@@ -1666,9 +1666,13 @@ export type Database = {
           description: string
           id: string
           invoice_id: string
+          is_upsell: boolean
           line_total: number
           quantity: number
+          sold_by_tech_id: string | null
+          unit_cost: number
           unit_price: number
+          visit_id: string | null
         }
         Insert: {
           account_id?: string | null
@@ -1676,9 +1680,13 @@ export type Database = {
           description: string
           id?: string
           invoice_id: string
+          is_upsell?: boolean
           line_total?: number
           quantity?: number
+          sold_by_tech_id?: string | null
+          unit_cost?: number
           unit_price?: number
+          visit_id?: string | null
         }
         Update: {
           account_id?: string | null
@@ -1686,9 +1694,13 @@ export type Database = {
           description?: string
           id?: string
           invoice_id?: string
+          is_upsell?: boolean
           line_total?: number
           quantity?: number
+          sold_by_tech_id?: string | null
+          unit_cost?: number
           unit_price?: number
+          visit_id?: string | null
         }
         Relationships: [
           {
@@ -1703,6 +1715,20 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_invoice_items_sold_by_tech_id_fkey"
+            columns: ["sold_by_tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_invoice_items_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
             referencedColumns: ["id"]
           },
         ]
@@ -3385,6 +3411,7 @@ export type Database = {
           read_ct: number
         }[]
       }
+      ss_default_upsell_pct: { Args: never; Returns: number }
       ss_get_review_request: {
         Args: { _token: string }
         Returns: {
@@ -3407,6 +3434,15 @@ export type Database = {
         Returns: string
       }
       ss_my_customer_id: { Args: never; Returns: string }
+      ss_my_invoice_lines: {
+        Args: { _invoice_id: string }
+        Returns: {
+          description: string
+          line_total: number
+          quantity: number
+          unit_price: number
+        }[]
+      }
       ss_my_level: {
         Args: { _uid: string }
         Returns: Database["public"]["Enums"]["ss_level"]
@@ -3428,6 +3464,10 @@ export type Database = {
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
+      ss_recalc_visit_upsell: {
+        Args: { _visit_id: string }
+        Returns: undefined
+      }
       ss_request_visit_reschedule: {
         Args: { p_customer_id: string; p_date: string; p_note?: string }
         Returns: Json
