@@ -149,6 +149,42 @@ export default function Pipeline() {
               <Field label="Monthly" value={money(detail.monthly_value)} />
             </dl>
             {detail.message && <p className="mt-3 text-[0.82rem]">{detail.message}</p>}
+
+            <div className="mt-4 rounded-md border p-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+              <div className="flex items-center justify-between gap-2">
+                <span className="ss-label">Eligible service plan</span>
+                <Chip tone={PLAN_STATUS[detail.plan_status ?? "recommended"]?.tone ?? "gold"}>
+                  {PLAN_STATUS[detail.plan_status ?? "recommended"]?.label ?? "Plan matched"}
+                </Chip>
+              </div>
+              <div className="mt-1.5 text-[0.9rem] font-semibold">
+                {findServicePlan(detail.plan_id)?.name ?? "Not matched yet"}
+              </div>
+              <ul className="mt-1.5 space-y-1 text-[0.75rem]">
+                {(findServicePlan(detail.plan_id)?.scope ?? []).map((s) => (
+                  <li key={s} className="flex gap-1.5">
+                    <span className="opacity-40">—</span>
+                    <span className="opacity-85">{s}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {SERVICE_PLANS.filter((p) => p.id !== detail.plan_id).map((p) => (
+                  <button key={p.id} className="ss-btn ss-btn-ghost" onClick={() => setPlan(detail, p.id)}>
+                    {p.name}
+                  </button>
+                ))}
+              </div>
+              {detail.plan_id && (
+                <Link
+                  className="ss-btn mt-2 w-full justify-center !no-underline"
+                  to={`/admin/crm/products?plan_id=${detail.plan_id}`}
+                >
+                  QUOTE THIS PLAN
+                </Link>
+              )}
+            </div>
+
             <div className="mt-4">
               <div className="ss-label mb-1.5">Move to stage</div>
               <div className="flex flex-wrap gap-1.5">
