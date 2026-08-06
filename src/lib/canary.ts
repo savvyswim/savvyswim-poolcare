@@ -41,7 +41,8 @@ export type CanaryRun = {
 export const DEFAULT_CANARY_ROUTES = [
   "/",
   "/services",
-  "/pricing",
+  "/free-inspection",
+  "/pool-cleaning-frisco-tx",
   "/app",
   "/portal",
   "/admin/crm",

@@ -1,12 +1,12 @@
 {
   "target": "http://localhost:8080",
-  "startedAt": "2026-08-06T23:33:55.598Z",
-  "finishedAt": "2026-08-06T23:33:57.418Z",
+  "startedAt": "2026-08-06T23:34:09.041Z",
+  "finishedAt": "2026-08-06T23:34:09.976Z",
   "rounds": 2,
-  "requests": 16,
-  "failures": 2,
-  "status": "failed",
-  "slowestMs": 504,
+  "requests": 18,
+  "failures": 0,
+  "status": "ok",
+  "slowestMs": 167,
   "probes": [
     {
       "route": "/",
@@ -15,7 +15,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 351,
+      "durationMs": 167,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -27,22 +27,34 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 109,
+      "durationMs": 54,
       "message": "",
       "stack": null,
       "bodySnippet": null
     },
     {
-      "route": "/pricing",
+      "route": "/free-inspection",
       "round": 1,
-      "url": "http://localhost:8080/pricing",
-      "kind": "http_4xx",
-      "ok": false,
-      "httpStatus": 404,
-      "durationMs": 15,
-      "message": "client error 404",
+      "url": "http://localhost:8080/free-inspection",
+      "kind": "ok",
+      "ok": true,
+      "httpStatus": 200,
+      "durationMs": 108,
+      "message": "",
       "stack": null,
-      "bodySnippet": "<!DOCTYPE html><html lang=\"en\" data-tsd-source=\"/src/routes/__root.tsx:92:5\"><head data-tsd-source=\"/src/routes/__root.tsx:93:7\"><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/src/styles.css\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"/@tanstack-start/styles.css?routes=__root__\" data-tanstack-router-dev-styles=\"true\" data-precedence=\"default\"/><title>Savvy Swim — Pool Cleaning, Service &amp; Repair in Texas</title><meta name=\"format-detection\" content=\"telephone=no\"/><meta name=\"theme-color\" content=\"#06141c\"/><meta name=\"mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-title\" content=\"Savvy Swim\"/><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"/><meta name=\"application-name\" content=\"Savvy Swim\"/><meta name=\"google-site-verification\" content=\""
+      "bodySnippet": null
+    },
+    {
+      "route": "/pool-cleaning-frisco-tx",
+      "round": 1,
+      "url": "http://localhost:8080/pool-cleaning-frisco-tx",
+      "kind": "ok",
+      "ok": true,
+      "httpStatus": 200,
+      "durationMs": 89,
+      "message": "",
+      "stack": null,
+      "bodySnippet": null
     },
     {
       "route": "/app",
@@ -51,7 +63,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 71,
+      "durationMs": 14,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -63,7 +75,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 504,
+      "durationMs": 14,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -75,7 +87,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 309,
+      "durationMs": 14,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -87,7 +99,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 65,
+      "durationMs": 14,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -99,7 +111,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 6,
+      "durationMs": 5,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -111,7 +123,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 81,
+      "durationMs": 89,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -123,22 +135,34 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 37,
+      "durationMs": 41,
       "message": "",
       "stack": null,
       "bodySnippet": null
     },
     {
-      "route": "/pricing",
+      "route": "/free-inspection",
       "round": 2,
-      "url": "http://localhost:8080/pricing",
-      "kind": "http_4xx",
-      "ok": false,
-      "httpStatus": 404,
-      "durationMs": 11,
-      "message": "client error 404",
+      "url": "http://localhost:8080/free-inspection",
+      "kind": "ok",
+      "ok": true,
+      "httpStatus": 200,
+      "durationMs": 20,
+      "message": "",
       "stack": null,
-      "bodySnippet": "<!DOCTYPE html><html lang=\"en\" data-tsd-source=\"/src/routes/__root.tsx:92:5\"><head data-tsd-source=\"/src/routes/__root.tsx:93:7\"><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/src/styles.css\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"/@tanstack-start/styles.css?routes=__root__\" data-tanstack-router-dev-styles=\"true\" data-precedence=\"default\"/><title>Savvy Swim — Pool Cleaning, Service &amp; Repair in Texas</title><meta name=\"format-detection\" content=\"telephone=no\"/><meta name=\"theme-color\" content=\"#06141c\"/><meta name=\"mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-title\" content=\"Savvy Swim\"/><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"/><meta name=\"application-name\" content=\"Savvy Swim\"/><meta name=\"google-site-verification\" content=\""
+      "bodySnippet": null
+    },
+    {
+      "route": "/pool-cleaning-frisco-tx",
+      "round": 2,
+      "url": "http://localhost:8080/pool-cleaning-frisco-tx",
+      "kind": "ok",
+      "ok": true,
+      "httpStatus": 200,
+      "durationMs": 42,
+      "message": "",
+      "stack": null,
+      "bodySnippet": null
     },
     {
       "route": "/app",
@@ -147,7 +171,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 13,
+      "durationMs": 15,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -159,7 +183,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 15,
+      "durationMs": 17,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -171,7 +195,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 13,
+      "durationMs": 14,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -183,7 +207,7 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 13,
+      "durationMs": 12,
       "message": "",
       "stack": null,
       "bodySnippet": null
@@ -195,36 +219,11 @@
       "kind": "ok",
       "ok": true,
       "httpStatus": 200,
-      "durationMs": 4,
+      "durationMs": 3,
       "message": "",
       "stack": null,
       "bodySnippet": null
     }
   ],
-  "incidents": [
-    {
-      "route": "/pricing",
-      "round": 1,
-      "url": "http://localhost:8080/pricing",
-      "kind": "http_4xx",
-      "ok": false,
-      "httpStatus": 404,
-      "durationMs": 15,
-      "message": "client error 404",
-      "stack": null,
-      "bodySnippet": "<!DOCTYPE html><html lang=\"en\" data-tsd-source=\"/src/routes/__root.tsx:92:5\"><head data-tsd-source=\"/src/routes/__root.tsx:93:7\"><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/src/styles.css\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"/@tanstack-start/styles.css?routes=__root__\" data-tanstack-router-dev-styles=\"true\" data-precedence=\"default\"/><title>Savvy Swim — Pool Cleaning, Service &amp; Repair in Texas</title><meta name=\"format-detection\" content=\"telephone=no\"/><meta name=\"theme-color\" content=\"#06141c\"/><meta name=\"mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-title\" content=\"Savvy Swim\"/><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"/><meta name=\"application-name\" content=\"Savvy Swim\"/><meta name=\"google-site-verification\" content=\""
-    },
-    {
-      "route": "/pricing",
-      "round": 2,
-      "url": "http://localhost:8080/pricing",
-      "kind": "http_4xx",
-      "ok": false,
-      "httpStatus": 404,
-      "durationMs": 11,
-      "message": "client error 404",
-      "stack": null,
-      "bodySnippet": "<!DOCTYPE html><html lang=\"en\" data-tsd-source=\"/src/routes/__root.tsx:92:5\"><head data-tsd-source=\"/src/routes/__root.tsx:93:7\"><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\"/><link rel=\"stylesheet\" href=\"/src/styles.css\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap\" data-precedence=\"default\"/><link rel=\"stylesheet\" href=\"/@tanstack-start/styles.css?routes=__root__\" data-tanstack-router-dev-styles=\"true\" data-precedence=\"default\"/><title>Savvy Swim — Pool Cleaning, Service &amp; Repair in Texas</title><meta name=\"format-detection\" content=\"telephone=no\"/><meta name=\"theme-color\" content=\"#06141c\"/><meta name=\"mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"/><meta name=\"apple-mobile-web-app-title\" content=\"Savvy Swim\"/><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"/><meta name=\"application-name\" content=\"Savvy Swim\"/><meta name=\"google-site-verification\" content=\""
-    }
-  ]
+  "incidents": []
 }
