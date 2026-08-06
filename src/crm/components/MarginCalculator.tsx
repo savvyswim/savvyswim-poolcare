@@ -89,6 +89,14 @@ export default function MarginCalculator({ compact = false }: { compact?: boolea
   const [markup, setMarkup] = useState("100");
   const [sell, setSell] = useState("");
   const [lines, setLines] = useState<Line[]>([newLine()]);
+  // Labor, service fees and tax so a full parts-and-services quote shows true job margin.
+  const [laborHours, setLaborHours] = useState("2");
+  const [laborCostRate, setLaborCostRate] = useState("28");
+  const [laborBillRate, setLaborBillRate] = useState("95");
+  const [feeCostAmt, setFeeCostAmt] = useState("0");
+  const [feeChargeAmt, setFeeChargeAmt] = useState("0");
+  const [taxRate, setTaxRate] = useState("8.25");
+  const [taxLabor, setTaxLabor] = useState(false);
 
   const c = num(cost);
 
