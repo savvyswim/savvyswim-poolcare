@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PortalMaintenance from "@/pages/PortalMaintenance";
 
-export const Route = createFileRoute("/portal/maintenance")({
+export const Route = createFileRoute("/portal_/maintenance")({
   head: () => ({
     meta: [
       { title: "Maintenance Schedule — Savvy Swim" },
