@@ -246,6 +246,32 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   );
 }
 
+function NavGroupBlock({
+  group,
+  items,
+  pathname,
+}: {
+  group: NavGroup;
+  items: NavItem[];
+  pathname: string;
+}) {
+  return (
+    <div className="space-y-0.5">
+      <div className="ss-tag px-2.5" style={{ fontSize: "0.5rem", opacity: 0.5 }}>
+        {group}
+      </div>
+      {items.map((i) => (
+        <NavRow
+          key={i.to}
+          item={i}
+          active={pathname === i.to || (i.to !== "/admin/crm" && pathname.startsWith(`${i.to}/`))}
+        />
+      ))}
+    </div>
+  );
+}
+
+
 function NavRow({ item, active }: { item: NavItem; active: boolean }) {
   const Icon = item.icon;
   return (

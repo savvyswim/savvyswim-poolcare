@@ -9,6 +9,8 @@ export type ModuleKey =
   | "alerts"
   | "technicians"
   | "products"
+  | "servicePlans"
+
   | "finance"
   | "trucks"
   | "inventory"
