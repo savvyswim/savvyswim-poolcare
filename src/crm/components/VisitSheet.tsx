@@ -4,12 +4,23 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { doseFor, evaluate, lsiVerdict, READING_FIELDS, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
+import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
 
+type Step = {
+  id: string;
+  label: string;
+  hint?: string;
+  is_required: boolean;
+  photo: ChecklistPhoto;
+  custom: boolean;
+};
+
 export type VisitPhoto = { label: string; path: string; url: string };
+
 
 const EVIDENCE_KINDS = [
   { tag: "water", label: "Pool water" },
