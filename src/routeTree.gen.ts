@@ -37,6 +37,7 @@ import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as AdminCrmAppRouteImport } from './routes/admin/crm/app'
 import { Route as AdminCrmLegacyRouteImport } from './routes/admin/crm/legacy'
 import { Route as AdminCrmLoginRouteImport } from './routes/admin/crm/login'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/index'
 import { Route as CrmAdminCrmAlertsRouteImport } from './routes/_crm/admin/crm/alerts'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
@@ -205,6 +206,11 @@ const AdminCrmLegacyRoute = AdminCrmLegacyRouteImport.update({
 const AdminCrmLoginRoute = AdminCrmLoginRouteImport.update({
   id: '/admin/crm/login',
   path: '/admin/crm/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmAdminCrmIndexRoute = CrmAdminCrmIndexRouteImport.update({
@@ -391,6 +397,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/app': typeof AdminCrmAppRoute
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
@@ -450,6 +457,7 @@ export interface FileRoutesByTo {
   '/admin/crm/app': typeof AdminCrmAppRoute
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
@@ -511,6 +519,7 @@ export interface FileRoutesById {
   '/admin/crm/app': typeof AdminCrmAppRoute
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
@@ -572,6 +581,7 @@ export interface FileRouteTypes {
     | '/admin/crm/app'
     | '/admin/crm/legacy'
     | '/admin/crm/login'
+    | '/api/public/health'
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
@@ -631,6 +641,7 @@ export interface FileRouteTypes {
     | '/admin/crm/app'
     | '/admin/crm/legacy'
     | '/admin/crm/login'
+    | '/api/public/health'
     | '/admin/crm/alerts'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
@@ -691,6 +702,7 @@ export interface FileRouteTypes {
     | '/admin/crm/app'
     | '/admin/crm/legacy'
     | '/admin/crm/login'
+    | '/api/public/health'
     | '/_crm/admin/crm/alerts'
     | '/_crm/admin/crm/break-even'
     | '/_crm/admin/crm/connect'
@@ -752,6 +764,7 @@ export interface RootRouteChildren {
   AdminCrmAppRoute: typeof AdminCrmAppRoute
   AdminCrmLegacyRoute: typeof AdminCrmLegacyRoute
   AdminCrmLoginRoute: typeof AdminCrmLoginRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
 }
 
@@ -951,6 +964,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/crm/login'
       fullPath: '/admin/crm/login'
       preLoaderRoute: typeof AdminCrmLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_crm/admin/crm/': {
@@ -1261,18 +1281,9 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmAppRoute: AdminCrmAppRoute,
   AdminCrmLegacyRoute: AdminCrmLegacyRoute,
   AdminCrmLoginRoute: AdminCrmLoginRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

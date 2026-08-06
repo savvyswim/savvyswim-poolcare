@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:smoke": "bunx tsx scripts/smoke-test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
