@@ -101,6 +101,7 @@ export function maintenanceMargin(monthlyPrice: number, c: CostModel): Maintenan
     marginPct: pct(grossProfit, monthlyPrice),
     perVisitProfit: grossProfit / visits,
     annualProfit: grossProfit * 12,
+    processingFee,
   };
 }
 
