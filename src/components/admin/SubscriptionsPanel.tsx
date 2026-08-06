@@ -91,6 +91,7 @@ export function SubscriptionsPanel() {
     setSavingId(null);
     if (error) return toast.error(error.message);
     toast.success(`${row.sku} saved`);
+    return undefined;
   };
 
   const deleteSub = async (id: string) => {
@@ -100,6 +101,7 @@ export function SubscriptionsPanel() {
     if (error) return toast.error(error.message);
     setSubs((prev) => prev.filter((s) => s.id !== id));
     toast.success("Subscriber removed");
+    return undefined;
   };
 
   if (loading) {

@@ -90,13 +90,19 @@ export default function AdminCleaning() {
       })
       .select("*")
       .single();
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setPlans((p) => [...p, data as CleaningPlan]);
   };
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("cleaning_plans").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setPlans((p) => p.filter((x) => x.id !== id));
     toast.success("Plan deleted");
   };
