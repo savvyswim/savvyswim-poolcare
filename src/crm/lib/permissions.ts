@@ -39,7 +39,7 @@ const OWNER: SsLevel[] = ["owner"];
 export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   route: ALL,
   jobs: ALL,
-  alerts: ALL,
+  waterLab: ALL,
   customers: OFFICE,
   pipeline: OFFICE,
   technicians: OFFICE,
