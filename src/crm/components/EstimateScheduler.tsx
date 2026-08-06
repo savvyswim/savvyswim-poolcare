@@ -55,7 +55,9 @@ export function MaintenanceSchedule({ monthly }: { monthly: number }) {
   const set = <K extends keyof Recurrence>(k: K, v: Recurrence[K]) => setR((p) => ({ ...p, [k]: v }));
   const sched = buildSchedule(r, invoiceFreq);
   const m = maintenanceMargin(monthly, { ...costs, visitsPerMonth: sched.perMonth });
-  const contractValue = monthly * Math.max(1, sched.invoices || 1);
+  const months = sched.perMonth > 0 ? sched.count / sched.perMonth : 0;
+  const contractValue = monthly * Math.max(1, months);
+  const perInvoice = sched.invoices > 0 ? contractValue / sched.invoices : contractValue;
 
   return (
     <div className="grid gap-3 lg:grid-cols-2">
