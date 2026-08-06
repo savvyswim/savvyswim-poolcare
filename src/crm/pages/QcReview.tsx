@@ -39,13 +39,21 @@ type VisitRow = {
   id: string;
   scheduled_date: string;
   minutes_on_site: number | null;
-  chem_ph: number | null;
-  chem_chlorine: number | null;
+  readings: Record<string, number | null> | null;
+  checklist: Record<string, boolean> | null;
   photos: unknown;
   ss_customers: { full_name: string; city: string | null } | null;
 };
 
 const RATING = [1, 2, 3, 4, 5];
+
+const checklistDone = (v: { checklist: Record<string, boolean> | null }) => {
+  const c = v.checklist;
+  if (!c || typeof c !== "object") return null;
+  const vals = Object.values(c);
+  if (!vals.length) return null;
+  return vals.filter(Boolean).length;
+};
 
 export default function QcReview() {
   const id = useSavvyIdentity();
@@ -83,7 +91,7 @@ export default function QcReview() {
       if (!techId) return [];
       const { data } = await supabase
         .from("ss_visits")
-        .select("id,scheduled_date,minutes_on_site,chem_ph,chem_chlorine,photos,ss_customers(full_name,city)")
+        .select("id,scheduled_date,minutes_on_site,readings,checklist,photos,ss_customers(full_name,city)")
         .eq("tech_id", techId)
         .eq("status", "completed")
         .gte("scheduled_date", range.start)
@@ -232,9 +240,12 @@ export default function QcReview() {
                 <div className="flex items-center gap-1 text-[0.78rem]">
                   <Droplets size={13} className="opacity-50" />
                   <span className="ss-num">
-                    pH {v.chem_ph ?? "—"} · Cl {v.chem_chlorine ?? "—"}
+                    pH {v.readings?.ph ?? "—"} · Cl {v.readings?.chlorine ?? "—"}
                   </span>
                 </div>
+                <Chip tone={checklistDone(v) === null ? "ink" : checklistDone(v)! >= 15 ? "green" : "gold"}>
+                  {checklistDone(v) === null ? "no checklist" : `${checklistDone(v)}/15 checklist`}
+                </Chip>
                 <Chip tone={Array.isArray(v.photos) && (v.photos as unknown[]).length ? "green" : "gold"}>
                   {Array.isArray(v.photos) && (v.photos as unknown[]).length
                     ? `${(v.photos as unknown[]).length} photos`
