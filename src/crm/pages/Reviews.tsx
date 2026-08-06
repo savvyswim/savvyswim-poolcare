@@ -89,7 +89,7 @@ export default function Reviews() {
       .insert({
         customer_name: name.trim(),
         phone: phone.trim() || null,
-        message: note.trim() || null,
+        message: personalize(note).trim() || null,
         photos,
         google_url: googleUrl.trim(),
       })
