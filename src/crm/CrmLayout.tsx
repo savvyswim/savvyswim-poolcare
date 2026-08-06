@@ -13,10 +13,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
 
-type NavGroup = "Today" | "Sales" | "Operations" | "Money" | "Marketing" | "Admin";
+type NavGroup = "Today" | "Sales" | "Operations" | "Marketing" | "Savvy FinOps" | "Admin";
 type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey; group: NavGroup };
 
-const GROUP_ORDER: NavGroup[] = ["Today", "Sales", "Operations", "Money", "Marketing", "Admin"];
+const GROUP_ORDER: NavGroup[] = ["Today", "Sales", "Operations", "Marketing", "Savvy FinOps", "Admin"];
 
 const STAFF_NAV: NavItem[] = [
   // Today
@@ -36,9 +36,9 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },
 
-  // Money
-  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Money" },
-  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store", group: "Money" },
+  // Savvy FinOps
+  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
+  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store", group: "Savvy FinOps" },
 
   // Marketing & website
   { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email", group: "Marketing" },
