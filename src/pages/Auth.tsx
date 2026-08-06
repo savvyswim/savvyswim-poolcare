@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Waves } from "lucide-react";
+import Seo from "@/components/Seo";
 import { isSharedDevice, setSharedDevice } from "@/lib/sessionSecurity";
 
 export default function Auth() {
