@@ -41,6 +41,8 @@ import EmailCenter from "@/crm/pages/EmailCenter";
 import Reports from "@/crm/pages/Reports";
 import WebsiteConnect from "@/crm/pages/WebsiteConnect";
 import CrmSettings from "@/crm/pages/Settings";
+import SecurityPage from "@/crm/pages/Security";
+
 import { RequireModule } from "@/crm/components/RequireModule";
 
 import { CartProvider } from "@/hooks/useCart";
@@ -93,6 +95,8 @@ const App = () => (
               <Route path="/admin/crm/reports" element={<Reports />} />
               <Route path="/admin/crm/connect" element={<WebsiteConnect />} />
               <Route path="/admin/crm/settings" element={<CrmSettings />} />
+              <Route path="/admin/crm/security" element={<SecurityPage />} />
+
             </Route>
 
             {/* Legacy /crm/* URLs redirect into the admin area */}

@@ -76,14 +76,15 @@ export default function Security() {
   }
 
   async function patch(f: Finding, changes: Partial<Finding>) {
-    const next = { ...changes } as Record<string, unknown>;
+    const next: Partial<Finding> = { ...changes };
     if (changes.status && ["fixed", "ignored"].includes(changes.status)) {
       next.approved_by_email = user?.email ?? null;
       next.approved_at = new Date().toISOString();
       next.resolved_at = new Date().toISOString();
     }
-    setFindings((s) => s.map((x) => (x.id === f.id ? { ...x, ...(next as Partial<Finding>) } : x)));
+    setFindings((s) => s.map((x) => (x.id === f.id ? { ...x, ...next } : x)));
     const { error } = await supabase.from("security_findings").update(next).eq("id", f.id);
+
     if (error) toast.error(error.message);
     else void load();
   }
