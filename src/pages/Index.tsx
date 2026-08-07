@@ -33,6 +33,8 @@ const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
 
 import Seo from "@/components/Seo";
+import ScrollReveal from "@/components/ScrollReveal";
+
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import type { OrderItem } from "@/components/OrderDialog";
