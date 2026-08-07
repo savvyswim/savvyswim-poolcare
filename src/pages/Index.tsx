@@ -640,7 +640,7 @@ const Index = () => {
 
 
       {/* PROCESS — how service works */}
-      <section className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section data-reveal className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="absolute inset-0 water-caustics opacity-40" />
         <div className="container-tight relative">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -699,7 +699,7 @@ const Index = () => {
       </section>
 
       {/* CLEANING PLANS */}
-      <section id="cleaning" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline">
+      <section data-reveal id="cleaning" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -896,7 +896,7 @@ const Index = () => {
       </section>
 
       {/* REFERRAL */}
-      <section id="refer" className="perf-section relative border-y border-hairline bg-navy-brand py-20 sm:py-28 lg:py-32 xl:py-40">
+      <section data-reveal id="refer" className="perf-section relative border-y border-hairline bg-navy-brand py-20 sm:py-28 lg:py-32 xl:py-40">
         <div className="container-tight">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             <div>
@@ -957,7 +957,7 @@ const Index = () => {
 
 
       {/* MARKETING */}
-      <section id="portfolio" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative">
+      <section data-reveal id="portfolio" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative">
         <div className="container-tight">
           <div className="max-w-3xl mb-14">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -1006,7 +1006,7 @@ const Index = () => {
 
 
       {/* TESTIMONIALS */}
-      <section className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
+      <section data-reveal className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative bg-ink/40 border-y border-hairline overflow-hidden">
         <div className="container-tight">
           <div className="max-w-2xl mb-12">
             <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-brand mb-3">
@@ -1064,7 +1064,7 @@ const Index = () => {
 
 
       {/* LOCAL AREA */}
-      <section className="perf-section py-12 border-t border-hairline">
+      <section data-reveal className="perf-section py-12 border-t border-hairline">
         <div className="container-tight flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div>
             <div className="font-tech text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Areas we serve</div>
@@ -1089,7 +1089,7 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section id="contact" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative overflow-hidden">
+      <section data-reveal id="contact" className="perf-section py-24 sm:py-32 lg:py-36 xl:py-44 relative overflow-hidden">
         <div className="container-tight">
           <div className="relative rounded-sm overflow-hidden card-3d p-10 sm:p-16 text-center shadow-3d">
             <div className="absolute inset-0">
