@@ -11,14 +11,6 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
-    ssr: {
-      // TanStack Start re-exports createMiddleware from start-client-core.
-      // Pre-bundle both modules so the server worker preserves that export;
-      // otherwise its built-in CSRF middleware crashes before React renders.
-      optimizeDeps: {
-        include: ["@tanstack/react-start", "@tanstack/start-client-core"],
-      },
-    },
     server: {
       watch: {
         // Env files are rewritten by the platform on every sync. Watching them
