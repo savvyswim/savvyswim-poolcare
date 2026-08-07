@@ -491,6 +491,17 @@ const Index = () => {
 
         {/* Spec sheet grid */}
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
+          <div className="absolute inset-0 overflow-hidden" aria-hidden>
+            <img
+              src={photoPoolWater.url}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-primary/85" />
+          </div>
+          <div className="relative">
           <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:gap-x-14 lg:py-24 xl:py-28 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <p className="tech-label">Method</p>
@@ -546,9 +557,21 @@ const Index = () => {
               </ul>
             </div>
           </div>
+          </div>
         </div>
 
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
+          <div className="absolute inset-0 overflow-hidden" aria-hidden>
+            <img
+              src={photoPoolWater.url}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-primary/85" />
+          </div>
+          <div className="relative">
           <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
 
             {[
@@ -561,6 +584,7 @@ const Index = () => {
                 <div className="mt-3 tech-label">{s.v}</div>
               </div>
             ))}
+          </div>
           </div>
         </div>
 
