@@ -210,6 +210,41 @@ export default function PayPerPool() {
     [lines, openPool],
   );
 
+  /* ------------------------------------- pool-by-pool earnings history */
+  const historySince = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 180);
+    return isoDay(d);
+  }, []);
+
+  const { rows: historyVisits, loading: historyLoading } = useTable<PayVisit>(
+    "pay-pool-history",
+    async () => {
+      if (!openPool) return [];
+      let q = supabase
+        .from("ss_visits")
+        .select(
+          "id,scheduled_date,tech_id,status,completed_at,chem_cost,tech_pay,tech_bonus,upsell_amount,upsell_commission,pay_status,payout_id," +
+            "ss_customers(id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct)",
+        )
+        .eq("status", "completed")
+        .eq("customer_id", openPool)
+        .gte("scheduled_date", historySince)
+        .order("scheduled_date", { ascending: false })
+        .limit(500);
+      if (!canManage && id.staffId) q = q.eq("tech_id", id.staffId);
+      const { data } = await q;
+      return (data ?? []) as unknown as PayVisit[];
+    },
+    [openPool, historySince, canManage, id.staffId],
+  );
+
+  const poolHistory = useMemo(
+    () => periodHistory(buildPayLines(historyVisits, liveCfg, techMeta)),
+    [historyVisits, liveCfg, techMeta],
+  );
+
+
   const adjByTech = useMemo(() => {
     const map = new Map<string, number>();
     const scoped = techFilter === "all" ? adjustments : adjustments.filter((a) => a.tech_id === techFilter);
