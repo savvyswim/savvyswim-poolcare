@@ -99,7 +99,7 @@ export default function DeployHealth() {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="crm-h1">Deploy Health</h1>
-          <p className="crm-sub">Startup dependency status, health pings and the rollback checklist.</p>
+          <p className="crm-sub">Live production errors, smoke tests, revision status, startup health and rollback guidance.</p>
         </div>
         <button type="button" className="crm-btn" onClick={runNow} disabled={pinging}>
           {pinging ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}

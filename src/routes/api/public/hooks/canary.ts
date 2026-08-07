@@ -13,9 +13,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
-import { runCanary, summarizeCanary, DEFAULT_CANARY_ROUTES } from "@/lib/canary";
+import { runCanary, summarizeCanary, DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
 
 const DEFAULT_TARGET = "https://savvyswim.com";
+const PREVIEW_TARGET = "https://id-preview--beff0d54-4ac3-49d5-8d2c-3d4520824e41.lovable.app";
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
 const DEFAULT_PHONE = "+14697440379";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -73,14 +74,28 @@ async function sendAlertSms(body: string) {
 
 async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
-  const target = (params.get("target") ?? process.env["HEALTH_WATCH_TARGET"] ?? DEFAULT_TARGET).replace(/\/$/, "");
+  const mode = params.get("mode") ?? "canary";
+  const target = DEFAULT_TARGET;
   const rounds = Number(params.get("rounds") ?? 3);
   const source = params.get("source") ?? "cron";
+
+  if (mode === "compare") {
+    const [production, preview] = await Promise.all([
+      runCanary({ target: DEFAULT_TARGET, routes: ["/"], rounds: 1, delayMs: 0 }),
+      runCanary({ target: PREVIEW_TARGET, routes: ["/"], rounds: 1, delayMs: 0 }),
+    ]);
+    return Response.json({
+      production: { revisionId: production.revisionId, status: production.status, httpStatus: production.probes[0]?.httpStatus },
+      preview: { revisionId: preview.revisionId, status: preview.status, httpStatus: preview.probes[0]?.httpStatus },
+      matches: Boolean(production.revisionId && production.revisionId === preview.revisionId),
+      checkedAt: new Date().toISOString(),
+    });
+  }
 
   const run = await runCanary({
     target,
     rounds: Number.isFinite(rounds) ? rounds : 3,
-    routes: DEFAULT_CANARY_ROUTES,
+    routes: mode === "smoke" ? SMOKE_ROUTES : DEFAULT_CANARY_ROUTES,
     delayMs: Number(params.get("delayMs") ?? 750),
   });
 
@@ -126,6 +141,7 @@ async function handle(request: Request) {
         failures: run.failures,
         slowest_ms: run.slowestMs,
         status: run.status,
+        revision_id: run.revisionId,
         alert_result: run.status === "failed" ? alert : null,
       })
       .select("id")
@@ -145,6 +161,7 @@ async function handle(request: Request) {
           message: i.message,
           stack: i.stack,
           body_snippet: i.bodySnippet,
+          request_id: i.requestId,
         })),
       );
     }
@@ -159,7 +176,8 @@ async function handle(request: Request) {
       requests: run.requests,
       failures: run.failures,
       slowestMs: run.slowestMs,
-      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, message, stack }) => ({
+      revisionId: run.revisionId,
+      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, message, stack, requestId, bodySnippet }) => ({
         route,
         round,
         kind,
@@ -167,6 +185,8 @@ async function handle(request: Request) {
         durationMs,
         message,
         stack,
+        requestId,
+        bodySnippet,
       })),
       alert,
     },

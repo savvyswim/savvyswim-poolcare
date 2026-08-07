@@ -1190,6 +1190,7 @@ export type Database = {
           kind: string
           message: string | null
           occurred_at: string
+          request_id: string | null
           round: number
           route: string
           run_id: string
@@ -1205,6 +1206,7 @@ export type Database = {
           kind: string
           message?: string | null
           occurred_at?: string
+          request_id?: string | null
           round?: number
           route: string
           run_id: string
@@ -1220,6 +1222,7 @@ export type Database = {
           kind?: string
           message?: string | null
           occurred_at?: string
+          request_id?: string | null
           round?: number
           route?: string
           run_id?: string
@@ -1244,6 +1247,7 @@ export type Database = {
           finished_at: string | null
           id: string
           requests: number
+          revision_id: string | null
           rounds: number
           slowest_ms: number
           source: string
@@ -1258,6 +1262,7 @@ export type Database = {
           finished_at?: string | null
           id?: string
           requests?: number
+          revision_id?: string | null
           rounds?: number
           slowest_ms?: number
           source?: string
@@ -1272,6 +1277,7 @@ export type Database = {
           finished_at?: string | null
           id?: string
           requests?: number
+          revision_id?: string | null
           rounds?: number
           slowest_ms?: number
           source?: string

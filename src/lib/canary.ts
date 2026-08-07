@@ -23,6 +23,8 @@ export type CanaryProbe = {
   message: string;
   stack: string | null;
   bodySnippet: string | null;
+  requestId: string | null;
+  revisionId: string | null;
 };
 
 export type CanaryRun = {
@@ -36,6 +38,7 @@ export type CanaryRun = {
   slowestMs: number;
   probes: CanaryProbe[];
   incidents: CanaryProbe[];
+  revisionId: string | null;
 };
 
 export const DEFAULT_CANARY_ROUTES = [
@@ -49,6 +52,8 @@ export const DEFAULT_CANARY_ROUTES = [
   "/admin/crm/deploy-health",
   "/api/public/health",
 ];
+
+export const SMOKE_ROUTES = ["/", "/free-inspection", "/admin/crm/login"];
 
 const BODY_SNIPPET_LIMIT = 1200;
 const MIN_HTML_BYTES = 500;
@@ -64,6 +69,13 @@ export function looksLikeCrashBody(body: string): boolean {
 export function extractStack(body: string): string | null {
   const match = body.match(/(?:^|\n|>)\s*([A-Za-z_$][\w$]*Error: [^\n<]{1,200}(?:\n\s+at [^\n<]{1,300}){1,20})/);
   return match?.[1]?.trim() ?? null;
+}
+
+async function fingerprint(body: string): Promise<string | null> {
+  if (!body) return null;
+  const bytes = new TextEncoder().encode(body);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest)).slice(0, 8).map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export function classify(input: {
@@ -105,6 +117,8 @@ async function probeOnce(
   let body = "";
   let aborted = false;
   let networkError: string | null = null;
+  let requestId: string | null = null;
+  let revisionId: string | null = null;
 
   try {
     const res = await fetch(url, {
@@ -114,6 +128,8 @@ async function probeOnce(
     });
     httpStatus = res.status;
     body = await res.text().catch(() => "");
+    requestId = res.headers.get("cf-ray") ?? res.headers.get("x-request-id") ?? res.headers.get("x-correlation-id");
+    revisionId = res.headers.get("x-lovable-revision") ?? res.headers.get("etag") ?? await fingerprint(body);
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") aborted = true;
     else networkError = error instanceof Error ? error.message : String(error);
@@ -135,6 +151,8 @@ async function probeOnce(
     message,
     stack: ok ? null : extractStack(body),
     bodySnippet: ok ? null : body.slice(0, BODY_SNIPPET_LIMIT) || null,
+    requestId,
+    revisionId,
   };
 }
 
@@ -174,6 +192,7 @@ export async function runCanary(options?: {
     slowestMs: probes.reduce((max, p) => Math.max(max, p.durationMs), 0),
     probes,
     incidents,
+    revisionId: probes.find((probe) => probe.route === "/" && probe.revisionId)?.revisionId ?? null,
   };
 }
 
