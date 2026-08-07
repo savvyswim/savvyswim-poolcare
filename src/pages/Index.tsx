@@ -422,11 +422,22 @@ const Index = () => {
                             {item.live && (
                               <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
                             )}
-                            <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                            {item.to ? (
+                              <Link
+                                to={item.to}
+                                tabIndex={dup === 1 ? -1 : undefined}
+                                className="underline-offset-4 hover:text-accent hover:underline transition"
+                              >
+                                {item.label}
+                              </Link>
+                            ) : (
+                              <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                            )}
                           </span>
                           <span className="mx-6 text-primary/20">/</span>
                         </span>
                       ))}
+
                     </div>
                   ))}
                 </div>
