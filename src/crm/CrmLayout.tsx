@@ -157,7 +157,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       {techLocked && obscured && <PrivacyNotice />}
 
       {/* sticky header */}
-      <header className="sticky top-0 z-40 lg:ml-[216px]" style={{ background: "hsl(var(--ss-cream))" }}>
+      <header className="sticky top-0 z-40 lg:ml-[232px] xl:ml-[248px]" style={{ background: "hsl(var(--ss-cream))" }}>
         <div className="flex items-center justify-between gap-3 px-4 py-2.5">
           <div className="flex items-center gap-3">
             <button
@@ -179,7 +179,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
       {/* desktop sidebar */}
       <aside
-        className="fixed left-0 top-0 z-50 hidden h-screen w-[216px] min-w-0 flex-col overflow-hidden border-r p-4 lg:flex"
+        className="fixed left-0 top-0 z-50 hidden h-screen w-[232px] xl:w-[248px] min-w-0 flex-col overflow-hidden border-r p-4 lg:flex"
         style={{ borderColor: "hsl(var(--ss-sand))", background: "hsl(var(--ss-white))" }}
       >
         <SavvyLogo size="md" />
@@ -217,8 +217,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         </div>
       )}
 
-      <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[232px] lg:pr-6">
-        <div className="mx-auto max-w-[1180px]">
+      <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[248px] lg:pr-8 xl:pl-[264px]">
+        <div className="mx-auto max-w-[1440px]">
           <CrmErrorBoundary resetKey={loc.pathname}>
             {allowed ? children ?? <Outlet /> : <AccessDenied />}
           </CrmErrorBoundary>
