@@ -179,6 +179,10 @@ export default function Products() {
 
 
   const sendSms = async () => {
+    if (saltCell && !saltCheck.ok) {
+      toast({ title: "Fix the salt cell add-on", description: saltCheck.reason });
+      return;
+    }
     if (!smsPhone.trim()) {
       toast({ title: "Add a phone number", description: "Enter the number to text this quote to." });
       return;
