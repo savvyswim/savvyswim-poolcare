@@ -62,6 +62,7 @@ export default function Products() {
     setChemOnly(p.defaults.chemOnly);
     setChemIncluded(p.defaults.chemIncluded);
     setSaltCell(p.defaults.saltCell);
+    setSaltQty(1);
     setCondition(p.defaults.condition);
     if (p.defaults.undercutPct) setUndercut(clampUndercut(p.defaults.undercutPct));
     setOverride("");
