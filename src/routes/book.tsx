@@ -6,6 +6,7 @@ const TITLE = "Book a Free Pool Inspection or 3D Quote | Savvy Swim";
 const DESCRIPTION =
   "Book your free, no-obligation pool inspection or 3D quote with Savvy Swim. Pick a time and we'll confirm by phone or email within one business day.";
 const URL = "https://savvyswim.com/book";
+const OG_IMAGE = "https://savvyswim.com/og-book.jpg";
 
 export const Route = createFileRoute("/book")({
   head: () => ({
@@ -17,9 +18,21 @@ export const Route = createFileRoute("/book")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: URL },
       { property: "og:site_name", content: "Savvy Swim" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "Book a free pool inspection — Savvy Swim, Dallas–Fort Worth",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+      {
+        name: "twitter:image:alt",
+        content: "Book a free pool inspection — Savvy Swim, Dallas–Fort Worth",
+      },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
