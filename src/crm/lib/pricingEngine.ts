@@ -273,6 +273,12 @@ export function computeQuote(
       amount: a,
     });
   }
+  if (input.swimClub) {
+    const a = addonAmount(addons, "swim_club", SWIM_CLUB_FEE);
+    monthly = Math.round((monthly + a) * 100) / 100;
+    lines.push({ label: "Swim Club membership", amount: a });
+  }
+
 
 
   const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];
