@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import {
   Mail,
   Phone,
@@ -24,6 +24,7 @@ import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
+import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
@@ -31,13 +32,27 @@ import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
 
-import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
-import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
-import { SubscribeDialog } from "@/components/SubscribeDialog";
-import { MembershipDialog } from "@/components/MembershipDialog";
+import type { OrderItem } from "@/components/OrderDialog";
+
+// Dialogs are only needed after a click — keep them out of the first payload.
+const BookingDialog = lazy(() =>
+  import("@/components/BookingDialog").then((m) => ({ default: m.BookingDialog })),
+);
+const OrderDialog = lazy(() =>
+  import("@/components/OrderDialog").then((m) => ({ default: m.OrderDialog })),
+);
+const SubscribeDialog = lazy(() =>
+  import("@/components/SubscribeDialog").then((m) => ({ default: m.SubscribeDialog })),
+);
+const MembershipDialog = lazy(() =>
+  import("@/components/MembershipDialog").then((m) => ({ default: m.MembershipDialog })),
+);
+const SwimClubPrompt = lazy(() =>
+  import("@/components/SwimClubPrompt").then((m) => ({ default: m.SwimClubPrompt })),
+);
 import {
   Accordion,
   AccordionContent,
@@ -85,7 +100,6 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { Link } from "@/lib/router-compat";
-import { SwimClubPrompt } from "@/components/SwimClubPrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 
@@ -179,6 +193,18 @@ const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  // Defer the swim-club prompt until the page is interactive on mobile.
+  const [promptReady, setPromptReady] = useState(false);
+  useEffect(() => {
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number };
+    const start = () => setPromptReady(true);
+    if (w.requestIdleCallback) {
+      w.requestIdleCallback(start);
+      return;
+    }
+    const t = window.setTimeout(start, 2000);
+    return () => window.clearTimeout(t);
+  }, []);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
   const [membershipOpen, setMembershipOpen] = useState(false);
@@ -363,6 +389,8 @@ const Index = () => {
         <div className="absolute inset-0 overflow-hidden" aria-hidden>
           <img
             src={photoPoolWater.url}
+            srcSet={`${photoPoolWaterMobile.url} 960w, ${photoPoolWater.url} 1600w`}
+            sizes="100vw"
             alt=""
             width={1920}
             height={1280}
@@ -493,7 +521,7 @@ const Index = () => {
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
-              src={photoPoolWater.url}
+              src={photoPoolWaterMobile.url}
               alt=""
               loading="lazy"
               decoding="async"
@@ -563,7 +591,7 @@ const Index = () => {
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
-              src={photoPoolWater.url}
+              src={photoPoolWaterMobile.url}
               alt=""
               loading="lazy"
               decoding="async"
@@ -1143,19 +1171,29 @@ const Index = () => {
         </div>
       </footer>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-      />
-      <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
-      <SubscribeDialog
-        open={subscribeOpen}
-        onOpenChange={setSubscribeOpen}
-        {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
-      />
-      <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
-      <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />
+      <Suspense fallback={null}>
+        {bookingOpen && (
+          <BookingDialog
+            open={bookingOpen}
+            onOpenChange={setBookingOpen}
+            {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
+          />
+        )}
+        {orderOpen && (
+          <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+        )}
+        {subscribeOpen && (
+          <SubscribeDialog
+            open={subscribeOpen}
+            onOpenChange={setSubscribeOpen}
+            {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
+          />
+        )}
+        {membershipOpen && (
+          <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        )}
+        {promptReady && <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />}
+      </Suspense>
 
 
     </div>
