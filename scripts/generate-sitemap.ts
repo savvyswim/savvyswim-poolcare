@@ -11,12 +11,34 @@ interface SitemapEntry {
   priority?: string;
 }
 
+const CITY_SLUGS = [
+  "dallas",
+  "plano",
+  "mckinney",
+  "allen",
+  "richardson",
+  "highland-park",
+  "university-park",
+  "garland",
+  "irving",
+  "rockwall",
+  "prosper",
+];
+
 const entries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/shop", changefreq: "weekly", priority: "0.8" },
+  { path: "/services", changefreq: "monthly", priority: "0.8" },
+  { path: "/book", changefreq: "monthly", priority: "0.8" },
+  { path: "/pool-cleaning-frisco-tx", changefreq: "monthly", priority: "0.8" },
+  ...CITY_SLUGS.map((slug): SitemapEntry => ({
+    path: `/${slug}`,
+    changefreq: "monthly",
+    priority: "0.8",
+  })),
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];
+
 
 function generateSitemap(list: SitemapEntry[]) {
   const urls = list.map((e) =>
