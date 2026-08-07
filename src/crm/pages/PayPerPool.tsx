@@ -255,6 +255,9 @@ export default function PayPerPool() {
 
   );
 
+  const [historyView, setHistoryView] = useState<"chart" | "list">("chart");
+
+
 
   const adjByTech = useMemo(() => {
     const map = new Map<string, number>();
