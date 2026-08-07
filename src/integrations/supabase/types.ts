@@ -1287,6 +1287,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_checklist_items: {
+        Row: {
+          created_at: string
+          hint: string | null
+          id: string
+          is_active: boolean
+          is_required: boolean
+          label: string
+          photo: string
+          plan_id: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          hint?: string | null
+          id?: string
+          is_active?: boolean
+          is_required?: boolean
+          label: string
+          photo?: string
+          plan_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          hint?: string | null
+          id?: string
+          is_active?: boolean
+          is_required?: boolean
+          label?: string
+          photo?: string
+          plan_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_city_rates: {
         Row: {
           city: string
@@ -1620,7 +1659,10 @@ export type Database = {
           commitment_start: string | null
           created_at: string
           custom_fields: Json
+          customer_code: string | null
+          dog_name: string | null
           email: string | null
+          emails: Json
           equipment: Json
           filter_interval_days: number
           full_name: string
@@ -1629,16 +1671,22 @@ export type Database = {
           id: string
           internal_notes: string | null
           invoice_day: number
+          labor_cost_type: string | null
           last_filter_clean_at: string | null
           lat: number | null
           lng: number | null
+          location_code: string | null
+          location_notes: string | null
+          minutes_at_stop: number | null
           monthly_price: number
           phone: string | null
+          phones: Json
           pool_type: string
           postal_code: string | null
           promo_code: string | null
           rate_override: number | null
           rate_override_note: string | null
+          rate_type: string | null
           referral_code: string | null
           route_day: string | null
           route_frequency: string
@@ -1662,7 +1710,10 @@ export type Database = {
           commitment_start?: string | null
           created_at?: string
           custom_fields?: Json
+          customer_code?: string | null
+          dog_name?: string | null
           email?: string | null
+          emails?: Json
           equipment?: Json
           filter_interval_days?: number
           full_name: string
@@ -1671,16 +1722,22 @@ export type Database = {
           id?: string
           internal_notes?: string | null
           invoice_day?: number
+          labor_cost_type?: string | null
           last_filter_clean_at?: string | null
           lat?: number | null
           lng?: number | null
+          location_code?: string | null
+          location_notes?: string | null
+          minutes_at_stop?: number | null
           monthly_price?: number
           phone?: string | null
+          phones?: Json
           pool_type?: string
           postal_code?: string | null
           promo_code?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
+          rate_type?: string | null
           referral_code?: string | null
           route_day?: string | null
           route_frequency?: string
@@ -1704,7 +1761,10 @@ export type Database = {
           commitment_start?: string | null
           created_at?: string
           custom_fields?: Json
+          customer_code?: string | null
+          dog_name?: string | null
           email?: string | null
+          emails?: Json
           equipment?: Json
           filter_interval_days?: number
           full_name?: string
@@ -1713,16 +1773,22 @@ export type Database = {
           id?: string
           internal_notes?: string | null
           invoice_day?: number
+          labor_cost_type?: string | null
           last_filter_clean_at?: string | null
           lat?: number | null
           lng?: number | null
+          location_code?: string | null
+          location_notes?: string | null
+          minutes_at_stop?: number | null
           monthly_price?: number
           phone?: string | null
+          phones?: Json
           pool_type?: string
           postal_code?: string | null
           promo_code?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
+          rate_type?: string | null
           referral_code?: string | null
           route_day?: string | null
           route_frequency?: string
@@ -1777,6 +1843,48 @@ export type Database = {
           id?: string
           source?: string
           status?: string
+        }
+        Relationships: []
+      }
+      ss_dosage_products: {
+        Row: {
+          cost_per_unit: number
+          created_at: string
+          dose_key: string
+          id: string
+          is_active: boolean
+          is_default: boolean
+          name: string
+          sort_order: number
+          strength_pct: number | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          cost_per_unit?: number
+          created_at?: string
+          dose_key: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name: string
+          sort_order?: number
+          strength_pct?: number | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          cost_per_unit?: number
+          created_at?: string
+          dose_key?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name?: string
+          sort_order?: number
+          strength_pct?: number | null
+          unit?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2029,6 +2137,7 @@ export type Database = {
           tech_id: string | null
           title: string
           updated_at: string
+          work_order_type_id: string | null
         }
         Insert: {
           auto_flag_source?: string | null
@@ -2043,6 +2152,7 @@ export type Database = {
           tech_id?: string | null
           title: string
           updated_at?: string
+          work_order_type_id?: string | null
         }
         Update: {
           auto_flag_source?: string | null
@@ -2057,6 +2167,7 @@ export type Database = {
           tech_id?: string | null
           title?: string
           updated_at?: string
+          work_order_type_id?: string | null
         }
         Relationships: [
           {
@@ -2071,6 +2182,13 @@ export type Database = {
             columns: ["tech_id"]
             isOneToOne: false
             referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_jobs_work_order_type_id_fkey"
+            columns: ["work_order_type_id"]
+            isOneToOne: false
+            referencedRelation: "ss_work_order_types"
             referencedColumns: ["id"]
           },
         ]
@@ -2889,6 +3007,51 @@ export type Database = {
           },
         ]
       }
+      ss_reading_fields: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          key: string
+          label: string
+          purpose: string | null
+          sort_order: number
+          step: number
+          target_max: number | null
+          target_min: number | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          label: string
+          purpose?: string | null
+          sort_order?: number
+          step?: number
+          target_max?: number | null
+          target_min?: number | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          label?: string
+          purpose?: string | null
+          sort_order?: number
+          step?: number
+          target_max?: number | null
+          target_min?: number | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_review_requests: {
         Row: {
           clicked_at: string | null
@@ -3276,6 +3439,7 @@ export type Database = {
           updated_at: string
           upsell_amount: number
           upsell_commission: number
+          water_body_id: string | null
         }
         Insert: {
           after_photo_url?: string | null
@@ -3309,6 +3473,7 @@ export type Database = {
           updated_at?: string
           upsell_amount?: number
           upsell_commission?: number
+          water_body_id?: string | null
         }
         Update: {
           after_photo_url?: string | null
@@ -3342,6 +3507,7 @@ export type Database = {
           updated_at?: string
           upsell_amount?: number
           upsell_commission?: number
+          water_body_id?: string | null
         }
         Relationships: [
           {
@@ -3358,7 +3524,109 @@ export type Database = {
             referencedRelation: "ss_staff"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "ss_visits_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "ss_water_bodies"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      ss_water_bodies: {
+        Row: {
+          created_at: string
+          customer_id: string
+          gallons: number
+          id: string
+          is_active: boolean
+          kind: string
+          name: string
+          notes: string | null
+          sanitizer: string | null
+          sort_order: number
+          surface: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          gallons?: number
+          id?: string
+          is_active?: boolean
+          kind?: string
+          name: string
+          notes?: string | null
+          sanitizer?: string | null
+          sort_order?: number
+          surface?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          gallons?: number
+          id?: string
+          is_active?: boolean
+          kind?: string
+          name?: string
+          notes?: string | null
+          sanitizer?: string | null
+          sort_order?: number
+          surface?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_water_bodies_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_work_order_types: {
+        Row: {
+          color: string
+          created_at: string
+          default_checklist: Json
+          default_minutes: number
+          default_price: number
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          default_checklist?: Json
+          default_minutes?: number
+          default_price?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          default_checklist?: Json
+          default_minutes?: number
+          default_price?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       ss_workflow_tasks: {
         Row: {
