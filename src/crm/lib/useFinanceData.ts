@@ -15,19 +15,25 @@ export type FinanceData = {
   reload: () => Promise<void>;
 };
 
+/** Last successful snapshot — returning to Finance paints instantly, then refreshes. */
+let cache: Omit<FinanceData, "reload"> | null = null;
+
 /**
  * One fetch for the whole finance suite so every tab reads the same numbers.
  */
 export function useFinanceData(): FinanceData {
-  const [state, setState] = useState<Omit<FinanceData, "reload">>({
-    loading: true,
-    accounts: [],
-    ledger: [],
-    invoices: [],
-    payments: [],
-    expenses: [],
-    customers: [],
-  });
+  const [state, setState] = useState<Omit<FinanceData, "reload">>(
+    () =>
+      cache ?? {
+        loading: true,
+        accounts: [],
+        ledger: [],
+        invoices: [],
+        payments: [],
+        expenses: [],
+        customers: [],
+      },
+  );
 
   const reload = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
@@ -39,7 +45,7 @@ export function useFinanceData(): FinanceData {
       supabase.from("ss_expenses").select("*").order("spent_on", { ascending: false }),
       supabase.from("ss_customers").select("id, full_name").order("full_name"),
     ]);
-    setState({
+    const next = {
       loading: false,
       accounts: (accounts.data ?? []) as Account[],
       ledger: (ledger.data ?? []) as LedgerEntry[],
@@ -47,8 +53,11 @@ export function useFinanceData(): FinanceData {
       payments: (payments.data ?? []) as Payment[],
       expenses: (expenses.data ?? []) as Expense[],
       customers: (customers.data ?? []) as CustomerLite[],
-    });
+    };
+    cache = next;
+    setState(next);
   }, []);
+
 
   useEffect(() => {
     void reload();
