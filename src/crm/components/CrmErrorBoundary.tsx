@@ -11,13 +11,13 @@ type State = { error: Error | null; attempt: number };
  * retry button remounts the subtree so the page refetches from scratch.
  */
 export class CrmErrorBoundary extends Component<Props, State> {
-  state: State = { error: null, attempt: 0 };
+  override state: State = { error: null, attempt: 0 };
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return { error };
   }
 
-  componentDidUpdate(prev: Props) {
+  override componentDidUpdate(prev: Props) {
     if (prev.resetKey !== this.props.resetKey && this.state.error) {
       this.setState({ error: null });
     }
@@ -25,7 +25,7 @@ export class CrmErrorBoundary extends Component<Props, State> {
 
   retry = () => this.setState((s) => ({ error: null, attempt: s.attempt + 1 }));
 
-  render() {
+  override render() {
     if (!this.state.error) {
       return <div key={this.state.attempt}>{this.props.children}</div>;
     }
