@@ -431,7 +431,8 @@ export default function PayPerPool() {
       <div className="flex flex-wrap gap-2 print:hidden">
         {([
           ["earnings", "Earnings"],
-          ...(canManage ? ([["rates", "Pool pay rates"]] as [Tab, string][]) : []),
+          ["rates", canManage ? "Pool pay rates" : "My pools"],
+          ...(canManage ? ([["team", "Tech bonuses"]] as [Tab, string][]) : []),
           ["payouts", "Invoices"],
         ] as [Tab, string][]).map(([k, label]) => (
           <button
