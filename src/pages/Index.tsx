@@ -24,6 +24,7 @@ import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
+import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
@@ -388,6 +389,8 @@ const Index = () => {
         <div className="absolute inset-0 overflow-hidden" aria-hidden>
           <img
             src={photoPoolWater.url}
+            srcSet={`${photoPoolWaterMobile.url} 960w, ${photoPoolWater.url} 1600w`}
+            sizes="100vw"
             alt=""
             width={1920}
             height={1280}
@@ -518,7 +521,7 @@ const Index = () => {
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
-              src={photoPoolWater.url}
+              src={photoPoolWaterMobile.url}
               alt=""
               loading="lazy"
               decoding="async"
@@ -588,7 +591,7 @@ const Index = () => {
         <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
-              src={photoPoolWater.url}
+              src={photoPoolWaterMobile.url}
               alt=""
               loading="lazy"
               decoding="async"
