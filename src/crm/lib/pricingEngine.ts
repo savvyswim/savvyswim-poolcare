@@ -492,6 +492,27 @@ export const SERVICE_PLANS: ServicePlan[] = [
       "Monthly rate set by pool size",
     ],
   },
+  {
+    id: "concierge",
+    name: "The Savvy Concierge",
+    tagline: "Hands-off ownership. Always guest-ready — Swim Club included",
+    defaults: {
+      chemOnly: false,
+      chemIncluded: true,
+      saltCell: true,
+      swimClub: true,
+      condition: "clean",
+    },
+    scope: [
+      "4 visits per month + 5 on-call touch-ups",
+      "All chemicals, salt and tabs included",
+      "Quarterly filter deep clean",
+      "Free minor equipment repairs",
+      "Seasonal open & close service",
+      "24/7 text support",
+      "Swim Club membership included ($19.99/mo built into the rate)",
+    ],
+  },
 
 ];
 
