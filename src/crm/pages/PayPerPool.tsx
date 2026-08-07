@@ -1,7 +1,18 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { DollarSign, FileText, Lock, Printer, Wallet } from "lucide-react";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+
 import { Chip, EmptyState, SectionTitle, StatTile } from "@/crm/components/Brand";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
 import {
@@ -19,6 +30,8 @@ import {
   type PayLine,
   type PayStatus,
   type PayVisit,
+  type PeriodEarnings,
+
 } from "@/crm/lib/payPerPool";
 
 const STATUS_TONE: Record<PayStatus, "ink" | "gold" | "aqua" | "green"> = {
@@ -252,7 +265,11 @@ export default function PayPerPool() {
   const poolHistory = useMemo(
     () => periodHistory(buildPayLines(historyVisits, liveCfg, techMeta)),
     [historyVisits, liveCfg, techMeta],
+
   );
+
+  const [historyView, setHistoryView] = useState<"chart" | "list">("chart");
+
 
 
   const adjByTech = useMemo(() => {
@@ -872,14 +889,33 @@ export default function PayPerPool() {
 
             {/* Earnings history — every pay period this pool has paid out */}
             <div className="mt-5">
-              <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">
-                Earnings history · last 6 months
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">
+                  Earnings history · last 6 months
+                </div>
+                <div className="flex gap-1">
+                  {(["chart", "list"] as const).map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setHistoryView(v)}
+                      className={`px-2 py-1 text-[0.6rem] uppercase tracking-[0.12em] border border-black/15 ${
+                        historyView === v ? "bg-black/85 text-white" : "opacity-60"
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
               </div>
               {historyLoading ? (
                 <TimelineSkeleton />
               ) : poolHistory.length === 0 ? (
                 <p className="mt-2 text-[0.75rem] opacity-55">No completed visits yet at this pool.</p>
+              ) : historyView === "chart" ? (
+                <EarningsChart periods={poolHistory} />
               ) : (
+
                 <ol className="ss-timeline mt-3 space-y-2">
                   {poolHistory.map((p) => (
                     <li key={p.start} className="relative ss-card p-3">
@@ -1037,6 +1073,76 @@ export default function PayPerPool() {
     </div>
   );
 }
+
+/* ----------------------------------------------------------------- chart */
+const CHART_SERIES = [
+  { key: "base", label: "Rate", color: "#8E1F2C" },
+  { key: "commission", label: "Commission", color: "#1FA9BE" },
+  { key: "bonus", label: "Bonus", color: "#C9932B" },
+] as const;
+
+/** Stacked earnings per pay period, oldest → newest, with an upsell trend line. */
+function EarningsChart({ periods }: { periods: PeriodEarnings[] }) {
+  const data = useMemo(
+    () =>
+      [...periods]
+        .sort((a, b) => a.start.localeCompare(b.start))
+        .map((p) => ({
+          label: new Date(`${p.start}T12:00:00`).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          }),
+          base: Math.round(p.rate * p.visits * 100) / 100,
+          bonus: Math.round(p.bonus * 100) / 100,
+          commission: Math.round(p.commission * 100) / 100,
+          upsell: Math.round(p.upsellAmount * 100) / 100,
+          total: Math.round(p.total * 100) / 100,
+        })),
+    [periods],
+  );
+
+  return (
+    <div className="ss-card mt-3 p-3">
+      <div className="h-56 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+            <CartesianGrid stroke="rgba(0,0,0,0.08)" vertical={false} />
+            <XAxis dataKey="label" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+            <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={48} />
+            <Tooltip
+              formatter={(v: number, name: string) => [money(Number(v)), name]}
+              contentStyle={{ borderRadius: 0, fontSize: "0.72rem", border: "1px solid rgba(0,0,0,0.15)" }}
+            />
+            {CHART_SERIES.map((s) => (
+              <Bar key={s.key} dataKey={s.key} name={s.label} stackId="pay" fill={s.color} />
+            ))}
+            <Line
+              type="monotone"
+              dataKey="upsell"
+              name="Upsell sold"
+              stroke="#2F5D3A"
+              strokeWidth={2}
+              dot={false}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-2 flex flex-wrap gap-3 text-[0.62rem] uppercase tracking-[0.12em] opacity-70">
+        {[...CHART_SERIES, { key: "upsell", label: "Upsell sold", color: "#2F5D3A" }].map((s) => (
+          <span key={s.key} className="flex items-center gap-1">
+            <span className="inline-block h-2 w-2" style={{ background: s.color }} />
+            {s.label}
+          </span>
+        ))}
+      </div>
+      <div className="mt-2 text-[0.7rem] opacity-65">
+        Total paid across these periods:{" "}
+        <strong>{money(data.reduce((s, d) => s + d.total, 0))}</strong>
+      </div>
+    </div>
+  );
+}
+
 
 /* -------------------------------------------------------------- skeleton */
 /** Placeholder rows that mirror the timeline card so layout never jumps. */
