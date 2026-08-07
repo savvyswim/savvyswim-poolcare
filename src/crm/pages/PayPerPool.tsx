@@ -390,10 +390,13 @@ export default function PayPerPool() {
       {/* headline tiles */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile label="Pools completed" value={String(totals.pools)} />
-        <StatTile label={canManage ? "Tech pay (period)" : "You earned"} value={money(totals.techTotal)} />
+        <StatTile
+          label={canManage ? "Tech pay (period)" : "You earned"}
+          value={money(totals.techTotal + adjTotal)}
+        />
         <StatTile label="Today so far" value={money(todayTotals.techTotal)} />
         {canManage ? (
-          <StatTile label="Company keeps" value={money(totals.companyKeeps)} />
+          <StatTile label="Company keeps" value={money(totals.companyKeeps - adjTotal)} />
         ) : (
           <StatTile label="Pools today" value={String(todayTotals.pools)} />
         )}
@@ -402,17 +405,21 @@ export default function PayPerPool() {
       {canManage && (
         <div className="ss-card p-4">
           <div className="text-[0.7rem] uppercase tracking-[0.18em] opacity-60">Finance view — period</div>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-3 grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-7">
             {[
               ["Service revenue", money(totals.revenue)],
               ["Tech base pay", `- ${money(totals.basePay)}`],
               ["Bonuses", `- ${money(totals.bonus)}`],
+              ["Extra bonus / adj.", `- ${money(adjTotal)}`],
               ["Upsell commission", `- ${money(totals.commission)}`],
               ["Chemicals", `- ${money(totals.chemCost)}`],
-              ["Company keeps", `${money(totals.companyKeeps)} · ${totals.marginPct.toFixed(0)}%`],
+              [
+                "Company keeps",
+                `${money(totals.companyKeeps - adjTotal)} · ${totals.marginPct.toFixed(0)}%`,
+              ],
             ].map(([k, v]) => (
-              <div key={k} className="border border-black/10 p-3">
-                <div className="text-[0.65rem] uppercase tracking-[0.14em] opacity-55">{k}</div>
+              <div key={k} className="min-w-0 border border-black/10 p-3">
+                <div className="truncate text-[0.65rem] uppercase tracking-[0.14em] opacity-55" title={k}>{k}</div>
                 <div className="mt-1 text-[0.95rem] font-semibold">{v}</div>
               </div>
             ))}
