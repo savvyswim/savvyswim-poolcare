@@ -24,6 +24,7 @@ export type ModuleKey =
   | "payPerPool"
   | "waterLab"
   | "settings"
+  | "serviceSetup"
   | "console"
   | "cleaning"
   | "store"
@@ -62,6 +63,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   qcReview: OFFICE,
   margin: OFFICE,
   settings: OFFICE,
+  serviceSetup: OFFICE,
   // Owner plus any office manager the owner assigns runs the books.
   finance: OFFICE,
   projects: OFFICE,
@@ -104,6 +106,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm/qc-review": "qcReview",
   "/admin/crm/water-lab": "waterLab",
   "/admin/crm/settings": "settings",
+  "/admin/crm/service-setup": "serviceSetup",
   "/admin/crm/security": "security",
   "/admin/crm/site-speed": "siteSpeed",
   "/admin/crm/deploy-health": "deployHealth",
