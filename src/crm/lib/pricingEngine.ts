@@ -415,6 +415,8 @@ export type ServicePlan = {
     chemOnly: boolean;
     chemIncluded: boolean;
     saltCell: boolean;
+    /** Swim Club membership bundled into the monthly rate ($19.99). */
+    swimClub?: boolean;
     condition: string;
     undercutPct?: number;
   };
