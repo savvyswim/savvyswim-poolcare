@@ -40,6 +40,10 @@ export default function Products() {
   const [providerPlan, setProviderPlan] = useState<string>("");
   const [planId, setPlanId] = useState<string>("signature");
   const [smsPhone, setSmsPhone] = useState<string>("");
+  /** One-time price for custom-priced services (Green-to-Clean Recovery). */
+  const [customPrice, setCustomPrice] = useState<string>("");
+  const [customNote, setCustomNote] = useState<string>("");
+
   const [sending, setSending] = useState(false);
   const [params, setParams] = useSearchParams();
   const [hydrated, setHydrated] = useState(false);
@@ -241,10 +245,53 @@ export default function Products() {
               })}
             </div>
 
+            {plan?.customPrice && (
+              <div
+                className="mb-4 border p-3"
+                style={{
+                  borderColor: "hsl(var(--ss-burgundy))",
+                  background: "hsl(var(--ss-burgundy) / 0.05)",
+                }}
+              >
+                <div className="ss-label">Price this recovery</div>
+                <p className="mt-1 text-[0.75rem] opacity-75">
+                  This one depends on the pool — size, how green it is, filter condition and whether
+                  it needs a drain. Set the one-time price after you look at it.
+                </p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  <div>
+                    <label className="ss-label">One-time recovery price</label>
+                    <input
+                      type="number"
+                      min={0}
+                      step="25"
+                      className="ss-input ss-num"
+                      placeholder="e.g. 550"
+                      value={customPrice}
+                      onChange={(e) => setCustomPrice(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="ss-label">What it covers (optional)</label>
+                    <input
+                      className="ss-input"
+                      placeholder="3 visits, filter clean, shock program"
+                      value={customNote}
+                      onChange={(e) => setCustomNote(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <p className="mt-2 text-[0.7rem] opacity-60">
+                  Weekly service below is what they pay once the water is clear.
+                </p>
+              </div>
+            )}
+
             <div className="ss-label mb-2">Quote calculator</div>
 
             <div className="grid gap-2.5 sm:grid-cols-2">
               <div>
+
                 <label className="ss-label">City / region</label>
                 <select className="ss-input" value={city} onChange={(e) => setCity(e.target.value)}>
                   {cities.map((c) => (
@@ -388,6 +435,14 @@ export default function Products() {
                   ? `${money(quote.market.savings)}/mo under market (${quote.market.savingsPct}%)`
                   : "at or above market — review the rate"}
               </div>
+              {plan?.customPrice && (
+                <div className="mt-2 text-[0.78rem] opacity-90">
+                  {Number(customPrice) > 0
+                    ? `Plus ${money(Number(customPrice))} one-time recovery${customNote.trim() ? ` · ${customNote.trim()}` : ""}`
+                    : "Set the one-time recovery price — it depends on the pool"}
+                </div>
+              )}
+
               {quote.cleanupLabel && (
                 <div className="mt-1 text-[0.78rem] opacity-75">
                   One-time cleanup {quote.cleanupLabel}

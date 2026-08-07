@@ -353,6 +353,8 @@ export type ServicePlan = {
   id: string;
   name: string;
   tagline: string;
+  /** Priced per pool after inspection — the estimate asks for a one-time price. */
+  customPrice?: boolean;
   /** Estimate fields this plan pre-fills. */
   defaults: {
     chemOnly: boolean;
@@ -364,6 +366,7 @@ export type ServicePlan = {
   /** What the visit includes — carried into the quote summary. */
   scope: string[];
 };
+
 
 export const SERVICE_PLANS: ServicePlan[] = [
   {
@@ -408,15 +411,18 @@ export const SERVICE_PLANS: ServicePlan[] = [
   {
     id: "recovery",
     name: "Green-to-Clean Recovery",
-    tagline: "Neglected or green pool brought back, then onto weekly service",
+    tagline: "Custom-priced one-off — depends on the pool, then onto weekly service",
+    customPrice: true,
     defaults: { chemOnly: false, chemIncluded: true, saltCell: false, condition: "green" },
     scope: [
       "Multi-visit algae recovery until the water is clear",
       "Heavy debris removal and filter deep clean",
       "Shock, flocculent and stabilizer program",
+      "Priced per pool after inspection — size, condition and drain time",
       "Rolls into Signature Weekly once clear",
     ],
   },
+
 ];
 
 export const findServicePlan = (id: string | null | undefined) =>
