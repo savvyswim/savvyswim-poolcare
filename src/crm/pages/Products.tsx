@@ -86,6 +86,8 @@ export default function Products() {
     if (g("chemOnly") === "1") setChemOnly(true);
     if (g("chemIncl") === "1") setChemIncluded(true);
     if (g("salt") === "1") setSaltCell(true);
+    if (g("saltQty"))
+      setSaltQty(Math.min(Math.max(Math.round(Number(g("saltQty"))) || 1, 1), MAX_SALT_CELLS));
     if (g("undercut")) setUndercut(clampUndercut(Number(g("undercut"))));
     if (g("override")) setOverride(g("override")!);
     if (g("now")) setPayingNow(g("now")!);
