@@ -6,6 +6,7 @@ import { Chip } from "@/crm/components/Brand";
 import { doseFor, evaluate, lsiVerdict, READING_FIELDS, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
+import { useWaterBodies } from "@/crm/lib/serviceConfig";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
@@ -50,7 +51,8 @@ export default function VisitSheet({
   onComplete: (stop: Stop) => void | Promise<void>;
 }) {
   const [step, setStep] = useState(1);
-  const [readings, setReadings] = useState<Readings>({});
+  const [bodyReadings, setBodyReadings] = useState<Record<string, Readings>>({});
+  const [activeBody, setActiveBody] = useState<string>("main");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
@@ -65,9 +67,43 @@ export default function VisitSheet({
   const startedAt = useRef(Date.now());
 
   const c = stop.ss_customers;
-  const dose = useMemo(() => doseFor(readings, c.gallons), [readings, c.gallons]);
-  const report = useMemo(() => evaluate(readings, c.gallons), [readings, c.gallons]);
+  const { rows: waterBodyRows } = useWaterBodies(c.id);
+
+  /** Every property has at least one body of water — fall back to the pool on the customer record. */
+  const bodies = useMemo(
+    () =>
+      waterBodyRows.length
+        ? waterBodyRows.map((b) => ({ id: b.id, name: b.name, kind: b.kind, gallons: b.gallons || c.gallons }))
+        : [{ id: "main", name: "Pool", kind: "pool", gallons: c.gallons }],
+    [waterBodyRows, c.gallons],
+  );
+
+  useEffect(() => {
+    if (!bodies.some((b) => b.id === activeBody)) setActiveBody(bodies[0]!.id);
+  }, [bodies, activeBody]);
+
+  const body = bodies.find((b) => b.id === activeBody) ?? bodies[0]!;
+  const readings = bodyReadings[body.id] ?? {};
+  const setReadings = useCallback(
+    (fn: (r: Readings) => Readings) =>
+      setBodyReadings((s) => ({ ...s, [body.id]: fn(s[body.id] ?? {}) })),
+    [body.id],
+  );
+
+  const dose = useMemo(() => doseFor(readings, body.gallons), [readings, body.gallons]);
+  const report = useMemo(() => evaluate(readings, body.gallons), [readings, body.gallons]);
   const verdict = lsiVerdict(dose.lsi);
+
+  /** One dose + report per body of water, so nothing is sized against the wrong volume. */
+  const perBody = useMemo(
+    () =>
+      bodies.map((b) => {
+        const r = bodyReadings[b.id] ?? {};
+        return { ...b, readings: r, dose: doseFor(r, b.gallons), report: evaluate(r, b.gallons) };
+      }),
+    [bodies, bodyReadings],
+  );
+  const totalChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
 
   useEffect(() => {
     supabase
@@ -147,9 +183,25 @@ export default function VisitSheet({
         status: "completed",
         completed_at: new Date().toISOString(),
         minutes_on_site: minutes,
+        water_body_id: body.id === "main" ? null : body.id,
         readings: readings as never,
-        dosing: { chlorine_oz: dose.chlorine_oz, acid_oz: dose.acid_oz, lsi: dose.lsi } as never,
-        chem_cost: dose.cost,
+        dosing: {
+          chlorine_oz: dose.chlorine_oz,
+          acid_oz: dose.acid_oz,
+          lsi: dose.lsi,
+          bodies: perBody.map((b) => ({
+            id: b.id === "main" ? null : b.id,
+            name: b.name,
+            kind: b.kind,
+            gallons: b.gallons,
+            readings: b.readings,
+            chlorine_oz: b.dose.chlorine_oz,
+            acid_oz: b.dose.acid_oz,
+            lsi: b.dose.lsi,
+            cost: b.dose.cost,
+          })),
+        } as never,
+        chem_cost: totalChemCost,
         checklist: checklist as never,
         photos: allPhotos as never,
         before_photo_url: before?.path ?? null,
@@ -312,9 +364,30 @@ export default function VisitSheet({
                 </div>
               </div>
 
-              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
-                Step 1 · Water readings
+              <div className="flex items-center justify-between gap-2">
+                <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                  Step 1 · Water readings — {body.name}
+                </div>
+                <span className="ss-num text-[0.72rem] opacity-65">{body.gallons.toLocaleString()} gal</span>
               </div>
+              {bodies.length > 1 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {perBody.map((b) => {
+                    const logged = Object.values(b.readings).some((v) => v !== undefined);
+                    return (
+                      <button
+                        key={b.id}
+                        className={`ss-btn ${b.id === body.id ? "" : "ss-btn-ghost"}`}
+                        style={{ fontSize: "0.68rem", padding: "0.35rem 0.6rem" }}
+                        onClick={() => setActiveBody(b.id)}
+                      >
+                        {b.name}
+                        {logged ? " ✓" : ""}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-2.5">
                 {READING_FIELDS.map((f) => {
                   const st = f.key === "temp" ? "unknown" : statusFor(f.key as MetricKey, (readings as Record<string, number | undefined>)[f.key]);
@@ -603,6 +676,34 @@ export default function VisitSheet({
                   </div>
                 )}
               </div>
+
+              {bodies.length > 1 && (
+                <div className="ss-card p-3">
+                  <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                    Every body of water
+                  </div>
+                  <div className="mt-2 space-y-2">
+                    {perBody.map((b) => (
+                      <div key={b.id} className="flex items-start justify-between gap-2 text-[0.76rem]">
+                        <div>
+                          <div className="font-semibold">
+                            {b.name} <span className="opacity-55">· {b.gallons.toLocaleString()} gal</span>
+                          </div>
+                          <div className="opacity-65">{b.report.summary}</div>
+                        </div>
+                        <div className="ss-num whitespace-nowrap text-right">
+                          <div>{b.dose.chlorine_oz} oz Cl</div>
+                          <div>{b.dose.acid_oz} oz acid</div>
+                          <div className="opacity-65">{money2(b.dose.cost)}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-2 border-t pt-2 text-[0.76rem]" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                    Total chem cost <strong className="ss-num">{money2(totalChemCost)}</strong>
+                  </div>
+                </div>
+              )}
 
               <div className="ss-card p-3 text-[0.78rem] opacity-75">
                 Time on site is captured automatically and this report is emailed to the customer
