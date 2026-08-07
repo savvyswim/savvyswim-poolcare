@@ -166,7 +166,8 @@ function BundleEditor({
       return;
     }
     setSaving(true);
-    const { error } = await saveBundle({ ...b, id: b.id || undefined });
+    const { id, ...rest } = b;
+    const { error } = await saveBundle(id ? { ...rest, id } : rest);
     setSaving(false);
     if (error) toast.error(error.message);
     else {
