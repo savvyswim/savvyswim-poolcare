@@ -981,10 +981,9 @@ export default function PayPerPool() {
               ) : historyView === "chart" ? (
                 <EarningsChart periods={filteredHistory} />
               ) : (
-
-
+                <>
                 <ol className="ss-timeline mt-3 space-y-2">
-                  {poolHistory.map((p) => (
+                  {pagedHistory.map((p) => (
                     <li key={p.start} className="relative ss-card p-3">
                       <span className="ss-timeline-dot" />
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -1010,6 +1009,30 @@ export default function PayPerPool() {
                     </li>
                   ))}
                 </ol>
+                <div className="mt-3 flex items-center justify-between gap-2 text-[0.65rem] uppercase tracking-[0.12em]">
+                  <button
+                    type="button"
+                    disabled={safePage === 0}
+                    onClick={() => setHistPage(safePage - 1)}
+                    className="border border-black/15 px-2 py-1 disabled:opacity-30"
+                  >
+                    Prev
+                  </button>
+                  <span className="opacity-60">
+                    Page {safePage + 1} of {histPages} · {filteredHistory.length} period
+                    {filteredHistory.length === 1 ? "" : "s"}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={safePage >= histPages - 1}
+                    onClick={() => setHistPage(safePage + 1)}
+                    className="border border-black/15 px-2 py-1 disabled:opacity-30"
+                  >
+                    Next
+                  </button>
+                </div>
+                </>
+
               )}
             </div>
           </div>
