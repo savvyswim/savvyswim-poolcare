@@ -833,9 +833,9 @@ const Index = () => {
                   <ul className="mb-10 space-y-4 text-sm text-primary">
                     {[
                       "First service visit free (new customers)",
-                      "50% off one filter clean (one time)",
-                      "5% off all parts",
-                      "7% off installation labor",
+                      "50% off filter cleans",
+                      "25% off all other add-on services",
+                      "Priority scheduling",
                       "24/7 text support",
                     ].map((perk) => (
                       <li key={perk} className="flex items-center gap-3">
