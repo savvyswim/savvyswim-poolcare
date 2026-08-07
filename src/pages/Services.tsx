@@ -261,20 +261,20 @@ const Services = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {SERVICES.map((s) => (
-                <button
+              {SERVICES.map((s) => {
+                const isOpen = openCard === s.title;
+                const panelId = `svc-panel-${s.no}`;
+                return (
+                <div
                   key={s.title}
-                  type="button"
-                  onClick={() => openBooking(s.title)}
-                  aria-label={`Book a free quote for ${s.title}`}
-                  className="text-left card-3d rounded-sm overflow-hidden group flex flex-col cursor-pointer"
+                  className="card-3d rounded-sm overflow-hidden group flex flex-col"
                 >
                   <div className="relative overflow-hidden">
                     <img
                       src={s.photo}
                       alt={s.alt}
                       loading="lazy"
-                  decoding="async"
+                      decoding="async"
                       className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute top-3 left-3 font-tech text-[10px] tracking-[0.2em] bg-background/85 px-2 py-1 rounded-sm">
@@ -287,30 +287,63 @@ const Services = () => {
                       <s.icon className="h-[18px] w-[18px] text-amber-brand" strokeWidth={1.75} />
                       <span className="h-px flex-1 bg-hairline" />
                     </div>
-                    <h3 className="text-[1.15rem] font-semibold mb-2 leading-snug">{s.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
 
-                    <div className="my-5 h-px bg-hairline" />
+                    <button
+                      type="button"
+                      onClick={() => setOpenCard(isOpen ? null : s.title)}
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      className="text-left w-full"
+                    >
+                      <span className="flex items-start justify-between gap-3">
+                        <span className="text-[1.15rem] font-semibold leading-snug">{s.title}</span>
+                        <ChevronDown
+                          className={`h-5 w-5 mt-0.5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180 text-primary" : ""}`}
+                          strokeWidth={1.75}
+                        />
+                      </span>
+                      <span className="mt-2 block text-sm text-muted-foreground leading-relaxed">{s.desc}</span>
+                      {!isOpen && (
+                        <span className="mt-3 block font-tech text-[10px] uppercase tracking-[0.2em] text-primary">
+                          Tap to see what's included
+                        </span>
+                      )}
+                    </button>
 
-                    <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                      What's included
+                    <div
+                      id={panelId}
+                      hidden={!isOpen}
+                      className="flex flex-col flex-1"
+                    >
+                      <div className="my-5 h-px bg-hairline" />
+
+                      <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                        What's included
+                      </div>
+                      <ul className="space-y-2 mb-6">
+                        {s.includes.map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-sm">
+                            <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
+                            <span className="text-foreground/90">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        type="button"
+                        onClick={() => openBooking(s.title)}
+                        aria-label={`Book a free quote for ${s.title}`}
+                        className="mt-auto inline-flex w-full items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground hover:text-primary transition"
+                      >
+                        <span>Book Free Quote</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
                     </div>
-                    <ul className="space-y-2 mb-6">
-                      {s.includes.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm">
-                          <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
-                          <span className="text-foreground/90">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <span className="mt-auto inline-flex items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground group-hover:text-primary transition">
-                      <span>Book Free Quote</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
                   </div>
-                </button>
-              ))}
+                </div>
+                );
+              })}
+
             </div>
           </div>
         </section>
