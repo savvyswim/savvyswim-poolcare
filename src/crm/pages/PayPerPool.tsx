@@ -10,6 +10,7 @@ import {
   isoDay,
   money,
   PAY_SETTINGS_KEY,
+  periodHistory,
   sumLines,
   weekRange,
   type PayConfig,
