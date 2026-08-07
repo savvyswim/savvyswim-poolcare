@@ -8,7 +8,7 @@ export const Route = createFileRoute("/$city")({
     if (!area) throw notFound();
     return { slug: area.slug };
   },
-  head: ({ params, loaderData }) => {
+  head: ({ loaderData }) => {
     const area = loaderData ? getServiceArea(loaderData.slug) : undefined;
     if (!area) {
       return { meta: [{ title: "Page not found | Savvy Swim" }, { name: "robots", content: "noindex" }] };
