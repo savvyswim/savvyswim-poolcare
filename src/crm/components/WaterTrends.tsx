@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { statusFor, type MetricKey } from "@/crm/lib/chem";
+import { statusFor, type MetricKey, type Status } from "@/crm/lib/chem";
 
 export type TrendVisit = {
   scheduled_date: string;
@@ -16,7 +16,7 @@ const money2 = (n: number) =>
 type Series = { label: string; color: string; points: { x: string; y: number }[] };
 
 /** Small multi-line sparkline — no chart library, keeps the customer card fast. */
-function Spark({ series, unit }: { series: Series[]; unit?: string }) {
+function Spark({ series, unit }: { series: Series[]; unit?: string | undefined }) {
   const all = series.flatMap((s) => s.points.map((p) => p.y));
   if (!all.length) {
     return (
@@ -60,24 +60,22 @@ function Panel({
 }: {
   title: string;
   series: Series[];
-  unit?: string;
-  latest?: string;
-  status?: "ok" | "warn" | "bad" | null;
+  unit?: string | undefined;
+  latest?: string | undefined;
+  status?: Status | null | undefined;
 }) {
   const dot =
-    status === "bad"
+    status === "low" || status === "high"
       ? "hsl(var(--ss-burgundy))"
-      : status === "warn"
-        ? "#C98A00"
-        : status === "ok"
-          ? "hsl(var(--ss-aqua))"
-          : "transparent";
+      : status === "good"
+        ? "hsl(var(--ss-aqua))"
+        : "transparent";
   return (
     <div className="ss-card p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="ss-label">{title}</div>
         <div className="flex items-center gap-1.5">
-          {status && <span className="h-2 w-2 rounded-full" style={{ background: dot }} />}
+          {status && status !== "unknown" && <span className="h-2 w-2 rounded-full" style={{ background: dot }} />}
           <span className="ss-num text-[0.85rem] font-bold">{latest ?? "—"}</span>
         </div>
       </div>
