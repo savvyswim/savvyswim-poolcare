@@ -1149,6 +1149,8 @@ export type Database = {
       }
       ss_bundles: {
         Row: {
+          billing: string
+          category: string
           created_at: string
           description: string | null
           id: string
@@ -1156,9 +1158,14 @@ export type Database = {
           items: Json
           name: string
           price: number
+          price_mode: string
+          show_item_prices: boolean
+          sort_order: number
           updated_at: string
         }
         Insert: {
+          billing?: string
+          category?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -1166,9 +1173,14 @@ export type Database = {
           items?: Json
           name: string
           price?: number
+          price_mode?: string
+          show_item_prices?: boolean
+          sort_order?: number
           updated_at?: string
         }
         Update: {
+          billing?: string
+          category?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -1176,6 +1188,9 @@ export type Database = {
           items?: Json
           name?: string
           price?: number
+          price_mode?: string
+          show_item_prices?: boolean
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []

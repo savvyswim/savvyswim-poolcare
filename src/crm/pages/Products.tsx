@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "@/lib/router-compat";
 import { SectionTitle, Chip } from "@/crm/components/Brand";
 import MarginCalculator from "@/crm/components/MarginCalculator";
+import BundleManager from "@/crm/components/BundleManager";
 import { MaintenanceSchedule, ServiceEstimate } from "@/crm/components/EstimateScheduler";
 import type { EstimateKind } from "@/crm/lib/estimateEngine";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,7 +26,7 @@ import {
 
 export default function Products() {
   const { cities, addons, margins, loading } = useRateCard();
-  const [kind, setKind] = useState<EstimateKind>("maintenance");
+  const [kind, setKind] = useState<EstimateKind | "bundles">("maintenance");
   const [city, setCity] = useState("Dallas");
   const [size, setSize] = useState<string>(POOL_SIZES[1].id);
   const [condition, setCondition] = useState<string>(CONDITIONS[0].id);
@@ -197,18 +198,24 @@ export default function Products() {
       />
 
       <div className="flex flex-wrap gap-1.5">
-        {(["maintenance", "service"] as const).map((k) => (
+        {(["maintenance", "service", "bundles"] as const).map((k) => (
           <button
             key={k}
             className={`ss-btn ${kind === k ? "" : "ss-btn-ghost"}`}
             onClick={() => setKind(k)}
           >
-            {k === "maintenance" ? "MAINTENANCE · RECURRING" : "SERVICE · ONE-OFF"}
+            {k === "maintenance"
+              ? "MAINTENANCE · RECURRING"
+              : k === "service"
+                ? "SERVICE · ONE-OFF"
+                : "BUNDLES"}
           </button>
         ))}
       </div>
 
-      {kind === "service" ? (
+      {kind === "bundles" ? (
+        <BundleManager />
+      ) : kind === "service" ? (
         <ServiceEstimate />
       ) : loading ? (
         <div className="ss-card p-6 text-[0.85rem] opacity-60">Loading rate card…</div>

@@ -17,6 +17,7 @@ import {
   maintenanceMargin,
   serviceMargin,
 } from "@/crm/lib/estimateEngine";
+import { bundleTotal, useBundles } from "@/crm/lib/bundles";
 
 /** Live cost model shared with Savvy Ledger → Margins. */
 export function useCostModel(): CostModel {
@@ -294,6 +295,7 @@ const newLine = (): ServiceLine => ({
 });
 
 export function ServiceEstimate() {
+  const { rows: bundles } = useBundles(true);
   const costs = useCostModel();
   const [lines, setLines] = useState<ServiceLine[]>([newLine()]);
   const [hours, setHours] = useState(2);
@@ -309,7 +311,38 @@ export function ServiceEstimate() {
   return (
     <div className="grid gap-3 lg:grid-cols-2">
       <div className="ss-card p-4">
-        <div className="ss-label mb-2">Repair / service job — parts &amp; labor</div>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="ss-label">Repair / service job — parts &amp; labor</div>
+          {bundles.length > 0 && (
+            <select
+              className="ss-input w-[210px]"
+              value=""
+              onChange={(e) => {
+                const b = bundles.find((x) => x.id === e.target.value);
+                if (!b) return;
+                /* A bundle drops in as its items — fixed-price bundles collapse to one line. */
+                const added: ServiceLine[] =
+                  b.price_mode === "fixed"
+                    ? [{ id: `${b.id}-pkg`, name: b.name, cost: bundleTotal(b), qty: 1, marginPct: 0 }]
+                    : b.items.map((i, n) => ({
+                        id: `${b.id}-${n}`,
+                        name: i.name,
+                        cost: i.price,
+                        qty: i.qty,
+                        marginPct: 0,
+                      }));
+                setLines((l) => [...l.filter((x) => x.name.trim() || x.cost), ...added]);
+              }}
+            >
+              <option value="">Apply a bundle…</option>
+              {bundles.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
         <div className="space-y-2">
           {lines.map((l, i) => (
             <div key={l.id} className="grid gap-2 sm:grid-cols-[1.6fr_.9fr_.5fr_.7fr_auto] sm:items-end">
