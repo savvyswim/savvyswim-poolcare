@@ -40,6 +40,10 @@ export default function Products() {
   const [providerPlan, setProviderPlan] = useState<string>("");
   const [planId, setPlanId] = useState<string>("signature");
   const [smsPhone, setSmsPhone] = useState<string>("");
+  /** One-time price for custom-priced services (Green-to-Clean Recovery). */
+  const [customPrice, setCustomPrice] = useState<string>("");
+  const [customNote, setCustomNote] = useState<string>("");
+
   const [sending, setSending] = useState(false);
   const [params, setParams] = useSearchParams();
   const [hydrated, setHydrated] = useState(false);
