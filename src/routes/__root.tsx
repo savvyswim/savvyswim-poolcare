@@ -18,6 +18,7 @@ import { CartProvider } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
+import { ChatWidget } from "@/components/ChatWidget";
 
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
