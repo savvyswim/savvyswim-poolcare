@@ -121,6 +121,15 @@ export default function Products() {
     addons,
   );
 
+  /** Salt cell is a recurring add-on — gate it to weekly plans and 1 per water body. */
+  const saltCheck = validateSaltCell({ saltCell, saltCellQty: saltQty, chemOnly, planId });
+  const saltAllowed = validateSaltCell({ saltCell: true, saltCellQty: 1, chemOnly, planId }).ok;
+
+  // Drop the add-on automatically when the plan/frequency stops supporting it.
+  useEffect(() => {
+    if (saltCell && !saltAllowed) setSaltCell(false);
+  }, [saltCell, saltAllowed]);
+
   const band = cities.find((c) => c.city === city);
 
   const currentMonthly = Number(payingNow) > 0 ? Number(payingNow) : 0;
