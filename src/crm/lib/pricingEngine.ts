@@ -282,6 +282,9 @@ export function computeQuote(
     base,
     monthly,
     lines,
+    /** Null when the salt cell add-on is valid (or unselected). */
+    saltCellIssue: input.saltCell && !salt.ok ? salt.reason! : null,
+
     cleanup,
     cleanupLabel: cond.cleanupHigh ? `$${cond.cleanupLow}–${cond.cleanupHigh}` : null,
     band: { low, mid, high },
