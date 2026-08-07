@@ -248,6 +248,33 @@ export function weekRange(ref: Date): { start: string; end: string } {
   return { start: isoDay(start), end: isoDay(end) };
 }
 
+/** Payout state for a pay period. */
+export type PayStatus = "pending" | "approved" | "paid";
+
+export const PAY_STATUS_LABEL: Record<PayStatus, string> = {
+  pending: "Pending",
+  approved: "Approved",
+  paid: "Paid",
+};
+
+const PAY_STATUS_RANK: Record<PayStatus, number> = { pending: 0, approved: 1, paid: 2 };
+
+/** Normalize a raw visit/payout status string into a pay status. */
+export function normalizePayStatus(raw: string | null | undefined): PayStatus {
+  const v = (raw ?? "").toLowerCase();
+  if (v === "paid") return "paid";
+  if (v === "approved") return "approved";
+  return "pending";
+}
+
+/** The least-advanced status wins, so a period only reads "paid" when it all is. */
+export function rollupPayStatus(values: Array<string | null | undefined>): PayStatus {
+  if (!values.length) return "pending";
+  return values
+    .map(normalizePayStatus)
+    .reduce((a, b) => (PAY_STATUS_RANK[b] < PAY_STATUS_RANK[a] ? b : a));
+}
+
 /** One pay period of history for a single pool. */
 export type PeriodEarnings = {
   start: string;
@@ -261,6 +288,9 @@ export type PeriodEarnings = {
   commission: number;
   total: number;
   locked: boolean;
+  /** Where this period's money stands: awaiting approval, approved, or paid. */
+  payStatus: PayStatus;
+
 };
 
 /** Group pay lines into Monday-start pay periods, newest first. */
@@ -288,6 +318,7 @@ export function periodHistory(lines: PayLine[]): PeriodEarnings[] {
         commission,
         total: ls.reduce((s, l) => s + l.techTotal, 0),
         locked: ls.some((l) => l.locked),
+        payStatus: rollupPayStatus(ls.map((l) => l.payStatus)),
       };
     });
 }
