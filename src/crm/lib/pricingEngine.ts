@@ -164,6 +164,8 @@ export type QuoteInput = {
   saltCell?: boolean;
   /** One salt cell per water body — 1 or 2 (pool + spa). */
   saltCellQty?: number;
+  /** Swim Club membership bundled into the monthly rate. */
+  swimClub?: boolean;
   /** Service plan the estimate is built on — gates the salt cell add-on. */
   planId?: string;
   rateOverride?: number | null;
