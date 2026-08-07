@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { withRetry, type RetryKind } from "@/crm/lib/retry";
+import { reportCrmError } from "@/crm/lib/errorReporting";
 
 export type SsLevel = "owner" | "office_manager" | "technician" | "contractor";
 
@@ -126,7 +128,13 @@ export function useSavvyIdentity(): SavvyIdentity {
   };
 }
 
-/** Generic table fetch with loading + refetch. */
+/**
+ * Generic table fetch with loading + refetch.
+ *
+ * Rate limits and timeouts are retried with exponential backoff before the
+ * page is allowed to look broken; a real error (bad query, no permission)
+ * fails fast and is reported so the office can see it.
+ */
 export function useTable<T>(
   key: string,
   fetcher: () => Promise<T[]>,
@@ -134,13 +142,24 @@ export function useTable<T>(
 ) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [retrying, setRetrying] = useState<RetryKind | null>(null);
 
   const refetch = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
-      setRows(await fetcher());
-    } catch {
+      const data = await withRetry(fetcher, {
+        onRetry: ({ kind }) => setRetrying(kind),
+      });
+      setRetrying(null);
+      setRows(data);
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error(String(e));
+      setRetrying(null);
+      setError(err);
       setRows([]);
+      void reportCrmError(err, { source: "useTable", table: key });
     } finally {
       setLoading(false);
     }
@@ -151,5 +170,5 @@ export function useTable<T>(
     void refetch();
   }, [refetch]);
 
-  return { rows, loading, refetch, setRows, key };
+  return { rows, loading, error, retrying, refetch, setRows, key };
 }

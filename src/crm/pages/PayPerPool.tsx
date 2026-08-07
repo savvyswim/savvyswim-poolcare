@@ -17,7 +17,13 @@ import {
   type PayVisit,
 } from "@/crm/lib/payPerPool";
 
-type Staff = { id: string; full_name: string; level: string };
+type Staff = {
+  id: string;
+  full_name: string;
+  level: string;
+  pay_rate: number | null;
+  upsell_pct: number | null;
+};
 type Payout = {
   id: string;
   tech_id: string;
@@ -35,6 +41,16 @@ type Payout = {
   paid_at: string | null;
 };
 
+type Adjustment = {
+  id: string;
+  tech_id: string;
+  effective_date: string;
+  kind: string;
+  amount: number;
+  reason: string | null;
+  payout_id: string | null;
+};
+
 type PoolRate = {
   id: string;
   full_name: string;
@@ -43,9 +59,10 @@ type PoolRate = {
   route_frequency: string | null;
   tech_pay_rate: number | null;
   tech_upsell_pct: number | null;
+  assigned_tech_id: string | null;
 };
 
-type Tab = "earnings" | "rates" | "payouts";
+type Tab = "earnings" | "rates" | "team" | "payouts";
 
 export default function PayPerPool() {
   const id = useSavvyIdentity();
@@ -85,9 +102,12 @@ export default function PayPerPool() {
   }
 
   /* ----------------------------------------------------------------- data */
-  const { rows: staff } = useTable<Staff>("pay-staff", async () => {
+  const { rows: staff, refetch: reloadStaff } = useTable<Staff>("pay-staff", async () => {
     const { data } = await supabase
-      .from("ss_staff").select("id,full_name,level").eq("is_active", true).order("full_name");
+      .from("ss_staff")
+      .select("id,full_name,level,pay_rate,upsell_pct")
+      .eq("is_active", true)
+      .order("full_name");
     return (data ?? []) as Staff[];
   });
 
@@ -123,30 +143,62 @@ export default function PayPerPool() {
     [canManage, id.staffId],
   );
 
+  const { rows: adjustments, refetch: reloadAdjustments } = useTable<Adjustment>(
+    "pay-adjustments",
+    async () => {
+      let q = supabase
+        .from("ss_tech_adjustments")
+        .select("*")
+        .gte("effective_date", from)
+        .lte("effective_date", to)
+        .order("effective_date", { ascending: false });
+      if (!canManage && id.staffId) q = q.eq("tech_id", id.staffId);
+      const { data } = await q;
+      return (data ?? []) as Adjustment[];
+    },
+    [from, to, canManage, id.staffId],
+  );
+
   const { rows: pools, refetch: reloadPools } = useTable<PoolRate>(
     "pay-pools",
     async () => {
-      if (!canManage) return [];
-      const { data } = await supabase
+      let q = supabase
         .from("ss_customers")
-        .select("id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct")
+        .select("id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct,assigned_tech_id")
         .eq("status", "active")
         .order("full_name");
+      if (!canManage && id.staffId) q = q.eq("assigned_tech_id", id.staffId);
+      const { data } = await q;
       return (data ?? []) as PoolRate[];
     },
-    [canManage],
+    [canManage, id.staffId],
   );
 
   /* -------------------------------------------------------------- compute */
-  const levelByTech = useMemo(
-    () => Object.fromEntries(staff.map((s) => [s.id, s.level])),
+  const techMeta = useMemo(
+    () =>
+      Object.fromEntries(
+        staff.map((s) => [s.id, { level: s.level, pay_rate: s.pay_rate, upsell_pct: s.upsell_pct }]),
+      ),
     [staff],
   );
 
   const lines = useMemo(() => {
     const scoped = techFilter === "all" ? visits : visits.filter((v) => v.tech_id === techFilter);
-    return buildPayLines(scoped, liveCfg, levelByTech);
-  }, [visits, techFilter, liveCfg, levelByTech]);
+    return buildPayLines(scoped, liveCfg, techMeta);
+  }, [visits, techFilter, liveCfg, techMeta]);
+
+  const adjByTech = useMemo(() => {
+    const map = new Map<string, number>();
+    const scoped = techFilter === "all" ? adjustments : adjustments.filter((a) => a.tech_id === techFilter);
+    for (const a of scoped) map.set(a.tech_id, (map.get(a.tech_id) ?? 0) + Number(a.amount));
+    return map;
+  }, [adjustments, techFilter]);
+
+  const adjTotal = useMemo(
+    () => [...adjByTech.values()].reduce((s, n) => s + n, 0),
+    [adjByTech],
+  );
 
   const totals = useMemo(() => sumLines(lines), [lines]);
   const todayLines = useMemo(() => lines.filter((l) => l.date === today), [lines, today]);
@@ -185,11 +237,42 @@ export default function PayPerPool() {
   // so there is nothing to type in here — the ledger is the source of truth.
 
 
+  async function saveStaffPay(staffId: string, patch: Partial<Staff>) {
+    const { error } = await supabase.from("ss_staff").update(patch as never).eq("id", staffId);
+    if (error) { toast.error(error.message); return; }
+    void reloadStaff();
+    void reloadVisits();
+    toast.success("Tech pay defaults saved");
+  }
+
+  async function addAdjustment(techId: string, kind: string, amount: number, reason: string) {
+    if (!amount) { toast.error("Enter an amount"); return; }
+    const { error } = await supabase.from("ss_tech_adjustments").insert({
+      tech_id: techId,
+      kind,
+      amount,
+      reason: reason.trim() || null,
+      effective_date: today,
+    });
+    if (error) { toast.error(error.message); return; }
+    void reloadAdjustments();
+    toast.success(kind === "bonus" ? "Bonus added" : "Commission adjustment added");
+  }
+
+  async function removeAdjustment(a: Adjustment) {
+    if (a.payout_id) { toast.error("Already on a paid invoice"); return; }
+    const { error } = await supabase.from("ss_tech_adjustments").delete().eq("id", a.id);
+    if (error) { toast.error(error.message); return; }
+    void reloadAdjustments();
+  }
+
   async function generateInvoice(techId: string) {
     const group = byTech.find((g) => g.techId === techId);
     if (!group) return;
     const open = group.lines.filter((l) => !l.locked);
-    if (!open.length) { toast.error("No unpaid pools in this period"); return; }
+    const openAdj = adjustments.filter((a) => a.tech_id === techId && !a.payout_id);
+    const adjSum = openAdj.reduce((s, a) => s + Number(a.amount), 0);
+    if (!open.length && !adjSum) { toast.error("No unpaid pools in this period"); return; }
     setBusy(true);
     const t = sumLines(open);
     const { data, error } = await supabase
@@ -202,7 +285,8 @@ export default function PayPerPool() {
         base_pay: Number(t.basePay.toFixed(2)),
         bonus_pay: Number(t.bonus.toFixed(2)),
         commission_pay: Number(t.commission.toFixed(2)),
-        total_pay: Number(t.techTotal.toFixed(2)),
+        adjustments: Number(adjSum.toFixed(2)),
+        total_pay: Number((t.techTotal + adjSum).toFixed(2)),
         status: "ready",
       })
       .select()
@@ -224,11 +308,18 @@ export default function PayPerPool() {
         })
         .eq("id", l.visitId);
     }
+    if (openAdj.length) {
+      await supabase
+        .from("ss_tech_adjustments")
+        .update({ payout_id: data.id })
+        .in("id", openAdj.map((a) => a.id));
+    }
     setBusy(false);
     void reloadVisits();
     void reloadPayouts();
+    void reloadAdjustments();
     setTab("payouts");
-    toast.success(`Invoice ${data.invoice_number} ready — ${money(t.techTotal)}`);
+    toast.success(`Invoice ${data.invoice_number} ready — ${money(t.techTotal + adjSum)}`);
   }
 
   async function markPaid(p: Payout) {
@@ -299,10 +390,13 @@ export default function PayPerPool() {
       {/* headline tiles */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile label="Pools completed" value={String(totals.pools)} />
-        <StatTile label={canManage ? "Tech pay (period)" : "You earned"} value={money(totals.techTotal)} />
+        <StatTile
+          label={canManage ? "Tech pay (period)" : "You earned"}
+          value={money(totals.techTotal + adjTotal)}
+        />
         <StatTile label="Today so far" value={money(todayTotals.techTotal)} />
         {canManage ? (
-          <StatTile label="Company keeps" value={money(totals.companyKeeps)} />
+          <StatTile label="Company keeps" value={money(totals.companyKeeps - adjTotal)} />
         ) : (
           <StatTile label="Pools today" value={String(todayTotals.pools)} />
         )}
@@ -311,17 +405,21 @@ export default function PayPerPool() {
       {canManage && (
         <div className="ss-card p-4">
           <div className="text-[0.7rem] uppercase tracking-[0.18em] opacity-60">Finance view — period</div>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-3 grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-7">
             {[
               ["Service revenue", money(totals.revenue)],
               ["Tech base pay", `- ${money(totals.basePay)}`],
               ["Bonuses", `- ${money(totals.bonus)}`],
+              ["Extra bonus / adj.", `- ${money(adjTotal)}`],
               ["Upsell commission", `- ${money(totals.commission)}`],
               ["Chemicals", `- ${money(totals.chemCost)}`],
-              ["Company keeps", `${money(totals.companyKeeps)} · ${totals.marginPct.toFixed(0)}%`],
+              [
+                "Company keeps",
+                `${money(totals.companyKeeps - adjTotal)} · ${totals.marginPct.toFixed(0)}%`,
+              ],
             ].map(([k, v]) => (
-              <div key={k} className="rounded-lg border border-black/10 p-3">
-                <div className="text-[0.65rem] uppercase tracking-[0.14em] opacity-55">{k}</div>
+              <div key={k} className="min-w-0 border border-black/10 p-3">
+                <div className="truncate text-[0.65rem] uppercase tracking-[0.14em] opacity-55" title={k}>{k}</div>
                 <div className="mt-1 text-[0.95rem] font-semibold">{v}</div>
               </div>
             ))}
@@ -333,7 +431,8 @@ export default function PayPerPool() {
       <div className="flex flex-wrap gap-2 print:hidden">
         {([
           ["earnings", "Earnings"],
-          ...(canManage ? ([["rates", "Pool pay rates"]] as [Tab, string][]) : []),
+          ["rates", canManage ? "Pool pay rates" : "My pools"],
+          ...(canManage ? ([["team", "Tech bonuses"]] as [Tab, string][]) : []),
           ["payouts", "Invoices"],
         ] as [Tab, string][]).map(([k, label]) => (
           <button
@@ -384,36 +483,40 @@ export default function PayPerPool() {
 
           {canManage && byTech.length > 0 && (
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {byTech.map((g) => (
-                <div key={g.techId} className="ss-card p-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <div>
-                      <div className="text-[0.95rem] font-semibold">{g.name}</div>
-                      <div className="text-[0.7rem] opacity-60">
-                        {g.totals.pools} pools · {money(g.totals.techTotal)} owed
+              {byTech.map((g) => {
+                const extra = adjByTech.get(g.techId) ?? 0;
+                return (
+                  <div key={g.techId} className="ss-card p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="truncate text-[0.95rem] font-semibold">{g.name}</div>
+                        <div className="text-[0.7rem] opacity-60">
+                          {g.totals.pools} pools · {money(g.totals.techTotal + extra)} owed
+                        </div>
                       </div>
+                      <Chip tone={g.totals.marginPct >= 45 ? "green" : "orange"}>
+                        {g.totals.marginPct.toFixed(0)}% margin
+                      </Chip>
                     </div>
-                    <Chip tone={g.totals.marginPct >= 45 ? "green" : "orange"}>
-                      {g.totals.marginPct.toFixed(0)}% margin
-                    </Chip>
+                    <div className="mt-3 grid grid-cols-4 gap-2 text-[0.72rem]">
+                      <div><span className="opacity-55">Base</span><br />{money(g.totals.basePay)}</div>
+                      <div><span className="opacity-55">Bonus</span><br />{money(g.totals.bonus)}</div>
+                      <div><span className="opacity-55">Comm.</span><br />{money(g.totals.commission)}</div>
+                      <div><span className="opacity-55">Extra</span><br />{money(extra)}</div>
+                    </div>
+                    {g.techId !== "unassigned" && (
+                      <button
+                        className="ss-btn mt-3 w-full"
+                        disabled={busy}
+                        onClick={() => generateInvoice(g.techId)}
+                      >
+                        <FileText className="mr-2 inline h-4 w-4" />
+                        Build invoice
+                      </button>
+                    )}
                   </div>
-                  <div className="mt-3 grid grid-cols-3 gap-2 text-[0.72rem]">
-                    <div><span className="opacity-55">Base</span><br />{money(g.totals.basePay)}</div>
-                    <div><span className="opacity-55">Bonus</span><br />{money(g.totals.bonus)}</div>
-                    <div><span className="opacity-55">Comm.</span><br />{money(g.totals.commission)}</div>
-                  </div>
-                  {g.techId !== "unassigned" && (
-                    <button
-                      className="ss-btn mt-3 w-full"
-                      disabled={busy}
-                      onClick={() => generateInvoice(g.techId)}
-                    >
-                      <FileText className="mr-2 inline h-4 w-4" />
-                      Build invoice
-                    </button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -514,6 +617,7 @@ export default function PayPerPool() {
               <tr>
                 <th className="px-4 py-2">Pool</th>
                 <th className="px-3 py-2">City</th>
+                <th className="px-3 py-2">Assigned tech</th>
                 <th className="px-3 py-2">Customer pays / mo</th>
                 <th className="px-3 py-2">Tech pay per visit</th>
                 <th className="px-3 py-2">Upsell %</th>
@@ -524,6 +628,9 @@ export default function PayPerPool() {
                 <tr key={p.id} className="border-t border-black/5">
                   <td className="px-4 py-2 font-medium">{p.full_name}</td>
                   <td className="px-3 py-2 opacity-70">{p.city ?? "—"}</td>
+                  <td className="px-3 py-2 opacity-70">
+                    {staff.find((s) => s.id === p.assigned_tech_id)?.full_name ?? "—"}
+                  </td>
                   <td className="px-3 py-2 opacity-70">{p.monthly_price ? money(Number(p.monthly_price)) : "—"}</td>
                   <td className="px-3 py-2">
                     <input
@@ -556,6 +663,117 @@ export default function PayPerPool() {
             </tbody>
           </table>
           {pools.length === 0 && <EmptyState>No active pools yet.</EmptyState>}
+        </div>
+      )}
+
+      {/* ------------------------------------------------- MY POOLS (tech) */}
+      {tab === "rates" && !canManage && (
+        <div className="space-y-3">
+          <p className="text-[0.75rem] opacity-60">
+            Every pool assigned to you and exactly what it pays you per visit.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {pools.map((p) => {
+              const myMeta = staff.find((s) => s.id === id.staffId);
+              const rate =
+                p.tech_pay_rate ??
+                myMeta?.pay_rate ??
+                (myMeta?.level === "contractor" ? cfg.contractor_rate : cfg.default_rate);
+              const pct = p.tech_upsell_pct ?? myMeta?.upsell_pct ?? cfg.upsell_pct;
+              return (
+                <div key={p.id} className="ss-card p-4">
+                  <div className="text-[0.9rem] font-semibold">{p.full_name}</div>
+                  <div className="text-[0.7rem] opacity-55">{p.city ?? "—"}</div>
+                  <div className="mt-3 flex items-end justify-between">
+                    <div>
+                      <div className="text-[0.62rem] uppercase tracking-[0.14em] opacity-55">You get / visit</div>
+                      <div className="text-[1.2rem] font-semibold">{money(Number(rate))}</div>
+                    </div>
+                    <Chip tone="aqua">{Number(pct)}% upsell</Chip>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {pools.length === 0 && <EmptyState>No pools assigned to you yet.</EmptyState>}
+        </div>
+      )}
+
+      {/* ------------------------------------------------- TEAM (bonuses) */}
+      {tab === "team" && canManage && (
+        <div className="space-y-3">
+          <p className="text-[0.75rem] opacity-60">
+            Set each tech's default pay and commission, then drop in extra bonuses. Anything you add here
+            lands on their next pay invoice.
+          </p>
+          {staff.map((s) => {
+            const mine = adjustments.filter((a) => a.tech_id === s.id);
+            return (
+              <div key={s.id} className="ss-card p-4">
+                <div className="flex flex-wrap items-end justify-between gap-3">
+                  <div>
+                    <div className="text-[0.95rem] font-semibold">{s.full_name}</div>
+                    <div className="text-[0.7rem] uppercase tracking-[0.12em] opacity-55">{s.level}</div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+                      Pay per pool
+                      <input
+                        type="number"
+                        step="0.5"
+                        className="ss-input mt-1 w-28"
+                        placeholder={String(s.level === "contractor" ? cfg.contractor_rate : cfg.default_rate)}
+                        defaultValue={num(s.pay_rate)}
+                        onBlur={(e) => {
+                          const v = e.target.value === "" ? null : Number(e.target.value);
+                          if (v !== s.pay_rate) void saveStaffPay(s.id, { pay_rate: v });
+                        }}
+                      />
+                    </label>
+                    <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+                      Upsell commission %
+                      <input
+                        type="number"
+                        step="1"
+                        className="ss-input mt-1 w-24"
+                        placeholder={String(cfg.upsell_pct)}
+                        defaultValue={num(s.upsell_pct)}
+                        onBlur={(e) => {
+                          const v = e.target.value === "" ? null : Number(e.target.value);
+                          if (v !== s.upsell_pct) void saveStaffPay(s.id, { upsell_pct: v });
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <BonusForm onAdd={(kind, amount, reason) => addAdjustment(s.id, kind, amount, reason)} />
+
+                {mine.length > 0 && (
+                  <ul className="mt-3 space-y-1 text-[0.75rem]">
+                    {mine.map((a) => (
+                      <li key={a.id} className="flex items-center justify-between gap-2 border-t border-black/5 pt-1">
+                        <span className="min-w-0 truncate">
+                          {a.effective_date} · {a.kind === "bonus" ? "Bonus" : "Commission"} ·{" "}
+                          {a.reason ?? "—"}
+                        </span>
+                        <span className="flex items-center gap-2 whitespace-nowrap">
+                          <strong>{money(Number(a.amount))}</strong>
+                          {a.payout_id ? (
+                            <Chip tone="green">on invoice</Chip>
+                          ) : (
+                            <button className="opacity-55 underline" onClick={() => removeAdjustment(a)}>
+                              remove
+                            </button>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -597,6 +815,60 @@ export default function PayPerPool() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ bonus */
+function BonusForm({
+  onAdd,
+}: {
+  onAdd: (kind: string, amount: number, reason: string) => void | Promise<void>;
+}) {
+  const [kind, setKind] = useState("bonus");
+  const [amount, setAmount] = useState("");
+  const [reason, setReason] = useState("");
+
+  return (
+    <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-black/5 pt-3">
+      <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Type
+        <select value={kind} onChange={(e) => setKind(e.target.value)} className="ss-input mt-1 block w-32">
+          <option value="bonus">Bonus</option>
+          <option value="commission">Commission</option>
+          <option value="deduction">Deduction</option>
+        </select>
+      </label>
+      <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Amount
+        <input
+          type="number"
+          step="0.5"
+          className="ss-input mt-1 block w-24"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </label>
+      <label className="min-w-[10rem] flex-1 text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Reason
+        <input
+          className="ss-input mt-1 block w-full"
+          placeholder="Upsell on Miller heater, perfect QC week…"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+      </label>
+      <button
+        className="ss-btn"
+        onClick={async () => {
+          const n = Number(amount) * (kind === "deduction" ? -1 : 1);
+          await onAdd(kind, n, reason);
+          setAmount("");
+          setReason("");
+        }}
+      >
+        Add
+      </button>
     </div>
   );
 }
