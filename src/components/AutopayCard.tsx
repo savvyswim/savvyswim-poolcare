@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment, PAYMENTS_ENABLED } from "@/lib/stripe";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -119,8 +118,4 @@ export default function AutopayCard({ pool, email }: { pool: AutopayPool; email:
       </Dialog>
     </div>
   );
-}
-
-export function useAutopayToast() {
-  return () => toast.success("Autopay is on — your card will be charged monthly.");
 }
