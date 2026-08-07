@@ -13,33 +13,42 @@ Deno.serve(async (req) => {
     const token = auth.replace(/^Bearer\s+/i, '')
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
 
-    let allowed = token === SERVICE_ROLE_KEY
-    if (!allowed && token) {
-      const { data: userData } = await admin.auth.getUser(token)
-      if (userData?.user) {
-        const { data: staff } = await admin
-          .from('ss_staff')
-          .select('is_active')
-          .eq('user_id', userData.user.id)
-          .maybeSingle()
-        allowed = !!staff?.is_active
+    const isSystem = token === SERVICE_ROLE_KEY
+    let staffId: string | null = null
+    let isOffice = false
+
+    if (!isSystem) {
+      if (!token) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
       }
-    }
-    if (!allowed) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      const { data: userData } = await admin.auth.getUser(token)
+      if (!userData?.user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+      const { data: staff } = await admin
+        .from('ss_staff')
+        .select('id, level, is_active')
+        .eq('user_id', userData.user.id)
+        .maybeSingle()
+      if (!staff?.is_active) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+      staffId = staff.id
+      isOffice = staff.level === 'owner' || staff.level === 'office_manager'
     }
 
     const body = await req.json()
     const {
       visitId,
-      email,
-      name,
-      visitDate,
-      address,
-      techName,
       minutes,
       summary,
       allGood,
@@ -50,12 +59,65 @@ Deno.serve(async (req) => {
       notes,
     } = body ?? {}
 
-    if (!email || !Array.isArray(metrics)) {
-      return new Response(JSON.stringify({ error: 'email and metrics are required' }), {
+    if (!visitId || !Array.isArray(metrics)) {
+      return new Response(JSON.stringify({ error: 'visitId and metrics are required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
+
+    // Recipient and visit facts come from the database — never from the caller.
+    const { data: visit } = await admin
+      .from('ss_visits')
+      .select('id, tech_id, customer_id, scheduled_date')
+      .eq('id', visitId)
+      .maybeSingle()
+    if (!visit) {
+      return new Response(JSON.stringify({ error: 'Visit not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    if (!isSystem && !isOffice && visit.tech_id !== staffId) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    const { data: customer } = await admin
+      .from('ss_customers')
+      .select('full_name, email, address, city')
+      .eq('id', visit.customer_id)
+      .maybeSingle()
+
+    const email = customer?.email
+    if (!email) {
+      return new Response(JSON.stringify({ error: 'Customer has no email on file' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    const name = (customer?.full_name ?? 'there').split(' ')[0]
+    const address = [customer?.address, customer?.city].filter(Boolean).join(', ') || undefined
+    const visitDate = new Date(visit.scheduled_date ?? Date.now()).toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
+
+    let techName: string | undefined
+    if (visit.tech_id) {
+      const { data: tech } = await admin
+        .from('ss_staff')
+        .select('full_name')
+        .eq('id', visit.tech_id)
+        .maybeSingle()
+      techName = (tech as { full_name?: string } | null)?.full_name ?? undefined
+    }
+
 
     const result = await sendTemplateEmail('service-report', email, {
       idempotencyKey: visitId ? `service-report:${visitId}` : undefined,
