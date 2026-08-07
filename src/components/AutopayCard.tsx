@@ -24,8 +24,19 @@ export type AutopayPool = {
 
 const money = (n: number) => `$${Number(n || 0).toFixed(2)}`;
 
+type SubRow = {
+  plan_name: string | null;
+  amount: number | null;
+  status: string;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean | null;
+};
+
+const ACTIVE = new Set(["active", "trialing", "past_due"]);
+
 export default function AutopayCard({ pool, email }: { pool: AutopayPool; email: string }) {
   const [rows, setRows] = useState<PricingRow[]>([]);
+  const [sub, setSub] = useState<SubRow | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -36,6 +47,18 @@ export default function AutopayCard({ pool, email }: { pool: AutopayPool; email:
       .then(({ data }) => setRows((data ?? []) as PricingRow[]));
   }, []);
 
+  useEffect(() => {
+    if (!email) return;
+    supabase
+      .from("subscriptions")
+      .select("plan_name,amount,status,current_period_end,cancel_at_period_end")
+      .eq("environment", getStripeEnvironment())
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => setSub((data as SubRow | null) ?? null));
+  }, [email]);
+
   /** Match the customer's monthly rate to the closest published plan. */
   const plan = useMemo(() => {
     const priced = rows.filter((r) => r.price != null && r.price_key);
@@ -44,6 +67,11 @@ export default function AutopayCard({ pool, email }: { pool: AutopayPool; email:
       Math.abs((r.price ?? 0) - pool.monthly_price) < Math.abs((best.price ?? 0) - pool.monthly_price) ? r : best,
     );
   }, [rows, pool.monthly_price]);
+
+  const autopayOn = !!sub && ACTIVE.has(sub.status);
+  const nextDate = sub?.current_period_end ? new Date(sub.current_period_end) : null;
+  const nextAmount = sub?.amount != null ? Number(sub.amount) : pool.monthly_price;
+  const willCancel = autopayOn && !!sub?.cancel_at_period_end;
 
   const fetchClientSecret = async (): Promise<string> => {
     const { data, error } = await supabase.functions.invoke("create-subscription-checkout", {
@@ -67,34 +95,65 @@ export default function AutopayCard({ pool, email }: { pool: AutopayPool; email:
     <div className="mt-4 border border-hairline p-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">Autopay</p>
+          <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+            Autopay {autopayOn ? "· on" : "· off"}
+          </p>
           <p className="mt-1 font-display text-lg uppercase tracking-tight">
-            {plan?.plan_name ?? "Monthly pool service"}
+            {sub?.plan_name ?? plan?.plan_name ?? "Monthly pool service"}
           </p>
           <p className="font-tech text-sm text-primary/70">
-            {money(pool.monthly_price)}/mo · charged automatically each month
+            {money(nextAmount)}/mo · charged automatically each month
           </p>
           <p className="mt-2 flex items-center gap-1.5 font-tech text-xs text-primary/55">
             <ShieldCheck className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
             Secure card on file · cancel anytime
           </p>
         </div>
-        <button
-          type="button"
-          disabled={!PAYMENTS_ENABLED || !plan}
-          onClick={() => setOpen(true)}
-          className="btn-quote px-5 py-3 text-[11px] font-bold uppercase tracking-wide disabled:opacity-50"
-        >
-          <CreditCard className="mr-1.5 inline h-3.5 w-3.5" aria-hidden="true" />
-          Enable autopay
-        </button>
+        {autopayOn ? (
+          <div className="border border-hairline px-4 py-3 text-right">
+            <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+              {willCancel ? "Ends on" : "Next charge"}
+            </p>
+            <p className="mt-1 font-display text-lg uppercase tracking-tight">
+              {nextDate
+                ? nextDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+                : "Pending"}
+            </p>
+            {!willCancel && (
+              <p className="font-tech text-sm text-primary/70">{money(nextAmount)}</p>
+            )}
+          </div>
+        ) : (
+          <button
+            type="button"
+            disabled={!PAYMENTS_ENABLED || !plan}
+            onClick={() => setOpen(true)}
+            className="btn-quote px-5 py-3 text-[11px] font-bold uppercase tracking-wide disabled:opacity-50"
+          >
+            <CreditCard className="mr-1.5 inline h-3.5 w-3.5" aria-hidden="true" />
+            Enable autopay
+          </button>
+        )}
       </div>
 
-      {!PAYMENTS_ENABLED && (
+      {autopayOn && sub?.status === "past_due" && (
+        <p className="mt-3 font-tech text-xs text-primary/70">
+          Last payment didn’t go through — we’ll retry automatically. Call (469) 744-0379 to update your card.
+        </p>
+      )}
+
+      {willCancel && (
+        <p className="mt-3 font-tech text-xs text-primary/60">
+          Autopay is set to end after this billing period — no further charges after that date.
+        </p>
+      )}
+
+      {!PAYMENTS_ENABLED && !autopayOn && (
         <p className="mt-3 font-tech text-xs text-primary/60">
           Card payments are temporarily unavailable — call (469) 744-0379 to set up autopay.
         </p>
       )}
+
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-lg">
