@@ -15,6 +15,11 @@ type Customer = {
   service_level: string; route_day: string | null; equipment: Record<string, string> | null;
   custom_fields: Record<string, boolean> | null; user_id: string | null;
   last_filter_clean_at: string | null; filter_interval_days: number;
+  customer_code: string | null; location_code: string | null; dog_name: string | null;
+  minutes_at_stop: number | null; location_notes: string | null;
+  rate_type: string | null; labor_cost_type: string | null;
+  phones: { label: string; value: string }[] | null;
+  emails: { label: string; value: string }[] | null;
 };
 
 const daysSince = (d: string | null) =>
@@ -26,9 +31,11 @@ type Visit = {
 };
 
 import SaltGuide from "@/crm/components/SaltGuide";
+import WaterBodies from "@/crm/components/WaterBodies";
+import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
 
-const TABS = ["Overview", "Timeline", "Water trends", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
+const TABS = ["Overview", "Timeline", "Water trends", "Bodies of water", "Details", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -242,6 +249,10 @@ export default function CustomerDetail() {
       )}
 
       {tab === "Water trends" && <WaterTrends visits={visits} />}
+
+      {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
+
+      {tab === "Details" && <CustomerDepth customer={c} canEdit={level !== "technician"} />}
 
       {tab === "Salt pool" && <SaltGuide gallons={c.gallons} />}
 
