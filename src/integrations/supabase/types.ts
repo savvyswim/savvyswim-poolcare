@@ -1326,6 +1326,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_client_errors: {
+        Row: {
+          context: Json
+          created_at: string
+          id: string
+          message: string
+          route: string | null
+          stack: string | null
+          surface: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context?: Json
+          created_at?: string
+          id?: string
+          message: string
+          route?: string | null
+          stack?: string | null
+          surface?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context?: Json
+          created_at?: string
+          id?: string
+          message?: string
+          route?: string | null
+          stack?: string | null
+          surface?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ss_contract_events: {
         Row: {
           contract_id: string
