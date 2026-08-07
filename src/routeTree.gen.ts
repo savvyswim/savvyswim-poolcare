@@ -25,6 +25,7 @@ import { Route as BRouteImport } from './routes/b'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as CrmRouteImport } from './routes/_crm'
+import { Route as CityRouteImport } from './routes/$city'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CrmIndexRouteImport } from './routes/crm/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -155,6 +156,11 @@ const AppRoute = AppRouteImport.update({
 } as any)
 const CrmRoute = CrmRouteImport.update({
   id: '/_crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CityRoute = CityRouteImport.update({
+  id: '/$city',
+  path: '/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -426,6 +432,7 @@ const CrmAdminCrmCustomersIdRoute = CrmAdminCrmCustomersIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$city': typeof CityRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/b': typeof BRoute
@@ -495,6 +502,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$city': typeof CityRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/b': typeof BRoute
@@ -565,6 +573,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$city': typeof CityRoute
   '/_crm': typeof CrmRouteWithChildren
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
@@ -637,6 +646,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$city'
     | '/app'
     | '/auth'
     | '/b'
@@ -706,6 +716,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$city'
     | '/app'
     | '/auth'
     | '/b'
@@ -775,6 +786,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$city'
     | '/_crm'
     | '/app'
     | '/auth'
@@ -846,6 +858,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CityRoute: typeof CityRoute
   CrmRoute: typeof CrmRouteWithChildren
   AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
@@ -996,6 +1009,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof CrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$city': {
+      id: '/$city'
+      path: '/$city'
+      fullPath: '/$city'
+      preLoaderRoute: typeof CityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -1437,6 +1457,7 @@ const CrmRouteWithChildren = CrmRoute._addFileChildren(CrmRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CityRoute: CityRoute,
   CrmRoute: CrmRouteWithChildren,
   AppRoute: AppRoute,
   AuthRoute: AuthRoute,

@@ -110,24 +110,25 @@ const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 const SMS_PHONE = "+14697440379";
 
-const TICKER_ITEMS: { label: string; live?: boolean }[] = [
+const TICKER_ITEMS: { label: string; live?: boolean; to?: string }[] = [
   { label: "Est. Texas — Pool Care Systems" },
   { label: "Jump in, the water's warm.", live: true },
-  { label: "Now serving — Dallas" },
-  { label: "Plano" },
-  { label: "Frisco" },
-  { label: "McKinney" },
-  { label: "Allen" },
-  { label: "Richardson" },
-  { label: "Highland Park" },
-  { label: "University Park" },
-  { label: "Garland" },
-  { label: "Irving" },
-  { label: "Rockwall" },
-  { label: "Prosper" },
+  { label: "Now serving — Dallas", to: "/dallas" },
+  { label: "Plano", to: "/plano" },
+  { label: "Frisco", to: "/pool-cleaning-frisco-tx" },
+  { label: "McKinney", to: "/mckinney" },
+  { label: "Allen", to: "/allen" },
+  { label: "Richardson", to: "/richardson" },
+  { label: "Highland Park", to: "/highland-park" },
+  { label: "University Park", to: "/university-park" },
+  { label: "Garland", to: "/garland" },
+  { label: "Irving", to: "/irving" },
+  { label: "Rockwall", to: "/rockwall" },
+  { label: "Prosper", to: "/prosper" },
   { label: "Lat 32.7767 / Lon −96.7970" },
   { label: "Rev. 04" },
 ];
+
 
 
 const REVIEWS_ROW_1 = [
@@ -421,11 +422,22 @@ const Index = () => {
                             {item.live && (
                               <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
                             )}
-                            <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                            {item.to ? (
+                              <Link
+                                to={item.to}
+                                tabIndex={dup === 1 ? -1 : undefined}
+                                className="underline-offset-4 hover:text-accent hover:underline transition"
+                              >
+                                {item.label}
+                              </Link>
+                            ) : (
+                              <span className={item.live ? "text-accent" : undefined}>{item.label}</span>
+                            )}
                           </span>
                           <span className="mx-6 text-primary/20">/</span>
                         </span>
                       ))}
+
                     </div>
                   ))}
                 </div>
