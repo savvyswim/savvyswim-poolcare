@@ -1,7 +1,18 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { DollarSign, FileText, Lock, Printer, Wallet } from "lucide-react";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+
 import { Chip, EmptyState, SectionTitle, StatTile } from "@/crm/components/Brand";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
 import {
