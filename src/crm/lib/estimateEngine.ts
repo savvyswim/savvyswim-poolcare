@@ -127,7 +127,7 @@ export function serviceMargin(
   lines: ServiceLine[],
   hours: number,
   c: CostModel,
-  opts: { includeTrip: boolean; taxLabor: boolean },
+  opts: { includeTrip: boolean; taxLabor: boolean; laborPrice?: number | null },
 ): ServiceMargin {
   const partsCost = lines.reduce((a, l) => a + l.cost * Math.max(1, l.qty), 0);
   const partsSell = lines.reduce((a, l) => {
@@ -136,9 +136,12 @@ export function serviceMargin(
     return a + unit * Math.max(1, l.qty);
   }, 0);
   const laborCost = hours * c.serviceLaborCostHr;
-  const laborSell = hours * c.serviceBillRateHr;
+  // Labor is quoted as a flat price; hours only record how long the job takes.
+  const laborSell =
+    opts.laborPrice != null && opts.laborPrice >= 0 ? opts.laborPrice : hours * c.serviceBillRateHr;
   const feeCost = opts.includeTrip ? c.serviceTripCost : 0;
   const feeSell = opts.includeTrip ? c.serviceTripFee : 0;
+
 
   const totalCost = partsCost + laborCost + feeCost;
   const subtotal = partsSell + laborSell + feeSell;
