@@ -106,6 +106,22 @@ function BookPage() {
         )}
       </div>
 
+      <section className="mx-auto mt-16 max-w-2xl border-t border-primary/15 pt-10">
+        <h2 className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-primary">
+          Before you book
+        </h2>
+        <dl className="mt-6 divide-y divide-primary/10">
+          {FAQS.map((f) => (
+            <div key={f.q} className="py-5">
+              <dt className="text-base font-semibold leading-snug text-primary">{f.q}</dt>
+              <dd className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">{f.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+
+
       <BookingDialog
         open={open}
         onOpenChange={(next) => {
