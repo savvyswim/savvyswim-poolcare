@@ -261,6 +261,9 @@ export type PeriodEarnings = {
   commission: number;
   total: number;
   locked: boolean;
+  /** Where this period's money stands: awaiting approval, approved, or paid. */
+  payStatus: PayStatus;
+
 };
 
 /** Group pay lines into Monday-start pay periods, newest first. */
