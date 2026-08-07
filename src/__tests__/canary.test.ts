@@ -64,6 +64,7 @@ describe("canary trace capture", () => {
       status: "failed",
       slowestMs: 900,
       probes: [],
+      revisionId: "fixture-revision",
       incidents: [
         {
           route: "/",
@@ -76,6 +77,8 @@ describe("canary trace capture", () => {
           message: "server error 500",
           stack: "Error: boom\n    at x",
           bodySnippet: "boom",
+          requestId: "fixture-request",
+          revisionId: "fixture-revision",
         },
       ],
     };
