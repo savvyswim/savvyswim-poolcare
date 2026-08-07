@@ -518,7 +518,7 @@ const Index = () => {
 
 
         {/* Spec sheet grid */}
-        <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
+        <div className="relative bg-foreground text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
               src={photoPoolWaterMobile.url}
@@ -527,7 +527,8 @@ const Index = () => {
               decoding="async"
               className="h-full w-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-primary/85" />
+            {/* Neutral scrim keeps the pool water blue while text stays legible. */}
+            <div className="absolute inset-0 bg-foreground/55" />
           </div>
           <div className="relative">
           <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:gap-x-14 lg:py-24 xl:py-28 lg:grid-cols-12">
@@ -588,7 +589,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
+        <div className="relative bg-foreground text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="absolute inset-0 overflow-hidden" aria-hidden>
             <img
               src={photoPoolWaterMobile.url}
@@ -597,7 +598,8 @@ const Index = () => {
               decoding="async"
               className="h-full w-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-primary/85" />
+            {/* Neutral scrim keeps the pool water blue while text stays legible. */}
+            <div className="absolute inset-0 bg-foreground/55" />
           </div>
           <div className="relative">
           <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
