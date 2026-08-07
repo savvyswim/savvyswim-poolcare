@@ -3,7 +3,6 @@ import { CalendarClock, Plus, Receipt, Trash2 } from "lucide-react";
 import { Chip } from "@/crm/components/Brand";
 import { money } from "@/crm/lib/pricingEngine";
 import {
-import { bundleTotal, useBundles } from "@/crm/lib/bundles";
   BillingType,
   CostModel,
   DEFAULT_RECURRENCE,
@@ -18,6 +17,7 @@ import { bundleTotal, useBundles } from "@/crm/lib/bundles";
   maintenanceMargin,
   serviceMargin,
 } from "@/crm/lib/estimateEngine";
+import { bundleTotal, useBundles } from "@/crm/lib/bundles";
 
 /** Live cost model shared with Savvy Ledger → Margins. */
 export function useCostModel(): CostModel {
