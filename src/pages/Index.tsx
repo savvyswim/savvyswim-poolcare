@@ -1189,7 +1189,7 @@ const Index = () => {
         {membershipOpen && (
           <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
         )}
-        {mounted && <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />}
+        {promptReady && <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />}
       </Suspense>
 
 
