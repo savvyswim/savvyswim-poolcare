@@ -16,6 +16,7 @@ import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
+import { CrmErrorBoundary } from "@/crm/components/CrmErrorBoundary";
 
 type NavGroup = "Today" | "Sales" | "Operations" | "Marketing" | "Savvy FinOps" | "Admin";
 type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey; group: NavGroup };
