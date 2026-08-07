@@ -2922,8 +2922,10 @@ export type Database = {
           initials: string | null
           is_active: boolean
           level: Database["public"]["Enums"]["ss_level"]
+          pay_rate: number | null
           phone: string | null
           updated_at: string
+          upsell_pct: number | null
           user_id: string | null
         }
         Insert: {
@@ -2934,8 +2936,10 @@ export type Database = {
           initials?: string | null
           is_active?: boolean
           level?: Database["public"]["Enums"]["ss_level"]
+          pay_rate?: number | null
           phone?: string | null
           updated_at?: string
+          upsell_pct?: number | null
           user_id?: string | null
         }
         Update: {
@@ -2946,8 +2950,10 @@ export type Database = {
           initials?: string | null
           is_active?: boolean
           level?: Database["public"]["Enums"]["ss_level"]
+          pay_rate?: number | null
           phone?: string | null
           updated_at?: string
+          upsell_pct?: number | null
           user_id?: string | null
         }
         Relationships: []
@@ -2972,6 +2978,57 @@ export type Database = {
           reason?: string
         }
         Relationships: []
+      }
+      ss_tech_adjustments: {
+        Row: {
+          amount: number
+          created_at: string
+          effective_date: string
+          id: string
+          kind: string
+          payout_id: string | null
+          reason: string | null
+          tech_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          effective_date?: string
+          id?: string
+          kind?: string
+          payout_id?: string | null
+          reason?: string | null
+          tech_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          effective_date?: string
+          id?: string
+          kind?: string
+          payout_id?: string | null
+          reason?: string | null
+          tech_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_tech_adjustments_payout_id_fkey"
+            columns: ["payout_id"]
+            isOneToOne: false
+            referencedRelation: "ss_tech_payouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_tech_adjustments_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_tech_payouts: {
         Row: {
