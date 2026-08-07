@@ -41,7 +41,6 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Operations" },
   { to: "/admin/crm/scorecard", label: "Tech Scorecard", icon: Timer, module: "scorecard", group: "Operations" },
   { to: "/admin/crm/qc-review", label: "Weekly QC Review", icon: ClipboardCheck, module: "qcReview", group: "Operations" },
-  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Operations" },
   { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
   { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },
 
@@ -57,7 +56,6 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email", group: "Marketing" },
   { to: "/admin/crm/reviews", label: "Google Reviews", icon: Star, module: "reviews", group: "Marketing" },
   { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect", group: "Marketing" },
-  { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Marketing" },
   { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs", group: "Marketing" },
 
   // Admin
@@ -69,6 +67,8 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
   { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
   { to: "/admin/crm/deploy-health", label: "Deploy Health", icon: Activity, module: "deployHealth", group: "Admin" },
+  { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Admin" },
+  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Admin" },
 ];
 
 
