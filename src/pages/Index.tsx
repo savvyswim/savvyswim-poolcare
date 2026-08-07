@@ -527,7 +527,7 @@ const Index = () => {
 
             <div className="lg:col-span-3 lg:col-start-10">
               <p className="tech-label">Index of Services</p>
-              <ul className="mt-6 space-y-2.5 text-[15px] text-primary-foreground">
+              <ul className="mt-6 divide-y divide-primary-foreground/20 border-y border-primary-foreground/20 text-[16px] font-medium text-primary-foreground">
                 {[
                   "Weekly Pool Cleaning",
                   "Chemical Balancing",
@@ -538,12 +538,9 @@ const Index = () => {
                   "Salt System Service",
                   "Leak & Plumbing Repair",
                   "Seasonal Openings",
-                ].map((s, i) => (
-                  <li key={s} className="flex gap-3">
-                    <span className="tech-readout text-[11px] pt-1 text-primary-foreground/55">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <a href="#services" className="transition-opacity hover:opacity-70">{s}</a>
+                ].map((s) => (
+                  <li key={s}>
+                    <a href="#services" className="block py-2.5 transition-opacity hover:opacity-70">{s}</a>
                   </li>
                 ))}
               </ul>
@@ -551,8 +548,9 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
+        <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
+
             {[
               { k: "1,200+", v: "Pools serviced" },
               { k: "4.9★", v: "Avg client rating" },
