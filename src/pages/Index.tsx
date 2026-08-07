@@ -490,20 +490,21 @@ const Index = () => {
 
 
         {/* Spec sheet grid */}
-        <div className="relative text-on-media [&_.tech-label]:text-primary-foreground/70">
+        <div className="relative bg-primary text-on-media [&_.tech-label]:text-primary-foreground/70">
           <div className="container-tight grid gap-x-10 gap-y-12 py-16 lg:gap-x-14 lg:py-24 xl:py-28 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <p className="tech-label">§ 01 — Method</p>
+              <p className="tech-label">Method</p>
               <p className="mt-6 max-w-xl text-[17px] lg:text-[1.15rem] leading-relaxed lg:leading-[1.75] text-primary-foreground">
                 Licensed technicians, calibrated chemistry, and monitored equipment. Every visit is logged,
                 photographed, and time-stamped — classic pool craft, run like a control room.
               </p>
-              <p className="mt-10 tech-label">§ 02 — Scope</p>
+              <p className="mt-10 tech-label">Scope</p>
               <p className="mt-6 max-w-xl text-[17px] lg:text-[1.15rem] leading-relaxed lg:leading-[1.75] text-primary-foreground">
                 Weekly maintenance is the baseline. From there: equipment repair, pump and filter service,
                 salt and automation tuning, and green-pool recovery. No contracts.
               </p>
             </div>
+
 
             {/* Readouts */}
             <div className="lg:col-span-3">
