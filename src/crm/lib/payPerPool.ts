@@ -247,3 +247,47 @@ export function weekRange(ref: Date): { start: string; end: string } {
   end.setDate(start.getDate() + 6);
   return { start: isoDay(start), end: isoDay(end) };
 }
+
+/** One pay period of history for a single pool. */
+export type PeriodEarnings = {
+  start: string;
+  end: string;
+  visits: number;
+  /** Average base pay per visit in that period. */
+  rate: number;
+  upsellAmount: number;
+  upsellPct: number;
+  bonus: number;
+  commission: number;
+  total: number;
+  locked: boolean;
+};
+
+/** Group pay lines into Monday-start pay periods, newest first. */
+export function periodHistory(lines: PayLine[]): PeriodEarnings[] {
+  const map = new Map<string, PayLine[]>();
+  for (const l of lines) {
+    const { start } = weekRange(new Date(`${l.date}T12:00:00`));
+    map.set(start, [...(map.get(start) ?? []), l]);
+  }
+  return [...map.entries()]
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([start, ls]) => {
+      const { end } = weekRange(new Date(`${start}T12:00:00`));
+      const base = ls.reduce((s, l) => s + l.basePay, 0);
+      const upsellAmount = ls.reduce((s, l) => s + l.upsellAmount, 0);
+      const commission = ls.reduce((s, l) => s + l.commission, 0);
+      return {
+        start,
+        end,
+        visits: ls.length,
+        rate: ls.length ? base / ls.length : 0,
+        upsellAmount,
+        upsellPct: upsellAmount > 0 ? (commission / upsellAmount) * 100 : 0,
+        bonus: ls.reduce((s, l) => s + l.bonus, 0),
+        commission,
+        total: ls.reduce((s, l) => s + l.techTotal, 0),
+        locked: ls.some((l) => l.locked),
+      };
+    });
+}
