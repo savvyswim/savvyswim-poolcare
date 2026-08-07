@@ -102,9 +102,12 @@ export default function PayPerPool() {
   }
 
   /* ----------------------------------------------------------------- data */
-  const { rows: staff } = useTable<Staff>("pay-staff", async () => {
+  const { rows: staff, refetch: reloadStaff } = useTable<Staff>("pay-staff", async () => {
     const { data } = await supabase
-      .from("ss_staff").select("id,full_name,level").eq("is_active", true).order("full_name");
+      .from("ss_staff")
+      .select("id,full_name,level,pay_rate,upsell_pct")
+      .eq("is_active", true)
+      .order("full_name");
     return (data ?? []) as Staff[];
   });
 
@@ -140,30 +143,62 @@ export default function PayPerPool() {
     [canManage, id.staffId],
   );
 
+  const { rows: adjustments, refetch: reloadAdjustments } = useTable<Adjustment>(
+    "pay-adjustments",
+    async () => {
+      let q = supabase
+        .from("ss_tech_adjustments")
+        .select("*")
+        .gte("effective_date", from)
+        .lte("effective_date", to)
+        .order("effective_date", { ascending: false });
+      if (!canManage && id.staffId) q = q.eq("tech_id", id.staffId);
+      const { data } = await q;
+      return (data ?? []) as Adjustment[];
+    },
+    [from, to, canManage, id.staffId],
+  );
+
   const { rows: pools, refetch: reloadPools } = useTable<PoolRate>(
     "pay-pools",
     async () => {
-      if (!canManage) return [];
-      const { data } = await supabase
+      let q = supabase
         .from("ss_customers")
-        .select("id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct")
+        .select("id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct,assigned_tech_id")
         .eq("status", "active")
         .order("full_name");
+      if (!canManage && id.staffId) q = q.eq("assigned_tech_id", id.staffId);
+      const { data } = await q;
       return (data ?? []) as PoolRate[];
     },
-    [canManage],
+    [canManage, id.staffId],
   );
 
   /* -------------------------------------------------------------- compute */
-  const levelByTech = useMemo(
-    () => Object.fromEntries(staff.map((s) => [s.id, s.level])),
+  const techMeta = useMemo(
+    () =>
+      Object.fromEntries(
+        staff.map((s) => [s.id, { level: s.level, pay_rate: s.pay_rate, upsell_pct: s.upsell_pct }]),
+      ),
     [staff],
   );
 
   const lines = useMemo(() => {
     const scoped = techFilter === "all" ? visits : visits.filter((v) => v.tech_id === techFilter);
-    return buildPayLines(scoped, liveCfg, levelByTech);
-  }, [visits, techFilter, liveCfg, levelByTech]);
+    return buildPayLines(scoped, liveCfg, techMeta);
+  }, [visits, techFilter, liveCfg, techMeta]);
+
+  const adjByTech = useMemo(() => {
+    const map = new Map<string, number>();
+    const scoped = techFilter === "all" ? adjustments : adjustments.filter((a) => a.tech_id === techFilter);
+    for (const a of scoped) map.set(a.tech_id, (map.get(a.tech_id) ?? 0) + Number(a.amount));
+    return map;
+  }, [adjustments, techFilter]);
+
+  const adjTotal = useMemo(
+    () => [...adjByTech.values()].reduce((s, n) => s + n, 0),
+    [adjByTech],
+  );
 
   const totals = useMemo(() => sumLines(lines), [lines]);
   const todayLines = useMemo(() => lines.filter((l) => l.date === today), [lines, today]);
