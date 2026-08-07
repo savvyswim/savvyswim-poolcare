@@ -192,6 +192,18 @@ const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  // Defer the swim-club prompt until the page is interactive on mobile.
+  const [promptReady, setPromptReady] = useState(false);
+  useEffect(() => {
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number };
+    const start = () => setPromptReady(true);
+    if (w.requestIdleCallback) {
+      w.requestIdleCallback(start);
+      return;
+    }
+    const t = window.setTimeout(start, 2000);
+    return () => window.clearTimeout(t);
+  }, []);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
   const [membershipOpen, setMembershipOpen] = useState(false);
