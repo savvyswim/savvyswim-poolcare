@@ -51,5 +51,5 @@ export function RequireModule({ module, children }: { module: ModuleKey; childre
     );
   }
 
-  return <>{children}</>;
+  return <CrmErrorBoundary resetKey={loc.pathname}>{children}</CrmErrorBoundary>;
 }
