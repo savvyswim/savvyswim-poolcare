@@ -87,15 +87,42 @@ export function visitsPerMonth(freq: string | null | undefined): number {
   return 4.33;
 }
 
+/** What the office knows about a tech: level plus their personal defaults. */
+export type TechMeta = {
+  level?: string | null;
+  pay_rate?: number | null;
+  upsell_pct?: number | null;
+};
+
+/**
+ * Pay for one pool, most specific wins:
+ * frozen visit pay → this pool's own rate → the tech's personal rate →
+ * contractor/company default.
+ */
 export function rateFor(
   visit: PayVisit,
   cfg: PayConfig,
-  techLevel?: string | null,
+  tech?: TechMeta | string | null,
 ): number {
+  const meta: TechMeta = typeof tech === "string" ? { level: tech } : (tech ?? {});
   if (visit.tech_pay && visit.tech_pay > 0) return Number(visit.tech_pay);
   const custom = visit.ss_customers?.tech_pay_rate;
   if (custom != null && Number(custom) > 0) return Number(custom);
-  return techLevel === "contractor" ? cfg.contractor_rate : cfg.default_rate;
+  if (meta.pay_rate != null && Number(meta.pay_rate) > 0) return Number(meta.pay_rate);
+  return meta.level === "contractor" ? cfg.contractor_rate : cfg.default_rate;
+}
+
+/** Commission % on an upsell: pool override → tech override → company default. */
+export function upsellPctFor(
+  visit: PayVisit,
+  cfg: PayConfig,
+  tech?: TechMeta | string | null,
+): number {
+  const meta: TechMeta = typeof tech === "string" ? { level: tech } : (tech ?? {});
+  const pool = visit.ss_customers?.tech_upsell_pct;
+  if (pool != null && Number(pool) > 0) return Number(pool);
+  if (meta.upsell_pct != null && Number(meta.upsell_pct) > 0) return Number(meta.upsell_pct);
+  return cfg.upsell_pct;
 }
 
 export function revenueFor(visit: PayVisit): number {
