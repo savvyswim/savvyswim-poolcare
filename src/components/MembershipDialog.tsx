@@ -85,8 +85,8 @@ export function MembershipDialog({ open, onOpenChange }: MembershipDialogProps) 
               <DialogTitle>Savvy Swim Club — $19.99 / month</DialogTitle>
               <DialogDescription>
                 Summer offer: new customers get their first service visit free on a 12-month
-                agreement. Members also get 50% off one filter clean, 5%
-                off parts, 7% off installation labor, and 24/7 text support. Billed monthly.
+                agreement. Members also get 50% off filter cleans, 25% off all other
+                add-on services, priority scheduling, and 24/7 text support. Billed monthly.
               </DialogDescription>
             </DialogHeader>
 

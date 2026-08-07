@@ -69,12 +69,12 @@ const MEMBERSHIP_FAQ = [
   },
   {
     q: "What is the Savvy Swim Club?",
-    a: "It's our $19.99/month membership for pool owners in DFW. Members get discounted pricing on parts and labor, a half-price filter clean, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
+    a: "It's our $19.99/month membership for pool owners in DFW. Members get 50% off filter cleans and 25% off every other add-on service, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
   },
 
   {
     q: "What do members get, exactly?",
-    a: "One filter clean at 50% off (one time per membership), 5% off all parts we supply, 7% off installation and repair labor, priority booking on the service calendar, and unlimited 24/7 text support for water chemistry and equipment questions.",
+    a: "50% off filter cleans, 25% off all other add-on services, priority booking on the service calendar, and unlimited 24/7 text support for water chemistry and equipment questions.",
   },
   {
     q: "How does billing work?",
@@ -833,9 +833,9 @@ const Index = () => {
                   <ul className="mb-10 space-y-4 text-sm text-primary">
                     {[
                       "First service visit free (new customers)",
-                      "50% off one filter clean (one time)",
-                      "5% off all parts",
-                      "7% off installation labor",
+                      "50% off filter cleans",
+                      "25% off all other add-on services",
+                      "Priority scheduling",
                       "24/7 text support",
                     ].map((perk) => (
                       <li key={perk} className="flex items-center gap-3">
