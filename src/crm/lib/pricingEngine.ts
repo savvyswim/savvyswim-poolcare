@@ -218,9 +218,9 @@ export function computeQuote(
     lines.push({ label: "Chemicals included", amount: a });
   }
   if (input.saltCell) {
-    const a = addonAmount(addons, "salt_cell", 20);
+    const a = addonAmount(addons, "salt_cell", 15);
     monthly += a;
-    lines.push({ label: "Saltwater system", amount: a });
+    lines.push({ label: "Salt cell service · quarterly clean", amount: a });
   }
 
   const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];

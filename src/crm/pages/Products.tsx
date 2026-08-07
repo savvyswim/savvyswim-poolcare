@@ -420,7 +420,7 @@ export default function Products() {
                   checked={saltCell}
                   onChange={(e) => setSaltCell(e.target.checked)}
                 />
-                Saltwater system
+                Salt cell service · $15/mo + quarterly clean
               </label>
             </div>
           </div>

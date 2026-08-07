@@ -1,0 +1,1 @@
+UPDATE public.ss_addons SET label = 'Salt cell service', amount = 15.00, description = 'Monthly salt cell monitoring, output tuning and a quarterly cell clean' WHERE key = 'salt_cell';
