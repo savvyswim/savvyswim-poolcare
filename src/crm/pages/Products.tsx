@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
   CONDITIONS,
+  MAX_SALT_CELLS,
   POOL_SIZES,
   SERVICE_PLANS,
   UNDERCUT_MAX,
@@ -19,6 +20,7 @@ import {
   marketAverage,
   money,
   useRateCard,
+  validateSaltCell,
 } from "@/crm/lib/pricingEngine";
 
 
