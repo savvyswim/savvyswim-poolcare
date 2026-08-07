@@ -7,8 +7,9 @@
     "predev": "bunx tsx scripts/generate-sitemap.ts",
     "dev": "vite dev",
     "prebuild": "bunx tsx scripts/generate-sitemap.ts",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
+    "build:dev": "NODE_OPTIONS=--max-old-space-size=8192 vite build --mode development",
+
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
