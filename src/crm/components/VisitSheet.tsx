@@ -291,6 +291,30 @@ export default function VisitSheet({
         <div className="savvy-crm flex-1 overflow-y-auto p-4" style={{ minHeight: 0 }}>
           {step === 1 && (
             <div className="space-y-3">
+              <div className="ss-card p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                    On arrival · before photo required
+                  </div>
+                  <Chip tone={before ? "aqua" : "burgundy"}>{before ? "Captured" : "Missing"}</Chip>
+                </div>
+                <p className="mt-0.5 text-[0.74rem] opacity-65">
+                  Snap the pool the moment you arrive — before you touch anything. Step 1 stays locked until it&apos;s captured.
+                </p>
+                <div className="mt-2">
+                  <PhotoTile
+                    label="Before"
+                    tone="#1C2A33"
+                    wide
+                    value={before}
+                    onPick={async (f) => setBefore(await upload(f, "before"))}
+                  />
+                </div>
+              </div>
+
+              <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                Step 1 · Water readings
+              </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {READING_FIELDS.map((f) => {
                   const st = f.key === "temp" ? "unknown" : statusFor(f.key as MetricKey, (readings as Record<string, number | undefined>)[f.key]);
@@ -443,9 +467,22 @@ export default function VisitSheet({
 
           {step === 3 && (
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-2.5">
-                <PhotoTile label="Before" tone="#1C2A33" value={before} onPick={async (f) => setBefore(await upload(f, "before"))} />
-                <PhotoTile label="After" tone="#8E1F2C" value={after} onPick={async (f) => setAfter(await upload(f, "after"))} />
+              <div className="ss-card p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+                    Before &amp; after · required
+                  </div>
+                  <Chip tone={before && after ? "aqua" : "burgundy"}>
+                    {before && after ? "Complete" : after ? "Before missing" : "After missing"}
+                  </Chip>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-2.5">
+                  <PhotoTile label="Before" tone="#1C2A33" value={before} onPick={async (f) => setBefore(await upload(f, "before"))} />
+                  <PhotoTile label="After" tone="#8E1F2C" value={after} onPick={async (f) => setAfter(await upload(f, "after"))} />
+                </div>
+                <p className="mt-2 text-[0.74rem] opacity-65">
+                  Both photos go on the customer report. The visit can&apos;t be completed without them.
+                </p>
               </div>
 
               <div className="ss-card p-3">
@@ -584,14 +621,14 @@ export default function VisitSheet({
           {step < 3 ? (
             <button
               className="ss-btn flex-1"
-              disabled={step === 2 && blockingTasks.length > 0}
+              disabled={(step === 1 && !before) || (step === 2 && blockingTasks.length > 0)}
               onClick={() => setStep((s) => s + 1)}
             >
               Continue
             </button>
           ) : (
-            <button className="ss-btn flex-1" disabled={saving} onClick={finish}>
-              <Check size={14} /> {saving ? "Saving…" : "Complete visit"}
+            <button className="ss-btn flex-1" disabled={saving || !before || !after} onClick={finish}>
+              <Check size={14} /> {saving ? "Saving…" : !before || !after ? "Photo required" : "Complete visit"}
             </button>
           )}
         </div>
@@ -605,15 +642,17 @@ function PhotoTile({
   tone,
   value,
   onPick,
+  wide = false,
 }: {
   label: string;
   tone: string;
   value: { url: string } | null;
   onPick: (f: File) => void | Promise<void>;
+  wide?: boolean;
 }) {
   return (
     <label
-      className="ss-card relative flex aspect-square cursor-pointer items-center justify-center overflow-hidden"
+      className={`ss-card relative flex cursor-pointer items-center justify-center overflow-hidden ${wide ? "aspect-[16/9]" : "aspect-square"}`}
       style={{ borderStyle: value ? "solid" : "dashed" }}
     >
       {value?.url ? (
