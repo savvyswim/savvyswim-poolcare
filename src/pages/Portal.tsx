@@ -28,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
+import AutopayCard from "@/components/AutopayCard";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
 
