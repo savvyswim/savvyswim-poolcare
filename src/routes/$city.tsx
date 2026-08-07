@@ -5,7 +5,7 @@ import { getServiceArea, SERVICE_AREAS } from "@/lib/serviceAreas";
 export const Route = createFileRoute("/$city")({
   loader: ({ params }) => {
     const area = getServiceArea(params.city);
-    if (!area) return { slug: "DEBUG:" + params.city };
+    if (!area) throw notFound();
     return { slug: area.slug };
   },
   head: ({ params, loaderData }) => {
