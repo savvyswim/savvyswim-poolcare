@@ -28,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
+import AutopayCard from "@/components/AutopayCard";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
 
@@ -750,6 +751,8 @@ export default function Portal() {
                   <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
                     <Receipt className="h-4 w-4 text-accent" aria-hidden="true" /> Billing
                   </h2>
+                  {pool && <AutopayCard pool={pool} email={user?.email ?? ""} />}
+
                   <div className="mt-4 divide-y divide-primary/10 border border-hairline">
                     {poolInvoices.length === 0 && (
                       <p className="p-5 font-tech text-sm text-primary/60">No invoices yet.</p>
