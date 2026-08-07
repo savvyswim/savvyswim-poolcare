@@ -1156,19 +1156,29 @@ const Index = () => {
         </div>
       </footer>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-      />
-      <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
-      <SubscribeDialog
-        open={subscribeOpen}
-        onOpenChange={setSubscribeOpen}
-        {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
-      />
-      <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
-      <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />
+      <Suspense fallback={null}>
+        {bookingOpen && (
+          <BookingDialog
+            open={bookingOpen}
+            onOpenChange={setBookingOpen}
+            {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
+          />
+        )}
+        {orderOpen && (
+          <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
+        )}
+        {subscribeOpen && (
+          <SubscribeDialog
+            open={subscribeOpen}
+            onOpenChange={setSubscribeOpen}
+            {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
+          />
+        )}
+        {membershipOpen && (
+          <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
+        )}
+        {mounted && <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />}
+      </Suspense>
 
 
     </div>
