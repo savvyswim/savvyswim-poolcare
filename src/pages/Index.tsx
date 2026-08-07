@@ -31,13 +31,27 @@ import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 const poolDesign = photoNavyCabana.url;
 const poolNight = photoRivieraLoungers.url;
 
-import { BookingDialog } from "@/components/BookingDialog";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
-import { OrderDialog, type OrderItem } from "@/components/OrderDialog";
-import { SubscribeDialog } from "@/components/SubscribeDialog";
-import { MembershipDialog } from "@/components/MembershipDialog";
+import type { OrderItem } from "@/components/OrderDialog";
+
+// Dialogs are only needed after a click — keep them out of the first payload.
+const BookingDialog = lazy(() =>
+  import("@/components/BookingDialog").then((m) => ({ default: m.BookingDialog })),
+);
+const OrderDialog = lazy(() =>
+  import("@/components/OrderDialog").then((m) => ({ default: m.OrderDialog })),
+);
+const SubscribeDialog = lazy(() =>
+  import("@/components/SubscribeDialog").then((m) => ({ default: m.SubscribeDialog })),
+);
+const MembershipDialog = lazy(() =>
+  import("@/components/MembershipDialog").then((m) => ({ default: m.MembershipDialog })),
+);
+const SwimClubPrompt = lazy(() =>
+  import("@/components/SwimClubPrompt").then((m) => ({ default: m.SwimClubPrompt })),
+);
 import {
   Accordion,
   AccordionContent,
