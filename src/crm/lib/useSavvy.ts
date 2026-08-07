@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { withRetry, type RetryKind } from "@/crm/lib/retry";
+import { reportCrmError } from "@/crm/lib/errorReporting";
 
 export type SsLevel = "owner" | "office_manager" | "technician" | "contractor";
 
