@@ -162,10 +162,54 @@ export type QuoteInput = {
   chemOnly: boolean;
   chemIncluded?: boolean;
   saltCell?: boolean;
+  /** One salt cell per water body — 1 or 2 (pool + spa). */
+  saltCellQty?: number;
+  /** Service plan the estimate is built on — gates the salt cell add-on. */
+  planId?: string;
   rateOverride?: number | null;
   /** Percent below the regional market average we want to land (10–20). */
   undercutPct?: number;
 };
+
+/** Max salt cells we service on one property (pool + spa). */
+export const MAX_SALT_CELLS = 2;
+
+/**
+ * Salt cell service is a recurring monthly fee with a quarterly cell clean, so
+ * it only attaches to a recurring weekly-service plan and needs a whole
+ * quantity of 1 per water body.
+ */
+export function validateSaltCell(input: {
+  saltCell?: boolean;
+  saltCellQty?: number;
+  chemOnly?: boolean;
+  planId?: string;
+}): { ok: boolean; reason?: string; qty: number } {
+  const qty = Math.round(Number(input.saltCellQty ?? 1));
+  if (!input.saltCell) return { ok: true, qty: 0 };
+  if (input.chemOnly)
+    return {
+      ok: false,
+      qty,
+      reason:
+        "Salt cell service needs a weekly full-service plan — chem-only visits don’t include the quarterly cell clean.",
+    };
+  const plan = input.planId ? findServicePlan(input.planId) : undefined;
+  if (plan?.customPrice)
+    return {
+      ok: false,
+      qty,
+      reason: `${plan.name} is a one-time custom-priced job — add salt cell service once it rolls onto a weekly plan.`,
+    };
+  if (!Number.isFinite(qty) || qty < 1 || qty > MAX_SALT_CELLS)
+    return {
+      ok: false,
+      qty,
+      reason: `Salt cell quantity must be 1–${MAX_SALT_CELLS} (one per water body).`,
+    };
+  return { ok: true, qty };
+}
+
 
 export type QuoteLine = { label: string; amount: number; note?: string };
 
@@ -217,11 +261,19 @@ export function computeQuote(
     monthly += a;
     lines.push({ label: "Chemicals included", amount: a });
   }
-  if (input.saltCell) {
-    const a = addonAmount(addons, "salt_cell", 15);
+  const salt = validateSaltCell(input);
+  if (input.saltCell && salt.ok) {
+    const a = addonAmount(addons, "salt_cell", 15) * salt.qty;
     monthly += a;
-    lines.push({ label: "Salt cell service · quarterly clean", amount: a });
+    lines.push({
+      label:
+        salt.qty > 1
+          ? `Salt cell service · quarterly clean × ${salt.qty}`
+          : "Salt cell service · quarterly clean",
+      amount: a,
+    });
   }
+
 
   const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];
   const cleanup = cond.cleanupHigh ? Math.round((cond.cleanupLow + cond.cleanupHigh) / 2) : 0;
@@ -230,6 +282,9 @@ export function computeQuote(
     base,
     monthly,
     lines,
+    /** Null when the salt cell add-on is valid (or unselected). */
+    saltCellIssue: input.saltCell && !salt.ok ? salt.reason! : null,
+
     cleanup,
     cleanupLabel: cond.cleanupHigh ? `$${cond.cleanupLow}–${cond.cleanupHigh}` : null,
     band: { low, mid, high },

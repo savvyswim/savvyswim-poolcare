@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
   CONDITIONS,
+  MAX_SALT_CELLS,
   POOL_SIZES,
   SERVICE_PLANS,
   UNDERCUT_MAX,
@@ -19,6 +20,7 @@ import {
   marketAverage,
   money,
   useRateCard,
+  validateSaltCell,
 } from "@/crm/lib/pricingEngine";
 
 
@@ -34,6 +36,7 @@ export default function Products() {
   const [chemOnly, setChemOnly] = useState(false);
   const [chemIncluded, setChemIncluded] = useState(false);
   const [saltCell, setSaltCell] = useState(false);
+  const [saltQty, setSaltQty] = useState(1);
   const [undercut, setUndercut] = useState(15);
   const [override, setOverride] = useState<string>("");
   const [payingNow, setPayingNow] = useState<string>("");
@@ -59,6 +62,7 @@ export default function Products() {
     setChemOnly(p.defaults.chemOnly);
     setChemIncluded(p.defaults.chemIncluded);
     setSaltCell(p.defaults.saltCell);
+    setSaltQty(1);
     setCondition(p.defaults.condition);
     if (p.defaults.undercutPct) setUndercut(clampUndercut(p.defaults.undercutPct));
     setOverride("");
@@ -82,6 +86,8 @@ export default function Products() {
     if (g("chemOnly") === "1") setChemOnly(true);
     if (g("chemIncl") === "1") setChemIncluded(true);
     if (g("salt") === "1") setSaltCell(true);
+    if (g("saltQty"))
+      setSaltQty(Math.min(Math.max(Math.round(Number(g("saltQty"))) || 1, 1), MAX_SALT_CELLS));
     if (g("undercut")) setUndercut(clampUndercut(Number(g("undercut"))));
     if (g("override")) setOverride(g("override")!);
     if (g("now")) setPayingNow(g("now")!);
@@ -106,12 +112,23 @@ export default function Products() {
       chemOnly,
       chemIncluded,
       saltCell,
+      saltCellQty: saltQty,
+      planId,
       undercutPct: undercut,
       rateOverride: override ? Number(override) : null,
     },
     cities,
     addons,
   );
+
+  /** Salt cell is a recurring add-on — gate it to weekly plans and 1 per water body. */
+  const saltCheck = validateSaltCell({ saltCell, saltCellQty: saltQty, chemOnly, planId });
+  const saltAllowed = validateSaltCell({ saltCell: true, saltCellQty: 1, chemOnly, planId }).ok;
+
+  // Drop the add-on automatically when the plan/frequency stops supporting it.
+  useEffect(() => {
+    if (saltCell && !saltAllowed) setSaltCell(false);
+  }, [saltCell, saltAllowed]);
 
   const band = cities.find((c) => c.city === city);
 
@@ -134,7 +151,10 @@ export default function Products() {
     if (planId) p.set("plan_id", planId);
     if (chemOnly) p.set("chemOnly", "1");
     if (chemIncluded) p.set("chemIncl", "1");
-    if (saltCell) p.set("salt", "1");
+    if (saltCell) {
+      p.set("salt", "1");
+      p.set("saltQty", String(saltQty));
+    }
     if (override) p.set("override", override);
     if (payingNow) p.set("now", payingNow);
     if (providerName.trim()) p.set("provider", providerName.trim());
@@ -159,6 +179,10 @@ export default function Products() {
 
 
   const sendSms = async () => {
+    if (saltCell && !saltCheck.ok) {
+      toast({ title: "Fix the salt cell add-on", description: saltCheck.reason });
+      return;
+    }
     if (!smsPhone.trim()) {
       toast({ title: "Add a phone number", description: "Enter the number to text this quote to." });
       return;
@@ -414,16 +438,58 @@ export default function Products() {
                 />
                 Chemicals included
               </label>
-              <label className="flex items-center gap-2">
+              <label
+                className="flex items-center gap-2"
+                style={{ opacity: saltAllowed ? 1 : 0.5 }}
+                title={
+                  saltAllowed
+                    ? undefined
+                    : validateSaltCell({ saltCell: true, saltCellQty: 1, chemOnly, planId }).reason
+                }
+              >
                 <input
                   type="checkbox"
                   checked={saltCell}
+                  disabled={!saltAllowed}
                   onChange={(e) => setSaltCell(e.target.checked)}
                 />
                 Salt cell service · $15/mo + quarterly clean
               </label>
+              {saltCell && (
+                <label className="flex items-center gap-2">
+                  Cells
+                  <input
+                    type="number"
+                    min={1}
+                    max={MAX_SALT_CELLS}
+                    step={1}
+                    value={saltQty}
+                    onChange={(e) =>
+                      setSaltQty(
+                        Math.min(
+                          Math.max(Math.round(Number(e.target.value)) || 1, 1),
+                          MAX_SALT_CELLS,
+                        ),
+                      )
+                    }
+                    className="ss-input w-14"
+                  />
+                  <span className="opacity-60">one per water body</span>
+                </label>
+              )}
             </div>
+            {saltCell && !saltCheck.ok && (
+              <div className="mt-2 text-[0.72rem]" style={{ color: "hsl(var(--destructive))" }}>
+                {saltCheck.reason}
+              </div>
+            )}
+            {!saltAllowed && (
+              <div className="mt-2 text-[0.72rem] opacity-70">
+                Salt cell service requires a weekly full-service plan.
+              </div>
+            )}
           </div>
+
 
           <div className="space-y-3">
             <div className="ss-hero p-4">
