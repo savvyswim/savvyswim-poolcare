@@ -48,6 +48,7 @@ import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/t
 import { Route as CrmAdminCrmTechniciansRouteImport } from './routes/_crm/admin/crm/technicians'
 import { Route as CrmAdminCrmSiteSpeedRouteImport } from './routes/_crm/admin/crm/site-speed'
 import { Route as CrmAdminCrmSettingsRouteImport } from './routes/_crm/admin/crm/settings'
+import { Route as CrmAdminCrmServiceSetupRouteImport } from './routes/_crm/admin/crm/service-setup'
 import { Route as CrmAdminCrmServicePlansRouteImport } from './routes/_crm/admin/crm/service-plans'
 import { Route as CrmAdminCrmSecurityRouteImport } from './routes/_crm/admin/crm/security'
 import { Route as CrmAdminCrmScorecardRouteImport } from './routes/_crm/admin/crm/scorecard'
@@ -269,6 +270,11 @@ const CrmAdminCrmSettingsRoute = CrmAdminCrmSettingsRouteImport.update({
   path: '/admin/crm/settings',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmServiceSetupRoute = CrmAdminCrmServiceSetupRouteImport.update({
+  id: '/admin/crm/service-setup',
+  path: '/admin/crm/service-setup',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmServicePlansRoute = CrmAdminCrmServicePlansRouteImport.update({
   id: '/admin/crm/service-plans',
   path: '/admin/crm/service-plans',
@@ -444,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
+  '/admin/crm/service-setup': typeof CrmAdminCrmServiceSetupRoute
   '/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
@@ -508,6 +515,7 @@ export interface FileRoutesByTo {
   '/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
+  '/admin/crm/service-setup': typeof CrmAdminCrmServiceSetupRoute
   '/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
@@ -574,6 +582,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/_crm/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/_crm/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
+  '/_crm/admin/crm/service-setup': typeof CrmAdminCrmServiceSetupRoute
   '/_crm/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/_crm/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/_crm/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
@@ -640,6 +649,7 @@ export interface FileRouteTypes {
     | '/admin/crm/scorecard'
     | '/admin/crm/security'
     | '/admin/crm/service-plans'
+    | '/admin/crm/service-setup'
     | '/admin/crm/settings'
     | '/admin/crm/site-speed'
     | '/admin/crm/technicians'
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | '/admin/crm/scorecard'
     | '/admin/crm/security'
     | '/admin/crm/service-plans'
+    | '/admin/crm/service-setup'
     | '/admin/crm/settings'
     | '/admin/crm/site-speed'
     | '/admin/crm/technicians'
@@ -769,6 +780,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/scorecard'
     | '/_crm/admin/crm/security'
     | '/_crm/admin/crm/service-plans'
+    | '/_crm/admin/crm/service-setup'
     | '/_crm/admin/crm/settings'
     | '/_crm/admin/crm/site-speed'
     | '/_crm/admin/crm/technicians'
@@ -1095,6 +1107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmSettingsRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/service-setup': {
+      id: '/_crm/admin/crm/service-setup'
+      path: '/admin/crm/service-setup'
+      fullPath: '/admin/crm/service-setup'
+      preLoaderRoute: typeof CrmAdminCrmServiceSetupRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/service-plans': {
       id: '/_crm/admin/crm/service-plans'
       path: '/admin/crm/service-plans'
@@ -1287,6 +1306,7 @@ interface CrmRouteChildren {
   CrmAdminCrmScorecardRoute: typeof CrmAdminCrmScorecardRoute
   CrmAdminCrmSecurityRoute: typeof CrmAdminCrmSecurityRoute
   CrmAdminCrmServicePlansRoute: typeof CrmAdminCrmServicePlansRoute
+  CrmAdminCrmServiceSetupRoute: typeof CrmAdminCrmServiceSetupRoute
   CrmAdminCrmSettingsRoute: typeof CrmAdminCrmSettingsRoute
   CrmAdminCrmSiteSpeedRoute: typeof CrmAdminCrmSiteSpeedRoute
   CrmAdminCrmTechniciansRoute: typeof CrmAdminCrmTechniciansRoute
@@ -1320,6 +1340,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmScorecardRoute: CrmAdminCrmScorecardRoute,
   CrmAdminCrmSecurityRoute: CrmAdminCrmSecurityRoute,
   CrmAdminCrmServicePlansRoute: CrmAdminCrmServicePlansRoute,
+  CrmAdminCrmServiceSetupRoute: CrmAdminCrmServiceSetupRoute,
   CrmAdminCrmSettingsRoute: CrmAdminCrmSettingsRoute,
   CrmAdminCrmSiteSpeedRoute: CrmAdminCrmSiteSpeedRoute,
   CrmAdminCrmTechniciansRoute: CrmAdminCrmTechniciansRoute,
@@ -1372,13 +1393,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -8,6 +8,7 @@ import {
   Grid3x3,
   Gauge,
   Wallet,
+  SlidersHorizontal,
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
@@ -63,6 +64,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console", group: "Admin" },
   { to: "/admin/team", label: "Team & Access", icon: Users, module: "team", group: "Admin" },
   { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
+  { to: "/admin/crm/service-setup", label: "Service Setup", icon: SlidersHorizontal, module: "serviceSetup", group: "Admin" },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
   { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
