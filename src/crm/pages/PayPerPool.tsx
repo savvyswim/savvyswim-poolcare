@@ -1061,6 +1061,76 @@ export default function PayPerPool() {
   );
 }
 
+/* ----------------------------------------------------------------- chart */
+const CHART_SERIES = [
+  { key: "base", label: "Rate", color: "#8E1F2C" },
+  { key: "commission", label: "Commission", color: "#1FA9BE" },
+  { key: "bonus", label: "Bonus", color: "#C9932B" },
+] as const;
+
+/** Stacked earnings per pay period, oldest → newest, with an upsell trend line. */
+function EarningsChart({ periods }: { periods: PeriodEarnings[] }) {
+  const data = useMemo(
+    () =>
+      [...periods]
+        .sort((a, b) => a.start.localeCompare(b.start))
+        .map((p) => ({
+          label: new Date(`${p.start}T12:00:00`).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          }),
+          base: Math.round(p.rate * p.visits * 100) / 100,
+          bonus: Math.round(p.bonus * 100) / 100,
+          commission: Math.round(p.commission * 100) / 100,
+          upsell: Math.round(p.upsellAmount * 100) / 100,
+          total: Math.round(p.total * 100) / 100,
+        })),
+    [periods],
+  );
+
+  return (
+    <div className="ss-card mt-3 p-3">
+      <div className="h-56 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+            <CartesianGrid stroke="rgba(0,0,0,0.08)" vertical={false} />
+            <XAxis dataKey="label" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+            <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={48} />
+            <Tooltip
+              formatter={(v: number, name: string) => [money(Number(v)), name]}
+              contentStyle={{ borderRadius: 0, fontSize: "0.72rem", border: "1px solid rgba(0,0,0,0.15)" }}
+            />
+            {CHART_SERIES.map((s) => (
+              <Bar key={s.key} dataKey={s.key} name={s.label} stackId="pay" fill={s.color} />
+            ))}
+            <Line
+              type="monotone"
+              dataKey="upsell"
+              name="Upsell sold"
+              stroke="#2F5D3A"
+              strokeWidth={2}
+              dot={false}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-2 flex flex-wrap gap-3 text-[0.62rem] uppercase tracking-[0.12em] opacity-70">
+        {[...CHART_SERIES, { key: "upsell", label: "Upsell sold", color: "#2F5D3A" }].map((s) => (
+          <span key={s.key} className="flex items-center gap-1">
+            <span className="inline-block h-2 w-2" style={{ background: s.color }} />
+            {s.label}
+          </span>
+        ))}
+      </div>
+      <div className="mt-2 text-[0.7rem] opacity-65">
+        Total paid across these periods:{" "}
+        <strong>{money(data.reduce((s, d) => s + d.total, 0))}</strong>
+      </div>
+    </div>
+  );
+}
+
+
 /* -------------------------------------------------------------- skeleton */
 /** Placeholder rows that mirror the timeline card so layout never jumps. */
 function TimelineSkeleton({ rows = 3 }: { rows?: number }) {
