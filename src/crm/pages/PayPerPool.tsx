@@ -926,13 +926,62 @@ export default function PayPerPool() {
                   ))}
                 </div>
               </div>
+
+              {/* Date range — anywhere inside the last 6 months */}
+              <div className="mt-2 flex flex-wrap items-end gap-2">
+                <label className="text-[0.6rem] uppercase tracking-[0.12em] opacity-55">
+                  From
+                  <input
+                    type="date"
+                    value={histFrom}
+                    min={historySince}
+                    max={histTo}
+                    onChange={(e) => {
+                      setHistFrom(e.target.value || historySince);
+                      setHistPage(0);
+                    }}
+                    className="mt-1 block border border-black/15 px-2 py-1 text-[0.72rem] tracking-normal"
+                  />
+                </label>
+                <label className="text-[0.6rem] uppercase tracking-[0.12em] opacity-55">
+                  To
+                  <input
+                    type="date"
+                    value={histTo}
+                    min={histFrom}
+                    max={todayIso}
+                    onChange={(e) => {
+                      setHistTo(e.target.value || todayIso);
+                      setHistPage(0);
+                    }}
+                    className="mt-1 block border border-black/15 px-2 py-1 text-[0.72rem] tracking-normal"
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHistFrom(historySince);
+                    setHistTo(todayIso);
+                    setHistPage(0);
+                  }}
+                  className="border border-black/15 px-2 py-1.5 text-[0.6rem] uppercase tracking-[0.12em] opacity-70"
+                >
+                  Reset
+                </button>
+              </div>
+
               {historyLoading ? (
                 <TimelineSkeleton />
-              ) : poolHistory.length === 0 ? (
-                <p className="mt-2 text-[0.75rem] opacity-55">No completed visits yet at this pool.</p>
+              ) : filteredHistory.length === 0 ? (
+                <p className="mt-2 text-[0.75rem] opacity-55">
+                  {poolHistory.length === 0
+                    ? "No completed visits yet at this pool."
+                    : "No pay periods in this date range."}
+                </p>
               ) : historyView === "chart" ? (
-                <EarningsChart periods={poolHistory} />
+                <EarningsChart periods={filteredHistory} />
               ) : (
+
 
                 <ol className="ss-timeline mt-3 space-y-2">
                   {poolHistory.map((p) => (
