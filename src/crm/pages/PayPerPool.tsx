@@ -320,7 +320,7 @@ export default function PayPerPool() {
               ["Chemicals", `- ${money(totals.chemCost)}`],
               ["Company keeps", `${money(totals.companyKeeps)} · ${totals.marginPct.toFixed(0)}%`],
             ].map(([k, v]) => (
-              <div key={k} className="rounded-lg border border-black/10 p-3">
+              <div key={k} className="border border-black/10 p-3">
                 <div className="text-[0.65rem] uppercase tracking-[0.14em] opacity-55">{k}</div>
                 <div className="mt-1 text-[0.95rem] font-semibold">{v}</div>
               </div>
