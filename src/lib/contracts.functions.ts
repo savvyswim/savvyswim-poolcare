@@ -176,8 +176,12 @@ export const sendContractSms = createServerFn({ method: "POST" })
     if (!from) await fail("No Twilio phone number is available on the connected account");
 
     const params = new URLSearchParams({ To: to, From: from!, Body: body });
-    if (origin.startsWith("https://")) {
-      params.set("StatusCallback", `${origin}/api/public/twilio/contract-sms-status`);
+    const statusSecret = process.env["TWILIO_STATUS_WEBHOOK_SECRET"];
+    if (origin.startsWith("https://") && statusSecret) {
+      params.set(
+        "StatusCallback",
+        `${origin}/api/public/twilio/contract-sms-status?k=${encodeURIComponent(statusSecret)}`,
+      );
     }
 
     const sendRes = await fetch(`${GATEWAY_URL}/Messages.json`, {
