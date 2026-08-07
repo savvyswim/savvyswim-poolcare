@@ -70,13 +70,13 @@
 .savvy-crm .ss-card {
   background: hsl(var(--ss-white));
   border: 1px solid hsl(var(--ss-sand));
-  border-radius: 14px;
+  border-radius: 0;
 }
 
 .savvy-crm .ss-hero {
   background: linear-gradient(140deg, hsl(var(--ss-burgundy)), hsl(var(--ss-burgundy-deep)));
   color: hsl(var(--ss-white));
-  border-radius: 16px;
+  border-radius: 0;
   border: 1px solid hsl(var(--ss-burgundy-deep));
 }
 .savvy-crm .ss-hero h1,
@@ -95,7 +95,7 @@
   letter-spacing: 0.06em;
   font-size: 0.78rem;
   padding: 0.6rem 1rem;
-  border-radius: 10px;
+  border-radius: 0;
   background: linear-gradient(160deg, hsl(var(--ss-burgundy)), hsl(var(--ss-burgundy-deep)));
   color: hsl(var(--ss-white));
   border: none;
@@ -125,7 +125,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0.22rem 0.55rem;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid transparent;
   white-space: nowrap;
 }
@@ -136,7 +136,7 @@
   width: 100%;
   background: hsl(var(--ss-white));
   border: 1px solid hsl(var(--ss-sand));
-  border-radius: 10px;
+  border-radius: 0;
   padding: 0.55rem 0.7rem;
   font-size: 0.9rem;
   color: hsl(var(--ss-ink));
