@@ -79,8 +79,8 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
           <ul className="mt-3 space-y-1.5">
             {[
               "Join the Swim Club bundle on a 12-month agreement",
-              "50% off your first filter clean",
-              "5% off parts · 7% off labor · 24/7 text support",
+              "50% off filter cleans",
+              "25% off all other add-ons · 24/7 text support",
             ].map((item) => (
               <li key={item} className="flex gap-2 text-[13px] leading-snug text-primary/80">
                 <span className="text-accent">—</span>
