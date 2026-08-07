@@ -40,12 +40,19 @@ export function bundleTotal(b: Pick<Bundle, "items" | "price" | "price_mode">) {
   return b.price_mode === "fixed" ? Number(b.price) || 0 : bundleSum(b.items);
 }
 
-function normalize(row: Record<string, unknown>): Bundle {
-  const rawItems = Array.isArray(row.items) ? (row.items as Record<string, unknown>[]) : [];
+type AnyRow = {
+  id?: unknown; name?: unknown; description?: unknown; category?: unknown; billing?: unknown;
+  price?: unknown; price_mode?: unknown; show_item_prices?: unknown; is_active?: unknown;
+  sort_order?: unknown; items?: unknown;
+};
+type AnyItem = { ref?: unknown; id?: unknown; source?: unknown; name?: unknown; price?: unknown; qty?: unknown };
+
+function normalize(row: AnyRow): Bundle {
+  const rawItems: AnyItem[] = Array.isArray(row.items) ? (row.items as AnyItem[]) : [];
   return {
     id: String(row.id),
     name: String(row.name ?? ""),
-    description: (row.description as string) ?? null,
+    description: (row.description as string | null) ?? null,
     category: String(row.category ?? BUNDLE_CATEGORIES[0]),
     billing: row.billing === "one_time" ? "one_time" : "monthly",
     price: Number(row.price ?? 0),
@@ -71,7 +78,7 @@ export function useBundles(activeOnly = false) {
     let q = supabase.from("ss_bundles").select("*").order("sort_order").order("name");
     if (activeOnly) q = q.eq("is_active", true);
     const { data } = await q;
-    setRows((data ?? []).map((r) => normalize(r as Record<string, unknown>)));
+    setRows((data ?? []).map((r) => normalize(r as AnyRow)));
     setLoading(false);
   }, [activeOnly]);
 
