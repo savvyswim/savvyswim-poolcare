@@ -383,7 +383,10 @@ const Index = () => {
         </div>
       </header>
 
+      <ScrollReveal />
+
       {/* HERO — cream poster panel floating on a beach backdrop */}
+
       <section className="relative pt-[60px] sm:pt-32 lg:pt-36">
         {/* photo backdrop */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden>
