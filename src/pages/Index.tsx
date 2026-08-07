@@ -586,13 +586,9 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          </div>
-        </div>
 
-        <div className="relative">
-          <div className="relative">
+          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 pb-16 text-center sm:grid-cols-3 sm:gap-6 lg:pb-24">
 
-          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
 
             {[
               { k: "1,200+", v: "Pools serviced" },
