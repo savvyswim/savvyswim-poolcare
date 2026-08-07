@@ -237,11 +237,42 @@ export default function PayPerPool() {
   // so there is nothing to type in here — the ledger is the source of truth.
 
 
+  async function saveStaffPay(staffId: string, patch: Partial<Staff>) {
+    const { error } = await supabase.from("ss_staff").update(patch as never).eq("id", staffId);
+    if (error) { toast.error(error.message); return; }
+    void reloadStaff();
+    void reloadVisits();
+    toast.success("Tech pay defaults saved");
+  }
+
+  async function addAdjustment(techId: string, kind: string, amount: number, reason: string) {
+    if (!amount) { toast.error("Enter an amount"); return; }
+    const { error } = await supabase.from("ss_tech_adjustments").insert({
+      tech_id: techId,
+      kind,
+      amount,
+      reason: reason.trim() || null,
+      effective_date: today,
+    });
+    if (error) { toast.error(error.message); return; }
+    void reloadAdjustments();
+    toast.success(kind === "bonus" ? "Bonus added" : "Commission adjustment added");
+  }
+
+  async function removeAdjustment(a: Adjustment) {
+    if (a.payout_id) { toast.error("Already on a paid invoice"); return; }
+    const { error } = await supabase.from("ss_tech_adjustments").delete().eq("id", a.id);
+    if (error) { toast.error(error.message); return; }
+    void reloadAdjustments();
+  }
+
   async function generateInvoice(techId: string) {
     const group = byTech.find((g) => g.techId === techId);
     if (!group) return;
     const open = group.lines.filter((l) => !l.locked);
-    if (!open.length) { toast.error("No unpaid pools in this period"); return; }
+    const openAdj = adjustments.filter((a) => a.tech_id === techId && !a.payout_id);
+    const adjSum = openAdj.reduce((s, a) => s + Number(a.amount), 0);
+    if (!open.length && !adjSum) { toast.error("No unpaid pools in this period"); return; }
     setBusy(true);
     const t = sumLines(open);
     const { data, error } = await supabase
@@ -254,7 +285,8 @@ export default function PayPerPool() {
         base_pay: Number(t.basePay.toFixed(2)),
         bonus_pay: Number(t.bonus.toFixed(2)),
         commission_pay: Number(t.commission.toFixed(2)),
-        total_pay: Number(t.techTotal.toFixed(2)),
+        adjustments: Number(adjSum.toFixed(2)),
+        total_pay: Number((t.techTotal + adjSum).toFixed(2)),
         status: "ready",
       })
       .select()
@@ -276,11 +308,18 @@ export default function PayPerPool() {
         })
         .eq("id", l.visitId);
     }
+    if (openAdj.length) {
+      await supabase
+        .from("ss_tech_adjustments")
+        .update({ payout_id: data.id })
+        .in("id", openAdj.map((a) => a.id));
+    }
     setBusy(false);
     void reloadVisits();
     void reloadPayouts();
+    void reloadAdjustments();
     setTab("payouts");
-    toast.success(`Invoice ${data.invoice_number} ready — ${money(t.techTotal)}`);
+    toast.success(`Invoice ${data.invoice_number} ready — ${money(t.techTotal + adjSum)}`);
   }
 
   async function markPaid(p: Payout) {
