@@ -11,6 +11,14 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    build: {
+      // Rolldown currently drops the createMiddleware declaration from
+      // TanStack's CSRF module while retaining its call sites in the Worker
+      // bundle. Disabling tree-shaking preserves the required declaration.
+      rollupOptions: {
+        treeshake: false,
+      },
+    },
     server: {
       watch: {
         // Env files are rewritten by the platform on every sync. Watching them
