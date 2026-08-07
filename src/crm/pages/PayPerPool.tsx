@@ -872,14 +872,33 @@ export default function PayPerPool() {
 
             {/* Earnings history — every pay period this pool has paid out */}
             <div className="mt-5">
-              <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">
-                Earnings history · last 6 months
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">
+                  Earnings history · last 6 months
+                </div>
+                <div className="flex gap-1">
+                  {(["chart", "list"] as const).map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setHistoryView(v)}
+                      className={`px-2 py-1 text-[0.6rem] uppercase tracking-[0.12em] border border-black/15 ${
+                        historyView === v ? "bg-black/85 text-white" : "opacity-60"
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
               </div>
               {historyLoading ? (
                 <TimelineSkeleton />
               ) : poolHistory.length === 0 ? (
                 <p className="mt-2 text-[0.75rem] opacity-55">No completed visits yet at this pool.</p>
+              ) : historyView === "chart" ? (
+                <EarningsChart periods={poolHistory} />
               ) : (
+
                 <ol className="ss-timeline mt-3 space-y-2">
                   {poolHistory.map((p) => (
                     <li key={p.start} className="relative ss-card p-3">
