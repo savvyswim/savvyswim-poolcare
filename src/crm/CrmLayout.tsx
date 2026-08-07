@@ -29,7 +29,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
   { to: "/admin/crm/water-lab", label: "Water Lab", icon: FlaskConical, module: "waterLab", group: "Today" },
-  { to: "/admin/crm/pay-per-pool", label: "Pay Per Pool", icon: Wallet, module: "payPerPool", group: "Today" },
+  { to: "/admin/crm/pay-per-pool", label: "Payroll", icon: Wallet, module: "payPerPool", group: "Today" },
 
   // Sales
   { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
