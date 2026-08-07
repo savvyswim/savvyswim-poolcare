@@ -17,7 +17,6 @@ import {
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
-import PriceMenu from "@/components/PriceMenu";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -315,8 +314,6 @@ const Services = () => {
             </div>
           </div>
         </section>
-
-        <PriceMenu onBook={openBooking} />
 
         {/* PROCESS */}
         <section className="perf-section border-y border-hairline bg-primary/[0.03] py-16 sm:py-20">
