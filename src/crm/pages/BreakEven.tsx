@@ -17,6 +17,10 @@ type BeState = {
   activePools: number;
   monthlyChurnPct: number;
   ownerDraw: number;
+  /** Swim Club membership add-on */
+  clubPrice: number;
+  clubAttachPct: number;
+  clubCostPerMember: number;
 };
 
 const money = (n: number) =>
@@ -45,6 +49,9 @@ function defaultState(model: PricingModel): BeState {
     activePools: model.pools,
     monthlyChurnPct: 2,
     ownerDraw: 0,
+    clubPrice: 19.99,
+    clubAttachPct: 0,
+    clubCostPerMember: 0,
   };
 }
 
@@ -106,6 +113,21 @@ export default function BreakEven() {
     localStorage.setItem(BE_KEY, JSON.stringify(state));
   }, [state]);
 
+  // Edits made here flow straight back into the Pricing Matrix.
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(model));
+  }, [model]);
+
+  const patchCost = (id: string, patch: Partial<{ label: string; monthly: number }>) =>
+    setModel((m) => ({ ...m, costs: m.costs.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
+  const addCost = () =>
+    setModel((m) => ({
+      ...m,
+      costs: [...m.costs, { id: `c-${Date.now()}`, label: "New cost", monthly: 0 }],
+    }));
+  const removeCost = (id: string) =>
+    setModel((m) => ({ ...m, costs: m.costs.filter((c) => c.id !== id) }));
+
   const calc = useMemo(() => {
     const pools = model.pools > 0 ? model.pools : 0;
     const variableMonthly = model.costs
@@ -133,13 +155,19 @@ export default function BreakEven() {
       };
     });
 
-    const blendedPrice = tiers.reduce((s, t) => s + t.price * t.share, 0);
-    const contribution = blendedPrice - variablePerPool;
+    const attach = Math.min(Math.max(state.clubAttachPct || 0, 0), 100) / 100;
+    const clubRevPerPool = (state.clubPrice || 0) * attach;
+    const clubCostPerPool = (state.clubCostPerMember || 0) * attach;
+    const clubMembers = state.activePools * attach;
+    const clubRevenue = clubMembers * (state.clubPrice || 0);
+
+    const blendedPrice = tiers.reduce((s, t) => s + t.price * t.share, 0) + clubRevPerPool;
+    const contribution = blendedPrice - variablePerPool - clubCostPerPool;
     const breakEvenPools = contribution > 0 ? fixedMonthly / contribution : Infinity;
     const breakEvenRevenue = contribution > 0 ? breakEvenPools * blendedPrice : Infinity;
 
-    const monthlyRevenue = tiers.reduce((s, t) => s + t.monthlyRevenue, 0);
-    const monthlyVariable = variablePerPool * state.activePools;
+    const monthlyRevenue = tiers.reduce((s, t) => s + t.monthlyRevenue, 0) + clubRevenue;
+    const monthlyVariable = (variablePerPool + clubCostPerPool) * state.activePools;
     const monthlyProfit = monthlyRevenue - monthlyVariable - fixedMonthly;
     const netMargin = monthlyRevenue > 0 ? monthlyProfit / monthlyRevenue : 0;
     const cushion = state.activePools - breakEvenPools;
@@ -186,6 +214,9 @@ export default function BreakEven() {
       annualRevenue,
       annualProfit,
       mixTotal,
+      clubMembers,
+      clubRevenue,
+      clubRevPerPool,
     };
   }, [model, state]);
 
@@ -311,7 +342,7 @@ export default function BreakEven() {
       <section className="ss-card p-4">
         <SectionTitle
           title="Step 1 — Split fixed vs per-pool costs"
-          sub="Costs come from the Pricing Matrix. Tick the ones that grow with every pool you add."
+          sub="Every label and amount is editable here and saves straight to the Pricing Matrix. Tick the ones that grow with every pool you add."
         />
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-[0.82rem]">
@@ -321,6 +352,7 @@ export default function BreakEven() {
                 <th className="ss-tag pb-2 text-right">Monthly total</th>
                 <th className="ss-tag pb-2 text-center">Scales per pool</th>
                 <th className="ss-tag pb-2 text-right">Treated as</th>
+                <th className="pb-2" />
               </tr>
             </thead>
             <tbody>
@@ -328,8 +360,21 @@ export default function BreakEven() {
                 const isVar = !!state.variable[c.id];
                 return (
                   <tr key={c.id} className="border-t border-[hsl(var(--ss-ink)/0.1)]">
-                    <td className="py-1.5 pr-2">{c.label}</td>
-                    <td className="ss-num py-1.5 pr-2 text-right">{money2(c.monthly)}</td>
+                    <td className="py-1.5 pr-2">
+                      <input
+                        value={c.label}
+                        onChange={(e) => patchCost(c.id, { label: e.target.value })}
+                        className="w-full min-w-[160px] rounded-md border border-transparent bg-transparent px-1 py-1 text-[0.82rem] outline-hidden hover:border-[hsl(var(--ss-ink)/0.15)] focus:border-[hsl(var(--ss-burgundy)/0.45)]"
+                      />
+                    </td>
+                    <td className="w-[130px] py-1.5 pr-2">
+                      <NumInput
+                        prefix="$"
+                        step={10}
+                        value={c.monthly}
+                        onChange={(monthly) => patchCost(c.id, { monthly })}
+                      />
+                    </td>
                     <td className="py-1.5 text-center">
                       <input
                         type="checkbox"
@@ -347,6 +392,16 @@ export default function BreakEven() {
                     <td className="py-1.5 text-right text-[0.75rem] opacity-60">
                       {isVar ? "Variable" : "Fixed"}
                     </td>
+                    <td className="py-1.5 pl-2 text-right">
+                      <button
+                        type="button"
+                        onClick={() => removeCost(c.id)}
+                        aria-label={`Remove ${c.label}`}
+                        className="text-[0.7rem] uppercase tracking-[0.12em] opacity-50 hover:text-[hsl(var(--ss-burgundy))] hover:opacity-100"
+                      >
+                        Remove
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
@@ -357,9 +412,54 @@ export default function BreakEven() {
                 <td className="ss-num py-2 pr-2 text-right font-bold">{money2(calc.fixedMonthly)}</td>
                 <td className="ss-tag py-2 text-center">Variable / pool</td>
                 <td className="ss-num py-2 text-right font-bold">{money2(calc.variablePerPool)}</td>
+                <td />
               </tr>
             </tfoot>
           </table>
+        </div>
+        <button type="button" onClick={addCost} className="ss-btn-ghost mt-3 text-[0.75rem]">
+          + Add cost category
+        </button>
+      </section>
+
+      <section className="ss-card p-4">
+        <SectionTitle
+          title="Step 1b — Swim Club membership"
+          sub="Swim Club is a $19.99/mo add-on on top of any service plan — a $120 pool billing Swim Club pays $139.99."
+        />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+          <label className="block">
+            <span className="ss-tag">Membership price / month</span>
+            <NumInput
+              prefix="$"
+              step={1}
+              value={state.clubPrice}
+              onChange={(clubPrice) => setState((s) => ({ ...s, clubPrice }))}
+            />
+          </label>
+          <label className="block">
+            <span className="ss-tag">Attach rate (% of pools)</span>
+            <NumInput
+              suffix="%"
+              value={state.clubAttachPct}
+              onChange={(clubAttachPct) => setState((s) => ({ ...s, clubAttachPct }))}
+            />
+          </label>
+          <label className="block">
+            <span className="ss-tag">Cost to serve / member</span>
+            <NumInput
+              prefix="$"
+              value={state.clubCostPerMember}
+              onChange={(clubCostPerMember) => setState((s) => ({ ...s, clubCostPerMember }))}
+            />
+          </label>
+          <div className="rounded-md border border-[hsl(var(--ss-ink)/0.12)] p-2">
+            <div className="ss-tag">Membership revenue</div>
+            <div className="ss-num mt-1 text-[1.05rem] font-bold">{money(calc.clubRevenue)}</div>
+            <div className="text-[0.65rem] opacity-50">
+              {calc.clubMembers.toFixed(0)} members · +{money2(calc.clubRevPerPool)} / pool blended
+            </div>
+          </div>
         </div>
       </section>
 
@@ -388,8 +488,23 @@ export default function BreakEven() {
             <tbody>
               {calc.tiers.map((t) => (
                 <tr key={t.key} className="border-t border-[hsl(var(--ss-ink)/0.1)]">
-                  <td className="py-1.5 pr-2 font-semibold">{t.name}</td>
-                  <td className="ss-num py-1.5 pr-2 text-right">{money2(t.price)}</td>
+                  <td className="py-1.5 pr-2">
+                    <input
+                      value={model.names[t.key] ?? t.name}
+                      onChange={(e) =>
+                        setModel((m) => ({ ...m, names: { ...m.names, [t.key]: e.target.value } }))
+                      }
+                      className="w-full min-w-[140px] rounded-md border border-transparent bg-transparent px-1 py-1 text-[0.82rem] font-semibold outline-hidden hover:border-[hsl(var(--ss-ink)/0.15)] focus:border-[hsl(var(--ss-burgundy)/0.45)]"
+                    />
+                  </td>
+                  <td className="w-[120px] py-1.5 pr-2">
+                    <NumInput
+                      prefix="$"
+                      step={5}
+                      value={model.prices[t.key]}
+                      onChange={(v) => setModel((m) => ({ ...m, prices: { ...m.prices, [t.key]: v } }))}
+                    />
+                  </td>
                   <td className="w-[110px] py-1.5 pr-2">
                     <NumInput
                       suffix="%"
