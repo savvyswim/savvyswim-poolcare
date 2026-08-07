@@ -422,8 +422,22 @@ export const SERVICE_PLANS: ServicePlan[] = [
       "Rolls into Signature Weekly once clear",
     ],
   },
+  {
+    id: "society",
+    name: "Savvy Swim Society",
+    tagline: "Standard weekly cleaning plus quarterly filter deep-clean and salt cell — priced by pool size",
+    defaults: { chemOnly: false, chemIncluded: true, saltCell: true, condition: "clean" },
+    scope: [
+      "Standard pool cleaning — skimming, brushing, vacuuming, chemistry",
+      "Bonus: full filter deep-clean every 3 months (4x per year)",
+      "Salt cell service — monitoring, output tuning and quarterly cell clean",
+      "All standard chemicals included",
+      "Monthly rate set by pool size",
+    ],
+  },
 
 ];
+
 
 export const findServicePlan = (id: string | null | undefined) =>
   SERVICE_PLANS.find((p) => p.id === id) ?? null;
