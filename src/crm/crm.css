@@ -177,7 +177,7 @@
   background: hsl(var(--ss-ink) / 0.55); padding: 1rem; backdrop-filter: blur(2px);
 }
 .ss-modal {
-  width: 100%; max-width: 34rem; max-height: 88vh; overflow-y: auto; border-radius: 0.75rem;
+  width: 100%; max-width: 34rem; max-height: 88vh; overflow-y: auto; border-radius: 0;
   border: 1px solid hsl(var(--ss-sand)); background: hsl(var(--ss-cream)); padding: 1rem;
   box-shadow: 0 24px 60px -18px hsl(var(--ss-ink) / 0.45);
 }
