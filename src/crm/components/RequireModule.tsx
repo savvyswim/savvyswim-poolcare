@@ -6,6 +6,7 @@ import { SavvyLogo } from "@/crm/components/Brand";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, type ModuleKey } from "@/crm/lib/permissions";
+import { CrmErrorBoundary } from "@/crm/components/CrmErrorBoundary";
 
 export function AccessDenied({ module }: { module?: string }) {
   return (
@@ -51,5 +52,5 @@ export function RequireModule({ module, children }: { module: ModuleKey; childre
     );
   }
 
-  return <>{children}</>;
+  return <CrmErrorBoundary resetKey={loc.pathname}>{children}</CrmErrorBoundary>;
 }

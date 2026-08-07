@@ -16,6 +16,7 @@ import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
+import { CrmErrorBoundary } from "@/crm/components/CrmErrorBoundary";
 
 type NavGroup = "Today" | "Sales" | "Operations" | "Marketing" | "Savvy FinOps" | "Admin";
 type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey; group: NavGroup };
@@ -28,7 +29,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
   { to: "/admin/crm/water-lab", label: "Water Lab", icon: FlaskConical, module: "waterLab", group: "Today" },
-  { to: "/admin/crm/pay-per-pool", label: "Pay Per Pool", icon: Wallet, module: "payPerPool", group: "Today" },
+  { to: "/admin/crm/pay-per-pool", label: "Payroll", icon: Wallet, module: "payPerPool", group: "Today" },
 
   // Sales
   { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
@@ -218,7 +219,9 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
       <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[232px] lg:pr-6">
         <div className="mx-auto max-w-[1180px]">
-          {allowed ? children ?? <Outlet /> : <AccessDenied />}
+          <CrmErrorBoundary resetKey={loc.pathname}>
+            {allowed ? children ?? <Outlet /> : <AccessDenied />}
+          </CrmErrorBoundary>
         </div>
       </main>
 

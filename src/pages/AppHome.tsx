@@ -68,6 +68,15 @@ export default function AppHome() {
 
   const busy = loading || (!!user && identity.loading);
 
+  // On the app domain there is only ever one destination per role, so skip the
+  // door screen and land staff in the CRM (and customers in the portal) directly.
+  useEffect(() => {
+    if (busy || !user) return;
+    if (identity.isOffice) navigate("/admin/crm/customers", { replace: true });
+    else if (identity.isTech) navigate("/admin/crm", { replace: true });
+    else if (identity.customerId) navigate("/portal", { replace: true });
+  }, [busy, user, identity.isOffice, identity.isTech, identity.customerId, navigate]);
+
   const doors: Door[] = [];
   if (identity.isOffice) doors.push(ADMIN_DOOR, TECH_DOOR);
   else if (identity.isTech) doors.push(TECH_DOOR);

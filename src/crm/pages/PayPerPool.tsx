@@ -249,7 +249,7 @@ export default function PayPerPool() {
   return (
     <div className="space-y-6 print:space-y-4">
       <SectionTitle
-        title={canManage ? "Pay Per Pool" : "My Pay"}
+        title={canManage ? "Payroll" : "My Pay"}
         sub={
           canManage
             ? "Set what each pool pays the tech, watch the day add up, and see what the company keeps after pay, chems, bonus and commission."
