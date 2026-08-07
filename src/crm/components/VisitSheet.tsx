@@ -294,12 +294,12 @@ export default function VisitSheet({
               <div className="ss-card p-3">
                 <div className="flex items-center justify-between gap-2">
                   <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
-                    Arrival photo · required
+                    On arrival · before photo required
                   </div>
                   <Chip tone={before ? "aqua" : "burgundy"}>{before ? "Captured" : "Missing"}</Chip>
                 </div>
                 <p className="mt-0.5 text-[0.74rem] opacity-65">
-                  Take the BEFORE shot of the pool before you touch anything.
+                  Snap the pool the moment you arrive — before you touch anything. Step 1 stays locked until it&apos;s captured.
                 </p>
                 <div className="mt-2">
                   <PhotoTile
