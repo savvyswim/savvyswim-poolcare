@@ -118,6 +118,8 @@ function RootComponent() {
               <CartDrawer />
               <Outlet />
               <ChatWidget />
+            </CartProvider>
+
 
           </AuthProvider>
         </TooltipProvider>
