@@ -352,46 +352,74 @@ const Services = () => {
         {/* CTA */}
         <section className="perf-section py-16 sm:py-24">
           <div className="container-tight">
-            <div className="border border-hairline rounded-sm p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8 justify-between">
-              <div>
-                <h2 className="font-display text-[1.8rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
-                  Not sure what you need?
+            <div className="border border-hairline bg-primary/[0.03] grid grid-cols-1 lg:grid-cols-12">
+              <div className="lg:col-span-5 p-8 sm:p-12 lg:border-r border-hairline">
+                <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-accent">
+                  Free quote · no pressure
+                </span>
+                <h2 className="mt-4 font-display text-[2rem] sm:text-[2.8rem] uppercase tracking-tight leading-[0.95] text-primary">
+                  Not sure what<br />you need?
                 </h2>
-                <p className="mt-3 text-muted-foreground max-w-md">
+                <p className="mt-4 text-muted-foreground leading-relaxed max-w-sm">
                   Tell us what the pool is doing and we'll point you to the right
-                  service — free quote, no pressure.
+                  service. Most quotes come back the same day.
                 </p>
-              </div>
-              <div className="flex gap-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => openBooking()}
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote mt-7 inline-flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-4 text-[13px] font-bold uppercase tracking-wide transition"
                 >
-                  Request Quote
+                  Request a quote
                 </button>
-                <a
-                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
-                >
-                  <Phone className="h-4 w-4" /> Call
-                </a>
-                <a
-                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "services_final_cta_text")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
-                >
-                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
-                </a>
+              </div>
+
+              <div className="lg:col-span-7 divide-y divide-hairline border-t lg:border-t-0 border-hairline">
+                {[
+                  {
+                    href: PHONE_HREF,
+                    icon: Phone,
+                    label: "Call us",
+                    hint: PHONE_DISPLAY,
+                    track: () => trackContactClick("call_click", "final_cta"),
+                  },
+                  {
+                    href: buildSmsHref(SMS_PHONE),
+                    icon: MessageSquare,
+                    label: "Text for a free pool quote",
+                    hint: "Send a photo of the water",
+                    track: () => trackContactClick("text_click", "services_final_cta_text"),
+                  },
+                ].map((c) => (
+                  <a
+                    key={c.label}
+                    href={c.href}
+                    onClick={c.track}
+                    className="group flex items-center gap-5 px-8 sm:px-10 py-7 transition hover:bg-primary/[0.05]"
+                  >
+                    <c.icon className="h-5 w-5 text-accent flex-shrink-0" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[13px] font-bold uppercase tracking-wide">{c.label}</span>
+                      <span className="block text-sm text-muted-foreground truncate">{c.hint}</span>
+                    </span>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
+                  </a>
+                ))}
                 <Link
                   to="/request-inspection"
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="group flex items-center gap-5 px-8 sm:px-10 py-7 transition hover:bg-primary/[0.05]"
                 >
-                  Request free pool visit
+                  <Waves className="h-5 w-5 text-accent flex-shrink-0" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[13px] font-bold uppercase tracking-wide">Request a free pool visit</span>
+                    <span className="block text-sm text-muted-foreground truncate">We inspect on site, then quote</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
                 </Link>
               </div>
             </div>
           </div>
         </section>
+
       </main>
 
       <footer className="border-t border-hairline py-10">
