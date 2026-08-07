@@ -670,32 +670,127 @@ export default function PayPerPool() {
       {tab === "rates" && !canManage && (
         <div className="space-y-3">
           <p className="text-[0.75rem] opacity-60">
-            Every pool assigned to you and exactly what it pays you per visit.
+            Every pool assigned to you and exactly what it pays you per visit. Tap a pool for the
+            full breakdown.
           </p>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {pools.map((p) => {
-              const myMeta = staff.find((s) => s.id === id.staffId);
-              const rate =
-                p.tech_pay_rate ??
-                myMeta?.pay_rate ??
-                (myMeta?.level === "contractor" ? cfg.contractor_rate : cfg.default_rate);
-              const pct = p.tech_upsell_pct ?? myMeta?.upsell_pct ?? cfg.upsell_pct;
+              const rate = poolRateForMe(p);
+              const pct = poolPctForMe(p);
+              const done = lines.filter((l) => l.customerId === p.id);
               return (
-                <div key={p.id} className="ss-card p-4">
+                <button
+                  key={p.id}
+                  className="ss-card p-4 text-left transition-shadow hover:shadow-[0_10px_24px_-16px_rgba(0,0,0,.5)]"
+                  onClick={() => setOpenPool(p.id)}
+                >
                   <div className="text-[0.9rem] font-semibold">{p.full_name}</div>
                   <div className="text-[0.7rem] opacity-55">{p.city ?? "—"}</div>
                   <div className="mt-3 flex items-end justify-between">
                     <div>
                       <div className="text-[0.62rem] uppercase tracking-[0.14em] opacity-55">You get / visit</div>
-                      <div className="text-[1.2rem] font-semibold">{money(Number(rate))}</div>
+                      <div className="text-[1.2rem] font-semibold">{money(rate)}</div>
                     </div>
-                    <Chip tone="aqua">{Number(pct)}% upsell</Chip>
+                    <Chip tone="aqua">{pct}% upsell</Chip>
                   </div>
-                </div>
+                  <div className="mt-2 text-[0.68rem] opacity-55">
+                    {done.length} completed this period · {money(done.reduce((s, l) => s + l.techTotal, 0))} earned
+                  </div>
+                </button>
               );
             })}
           </div>
           {pools.length === 0 && <EmptyState>No pools assigned to you yet.</EmptyState>}
+        </div>
+      )}
+
+      {/* ------------------------------------------- MY POOL DETAIL (tech) */}
+      {openPoolRow && (
+        <div className="ss-modal-backdrop" onClick={() => setOpenPool(null)}>
+          <div className="ss-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-[1rem]">{openPoolRow.full_name}</h2>
+                <div className="text-[0.72rem] opacity-55">
+                  {openPoolRow.city ?? "—"} · {openPoolRow.route_frequency ?? "weekly"}
+                </div>
+              </div>
+              <button className="ss-btn-ghost ss-btn" onClick={() => setOpenPool(null)}>Close</button>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="ss-card p-3">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">You get / visit</div>
+                <div className="mt-1 text-[1.35rem] font-semibold">{money(poolRateForMe(openPoolRow))}</div>
+              </div>
+              <div className="ss-card p-3">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">Upsell commission</div>
+                <div className="mt-1 text-[1.35rem] font-semibold">{poolPctForMe(openPoolRow)}%</div>
+              </div>
+              <div className="ss-card p-3">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">Visits this period</div>
+                <div className="mt-1 text-[1.35rem] font-semibold">{openPoolLines.length}</div>
+              </div>
+              <div className="ss-card p-3">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">Earned this period</div>
+                <div className="mt-1 text-[1.35rem] font-semibold">
+                  {money(openPoolLines.reduce((s, l) => s + l.techTotal, 0))}
+                </div>
+              </div>
+            </div>
+
+            {/* Bonus stays hidden until asked for — the office sets it, the tech confirms it. */}
+            <div className="mt-4">
+              {showBonus ? (
+                <div className="ss-card p-3">
+                  <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">Bonus & commission</div>
+                  <ul className="mt-2 space-y-1 text-[0.78rem]">
+                    <li className="flex justify-between">
+                      <span>Base pay ({openPoolLines.length} visits)</span>
+                      <strong>{money(openPoolLines.reduce((s, l) => s + l.basePay, 0))}</strong>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Daily bonus earned here</span>
+                      <strong>{money(openPoolLines.reduce((s, l) => s + l.bonus, 0))}</strong>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Upsell commission</span>
+                      <strong>{money(openPoolLines.reduce((s, l) => s + l.commission, 0))}</strong>
+                    </li>
+                    <li className="flex justify-between border-t border-black/10 pt-1">
+                      <span>Total from this pool</span>
+                      <strong>{money(openPoolLines.reduce((s, l) => s + l.techTotal, 0))}</strong>
+                    </li>
+                  </ul>
+                  <p className="mt-2 text-[0.68rem] opacity-55">
+                    Bonuses and rate changes are set by the office.
+                  </p>
+                </div>
+              ) : (
+                <button className="ss-btn w-full" onClick={() => setShowBonus(true)}>
+                  <DollarSign className="mr-2 inline h-4 w-4" />
+                  Show bonus &amp; commission
+                </button>
+              )}
+            </div>
+
+            {openPoolLines.length > 0 && (
+              <div className="mt-4">
+                <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">Visits</div>
+                <ul className="mt-2 space-y-1 text-[0.76rem]">
+                  {openPoolLines.map((l) => (
+                    <li key={l.visitId} className="flex items-center justify-between border-t border-black/5 pt-1">
+                      <span>{l.date}</span>
+                      <span className="flex items-center gap-2">
+                        <strong>{money(l.techTotal)}</strong>
+                        {l.locked && <Lock size={12} className="opacity-45" />}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
