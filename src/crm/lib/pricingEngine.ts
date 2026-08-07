@@ -176,6 +176,9 @@ export type QuoteInput = {
 /** Max salt cells we service on one property (pool + spa). */
 export const MAX_SALT_CELLS = 2;
 
+/** Swim Club membership fee, stacked on top of the pool's monthly rate. */
+export const SWIM_CLUB_FEE = 19.99;
+
 /**
  * Salt cell service is a recurring monthly fee with a quarterly cell clean, so
  * it only attaches to a recurring weekly-service plan and needs a whole
