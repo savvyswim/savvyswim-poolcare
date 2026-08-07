@@ -818,3 +818,57 @@ export default function PayPerPool() {
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ bonus */
+function BonusForm({
+  onAdd,
+}: {
+  onAdd: (kind: string, amount: number, reason: string) => void | Promise<void>;
+}) {
+  const [kind, setKind] = useState("bonus");
+  const [amount, setAmount] = useState("");
+  const [reason, setReason] = useState("");
+
+  return (
+    <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-black/5 pt-3">
+      <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Type
+        <select value={kind} onChange={(e) => setKind(e.target.value)} className="ss-input mt-1 block w-32">
+          <option value="bonus">Bonus</option>
+          <option value="commission">Commission</option>
+          <option value="deduction">Deduction</option>
+        </select>
+      </label>
+      <label className="text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Amount
+        <input
+          type="number"
+          step="0.5"
+          className="ss-input mt-1 block w-24"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </label>
+      <label className="min-w-[10rem] flex-1 text-[0.62rem] uppercase tracking-[0.14em] opacity-60">
+        Reason
+        <input
+          className="ss-input mt-1 block w-full"
+          placeholder="Upsell on Miller heater, perfect QC week…"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+      </label>
+      <button
+        className="ss-btn"
+        onClick={async () => {
+          const n = Number(amount) * (kind === "deduction" ? -1 : 1);
+          await onAdd(kind, n, reason);
+          setAmount("");
+          setReason("");
+        }}
+      >
+        Add
+      </button>
+    </div>
+  );
+}
