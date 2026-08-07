@@ -483,36 +483,40 @@ export default function PayPerPool() {
 
           {canManage && byTech.length > 0 && (
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {byTech.map((g) => (
-                <div key={g.techId} className="ss-card p-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <div>
-                      <div className="text-[0.95rem] font-semibold">{g.name}</div>
-                      <div className="text-[0.7rem] opacity-60">
-                        {g.totals.pools} pools · {money(g.totals.techTotal)} owed
+              {byTech.map((g) => {
+                const extra = adjByTech.get(g.techId) ?? 0;
+                return (
+                  <div key={g.techId} className="ss-card p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="truncate text-[0.95rem] font-semibold">{g.name}</div>
+                        <div className="text-[0.7rem] opacity-60">
+                          {g.totals.pools} pools · {money(g.totals.techTotal + extra)} owed
+                        </div>
                       </div>
+                      <Chip tone={g.totals.marginPct >= 45 ? "green" : "orange"}>
+                        {g.totals.marginPct.toFixed(0)}% margin
+                      </Chip>
                     </div>
-                    <Chip tone={g.totals.marginPct >= 45 ? "green" : "orange"}>
-                      {g.totals.marginPct.toFixed(0)}% margin
-                    </Chip>
+                    <div className="mt-3 grid grid-cols-4 gap-2 text-[0.72rem]">
+                      <div><span className="opacity-55">Base</span><br />{money(g.totals.basePay)}</div>
+                      <div><span className="opacity-55">Bonus</span><br />{money(g.totals.bonus)}</div>
+                      <div><span className="opacity-55">Comm.</span><br />{money(g.totals.commission)}</div>
+                      <div><span className="opacity-55">Extra</span><br />{money(extra)}</div>
+                    </div>
+                    {g.techId !== "unassigned" && (
+                      <button
+                        className="ss-btn mt-3 w-full"
+                        disabled={busy}
+                        onClick={() => generateInvoice(g.techId)}
+                      >
+                        <FileText className="mr-2 inline h-4 w-4" />
+                        Build invoice
+                      </button>
+                    )}
                   </div>
-                  <div className="mt-3 grid grid-cols-3 gap-2 text-[0.72rem]">
-                    <div><span className="opacity-55">Base</span><br />{money(g.totals.basePay)}</div>
-                    <div><span className="opacity-55">Bonus</span><br />{money(g.totals.bonus)}</div>
-                    <div><span className="opacity-55">Comm.</span><br />{money(g.totals.commission)}</div>
-                  </div>
-                  {g.techId !== "unassigned" && (
-                    <button
-                      className="ss-btn mt-3 w-full"
-                      disabled={busy}
-                      onClick={() => generateInvoice(g.techId)}
-                    >
-                      <FileText className="mr-2 inline h-4 w-4" />
-                      Build invoice
-                    </button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
