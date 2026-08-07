@@ -175,22 +175,22 @@ const Services = () => {
       <main>
         {/* HERO */}
         <section className="border-b border-hairline">
-          <div className="container-tight py-16 sm:py-20">
+          <div className="container-tight py-12 sm:py-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
               <div className="lg:col-span-7">
                 <div className="border-t-2 border-accent pt-6">
                   <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-4">
                     What we do
                   </div>
-                  <h1 className="font-display text-[2.6rem] sm:text-[4.2rem] leading-[0.94] tracking-tight uppercase">
+                  <h1 className="font-display text-[2.15rem] xs:text-[2.5rem] sm:text-[4.2rem] leading-[1.02] sm:leading-[0.94] tracking-tight uppercase">
                     Cleaning, service<br />
                     &amp; <span className="text-accent">repair.</span>
                   </h1>
-                  <p className="mt-6 max-w-xl text-muted-foreground text-base leading-relaxed">
+                  <p className="mt-5 max-w-xl text-muted-foreground text-[0.95rem] sm:text-base leading-[1.7]">
                     Weekly maintenance, equipment repair, and everything in between —
                     one team, one phone call, no contracts.
                   </p>
-                  <p className="mt-4 font-serif italic text-xl text-foreground/80">
+                  <p className="mt-4 font-serif italic text-lg sm:text-xl leading-snug text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
@@ -251,10 +251,10 @@ const Services = () => {
         </section>
 
         {/* SERVICES */}
-        <section className="perf-section py-16 sm:py-24">
+        <section className="perf-section py-12 sm:py-24">
           <div className="container-tight">
             <div className="flex items-end justify-between gap-6 mb-10 border-b border-hairline pb-5">
-              <h2 className="font-display text-[1.7rem] sm:text-[2.2rem] uppercase tracking-tight leading-none">
+              <h2 className="font-display text-[1.45rem] sm:text-[2.2rem] uppercase tracking-tight leading-[1.05]">
                 The service list
               </h2>
               <span className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -284,7 +284,7 @@ const Services = () => {
                     </span>
                   </div>
 
-                  <div className="p-6 sm:p-7 flex flex-col flex-1">
+                  <div className="p-5 sm:p-7 flex flex-col flex-1">
                     <div className="flex items-center gap-3 mb-4">
                       <s.icon className="h-[18px] w-[18px] text-amber-brand" strokeWidth={1.75} />
                       <span className="h-px flex-1 bg-hairline" />
@@ -298,13 +298,13 @@ const Services = () => {
                       className="text-left w-full"
                     >
                       <span className="flex items-start justify-between gap-3">
-                        <span className="text-[1.15rem] font-semibold leading-snug">{s.title}</span>
+                        <span className="text-[1.08rem] sm:text-[1.15rem] font-semibold leading-snug">{s.title}</span>
                         <ChevronDown
                           className={`h-5 w-5 mt-0.5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180 text-primary" : ""}`}
                           strokeWidth={1.75}
                         />
                       </span>
-                      <span className="mt-2 block text-sm text-muted-foreground leading-relaxed">{s.desc}</span>
+                      <span className="mt-2 block text-[0.95rem] sm:text-sm text-muted-foreground leading-[1.65]">{s.desc}</span>
                       {!isOpen && (
                         <span className="mt-3 block font-tech text-[10px] uppercase tracking-[0.2em] text-primary">
                           Tap to see what's included
@@ -324,7 +324,7 @@ const Services = () => {
                       </div>
                       <ul className="space-y-2 mb-6">
                         {s.includes.map((item) => (
-                          <li key={item} className="flex items-start gap-2 text-sm">
+                          <li key={item} className="flex items-start gap-2 text-[0.95rem] sm:text-sm leading-[1.55]">
                             <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
                             <span className="text-foreground/90">{item}</span>
                           </li>
@@ -351,7 +351,7 @@ const Services = () => {
         </section>
 
         {/* PROCESS */}
-        <section className="perf-section border-y border-hairline bg-primary/[0.03] py-16 sm:py-20">
+        <section className="perf-section border-y border-hairline bg-primary/[0.03] py-12 sm:py-20">
           <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-5">
               <img
@@ -366,7 +366,7 @@ const Services = () => {
               <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-4">
                 How it runs
               </div>
-              <h2 className="font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-[1] mb-8">
+              <h2 className="font-display text-[1.6rem] sm:text-[2.6rem] uppercase tracking-tight leading-[1.08] mb-6 sm:mb-8">
                 Three steps. Then you stop thinking about it.
               </h2>
               <div className="divide-y divide-hairline border-t border-hairline">
@@ -375,7 +375,7 @@ const Services = () => {
                     <span className="font-tech text-[11px] text-accent w-8 pt-1">{p.no}</span>
                     <div>
                       <h3 className="font-semibold mb-1">{p.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">{p.desc}</p>
+                      <p className="text-[0.95rem] sm:text-sm text-muted-foreground leading-[1.65] max-w-lg">{p.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -385,7 +385,7 @@ const Services = () => {
         </section>
 
         {/* CTA */}
-        <section className="perf-section py-16 sm:py-24">
+        <section className="perf-section py-12 sm:py-24">
           <div className="container-tight">
             <div className="border border-hairline bg-primary/[0.03] grid grid-cols-1 lg:grid-cols-12">
               <div className="lg:col-span-5 p-8 sm:p-12 lg:border-r border-hairline">
