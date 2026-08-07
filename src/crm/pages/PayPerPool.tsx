@@ -30,6 +30,8 @@ import {
   type PayLine,
   type PayStatus,
   type PayVisit,
+  type PeriodEarnings,
+
 } from "@/crm/lib/payPerPool";
 
 const STATUS_TONE: Record<PayStatus, "ink" | "gold" | "aqua" | "green"> = {
