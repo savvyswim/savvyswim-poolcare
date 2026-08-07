@@ -177,7 +177,10 @@
   html {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    overscroll-behavior-y: none;
   }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
