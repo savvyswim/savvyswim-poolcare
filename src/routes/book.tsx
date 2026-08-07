@@ -16,12 +16,40 @@ export const Route = createFileRoute("/book")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: URL },
+      { property: "og:site_name", content: "Savvy Swim" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
     links: [{ rel: "canonical", href: URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: TITLE,
+          description: DESCRIPTION,
+          url: URL,
+          potentialAction: {
+            "@type": "ReserveAction",
+            target: URL,
+            name: "Book a free pool inspection or 3D quote",
+          },
+          provider: {
+            "@type": "LocalBusiness",
+            name: "Savvy Swim",
+            telephone: "+1-469-744-0379",
+            url: "https://savvyswim.com",
+            areaServed: "Dallas–Fort Worth, TX",
+          },
+        }),
+      },
+    ],
   }),
   component: BookPage,
 });
+
 
 function BookPage() {
   const navigate = useNavigate();
