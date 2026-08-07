@@ -117,7 +117,8 @@ function RootComponent() {
 
               <CartDrawer />
               <Outlet />
-            </CartProvider>
+              <ChatWidget />
+
           </AuthProvider>
         </TooltipProvider>
       </HelmetProvider>
