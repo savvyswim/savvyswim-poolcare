@@ -265,10 +265,28 @@ export default function PayPerPool() {
   const poolHistory = useMemo(
     () => periodHistory(buildPayLines(historyVisits, liveCfg, techMeta)),
     [historyVisits, liveCfg, techMeta],
-
   );
 
   const [historyView, setHistoryView] = useState<"chart" | "list">("chart");
+  const todayIso = useMemo(() => isoDay(new Date()), []);
+  const [histFrom, setHistFrom] = useState(historySince);
+  const [histTo, setHistTo] = useState(todayIso);
+  const [histPage, setHistPage] = useState(0);
+  const HIST_PAGE_SIZE = 6;
+
+  /** Periods whose week overlaps the chosen window. */
+  const filteredHistory = useMemo(
+    () => poolHistory.filter((p) => p.end >= histFrom && p.start <= histTo),
+    [poolHistory, histFrom, histTo],
+  );
+
+  const histPages = Math.max(1, Math.ceil(filteredHistory.length / HIST_PAGE_SIZE));
+  const safePage = Math.min(histPage, histPages - 1);
+  const pagedHistory = useMemo(
+    () => filteredHistory.slice(safePage * HIST_PAGE_SIZE, safePage * HIST_PAGE_SIZE + HIST_PAGE_SIZE),
+    [filteredHistory, safePage],
+  );
+
 
 
 
