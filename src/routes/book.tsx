@@ -6,6 +6,7 @@ const TITLE = "Book a Free Pool Inspection or 3D Quote | Savvy Swim";
 const DESCRIPTION =
   "Book your free, no-obligation pool inspection or 3D quote with Savvy Swim. Pick a time and we'll confirm by phone or email within one business day.";
 const URL = "https://savvyswim.com/book";
+const OG_IMAGE = "https://savvyswim.com/og-book.jpg";
 
 export const Route = createFileRoute("/book")({
   head: () => ({
