@@ -119,7 +119,22 @@ const SERVICES = [
       "Stain treatment",
     ],
   },
+  {
+    no: "07",
+    icon: Waves,
+    title: "Savvy Swim Society",
+    photo: photoRedUmbrellas.url,
+    alt: "Red and white striped umbrellas lined up beside a pool",
+    desc: "Our all-inclusive membership plan: standard weekly cleaning plus a full filter deep-clean every quarter and salt cell service. Monthly rate is set by your pool size.",
+    includes: [
+      "Standard cleaning — skim, brush, vacuum, chemistry",
+      "Filter deep-clean every 3 months (4x/year)",
+      "Salt cell monitoring, tuning & quarterly clean",
+      "Priced by pool size after the walkthrough",
+    ],
+  },
 ];
+
 
 const PROCESS = [
   { no: "I", title: "Walkthrough", desc: "We inspect the pool, equipment pad, and water chemistry — then quote flat." },
