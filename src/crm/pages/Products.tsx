@@ -142,7 +142,10 @@ export default function Products() {
     if (planId) p.set("plan_id", planId);
     if (chemOnly) p.set("chemOnly", "1");
     if (chemIncluded) p.set("chemIncl", "1");
-    if (saltCell) p.set("salt", "1");
+    if (saltCell) {
+      p.set("salt", "1");
+      p.set("saltQty", String(saltQty));
+    }
     if (override) p.set("override", override);
     if (payingNow) p.set("now", payingNow);
     if (providerName.trim()) p.set("provider", providerName.trim());
