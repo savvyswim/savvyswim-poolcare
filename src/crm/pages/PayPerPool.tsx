@@ -876,7 +876,7 @@ export default function PayPerPool() {
                 Earnings history · last 6 months
               </div>
               {historyLoading ? (
-                <p className="mt-2 text-[0.75rem] opacity-55">Loading history…</p>
+                <TimelineSkeleton />
               ) : poolHistory.length === 0 ? (
                 <p className="mt-2 text-[0.75rem] opacity-55">No completed visits yet at this pool.</p>
               ) : (
@@ -1035,6 +1035,29 @@ export default function PayPerPool() {
         </div>
       )}
     </div>
+  );
+}
+
+/* -------------------------------------------------------------- skeleton */
+/** Placeholder rows that mirror the timeline card so layout never jumps. */
+function TimelineSkeleton({ rows = 3 }: { rows?: number }) {
+  return (
+    <ol className="ss-timeline mt-3 space-y-2" aria-hidden="true">
+      {Array.from({ length: rows }).map((_, i) => (
+        <li key={i} className="relative ss-card p-3">
+          <span className="ss-timeline-dot opacity-40" />
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="ss-skel h-3 w-28" />
+            <span className="ss-skel h-3.5 w-16" />
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1">
+            <span className="ss-skel h-4 w-16" />
+            <span className="ss-skel h-4 w-20" />
+            <span className="ss-skel h-4 w-14" />
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 
