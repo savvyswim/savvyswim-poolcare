@@ -586,23 +586,9 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          </div>
-        </div>
 
-        <div className="relative bg-foreground text-on-media [&_.tech-label]:text-primary-foreground/70">
-          <div className="absolute inset-0 overflow-hidden" aria-hidden>
-            <img
-              src={photoPoolWaterMobile.url}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-cover object-center"
-            />
-            {/* Neutral scrim keeps the pool water blue while text stays legible. */}
-            <div className="absolute inset-0 bg-foreground/55" />
-          </div>
-          <div className="relative">
-          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 py-12 text-center sm:grid-cols-3 sm:gap-6 lg:py-16">
+          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 pb-16 text-center sm:grid-cols-3 sm:gap-6 lg:pb-24">
+
 
             {[
               { k: "1,200+", v: "Pools serviced" },
