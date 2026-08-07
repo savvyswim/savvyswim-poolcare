@@ -434,16 +434,58 @@ export default function Products() {
                 />
                 Chemicals included
               </label>
-              <label className="flex items-center gap-2">
+              <label
+                className="flex items-center gap-2"
+                style={{ opacity: saltAllowed ? 1 : 0.5 }}
+                title={
+                  saltAllowed
+                    ? undefined
+                    : validateSaltCell({ saltCell: true, saltCellQty: 1, chemOnly, planId }).reason
+                }
+              >
                 <input
                   type="checkbox"
                   checked={saltCell}
+                  disabled={!saltAllowed}
                   onChange={(e) => setSaltCell(e.target.checked)}
                 />
                 Salt cell service · $15/mo + quarterly clean
               </label>
+              {saltCell && (
+                <label className="flex items-center gap-2">
+                  Cells
+                  <input
+                    type="number"
+                    min={1}
+                    max={MAX_SALT_CELLS}
+                    step={1}
+                    value={saltQty}
+                    onChange={(e) =>
+                      setSaltQty(
+                        Math.min(
+                          Math.max(Math.round(Number(e.target.value)) || 1, 1),
+                          MAX_SALT_CELLS,
+                        ),
+                      )
+                    }
+                    className="ss-input w-14"
+                  />
+                  <span className="opacity-60">one per water body</span>
+                </label>
+              )}
             </div>
+            {saltCell && !saltCheck.ok && (
+              <div className="mt-2 text-[0.72rem]" style={{ color: "hsl(var(--destructive))" }}>
+                {saltCheck.reason}
+              </div>
+            )}
+            {!saltAllowed && (
+              <div className="mt-2 text-[0.72rem] opacity-70">
+                Salt cell service requires a weekly full-service plan.
+              </div>
+            )}
           </div>
+
 
           <div className="space-y-3">
             <div className="ss-hero p-4">
