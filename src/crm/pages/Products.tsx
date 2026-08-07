@@ -435,6 +435,14 @@ export default function Products() {
                   ? `${money(quote.market.savings)}/mo under market (${quote.market.savingsPct}%)`
                   : "at or above market — review the rate"}
               </div>
+              {plan?.customPrice && (
+                <div className="mt-2 text-[0.78rem] opacity-90">
+                  {Number(customPrice) > 0
+                    ? `Plus ${money(Number(customPrice))} one-time recovery${customNote.trim() ? ` · ${customNote.trim()}` : ""}`
+                    : "Set the one-time recovery price — it depends on the pool"}
+                </div>
+              )}
+
               {quote.cleanupLabel && (
                 <div className="mt-1 text-[0.78rem] opacity-75">
                   One-time cleanup {quote.cleanupLabel}
