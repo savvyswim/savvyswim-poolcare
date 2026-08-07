@@ -252,6 +252,7 @@ export default function PayPerPool() {
   const poolHistory = useMemo(
     () => periodHistory(buildPayLines(historyVisits, liveCfg, techMeta)),
     [historyVisits, liveCfg, techMeta],
+
   );
 
 
