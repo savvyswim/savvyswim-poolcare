@@ -962,57 +962,6 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="card-3d rounded-sm overflow-hidden grid md:grid-cols-2">
-            <div className="relative min-h-[280px]">
-              <img
-                src={photoLifeguardChair.url}
-                alt="Savvy Swim branded umbrella beside a crystal-clear serviced pool"
-                loading="lazy"
-                  decoding="async"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </div>
-            <div className="p-8 sm:p-12 flex flex-col justify-center">
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-brand mb-4">
-                New customer offer
-              </div>
-              <h3 className="text-[1.7rem] sm:text-[2.1rem] lg:text-[2.5rem] leading-[1.1] lg:leading-[1.08] font-semibold tracking-tight mb-5">
-                First month of weekly service, half off.
-              </h3>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Free on-site water test and equipment inspection",
-                  "Photo report emailed after every visit",
-                  "No contracts on weekly service — cancel anytime",
-                ].map((i) => (
-                  <li key={i} className="flex gap-3 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-amber-brand shrink-0 mt-0.5" />
-                    {i}
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "why_savvy")}
-                  className="btn-quote inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm text-sm font-bold uppercase tracking-wider"
-                >
-                  <Phone className="h-4 w-4" /> Call (469) 744-0379
-                </a>
-                <a
-                  href={buildSmsHref(SMS_PHONE)} onClick={() => trackContactClick("text_click", "why_savvy_text")}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
-                >
-                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
-                </a>
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Free pool service quote")}`}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-sm border border-hairline text-sm font-bold uppercase tracking-wider hover:bg-muted transition"
-                >
-                  Get a free quote <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
