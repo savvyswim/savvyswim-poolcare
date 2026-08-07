@@ -10,6 +10,7 @@ import {
   isoDay,
   money,
   PAY_SETTINGS_KEY,
+  periodHistory,
   sumLines,
   weekRange,
   type PayConfig,
@@ -209,6 +210,41 @@ export default function PayPerPool() {
     () => (openPool ? lines.filter((l) => l.customerId === openPool) : []),
     [lines, openPool],
   );
+
+  /* ------------------------------------- pool-by-pool earnings history */
+  const historySince = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 180);
+    return isoDay(d);
+  }, []);
+
+  const { rows: historyVisits, loading: historyLoading } = useTable<PayVisit>(
+    "pay-pool-history",
+    async () => {
+      if (!openPool) return [];
+      let q = supabase
+        .from("ss_visits")
+        .select(
+          "id,scheduled_date,tech_id,status,completed_at,chem_cost,tech_pay,tech_bonus,upsell_amount,upsell_commission,pay_status,payout_id," +
+            "ss_customers(id,full_name,city,monthly_price,route_frequency,tech_pay_rate,tech_upsell_pct)",
+        )
+        .eq("status", "completed")
+        .eq("customer_id", openPool)
+        .gte("scheduled_date", historySince)
+        .order("scheduled_date", { ascending: false })
+        .limit(500);
+      if (!canManage && id.staffId) q = q.eq("tech_id", id.staffId);
+      const { data } = await q;
+      return (data ?? []) as unknown as PayVisit[];
+    },
+    [openPool, historySince, canManage, id.staffId],
+  );
+
+  const poolHistory = useMemo(
+    () => periodHistory(buildPayLines(historyVisits, liveCfg, techMeta)),
+    [historyVisits, liveCfg, techMeta],
+  );
+
 
   const adjByTech = useMemo(() => {
     const map = new Map<string, number>();
@@ -812,6 +848,45 @@ export default function PayPerPool() {
                 </ul>
               </div>
             )}
+
+            {/* Earnings history — every pay period this pool has paid out */}
+            <div className="mt-5">
+              <div className="text-[0.6rem] uppercase tracking-[0.14em] opacity-55">
+                Earnings history · last 6 months
+              </div>
+              {historyLoading ? (
+                <p className="mt-2 text-[0.75rem] opacity-55">Loading history…</p>
+              ) : poolHistory.length === 0 ? (
+                <p className="mt-2 text-[0.75rem] opacity-55">No completed visits yet at this pool.</p>
+              ) : (
+                <ol className="ss-timeline mt-3 space-y-2">
+                  {poolHistory.map((p) => (
+                    <li key={p.start} className="relative ss-card p-3">
+                      <span className="ss-timeline-dot" />
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <div className="text-[0.78rem] font-semibold">
+                          {new Date(`${p.start}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                          {" – "}
+                          {new Date(`${p.end}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <strong className="text-[0.95rem]">{money(p.total)}</strong>
+                          {p.locked && <Lock size={12} className="opacity-45" />}
+                        </div>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        <Chip tone="ink">{p.visits} visit{p.visits === 1 ? "" : "s"}</Chip>
+                        <Chip tone="ink">{money(p.rate)} / visit</Chip>
+                        <Chip tone="aqua">{p.upsellPct.toFixed(0)}% upsell</Chip>
+                        {p.upsellAmount > 0 && <Chip tone="aqua">{money(p.upsellAmount)} sold</Chip>}
+                        {p.bonus > 0 && <Chip tone="gold">{money(p.bonus)} bonus</Chip>}
+                        {p.commission > 0 && <Chip tone="green">{money(p.commission)} commission</Chip>}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
           </div>
         </div>
       )}
