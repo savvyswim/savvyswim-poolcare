@@ -299,8 +299,10 @@ export function ServiceEstimate() {
   const [hours, setHours] = useState(2);
   const [includeTrip, setIncludeTrip] = useState(true);
   const [taxLabor, setTaxLabor] = useState(false);
+  const [laborPrice, setLaborPrice] = useState(190);
 
-  const m = serviceMargin(lines, hours, costs, { includeTrip, taxLabor });
+  const m = serviceMargin(lines, hours, costs, { includeTrip, taxLabor, laborPrice });
+
   const upd = (i: number, patch: Partial<ServiceLine>) =>
     setLines((l) => l.map((x, j) => (j === i ? { ...x, ...patch } : x)));
 
