@@ -25,7 +25,9 @@ type Visit = {
   notes: string | null; readings: Record<string, number> | null; chem_cost: number | null;
 };
 
-const TABS = ["Overview", "Timeline", "Equipment", "Contracts", "Billing"] as const;
+import SaltGuide from "@/crm/components/SaltGuide";
+
+const TABS = ["Overview", "Timeline", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -237,6 +239,8 @@ export default function CustomerDetail() {
           )}
         </div>
       )}
+
+      {tab === "Salt pool" && <SaltGuide gallons={c.gallons} />}
 
       {tab === "Contracts" && level !== "technician" && <CustomerContracts customer={c} />}
 
