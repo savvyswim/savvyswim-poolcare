@@ -112,6 +112,8 @@ export default function Products() {
       chemOnly,
       chemIncluded,
       saltCell,
+      saltCellQty: saltQty,
+      planId,
       undercutPct: undercut,
       rateOverride: override ? Number(override) : null,
     },
