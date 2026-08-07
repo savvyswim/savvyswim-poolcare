@@ -261,11 +261,19 @@ export function computeQuote(
     monthly += a;
     lines.push({ label: "Chemicals included", amount: a });
   }
-  if (input.saltCell) {
-    const a = addonAmount(addons, "salt_cell", 15);
+  const salt = validateSaltCell(input);
+  if (input.saltCell && salt.ok) {
+    const a = addonAmount(addons, "salt_cell", 15) * salt.qty;
     monthly += a;
-    lines.push({ label: "Salt cell service · quarterly clean", amount: a });
+    lines.push({
+      label:
+        salt.qty > 1
+          ? `Salt cell service · quarterly clean × ${salt.qty}`
+          : "Salt cell service · quarterly clean",
+      amount: a,
+    });
   }
+
 
   const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];
   const cleanup = cond.cleanupHigh ? Math.round((cond.cleanupLow + cond.cleanupHigh) / 2) : 0;
