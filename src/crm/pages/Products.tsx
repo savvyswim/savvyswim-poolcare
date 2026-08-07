@@ -36,6 +36,7 @@ export default function Products() {
   const [chemOnly, setChemOnly] = useState(false);
   const [chemIncluded, setChemIncluded] = useState(false);
   const [saltCell, setSaltCell] = useState(false);
+  const [saltQty, setSaltQty] = useState(1);
   const [undercut, setUndercut] = useState(15);
   const [override, setOverride] = useState<string>("");
   const [payingNow, setPayingNow] = useState<string>("");
