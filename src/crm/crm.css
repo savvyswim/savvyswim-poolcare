@@ -181,3 +181,22 @@
   border: 1px solid hsl(var(--ss-sand)); background: hsl(var(--ss-cream)); padding: 1rem;
   box-shadow: 0 24px 60px -18px hsl(var(--ss-ink) / 0.45);
 }
+
+/* --- smooth page transitions on desktop --- */
+@keyframes ss-page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.ss-page-enter { animation: ss-page-in 220ms cubic-bezier(.22,.61,.36,1) both; }
+@media (prefers-reduced-motion: reduce) { .ss-page-enter { animation: none; } }
+
+/* --- earnings history timeline --- */
+.ss-timeline { position: relative; padding-left: 0.9rem; }
+.ss-timeline::before {
+  content: ""; position: absolute; left: 0.22rem; top: 0.35rem; bottom: 0.35rem;
+  width: 1px; background: hsl(var(--ss-sand));
+}
+.ss-timeline-dot {
+  position: absolute; left: -0.78rem; top: 0.55rem; width: 0.5rem; height: 0.5rem;
+  border-radius: 99px; background: hsl(var(--ss-aqua));
+}
