@@ -188,6 +188,28 @@ export default function PayPerPool() {
     return buildPayLines(scoped, liveCfg, techMeta);
   }, [visits, techFilter, liveCfg, techMeta]);
 
+  /* -------------------------------------------------- tech "my pool" view */
+  const [openPool, setOpenPool] = useState<string | null>(null);
+  const [showBonus, setShowBonus] = useState(false);
+  const myMeta = useMemo(() => staff.find((s) => s.id === id.staffId), [staff, id.staffId]);
+
+  function poolRateForMe(p: PoolRate) {
+    return Number(
+      p.tech_pay_rate ??
+        myMeta?.pay_rate ??
+        (myMeta?.level === "contractor" ? liveCfg.contractor_rate : liveCfg.default_rate),
+    );
+  }
+  function poolPctForMe(p: PoolRate) {
+    return Number(p.tech_upsell_pct ?? myMeta?.upsell_pct ?? liveCfg.upsell_pct);
+  }
+
+  const openPoolRow = useMemo(() => pools.find((p) => p.id === openPool) ?? null, [pools, openPool]);
+  const openPoolLines = useMemo(
+    () => (openPool ? lines.filter((l) => l.customerId === openPool) : []),
+    [lines, openPool],
+  );
+
   const adjByTech = useMemo(() => {
     const map = new Map<string, number>();
     const scoped = techFilter === "all" ? adjustments : adjustments.filter((a) => a.tech_id === techFilter);
