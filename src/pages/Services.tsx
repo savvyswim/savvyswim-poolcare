@@ -133,6 +133,22 @@ const SERVICES = [
       "Priced by pool size after the walkthrough",
     ],
   },
+  {
+    no: "08",
+    icon: ShieldCheck,
+    title: "The Savvy Concierge",
+    photo: photoNavyCabana.url,
+    alt: "Navy and white cabana stripes beside a pool",
+    desc: "Hands-off ownership. Always guest-ready. Our top tier bundles the Swim Club membership ($19.99/mo) into your pool's monthly rate.",
+    includes: [
+      "4 visits/month + 5 on-call touch-ups",
+      "All chemicals, salt & tabs included",
+      "Quarterly filter deep clean",
+      "Free minor equipment repairs",
+      "Seasonal open & close service",
+      "24/7 text support + Swim Club access",
+    ],
+  },
 ];
 
 

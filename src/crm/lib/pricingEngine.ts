@@ -164,6 +164,8 @@ export type QuoteInput = {
   saltCell?: boolean;
   /** One salt cell per water body — 1 or 2 (pool + spa). */
   saltCellQty?: number;
+  /** Swim Club membership bundled into the monthly rate. */
+  swimClub?: boolean;
   /** Service plan the estimate is built on — gates the salt cell add-on. */
   planId?: string;
   rateOverride?: number | null;
@@ -173,6 +175,9 @@ export type QuoteInput = {
 
 /** Max salt cells we service on one property (pool + spa). */
 export const MAX_SALT_CELLS = 2;
+
+/** Swim Club membership fee, stacked on top of the pool's monthly rate. */
+export const SWIM_CLUB_FEE = 19.99;
 
 /**
  * Salt cell service is a recurring monthly fee with a quarterly cell clean, so
@@ -273,6 +278,12 @@ export function computeQuote(
       amount: a,
     });
   }
+  if (input.swimClub) {
+    const a = addonAmount(addons, "swim_club", SWIM_CLUB_FEE);
+    monthly = Math.round((monthly + a) * 100) / 100;
+    lines.push({ label: "Swim Club membership", amount: a });
+  }
+
 
 
   const cond = CONDITIONS.find((c) => c.id === input.condition) ?? CONDITIONS[0];
@@ -415,6 +426,8 @@ export type ServicePlan = {
     chemOnly: boolean;
     chemIncluded: boolean;
     saltCell: boolean;
+    /** Swim Club membership bundled into the monthly rate ($19.99). */
+    swimClub?: boolean;
     condition: string;
     undercutPct?: number;
   };
@@ -488,6 +501,27 @@ export const SERVICE_PLANS: ServicePlan[] = [
       "Salt cell service — monitoring, output tuning and quarterly cell clean",
       "All standard chemicals included",
       "Monthly rate set by pool size",
+    ],
+  },
+  {
+    id: "concierge",
+    name: "The Savvy Concierge",
+    tagline: "Hands-off ownership. Always guest-ready — Swim Club included",
+    defaults: {
+      chemOnly: false,
+      chemIncluded: true,
+      saltCell: true,
+      swimClub: true,
+      condition: "clean",
+    },
+    scope: [
+      "4 visits per month + 5 on-call touch-ups",
+      "All chemicals, salt and tabs included",
+      "Quarterly filter deep clean",
+      "Free minor equipment repairs",
+      "Seasonal open & close service",
+      "24/7 text support",
+      "Swim Club membership included ($19.99/mo built into the rate)",
     ],
   },
 
