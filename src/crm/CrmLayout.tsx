@@ -218,7 +218,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       )}
 
       <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[248px] lg:pr-8 xl:pl-[264px]">
-        <div className="mx-auto max-w-[1440px]">
+        <div key={loc.pathname} className="ss-page-enter mx-auto max-w-[1440px]">
           <CrmErrorBoundary resetKey={loc.pathname}>
             {allowed ? children ?? <Outlet /> : <AccessDenied />}
           </CrmErrorBoundary>
