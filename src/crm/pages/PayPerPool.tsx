@@ -17,7 +17,13 @@ import {
   type PayVisit,
 } from "@/crm/lib/payPerPool";
 
-type Staff = { id: string; full_name: string; level: string };
+type Staff = {
+  id: string;
+  full_name: string;
+  level: string;
+  pay_rate: number | null;
+  upsell_pct: number | null;
+};
 type Payout = {
   id: string;
   tech_id: string;
@@ -35,6 +41,16 @@ type Payout = {
   paid_at: string | null;
 };
 
+type Adjustment = {
+  id: string;
+  tech_id: string;
+  effective_date: string;
+  kind: string;
+  amount: number;
+  reason: string | null;
+  payout_id: string | null;
+};
+
 type PoolRate = {
   id: string;
   full_name: string;
@@ -43,9 +59,10 @@ type PoolRate = {
   route_frequency: string | null;
   tech_pay_rate: number | null;
   tech_upsell_pct: number | null;
+  assigned_tech_id: string | null;
 };
 
-type Tab = "earnings" | "rates" | "payouts";
+type Tab = "earnings" | "rates" | "team" | "payouts";
 
 export default function PayPerPool() {
   const id = useSavvyIdentity();
