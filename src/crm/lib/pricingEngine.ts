@@ -353,6 +353,8 @@ export type ServicePlan = {
   id: string;
   name: string;
   tagline: string;
+  /** Priced per pool after inspection — the estimate asks for a one-time price. */
+  customPrice?: boolean;
   /** Estimate fields this plan pre-fills. */
   defaults: {
     chemOnly: boolean;
@@ -364,6 +366,7 @@ export type ServicePlan = {
   /** What the visit includes — carried into the quote summary. */
   scope: string[];
 };
+
 
 export const SERVICE_PLANS: ServicePlan[] = [
   {
