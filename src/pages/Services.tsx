@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   ArrowRight,
   MessageSquare,
+  ChevronDown,
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
@@ -128,6 +129,7 @@ const PROCESS = [
 
 const Services = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [openCard, setOpenCard] = useState<string | null>(null);
   const [bookingService, setBookingService] = useState<string | undefined>();
 
   const openBooking = (service?: string) => {
