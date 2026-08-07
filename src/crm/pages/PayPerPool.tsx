@@ -704,7 +704,7 @@ export default function PayPerPool() {
                 <button
                   key={p.id}
                   className="ss-card p-4 text-left transition-shadow hover:shadow-[0_10px_24px_-16px_rgba(0,0,0,.5)]"
-                  onClick={() => setOpenPool(p.id)}
+                  onClick={() => { setOpenPool(p.id); setShowBonus(false); }}
                 >
                   <div className="text-[0.9rem] font-semibold">{p.full_name}</div>
                   <div className="text-[0.7rem] opacity-55">{p.city ?? "—"}</div>
@@ -734,7 +734,7 @@ export default function PayPerPool() {
               <div>
                 <h2 className="text-[1rem]">{openPoolRow.full_name}</h2>
                 <div className="text-[0.72rem] opacity-55">
-                  {openPoolRow.city ?? "—"} · {openPoolRow.route_frequency ?? "weekly"}
+                  {openPoolRow.city ?? "—"}
                 </div>
               </div>
               <button className="ss-btn-ghost ss-btn" onClick={() => setOpenPool(null)}>Close</button>
