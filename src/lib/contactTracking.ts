@@ -121,8 +121,6 @@ export const POOL_SMS_TEMPLATE = [
   "Best time to reach me:",
 ].join("\n");
 
-/** @deprecated use POOL_SMS_TEMPLATE */
-export const HAIL_SMS_TEMPLATE = POOL_SMS_TEMPLATE;
 
 /**
  * Builds an sms: link with the prefilled inspection message. The body is kept
