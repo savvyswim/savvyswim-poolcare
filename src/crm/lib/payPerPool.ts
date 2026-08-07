@@ -138,7 +138,7 @@ export function revenueFor(visit: PayVisit): number {
 export function buildPayLines(
   visits: PayVisit[],
   cfg: PayConfig,
-  levelByTech: Record<string, string> = {},
+  techByid: Record<string, TechMeta | string> = {},
 ): PayLine[] {
   // Count pools per tech per day so the daily bonus lands on the last pool.
   const dayCounts = new Map<string, PayVisit[]>();
@@ -159,15 +159,16 @@ export function buildPayLines(
   }
 
   return visits.map((v) => {
+    const meta = techByid[v.tech_id ?? ""];
     const locked = !!v.payout_id;
-    const basePay = rateFor(v, cfg, levelByTech[v.tech_id ?? ""]);
+    const basePay = rateFor(v, cfg, meta);
     const bonus = locked
       ? Number(v.tech_bonus ?? 0)
       : bonusVisit.has(v.id)
         ? cfg.bonus_amount
         : 0;
     const upsellAmount = Number(v.upsell_amount ?? 0);
-    const pct = Number(v.ss_customers?.tech_upsell_pct ?? cfg.upsell_pct);
+    const pct = upsellPctFor(v, cfg, meta);
     const commission = locked
       ? Number(v.upsell_commission ?? 0)
       : Math.round(upsellAmount * (pct / 100) * 100) / 100;
