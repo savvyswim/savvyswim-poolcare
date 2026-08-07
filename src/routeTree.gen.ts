@@ -19,6 +19,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as CrmRouteImport } from './routes/_crm'
@@ -123,6 +124,11 @@ const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
 const FreeInspectionRoute = FreeInspectionRouteImport.update({
   id: '/free-inspection',
   path: '/free-inspection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -410,6 +416,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
@@ -476,6 +483,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
@@ -544,6 +552,7 @@ export interface FileRoutesById {
   '/_crm': typeof CrmRouteWithChildren
   '/app': typeof AppRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
@@ -612,6 +621,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/book'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
@@ -678,6 +688,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/book'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/_crm'
     | '/app'
     | '/auth'
+    | '/book'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
@@ -813,6 +825,7 @@ export interface RootRouteChildren {
   CrmRoute: typeof CrmRouteWithChildren
   AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
+  BookRoute: typeof BookRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
   PortalRoute: typeof PortalRoute
@@ -915,6 +928,13 @@ declare module '@tanstack/react-router' {
       path: '/free-inspection'
       fullPath: '/free-inspection'
       preLoaderRoute: typeof FreeInspectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1380,6 +1400,7 @@ const rootRouteChildren: RootRouteChildren = {
   CrmRoute: CrmRouteWithChildren,
   AppRoute: AppRoute,
   AuthRoute: AuthRoute,
+  BookRoute: BookRoute,
   FreeInspectionRoute: FreeInspectionRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
   PortalRoute: PortalRoute,
@@ -1414,3 +1435,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
