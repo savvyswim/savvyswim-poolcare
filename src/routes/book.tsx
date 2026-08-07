@@ -45,10 +45,38 @@ export const Route = createFileRoute("/book")({
           },
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
     ],
   }),
   component: BookPage,
 });
+
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "Do you work with insurance claims?",
+    a: "Yes. If your pool or equipment was damaged and you're filing a claim, we document the damage with photos and provide a written, itemized estimate you can submit to your insurer. We can also speak with your adjuster on site during the inspection.",
+  },
+  {
+    q: "What happens during a mobile inspection?",
+    a: "A technician comes to your property, tests the water, checks the pump, filter, heater, and automation, looks over the surface and tile line, and walks you through what we find. It usually takes 30–45 minutes and there's no charge or obligation.",
+  },
+  {
+    q: "How fast do you respond and get the work done?",
+    a: "We confirm your booking by phone or email within one business day. Inspections are typically scheduled within a few days, and your written estimate follows within one business day of the visit. Repair timing depends on parts availability — we'll give you a date in the estimate.",
+  },
+];
+
 
 
 function BookPage() {
