@@ -26,8 +26,9 @@ type Visit = {
 };
 
 import SaltGuide from "@/crm/components/SaltGuide";
+import WaterTrends from "@/crm/components/WaterTrends";
 
-const TABS = ["Overview", "Timeline", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
+const TABS = ["Overview", "Timeline", "Water trends", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -239,6 +240,8 @@ export default function CustomerDetail() {
           )}
         </div>
       )}
+
+      {tab === "Water trends" && <WaterTrends visits={visits} />}
 
       {tab === "Salt pool" && <SaltGuide gallons={c.gallons} />}
 
