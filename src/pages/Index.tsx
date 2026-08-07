@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import {
   Mail,
   Phone,
@@ -99,7 +99,6 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { Link } from "@/lib/router-compat";
-import { SwimClubPrompt } from "@/components/SwimClubPrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 
