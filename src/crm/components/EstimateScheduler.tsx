@@ -366,20 +366,33 @@ export function ServiceEstimate() {
 
         <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
           <div>
-            <label className="ss-label">Labor hours</label>
+            <label className="ss-label">Labor price</label>
+            <input
+              type="number"
+              step="5"
+              min={0}
+              className="ss-input ss-num"
+              value={laborPrice}
+              onChange={(e) => setLaborPrice(Number(e.target.value))}
+            />
+            <div className="mt-1 text-[0.68rem] opacity-60">What the customer is charged for labor.</div>
+          </div>
+          <div>
+            <label className="ss-label">Time on site (hrs)</label>
             <input
               type="number"
               step="0.25"
+              min={0}
               className="ss-input ss-num"
               value={hours}
               onChange={(e) => setHours(Number(e.target.value))}
             />
-          </div>
-          <div>
-            <label className="ss-label">Billed at</label>
-            <div className="ss-input ss-num opacity-70">{money(costs.serviceBillRateHr)}/hr</div>
+            <div className="mt-1 text-[0.68rem] opacity-60">
+              Tracking only — how long the service takes. Doesn’t change the price.
+            </div>
           </div>
         </div>
+
         <div className="mt-2 flex flex-wrap gap-3 text-[0.78rem]">
           <label className="flex items-center gap-2">
             <input type="checkbox" checked={includeTrip} onChange={(e) => setIncludeTrip(e.target.checked)} />
