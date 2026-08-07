@@ -9,14 +9,23 @@ import {
   DEFAULT_PAY_CONFIG,
   isoDay,
   money,
+  normalizePayStatus,
   PAY_SETTINGS_KEY,
+  PAY_STATUS_LABEL,
   periodHistory,
   sumLines,
   weekRange,
   type PayConfig,
   type PayLine,
+  type PayStatus,
   type PayVisit,
 } from "@/crm/lib/payPerPool";
+
+const STATUS_TONE: Record<PayStatus, "ink" | "gold" | "aqua" | "green"> = {
+  pending: "gold",
+  approved: "aqua",
+  paid: "green",
+};
 
 type Staff = {
   id: string;
@@ -345,7 +354,7 @@ export default function PayPerPool() {
         commission_pay: Number(t.commission.toFixed(2)),
         adjustments: Number(adjSum.toFixed(2)),
         total_pay: Number((t.techTotal + adjSum).toFixed(2)),
-        status: "ready",
+        status: "pending",
       })
       .select()
       .single();
@@ -377,7 +386,19 @@ export default function PayPerPool() {
     void reloadPayouts();
     void reloadAdjustments();
     setTab("payouts");
-    toast.success(`Invoice ${data.invoice_number} ready — ${money(t.techTotal + adjSum)}`);
+    toast.success(`Invoice ${data.invoice_number} pending approval — ${money(t.techTotal + adjSum)}`);
+  }
+
+  async function approvePayout(p: Payout) {
+    const { error } = await supabase
+      .from("ss_tech_payouts")
+      .update({ status: "approved" })
+      .eq("id", p.id);
+    if (error) { toast.error(error.message); return; }
+    await supabase.from("ss_visits").update({ pay_status: "approved" }).eq("payout_id", p.id);
+    void reloadPayouts();
+    void reloadVisits();
+    toast.success(`${p.invoice_number} approved`);
   }
 
   async function markPaid(p: Payout) {
@@ -870,6 +891,7 @@ export default function PayPerPool() {
                           {new Date(`${p.end}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                         </div>
                         <div className="flex items-center gap-2">
+                          <Chip tone={STATUS_TONE[p.payStatus]}>{PAY_STATUS_LABEL[p.payStatus]}</Chip>
                           <strong className="text-[0.95rem]">{money(p.total)}</strong>
                           {p.locked && <Lock size={12} className="opacity-45" />}
                         </div>
@@ -985,7 +1007,9 @@ export default function PayPerPool() {
                 </div>
                 <div className="text-right">
                   <div className="text-[1.15rem] font-semibold">{money(Number(p.total_pay))}</div>
-                  <Chip tone={p.status === "paid" ? "green" : "aqua"}>{p.status}</Chip>
+                  <Chip tone={STATUS_TONE[normalizePayStatus(p.status)]}>
+                    {PAY_STATUS_LABEL[normalizePayStatus(p.status)]}
+                  </Chip>
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2 text-[0.75rem] sm:grid-cols-4">
@@ -999,7 +1023,10 @@ export default function PayPerPool() {
                   <Printer className="mr-2 inline h-4 w-4" />
                   Print invoice
                 </button>
-                {canManage && p.status !== "paid" && (
+                {canManage && normalizePayStatus(p.status) === "pending" && (
+                  <button className="ss-btn-ghost" onClick={() => approvePayout(p)}>Approve</button>
+                )}
+                {canManage && normalizePayStatus(p.status) !== "paid" && (
                   <button className="ss-btn" onClick={() => markPaid(p)}>Mark paid</button>
                 )}
               </div>
