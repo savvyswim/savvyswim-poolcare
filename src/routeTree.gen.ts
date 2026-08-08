@@ -65,6 +65,7 @@ import { Route as CrmAdminCrmScorecardRouteImport } from './routes/_crm/admin/cr
 import { Route as CrmAdminCrmReviewsRouteImport } from './routes/_crm/admin/crm/reviews'
 import { Route as CrmAdminCrmRevenueGrowthRouteImport } from './routes/_crm/admin/crm/revenue-growth'
 import { Route as CrmAdminCrmReportsRouteImport } from './routes/_crm/admin/crm/reports'
+import { Route as CrmAdminCrmQuotesRouteImport } from './routes/_crm/admin/crm/quotes'
 import { Route as CrmAdminCrmQcReviewRouteImport } from './routes/_crm/admin/crm/qc-review'
 import { Route as CrmAdminCrmProductsRouteImport } from './routes/_crm/admin/crm/products'
 import { Route as CrmAdminCrmPricingMatrixRouteImport } from './routes/_crm/admin/crm/pricing-matrix'
@@ -369,6 +370,11 @@ const CrmAdminCrmReportsRoute = CrmAdminCrmReportsRouteImport.update({
   path: '/admin/crm/reports',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmQuotesRoute = CrmAdminCrmQuotesRouteImport.update({
+  id: '/admin/crm/quotes',
+  path: '/admin/crm/quotes',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmQcReviewRoute = CrmAdminCrmQcReviewRouteImport.update({
   id: '/admin/crm/qc-review',
   path: '/admin/crm/qc-review',
@@ -519,6 +525,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -595,6 +602,7 @@ export interface FileRoutesByTo {
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -673,6 +681,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/_crm/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/_crm/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/_crm/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/_crm/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/_crm/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/_crm/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/admin/crm/pricing-matrix'
     | '/admin/crm/products'
     | '/admin/crm/qc-review'
+    | '/admin/crm/quotes'
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
@@ -827,6 +837,7 @@ export interface FileRouteTypes {
     | '/admin/crm/pricing-matrix'
     | '/admin/crm/products'
     | '/admin/crm/qc-review'
+    | '/admin/crm/quotes'
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
@@ -904,6 +915,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/pricing-matrix'
     | '/_crm/admin/crm/products'
     | '/_crm/admin/crm/qc-review'
+    | '/_crm/admin/crm/quotes'
     | '/_crm/admin/crm/reports'
     | '/_crm/admin/crm/revenue-growth'
     | '/_crm/admin/crm/reviews'
@@ -1369,6 +1381,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmReportsRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/quotes': {
+      id: '/_crm/admin/crm/quotes'
+      path: '/admin/crm/quotes'
+      fullPath: '/admin/crm/quotes'
+      preLoaderRoute: typeof CrmAdminCrmQuotesRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/qc-review': {
       id: '/_crm/admin/crm/qc-review'
       path: '/admin/crm/qc-review'
@@ -1521,6 +1540,7 @@ interface CrmRouteChildren {
   CrmAdminCrmPricingMatrixRoute: typeof CrmAdminCrmPricingMatrixRoute
   CrmAdminCrmProductsRoute: typeof CrmAdminCrmProductsRoute
   CrmAdminCrmQcReviewRoute: typeof CrmAdminCrmQcReviewRoute
+  CrmAdminCrmQuotesRoute: typeof CrmAdminCrmQuotesRoute
   CrmAdminCrmReportsRoute: typeof CrmAdminCrmReportsRoute
   CrmAdminCrmRevenueGrowthRoute: typeof CrmAdminCrmRevenueGrowthRoute
   CrmAdminCrmReviewsRoute: typeof CrmAdminCrmReviewsRoute
@@ -1557,6 +1577,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmPricingMatrixRoute: CrmAdminCrmPricingMatrixRoute,
   CrmAdminCrmProductsRoute: CrmAdminCrmProductsRoute,
   CrmAdminCrmQcReviewRoute: CrmAdminCrmQcReviewRoute,
+  CrmAdminCrmQuotesRoute: CrmAdminCrmQuotesRoute,
   CrmAdminCrmReportsRoute: CrmAdminCrmReportsRoute,
   CrmAdminCrmRevenueGrowthRoute: CrmAdminCrmRevenueGrowthRoute,
   CrmAdminCrmReviewsRoute: CrmAdminCrmReviewsRoute,
