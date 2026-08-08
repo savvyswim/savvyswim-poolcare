@@ -1038,6 +1038,7 @@ export default function Portal() {
           pool={resched.pool}
           currentDate={resched.date}
           saving={saving}
+          serviceAddressLine={serviceAddress ? `${serviceAddress.label} — ${formatAddress(serviceAddress)}` : null}
           onClose={() => setResched(null)}
           onSubmit={submitReschedule}
         />
