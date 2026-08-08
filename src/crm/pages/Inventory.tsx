@@ -425,7 +425,20 @@ export default function Inventory() {
                 </div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
+                  {(() => {
+                    const u = usageByItem.get(i.id);
+                    if (!u || !u.qty) return null;
+                    const days = u.qty / 30;
+                    return (
+                      <>
+                        {" · "}used {Math.round(u.qty * 100) / 100} {i.unit ?? "units"} on {u.jobs} job(s) in 30 days
+                        {u.cost > 0 && ` · $${u.cost.toFixed(2)}`}
+                        {days > 0 && ` · ~${Math.floor(i.quantity / days)} days of stock left`}
+                      </>
+                    );
+                  })()}
                 </div>
+
               </div>
               <div className="flex items-center gap-2">
                 <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, -1)} aria-label={`Decrease ${i.name}`}>−</button>
