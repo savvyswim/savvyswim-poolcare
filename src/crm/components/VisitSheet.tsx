@@ -318,7 +318,12 @@ export default function VisitSheet({
     const usedRows = used.filter((u) => u.qty > 0);
     if (usedRows.length) {
       const { error: invErr } = await supabase.rpc("ss_log_inventory_usage", {
-        p_items: usedRows.map((u) => ({ item_id: u.item_id, qty: u.qty, unit: u.entry_unit || u.unit })),
+        p_items: usedRows.map((u) => ({
+          item_id: u.item_id,
+          qty: u.qty,
+          unit: u.entry_unit || u.unit,
+          unit_cost: u.unit_cost,
+        })),
         p_visit_id: stop.id,
         p_note: `Used on ${c.full_name}'s visit`,
       });
