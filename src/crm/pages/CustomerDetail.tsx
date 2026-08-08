@@ -37,6 +37,7 @@ type Visit = {
 import SaltGuide from "@/crm/components/SaltGuide";
 import WaterBodies from "@/crm/components/WaterBodies";
 import EquipmentRecords from "@/crm/components/EquipmentRecords";
+import CustomerWorkflowPicker from "@/crm/components/CustomerWorkflowPicker";
 import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
 
