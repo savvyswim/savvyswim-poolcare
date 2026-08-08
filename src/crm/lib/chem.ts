@@ -267,3 +267,84 @@ export function evaluate(readings: Readings, gallons: number) {
         : "No readings recorded on this visit.",
   };
 }
+
+/* ────────────────────────────────────────────────────────────────
+   Severity bands — how far outside the Savvy Swim target a reading
+   is. Drives the colour of the field and whether the office gets
+   an alert when the tech saves the visit.
+   ──────────────────────────────────────────────────────────────── */
+
+export type Severity = "unknown" | "good" | "watch" | "critical";
+
+/** Outside these bands the water is unsafe / equipment is at risk. */
+export const CRITICAL_BANDS: Record<MetricKey, { low: number | null; high: number | null }> = {
+  fc: { low: 0.5, high: 5 },
+  ph: { low: 7.0, high: 8.0 },
+  ta: { low: 60, high: 180 },
+  ch: { low: 150, high: 600 },
+  cyc: { low: 20, high: 100 },
+  psi: { low: 5, high: 22 },
+  salt: { low: 2500, high: 4500 },
+};
+
+export function severityFor(key: MetricKey, value: number | undefined): Severity {
+  const status = statusFor(key, value);
+  if (status === "unknown" || status === "good") return status;
+  const band = CRITICAL_BANDS[key];
+  const v = value as number;
+  if (status === "low" && band.low != null && v < band.low) return "critical";
+  if (status === "high" && band.high != null && v > band.high) return "critical";
+  return "watch";
+}
+
+/** Inline colours (brand tokens) for a reading input / chip. */
+export function severityTone(sev: Severity) {
+  switch (sev) {
+    case "critical":
+      return { bg: "hsl(var(--ss-burgundy) / .1)", fg: "hsl(var(--ss-burgundy))", border: "hsl(var(--ss-burgundy))" };
+    case "watch":
+      return { bg: "hsl(38 92% 92%)", fg: "hsl(28 80% 30%)", border: "hsl(38 85% 45%)" };
+    case "good":
+      return { bg: "hsl(152 55% 92%)", fg: "hsl(152 60% 24%)", border: "hsl(152 45% 40%)" };
+    default:
+      return { bg: "transparent", fg: "inherit", border: "hsl(var(--ss-ink) / .2)" };
+  }
+}
+
+export type ReadingFlag = {
+  key: MetricKey;
+  label: string;
+  value: number;
+  unit: string;
+  range: string;
+  status: Status;
+  severity: Severity;
+};
+
+/** Every tested reading that sits outside target, worst first. */
+export function flagReadings(readings: Readings): ReadingFlag[] {
+  const order: Record<Severity, number> = { critical: 0, watch: 1, good: 2, unknown: 3 };
+  return (Object.keys(TARGETS) as MetricKey[])
+    .map((key) => {
+      const t = TARGETS[key];
+      const value = (readings as Record<string, number | undefined>)[key];
+      const severity = severityFor(key, value);
+      return {
+        key,
+        label: t.label,
+        value: value as number,
+        unit: t.unit,
+        range: `${t.min}–${t.max}${t.unit ? ` ${t.unit}` : ""}`,
+        status: statusFor(key, value),
+        severity,
+      };
+    })
+    .filter((f) => f.severity === "watch" || f.severity === "critical")
+    .sort((a, b) => order[a.severity] - order[b.severity]);
+}
+
+export function describeFlags(flags: ReadingFlag[]) {
+  return flags
+    .map((f) => `${f.label} ${f.value}${f.unit ? ` ${f.unit}` : ""} (${f.status}, target ${f.range})`)
+    .join(" · ");
+}
