@@ -681,6 +681,67 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {/* Water reports */}
+                <section className="mt-12">
+                  <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+                    <FlaskConical className="h-4 w-4 text-accent" aria-hidden="true" /> Water reports
+                  </h2>
+                  <p className="mt-1 font-tech text-xs text-primary/55">
+                    Every balanced-water test we run, ready to download as a branded PDF.
+                  </p>
+                  <div className="mt-4 divide-y divide-primary/10 border border-hairline">
+                    {poolVisits.filter((v) => v.readings && v.status === "completed").length === 0 && (
+                      <p className="p-5 font-tech text-sm text-primary/60">
+                        Your first water report lands after the next visit.
+                      </p>
+                    )}
+                    {poolVisits
+                      .filter((v) => v.readings && v.status === "completed")
+                      .slice(0, 12)
+                      .map((v) => {
+                        const r = (v.readings ?? {}) as Record<string, number | undefined>;
+                        const summary = (["fc", "ph", "ta", "cyc"] as MetricKey[])
+                          .filter((k) => typeof r[k] === "number")
+                          .map((k) => `${TARGETS[k].label} ${r[k]}`)
+                          .join(" · ");
+                        return (
+                          <div
+                            key={`wr-${v.id}`}
+                            className="flex flex-wrap items-center justify-between gap-3 p-4"
+                          >
+                            <div className="min-w-0">
+                              <p className="font-tech text-sm font-semibold">
+                                {new Date(v.scheduled_date).toLocaleDateString(undefined, {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}{" "}
+                                water test
+                              </p>
+                              <p className="font-tech text-xs text-primary/60">{summary || "Full chemistry logged"}</p>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => downloadReport(pool, v)}
+                                className="inline-flex items-center gap-1.5 border border-primary/20 px-3 py-2 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                              >
+                                <Download className="h-3 w-3" aria-hidden="true" /> Download
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => shareReport(pool, v)}
+                                className="inline-flex items-center gap-1.5 border border-primary/20 px-3 py-2 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                              >
+                                <Share2 className="h-3 w-3" aria-hidden="true" /> Share
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </section>
+
                 {/* Service reports */}
                 <section className="mt-12">
                   <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
