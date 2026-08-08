@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, History, Minus, Pencil, Plus, Trash2, Upload, X } from "lucide-react";
+import { Check, History, Minus, Pencil, Plus, QrCode, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,12 +7,15 @@ import { checkLowStock } from "@/lib/inventory-alerts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import InventoryImport from "@/crm/components/InventoryImport";
+import InventoryLabels, { codeFor } from "@/crm/components/InventoryLabels";
+import CodeScanner from "@/crm/components/CodeScanner";
 import { convertQty, enterableUnits, PACK_UNITS, STOCK_UNITS, packLabel } from "@/crm/lib/units";
 
 
 type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
   pack_size: number | null; pack_unit: string | null;
+  sku: string | null; barcode: string | null;
 };
 
 const UNITS = STOCK_UNITS;
@@ -43,7 +46,7 @@ const stamp = (iso: string) =>
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
   });
 
-const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5, pack_size: "", pack_unit: "lb" };
+const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5, pack_size: "", pack_unit: "lb", sku: "", barcode: "" };
 
 /** "+2 (5 lb)" — shows what the tech typed when it differed from the stock unit. */
 const enteredNote = (m: Move, unit?: string | null) =>
@@ -63,6 +66,7 @@ export default function Inventory() {
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [showLabels, setShowLabels] = useState(false);
   const runLowStockCheck = useServerFn(checkLowStock);
 
   /** Fires the reorder notification when a change drops an item to/below its point. */
@@ -85,7 +89,7 @@ export default function Inventory() {
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
       .from("ss_inventory")
-      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit")
+      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit,sku,barcode")
       .order("name");
     return (data ?? []) as Item[];
   });
@@ -165,7 +169,9 @@ export default function Inventory() {
 
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
-    return rows.filter((r) => !t || `${r.name} ${r.unit ?? ""}`.toLowerCase().includes(t));
+    return rows.filter(
+      (r) => !t || `${r.name} ${r.unit ?? ""} ${r.sku ?? ""} ${r.barcode ?? ""}`.toLowerCase().includes(t),
+    );
   }, [rows, q]);
 
   const low = rows.filter((r) => r.quantity <= r.low_threshold);
@@ -252,6 +258,8 @@ export default function Inventory() {
       low_threshold: i.low_threshold,
       pack_size: i.pack_size == null ? "" : String(i.pack_size),
       pack_unit: i.pack_unit ?? "lb",
+      sku: i.sku ?? "",
+      barcode: i.barcode ?? "",
     });
   }
 
@@ -269,6 +277,8 @@ export default function Inventory() {
         low_threshold: Math.max(0, Number(edit.low_threshold) || 0),
         pack_size: Number(edit.pack_size) > 0 ? Number(edit.pack_size) : null,
         pack_unit: Number(edit.pack_size) > 0 ? edit.pack_unit : null,
+        sku: edit.sku.trim() || null,
+        barcode: edit.barcode.trim() || null,
       })
       .eq("id", editId);
     setBusy(false);
@@ -301,6 +311,10 @@ export default function Inventory() {
         </button>
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowImport((v) => !v)}>
           <Upload size={13} /> {showImport ? "Hide import" : "Import CSV"}
+        </button>
+        <CodeScanner label="Scan product" onScan={(c) => setQ(c)} />
+        <button className="ss-btn ss-btn-ghost" onClick={() => setShowLabels(true)}>
+          <QrCode size={13} /> Print labels
         </button>
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
           <History size={13} /> {showLog ? "Hide history" : "History"}
@@ -508,6 +522,27 @@ export default function Inventory() {
                         How much one {edit.unit} holds — lets techs enter quantities in other units.
                       </span>
                     </label>
+                <label className="space-y-1">
+                  <span className="ss-label">SKU (label code)</span>
+                  <input
+                    className="ss-input ss-num w-full"
+                    placeholder="SS-1A2B3C4D"
+                    value={edit.sku}
+                    onChange={(e) => setEdit({ ...edit, sku: e.target.value })}
+                  />
+                </label>
+                <label className="space-y-1">
+                  <span className="ss-label">Barcode (from the bottle)</span>
+                  <div className="flex gap-2">
+                    <input
+                      className="ss-input ss-num w-full"
+                      placeholder="Scan or type"
+                      value={edit.barcode}
+                      onChange={(e) => setEdit({ ...edit, barcode: e.target.value })}
+                    />
+                    <CodeScanner label="Scan" onScan={(c) => setEdit((d) => ({ ...d, barcode: c }))} />
+                  </div>
+                </label>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button className="ss-btn" disabled={busy} onClick={() => void saveEdit()}>
@@ -528,6 +563,7 @@ export default function Inventory() {
                   <span className="text-[0.88rem] font-semibold">{i.name}</span>
                   {i.quantity <= i.low_threshold && <Chip tone="orange">Reorder</Chip>}
                 </div>
+                <div className="ss-num text-[0.68rem] opacity-55">{codeFor(i)}</div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
                   {packLabel(i, i.unit ?? "unit") && ` · ${packLabel(i, i.unit ?? "unit")}`}
@@ -677,6 +713,8 @@ export default function Inventory() {
           ),
         )}
       </div>
+      {showLabels && <InventoryLabels items={shown} onClose={() => setShowLabels(false)} />}
+
     </div>
   );
 }

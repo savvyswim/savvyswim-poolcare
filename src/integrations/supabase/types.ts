@@ -2323,6 +2323,7 @@ export type Database = {
       }
       ss_inventory: {
         Row: {
+          barcode: string | null
           created_at: string
           id: string
           low_threshold: number
@@ -2330,11 +2331,13 @@ export type Database = {
           pack_size: number | null
           pack_unit: string | null
           quantity: number
+          sku: string | null
           unit: string
           unit_cost: number
           updated_at: string
         }
         Insert: {
+          barcode?: string | null
           created_at?: string
           id?: string
           low_threshold?: number
@@ -2342,11 +2345,13 @@ export type Database = {
           pack_size?: number | null
           pack_unit?: string | null
           quantity?: number
+          sku?: string | null
           unit?: string
           unit_cost?: number
           updated_at?: string
         }
         Update: {
+          barcode?: string | null
           created_at?: string
           id?: string
           low_threshold?: number
@@ -2354,6 +2359,7 @@ export type Database = {
           pack_size?: number | null
           pack_unit?: string | null
           quantity?: number
+          sku?: string | null
           unit?: string
           unit_cost?: number
           updated_at?: string
