@@ -2,6 +2,8 @@
 export type Readings = {
   fc?: number; ph?: number; ta?: number; ch?: number;
   cyc?: number; psi?: number; temp?: number; salt?: number;
+  phos?: number; tds?: number; borate?: number; copper?: number;
+  iron?: number; orp?: number; peroxide?: number;
 };
 
 export const CHEM_COST = { chlorinePerOz: 0.05, acidPerOz: 0.045 };
@@ -15,6 +17,13 @@ export const TARGETS = {
   cyc: { min: 30, max: 50, ideal: 40, label: "CYA", unit: "ppm", purpose: "Chlorine shield" },
   psi: { min: 8, max: 15, ideal: 12, label: "Filter PSI", unit: "psi", purpose: "Circulation" },
   salt: { min: 3000, max: 3400, ideal: 3200, label: "Salt", unit: "ppm", purpose: "Cell output" },
+  phos: { min: 0, max: 125, ideal: 0, label: "Phosphates", unit: "ppb", purpose: "Algae fuel" },
+  tds: { min: 0, max: 1500, ideal: 1000, label: "TDS", unit: "ppm", purpose: "Water age" },
+  borate: { min: 30, max: 50, ideal: 40, label: "Borates", unit: "ppm", purpose: "pH buffer" },
+  copper: { min: 0, max: 0.2, ideal: 0, label: "Copper", unit: "ppm", purpose: "Staining metal" },
+  iron: { min: 0, max: 0.2, ideal: 0, label: "Iron", unit: "ppm", purpose: "Staining metal" },
+  orp: { min: 650, max: 750, ideal: 700, label: "ORP", unit: "mV", purpose: "Sanitizer strength" },
+  peroxide: { min: 50, max: 100, ideal: 75, label: "Peroxide", unit: "ppm", purpose: "Biguanide sanitizer" },
 } as const;
 
 export type MetricKey = keyof typeof TARGETS;
@@ -80,6 +89,13 @@ export const READING_FIELDS = [
   { key: "psi", label: "Filter PSI", unit: "psi", target: "8–15", step: 1 },
   { key: "temp", label: "Water Temp", unit: "°F", target: "—", step: 1 },
   { key: "salt", label: "Salt", unit: "ppm", target: "3000–3400", step: 10 },
+  { key: "phos", label: "Phosphates", unit: "ppb", target: "< 125", step: 5 },
+  { key: "tds", label: "TDS", unit: "ppm", target: "< 1500", step: 50 },
+  { key: "borate", label: "Borates", unit: "ppm", target: "30–50", step: 1 },
+  { key: "copper", label: "Copper", unit: "ppm", target: "< 0.2", step: 0.1 },
+  { key: "iron", label: "Iron", unit: "ppm", target: "< 0.2", step: 0.1 },
+  { key: "orp", label: "ORP", unit: "mV", target: "650–750", step: 10 },
+  { key: "peroxide", label: "Peroxide", unit: "ppm", target: "50–100", step: 5 },
 ] as const;
 
 /* ────────────────────────────────────────────────────────────────
@@ -233,6 +249,92 @@ export function evaluate(readings: Readings, gallons: number) {
     });
   }
 
+  const { phos, tds, borate, copper, iron, orp, peroxide } = readings;
+
+  if (statusFor("phos", phos) === "high" && phos !== undefined) {
+    treatments.push({
+      metric: "phos",
+      chemical: "Phosphate remover (lanthanum)",
+      amount: `${round1(Math.max(4, (phos / 1000) * 9) * g)} oz`,
+      reason: `Phosphates ${phos} ppb are above 125 ppb — algae food, chlorine demand climbs.`,
+    });
+  }
+
+  if (statusFor("tds", tds) === "high" && tds !== undefined) {
+    treatments.push({
+      metric: "tds",
+      chemical: "Partial drain & refill",
+      amount: `Dilute ~${Math.min(50, Math.round(((tds - TARGETS.tds.ideal) / Math.max(tds, 1)) * 100))}%`,
+      reason: `TDS ${tds} ppm is above 1500 ppm — dull water and weak sanitizer (salt pools read higher by design).`,
+    });
+  }
+
+  if (statusFor("borate", borate) === "low" && borate !== undefined) {
+    treatments.push({
+      metric: "borate",
+      chemical: "Sodium tetraborate (borate up)",
+      amount: lbs(((TARGETS.borate.ideal - borate) / 10) * 1.4 * g),
+      reason: `Borates ${borate} ppm are below 30 ppm — pH drifts up between visits.`,
+    });
+  } else if (statusFor("borate", borate) === "high" && borate !== undefined) {
+    treatments.push({
+      metric: "borate",
+      chemical: "Partial drain & refill",
+      amount: "Dilute to 30–50 ppm",
+      reason: `Borates ${borate} ppm are above 50 ppm — only dilution lowers borates.`,
+    });
+  }
+
+  if (statusFor("copper", copper) === "high" && copper !== undefined) {
+    treatments.push({
+      metric: "copper",
+      chemical: "Metal sequestrant + partial drain",
+      amount: `${round1(32 * g)} oz sequestrant`,
+      reason: `Copper ${copper} ppm is above 0.2 ppm — blue-green staining and hair discoloration risk.`,
+    });
+  }
+
+  if (statusFor("iron", iron) === "high" && iron !== undefined) {
+    treatments.push({
+      metric: "iron",
+      chemical: "Metal sequestrant + filter with clarifier",
+      amount: `${round1(32 * g)} oz sequestrant`,
+      reason: `Iron ${iron} ppm is above 0.2 ppm — rust staining on plaster and fittings.`,
+    });
+  }
+
+  if (statusFor("orp", orp) === "low" && orp !== undefined) {
+    treatments.push({
+      metric: "orp",
+      chemical: "Raise sanitizer / verify CYA",
+      amount: "On site",
+      reason: `ORP ${orp} mV is below 650 mV — sanitizer is not killing fast enough.`,
+    });
+  } else if (statusFor("orp", orp) === "high" && orp !== undefined) {
+    treatments.push({
+      metric: "orp",
+      chemical: "Reduce feed rate",
+      amount: "On site",
+      reason: `ORP ${orp} mV is above 750 mV — over-sanitized, hard on surfaces and swimmers.`,
+    });
+  }
+
+  if (statusFor("peroxide", peroxide) === "low" && peroxide !== undefined) {
+    treatments.push({
+      metric: "peroxide",
+      chemical: "Biguanide shock (hydrogen peroxide)",
+      amount: `${round1(((TARGETS.peroxide.ideal - peroxide) / 10) * 6 * g)} oz`,
+      reason: `Peroxide ${peroxide} ppm is below 50 ppm — biguanide pool loses sanitation.`,
+    });
+  } else if (statusFor("peroxide", peroxide) === "high" && peroxide !== undefined) {
+    treatments.push({
+      metric: "peroxide",
+      chemical: "Hold shock, retest",
+      amount: "Wait 24–48 hrs",
+      reason: `Peroxide ${peroxide} ppm is above 100 ppm — let it burn down before adding more.`,
+    });
+  }
+
   if (statusFor("psi", psi) === "high" && psi !== undefined) {
     treatments.push({
       metric: "psi",
@@ -285,6 +387,13 @@ export const CRITICAL_BANDS: Record<MetricKey, { low: number | null; high: numbe
   cyc: { low: 20, high: 100 },
   psi: { low: 5, high: 22 },
   salt: { low: 2500, high: 4500 },
+  phos: { low: null, high: 500 },
+  tds: { low: null, high: 3000 },
+  borate: { low: 10, high: 80 },
+  copper: { low: null, high: 0.5 },
+  iron: { low: null, high: 0.5 },
+  orp: { low: 550, high: 850 },
+  peroxide: { low: 30, high: 150 },
 };
 
 export function severityFor(key: MetricKey, value: number | undefined): Severity {
