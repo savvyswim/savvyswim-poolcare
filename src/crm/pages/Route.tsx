@@ -7,7 +7,10 @@ import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import VisitSheet from "@/crm/components/VisitSheet";
 import RouteMap from "@/crm/components/RouteMap";
 import RouteBuilder from "@/crm/components/RouteBuilder";
+import RouteOptimizer from "@/crm/components/RouteOptimizer";
+import NoAccessDialog from "@/crm/components/NoAccessDialog";
 import { useGeofence } from "@/crm/lib/useGeofence";
+
 
 export type Stop = {
   id: string;
