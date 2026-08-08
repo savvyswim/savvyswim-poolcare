@@ -1933,6 +1933,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_failure_alerts: {
+        Row: {
+          account_key: string
+          account_name: string | null
+          alert_count: number
+          alert_result: string | null
+          created_at: string
+          failed_events: number
+          failure_rate: number
+          id: string
+          last_alerted_at: string
+          threshold_pct: number
+          total_events: number
+          updated_at: string
+          window_minutes: number
+        }
+        Insert: {
+          account_key: string
+          account_name?: string | null
+          alert_count?: number
+          alert_result?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          threshold_pct?: number
+          total_events?: number
+          updated_at?: string
+          window_minutes?: number
+        }
+        Update: {
+          account_key?: string
+          account_name?: string | null
+          alert_count?: number
+          alert_result?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          threshold_pct?: number
+          total_events?: number
+          updated_at?: string
+          window_minutes?: number
+        }
+        Relationships: []
+      }
       ss_feed: {
         Row: {
           body: string | null
