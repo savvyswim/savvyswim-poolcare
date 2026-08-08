@@ -217,6 +217,11 @@ export default function PortalAddresses({
                             Default
                           </span>
                         )}
+                        {r.is_billing && (
+                          <span className="border border-primary/40 px-1.5 py-0.5 text-[9px] tracking-widest text-primary">
+                            Billing
+                          </span>
+                        )}
                       </span>
                       <span className="mt-1 block text-xs text-muted-foreground">{formatAddress(r)}</span>
                       {r.notes && <span className="mt-1 block text-xs text-muted-foreground">{r.notes}</span>}
