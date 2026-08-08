@@ -3160,6 +3160,60 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_server_errors: {
+        Row: {
+          alert_result: string | null
+          alert_sent: boolean
+          boot_id: string | null
+          fingerprint: string
+          id: string
+          ip_address: string | null
+          message: string
+          method: string | null
+          occurred_at: string
+          occurrences: number
+          route: string | null
+          source: string
+          stack: string | null
+          status_code: number | null
+          user_agent: string | null
+        }
+        Insert: {
+          alert_result?: string | null
+          alert_sent?: boolean
+          boot_id?: string | null
+          fingerprint: string
+          id?: string
+          ip_address?: string | null
+          message: string
+          method?: string | null
+          occurred_at?: string
+          occurrences?: number
+          route?: string | null
+          source?: string
+          stack?: string | null
+          status_code?: number | null
+          user_agent?: string | null
+        }
+        Update: {
+          alert_result?: string | null
+          alert_sent?: boolean
+          boot_id?: string | null
+          fingerprint?: string
+          id?: string
+          ip_address?: string | null
+          message?: string
+          method?: string | null
+          occurred_at?: string
+          occurrences?: number
+          route?: string | null
+          source?: string
+          stack?: string | null
+          status_code?: number | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       ss_settings: {
         Row: {
           key: string
