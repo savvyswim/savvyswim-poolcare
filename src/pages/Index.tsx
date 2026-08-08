@@ -325,11 +325,11 @@ const Index = () => {
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
               <a
-
                 href={PHONE_HREF}
                 onClick={() => trackContactClick("call_click", "header_mobile")}
                 aria-label={`Call ${PHONE_DISPLAY}`}
-                className="inline-flex items-center justify-center border border-primary/20 p-2.5 text-primary transition-colors hover:border-primary lg:hidden"
+                className="inline-flex items-center justify-center border border-primary/20 p-2.5 text-primary transition-colors hover:border-primary 2xl:hidden"
+
               >
                 <Phone className="h-4 w-4" />
               </a>
