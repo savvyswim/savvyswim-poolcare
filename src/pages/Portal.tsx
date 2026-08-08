@@ -934,6 +934,12 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {pool && (
+                  <div className="mt-12">
+                    <PortalProfile />
+                  </div>
+                )}
+
                 {pool && <PortalDocuments customerName={pool.full_name} />}
 
                 {pool && <PortalTickets customerId={pool.id} />}
