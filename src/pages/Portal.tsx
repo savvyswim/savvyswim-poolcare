@@ -48,6 +48,7 @@ import PortalChemHistory from "@/components/PortalChemHistory";
 import PortalPayDialog, { type PayableInvoice } from "@/components/PortalPayDialog";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
+import { sendRescheduleNotice } from "@/lib/reschedule-notify.functions";
 
 
 type Pool = {
@@ -114,7 +115,12 @@ export default function Portal() {
   const [busy, setBusy] = useState(true);
   const [days, setDays] = useState<(typeof RANGES)[number]>(90);
   const [metric, setMetric] = useState<MetricKey>("fc");
-  const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
+  const [resched, setResched] = useState<{
+    pool: Pool;
+    date: string;
+    note: string;
+    originalDate: string | null;
+  } | null>(null);
   const [saving, setSaving] = useState(false);
   const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
   const [serviceAddress, setServiceAddress] = useState<ServiceAddress | null>(null);
@@ -237,7 +243,12 @@ export default function Portal() {
 
 
   function openReschedule(p: Pool, current: string | null) {
-    setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
+    setResched({
+      pool: p,
+      date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10),
+      note: "",
+      originalDate: current,
+    });
   }
 
   async function submitReschedule(date: string, note: string): Promise<boolean> {
@@ -261,6 +272,24 @@ export default function Portal() {
     const when = new Date(`${date}T12:00:00`).toLocaleDateString();
     await refreshVisits();
     toast.success(`Visit set for ${when} — confirmation sent to the office.`);
+
+    // Updated SMS/email confirmation to the customer with the new time + note.
+    const visitId = info["visit_id"];
+    if (typeof visitId === "string") {
+      sendRescheduleNotice({
+        data: {
+          visitId,
+          previousDate: resched.originalDate,
+          note: fullNote || null,
+          created: Boolean(info["created"]),
+        },
+      })
+        .then((res) => {
+          const via = (res as { channels?: string[] } | undefined)?.channels?.[0];
+          if (via) toast.success(`Updated confirmation sent by ${via === "sms" ? "text" : "email"}.`);
+        })
+        .catch(() => undefined);
+    }
 
     supabase.functions
       .invoke("notify-office-request", {
