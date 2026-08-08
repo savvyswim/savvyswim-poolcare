@@ -271,15 +271,26 @@ export default function RoutePage() {
           onComplete={handleComplete}
         />
       )}
+
+      {noAccess && (
+        <NoAccessDialog
+          visitId={noAccess.id}
+          customerId={noAccess.customer_id}
+          customerName={noAccess.ss_customers.full_name}
+          onClose={() => setNoAccess(null)}
+          onSaved={load}
+        />
+      )}
     </div>
   );
 }
 
 function StopCard({
-  stop, isTech, onOnMyWay, onStart,
+  stop, isTech, onOnMyWay, onStart, onNoAccess,
 }: {
-  stop: Stop; isTech: boolean; onOnMyWay: () => void; onStart: () => void;
+  stop: Stop; isTech: boolean; onOnMyWay: () => void; onStart: () => void; onNoAccess: () => void;
 }) {
+
   const c = stop.ss_customers;
   const warnings = Object.entries(c.custom_fields ?? {}).filter(([, v]) => v === true);
   return (
