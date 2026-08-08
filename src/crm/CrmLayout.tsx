@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { claimStaffSeat } from "@/lib/accounts.functions";
+
 import { Link, Outlet, useLocation, useNavigate } from "@/lib/router-compat";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, LogOut, Mail,
