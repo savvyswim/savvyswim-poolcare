@@ -66,7 +66,7 @@ export default function PortalPayDialog({
       >
         <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
           Invoice {invoice.invoice_number}
-philosophy        </p>
+</p>
         <h2 className="mt-1 font-display text-3xl uppercase leading-none">{money(invoice.amount)}</h2>
         <p className="mt-2 font-tech text-xs text-primary/60">
           {invoice.due_date ? `Due ${new Date(invoice.due_date).toLocaleDateString()}` : "Due on receipt"}
