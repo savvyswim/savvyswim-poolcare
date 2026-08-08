@@ -202,18 +202,35 @@ function NewCustomer({ onDone }: { onDone: () => void }) {
               <input className="ss-input ss-num" type="number" value={f.monthly_price} onChange={(e) => setF({ ...f, monthly_price: Number(e.target.value) })} />
             </div>
           </div>
+          <label className="flex items-center gap-2 text-[0.78rem] opacity-85">
+            <input type="checkbox" checked={withLogin} onChange={(e) => setWithLogin(e.target.checked)} />
+            Email a portal login invite to this customer
+          </label>
         </div>
         <div className="mt-4 flex gap-2">
           <button className="ss-btn ss-btn-ghost flex-1" onClick={onDone}>Cancel</button>
           <button className="ss-btn flex-1" disabled={saving || !f.full_name} onClick={async () => {
             setSaving(true);
-            const { error } = await supabase.from("ss_customers").insert(f);
-            setSaving(false);
-            if (error) { toast.error(error.message); return; }
+            const { data: created, error } = await supabase.from("ss_customers").insert(f).select("id").maybeSingle();
+            if (error) { setSaving(false); toast.error(error.message); return; }
             toast.success("Customer created");
+            if (withLogin && created?.id && f.email.trim()) {
+              try {
+                await createCustomerLogin({
+                  data: { customer_id: created.id, email: f.email.trim(), mode: "invite", origin: window.location.origin },
+                });
+                toast.success(`Login invite emailed to ${f.email.trim()}`);
+              } catch (err: any) {
+                toast.error(err?.message ?? "Customer saved, but the login invite failed");
+              }
+            } else if (withLogin) {
+              toast.error("Add an email to send a login invite");
+            }
+            setSaving(false);
             onDone();
           }}>Create</button>
         </div>
+
       </div>
     </div>
   );
