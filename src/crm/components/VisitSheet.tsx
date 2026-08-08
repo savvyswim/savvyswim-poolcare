@@ -4,13 +4,30 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { describeFlags, doseFor, evaluate, flagReadings, lsiVerdict, READING_FIELDS, severityFor, severityTone, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
-import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
+import {
+  PHASE_LABEL,
+  PHASE_ORDER,
+  SIGNATURE_CHECKLIST,
+  signaturePhase,
+  type ChecklistPhoto,
+  type WorkflowPhase,
+} from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
 import ChemicalsAdded, { chemTotal, type AppliedChem } from "@/crm/components/ChemicalsAdded";
 import type { Stop } from "@/crm/pages/Route";
 
-type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
+type Task = { id: string; label: string; is_required: boolean; photo_required: boolean; phase?: WorkflowPhase | null; hint?: string | null };
+
+type TemplateStep = {
+  id: string;
+  label: string;
+  hint: string | null;
+  phase: WorkflowPhase;
+  is_required: boolean;
+  photo_required: boolean;
+  sort_order: number;
+};
 
 type Step = {
   id: string;
@@ -19,6 +36,7 @@ type Step = {
   is_required: boolean;
   photo: ChecklistPhoto;
   custom: boolean;
+  phase: WorkflowPhase;
 };
 
 export type VisitPhoto = { label: string; path: string; url: string };
