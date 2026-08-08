@@ -13,6 +13,7 @@ export type ServiceAddress = {
   postal_code: string | null;
   notes: string | null;
   is_default: boolean;
+  is_billing: boolean;
 };
 
 const inputClass =
