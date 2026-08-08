@@ -4377,6 +4377,48 @@ export type Database = {
           },
         ]
       }
+      ss_test_accounts: {
+        Row: {
+          created_at: string
+          email: string
+          environment: string
+          id: string
+          label: string
+          last_rotated_at: string | null
+          last_rotated_by: string | null
+          notes: string | null
+          role: string
+          rotation_count: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          environment?: string
+          id?: string
+          label: string
+          last_rotated_at?: string | null
+          last_rotated_by?: string | null
+          notes?: string | null
+          role?: string
+          rotation_count?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          environment?: string
+          id?: string
+          label?: string
+          last_rotated_at?: string | null
+          last_rotated_by?: string | null
+          notes?: string | null
+          role?: string
+          rotation_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_ticket_messages: {
         Row: {
           author_kind: string
