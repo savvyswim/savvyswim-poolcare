@@ -98,6 +98,25 @@ export default function AuditTrail() {
     };
   }, [rows]);
 
+  // Which accounts generate the most webhook failures. Rejections happen before
+  // we can read the payload, so they land in an "unattributed" bucket.
+  const byAccount = useMemo(() => {
+    type Bucket = { name: string; total: number; failed: number; last: string | null };
+    const map = new Map<string, Bucket>();
+    for (const r of rows.filter((x) => x.action.startsWith("twilio_status_webhook"))) {
+      const d = (r.details ?? {}) as { customerId?: string; customerName?: string };
+      const key = d.customerId ?? "unattributed";
+      const name = d.customerName ?? (key === "unattributed" ? "Unattributed / pre-verification" : key);
+      const b = map.get(key) ?? { name, total: 0, failed: 0, last: null };
+      b.total += 1;
+      if (!r.success) b.failed += 1;
+      if (!b.last || r.created_at > b.last) b.last = r.created_at;
+      map.set(key, b);
+    }
+    return [...map.values()].sort((a, b) => b.failed - a.failed || b.total - a.total).slice(0, 10);
+  }, [rows]);
+
+
 
   return (
     <div className="space-y-6">
@@ -175,6 +194,37 @@ export default function AuditTrail() {
           </div>
         )}
       </div>
+
+      <div className="border border-foreground/15 p-4">
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          Verification & delivery failures by account
+        </div>
+        {byAccount.length === 0 ? (
+          <div className="mt-3 text-sm text-muted-foreground">No webhook events recorded yet.</div>
+        ) : (
+          <div className="mt-3 divide-y divide-foreground/10">
+            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-3 pb-2 text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+              <span>Account</span>
+              <span className="text-right">Events</span>
+              <span className="text-right">Failures</span>
+              <span className="text-right">Last</span>
+            </div>
+            {byAccount.map((a) => (
+              <div key={a.name} className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 py-2 text-sm">
+                <span className="truncate">{a.name}</span>
+                <span className="text-right tabular-nums">{a.total}</span>
+                <span className="text-right">
+                  <Chip tone={a.failed > 0 ? "burgundy" : "aqua"}>{a.failed}</Chip>
+                </span>
+                <span className="text-right text-xs text-muted-foreground">
+                  {a.last ? when(a.last) : "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
 
       <div className="flex flex-wrap gap-2">
 
