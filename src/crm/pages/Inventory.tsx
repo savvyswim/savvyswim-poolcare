@@ -295,6 +295,8 @@ export default function Inventory() {
                 </span>
                 <span className="font-semibold">{m.item_name}</span>
                 <span className="opacity-70">{reasonLabel(m.reason)}</span>
+                {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
+                {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
                 {m.note && <span className="opacity-60">· {m.note}</span>}
                 <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
               </div>
