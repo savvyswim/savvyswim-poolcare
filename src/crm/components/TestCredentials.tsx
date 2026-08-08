@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { KeyRound, Loader2, Mail, Plus, RotateCw, Trash2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, KeyRound, Loader2, Mail, Plus, RotateCw, ShieldCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { Chip } from "@/crm/components/Brand";
@@ -7,8 +7,27 @@ import {
   listTestAccounts,
   removeTestAccount,
   rotateTestCredential,
+  selfCheckTestAccounts,
   upsertTestAccount,
 } from "@/lib/test-credentials.functions";
+
+type CheckResult = {
+  id: string;
+  label: string;
+  email: string;
+  role: string;
+  ok: boolean;
+  summary: string;
+  last_sign_in_at: string | null;
+  checks: { check: string; passed: boolean; detail: string }[];
+};
+
+type CheckReport = {
+  environment: string;
+  checked_at: string;
+  passed: boolean;
+  results: CheckResult[];
+};
 
 type Row = {
   id: string;
@@ -51,11 +70,30 @@ export default function TestCredentials() {
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState<typeof blank>(blank);
   const [reveal, setReveal] = useState<{ email: string; password: string } | null>(null);
+  const [checking, setChecking] = useState(false);
+  const [report, setReport] = useState<CheckReport | null>(null);
 
   const list = useServerFn(listTestAccounts);
   const rotate = useServerFn(rotateTestCredential);
   const upsert = useServerFn(upsertTestAccount);
   const remove = useServerFn(removeTestAccount);
+  const selfCheck = useServerFn(selfCheckTestAccounts);
+
+  async function runSelfCheck() {
+    setChecking(true);
+    try {
+      const res = (await selfCheck({
+        data: { origin: window.location.origin },
+      })) as CheckReport;
+      setReport(res);
+      res.passed
+        ? toast.success(`All ${res.results.length} ${res.environment} logins are usable`)
+        : toast.error(`${res.results.filter((r) => !r.ok).length} login(s) need attention`);
+    } catch (e) {
+      toast.error((e as Error).message);
+    }
+    setChecking(false);
+  }
 
   const load = useCallback(async () => {
     try {
@@ -116,9 +154,15 @@ export default function TestCredentials() {
             and never written to the database, the code, or the audit log.
           </p>
         </div>
-        <button className="ss-btn" onClick={() => setAdding((v) => !v)}>
-          <Plus size={14} /> Register account
-        </button>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <button className="ss-btn" onClick={() => void runSelfCheck()} disabled={checking}>
+            {checking ? <Loader2 size={14} className="animate-spin" /> : <ShieldCheck size={14} />}
+            Run self-check
+          </button>
+          <button className="ss-btn" onClick={() => setAdding((v) => !v)}>
+            <Plus size={14} /> Register account
+          </button>
+        </div>
       </div>
 
       {adding && (
@@ -193,6 +237,52 @@ export default function TestCredentials() {
           </div>
           <p className="mt-1 opacity-65">
             Share it through your password manager — never paste it into chat, tickets or the repo.
+          </p>
+        </div>
+      )}
+
+      {report && (
+        <div className="mt-3 border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+          <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
+            Self-check · {report.environment} · {when(report.checked_at)}
+          </div>
+          <div className="mt-2 space-y-2">
+            {!report.results.length && (
+              <p className="text-[0.8rem] opacity-60">
+                No accounts registered for this environment.
+              </p>
+            )}
+            {report.results.map((r) => (
+              <div key={r.id} className="text-[0.8rem]">
+                <div className="flex items-start gap-2">
+                  {r.ok ? (
+                    <CheckCircle2 size={14} className="mt-0.5 shrink-0" style={{ color: "hsl(152 55% 34%)" }} />
+                  ) : (
+                    <AlertTriangle size={14} className="mt-0.5 shrink-0" style={{ color: "hsl(var(--ss-burgundy))" }} />
+                  )}
+                  <span>
+                    <strong>{r.label}</strong> <span className="opacity-65">({r.role})</span>
+                    <span className="block opacity-70">{r.summary}</span>
+                    <span className="block text-[0.72rem] opacity-55">
+                      Last sign-in: {when(r.last_sign_in_at)}
+                    </span>
+                  </span>
+                </div>
+                <details className="ml-6 mt-1 text-[0.74rem] opacity-70">
+                  <summary className="cursor-pointer">Details ({r.checks.length} checks)</summary>
+                  <div className="mt-1 space-y-0.5">
+                    {r.checks.map((c) => (
+                      <div key={c.check}>
+                        {c.passed ? "PASS" : "FAIL"} · {c.check.replace(/_/g, " ")} — {c.detail}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-[0.72rem] opacity-55">
+            Checks account state only — no password is read, tested or displayed.
           </p>
         </div>
       )}

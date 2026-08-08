@@ -160,3 +160,51 @@ export const rotateTestCredential = createServerFn({ method: "POST" })
       action_link: actionLink,
     };
   });
+
+/**
+ * Owner-only self-check: verifies each registered login for the caller's
+ * environment is actually usable (auth user exists, confirmed, not banned, and
+ * wired to the right staff/customer record). No secret is read or returned.
+ */
+export const selfCheckTestAccounts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ origin: z.string().url().max(200).optional() }).parse(data ?? {}),
+  )
+  .handler(async ({ data, context }) => {
+    const { assertOwner } = await import("@/lib/test-credentials.guard.server");
+    await assertOwner(context.supabase);
+
+    const { environmentFromOrigin, findAuthUserByEmail } = await import(
+      "@/lib/test-credentials.server"
+    );
+    const { checkAccountReadiness } = await import("@/lib/test-credentials.check.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const environment = environmentFromOrigin(data.origin);
+    const { data: rows, error } = await supabaseAdmin
+      .from("ss_test_accounts")
+      .select("id, label, email, role, environment")
+      .eq("environment", environment)
+      .order("label");
+    if (error) throw new Error(error.message);
+
+    const results = [];
+    for (const row of rows ?? []) {
+      const user = await findAuthUserByEmail(supabaseAdmin as never, row.email);
+      results.push({
+        id: row.id,
+        label: row.label,
+        email: row.email,
+        role: row.role,
+        ...(await checkAccountReadiness(supabaseAdmin as never, row.role, user)),
+      });
+    }
+
+    return {
+      environment,
+      checked_at: new Date().toISOString(),
+      passed: results.every((r) => r.ok),
+      results,
+    };
+  });
