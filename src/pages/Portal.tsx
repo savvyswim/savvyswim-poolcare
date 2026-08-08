@@ -614,6 +614,28 @@ export default function Portal() {
                         <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
                         {nextVisit ? "Reschedule" : "Request a visit"}
                       </button>
+                      {nextVisit && (
+                        <div className="flex gap-2">
+                          <a
+                            href={googleCalendarUrl(visitEvent(pool, nextVisit))}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex flex-1 items-center justify-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <CalendarPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                            Google
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => downloadIcs(visitEvent(pool, nextVisit))}
+                            className="inline-flex flex-1 items-center justify-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                            .ics
+                          </button>
+                        </div>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => toggleFlag(pool, "rain", !nextVisit?.rain_hold)}
