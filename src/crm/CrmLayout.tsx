@@ -5,6 +5,7 @@ import {
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
   Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, ScrollText, Star, FlaskConical,
   TrendingUp,
+  MessageSquare,
   Grid3x3,
   Gauge,
   Wallet,
@@ -29,6 +30,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm", label: "Today's Route", icon: Map, module: "route", group: "Today" },
   { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
+  { to: "/admin/crm/tickets", label: "Customer Tickets", icon: MessageSquare, module: "tickets", group: "Today" },
   { to: "/admin/crm/water-lab", label: "Water Lab", icon: FlaskConical, module: "waterLab", group: "Today" },
   { to: "/admin/crm/pay-per-pool", label: "Payroll", icon: Wallet, module: "payPerPool", group: "Today" },
 

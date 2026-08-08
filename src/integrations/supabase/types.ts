@@ -1933,6 +1933,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_failure_alerts: {
+        Row: {
+          account_key: string
+          account_name: string | null
+          alert_count: number
+          alert_result: string | null
+          created_at: string
+          failed_events: number
+          failure_rate: number
+          id: string
+          last_alerted_at: string
+          threshold_pct: number
+          total_events: number
+          updated_at: string
+          window_minutes: number
+        }
+        Insert: {
+          account_key: string
+          account_name?: string | null
+          alert_count?: number
+          alert_result?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          threshold_pct?: number
+          total_events?: number
+          updated_at?: string
+          window_minutes?: number
+        }
+        Update: {
+          account_key?: string
+          account_name?: string | null
+          alert_count?: number
+          alert_result?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          threshold_pct?: number
+          total_events?: number
+          updated_at?: string
+          window_minutes?: number
+        }
+        Relationships: []
+      }
       ss_feed: {
         Row: {
           body: string | null
@@ -3410,6 +3458,88 @@ export type Database = {
             columns: ["tech_id"]
             isOneToOne: false
             referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_ticket_messages: {
+        Row: {
+          author_kind: string
+          author_label: string | null
+          author_user_id: string | null
+          body: string
+          created_at: string
+          id: string
+          ticket_id: string
+        }
+        Insert: {
+          author_kind?: string
+          author_label?: string | null
+          author_user_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          ticket_id: string
+        }
+        Update: {
+          author_kind?: string
+          author_label?: string | null
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "ss_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_tickets: {
+        Row: {
+          category: string
+          created_at: string
+          customer_id: string
+          id: string
+          last_message_at: string
+          priority: string
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          last_message_at?: string
+          priority?: string
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          last_message_at?: string
+          priority?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_tickets_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
             referencedColumns: ["id"]
           },
         ]
