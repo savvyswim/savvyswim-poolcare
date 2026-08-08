@@ -1,6 +1,7 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { sendTemplateEmail } from '../_shared/transactional-email-templates/send-email.ts'
+import { recordAudit } from '../_shared/audit.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -15,10 +16,18 @@ Deno.serve(async (req) => {
 
     const isSystem = token === SERVICE_ROLE_KEY
     let staffId: string | null = null
+    let userId: string | null = null
     let isOffice = false
 
     if (!isSystem) {
       if (!token) {
+        await recordAudit({
+          action: 'service_report.denied',
+          actorKind: 'user',
+          success: false,
+          outcome: 'Missing bearer token',
+          request: req,
+        })
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -26,17 +35,33 @@ Deno.serve(async (req) => {
       }
       const { data: userData } = await admin.auth.getUser(token)
       if (!userData?.user) {
+        await recordAudit({
+          action: 'service_report.denied',
+          actorKind: 'user',
+          success: false,
+          outcome: 'Invalid session token',
+          request: req,
+        })
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         })
       }
+      userId = userData.user.id
       const { data: staff } = await admin
         .from('ss_staff')
-        .select('id, level, is_active')
+        .select('id, level, is_active, full_name')
         .eq('user_id', userData.user.id)
         .maybeSingle()
       if (!staff?.is_active) {
+        await recordAudit({
+          action: 'service_report.denied',
+          actorKind: 'user',
+          actorUserId: userId,
+          success: false,
+          outcome: 'Caller is not active staff',
+          request: req,
+        })
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -80,6 +105,17 @@ Deno.serve(async (req) => {
     }
 
     if (!isSystem && !isOffice && visit.tech_id !== staffId) {
+      await recordAudit({
+        action: 'service_report.denied',
+        actorKind: 'staff',
+        actorUserId: userId,
+        actorStaffId: staffId,
+        subjectTable: 'ss_visits',
+        subjectId: visitId,
+        success: false,
+        outcome: 'Tech is not assigned to this visit',
+        request: req,
+      })
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -142,12 +178,38 @@ Deno.serve(async (req) => {
       },
     })
 
+    await recordAudit({
+      action: 'service_report.sent',
+      actorKind: isSystem ? 'system' : 'staff',
+      actorUserId: userId,
+      actorStaffId: staffId,
+      actorLabel: techName ?? null,
+      subjectTable: 'ss_visits',
+      subjectId: visitId,
+      success: true,
+      outcome: `Report emailed to ${email}`,
+      details: {
+        customerId: visit.customer_id,
+        isOffice,
+        photoCount: Array.isArray(photos) ? photos.length : 0,
+      },
+      request: req,
+    })
+
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (error) {
     console.error('send-service-report failed:', error)
+    await recordAudit({
+      action: 'service_report.failed',
+      actorKind: 'system',
+      subjectTable: 'ss_visits',
+      success: false,
+      outcome: (error as Error).message,
+      request: req,
+    })
     return new Response(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
