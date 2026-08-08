@@ -48,6 +48,24 @@ export default function Inventory() {
   const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
+  const runLowStockCheck = useServerFn(checkLowStock);
+
+  /** Fires the reorder notification when a change drops an item to/below its point. */
+  async function notifyIfLow(item: Item, nextQuantity: number) {
+    if (nextQuantity > item.low_threshold) return;
+    try {
+      const res = await runLowStockCheck({ data: { itemIds: [item.id] } });
+      if (res.notified.length) {
+        toast.warning(`${item.name} hit its reorder point — office notified`);
+      } else {
+        toast.warning(`${item.name} is at its reorder point`);
+      }
+    } catch {
+      toast.warning(`${item.name} is at its reorder point`);
+    }
+  }
+
+
 
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
