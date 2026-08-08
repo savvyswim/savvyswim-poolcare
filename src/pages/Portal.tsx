@@ -30,6 +30,9 @@ import {
   YAxis,
 } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import PortalScheduleDialog, { VISIT_SLOTS } from "@/components/PortalScheduleDialog";
+import { downloadIcs, googleCalendarUrl } from "@/lib/calendar";
+
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
