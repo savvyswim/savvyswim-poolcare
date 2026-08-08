@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Lock, MapPin, Navigation, PawPrint, Send, Timer } from "lucide-react";
+import { Ban, CheckCircle2, Lock, MapPin, Navigation, PawPrint, Send, Timer } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, RouteRing, SectionTitle } from "@/crm/components/Brand";
