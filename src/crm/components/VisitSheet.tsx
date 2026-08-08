@@ -14,7 +14,12 @@ import {
 } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
-import ChemicalsAdded, { chemTotal, type AppliedChem } from "@/crm/components/ChemicalsAdded";
+import ChemicalsAdded, {
+  chemTotal,
+  describeVariances,
+  doseVariances,
+  type AppliedChem,
+} from "@/crm/components/ChemicalsAdded";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean; phase?: WorkflowPhase | null; hint?: string | null };
@@ -131,6 +136,16 @@ export default function VisitSheet({
     [applied],
   );
   const anyLogged = useMemo(() => Object.values(applied).some((l) => l.length), [applied]);
+  // Logged quantities vs the dose the engine recommended, per body of water.
+  const doseFlags = useMemo(
+    () =>
+      perBody.flatMap((b) =>
+        doseVariances(applied[b.id] ?? [], { chlorine: b.dose.chlorine_oz, acid: b.dose.acid_oz })
+          .filter((v) => v.severity !== "ok")
+          .map((v) => ({ ...v, bodyName: b.name })),
+      ),
+    [perBody, applied],
+  );
   const estimatedChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
   const totalChemCost = anyLogged ? loggedCost : estimatedChemCost;
 
@@ -279,6 +294,10 @@ export default function VisitSheet({
             cost: b.dose.cost,
             applied: applied[b.id] ?? [],
             applied_cost: chemTotal(applied[b.id] ?? []),
+            dose_variance: doseVariances(applied[b.id] ?? [], {
+              chlorine: b.dose.chlorine_oz,
+              acid: b.dose.acid_oz,
+            }),
           })),
         } as never,
         chem_cost: totalChemCost,
@@ -318,19 +337,36 @@ export default function VisitSheet({
     const chemFlags = perBody.flatMap((b) =>
       flagReadings(b.readings).map((f) => ({ ...f, bodyName: b.name })),
     );
+    const doseVarianceLine = doseFlags.length
+      ? doseFlags
+          .map((v) => `${v.bodyName} — ${describeVariances([v])}`)
+          .join(" | ")
+      : "";
+    const doseCritical = doseFlags.some((v) => v.severity === "critical");
+
     if (chemFlags.length) {
       const critical = chemFlags.filter((f) => f.severity === "critical");
       await supabase.from("ss_alerts").insert({
         customer_id: c.id,
         tech_id: stop.tech_id,
-        priority: critical.length ? "HIGH" : "MED",
+        priority: critical.length || doseCritical ? "HIGH" : "MED",
         title: critical.length
           ? `Chemistry out of range — ${c.full_name}`
           : `Chemistry watch — ${c.full_name}`,
         body:
           chemFlags
             .map((f) => `${f.bodyName}: ${describeFlags([f])}`)
-            .join(" | ") + (notes ? ` — ${notes}` : ""),
+            .join(" | ") +
+          (doseVarianceLine ? ` || DOSE VARIANCE: ${doseVarianceLine}` : "") +
+          (notes ? ` — ${notes}` : ""),
+      });
+    } else if (doseVarianceLine) {
+      await supabase.from("ss_alerts").insert({
+        customer_id: c.id,
+        tech_id: stop.tech_id,
+        priority: doseCritical ? "HIGH" : "MED",
+        title: `Dose variance — ${c.full_name}`,
+        body: `Logged quantities differ from the recommended dose. ${doseVarianceLine}` + (notes ? ` — ${notes}` : ""),
       });
     }
 

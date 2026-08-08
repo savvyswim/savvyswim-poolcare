@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { FlaskConical, Plus, Trash2, Wand2 } from "lucide-react";
+import { AlertTriangle, FlaskConical, Plus, Trash2, Wand2 } from "lucide-react";
 import { money2 } from "@/crm/lib/pricing";
 import { useDosageProducts, type DosageProduct } from "@/crm/lib/serviceConfig";
 
@@ -28,6 +28,94 @@ export function chemTotal(entries: AppliedChem[]) {
   return entries.reduce((s, e) => s + (Number(e.cost) || 0), 0);
 }
 
+export type DoseVariance = {
+  dose_key: string;
+  name: string;
+  unit: string;
+  recommended: number;
+  logged: number;
+  deltaPct: number | null;
+  kind: "match" | "under" | "over" | "missed" | "extra";
+  severity: "ok" | "watch" | "critical";
+};
+
+const VARIANCE_WATCH = 25;
+const VARIANCE_CRITICAL = 50;
+
+/**
+ * Compares what the tech actually poured against the dose the engine
+ * recommended for this body of water. Anything more than 25% off is worth a
+ * look; more than 50% off (or a recommended dose never poured) goes to the
+ * office as a hard flag.
+ */
+export function doseVariances(
+  entries: AppliedChem[],
+  suggested: Record<string, number> | undefined,
+  labels?: Record<string, { name: string; unit: string }>,
+): DoseVariance[] {
+  const loggedByKey = new Map<string, { qty: number; name: string; unit: string }>();
+  for (const e of entries) {
+    const cur = loggedByKey.get(e.dose_key) ?? { qty: 0, name: e.name, unit: e.unit };
+    cur.qty += Number(e.qty) || 0;
+    loggedByKey.set(e.dose_key, cur);
+  }
+
+  const keys = new Set([...Object.keys(suggested ?? {}), ...loggedByKey.keys()]);
+  const out: DoseVariance[] = [];
+
+  for (const key of keys) {
+    const recommended = Math.round((Number(suggested?.[key] ?? 0) || 0) * 10) / 10;
+    const hit = loggedByKey.get(key);
+    const logged = Math.round((hit?.qty ?? 0) * 10) / 10;
+    if (recommended <= 0 && logged <= 0) continue;
+
+    const name = hit?.name ?? labels?.[key]?.name ?? key;
+    const unit = hit?.unit ?? labels?.[key]?.unit ?? "oz";
+
+    if (recommended <= 0) {
+      out.push({ dose_key: key, name, unit, recommended, logged, deltaPct: null, kind: "extra", severity: "watch" });
+      continue;
+    }
+    if (logged <= 0) {
+      out.push({ dose_key: key, name, unit, recommended, logged, deltaPct: -100, kind: "missed", severity: "critical" });
+      continue;
+    }
+
+    const deltaPct = Math.round(((logged - recommended) / recommended) * 100);
+    const abs = Math.abs(deltaPct);
+    const severity = abs >= VARIANCE_CRITICAL ? "critical" : abs >= VARIANCE_WATCH ? "watch" : "ok";
+    out.push({
+      dose_key: key,
+      name,
+      unit,
+      recommended,
+      logged,
+      deltaPct,
+      kind: severity === "ok" ? "match" : deltaPct > 0 ? "over" : "under",
+      severity,
+    });
+  }
+
+  const order = { critical: 0, watch: 1, ok: 2 } as const;
+  return out.sort((a, b) => order[a.severity] - order[b.severity]);
+}
+
+export function describeVariances(list: DoseVariance[]) {
+  return list
+    .map((v) => {
+      if (v.kind === "missed") return `${v.name}: recommended ${v.recommended} ${v.unit}, none logged`;
+      if (v.kind === "extra") return `${v.name}: ${v.logged} ${v.unit} logged, not recommended`;
+      return `${v.name}: logged ${v.logged} ${v.unit} vs ${v.recommended} ${v.unit} (${v.deltaPct! > 0 ? "+" : ""}${v.deltaPct}%)`;
+    })
+    .join(" · ");
+}
+
+const VAR_TONE: Record<DoseVariance["severity"], { bg: string; fg: string }> = {
+  critical: { bg: "hsl(var(--ss-burgundy) / .12)", fg: "hsl(var(--ss-burgundy))" },
+  watch: { bg: "hsl(38 92% 90%)", fg: "hsl(28 80% 30%)" },
+  ok: { bg: "hsl(152 55% 92%)", fg: "hsl(152 60% 24%)" },
+};
+
 /**
  * What the tech actually poured — product, quantity, live cost. Suggested
  * quantities come from the computed dose for this body of water, but the tech
@@ -48,6 +136,12 @@ export default function ChemicalsAdded({
   const { rows } = useDosageProducts(true);
   const products = rows.length ? rows : FALLBACK;
   const total = useMemo(() => chemTotal(entries), [entries]);
+  const variances = useMemo(() => doseVariances(entries, suggested), [entries, suggested]);
+  const varianceByKey = useMemo(
+    () => new Map(variances.map((v) => [v.dose_key, v])),
+    [variances],
+  );
+  const flagged = variances.filter((v) => v.severity !== "ok");
 
   function line(p: DosageProduct, qty: number): AppliedChem {
     return {
@@ -109,7 +203,22 @@ export default function ChemicalsAdded({
         )}
         {entries.map((e, i) => (
           <div key={`${e.name}-${i}`} className="flex items-center gap-2">
-            <span className="min-w-0 flex-1 truncate text-[0.78rem] font-semibold">{e.name}</span>
+            <span className="min-w-0 flex-1 truncate text-[0.78rem] font-semibold">
+              {e.name}
+              {(() => {
+                const v = varianceByKey.get(e.dose_key);
+                if (!v || v.deltaPct === null || v.severity === "ok") return null;
+                return (
+                  <span
+                    className="ml-1.5 rounded-full px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wide"
+                    style={{ background: VAR_TONE[v.severity].bg, color: VAR_TONE[v.severity].fg }}
+                  >
+                    {v.deltaPct > 0 ? "+" : ""}
+                    {v.deltaPct}% vs dose
+                  </span>
+                );
+              })()}
+            </span>
             <input
               className="ss-input ss-num w-[86px]"
               type="number"
@@ -152,6 +261,32 @@ export default function ChemicalsAdded({
             ))}
           </select>
           <Plus size={13} className="opacity-50" />
+        </div>
+      )}
+
+      {flagged.length > 0 && (
+        <div
+          className="mt-2 p-2 text-[0.74rem]"
+          style={{
+            border: `1px solid ${VAR_TONE[flagged[0]!.severity].fg}`,
+            background: VAR_TONE[flagged[0]!.severity].bg,
+            color: VAR_TONE[flagged[0]!.severity].fg,
+          }}
+        >
+          <div className="ss-tag flex items-center gap-1" style={{ fontSize: "0.52rem", color: "inherit" }}>
+            <AlertTriangle size={10} /> Dose variance — office will be notified
+          </div>
+          <ul className="mt-1 space-y-0.5">
+            {flagged.map((v) => (
+              <li key={v.dose_key}>
+                {v.kind === "missed"
+                  ? `${v.name}: recommended ${v.recommended} ${v.unit}, nothing logged`
+                  : v.kind === "extra"
+                    ? `${v.name}: ${v.logged} ${v.unit} logged, no dose recommended`
+                    : `${v.name}: ${v.logged} ${v.unit} vs ${v.recommended} ${v.unit} recommended (${v.deltaPct! > 0 ? "+" : ""}${v.deltaPct}%)`}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
