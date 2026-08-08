@@ -83,7 +83,7 @@ export default function VisitSheet({
   const [tasks, setTasks] = useState<Task[]>([]);
   const [templateSteps, setTemplateSteps] = useState<TemplateStep[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
+  const [taskPhotos, setTaskPhotos] = useState<Record<string, string[]>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
   const [after, setAfter] = useState<{ url: string; path: string } | null>(null);
   const [evidence, setEvidence] = useState<VisitPhoto[]>([]);
