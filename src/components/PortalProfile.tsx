@@ -70,8 +70,8 @@ export default function PortalProfile() {
         city: form.city ?? "",
         state: form.state ?? "",
         postal_code: form.postal_code ?? "",
-        phone: form.phone ?? "",
-        email: form.email ?? "",
+        // phone + email change only through verified codes
+
         gate_code: form.gate_code ?? "",
         dog_name: form.dog_name ?? "",
         location_notes: form.location_notes ?? "",
