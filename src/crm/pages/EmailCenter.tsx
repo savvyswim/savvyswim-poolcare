@@ -4,6 +4,8 @@ import { Snowflake } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
+import MarketingImport from "@/crm/components/MarketingImport";
+
 
 type FeedRow = {
   id: string; kind: string; title: string; body: string | null;
@@ -108,7 +110,10 @@ export default function EmailCenter() {
       </div>
 
 
+      <MarketingImport />
+
       <div className="grid gap-3 lg:grid-cols-2">
+
         <div className="ss-card p-4">
           <div className="ss-label mb-2">Compose</div>
           <div className="mb-2.5 flex flex-wrap gap-1.5">
