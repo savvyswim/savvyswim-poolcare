@@ -722,6 +722,21 @@ export default function Inventory() {
         )}
       </div>
       {showLabels && <InventoryLabels items={shown} onClose={() => setShowLabels(false)} />}
+      {showReorder && (
+        <ReorderDraft
+          lowItems={low.map((i) => ({
+            id: i.id,
+            name: i.name,
+            unit: i.unit,
+            quantity: Number(i.quantity) || 0,
+            low_threshold: Number(i.low_threshold) || 0,
+            unit_cost: Number(i.unit_cost ?? 0),
+            sku: i.sku,
+          }))}
+          onClose={() => setShowReorder(false)}
+          onCreated={() => void refetch()}
+        />
+      )}
 
     </div>
   );
