@@ -222,6 +222,7 @@ export default function PortalAddresses({
                             state: r.state ?? "",
                             postal_code: r.postal_code ?? "",
                             notes: r.notes ?? "",
+                            is_billing: r.is_billing,
                           })
                         }
                         className="border border-primary/20 px-2 py-1.5 font-tech text-[10px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
