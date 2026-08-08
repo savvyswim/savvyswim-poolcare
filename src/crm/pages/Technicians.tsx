@@ -60,23 +60,27 @@ export default function Technicians() {
     }
   };
 
-  const sendLogin = async (s: Staff) => {
+  const sendLogin = async (s: Staff, mode: "invite" | "password" = "invite") => {
     if (!s.email) { toast.error("Add an email to that team member first"); return; }
     setInviting(s.id);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-invite-staff", {
-        body: { staff_id: s.id, origin: window.location.origin },
+      const res = await createStaffLogin({
+        data: { staff_id: s.id, mode, origin: window.location.origin },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      toast.success(`Login invite sent to ${s.email}`);
+      if (res.password) {
+        setTempPasswords((p) => ({ ...p, [s.id]: res.password as string }));
+        toast.success("Staff login created — share the password shown");
+      } else {
+        toast.success(`Login invite sent to ${res.email}`);
+      }
       await reload();
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not send that login invite");
+      toast.error(err?.message ?? "Could not create that login");
     } finally {
       setInviting(null);
     }
   };
+
 
   const toggleActive = async (s: Staff) => {
     const { error } = await supabase.from("ss_staff").update({ is_active: !s.is_active }).eq("id", s.id);
