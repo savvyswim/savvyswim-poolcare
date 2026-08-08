@@ -2204,6 +2204,98 @@ export type Database = {
           },
         ]
       }
+      ss_job_expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          id: string
+          job_id: string
+          label: string
+          spent_on: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          category?: string
+          created_at?: string
+          id?: string
+          job_id: string
+          label: string
+          spent_on?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          id?: string
+          job_id?: string
+          label?: string
+          spent_on?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_job_expenses_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "ss_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_job_time_entries: {
+        Row: {
+          created_at: string
+          hourly_rate: number
+          id: string
+          job_id: string
+          minutes: number
+          note: string | null
+          staff_id: string | null
+          updated_at: string
+          worked_on: string
+        }
+        Insert: {
+          created_at?: string
+          hourly_rate?: number
+          id?: string
+          job_id: string
+          minutes?: number
+          note?: string | null
+          staff_id?: string | null
+          updated_at?: string
+          worked_on?: string
+        }
+        Update: {
+          created_at?: string
+          hourly_rate?: number
+          id?: string
+          job_id?: string
+          minutes?: number
+          note?: string | null
+          staff_id?: string | null
+          updated_at?: string
+          worked_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_job_time_entries_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "ss_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_job_time_entries_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_jobs: {
         Row: {
           auto_flag_source: string | null
@@ -3685,12 +3777,17 @@ export type Database = {
           created_at: string
           customer_id: string
           dosing: Json
+          drive_miles: number | null
+          drive_minutes: number | null
           en_route_at: string | null
           feedback: string | null
           id: string
           is_locked: boolean
           issue_reported: string | null
           minutes_on_site: number | null
+          no_access_at: string | null
+          no_access_photo_url: string | null
+          no_access_reason: string | null
           notes: string | null
           pay_status: string
           payout_id: string | null
@@ -3719,12 +3816,17 @@ export type Database = {
           created_at?: string
           customer_id: string
           dosing?: Json
+          drive_miles?: number | null
+          drive_minutes?: number | null
           en_route_at?: string | null
           feedback?: string | null
           id?: string
           is_locked?: boolean
           issue_reported?: string | null
           minutes_on_site?: number | null
+          no_access_at?: string | null
+          no_access_photo_url?: string | null
+          no_access_reason?: string | null
           notes?: string | null
           pay_status?: string
           payout_id?: string | null
@@ -3753,12 +3855,17 @@ export type Database = {
           created_at?: string
           customer_id?: string
           dosing?: Json
+          drive_miles?: number | null
+          drive_minutes?: number | null
           en_route_at?: string | null
           feedback?: string | null
           id?: string
           is_locked?: boolean
           issue_reported?: string | null
           minutes_on_site?: number | null
+          no_access_at?: string | null
+          no_access_photo_url?: string | null
+          no_access_reason?: string | null
           notes?: string | null
           pay_status?: string
           payout_id?: string | null
@@ -4302,6 +4409,13 @@ export type Database = {
           p_service_type: string
         }
         Returns: string
+      }
+      ss_my_chem_history: {
+        Args: { _days?: number }
+        Returns: {
+          readings: Json
+          visit_date: string
+        }[]
       }
       ss_my_customer_id: { Args: never; Returns: string }
       ss_my_documents: {
