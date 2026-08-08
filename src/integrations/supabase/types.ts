@@ -3726,6 +3726,91 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_route_schedules: {
+        Row: {
+          created_at: string
+          customer_id: string
+          end_date: string | null
+          frequency: string
+          id: string
+          interval_weeks: number
+          is_active: boolean
+          label: string
+          last_generated_through: string | null
+          minutes_at_stop: number | null
+          month_day: number | null
+          notes: string | null
+          start_date: string
+          stop_order: number
+          tech_id: string | null
+          updated_at: string
+          water_body_id: string | null
+          weekdays: number[]
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          interval_weeks?: number
+          is_active?: boolean
+          label?: string
+          last_generated_through?: string | null
+          minutes_at_stop?: number | null
+          month_day?: number | null
+          notes?: string | null
+          start_date?: string
+          stop_order?: number
+          tech_id?: string | null
+          updated_at?: string
+          water_body_id?: string | null
+          weekdays?: number[]
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          interval_weeks?: number
+          is_active?: boolean
+          label?: string
+          last_generated_through?: string | null
+          minutes_at_stop?: number | null
+          month_day?: number | null
+          notes?: string | null
+          start_date?: string
+          stop_order?: number
+          tech_id?: string | null
+          updated_at?: string
+          water_body_id?: string | null
+          weekdays?: number[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_route_schedules_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_route_schedules_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_route_schedules_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "ss_water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_security_audit: {
         Row: {
           action: string
@@ -5083,6 +5168,10 @@ export type Database = {
         Returns: Json
       }
       ss_default_upsell_pct: { Args: never; Returns: number }
+      ss_generate_route_visits: {
+        Args: { p_customer_id: string; p_through: string }
+        Returns: number
+      }
       ss_get_contract: {
         Args: { _token: string }
         Returns: {
