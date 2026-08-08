@@ -44,6 +44,8 @@ export default function CustomerDetail() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting] = useState(false);
   const [invited, setInvited] = useState(false);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
+
 
   const { rows: customers } = useTable<Customer>(`customer-${id}`, async () => {
     const { data } = await supabase.from("ss_customers").select("*").eq("id", id).limit(1);
