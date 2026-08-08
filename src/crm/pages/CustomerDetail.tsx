@@ -37,11 +37,12 @@ type Visit = {
 import SaltGuide from "@/crm/components/SaltGuide";
 import WaterBodies from "@/crm/components/WaterBodies";
 import EquipmentRecords from "@/crm/components/EquipmentRecords";
+import RouteSchedules from "@/crm/components/RouteSchedules";
 import CustomerWorkflowPicker from "@/crm/components/CustomerWorkflowPicker";
 import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
 
-const TABS = ["Overview", "Timeline", "Water trends", "Bodies of water", "Details", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
+const TABS = ["Overview", "Timeline", "Water trends", "Schedule", "Bodies of water", "Details", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -275,6 +276,8 @@ export default function CustomerDetail() {
         </div>
       )}
 
+
+      {tab === "Schedule" && <RouteSchedules customerId={c.id} canEdit={level !== "technician"} />}
 
       {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
 
