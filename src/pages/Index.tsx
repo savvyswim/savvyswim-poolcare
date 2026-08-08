@@ -315,6 +315,7 @@ const Index = () => {
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
+              <Link to="/portal" className="hover:text-accent transition">Customer Login</Link>
             </nav>
 
 
@@ -379,6 +380,13 @@ const Index = () => {
                   className="py-3.5 text-[13px] uppercase tracking-[0.14em] transition-colors hover:text-accent"
                 >
                   Service &amp; Repair
+                </Link>
+                <Link
+                  to="/portal"
+                  onClick={() => setMenuOpen(false)}
+                  className="py-3.5 text-[13px] uppercase tracking-[0.14em] text-accent transition-colors hover:opacity-80"
+                >
+                  Customer Login
                 </Link>
               </div>
             </nav>
