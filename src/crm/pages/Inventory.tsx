@@ -229,6 +229,26 @@ export default function Inventory() {
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
           <History size={13} /> {showLog ? "Hide history" : "History"}
         </button>
+        {low.length > 0 && (
+          <button
+            className="ss-btn ss-btn-ghost"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const res = await runLowStockCheck({ data: {} });
+                if (res.notified.length) toast.success(`Reorder alert sent for ${res.notified.length} item(s)`);
+                else toast.info("Already alerted in the last 24 hours");
+              } catch (e) {
+                toast.error(e instanceof Error ? e.message : "Could not send the reorder alert");
+              }
+              setBusy(false);
+            }}
+          >
+            Send reorder alert ({low.length})
+          </button>
+        )}
+
       </div>
 
       {showLog && (
