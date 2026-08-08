@@ -38,6 +38,8 @@ import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
 import PortalTickets from "@/components/PortalTickets";
 import PortalDocuments from "@/components/PortalDocuments";
+import PortalDamageReport from "@/components/PortalDamageReport";
+
 import PortalProfile from "@/components/PortalProfile";
 import PortalActivity from "@/components/PortalActivity";
 import PortalChemHistory from "@/components/PortalChemHistory";
