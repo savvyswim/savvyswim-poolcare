@@ -6,6 +6,8 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { SERVICE_PLANS, findServicePlan } from "@/crm/lib/pricingEngine";
+import { logCustomerActivity, logLeadEvent, logTechAssignment } from "@/crm/lib/activity";
+
 
 type LeadEvent = {
   id: string; event_type: string; label: string; detail: string | null; created_at: string;
@@ -17,6 +19,9 @@ const EVENT_TONE: Record<string, string> = {
   plan_quoted: "var(--ss-aqua)",
   plan_status: "var(--ss-aqua)",
   stage: "var(--ss-burgundy)",
+  converted: "var(--ss-burgundy)",
+  tech_assigned: "var(--ss-aqua)",
+
 };
 
 function LeadTimeline({ leadId }: { leadId: string }) {
@@ -153,9 +158,12 @@ export default function Pipeline() {
   async function assignOps(job: OpsJob, techId: string) {
     const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
     if (error) { toast.error(error.message); return; }
+    const techName = techId ? (staff.find((s) => s.id === techId)?.full_name ?? "tech") : null;
+    void logTechAssignment({ customerId: job.customer_id ?? null, jobTitle: job.title, techName });
     toast.success(techId ? "Assigned" : "Unassigned");
     void refetchJobs();
   }
+
 
   async function moveOps(job: OpsJob, status: string) {
     const { error } = await supabase
@@ -240,6 +248,22 @@ export default function Pipeline() {
         .from("ss_leads")
         .update({ converted_customer_id: customerId, stage: "contacted", stage_changed_at: new Date().toISOString() })
         .eq("id", lead.id);
+
+      const source = lead.source ?? "marketing";
+      await logLeadEvent(
+        lead.id,
+        "converted",
+        "Lead converted to customer",
+        `Inspection job created · source ${source}`,
+      );
+      await logCustomerActivity(
+        customerId,
+        "Converted from marketing lead",
+        `Lead: ${lead.full_name} · source ${source} · inspection job created (tech not yet assigned)`,
+        "convert",
+      );
+
+
 
       toast.success("Inspection created — assign a tech in Jobs & repairs");
       setDetail(null);

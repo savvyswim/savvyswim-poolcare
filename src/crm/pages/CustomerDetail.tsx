@@ -41,8 +41,9 @@ import RouteSchedules from "@/crm/components/RouteSchedules";
 import CustomerWorkflowPicker from "@/crm/components/CustomerWorkflowPicker";
 import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
+import ActivityLog from "@/crm/components/ActivityLog";
 
-const TABS = ["Overview", "Timeline", "Water trends", "Schedule", "Bodies of water", "Details", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
+const TABS = ["Overview", "Activity", "Timeline", "Water trends", "Schedule", "Bodies of water", "Details", "Equipment", "Salt pool", "Contracts", "Billing"] as const;
 
 export default function CustomerDetail() {
   const { id = "" } = useParams();
@@ -229,6 +230,8 @@ export default function CustomerDetail() {
           {level === "owner" && <Stat label="Lifetime billed" value={money(lifetime)} />}
         </div>
       )}
+
+      {tab === "Activity" && <ActivityLog customerId={c.id} />}
 
       {tab === "Timeline" && (
         <div className="space-y-2">

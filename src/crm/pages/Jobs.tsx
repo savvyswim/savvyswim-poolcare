@@ -6,6 +6,8 @@ import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import JobProfit from "@/crm/components/JobProfit";
 import { runAutomations } from "@/crm/lib/automations";
+import { logTechAssignment } from "@/crm/lib/activity";
+
 
 
 type Job = {
@@ -38,9 +40,12 @@ export default function Jobs() {
   async function assign(job: Job, techId: string) {
     const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
     if (error) { toast.error(error.message); return; }
-    toast.success(techId ? `Assigned to ${staff.find((s) => s.id === techId)?.full_name ?? "tech"}` : "Unassigned");
+    const techName = techId ? (staff.find((s) => s.id === techId)?.full_name ?? "tech") : null;
+    void logTechAssignment({ customerId: job.customer_id, jobTitle: job.title, techName });
+    toast.success(techId ? `Assigned to ${techName}` : "Unassigned");
     void refetch();
   }
+
 
   const shown = useMemo(() => rows.filter((j) => j.status === filter), [rows, filter]);
   const openValue = useMemo(
