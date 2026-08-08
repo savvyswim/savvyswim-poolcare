@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Bell, Home, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import PortalContactVerify from "@/components/PortalContactVerify";
+
 
 type Profile = {
   id: string;
