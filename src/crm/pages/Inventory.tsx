@@ -99,6 +99,11 @@ export default function Inventory() {
     return (data ?? []) as unknown as Move[];
   });
 
+  const unitById = useMemo(
+    () => new Map(rows.map((r) => [r.id, r.unit ?? "ea"])),
+    [rows],
+  );
+
   const movesByItem = useMemo(() => {
     const m = new Map<string, Move[]>();
     for (const mv of moves) m.set(mv.item_id, [...(m.get(mv.item_id) ?? []), mv]);
@@ -331,7 +336,9 @@ export default function Inventory() {
                 <span className="opacity-70">{reasonLabel(m.reason)}</span>
                 {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
                 {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
-                {enteredNote(m) && <span className="opacity-60">· {enteredNote(m)}</span>}
+                {enteredNote(m, unitById.get(m.item_id)) && (
+                  <span className="opacity-60">· {enteredNote(m, unitById.get(m.item_id))}</span>
+                )}
                 {m.note && <span className="opacity-60">· {m.note}</span>}
                 <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
               </div>
