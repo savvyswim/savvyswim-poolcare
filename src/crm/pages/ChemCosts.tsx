@@ -31,6 +31,16 @@ type VisitRow = {
   ss_staff: { full_name: string } | null;
 };
 
+type MoveRow = {
+  visit_id: string | null;
+  item_name: string;
+  delta: number;
+  unit_cost: number | null;
+  total_cost: number | null;
+  entered_qty: number | null;
+  entered_unit: string | null;
+};
+
 type Line = {
   visitId: string;
   date: string;
