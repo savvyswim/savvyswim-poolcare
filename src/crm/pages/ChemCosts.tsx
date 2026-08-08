@@ -52,6 +52,7 @@ const csvCell = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
  */
 export default function ChemCosts() {
   const [visits, setVisits] = useState<VisitRow[]>([]);
+  const [moves, setMoves] = useState<MoveRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [from, setFrom] = useState(new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10));
   const [to, setTo] = useState(new Date().toISOString().slice(0, 10));
