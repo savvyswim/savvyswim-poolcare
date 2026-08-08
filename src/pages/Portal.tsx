@@ -242,7 +242,12 @@ export default function Portal() {
 
 
   function openReschedule(p: Pool, current: string | null) {
-    setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
+    setResched({
+      pool: p,
+      date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10),
+      note: "",
+      originalDate: current,
+    });
   }
 
   async function submitReschedule(date: string, note: string): Promise<boolean> {
