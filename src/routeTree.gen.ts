@@ -45,6 +45,7 @@ import { Route as AdminCrmLoginRouteImport } from './routes/admin/crm/login'
 import { Route as AdminCrmLegacyRouteImport } from './routes/admin/crm/legacy'
 import { Route as AdminCrmAppRouteImport } from './routes/admin/crm/app'
 import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/index'
+import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
@@ -261,6 +262,11 @@ const CrmAdminCrmIndexRoute = CrmAdminCrmIndexRouteImport.update({
   id: '/admin/crm/',
   path: '/admin/crm/',
   getParentRoute: () => CrmRoute,
+} as any)
+const ApiPublicTwilioInboundRoute = ApiPublicTwilioInboundRouteImport.update({
+  id: '/api/public/twilio/inbound',
+  path: '/api/public/twilio/inbound',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicTwilioContractSmsStatusRoute =
   ApiPublicTwilioContractSmsStatusRouteImport.update({
@@ -524,6 +530,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -598,6 +605,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/admin/crm': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -674,6 +682,7 @@ export interface FileRoutesById {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/_crm/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/_crm/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/_crm/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -750,6 +759,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/admin/crm/'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -824,6 +834,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/admin/crm'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -899,6 +910,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/_crm/admin/crm/'
     | '/_crm/admin/crm/customers/$id'
     | '/_crm/admin/crm/projects/$id'
@@ -947,6 +959,7 @@ export interface RootRouteChildren {
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
+  ApiPublicTwilioInboundRoute: typeof ApiPublicTwilioInboundRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1202,6 +1215,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/crm/'
       preLoaderRoute: typeof CrmAdminCrmIndexRouteImport
       parentRoute: typeof CrmRoute
+    }
+    '/api/public/twilio/inbound': {
+      id: '/api/public/twilio/inbound'
+      path: '/api/public/twilio/inbound'
+      fullPath: '/api/public/twilio/inbound'
+      preLoaderRoute: typeof ApiPublicTwilioInboundRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/twilio/contract-sms-status': {
       id: '/api/public/twilio/contract-sms-status'
@@ -1580,6 +1600,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
+  ApiPublicTwilioInboundRoute: ApiPublicTwilioInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
