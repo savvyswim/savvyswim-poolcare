@@ -74,6 +74,7 @@ import { Route as CrmAdminCrmPayPerPoolRouteImport } from './routes/_crm/admin/c
 import { Route as CrmAdminCrmMarginRouteImport } from './routes/_crm/admin/crm/margin'
 import { Route as CrmAdminCrmJobsRouteImport } from './routes/_crm/admin/crm/jobs'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
+import { Route as CrmAdminCrmInboxRouteImport } from './routes/_crm/admin/crm/inbox'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
@@ -416,6 +417,11 @@ const CrmAdminCrmInventoryRoute = CrmAdminCrmInventoryRouteImport.update({
   path: '/admin/crm/inventory',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmInboxRoute = CrmAdminCrmInboxRouteImport.update({
+  id: '/admin/crm/inbox',
+  path: '/admin/crm/inbox',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmFinanceRoute = CrmAdminCrmFinanceRouteImport.update({
   id: '/admin/crm/finance',
   path: '/admin/crm/finance',
@@ -517,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
@@ -594,6 +601,7 @@ export interface FileRoutesByTo {
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
@@ -673,6 +681,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/_crm/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/_crm/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/_crm/admin/crm/margin': typeof CrmAdminCrmMarginRoute
@@ -752,6 +761,7 @@ export interface FileRouteTypes {
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/inbox'
     | '/admin/crm/inventory'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
@@ -829,6 +839,7 @@ export interface FileRouteTypes {
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/inbox'
     | '/admin/crm/inventory'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
@@ -907,6 +918,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
     | '/_crm/admin/crm/finance'
+    | '/_crm/admin/crm/inbox'
     | '/_crm/admin/crm/inventory'
     | '/_crm/admin/crm/jobs'
     | '/_crm/admin/crm/margin'
@@ -1444,6 +1456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmInventoryRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/inbox': {
+      id: '/_crm/admin/crm/inbox'
+      path: '/admin/crm/inbox'
+      fullPath: '/admin/crm/inbox'
+      preLoaderRoute: typeof CrmAdminCrmInboxRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/finance': {
       id: '/_crm/admin/crm/finance'
       path: '/admin/crm/finance'
@@ -1532,6 +1551,7 @@ interface CrmRouteChildren {
   CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
+  CrmAdminCrmInboxRoute: typeof CrmAdminCrmInboxRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
   CrmAdminCrmJobsRoute: typeof CrmAdminCrmJobsRoute
   CrmAdminCrmMarginRoute: typeof CrmAdminCrmMarginRoute
@@ -1569,6 +1589,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
+  CrmAdminCrmInboxRoute: CrmAdminCrmInboxRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
   CrmAdminCrmJobsRoute: CrmAdminCrmJobsRoute,
   CrmAdminCrmMarginRoute: CrmAdminCrmMarginRoute,
