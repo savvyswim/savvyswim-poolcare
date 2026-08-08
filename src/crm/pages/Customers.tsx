@@ -178,6 +178,8 @@ function SegChip({ label, count, tone, active, onClick }: {
 function NewCustomer({ onDone }: { onDone: () => void }) {
   const [f, setF] = useState({ full_name: "", address: "", city: "Dallas", phone: "", email: "", monthly_price: 0 });
   const [saving, setSaving] = useState(false);
+  const [withLogin, setWithLogin] = useState(true);
+
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/45" onClick={onDone} />
