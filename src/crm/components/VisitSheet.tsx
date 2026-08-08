@@ -20,6 +20,7 @@ import ChemicalsAdded, {
   doseVariances,
   type AppliedChem,
 } from "@/crm/components/ChemicalsAdded";
+import InventoryUsed, { usedTotal, type UsedItem } from "@/crm/components/InventoryUsed";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean; phase?: WorkflowPhase | null; hint?: string | null };
