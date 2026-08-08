@@ -358,7 +358,7 @@ export const MessageResponse = memo(
           "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
           className
         )}
-        plugins={plugins as ComponentProps<typeof Streamdown>["plugins"]}
+        plugins={plugins as NonNullable<ComponentProps<typeof Streamdown>["plugins"]>}
         {...props}
       />
     );
