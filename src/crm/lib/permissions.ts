@@ -152,3 +152,8 @@ export function canAccessPath(level: SsLevel | null, pathname: string): boolean 
   const mod = moduleForPath(pathname);
   return mod ? canAccess(level, mod) : !!level;
 }
+
+/** Exporting or downloading customer data is office/owner only. */
+export function canExport(level: SsLevel | null): boolean {
+  return level === "owner" || level === "office_manager";
+}
