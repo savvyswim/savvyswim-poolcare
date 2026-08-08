@@ -307,7 +307,19 @@ export default function Pipeline() {
 
 
 
+            <button
+              className="ss-btn mt-4 w-full justify-center"
+              disabled={converting}
+              onClick={() => convertToInspection(detail)}
+            >
+              {converting ? "Converting…" : "CONVERT TO INSPECTION"}
+            </button>
+            <div className="mt-1 text-center text-[0.7rem] opacity-60">
+              Creates the customer record and an open inspection job in Jobs &amp; repairs to assign a tech.
+            </div>
+
             <div className="mt-4">
+
               <div className="ss-label mb-1.5">Move to stage</div>
               <div className="flex flex-wrap gap-1.5">
                 {STAGES.filter((s) => s.key !== detail.stage).map((s) => (
