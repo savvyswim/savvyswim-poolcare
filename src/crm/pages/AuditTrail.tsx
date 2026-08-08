@@ -98,6 +98,25 @@ export default function AuditTrail() {
     };
   }, [rows]);
 
+  // Which accounts generate the most webhook failures. Rejections happen before
+  // we can read the payload, so they land in an "unattributed" bucket.
+  const byAccount = useMemo(() => {
+    type Bucket = { name: string; total: number; failed: number; last: string | null };
+    const map = new Map<string, Bucket>();
+    for (const r of rows.filter((x) => x.action.startsWith("twilio_status_webhook"))) {
+      const d = (r.details ?? {}) as { customerId?: string; customerName?: string };
+      const key = d.customerId ?? "unattributed";
+      const name = d.customerName ?? (key === "unattributed" ? "Unattributed / pre-verification" : key);
+      const b = map.get(key) ?? { name, total: 0, failed: 0, last: null };
+      b.total += 1;
+      if (!r.success) b.failed += 1;
+      if (!b.last || r.created_at > b.last) b.last = r.created_at;
+      map.set(key, b);
+    }
+    return [...map.values()].sort((a, b) => b.failed - a.failed || b.total - a.total).slice(0, 10);
+  }, [rows]);
+
+
 
   return (
     <div className="space-y-6">
