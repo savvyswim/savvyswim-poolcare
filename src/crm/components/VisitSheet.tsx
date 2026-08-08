@@ -7,6 +7,7 @@ import { describeFlags, doseFor, evaluate, flagReadings, lsiVerdict, READING_FIE
 import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
+import ChemicalsAdded, { chemTotal, type AppliedChem } from "@/crm/components/ChemicalsAdded";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
