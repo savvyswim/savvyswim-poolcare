@@ -3566,6 +3566,33 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_reminder_schedules: {
+        Row: {
+          appointment_type: string
+          created_at: string
+          enabled: boolean
+          id: string
+          offsets_hours: number[]
+          updated_at: string
+        }
+        Insert: {
+          appointment_type: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          offsets_hours?: number[]
+          updated_at?: string
+        }
+        Update: {
+          appointment_type?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          offsets_hours?: number[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_review_requests: {
         Row: {
           clicked_at: string | null
