@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { CreditCard, Landmark, Phone, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { sendPortalReceipt } from "@/lib/portal-receipt.functions";
+
 
 export type PayableInvoice = {
   id: string;
@@ -34,6 +37,8 @@ export default function PortalPayDialog({
   const [method, setMethod] = useState<MethodKey>("card");
   const [reference, setReference] = useState("");
   const [busy, setBusy] = useState(false);
+  const sendReceipt = useServerFn(sendPortalReceipt);
+
 
   async function submit() {
     setBusy(true);
@@ -42,14 +47,29 @@ export default function PortalPayDialog({
       p_method: method,
       ...(reference ? { p_reference: reference } : {}),
     });
-    setBusy(false);
     if (error) {
+      setBusy(false);
       toast.error(error.message);
       return;
     }
-    toast.success(`Payment started for ${invoice.invoice_number} — receipt on the way.`);
+
+    let receiptNote = "receipt on the way";
+    try {
+      const res = await sendReceipt({
+        data: { invoiceId: invoice.id, method, ...(reference ? { reference } : {}) },
+      });
+      if (res.channels.length) {
+        receiptNote = `receipt sent by ${res.channels.join(" + ")}`;
+      }
+    } catch {
+      /* payment recorded; receipt delivery is best-effort */
+    }
+
+    setBusy(false);
+    toast.success(`Payment recorded for ${invoice.invoice_number} — ${receiptNote}.`);
     onPaid();
     onClose();
+
   }
 
   return (
