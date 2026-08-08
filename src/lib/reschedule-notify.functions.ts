@@ -53,15 +53,15 @@ export const sendRescheduleNotice = createServerFn({ method: "POST" })
       created: Boolean(data.created),
     };
 
-    // The visit moved, so the 24h / 2h reminder pair must fire again for the new
-    // date. Clearing the dedupe rows re-arms both cron stages.
+    // The visit moved, so every configured reminder offset must fire again for
+    // the new date. Clearing the dedupe rows re-arms the whole schedule.
     if (!data.created) {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin
         .from("ss_feed")
         .delete()
         .eq("visit_id", visit.id)
-        .in("kind", ["reminder", "reminder_2h"]);
+        .like("kind", "reminder%");
     }
 
     const channels: string[] = [];
