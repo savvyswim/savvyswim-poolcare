@@ -195,6 +195,37 @@ export default function AuditTrail() {
         )}
       </div>
 
+      <div className="border border-foreground/15 p-4">
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          Verification & delivery failures by account
+        </div>
+        {byAccount.length === 0 ? (
+          <div className="mt-3 text-sm text-muted-foreground">No webhook events recorded yet.</div>
+        ) : (
+          <div className="mt-3 divide-y divide-foreground/10">
+            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-3 pb-2 text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+              <span>Account</span>
+              <span className="text-right">Events</span>
+              <span className="text-right">Failures</span>
+              <span className="text-right">Last</span>
+            </div>
+            {byAccount.map((a) => (
+              <div key={a.name} className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 py-2 text-sm">
+                <span className="truncate">{a.name}</span>
+                <span className="text-right tabular-nums">{a.total}</span>
+                <span className="text-right">
+                  <Chip tone={a.failed > 0 ? "burgundy" : "aqua"}>{a.failed}</Chip>
+                </span>
+                <span className="text-right text-xs text-muted-foreground">
+                  {a.last ? when(a.last) : "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+
       <div className="flex flex-wrap gap-2">
 
         {FILTERS.map((f) => (
