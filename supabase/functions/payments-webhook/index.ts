@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { type StripeEnv, verifyWebhook } from "../_shared/stripe.ts";
+import { recordAudit } from "../_shared/audit.ts";
 
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
@@ -103,6 +104,17 @@ Deno.serve(async (req) => {
 
   try {
     const event = await verifyWebhook(req, env);
+    await recordAudit({
+      action: "stripe_webhook.received",
+      actorKind: "webhook",
+      actorLabel: `stripe:${env}`,
+      subjectTable: "stripe_event",
+      subjectId: event.id,
+      success: true,
+      outcome: event.type,
+      details: { env },
+      request: req,
+    });
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
@@ -135,6 +147,14 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("Webhook error:", e);
+    await recordAudit({
+      action: "stripe_webhook.rejected",
+      actorKind: "webhook",
+      actorLabel: `stripe:${env}`,
+      success: false,
+      outcome: (e as Error).message,
+      request: req,
+    });
     return new Response("Webhook error", { status: 400 });
   }
 });

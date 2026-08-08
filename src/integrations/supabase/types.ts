@@ -3109,6 +3109,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_security_audit: {
+        Row: {
+          action: string
+          actor_kind: string
+          actor_label: string | null
+          actor_staff_id: string | null
+          actor_user_id: string | null
+          created_at: string
+          details: Json
+          id: string
+          ip_address: string | null
+          outcome: string | null
+          subject_id: string | null
+          subject_table: string | null
+          success: boolean
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_kind?: string
+          actor_label?: string | null
+          actor_staff_id?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          ip_address?: string | null
+          outcome?: string | null
+          subject_id?: string | null
+          subject_table?: string | null
+          success?: boolean
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_kind?: string
+          actor_label?: string | null
+          actor_staff_id?: string | null
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          ip_address?: string | null
+          outcome?: string | null
+          subject_id?: string | null
+          subject_table?: string | null
+          success?: boolean
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       ss_settings: {
         Row: {
           key: string

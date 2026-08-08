@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "@/lib/router-compat";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
-  Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, Star, FlaskConical,
+  Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, ScrollText, Star, FlaskConical,
   TrendingUp,
   Grid3x3,
   Gauge,
@@ -67,6 +67,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/service-setup", label: "Service Setup", icon: SlidersHorizontal, module: "serviceSetup", group: "Admin" },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
+  { to: "/admin/crm/audit-trail", label: "Audit Trail", icon: ScrollText, module: "security", group: "Admin" },
   { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
   { to: "/admin/crm/deploy-health", label: "Deploy Health", icon: Activity, module: "deployHealth", group: "Admin" },
   { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Admin" },

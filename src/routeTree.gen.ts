@@ -73,6 +73,7 @@ import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/em
 import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
 import { Route as CrmAdminCrmConnectRouteImport } from './routes/_crm/admin/crm/connect'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
+import { Route as CrmAdminCrmAuditTrailRouteImport } from './routes/_crm/admin/crm/audit-trail'
 import { Route as CrmAdminCrmAlertsRouteImport } from './routes/_crm/admin/crm/alerts'
 import { Route as CrmAdminCrmProjectsIndexRouteImport } from './routes/_crm/admin/crm/projects/index'
 import { Route as CrmAdminCrmCustomersIndexRouteImport } from './routes/_crm/admin/crm/customers/index'
@@ -402,6 +403,11 @@ const CrmAdminCrmBreakEvenRoute = CrmAdminCrmBreakEvenRouteImport.update({
   path: '/admin/crm/break-even',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmAuditTrailRoute = CrmAdminCrmAuditTrailRouteImport.update({
+  id: '/admin/crm/audit-trail',
+  path: '/admin/crm/audit-trail',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmAlertsRoute = CrmAdminCrmAlertsRouteImport.update({
   id: '/admin/crm/alerts',
   path: '/admin/crm/alerts',
@@ -466,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
+  '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
@@ -536,6 +543,7 @@ export interface FileRoutesByTo {
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
+  '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
@@ -608,6 +616,7 @@ export interface FileRoutesById {
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
+  '/_crm/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
@@ -680,6 +689,7 @@ export interface FileRouteTypes {
     | '/admin/crm/login'
     | '/api/public/health'
     | '/admin/crm/alerts'
+    | '/admin/crm/audit-trail'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
@@ -750,6 +760,7 @@ export interface FileRouteTypes {
     | '/admin/crm/login'
     | '/api/public/health'
     | '/admin/crm/alerts'
+    | '/admin/crm/audit-trail'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
@@ -821,6 +832,7 @@ export interface FileRouteTypes {
     | '/admin/crm/login'
     | '/api/public/health'
     | '/_crm/admin/crm/alerts'
+    | '/_crm/admin/crm/audit-trail'
     | '/_crm/admin/crm/break-even'
     | '/_crm/admin/crm/connect'
     | '/_crm/admin/crm/deploy-health'
@@ -1347,6 +1359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmBreakEvenRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/audit-trail': {
+      id: '/_crm/admin/crm/audit-trail'
+      path: '/admin/crm/audit-trail'
+      fullPath: '/admin/crm/audit-trail'
+      preLoaderRoute: typeof CrmAdminCrmAuditTrailRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/alerts': {
       id: '/_crm/admin/crm/alerts'
       path: '/admin/crm/alerts'
@@ -1387,6 +1406,7 @@ declare module '@tanstack/react-router' {
 
 interface CrmRouteChildren {
   CrmAdminCrmAlertsRoute: typeof CrmAdminCrmAlertsRoute
+  CrmAdminCrmAuditTrailRoute: typeof CrmAdminCrmAuditTrailRoute
   CrmAdminCrmBreakEvenRoute: typeof CrmAdminCrmBreakEvenRoute
   CrmAdminCrmConnectRoute: typeof CrmAdminCrmConnectRoute
   CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
@@ -1421,6 +1441,7 @@ interface CrmRouteChildren {
 
 const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmAlertsRoute: CrmAdminCrmAlertsRoute,
+  CrmAdminCrmAuditTrailRoute: CrmAdminCrmAuditTrailRoute,
   CrmAdminCrmBreakEvenRoute: CrmAdminCrmBreakEvenRoute,
   CrmAdminCrmConnectRoute: CrmAdminCrmConnectRoute,
   CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
@@ -1498,13 +1519,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
