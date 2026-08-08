@@ -231,8 +231,10 @@ export default function RoutePage() {
                 isTech={id.isTech}
                 onOnMyWay={() => sendOnMyWay(s)}
                 onStart={() => setActiveVisit(s)}
+                onNoAccess={() => setNoAccess(s)}
               />
             ))}
+
           </div>
 
           {!!done.length && (
