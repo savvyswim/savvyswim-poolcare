@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { type StripeEnv, verifyWebhook } from "../_shared/stripe.ts";
+import { recordAudit } from "../_shared/audit.ts";
 
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
