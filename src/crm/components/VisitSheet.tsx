@@ -215,7 +215,7 @@ export default function VisitSheet({
           label: s.label,
           hint: s.hint ?? undefined,
           is_required: s.is_required,
-          photo: (s.photo_required ? "required" : "suggested") as ChecklistPhoto,
+          photo: photoRuleFor(s.label),
           custom: false,
           phase: s.phase,
         }))
@@ -233,7 +233,7 @@ export default function VisitSheet({
       label: t.label,
       hint: t.hint ?? undefined,
       is_required: t.is_required,
-      photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+      photo: photoRuleFor(t.label),
       custom: true,
       phase: (t.phase ?? "in_progress") as WorkflowPhase,
     }));
@@ -244,8 +244,9 @@ export default function VisitSheet({
   const blockingTasks = steps.filter(
     (t) =>
       (t.is_required && !checked[t.id]) ||
-      (t.photo === "required" && checked[t.id] && !taskPhotos[t.id]),
+      (t.photo === "required" && checked[t.id] && !(taskPhotos[t.id] ?? []).length),
   );
+
   const doneCount = steps.filter((t) => checked[t.id]).length;
 
   async function finish() {
