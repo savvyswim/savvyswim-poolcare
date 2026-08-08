@@ -71,7 +71,7 @@ export default function PortalAddresses({
     setLoading(true);
     const { data, error } = await supabase
       .from("ss_service_addresses")
-      .select("id,customer_id,label,address,city,state,postal_code,notes,is_default")
+      .select("id,customer_id,label,address,city,state,postal_code,notes,is_default,is_billing")
       .eq("customer_id", customerId)
       .order("is_default", { ascending: false })
       .order("created_at", { ascending: true });
@@ -94,16 +94,33 @@ export default function PortalAddresses({
       toast.error("Add a street address first.");
       return;
     }
+
+    // Same street address can only exist twice: once as a service address and
+    // once as the billing copy. Anything beyond that is a duplicate.
+    const key = addressKey({ address: draft.address, city: draft.city, postal_code: draft.postal_code });
+    const clash = rows.find(
+      (r) => r.id !== draft.id && addressKey(r) === key && r.is_billing === draft.is_billing,
+    );
+    if (clash) {
+      toast.error(
+        draft.is_billing
+          ? "That billing address is already saved."
+          : "That address is already saved — tick “Billing address” to keep a separate billing copy.",
+      );
+      return;
+    }
+
     setSaving(true);
     const payload = {
       customer_id: customerId,
-      label: draft.label.trim() || "Service address",
+      label: draft.label.trim() || (draft.is_billing ? "Billing address" : "Service address"),
       address: draft.address.trim(),
       city: draft.city.trim() || null,
       state: draft.state.trim() || null,
       postal_code: draft.postal_code.trim() || null,
       notes: draft.notes.trim() || null,
-      is_default: rows.length === 0,
+      is_billing: draft.is_billing,
+      is_default: rows.length === 0 && !draft.is_billing,
     };
     const { error } = draft.id
       ? await supabase.from("ss_service_addresses").update(payload).eq("id", draft.id)
