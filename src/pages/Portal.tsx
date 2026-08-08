@@ -41,6 +41,7 @@ import PortalDocuments from "@/components/PortalDocuments";
 import PortalDamageReport from "@/components/PortalDamageReport";
 
 import PortalProfile from "@/components/PortalProfile";
+import PortalAddresses, { formatAddress, type ServiceAddress } from "@/components/PortalAddresses";
 import PortalActivity from "@/components/PortalActivity";
 import PortalChemHistory from "@/components/PortalChemHistory";
 
@@ -116,6 +117,7 @@ export default function Portal() {
   const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
   const [saving, setSaving] = useState(false);
   const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
+  const [serviceAddress, setServiceAddress] = useState<ServiceAddress | null>(null);
 
 
   useEffect(() => {
@@ -955,7 +957,12 @@ export default function Portal() {
                 </section>
 
                 {pool && (
-                  <div className="mt-12">
+                  <div className="mt-12 space-y-6">
+                    <PortalAddresses
+                      customerId={pool.id}
+                      selectedId={serviceAddress?.id ?? null}
+                      onSelect={setServiceAddress}
+                    />
                     <PortalProfile />
                   </div>
                 )}
