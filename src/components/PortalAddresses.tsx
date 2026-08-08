@@ -28,6 +28,7 @@ type Draft = {
   state: string;
   postal_code: string;
   notes: string;
+  is_billing: boolean;
 };
 
 const emptyDraft = (): Draft => ({
@@ -38,11 +39,19 @@ const emptyDraft = (): Draft => ({
   state: "",
   postal_code: "",
   notes: "",
+  is_billing: false,
 });
 
 export function formatAddress(a: ServiceAddress) {
   return [a.address, a.city, a.state, a.postal_code].filter(Boolean).join(", ");
 }
+
+const normalize = (v: string | null | undefined) =>
+  (v ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+
+const addressKey = (a: { address: string; city?: string | null; postal_code?: string | null }) =>
+  [normalize(a.address), normalize(a.city), normalize(a.postal_code)].join("|");
+
 
 export default function PortalAddresses({
   customerId,
