@@ -8,7 +8,9 @@ import {
   PHASE_LABEL,
   PHASE_ORDER,
   SIGNATURE_CHECKLIST,
+  photoRuleFor,
   signaturePhase,
+
   type ChecklistPhoto,
   type WorkflowPhase,
 } from "@/crm/lib/checklist";
