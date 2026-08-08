@@ -152,7 +152,7 @@ export default function ChemCosts() {
           `${l.customer} ${l.product} ${l.body} ${l.tech}`.toLowerCase().includes(needle),
         )
       : out;
-  }, [visits, q]);
+  }, [visits, moves, q]);
 
   /** Visit → body of water → product rollup. */
   const jobs = useMemo(() => {
