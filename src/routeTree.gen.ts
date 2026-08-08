@@ -51,6 +51,7 @@ import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
 import { Route as CrmAdminCrmWaterLabRouteImport } from './routes/_crm/admin/crm/water-lab'
 import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/trucks'
+import { Route as CrmAdminCrmTicketsRouteImport } from './routes/_crm/admin/crm/tickets'
 import { Route as CrmAdminCrmTechniciansRouteImport } from './routes/_crm/admin/crm/technicians'
 import { Route as CrmAdminCrmSiteSpeedRouteImport } from './routes/_crm/admin/crm/site-speed'
 import { Route as CrmAdminCrmSettingsRouteImport } from './routes/_crm/admin/crm/settings'
@@ -293,6 +294,11 @@ const CrmAdminCrmTrucksRoute = CrmAdminCrmTrucksRouteImport.update({
   path: '/admin/crm/trucks',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmTicketsRoute = CrmAdminCrmTicketsRouteImport.update({
+  id: '/admin/crm/tickets',
+  path: '/admin/crm/tickets',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmTechniciansRoute = CrmAdminCrmTechniciansRouteImport.update({
   id: '/admin/crm/technicians',
   path: '/admin/crm/technicians',
@@ -503,6 +509,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
+  '/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -575,6 +582,7 @@ export interface FileRoutesByTo {
   '/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
+  '/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -649,6 +657,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/settings': typeof CrmAdminCrmSettingsRoute
   '/_crm/admin/crm/site-speed': typeof CrmAdminCrmSiteSpeedRoute
   '/_crm/admin/crm/technicians': typeof CrmAdminCrmTechniciansRoute
+  '/_crm/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/_crm/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/_crm/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -723,6 +732,7 @@ export interface FileRouteTypes {
     | '/admin/crm/settings'
     | '/admin/crm/site-speed'
     | '/admin/crm/technicians'
+    | '/admin/crm/tickets'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
     | '/api/public/hooks/canary'
@@ -795,6 +805,7 @@ export interface FileRouteTypes {
     | '/admin/crm/settings'
     | '/admin/crm/site-speed'
     | '/admin/crm/technicians'
+    | '/admin/crm/tickets'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
     | '/api/public/hooks/canary'
@@ -868,6 +879,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/settings'
     | '/_crm/admin/crm/site-speed'
     | '/_crm/admin/crm/technicians'
+    | '/_crm/admin/crm/tickets'
     | '/_crm/admin/crm/trucks'
     | '/_crm/admin/crm/water-lab'
     | '/api/public/hooks/canary'
@@ -1219,6 +1231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmTrucksRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/tickets': {
+      id: '/_crm/admin/crm/tickets'
+      path: '/admin/crm/tickets'
+      fullPath: '/admin/crm/tickets'
+      preLoaderRoute: typeof CrmAdminCrmTicketsRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/technicians': {
       id: '/_crm/admin/crm/technicians'
       path: '/admin/crm/technicians'
@@ -1451,6 +1470,7 @@ interface CrmRouteChildren {
   CrmAdminCrmSettingsRoute: typeof CrmAdminCrmSettingsRoute
   CrmAdminCrmSiteSpeedRoute: typeof CrmAdminCrmSiteSpeedRoute
   CrmAdminCrmTechniciansRoute: typeof CrmAdminCrmTechniciansRoute
+  CrmAdminCrmTicketsRoute: typeof CrmAdminCrmTicketsRoute
   CrmAdminCrmTrucksRoute: typeof CrmAdminCrmTrucksRoute
   CrmAdminCrmWaterLabRoute: typeof CrmAdminCrmWaterLabRoute
   CrmAdminCrmIndexRoute: typeof CrmAdminCrmIndexRoute
@@ -1486,6 +1506,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmSettingsRoute: CrmAdminCrmSettingsRoute,
   CrmAdminCrmSiteSpeedRoute: CrmAdminCrmSiteSpeedRoute,
   CrmAdminCrmTechniciansRoute: CrmAdminCrmTechniciansRoute,
+  CrmAdminCrmTicketsRoute: CrmAdminCrmTicketsRoute,
   CrmAdminCrmTrucksRoute: CrmAdminCrmTrucksRoute,
   CrmAdminCrmWaterLabRoute: CrmAdminCrmWaterLabRoute,
   CrmAdminCrmIndexRoute: CrmAdminCrmIndexRoute,
