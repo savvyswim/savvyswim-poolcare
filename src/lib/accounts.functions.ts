@@ -176,3 +176,44 @@ export const createStaffLogin = createServerFn({ method: "POST" })
 
     return { ok: true, email, user_id: userId, password: tempPassword ?? null, mode: data.mode };
   });
+
+/**
+ * Self-heals the "No staff access" dead end: if the signed-in email matches an
+ * active roster row that has no login attached yet, link them together.
+ */
+export const claimStaffSeat = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const email = String((context.claims as any)?.email ?? "").trim().toLowerCase();
+    const userId = context.userId as string;
+    if (!email) return { ok: false as const, reason: "No email on this account" };
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: mine } = await supabaseAdmin
+      .from("ss_staff")
+      .select("id, level")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (mine) return { ok: true as const, level: mine.level };
+
+    const { data: staff, error } = await supabaseAdmin
+      .from("ss_staff")
+      .select("id, level, user_id, is_active")
+      .ilike("email", email)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!staff) return { ok: false as const, reason: "No roster entry matches this email" };
+    if (!staff.is_active) return { ok: false as const, reason: "That roster entry is inactive" };
+    if (staff.user_id && staff.user_id !== userId) {
+      return { ok: false as const, reason: "That roster entry is linked to another login" };
+    }
+
+    const { error: linkErr } = await supabaseAdmin
+      .from("ss_staff")
+      .update({ user_id: userId })
+      .eq("id", staff.id);
+    if (linkErr) throw new Error(linkErr.message);
+
+    return { ok: true as const, level: staff.level };
+  });
