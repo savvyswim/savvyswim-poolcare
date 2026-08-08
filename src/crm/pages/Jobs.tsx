@@ -18,6 +18,8 @@ const FILTERS = ["open", "scheduled", "completed"] as const;
 
 export default function Jobs() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("open");
+  const [openId, setOpenId] = useState<string | null>(null);
+
 
   const { rows, refetch } = useTable<Job>("jobs", async () => {
     const { data } = await supabase
