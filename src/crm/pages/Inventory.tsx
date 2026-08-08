@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
@@ -8,8 +9,17 @@ type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
 };
 
+const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
+
+const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5 };
+
 export default function Inventory() {
   const [q, setQ] = useState("");
+  const [adding, setAdding] = useState(false);
+  const [draft, setDraft] = useState({ ...emptyDraft });
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState({ ...emptyDraft });
+  const [busy, setBusy] = useState(false);
 
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
@@ -34,32 +44,232 @@ export default function Inventory() {
     void refetch();
   }
 
+  async function setQuantity(item: Item, value: number) {
+    const next = Math.max(0, Number.isFinite(value) ? value : 0);
+    if (next === item.quantity) return;
+    const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
+    if (error) { toast.error(error.message); return; }
+    void refetch();
+  }
+
+  async function addItem() {
+    const name = draft.name.trim();
+    if (!name) { toast.error("Give the item a name."); return; }
+    if (rows.some((r) => r.name.toLowerCase() === name.toLowerCase())) {
+      toast.error("That item is already on the shelf.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.from("ss_inventory").insert({
+      name,
+      unit: draft.unit || "ea",
+      quantity: Math.max(0, Number(draft.quantity) || 0),
+      low_threshold: Math.max(0, Number(draft.low_threshold) || 0),
+    });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`${name} added to inventory`);
+    setDraft({ ...emptyDraft });
+    setAdding(false);
+    void refetch();
+  }
+
+  function startEdit(i: Item) {
+    setEditId(i.id);
+    setEdit({
+      name: i.name,
+      unit: i.unit ?? "ea",
+      quantity: i.quantity,
+      low_threshold: i.low_threshold,
+    });
+  }
+
+  async function saveEdit() {
+    if (!editId) return;
+    const name = edit.name.trim();
+    if (!name) { toast.error("Give the item a name."); return; }
+    setBusy(true);
+    const { error } = await supabase
+      .from("ss_inventory")
+      .update({
+        name,
+        unit: edit.unit || "ea",
+        quantity: Math.max(0, Number(edit.quantity) || 0),
+        low_threshold: Math.max(0, Number(edit.low_threshold) || 0),
+      })
+      .eq("id", editId);
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    setEditId(null);
+    void refetch();
+  }
+
+  async function remove(i: Item) {
+    if (!window.confirm(`Remove ${i.name} from inventory?`)) return;
+    const { error } = await supabase.from("ss_inventory").delete().eq("id", i.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`${i.name} removed`);
+    void refetch();
+  }
+
   return (
     <div className="space-y-4">
       <SectionTitle title="Inventory" sub={`${rows.length} items · ${totalUnits} units on hand · ${low.length} low`} />
 
-      <input className="ss-input" placeholder="Search items" value={q} onChange={(e) => setQ(e.target.value)} />
+      <div className="flex flex-wrap items-center gap-2">
+        <input
+          className="ss-input min-w-[180px] flex-1"
+          placeholder="Search items"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+        <button className="ss-btn" onClick={() => setAdding((v) => !v)}>
+          {adding ? <X size={13} /> : <Plus size={13} />} {adding ? "Cancel" : "Add item"}
+        </button>
+      </div>
+
+      {adding && (
+        <div className="ss-card space-y-2 p-3">
+          <div className="ss-tag" style={{ fontSize: "0.55rem" }}>New inventory item</div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="space-y-1">
+              <span className="ss-label">Item name</span>
+              <input
+                className="ss-input w-full"
+                placeholder="e.g. Cyanuric Acid"
+                value={draft.name}
+                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+              />
+            </label>
+            <label className="space-y-1">
+              <span className="ss-label">Unit</span>
+              <select
+                className="ss-input w-full"
+                value={draft.unit}
+                onChange={(e) => setDraft({ ...draft, unit: e.target.value })}
+              >
+                {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+              </select>
+            </label>
+            <label className="space-y-1">
+              <span className="ss-label">On hand</span>
+              <input
+                className="ss-input ss-num w-full"
+                type="number"
+                min={0}
+                step={1}
+                value={draft.quantity}
+                onChange={(e) => setDraft({ ...draft, quantity: Number(e.target.value) })}
+              />
+            </label>
+            <label className="space-y-1">
+              <span className="ss-label">Reorder at</span>
+              <input
+                className="ss-input ss-num w-full"
+                type="number"
+                min={0}
+                step={1}
+                value={draft.low_threshold}
+                onChange={(e) => setDraft({ ...draft, low_threshold: Number(e.target.value) })}
+              />
+            </label>
+          </div>
+          <button className="ss-btn" disabled={busy} onClick={() => void addItem()}>
+            <Check size={13} /> {busy ? "Saving…" : "Add to inventory"}
+          </button>
+        </div>
+      )}
 
       <div className="space-y-2">
         {!shown.length && <EmptyState>No items.</EmptyState>}
-        {shown.map((i) => (
-          <div key={i.id} className="ss-card flex flex-wrap items-center gap-3 p-3">
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[0.88rem] font-semibold">{i.name}</span>
-                {i.quantity <= i.low_threshold && <Chip tone="orange">Reorder</Chip>}
+        {shown.map((i) =>
+          editId === i.id ? (
+            <div key={i.id} className="ss-card space-y-2 p-3">
+              <div className="grid gap-2 sm:grid-cols-2">
+                <label className="space-y-1">
+                  <span className="ss-label">Item name</span>
+                  <input
+                    className="ss-input w-full"
+                    value={edit.name}
+                    onChange={(e) => setEdit({ ...edit, name: e.target.value })}
+                  />
+                </label>
+                <label className="space-y-1">
+                  <span className="ss-label">Unit</span>
+                  <select
+                    className="ss-input w-full"
+                    value={edit.unit}
+                    onChange={(e) => setEdit({ ...edit, unit: e.target.value })}
+                  >
+                    {[...new Set([edit.unit, ...UNITS])].map((u) => <option key={u} value={u}>{u}</option>)}
+                  </select>
+                </label>
+                <label className="space-y-1">
+                  <span className="ss-label">On hand</span>
+                  <input
+                    className="ss-input ss-num w-full"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={edit.quantity}
+                    onChange={(e) => setEdit({ ...edit, quantity: Number(e.target.value) })}
+                  />
+                </label>
+                <label className="space-y-1">
+                  <span className="ss-label">Reorder at</span>
+                  <input
+                    className="ss-input ss-num w-full"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={edit.low_threshold}
+                    onChange={(e) => setEdit({ ...edit, low_threshold: Number(e.target.value) })}
+                  />
+                </label>
               </div>
-              <div className="text-[0.72rem] opacity-60">
-                Reorder at {i.low_threshold} {i.unit ?? "units"}
+              <div className="flex flex-wrap gap-2">
+                <button className="ss-btn" disabled={busy} onClick={() => void saveEdit()}>
+                  <Check size={13} /> Save
+                </button>
+                <button className="ss-btn ss-btn-ghost" onClick={() => setEditId(null)}>
+                  <X size={13} /> Cancel
+                </button>
+                <button className="ss-btn ss-btn-ghost" onClick={() => void remove(i)}>
+                  <Trash2 size={13} /> Delete
+                </button>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="ss-btn ss-btn-ghost" onClick={() => adjust(i, -1)} aria-label="Decrease">−</button>
-              <span className="ss-num w-12 text-center text-[1rem] font-bold">{i.quantity}</span>
-              <button className="ss-btn ss-btn-ghost" onClick={() => adjust(i, 1)} aria-label="Increase">+</button>
+          ) : (
+            <div key={i.id} className="ss-card flex flex-wrap items-center gap-3 p-3">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[0.88rem] font-semibold">{i.name}</span>
+                  {i.quantity <= i.low_threshold && <Chip tone="orange">Reorder</Chip>}
+                </div>
+                <div className="text-[0.72rem] opacity-60">
+                  Reorder at {i.low_threshold} {i.unit ?? "units"}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, -1)} aria-label={`Decrease ${i.name}`}>−</button>
+                <input
+                  className="ss-input ss-num w-16 text-center text-[1rem] font-bold"
+                  type="number"
+                  min={0}
+                  step={1}
+                  aria-label={`${i.name} on hand`}
+                  defaultValue={i.quantity}
+                  key={`${i.id}-${i.quantity}`}
+                  onBlur={(e) => void setQuantity(i, Number(e.target.value))}
+                />
+                <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, 1)} aria-label={`Increase ${i.name}`}>+</button>
+                <button className="ss-btn ss-btn-ghost" onClick={() => startEdit(i)} aria-label={`Edit ${i.name}`}>
+                  <Pencil size={13} />
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );
