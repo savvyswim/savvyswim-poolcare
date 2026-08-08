@@ -169,7 +169,9 @@ export default function Inventory() {
 
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
-    return rows.filter((r) => !t || `${r.name} ${r.unit ?? ""}`.toLowerCase().includes(t));
+    return rows.filter(
+      (r) => !t || `${r.name} ${r.unit ?? ""} ${r.sku ?? ""} ${r.barcode ?? ""}`.toLowerCase().includes(t),
+    );
   }, [rows, q]);
 
   const low = rows.filter((r) => r.quantity <= r.low_threshold);
@@ -561,6 +563,7 @@ export default function Inventory() {
                   <span className="text-[0.88rem] font-semibold">{i.name}</span>
                   {i.quantity <= i.low_threshold && <Chip tone="orange">Reorder</Chip>}
                 </div>
+                <div className="ss-num text-[0.68rem] opacity-55">{codeFor(i)}</div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
                   {packLabel(i, i.unit ?? "unit") && ` · ${packLabel(i, i.unit ?? "unit")}`}
@@ -710,6 +713,8 @@ export default function Inventory() {
           ),
         )}
       </div>
+      {showLabels && <InventoryLabels items={shown} onClose={() => setShowLabels(false)} />}
+
     </div>
   );
 }
