@@ -37,6 +37,7 @@ type Visit = {
 import SaltGuide from "@/crm/components/SaltGuide";
 import WaterBodies from "@/crm/components/WaterBodies";
 import EquipmentRecords from "@/crm/components/EquipmentRecords";
+import CustomerWorkflowPicker from "@/crm/components/CustomerWorkflowPicker";
 import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
 
@@ -277,7 +278,12 @@ export default function CustomerDetail() {
 
       {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
 
-      {tab === "Details" && <CustomerDepth customer={c} canEdit={level !== "technician"} />}
+      {tab === "Details" && (
+        <div className="space-y-3">
+          <CustomerWorkflowPicker customerId={c.id} canEdit={level !== "technician"} />
+          <CustomerDepth customer={c} canEdit={level !== "technician"} />
+        </div>
+      )}
 
       {tab === "Salt pool" && <SaltGuide gallons={c.gallons} />}
 

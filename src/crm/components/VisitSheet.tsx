@@ -4,21 +4,39 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { describeFlags, doseFor, evaluate, flagReadings, lsiVerdict, READING_FIELDS, severityFor, severityTone, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
-import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
+import {
+  PHASE_LABEL,
+  PHASE_ORDER,
+  SIGNATURE_CHECKLIST,
+  signaturePhase,
+  type ChecklistPhoto,
+  type WorkflowPhase,
+} from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
 import ChemicalsAdded, { chemTotal, type AppliedChem } from "@/crm/components/ChemicalsAdded";
 import type { Stop } from "@/crm/pages/Route";
 
-type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
+type Task = { id: string; label: string; is_required: boolean; photo_required: boolean; phase?: WorkflowPhase | null; hint?: string | null };
+
+type TemplateStep = {
+  id: string;
+  label: string;
+  hint: string | null;
+  phase: WorkflowPhase;
+  is_required: boolean;
+  photo_required: boolean;
+  sort_order: number;
+};
 
 type Step = {
   id: string;
   label: string;
-  hint?: string;
+  hint?: string | undefined;
   is_required: boolean;
   photo: ChecklistPhoto;
   custom: boolean;
+  phase: WorkflowPhase;
 };
 
 export type VisitPhoto = { label: string; path: string; url: string };
@@ -55,6 +73,7 @@ export default function VisitSheet({
   const [bodyReadings, setBodyReadings] = useState<Record<string, Readings>>({});
   const [activeBody, setActiveBody] = useState<string>("main");
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [templateSteps, setTemplateSteps] = useState<TemplateStep[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
@@ -118,10 +137,38 @@ export default function VisitSheet({
   useEffect(() => {
     supabase
       .from("ss_workflow_tasks")
-      .select("id,label,is_required,photo_required")
+      .select("id,label,is_required,photo_required,phase,hint")
       .eq("customer_id", c.id)
       .order("sort_order")
-      .then(({ data }) => setTasks(data ?? []));
+      .then(({ data }) => setTasks((data ?? []) as Task[]));
+
+    /** Ordered workflow template: the one assigned to this pool, else the default. */
+    void (async () => {
+      const { data: cust } = await supabase
+        .from("ss_customers")
+        .select("workflow_template_id")
+        .eq("id", c.id)
+        .maybeSingle();
+      const assigned = (cust as { workflow_template_id?: string | null } | null)?.workflow_template_id ?? null;
+      let templateId = assigned;
+      if (!templateId) {
+        const { data: def } = await supabase
+          .from("ss_workflow_templates")
+          .select("id")
+          .eq("is_default", true)
+          .eq("is_active", true)
+          .maybeSingle();
+        templateId = def?.id ?? null;
+      }
+      if (!templateId) return;
+      const { data: rows } = await supabase
+        .from("ss_workflow_template_steps")
+        .select("id,label,hint,phase,is_required,photo_required,sort_order")
+        .eq("template_id", templateId)
+        .order("sort_order");
+      setTemplateSteps((rows ?? []) as TemplateStep[]);
+    })();
+
     void supabase.from("ss_visits").update({ started_at: new Date().toISOString(), status: "in_progress" }).eq("id", stop.id);
   }, [c.id, stop.id]);
 
@@ -142,27 +189,39 @@ export default function VisitSheet({
     [c.id, stop.id],
   );
 
-  /** Signature checklist first, then anything specific to this pool. */
-  const steps: Step[] = useMemo(
-    () => [
-      ...SIGNATURE_CHECKLIST.map((s) => ({
-        id: s.id,
-        label: s.label,
-        hint: s.hint,
-        is_required: s.is_required,
-        photo: s.photo,
-        custom: false,
-      })),
-      ...tasks.map((t) => ({
-        id: t.id,
-        label: t.label,
-        is_required: t.is_required,
-        photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
-        custom: true,
-      })),
-    ],
-    [tasks],
-  );
+  /** Template sequence (or the built-in signature list), then anything specific to this pool. */
+  const steps: Step[] = useMemo(() => {
+    const base: Step[] = templateSteps.length
+      ? templateSteps.map((s) => ({
+          id: s.id,
+          label: s.label,
+          hint: s.hint ?? undefined,
+          is_required: s.is_required,
+          photo: (s.photo_required ? "required" : "suggested") as ChecklistPhoto,
+          custom: false,
+          phase: s.phase,
+        }))
+      : SIGNATURE_CHECKLIST.map((s) => ({
+          id: s.id,
+          label: s.label,
+          hint: s.hint,
+          is_required: s.is_required,
+          photo: s.photo,
+          custom: false,
+          phase: signaturePhase(s.id),
+        }));
+    const custom: Step[] = tasks.map((t) => ({
+      id: t.id,
+      label: t.label,
+      hint: t.hint ?? undefined,
+      is_required: t.is_required,
+      photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+      custom: true,
+      phase: (t.phase ?? "in_progress") as WorkflowPhase,
+    }));
+    const all = [...base, ...custom];
+    return PHASE_ORDER.flatMap((p) => all.filter((s) => s.phase === p));
+  }, [tasks, templateSteps]);
 
   const blockingTasks = steps.filter(
     (t) =>
@@ -548,10 +607,15 @@ export default function VisitSheet({
               </div>
 
               {steps.map((t, i) => {
-                const first = t.custom && !steps[i - 1]?.custom;
+                const newPhase = steps[i - 1]?.phase !== t.phase;
                 return (
                   <div key={t.id}>
-                    {first && (
+                    {newPhase && (
+                      <div className="ss-tag px-1 pb-1 pt-3" style={{ fontSize: "0.55rem" }}>
+                        {PHASE_LABEL[t.phase]}
+                      </div>
+                    )}
+                    {t.custom && !steps[i - 1]?.custom && !newPhase && (
                       <div className="ss-tag px-1 pb-1 pt-3" style={{ fontSize: "0.55rem" }}>
                         Specific to this pool
                       </div>

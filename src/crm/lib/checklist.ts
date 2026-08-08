@@ -122,3 +122,21 @@ export const SIGNATURE_CHECKLIST: ChecklistStep[] = [
     photo: "none",
   },
 ];
+
+/** Job workflow phases, in the order a tech runs them. */
+export type WorkflowPhase = "arriving" | "in_progress" | "leaving";
+
+export const PHASE_ORDER: WorkflowPhase[] = ["arriving", "in_progress", "leaving"];
+
+export const PHASE_LABEL: Record<WorkflowPhase, string> = {
+  arriving: "When arriving",
+  in_progress: "In progress",
+  leaving: "When leaving",
+};
+
+/** Fallback phase for the built-in signature checklist when no template is set. */
+export function signaturePhase(id: string): WorkflowPhase {
+  if (id <= "sig-02") return "arriving";
+  if (id >= "sig-13") return "leaving";
+  return "in_progress";
+}
