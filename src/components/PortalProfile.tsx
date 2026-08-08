@@ -136,16 +136,11 @@ export default function PortalProfile() {
                 onChange={(e) => set("postal_code", e.target.value)} />
             </div>
           </div>
-          <div>
-            <label className={labelClass} htmlFor="pp-phone">Phone</label>
-            <input id="pp-phone" className={inputClass} maxLength={40} value={form.phone ?? ""}
-              onChange={(e) => set("phone", e.target.value)} />
+          <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2">
+            <PortalContactVerify channel="sms" current={form.phone} onVerified={() => void load()} />
+            <PortalContactVerify channel="email" current={form.email} onVerified={() => void load()} />
           </div>
-          <div>
-            <label className={labelClass} htmlFor="pp-email">Email</label>
-            <input id="pp-email" type="email" className={inputClass} maxLength={200} value={form.email ?? ""}
-              onChange={(e) => set("email", e.target.value)} />
-          </div>
+
           <div>
             <label className={labelClass} htmlFor="pp-gate">Gate code</label>
             <input id="pp-gate" className={inputClass} maxLength={60} value={form.gate_code ?? ""}
