@@ -145,19 +145,49 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
     return (
       <div className="savvy-crm flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
         <SavvyLogo size="lg" />
-        <div className="ss-card max-w-sm p-5">
+        <div className="ss-card w-full max-w-sm p-5">
           <h2 className="text-[0.9rem]">No staff access</h2>
           <p className="mt-2 text-[0.85rem] opacity-70">
-            This account isn't on the Savvy Swim staff roster yet. Ask an owner to add you in
-            Technicians.
+            Signed in as <strong>{user?.email ?? "unknown account"}</strong>. This login isn't
+            linked to a Savvy Swim roster entry yet.
           </p>
-          <button className="ss-btn mt-4" onClick={() => void signOut()}>
-            Sign out
-          </button>
+          {claimMsg ? <p className="mt-3 text-[0.8rem] opacity-80">{claimMsg}</p> : null}
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <button
+              className="ss-btn"
+              disabled={claiming}
+              onClick={async () => {
+                setClaiming(true);
+                setClaimMsg(null);
+                try {
+                  const res = await claimSeat({ data: {} } as any);
+                  if (res?.ok) {
+                    setClaimMsg("Roster entry linked — loading your workspace…");
+                    await id.refresh();
+                  } else {
+                    setClaimMsg(res?.reason ?? "Could not link this account.");
+                  }
+                } catch (e: any) {
+                  setClaimMsg(e?.message ?? "Could not link this account.");
+                } finally {
+                  setClaiming(false);
+                }
+              }}
+            >
+              {claiming ? "Linking…" : "Link my staff account"}
+            </button>
+            <button className="ss-btn ss-btn-ghost" onClick={() => void signOut()}>
+              Sign out
+            </button>
+          </div>
+          <p className="mt-3 text-[0.75rem] opacity-60">
+            If linking fails, ask an owner to add this email in Technicians.
+          </p>
         </div>
       </div>
     );
   }
+
 
   const techLocked = id.isTech;
 
