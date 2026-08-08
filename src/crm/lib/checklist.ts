@@ -165,6 +165,6 @@ export const PHASE_LABEL: Record<WorkflowPhase, string> = {
 /** Fallback phase for the built-in signature checklist when no template is set. */
 export function signaturePhase(id: string): WorkflowPhase {
   if (id <= "sig-02") return "arriving";
-  if (id >= "sig-13") return "leaving";
+  if (id >= "sig-15") return "leaving";
   return "in_progress";
 }
