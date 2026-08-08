@@ -36,25 +36,47 @@ const when = (v: string) =>
     minute: "2-digit",
   });
 
+type FailureAlert = {
+  id: string;
+  account_name: string | null;
+  account_key: string;
+  failed_events: number;
+  total_events: number;
+  failure_rate: number;
+  threshold_pct: number;
+  alert_count: number;
+  last_alerted_at: string;
+};
+
 export default function AuditTrail() {
   const [rows, setRows] = useState<AuditRow[]>([]);
+  const [alerts, setAlerts] = useState<FailureAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["key"]>("all");
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("ss_security_audit")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(200);
+    const [{ data }, { data: alertData }] = await Promise.all([
+      supabase
+        .from("ss_security_audit")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabase
+        .from("ss_failure_alerts")
+        .select("*")
+        .order("last_alerted_at", { ascending: false })
+        .limit(10),
+    ]);
     setRows((data ?? []) as unknown as AuditRow[]);
+    setAlerts((alertData ?? []) as unknown as FailureAlert[]);
     setLoading(false);
   }, []);
 
   useEffect(() => {
     void load();
   }, [load]);
+
 
   const visible = useMemo(() => {
     if (filter === "all") return rows;
