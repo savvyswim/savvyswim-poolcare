@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "@/lib/router-compat";
 import {
   AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, LogOut, Mail,
   Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
-  Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, Star, FlaskConical,
+  Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, ScrollText, Star, FlaskConical,
   TrendingUp,
   Grid3x3,
   Gauge,
