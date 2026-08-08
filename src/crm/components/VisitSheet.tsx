@@ -132,6 +132,8 @@ export default function VisitSheet({
   );
   /** Actual products poured, per body of water. */
   const [applied, setApplied] = useState<Record<string, AppliedChem[]>>({});
+  /** Truck stock consumed on this stop — decremented from on-hand on save. */
+  const [used, setUsed] = useState<UsedItem[]>([]);
   const loggedCost = useMemo(
     () => Object.values(applied).reduce((s, list) => s + chemTotal(list), 0),
     [applied],
