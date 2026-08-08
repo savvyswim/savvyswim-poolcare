@@ -334,9 +334,13 @@ function StopCard({
             <button className="ss-btn ss-btn-ghost" onClick={onOnMyWay}>
               <Send size={12} /> On my way
             </button>
+            <button className="ss-btn ss-btn-ghost" onClick={onNoAccess}>
+              <Ban size={12} /> No access
+            </button>
             <button className="ss-btn" onClick={onStart}>
               Start visit
             </button>
+
           </div>
         </div>
       </div>
