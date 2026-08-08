@@ -56,6 +56,7 @@ const STAFF_NAV: NavItem[] = [
   // Savvy FinOps
   { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/job-costing", label: "Job Costing", icon: Calculator, module: "jobCosting", group: "Savvy FinOps" },
+  { to: "/admin/crm/chem-costs", label: "Chemical Costs", icon: FlaskConical, module: "jobCosting", group: "Savvy FinOps" },
   { to: "/admin/crm/margin", label: "Margin Calculator", icon: Percent, module: "margin", group: "Savvy FinOps" },
   { to: "/admin/crm/revenue-growth", label: "Revenue Growth", icon: TrendingUp, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/pricing-matrix", label: "Pricing Matrix", icon: Grid3x3, module: "finance", group: "Savvy FinOps" },

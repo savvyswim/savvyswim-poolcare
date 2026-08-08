@@ -80,6 +80,7 @@ import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
 import { Route as CrmAdminCrmConnectRouteImport } from './routes/_crm/admin/crm/connect'
+import { Route as CrmAdminCrmChemCostsRouteImport } from './routes/_crm/admin/crm/chem-costs'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
 import { Route as CrmAdminCrmAutomationsRouteImport } from './routes/_crm/admin/crm/automations'
 import { Route as CrmAdminCrmAuditTrailRouteImport } from './routes/_crm/admin/crm/audit-trail'
@@ -449,6 +450,11 @@ const CrmAdminCrmConnectRoute = CrmAdminCrmConnectRouteImport.update({
   path: '/admin/crm/connect',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmChemCostsRoute = CrmAdminCrmChemCostsRouteImport.update({
+  id: '/admin/crm/chem-costs',
+  path: '/admin/crm/chem-costs',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmBreakEvenRoute = CrmAdminCrmBreakEvenRouteImport.update({
   id: '/admin/crm/break-even',
   path: '/admin/crm/break-even',
@@ -532,6 +538,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
+  '/admin/crm/chem-costs': typeof CrmAdminCrmChemCostsRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
@@ -612,6 +619,7 @@ export interface FileRoutesByTo {
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
+  '/admin/crm/chem-costs': typeof CrmAdminCrmChemCostsRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
@@ -694,6 +702,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/_crm/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
+  '/_crm/admin/crm/chem-costs': typeof CrmAdminCrmChemCostsRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
@@ -776,6 +785,7 @@ export interface FileRouteTypes {
     | '/admin/crm/audit-trail'
     | '/admin/crm/automations'
     | '/admin/crm/break-even'
+    | '/admin/crm/chem-costs'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
@@ -856,6 +866,7 @@ export interface FileRouteTypes {
     | '/admin/crm/audit-trail'
     | '/admin/crm/automations'
     | '/admin/crm/break-even'
+    | '/admin/crm/chem-costs'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
@@ -937,6 +948,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/audit-trail'
     | '/_crm/admin/crm/automations'
     | '/_crm/admin/crm/break-even'
+    | '/_crm/admin/crm/chem-costs'
     | '/_crm/admin/crm/connect'
     | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
@@ -1522,6 +1534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmConnectRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/chem-costs': {
+      id: '/_crm/admin/crm/chem-costs'
+      path: '/admin/crm/chem-costs'
+      fullPath: '/admin/crm/chem-costs'
+      preLoaderRoute: typeof CrmAdminCrmChemCostsRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/break-even': {
       id: '/_crm/admin/crm/break-even'
       path: '/admin/crm/break-even'
@@ -1586,6 +1605,7 @@ interface CrmRouteChildren {
   CrmAdminCrmAuditTrailRoute: typeof CrmAdminCrmAuditTrailRoute
   CrmAdminCrmAutomationsRoute: typeof CrmAdminCrmAutomationsRoute
   CrmAdminCrmBreakEvenRoute: typeof CrmAdminCrmBreakEvenRoute
+  CrmAdminCrmChemCostsRoute: typeof CrmAdminCrmChemCostsRoute
   CrmAdminCrmConnectRoute: typeof CrmAdminCrmConnectRoute
   CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
@@ -1626,6 +1646,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmAuditTrailRoute: CrmAdminCrmAuditTrailRoute,
   CrmAdminCrmAutomationsRoute: CrmAdminCrmAutomationsRoute,
   CrmAdminCrmBreakEvenRoute: CrmAdminCrmBreakEvenRoute,
+  CrmAdminCrmChemCostsRoute: CrmAdminCrmChemCostsRoute,
   CrmAdminCrmConnectRoute: CrmAdminCrmConnectRoute,
   CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
