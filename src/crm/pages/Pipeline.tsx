@@ -273,48 +273,92 @@ export default function Pipeline() {
         </button>
       </div>
 
-      <div className="ss-card p-4">
-        <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-          {SERVICE_PLANS.map((p) => (
-            <div key={p.id} className="rounded-md border p-2.5" style={{ borderColor: "hsl(var(--ss-sand))" }}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[0.83rem] font-semibold">{p.name}</span>
-                <span className="ss-num text-[0.78rem] opacity-70">{planCounts[p.id] ?? 0}</span>
+      {board === "marketing" && (
+        <>
+          <div className="ss-card p-4">
+            <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              {SERVICE_PLANS.map((p) => (
+                <div key={p.id} className="rounded-md border p-2.5" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[0.83rem] font-semibold">{p.name}</span>
+                    <span className="ss-num text-[0.78rem] opacity-70">{planCounts[p.id] ?? 0}</span>
+                  </div>
+                  <div className="mt-0.5 text-[0.7rem] opacity-65">{p.tagline}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+            {STAGES.map((s) => (
+              <div key={s.key} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="ss-tag">{s.label}</span>
+                  <span className="ss-num text-[0.72rem] opacity-60">{byStage[s.key]?.length ?? 0}</span>
+                </div>
+                {!byStage[s.key]?.length && <EmptyState>—</EmptyState>}
+                {byStage[s.key]?.map((l) => (
+                  <button key={l.id} className="ss-card w-full p-3 text-left" onClick={() => setDetail(l)}>
+                    <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{l.full_name}</div>
+                    <div className="text-[0.72rem] opacity-65">{l.city ?? "—"} · {l.pool_size ?? "—"}</div>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      <Chip tone="green">{money(l.monthly_value)}/mo</Chip>
+                      {l.plan_id && (
+                        <Chip tone={PLAN_STATUS[l.plan_status ?? "recommended"]?.tone ?? "gold"}>
+                          {findServicePlan(l.plan_id)?.name ?? l.plan_id}
+                        </Chip>
+                      )}
+                      {l.cleanup_price ? <Chip tone="gold">Clean-up {money(l.cleanup_price)}</Chip> : null}
+                      {l.source && <Chip tone="aqua">{l.source}</Chip>}
+                    </div>
+                  </button>
+                ))}
               </div>
-              <div className="mt-0.5 text-[0.7rem] opacity-65">{p.tagline}</div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {board === "operations" && (
+        <div className="grid gap-3 md:grid-cols-3">
+          {OPS_COLUMNS.map((c) => (
+            <div key={c.key} className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="ss-tag">{c.label}</span>
+                <span className="ss-num text-[0.72rem] opacity-60">{byOpsStatus[c.key]?.length ?? 0}</span>
+              </div>
+              {!byOpsStatus[c.key]?.length && <EmptyState>—</EmptyState>}
+              {byOpsStatus[c.key]?.map((j) => (
+                <div key={j.id} className="ss-card p-3">
+                  <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+                    {j.ss_customers?.full_name ?? "Customer"}
+                  </div>
+                  <div className="text-[0.72rem] opacity-65">{j.title} · {j.ss_customers?.city ?? j.details ?? "—"}</div>
+                  <select
+                    className="ss-input mt-2 w-full text-[0.78rem]"
+                    value={j.tech_id ?? ""}
+                    onChange={(e) => void assignOps(j, e.target.value)}
+                  >
+                    <option value="">Unassigned</option>
+                    {staff.map((t) => (
+                      <option key={t.id} value={t.id}>{t.full_name}</option>
+                    ))}
+                  </select>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {OPS_COLUMNS.filter((x) => x.key !== j.status).map((x) => (
+                      <button key={x.key} className="ss-btn ss-btn-ghost text-[0.72rem]" onClick={() => void moveOps(j, x.key)}>
+                        → {x.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
-        {STAGES.map((s) => (
-          <div key={s.key} className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="ss-tag">{s.label}</span>
-              <span className="ss-num text-[0.72rem] opacity-60">{byStage[s.key]?.length ?? 0}</span>
-            </div>
-            {!byStage[s.key]?.length && <EmptyState>—</EmptyState>}
-            {byStage[s.key]?.map((l) => (
-              <button key={l.id} className="ss-card w-full p-3 text-left" onClick={() => setDetail(l)}>
-                <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{l.full_name}</div>
-                <div className="text-[0.72rem] opacity-65">{l.city ?? "—"} · {l.pool_size ?? "—"}</div>
-                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  <Chip tone="green">{money(l.monthly_value)}/mo</Chip>
-                  {l.plan_id && (
-                    <Chip tone={PLAN_STATUS[l.plan_status ?? "recommended"]?.tone ?? "gold"}>
-                      {findServicePlan(l.plan_id)?.name ?? l.plan_id}
-                    </Chip>
-                  )}
-                  {l.cleanup_price ? <Chip tone="gold">Clean-up {money(l.cleanup_price)}</Chip> : null}
-                  {l.source && <Chip tone="aqua">{l.source}</Chip>}
-                </div>
-              </button>
-            ))}
-          </div>
-        ))}
-      </div>
 
 
       {detail && (
