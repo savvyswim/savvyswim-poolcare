@@ -4,6 +4,8 @@ import { Snowflake } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
+import MarketingImport from "@/crm/components/MarketingImport";
+
 
 type FeedRow = {
   id: string; kind: string; title: string; body: string | null;
