@@ -81,10 +81,12 @@ export default function Inventory() {
   const { rows: moves, refetch: refetchMoves } = useTable<Move>("inventory-moves", async () => {
     const { data } = await supabase
       .from("ss_inventory_moves")
-      .select("id,item_id,item_name,delta,quantity_after,reason,note,created_at")
+      .select(
+        "id,item_id,item_name,delta,quantity_after,reason,note,created_at,visit_id,job_id,customer_id,total_cost,ss_customers(full_name)",
+      )
       .order("created_at", { ascending: false })
       .limit(300);
-    return (data ?? []) as Move[];
+    return (data ?? []) as unknown as Move[];
   });
 
   const movesByItem = useMemo(() => {
@@ -92,6 +94,32 @@ export default function Inventory() {
     for (const mv of moves) m.set(mv.item_id, [...(m.get(mv.item_id) ?? []), mv]);
     return m;
   }, [moves]);
+
+  /** Consumption tied to a visit or job over the last 30 days, per item. */
+  const usageByItem = useMemo(() => {
+    const since = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const m = new Map<string, { qty: number; cost: number; jobs: number }>();
+    for (const mv of moves) {
+      if (mv.delta >= 0) continue;
+      if (!mv.visit_id && !mv.job_id && mv.reason !== "usage" && mv.reason !== "used_on_job") continue;
+      if (new Date(mv.created_at).getTime() < since) continue;
+      const cur = m.get(mv.item_id) ?? { qty: 0, cost: 0, jobs: 0 };
+      cur.qty += Math.abs(mv.delta);
+      cur.cost += Number(mv.total_cost) || 0;
+      if (mv.visit_id || mv.job_id) cur.jobs += 1;
+      m.set(mv.item_id, cur);
+    }
+    return m;
+  }, [moves]);
+
+  const usageContext = (m: Move) => {
+    const who = m.ss_customers?.full_name;
+    if (m.visit_id) return who ? `visit · ${who}` : "visit";
+    if (m.job_id) return who ? `job · ${who}` : "job";
+    return null;
+  };
+
+
 
   async function logMove(item: Item, delta: number, quantityAfter: number, reason: string, note?: string) {
     if (!delta) return;
