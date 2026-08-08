@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, History, Minus, Pencil, Plus, QrCode, Trash2, Upload, X } from "lucide-react";
+import { Check, History, Minus, Pencil, Plus, QrCode, ShoppingCart, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import { useTable } from "@/crm/lib/useSavvy";
 import InventoryImport from "@/crm/components/InventoryImport";
 import InventoryLabels, { codeFor } from "@/crm/components/InventoryLabels";
 import CodeScanner from "@/crm/components/CodeScanner";
+import ReorderDraft from "@/crm/components/ReorderDraft";
 import { convertQty, enterableUnits, PACK_UNITS, STOCK_UNITS, packLabel } from "@/crm/lib/units";
 
 
@@ -16,6 +17,7 @@ type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
   pack_size: number | null; pack_unit: string | null;
   sku: string | null; barcode: string | null;
+  unit_cost?: number | null;
 };
 
 const UNITS = STOCK_UNITS;
@@ -67,6 +69,7 @@ export default function Inventory() {
   const [showLog, setShowLog] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
+  const [showReorder, setShowReorder] = useState(false);
   const runLowStockCheck = useServerFn(checkLowStock);
 
   /** Fires the reorder notification when a change drops an item to/below its point. */
@@ -89,7 +92,7 @@ export default function Inventory() {
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
       .from("ss_inventory")
-      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit,sku,barcode")
+      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit,sku,barcode,unit_cost")
       .order("name");
     return (data ?? []) as Item[];
   });
@@ -336,6 +339,11 @@ export default function Inventory() {
             }}
           >
             Send reorder alert ({low.length})
+          </button>
+        )}
+        {low.length > 0 && (
+          <button className="ss-btn" onClick={() => setShowReorder(true)}>
+            <ShoppingCart size={13} /> Create reorder ({low.length})
           </button>
         )}
 
@@ -714,6 +722,21 @@ export default function Inventory() {
         )}
       </div>
       {showLabels && <InventoryLabels items={shown} onClose={() => setShowLabels(false)} />}
+      {showReorder && (
+        <ReorderDraft
+          lowItems={low.map((i) => ({
+            id: i.id,
+            name: i.name,
+            unit: i.unit,
+            quantity: Number(i.quantity) || 0,
+            low_threshold: Number(i.low_threshold) || 0,
+            unit_cost: Number(i.unit_cost ?? 0),
+            sku: i.sku,
+          }))}
+          onClose={() => setShowReorder(false)}
+          onCreated={() => void refetch()}
+        />
+      )}
 
     </div>
   );
