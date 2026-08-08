@@ -16,7 +16,6 @@ type Doc = {
 };
 
 const KIND_LABEL: Record<string, string> = {
-  insurance: "Insurance packet",
   agreement: "Agreement",
   service: "Service agreement",
   waiver: "Waiver",
@@ -166,7 +165,7 @@ export default function PortalDocuments({ customerName }: { customerName?: strin
             )}
           </h2>
           <p className="mt-1 font-tech text-xs text-primary/60">
-            Insurance documentation packets and agreements — review and approve digitally before we submit them.
+            Service agreements and authorizations — review and approve digitally, no printing or scanning.
           </p>
         </div>
       </div>
@@ -238,8 +237,8 @@ export default function PortalDocuments({ customerName }: { customerName?: strin
                             className="mt-0.5"
                           />
                           <span>
-                            I approve this packet, confirm the information is accurate, and authorize Savvy Swim to
-                            submit it to the insurer on my behalf. My typed name and drawn signature are my electronic
+                            I approve this document, confirm the information is accurate, and authorize Savvy Swim to
+                            proceed with the service described. My typed name and drawn signature are my electronic
                             signature.
                           </span>
                         </label>

@@ -77,8 +77,8 @@ export const Route = createFileRoute("/book")({
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: "Do you work with insurance claims?",
-    a: "Yes. If your pool or equipment was damaged and you're filing a claim, we document the damage with photos and provide a written, itemized estimate you can submit to your insurer. We can also speak with your adjuster on site during the inspection.",
+    q: "Do you handle equipment repairs too?",
+    a: "Yes. If the inspection turns up a failing pump, filter, heater, or automation panel, we document it with photos and give you a written, itemized repair estimate on the spot. No pressure and no obligation to book the work.",
   },
   {
     q: "What happens during a mobile inspection?",

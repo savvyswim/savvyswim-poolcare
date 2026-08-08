@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CloudHail, ImagePlus, Trash2, Upload } from "lucide-react";
+import { ImagePlus, ShieldAlert, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -17,10 +17,11 @@ type Report = {
 };
 
 const KINDS = [
-  { value: "hail", label: "Hail damage" },
-  { value: "storm", label: "Storm / wind" },
-  { value: "equipment", label: "Equipment damage" },
-  { value: "other", label: "Other damage" },
+  { value: "equipment", label: "Equipment (pump, filter, heater)" },
+  { value: "surface", label: "Surface, tile or coping" },
+  { value: "leak", label: "Leak or water loss" },
+  { value: "storm", label: "Storm debris" },
+  { value: "other", label: "Other pool issue" },
 ];
 
 const STATUS_LABEL: Record<string, string> = {
@@ -40,7 +41,7 @@ function fmtDate(iso: string) {
 export default function PortalDamageReport({ customerId }: { customerId: string }) {
   const [reports, setReports] = useState<Report[]>([]);
   const [signed, setSigned] = useState<Record<string, string>>({});
-  const [kind, setKind] = useState("hail");
+  const [kind, setKind] = useState("equipment");
   const [occurredOn, setOccurredOn] = useState("");
   const [notes, setNotes] = useState("");
   const [pending, setPending] = useState<File[]>([]);
@@ -133,8 +134,8 @@ export default function PortalDamageReport({ customerId }: { customerId: string 
   return (
     <section className="mt-10 border border-primary/15 bg-background p-5 sm:p-6">
       <div className="flex items-center gap-2">
-        <CloudHail className="h-4 w-4 text-accent" aria-hidden="true" />
-        <h2 className="font-display text-xl uppercase leading-none">Storm &amp; hail damage</h2>
+        <ShieldAlert className="h-4 w-4 text-accent" aria-hidden="true" />
+        <h2 className="font-display text-xl uppercase leading-none">Report a pool issue</h2>
       </div>
       <p className="mt-2 font-tech text-xs text-primary/60">
         Upload photos and notes before your inspection so your tech arrives knowing exactly what to check.
@@ -142,7 +143,7 @@ export default function PortalDamageReport({ customerId }: { customerId: string 
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="font-tech text-[10px] uppercase tracking-widest text-primary/60">Damage type</span>
+          <span className="font-tech text-[10px] uppercase tracking-widest text-primary/60">Issue type</span>
           <select
             value={kind}
             onChange={(e) => setKind(e.target.value)}
