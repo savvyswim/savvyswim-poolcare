@@ -42,14 +42,29 @@ export default function PortalPayDialog({
       p_method: method,
       ...(reference ? { p_reference: reference } : {}),
     });
-    setBusy(false);
     if (error) {
+      setBusy(false);
       toast.error(error.message);
       return;
     }
-    toast.success(`Payment started for ${invoice.invoice_number} — receipt on the way.`);
+
+    let receiptNote = "receipt on the way";
+    try {
+      const res = await sendReceipt({
+        data: { invoiceId: invoice.id, method, ...(reference ? { reference } : {}) },
+      });
+      if (res.channels.length) {
+        receiptNote = `receipt sent by ${res.channels.join(" + ")}`;
+      }
+    } catch {
+      /* payment recorded; receipt delivery is best-effort */
+    }
+
+    setBusy(false);
+    toast.success(`Payment recorded for ${invoice.invoice_number} — ${receiptNote}.`);
     onPaid();
     onClose();
+
   }
 
   return (
