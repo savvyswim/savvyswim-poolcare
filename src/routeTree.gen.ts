@@ -46,6 +46,7 @@ import { Route as AdminCrmLegacyRouteImport } from './routes/admin/crm/legacy'
 import { Route as AdminCrmAppRouteImport } from './routes/admin/crm/app'
 import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/index'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
+import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
@@ -265,6 +266,12 @@ const ApiPublicTwilioContractSmsStatusRoute =
   ApiPublicTwilioContractSmsStatusRouteImport.update({
     id: '/api/public/twilio/contract-sms-status',
     path: '/api/public/twilio/contract-sms-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksVisitRemindersRoute =
+  ApiPublicHooksVisitRemindersRouteImport.update({
+    id: '/api/public/hooks/visit-reminders',
+    path: '/api/public/hooks/visit-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksHealthWatchRoute =
@@ -515,6 +522,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
+  '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -588,6 +596,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
+  '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/admin/crm': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -663,6 +672,7 @@ export interface FileRoutesById {
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
+  '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/_crm/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/_crm/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
@@ -738,6 +748,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/canary'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
+    | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
     | '/admin/crm/'
     | '/admin/crm/customers/$id'
@@ -811,6 +822,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/canary'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
+    | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
     | '/admin/crm'
     | '/admin/crm/customers/$id'
@@ -885,6 +897,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/canary'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
+    | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
     | '/_crm/admin/crm/'
     | '/_crm/admin/crm/customers/$id'
@@ -932,6 +945,7 @@ export interface RootRouteChildren {
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
+  ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
 }
 
@@ -1194,6 +1208,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/twilio/contract-sms-status'
       fullPath: '/api/public/twilio/contract-sms-status'
       preLoaderRoute: typeof ApiPublicTwilioContractSmsStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/visit-reminders': {
+      id: '/api/public/hooks/visit-reminders'
+      path: '/api/public/hooks/visit-reminders'
+      fullPath: '/api/public/hooks/visit-reminders'
+      preLoaderRoute: typeof ApiPublicHooksVisitRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/health-watch': {
@@ -1557,8 +1578,19 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
+  ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
