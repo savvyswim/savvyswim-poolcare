@@ -136,8 +136,8 @@ export default function MarketingImport({ onDone }: { onDone?: () => void }) {
         <button className="ss-btn ss-btn-ghost" onClick={downloadTemplate}>Template</button>
       </div>
       <div className="mb-2 text-[0.75rem] opacity-70">
-        Columns: name, email, phone, address, city, source. Contacts land in the pipeline as new leads and join the
-        “Open leads” audience. Existing emails are updated, not duplicated.
+        Columns: name, email, phone, address, city, source. Contacts land in the pipeline as new leads.
+        Existing emails are updated, not duplicated.
       </div>
 
       <input
