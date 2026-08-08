@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { buildRollbackChecklist, type DeployPing } from "@/lib/rollback-checklist";
 import CanaryPanel from "@/crm/pages/CanaryPanel";
+import ServerErrorsPanel from "@/crm/components/ServerErrorsPanel";
+
 
 type Row = {
   id: string;
