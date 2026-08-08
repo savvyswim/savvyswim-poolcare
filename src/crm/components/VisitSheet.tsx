@@ -390,23 +390,22 @@ export default function VisitSheet({
               )}
               <div className="grid grid-cols-2 gap-2.5">
                 {READING_FIELDS.map((f) => {
-                  const st = f.key === "temp" ? "unknown" : statusFor(f.key as MetricKey, (readings as Record<string, number | undefined>)[f.key]);
+                  const raw = (readings as Record<string, number | undefined>)[f.key];
+                  const sev = f.key === "temp" ? "unknown" : severityFor(f.key as MetricKey, raw);
+                  const st = f.key === "temp" ? "unknown" : statusFor(f.key as MetricKey, raw);
+                  const tone = severityTone(sev);
                   return (
                   <div key={f.key}>
                     <label className="ss-label flex items-center justify-between gap-1">
                       <span>
                         {f.label} <span className="opacity-50">{f.target}</span>
                       </span>
-                      {st !== "unknown" && (
+                      {sev !== "unknown" && (
                         <span
                           className="rounded-full px-1.5 py-0.5 text-[0.55rem] font-semibold uppercase tracking-wide"
-                          style={
-                            st === "good"
-                              ? { background: "hsl(152 55% 90%)", color: "hsl(152 60% 24%)" }
-                              : { background: "hsl(var(--ss-burgundy) / .12)", color: "hsl(var(--ss-burgundy))" }
-                          }
+                          style={{ background: tone.bg, color: tone.fg }}
                         >
-                          {st === "good" ? "OK" : st}
+                          {sev === "good" ? "OK" : sev === "critical" ? `${st} !` : st}
                         </span>
                       )}
                     </label>
@@ -415,7 +414,20 @@ export default function VisitSheet({
                       type="number"
                       step={f.step}
                       inputMode="decimal"
-                      value={(readings as Record<string, number | undefined>)[f.key] ?? ""}
+                      style={
+                        sev === "watch" || sev === "critical"
+                          ? {
+                              borderColor: tone.border,
+                              boxShadow: `inset 0 0 0 1px ${tone.border}`,
+                              background: tone.bg,
+                              color: tone.fg,
+                              fontWeight: 700,
+                            }
+                          : sev === "good"
+                            ? { borderColor: tone.border }
+                            : undefined
+                      }
+                      value={raw ?? ""}
                       onChange={(e) =>
                         setReadings((r) => ({
                           ...r,
@@ -427,6 +439,31 @@ export default function VisitSheet({
                   );
                 })}
               </div>
+
+              {flags.length > 0 && (
+                <div
+                  className="p-3"
+                  style={{
+                    border: `1px solid ${severityTone(flags[0]!.severity).border}`,
+                    background: severityTone(flags[0]!.severity).bg,
+                  }}
+                >
+                  <div className="ss-tag" style={{ fontSize: "0.52rem", color: severityTone(flags[0]!.severity).fg }}>
+                    {flags.some((f) => f.severity === "critical")
+                      ? "Out of range — office will be alerted"
+                      : "Watch levels — logged for the office"}
+                  </div>
+                  <ul className="mt-1.5 space-y-0.5 text-[0.72rem]">
+                    {flags.map((f) => (
+                      <li key={f.key} style={{ color: severityTone(f.severity).fg }}>
+                        <strong>{f.label}</strong> {f.value}
+                        {f.unit ? ` ${f.unit}` : ""} — {f.status} vs target {f.range}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
 
               <div className="ss-hero p-3.5">
                 <div className="ss-tag" style={{ color: "rgba(255,255,255,.7)", fontSize: "0.52rem" }}>
