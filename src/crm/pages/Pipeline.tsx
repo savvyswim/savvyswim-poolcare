@@ -97,6 +97,7 @@ const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "gree
 
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
+  const [converting, setConverting] = useState(false);
 
   const { rows, refetch } = useTable<Lead>("pipeline", async () => {
     const { data } = await supabase
@@ -165,7 +166,7 @@ export default function Pipeline() {
             city: lead.city,
             status: "inactive",
             monthly_price: Number(lead.monthly_value || 0),
-            notes: `Converted from lead (${lead.source ?? "marketing"})`,
+            location_notes: `Converted from lead (${lead.source ?? "marketing"})`,
           })
           .select("id")
           .single();
