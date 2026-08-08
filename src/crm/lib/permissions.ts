@@ -7,6 +7,7 @@ export type ModuleKey =
   | "pipeline"
   | "jobs"
   | "alerts"
+  | "tickets"
   | "technicians"
   | "products"
   | "servicePlans"
@@ -48,6 +49,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   waterLab: ALL,
   payPerPool: ALL,
   alerts: ALL,
+  tickets: OFFICE,
   customers: OFFICE,
   pipeline: OFFICE,
   technicians: OFFICE,

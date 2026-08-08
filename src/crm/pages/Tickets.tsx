@@ -27,8 +27,7 @@ type Message = {
 const STATUSES = ["new", "open", "answered", "closed"];
 
 export default function Tickets() {
-  const identity = useSavvyIdentity();
-  const staffName = (identity as { staff?: { name?: string } | null })?.staff?.name ?? "Savvy Swim";
+  const { staffName } = useSavvyIdentity();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [names, setNames] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
@@ -90,7 +89,7 @@ export default function Tickets() {
     const { error } = await supabase.from("ss_ticket_messages").insert({
       ticket_id: ticketId,
       author_kind: "staff",
-      author_label: staffName,
+      author_label: staffName ?? "Savvy Swim",
       body: reply.trim(),
     });
     if (!error) {
