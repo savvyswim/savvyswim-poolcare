@@ -37,6 +37,8 @@ export default function PortalPayDialog({
   const [method, setMethod] = useState<MethodKey>("card");
   const [reference, setReference] = useState("");
   const [busy, setBusy] = useState(false);
+  const sendReceipt = useServerFn(sendPortalReceipt);
+
 
   async function submit() {
     setBusy(true);
