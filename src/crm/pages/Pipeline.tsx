@@ -246,6 +246,22 @@ export default function Pipeline() {
         .update({ converted_customer_id: customerId, stage: "contacted", stage_changed_at: new Date().toISOString() })
         .eq("id", lead.id);
 
+      const source = lead.source ?? "marketing";
+      await logLeadEvent(
+        lead.id,
+        "converted",
+        "Lead converted to customer",
+        `Inspection job created · source ${source}`,
+      );
+      await logCustomerActivity(
+        customerId,
+        "Converted from marketing lead",
+        `Lead: ${lead.full_name} · source ${source} · inspection job created (tech not yet assigned)`,
+        "convert",
+      );
+
+
+
       toast.success("Inspection created — assign a tech in Jobs & repairs");
       setDetail(null);
       void refetch();
