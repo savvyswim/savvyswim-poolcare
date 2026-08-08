@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { Check, History, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { checkLowStock } from "@/lib/inventory-alerts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
+
 
 type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
@@ -45,6 +48,24 @@ export default function Inventory() {
   const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
+  const runLowStockCheck = useServerFn(checkLowStock);
+
+  /** Fires the reorder notification when a change drops an item to/below its point. */
+  async function notifyIfLow(item: Item, nextQuantity: number) {
+    if (nextQuantity > item.low_threshold) return;
+    try {
+      const res = await runLowStockCheck({ data: { itemIds: [item.id] } });
+      if (res.notified.length) {
+        toast.warning(`${item.name} hit its reorder point — office notified`);
+      } else {
+        toast.warning(`${item.name} is at its reorder point`);
+      }
+    } catch {
+      toast.warning(`${item.name} is at its reorder point`);
+    }
+  }
+
+
 
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
@@ -98,6 +119,7 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, delta > 0 ? "restock" : "used_on_job");
+    void notifyIfLow(item, next);
     void refetch();
   }
 
@@ -107,6 +129,7 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, "correction", "Count typed directly");
+    void notifyIfLow(item, next);
     void refetch();
   }
 
@@ -119,7 +142,9 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { setBusy(false); toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note);
+    void notifyIfLow(item, next);
     setBusy(false);
+
     setAdjustId(null);
     setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
     toast.success(`${item.name} · ${delta > 0 ? "+" : ""}${delta} ${item.unit ?? "units"}`);
@@ -204,6 +229,26 @@ export default function Inventory() {
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
           <History size={13} /> {showLog ? "Hide history" : "History"}
         </button>
+        {low.length > 0 && (
+          <button
+            className="ss-btn ss-btn-ghost"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const res = await runLowStockCheck({ data: {} });
+                if (res.notified.length) toast.success(`Reorder alert sent for ${res.notified.length} item(s)`);
+                else toast.info("Already alerted in the last 24 hours");
+              } catch (e) {
+                toast.error(e instanceof Error ? e.message : "Could not send the reorder alert");
+              }
+              setBusy(false);
+            }}
+          >
+            Send reorder alert ({low.length})
+          </button>
+        )}
+
       </div>
 
       {showLog && (
