@@ -97,7 +97,7 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
 
           const { data: existing } = await supabaseAdmin
             .from("ss_contract_sms")
-            .select("id")
+            .select("id, contract_id")
             .eq("message_sid", sid)
             .maybeSingle();
           if (!existing) {
@@ -115,6 +115,28 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
             return new Response("ok");
           }
 
+          // Tenant attribution: every applied status carries the customer it
+          // belongs to, so the Audit Trail can rank failures per account.
+          let customerId: string | null = null;
+          let customerName: string | null = null;
+          const { data: contract } = await supabaseAdmin
+            .from("ss_contracts")
+            .select("customer_id, recipient_name")
+            .eq("id", existing.contract_id)
+            .maybeSingle();
+          if (contract) {
+            customerId = contract.customer_id ?? null;
+            customerName = contract.recipient_name ?? null;
+            if (customerId) {
+              const { data: customer } = await supabaseAdmin
+                .from("ss_customers")
+                .select("full_name")
+                .eq("id", customerId)
+                .maybeSingle();
+              customerName = customer?.full_name ?? customerName;
+            }
+          }
+
           await supabaseAdmin
             .from("ss_contract_sms")
             .update({
@@ -123,21 +145,35 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
             })
             .eq("id", existing.id);
 
-          log("status_applied", { ip, sid, status, errorCode: errorCode ? String(errorCode) : null });
+          const deliveryFailed = ["failed", "undelivered"].includes(status.toLowerCase());
+
+          log("status_applied", {
+            ip,
+            sid,
+            status,
+            customerId,
+            errorCode: errorCode ? String(errorCode) : null,
+          });
 
           await recordAudit({
             action: "twilio_status_webhook.applied",
             actorLabel: "twilio",
             subjectTable: "ss_contract_sms",
             subjectId: existing.id,
-            success: true,
+            success: !deliveryFailed,
             outcome: `Status set to ${status}`,
             details: {
               messageSid: sid,
+              status,
+              deliveryFailed,
+              customerId,
+              customerName,
+              contractId: existing.contract_id,
               errorCode: errorCode ? String(errorCode) : null,
               hasTwilioSignature,
               durationMs: Date.now() - startedAt,
             },
+
             request,
           });
 
