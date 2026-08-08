@@ -167,7 +167,10 @@ export default function DeployHealth() {
         )}
       </section>
 
+      <ServerErrorsPanel />
+
       <CanaryPanel />
+
 
       {/* History */}
       <section className="crm-card p-4">
