@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { MessageSquare, Send } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Check, CheckCheck, Inbox, MessageSquare, Plus, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -36,15 +36,49 @@ const STATUS_LABEL: Record<string, string> = {
   closed: "Closed",
 };
 
+const QUICK_REPLIES = [
+  "Thanks — that works for me.",
+  "Can we move this to another day?",
+  "Please call me about this.",
+  "Still seeing the issue.",
+];
+
+const READ_KEY = "savvy_portal_thread_reads";
+
+function loadReads(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(READ_KEY) || "{}") as Record<string, string>;
+  } catch {
+    return {};
+  }
+}
+
 export default function PortalTickets({ customerId }: { customerId: string }) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
   const [openId, setOpenId] = useState<string | null>(null);
+  const [reads, setReads] = useState<Record<string, string>>({});
+  const [composing, setComposing] = useState(false);
   const [subject, setSubject] = useState("");
   const [category, setCategory] = useState("general");
   const [body, setBody] = useState("");
   const [reply, setReply] = useState("");
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => setReads(loadReads()), []);
+
+  const markRead = useCallback((ticketId: string) => {
+    setReads((prev) => {
+      const next = { ...prev, [ticketId]: new Date().toISOString() };
+      try {
+        window.localStorage.setItem(READ_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
 
   const loadTickets = useCallback(async () => {
     const { data } = await supabase
@@ -67,6 +101,22 @@ export default function PortalTickets({ customerId }: { customerId: string }) {
       .order("created_at", { ascending: true });
     setMessages((m) => ({ ...m, [ticketId]: (data as Message[]) ?? [] }));
   }, []);
+
+  function isUnread(t: Ticket) {
+    const seen = reads[t.id];
+    if (t.status !== "answered" && t.status !== "open") return false;
+    if (!seen) return t.status === "answered";
+    return new Date(t.last_message_at).getTime() > new Date(seen).getTime();
+  }
+
+  const unreadCount = useMemo(() => tickets.filter(isUnread).length, [tickets, reads]);
+
+  function openThread(id: string) {
+    setOpenId(id);
+    setComposing(false);
+    markRead(id);
+    void loadMessages(id);
+  }
 
   async function submitTicket() {
     if (!subject.trim() || !body.trim()) {
@@ -97,147 +147,234 @@ export default function PortalTickets({ customerId }: { customerId: string }) {
     setBody("");
     setCategory("general");
     await loadTickets();
-    setOpenId(data.id);
-    await loadMessages(data.id);
+    openThread(data.id);
   }
 
-  async function sendReply(ticketId: string) {
-    if (!reply.trim()) return;
+  async function sendReply(ticketId: string, text?: string) {
+    const value = (text ?? reply).trim();
+    if (!value) return;
     setBusy(true);
     const { error } = await supabase
       .from("ss_ticket_messages")
-      .insert({ ticket_id: ticketId, author_kind: "customer", body: reply.trim() });
+      .insert({ ticket_id: ticketId, author_kind: "customer", body: value });
     setBusy(false);
     if (error) {
       toast.error("Could not send your reply.");
       return;
     }
     setReply("");
+    markRead(ticketId);
     await loadMessages(ticketId);
     await loadTickets();
   }
 
+  const activeTicket = tickets.find((t) => t.id === openId) ?? null;
+  const thread = openId ? messages[openId] ?? [] : [];
+
+  function deliveryState(m: Message, all: Message[]) {
+    if (m.author_kind !== "customer") return null;
+    const seen = all.some(
+      (x) => x.author_kind === "staff" && new Date(x.created_at).getTime() > new Date(m.created_at).getTime(),
+    );
+    return seen ? { label: "Read by team", icon: CheckCheck } : { label: "Sent", icon: Check };
+  }
+
   return (
     <section className="mt-12">
-      <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
-        <MessageSquare className="h-4 w-4 text-accent" aria-hidden="true" /> Message Savvy Swim
-      </h2>
-      <p className="mt-1 font-tech text-xs text-primary/60">
-        Send us a note about your pool, your schedule, or your bill. Replies land right here.
-      </p>
-
-      <div className="mt-4 border border-hairline p-5">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block">
-            <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Subject</span>
-            <input
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              maxLength={120}
-              placeholder="Pump sounds loud"
-              className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
-            />
-          </label>
-          <label className="block">
-            <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Topic</span>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
-              ))}
-            </select>
-          </label>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+            <MessageSquare className="h-4 w-4 text-accent" aria-hidden="true" /> Message center
+            {unreadCount > 0 && (
+              <span className="bg-accent px-2 py-0.5 font-tech text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+                {unreadCount} new
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 font-tech text-xs text-primary/60">
+            Your inbox with the Savvy Swim team — service, schedule, billing and repairs.
+          </p>
         </div>
-        <label className="mt-3 block">
-          <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Message</span>
-          <textarea
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            rows={4}
-            maxLength={2000}
-            placeholder="Tell us what's going on…"
-            className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
-          />
-        </label>
         <button
           type="button"
-          disabled={busy}
-          onClick={() => void submitTicket()}
-          className="btn-quote mt-3 inline-flex items-center gap-2 px-5 py-3 text-[12px] font-bold uppercase tracking-wide disabled:opacity-50"
+          onClick={() => {
+            setComposing((c) => !c);
+            setOpenId(null);
+          }}
+          className="btn-quote inline-flex items-center gap-2 px-4 py-2.5 text-[11px] font-bold uppercase tracking-wide"
         >
-          <Send className="h-3.5 w-3.5" /> Send message
+          <Plus className="h-3.5 w-3.5" /> New message
         </button>
       </div>
 
-      <div className="mt-4 divide-y divide-primary/10 border border-hairline">
-        {tickets.length === 0 && (
-          <p className="p-5 font-tech text-sm text-primary/60">No messages yet.</p>
-        )}
-        {tickets.map((t) => {
-          const isOpen = openId === t.id;
-          return (
-            <article key={t.id}>
-              <button
-                type="button"
-                onClick={() => {
-                  const next = isOpen ? null : t.id;
-                  setOpenId(next);
-                  if (next) void loadMessages(next);
-                }}
-                className="flex w-full flex-wrap items-center justify-between gap-3 p-5 text-left"
+      {composing && (
+        <div className="mt-4 border border-hairline p-5">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block">
+              <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Subject</span>
+              <input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                maxLength={120}
+                placeholder="Pump sounds loud"
+                className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
+              />
+            </label>
+            <label className="block">
+              <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Topic</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
               >
-                <div className="min-w-0">
-                  <p className="font-tech text-sm font-semibold">{t.subject}</p>
-                  <p className="font-tech text-xs text-primary/60">
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="mt-3 block">
+            <span className="font-tech text-xs uppercase tracking-[0.14em] text-primary/60">Message</span>
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              rows={4}
+              maxLength={2000}
+              placeholder="Tell us what's going on…"
+              className="mt-1 w-full border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
+            />
+          </label>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void submitTicket()}
+            className="btn-quote mt-3 inline-flex items-center gap-2 px-5 py-3 text-[12px] font-bold uppercase tracking-wide disabled:opacity-50"
+          >
+            <Send className="h-3.5 w-3.5" /> Send message
+          </button>
+        </div>
+      )}
+
+      <div className="mt-4 grid gap-0 border border-hairline md:grid-cols-[minmax(0,320px)_1fr]">
+        {/* Inbox */}
+        <div className="divide-y divide-primary/10 border-b border-primary/10 md:border-b-0 md:border-r">
+          <p className="flex items-center gap-2 p-3 font-tech text-[11px] uppercase tracking-[0.14em] text-primary/50">
+            <Inbox className="h-3.5 w-3.5" /> Inbox ({tickets.length})
+          </p>
+          {tickets.length === 0 && <p className="p-5 font-tech text-sm text-primary/60">No messages yet.</p>}
+          {tickets.map((t) => {
+            const unread = isUnread(t);
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => openThread(t.id)}
+                className={`flex w-full items-start gap-3 p-4 text-left ${
+                  openId === t.id ? "bg-primary/5" : ""
+                }`}
+              >
+                <span
+                  className={`mt-1.5 h-2 w-2 shrink-0 ${unread ? "bg-accent" : "bg-primary/20"}`}
+                  aria-hidden="true"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className={`block truncate font-tech text-sm ${unread ? "font-bold" : "font-semibold"}`}>
+                    {t.subject}
+                  </span>
+                  <span className="mt-0.5 block font-tech text-[11px] text-primary/55">
                     {new Date(t.last_message_at).toLocaleString()} · {t.category}
-                  </p>
-                </div>
-                <span className="font-tech text-[11px] uppercase tracking-[0.14em] text-accent">
+                  </span>
+                </span>
+                <span className="shrink-0 font-tech text-[10px] uppercase tracking-[0.14em] text-accent">
                   {STATUS_LABEL[t.status] ?? t.status}
                 </span>
               </button>
-              {isOpen && (
-                <div className="border-t border-primary/10 p-5">
-                  <div className="space-y-3">
-                    {(messages[t.id] ?? []).map((m) => (
-                      <div
-                        key={m.id}
-                        className={m.author_kind === "staff" ? "border-l-2 border-accent pl-3" : "border-l-2 border-primary/20 pl-3"}
-                      >
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-primary/50">
-                          {m.author_kind === "staff" ? m.author_label || "Savvy Swim" : "You"} ·{" "}
-                          {new Date(m.created_at).toLocaleString()}
+            );
+          })}
+        </div>
+
+        {/* Thread */}
+        <div className="p-5">
+          {!activeTicket && (
+            <p className="font-tech text-sm text-primary/60">
+              Select a conversation to read it, or start a new message.
+            </p>
+          )}
+          {activeTicket && (
+            <>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/10 pb-3">
+                <p className="font-tech text-sm font-bold">{activeTicket.subject}</p>
+                <span className="font-tech text-[11px] uppercase tracking-[0.14em] text-accent">
+                  {STATUS_LABEL[activeTicket.status] ?? activeTicket.status}
+                </span>
+              </div>
+              <div className="mt-4 space-y-4">
+                {thread.map((m) => {
+                  const state = deliveryState(m, thread);
+                  const StateIcon = state?.icon;
+                  return (
+                    <div
+                      key={m.id}
+                      className={
+                        m.author_kind === "staff"
+                          ? "border-l-2 border-accent pl-3"
+                          : "border-l-2 border-primary/20 pl-3"
+                      }
+                    >
+                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-primary/50">
+                        {m.author_kind === "staff" ? m.author_label || "Savvy Swim" : "You"} ·{" "}
+                        {new Date(m.created_at).toLocaleString()}
+                      </p>
+                      <p className="mt-1 whitespace-pre-wrap font-tech text-sm">{m.body}</p>
+                      {state && StateIcon && (
+                        <p className="mt-1 flex items-center gap-1 font-tech text-[10px] uppercase tracking-[0.14em] text-primary/45">
+                          <StateIcon className="h-3 w-3" /> {state.label}
                         </p>
-                        <p className="mt-1 whitespace-pre-wrap font-tech text-sm">{m.body}</p>
-                      </div>
-                    ))}
-                  </div>
-                  {t.status !== "closed" && (
-                    <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                      <input
-                        value={reply}
-                        onChange={(e) => setReply(e.target.value)}
-                        placeholder="Write a reply…"
-                        className="flex-1 border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
-                      />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {activeTicket.status !== "closed" && (
+                <div className="mt-5">
+                  <div className="flex flex-wrap gap-2">
+                    {QUICK_REPLIES.map((q) => (
                       <button
+                        key={q}
                         type="button"
                         disabled={busy}
-                        onClick={() => void sendReply(t.id)}
-                        className="btn-quote px-5 py-3 text-[12px] font-bold uppercase tracking-wide disabled:opacity-50"
+                        onClick={() => void sendReply(activeTicket.id, q)}
+                        className="border border-primary/20 px-3 py-1.5 font-tech text-[11px] hover:border-primary disabled:opacity-50"
                       >
-                        Reply
+                        {q}
                       </button>
-                    </div>
-                  )}
+                    ))}
+                  </div>
+                  <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                    <input
+                      value={reply}
+                      onChange={(e) => setReply(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") void sendReply(activeTicket.id);
+                      }}
+                      placeholder="Write a reply…"
+                      className="flex-1 border border-primary/20 bg-transparent p-2.5 font-tech text-sm outline-none focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => void sendReply(activeTicket.id)}
+                      className="btn-quote inline-flex items-center gap-2 px-5 py-3 text-[12px] font-bold uppercase tracking-wide disabled:opacity-50"
+                    >
+                      <Send className="h-3.5 w-3.5" /> Reply
+                    </button>
+                  </div>
                 </div>
               )}
-            </article>
-          );
-        })}
+            </>
+          )}
+        </div>
       </div>
     </section>
   );
