@@ -28,6 +28,8 @@ export default function Technicians() {
   const [adding, setAdding] = useState(false);
   const [saving, setSaving] = useState(false);
   const [inviting, setInviting] = useState<string | null>(null);
+  const [tempPasswords, setTempPasswords] = useState<Record<string, string>>({});
+
   const [form, setForm] = useState({ full_name: "", email: "", phone: "", level: "technician" });
 
   const { rows, refetch: reload } = useTable<Staff>("staff", async () => {
