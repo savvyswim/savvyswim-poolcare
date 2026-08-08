@@ -8,6 +8,8 @@ import { createCustomerLogin } from "@/lib/accounts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import CustomerContracts from "@/crm/components/CustomerContracts";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
+import ChemHistory from "@/crm/components/ChemHistory";
+
 import { money } from "@/crm/lib/pricing";
 
 type Customer = {
