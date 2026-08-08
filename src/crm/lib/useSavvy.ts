@@ -87,6 +87,13 @@ export function useSavvyIdentity(): SavvyIdentity {
           supabase.from("ss_staff").select("id, full_name, level, initials").eq("user_id", user.id).maybeSingle(),
           supabase.from("ss_customers").select("id").eq("user_id", user.id).maybeSingle(),
         ]);
+        // Customers cannot read ss_customers directly (RLS is office/tech only),
+        // so confirm portal identity through the security-definer helper.
+        let customerId = cust?.id ?? null;
+        if (!customerId && !staff) {
+          const { data: rpcId } = await supabase.rpc("ss_my_customer_id");
+          customerId = (rpcId as string | null) ?? null;
+        }
         publish({
           loading: false,
           // Legacy admins may predate the ss_staff roster. Treat their verified
@@ -98,7 +105,7 @@ export function useSavvyIdentity(): SavvyIdentity {
             staff?.initials ||
             (staff?.full_name ?? "").split(" ").map((p) => p[0]).join("").slice(0, 3) ||
             null,
-          customerId: cust?.id ?? null,
+          customerId,
         });
       })().finally(() => {
         inflight = null;
