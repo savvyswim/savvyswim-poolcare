@@ -319,23 +319,55 @@ export const MessageBranchPage = ({
 
 export type MessageResponseProps = ComponentProps<typeof Streamdown>;
 
-const streamdownPlugins = { cjk };
+const basePlugins = { cjk };
+
+/**
+ * Syntax highlighting (Shiki) loads a WASM module that the SSR worker runtime
+ * cannot resolve, so the code plugin is imported only in the browser, after
+ * hydration. Server render and first paint use the plain-markdown fallback.
+ */
+function useCodePlugin() {
+  const [codePlugin, setCodePlugin] = useState<unknown>(null);
+
+  useEffect(() => {
+    let active = true;
+    void import("@streamdown/code")
+      .then((mod) => {
+        if (active) setCodePlugin(mod.code);
+      })
+      .catch(() => {
+        // Highlighting is progressive enhancement — plain code blocks are fine.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return useMemo(
+    () => (codePlugin ? { ...basePlugins, code: codePlugin } : basePlugins),
+    [codePlugin]
+  );
+}
 
 export const MessageResponse = memo(
-  ({ className, ...props }: MessageResponseProps) => (
-    <Streamdown
-      className={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
-        className
-      )}
-      plugins={streamdownPlugins}
-      {...props}
-    />
-  ),
+  ({ className, ...props }: MessageResponseProps) => {
+    const plugins = useCodePlugin();
+    return (
+      <Streamdown
+        className={cn(
+          "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+          className
+        )}
+        plugins={plugins as NonNullable<ComponentProps<typeof Streamdown>["plugins"]>}
+        {...props}
+      />
+    );
+  },
   (prevProps, nextProps) =>
     prevProps.children === nextProps.children &&
     nextProps.isAnimating === prevProps.isAnimating
 );
+
 
 MessageResponse.displayName = "MessageResponse";
 
