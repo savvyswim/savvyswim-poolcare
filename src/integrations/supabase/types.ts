@@ -1856,6 +1856,7 @@ export type Database = {
           tech_upsell_pct: number | null
           updated_at: string
           user_id: string | null
+          workflow_template_id: string | null
         }
         Insert: {
           address?: string | null
@@ -1912,6 +1913,7 @@ export type Database = {
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          workflow_template_id?: string | null
         }
         Update: {
           address?: string | null
@@ -1968,6 +1970,7 @@ export type Database = {
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          workflow_template_id?: string | null
         }
         Relationships: [
           {
@@ -1975,6 +1978,13 @@ export type Database = {
             columns: ["assigned_tech_id"]
             isOneToOne: false
             referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_customers_workflow_template_id_fkey"
+            columns: ["workflow_template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_workflow_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -4613,27 +4623,33 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: string
+          hint: string | null
           id: string
           is_required: boolean
           label: string
+          phase: string
           photo_required: boolean
           sort_order: number
         }
         Insert: {
           created_at?: string
           customer_id: string
+          hint?: string | null
           id?: string
           is_required?: boolean
           label: string
+          phase?: string
           photo_required?: boolean
           sort_order?: number
         }
         Update: {
           created_at?: string
           customer_id?: string
+          hint?: string | null
           id?: string
           is_required?: boolean
           label?: string
+          phase?: string
           photo_required?: boolean
           sort_order?: number
         }
@@ -4646,6 +4662,86 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ss_workflow_template_steps: {
+        Row: {
+          created_at: string
+          hint: string | null
+          id: string
+          is_required: boolean
+          label: string
+          phase: string
+          photo_required: boolean
+          sort_order: number
+          template_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          hint?: string | null
+          id?: string
+          is_required?: boolean
+          label: string
+          phase?: string
+          photo_required?: boolean
+          sort_order?: number
+          template_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          hint?: string | null
+          id?: string
+          is_required?: boolean
+          label?: string
+          phase?: string
+          photo_required?: boolean
+          sort_order?: number
+          template_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_workflow_template_steps_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_workflow_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_workflow_templates: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          is_default: boolean
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       store_order_items: {
         Row: {
