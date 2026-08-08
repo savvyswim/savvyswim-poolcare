@@ -66,7 +66,21 @@ export default function ChemCosts() {
       .lte("scheduled_date", to)
       .order("scheduled_date", { ascending: false })
       .limit(1000);
-    setVisits((data ?? []) as unknown as VisitRow[]);
+    const rows = (data ?? []) as unknown as VisitRow[];
+    setVisits(rows);
+
+    const ids = rows.map((v) => v.id);
+    if (ids.length) {
+      const { data: mv } = await supabase
+        .from("ss_inventory_moves")
+        .select("visit_id,item_name,delta,unit_cost,total_cost,entered_qty,entered_unit")
+        .in("visit_id", ids)
+        .lt("delta", 0)
+        .limit(4000);
+      setMoves((mv ?? []) as unknown as MoveRow[]);
+    } else {
+      setMoves([]);
+    }
     setLoading(false);
   }, [from, to]);
 
@@ -76,6 +90,7 @@ export default function ChemCosts() {
 
   const lines = useMemo<Line[]>(() => {
     const out: Line[] = [];
+    const byVisit = new Map(visits.map((v) => [v.id, v]));
     for (const v of visits) {
       const d = v.dosing ?? {};
       const flat: AppliedLine[] = d.applied?.length
@@ -99,6 +114,27 @@ export default function ChemCosts() {
         });
       }
     }
+    // Truck stock pulled on the visit — costed at the unit cost recorded on the move.
+    for (const m of moves) {
+      const v = m.visit_id ? byVisit.get(m.visit_id) : null;
+      if (!v) continue;
+      const qty = Math.abs(Number(m.delta) || 0);
+      const cost = Number(m.total_cost ?? 0);
+      if (!qty && !cost) continue;
+      out.push({
+        visitId: v.id,
+        date: v.scheduled_date,
+        customer: v.ss_customers?.full_name ?? "—",
+        tech: v.ss_staff?.full_name ?? "Unassigned",
+        body: "Truck stock",
+        product: m.item_name,
+        unit: m.entered_unit || "ea",
+        qty: Number(m.entered_qty ?? qty),
+        costPerUnit: Number(m.unit_cost ?? (qty ? cost / qty : 0)),
+        cost,
+      });
+    }
+
     const needle = q.trim().toLowerCase();
     return needle
       ? out.filter((l) =>
