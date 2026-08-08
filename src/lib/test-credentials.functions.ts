@@ -39,9 +39,11 @@ export const upsertTestAccount = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { assertOwner } = await import("@/lib/test-credentials.guard.server");
     await assertOwner(context.supabase);
+    const { id, ...rest } = data;
+    const row = { ...rest, notes: data.notes ?? null, ...(id ? { id } : {}) };
     const { error } = await context.supabase
       .from("ss_test_accounts")
-      .upsert({ ...data, notes: data.notes ?? null }, { onConflict: "email,environment" });
+      .upsert(row, { onConflict: "email,environment" });
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
