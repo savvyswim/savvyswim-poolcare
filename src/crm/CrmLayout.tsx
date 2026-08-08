@@ -99,7 +99,11 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const nav = useNavigate();
   const loc = useLocation();
   const [drawer, setDrawer] = useState(false);
+  const [claiming, setClaiming] = useState(false);
+  const [claimMsg, setClaimMsg] = useState<string | null>(null);
+  const claimSeat = useServerFn(claimStaffSeat);
   const obscured = useWindowObscured();
+
 
   useEffect(() => {
     if (!authLoading && !user) nav("/admin/crm/login", { replace: true, state: { from: loc.pathname } });
