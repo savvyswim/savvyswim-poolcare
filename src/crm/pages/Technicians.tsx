@@ -2,6 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { createStaffLogin } from "@/lib/accounts.functions";
+
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
 
