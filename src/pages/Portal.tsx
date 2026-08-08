@@ -34,6 +34,7 @@ import PortalScheduleDialog, { VISIT_SLOTS } from "@/components/PortalScheduleDi
 import { downloadIcs, googleCalendarUrl } from "@/lib/calendar";
 
 import { useAuth } from "@/hooks/useAuth";
+import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
 import PortalTickets from "@/components/PortalTickets";
@@ -107,6 +108,7 @@ const CHART_METRICS: MetricKey[] = ["fc", "ph", "ta", "ch", "cyc", "psi"];
 
 export default function Portal() {
   const { user, loading, signOut } = useAuth();
+  const identity = useSavvyIdentity();
   const navigate = useNavigate();
   const [pools, setPools] = useState<Pool[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
