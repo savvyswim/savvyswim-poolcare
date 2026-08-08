@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
+import ReminderSchedules from "@/crm/components/ReminderSchedules";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 
 type Row = { key: string; value: Record<string, unknown> };
@@ -37,7 +38,9 @@ export default function Settings() {
       {level !== "owner" && (
         <div className="ss-card p-3 text-[0.82rem] opacity-75">Read-only — only the owner can change settings.</div>
       )}
+      <ReminderSchedules />
       <div className="grid gap-3 lg:grid-cols-2">
+
         {rows.map((r) => (
           <div key={r.key} className="ss-card p-4">
             <div className="ss-label mb-2">{r.key.replace(/_/g, " ")}</div>

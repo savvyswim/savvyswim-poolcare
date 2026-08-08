@@ -1,10 +1,15 @@
 /**
- * Appointment reminders for customers — two stages.
+ * Appointment reminders for customers — configurable lead times.
  *
- *   stage=24h (default) → runs once a day (5pm CT) for every visit scheduled
- *                         tomorrow.
- *   stage=2h            → runs hourly and reminds customers whose arrival
- *                         window starts about two hours from now (today, CT).
+ * Runs hourly from pg_cron. For every upcoming visit we work out how many hours
+ * away the arrival window starts, then compare that against the reminder offsets
+ * configured for the appointment type in ss_reminder_schedules (CRM → Settings →
+ * Reminder schedule). A row looks like:
+ *
+ *   appointment_type 'Weekly Service' · offsets_hours {48,24,2} · enabled true
+ *
+ * Appointment type is the customer's service level; the 'default' row covers
+ * anything without its own schedule.
  *
  * Channel follows /portal → Property profile:
  *   notify_visits = false  → never remind (hard opt-out)
@@ -13,9 +18,9 @@
  *   preferred_contact email→ branded email
  *
  * Deduping: every reminder writes an ss_feed row tied to the visit
- * (kind = 'reminder' for 24h, 'reminder_2h' for the day-of nudge), and we skip
- * any visit that already has one — so a re-run never double-texts a customer.
- * Rescheduling clears those rows so the new date gets a fresh pair.
+ * (kind = 'reminder' for the 24h notice, 'reminder_<n>h' for the others), and we
+ * skip any visit that already has one for that offset — so a re-run never
+ * double-texts. Rescheduling clears those rows so the new date re-arms them.
  *
  * Public route: takes no caller input that drives writes and returns no PII.
  */
@@ -26,8 +31,7 @@ const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 const SENDER_DOMAIN = "notify.savvyswim.com";
 const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswim.com>";
 const OFFICE_PHONE = "(469) 744-0379";
-
-type Stage = "24h" | "2h";
+const DEFAULT_OFFSETS = [24, 2];
 
 type Customer = {
   id: string;
@@ -50,7 +54,7 @@ type VisitRow = {
   ss_customers: Customer | null;
 };
 
-/** Current date/time parts in America/Chicago. */
+/** Current date/time in America/Chicago. */
 function nowCT(): Date {
   return new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
 }
@@ -59,13 +63,6 @@ function isoDate(d: Date): string {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}-${m}-${day}`;
-}
-
-/** YYYY-MM-DD for "tomorrow" in America/Chicago. */
-function tomorrowInCT(): string {
-  const ct = nowCT();
-  ct.setDate(ct.getDate() + 1);
-  return isoDate(ct);
 }
 
 function prettyDate(iso: string): string {
@@ -90,6 +87,18 @@ function windowStartHour(slot: string): number {
   let hour = Number(m[1]) % 12;
   if ((m[3] ?? "a").toLowerCase() === "p") hour += 12;
   return hour;
+}
+
+/** ss_feed kind for a given offset — 24h keeps the legacy 'reminder' kind. */
+function feedKindFor(offset: number): string {
+  return offset === 24 ? "reminder" : `reminder_${offset}h`;
+}
+
+/** "in 2 days" / "tomorrow" / "in about 2 hours" */
+function leadLabel(offset: number, when: string): string {
+  if (offset >= 36) return `in ${Math.round(offset / 24)} days, on ${when}`;
+  if (offset >= 12) return `tomorrow, ${when}`;
+  return `in about ${offset} ${offset === 1 ? "hour" : "hours"}`;
 }
 
 function esc(value: string): string {
@@ -125,17 +134,17 @@ async function emailReminder(
   when: string,
   slot: string,
   visitId: string,
-  stage: Stage,
+  offset: number,
 ): Promise<boolean> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return false;
   const first = customer.full_name?.split(" ")[0] ?? "there";
   const where = [customer.address, customer.city].filter(Boolean).join(", ");
-  const soon = stage === "2h";
-  const lead = soon ? "in about 2 hours" : `tomorrow, ${when}`;
+  const soon = offset < 12;
+  const lead = leadLabel(offset, when);
   const subject = soon
-    ? `Your pool service is about 2 hours out — ${slot}`
-    : `Your pool service is tomorrow — ${when}`;
+    ? `Your pool service is about ${offset} hours out — ${slot}`
+    : `Your pool service is ${lead}`;
   const text =
     `Hi ${first} — a quick reminder that your Savvy Swim visit is ${lead}, ` +
     `arriving between ${slot}.${where ? ` We'll be at ${where}.` : ""}\n\n` +
@@ -151,7 +160,7 @@ async function emailReminder(
         subject,
         html: `<div style="font-family:Helvetica,Arial,sans-serif;color:#1c1c1c;max-width:560px">
   <p style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#8E1F2C;margin:0 0 12px">Savvy Swim · Visit reminder</p>
-  <h1 style="font-size:22px;margin:0 0 12px">Hi ${esc(first)}, ${soon ? "your tech is about 2 hours out." : "we're on the schedule for tomorrow."}</h1>
+  <h1 style="font-size:22px;margin:0 0 12px">Hi ${esc(first)}, ${soon ? `your tech is about ${offset} hours out.` : `we're on the schedule ${esc(lead)}.`}</h1>
   <p style="font-size:15px;line-height:1.6;margin:0 0 8px"><strong>${esc(when)}</strong> · arriving between <strong>${esc(slot)}</strong></p>
   ${where ? `<p style="font-size:15px;line-height:1.6;margin:0 0 8px">${esc(where)}</p>` : ""}
   <p style="font-size:15px;line-height:1.6;margin:16px 0">Please leave the gate unlocked and pets inside so your tech can get straight to work.</p>
@@ -159,8 +168,8 @@ async function emailReminder(
 </div>`,
         text,
         purpose: "transactional",
-        label: soon ? "visit-reminder-2h" : "visit-reminder",
-        idempotency_key: `visit-reminder:${stage}:${visitId}`,
+        label: `visit-reminder-${offset}h`,
+        idempotency_key: `visit-reminder:${offset}h:${visitId}`,
       },
       { apiKey },
     );
@@ -173,15 +182,32 @@ async function emailReminder(
 
 async function run(request: Request) {
   const params = new URL(request.url).searchParams;
-  const stage: Stage = params.get("stage") === "2h" ? "2h" : "24h";
-  const ct = nowCT();
-  const target = params.get("date") ?? (stage === "2h" ? isoDate(ct) : tomorrowInCT());
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(target)) {
+  const dateFilter = params.get("date");
+  if (dateFilter && !/^\d{4}-\d{2}-\d{2}$/.test(dateFilter)) {
     return Response.json({ error: "bad date" }, { status: 400 });
   }
-  const feedKind = stage === "2h" ? "reminder_2h" : "reminder";
-  const when = prettyDate(target);
+  const ct = nowCT();
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  // Configurable offsets per appointment type.
+  const { data: scheduleRows } = await supabaseAdmin
+    .from("ss_reminder_schedules")
+    .select("appointment_type, offsets_hours, enabled");
+  const schedules = new Map<string, number[]>();
+  for (const row of scheduleRows ?? []) {
+    if (row.enabled === false) continue;
+    const offsets = (row.offsets_hours ?? [])
+      .map(Number)
+      .filter((n) => Number.isFinite(n) && n > 0 && n <= 336)
+      .sort((a, b) => b - a);
+    schedules.set(row.appointment_type, offsets);
+  }
+  const fallback = schedules.get("default") ?? DEFAULT_OFFSETS;
+  const maxOffset = Math.max(fallback[0] ?? 24, ...[...schedules.values()].map((o) => o[0] ?? 0));
+
+  const from = dateFilter ?? isoDate(ct);
+  const horizon = new Date(ct.getTime() + (maxOffset + 24) * 3600_000);
+  const to = dateFilter ?? isoDate(horizon);
 
   const { data, error } = await supabaseAdmin
     .from("ss_visits")
@@ -189,36 +215,26 @@ async function run(request: Request) {
       "id, customer_id, scheduled_date, notes, " +
         "ss_customers(id, full_name, email, phone, address, city, service_level, gate_code, notify_visits, preferred_contact)",
     )
-    .eq("scheduled_date", target)
+    .gte("scheduled_date", from)
+    .lte("scheduled_date", to)
     .in("status", ["scheduled", "pending", "en_route"])
-    .limit(500);
+    .limit(1000);
 
   if (error) {
     console.error("[visit-reminders] query failed", error.message);
     return Response.json({ error: "query failed" }, { status: 500 });
   }
 
-  let visits = (data ?? []) as unknown as VisitRow[];
+  const visits = (data ?? []) as unknown as VisitRow[];
+  if (!visits.length) return Response.json({ from, to, sms: 0, email: 0, skipped: 0 });
 
-  // Day-of nudge: only visits whose arrival window starts ~2 hours from now.
-  if (stage === "2h") {
-    const nowHour = ct.getHours() + ct.getMinutes() / 60;
-    visits = visits.filter((v) => {
-      const start = windowStartHour(windowFromNotes(v.notes));
-      const lead = start - nowHour;
-      return lead > 1 && lead <= 2.5;
-    });
-  }
-
-  if (!visits.length) return Response.json({ date: target, stage, sms: 0, email: 0, skipped: 0 });
-
-  // Already-reminded visits (a re-run must never double-notify).
+  // Already-reminded pairs (a re-run must never double-notify).
   const { data: priorFeed } = await supabaseAdmin
     .from("ss_feed")
-    .select("visit_id")
-    .eq("kind", feedKind)
+    .select("visit_id, kind")
+    .like("kind", "reminder%")
     .in("visit_id", visits.map((v) => v.id));
-  const alreadySent = new Set((priorFeed ?? []).map((f) => f.visit_id as string));
+  const alreadySent = new Set((priorFeed ?? []).map((f) => `${f.visit_id}|${f.kind}`));
 
   let sentSms = 0;
   let sentEmail = 0;
@@ -226,22 +242,42 @@ async function run(request: Request) {
 
   for (const visit of visits) {
     const c = visit.ss_customers;
-    if (!c || alreadySent.has(visit.id) || c.notify_visits === false) {
+    if (!c || c.notify_visits === false) {
+      skipped += 1;
+      continue;
+    }
+
+    const offsets = schedules.get(c.service_level ?? "") ?? fallback;
+    if (!offsets.length) {
       skipped += 1;
       continue;
     }
 
     const slot = windowFromNotes(visit.notes);
+    const [y, m, d] = visit.scheduled_date.split("-").map(Number);
+    const start = new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1, windowStartHour(slot), 0, 0);
+    const leadHours = (start.getTime() - ct.getTime()) / 3600_000;
+
+    // The cron runs hourly, so an offset is "due" in the hour leading up to it.
+    const due = offsets.find((o) => leadHours <= o && leadHours > o - 1);
+    if (due === undefined) continue;
+    if (alreadySent.has(`${visit.id}|${feedKindFor(due)}`)) {
+      skipped += 1;
+      continue;
+    }
+
+    const when = prettyDate(visit.scheduled_date);
+    const lead = leadLabel(due, when);
     const channel = (c.preferred_contact ?? "email").toLowerCase();
     const wantsText = channel === "sms" || channel === "phone";
     let via: "sms" | "email" | null = null;
 
     if (wantsText && c.phone) {
       const body =
-        stage === "2h"
-          ? `Savvy Swim: your pool service is about 2 hours out — arriving between ${slot} today. ` +
+        due < 12
+          ? `Savvy Swim: your pool service is about ${due} hours out — arriving between ${slot} today. ` +
             `Please unlock the gate and keep pets inside. Questions? ${OFFICE_PHONE}.`
-          : `Savvy Swim: your pool service is tomorrow, ${when}, between ${slot}. ` +
+          : `Savvy Swim: your pool service is ${lead}, between ${slot}. ` +
             `Please unlock the gate and keep pets inside. Reschedule at savvyswim.com/portal or call ${OFFICE_PHONE}.`;
       if (await twilioSend(c.phone, body)) {
         via = "sms";
@@ -250,7 +286,7 @@ async function run(request: Request) {
     }
 
     if (!via && c.email) {
-      if (await emailReminder(c.email, c, when, slot, visit.id, stage)) {
+      if (await emailReminder(c.email, c, when, slot, visit.id, due)) {
         via = "email";
         sentEmail += 1;
       }
@@ -264,18 +300,15 @@ async function run(request: Request) {
     await supabaseAdmin.from("ss_feed").insert({
       customer_id: c.id,
       visit_id: visit.id,
-      kind: feedKind,
-      title:
-        stage === "2h"
-          ? `Reminder sent — arriving in about 2 hours (${slot})`
-          : `Reminder sent — visit tomorrow, ${when}`,
+      kind: feedKindFor(due),
+      title: `Reminder sent — visit ${lead}`,
       body: `Arrival window ${slot}. Sent by ${via === "sms" ? "text message" : "email"} based on your notification preferences.`,
       sent_by_sms: via === "sms",
     });
   }
 
-  console.log(`[visit-reminders] ${stage} ${target}: sms=${sentSms} email=${sentEmail} skipped=${skipped}`);
-  return Response.json({ date: target, stage, sms: sentSms, email: sentEmail, skipped });
+  console.log(`[visit-reminders] ${from}→${to}: sms=${sentSms} email=${sentEmail} skipped=${skipped}`);
+  return Response.json({ from, to, sms: sentSms, email: sentEmail, skipped });
 }
 
 export const Route = createFileRoute("/api/public/hooks/visit-reminders")({
