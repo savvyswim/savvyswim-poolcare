@@ -2327,6 +2327,8 @@ export type Database = {
           id: string
           low_threshold: number
           name: string
+          pack_size: number | null
+          pack_unit: string | null
           quantity: number
           unit: string
           unit_cost: number
@@ -2337,6 +2339,8 @@ export type Database = {
           id?: string
           low_threshold?: number
           name: string
+          pack_size?: number | null
+          pack_unit?: string | null
           quantity?: number
           unit?: string
           unit_cost?: number
@@ -2347,6 +2351,8 @@ export type Database = {
           id?: string
           low_threshold?: number
           name?: string
+          pack_size?: number | null
+          pack_unit?: string | null
           quantity?: number
           unit?: string
           unit_cost?: number
@@ -2360,6 +2366,8 @@ export type Database = {
           created_at: string
           customer_id: string | null
           delta: number
+          entered_qty: number | null
+          entered_unit: string | null
           id: string
           item_id: string
           item_name: string
@@ -2376,6 +2384,8 @@ export type Database = {
           created_at?: string
           customer_id?: string | null
           delta: number
+          entered_qty?: number | null
+          entered_unit?: string | null
           id?: string
           item_id: string
           item_name: string
@@ -2392,6 +2402,8 @@ export type Database = {
           created_at?: string
           customer_id?: string | null
           delta?: number
+          entered_qty?: number | null
+          entered_unit?: string | null
           id?: string
           item_id?: string
           item_name?: string
@@ -5250,6 +5262,16 @@ export type Database = {
         Args: { _selected_ids: string[]; _signer_name: string; _token: string }
         Returns: Json
       }
+      ss_convert_qty: {
+        Args: {
+          p_from: string
+          p_pack_size?: number
+          p_pack_unit?: string
+          p_qty: number
+          p_to: string
+        }
+        Returns: number
+      }
       ss_default_upsell_pct: { Args: never; Returns: number }
       ss_generate_route_visits: {
         Args: { p_customer_id: string; p_through: string }
@@ -5405,6 +5427,8 @@ export type Database = {
         }
         Returns: Json
       }
+      ss_unit_factor: { Args: { p_unit: string }; Returns: number }
+      ss_unit_family: { Args: { p_unit: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user" | "crm_manager" | "store_manager"
