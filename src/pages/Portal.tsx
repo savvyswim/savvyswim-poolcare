@@ -114,7 +114,12 @@ export default function Portal() {
   const [busy, setBusy] = useState(true);
   const [days, setDays] = useState<(typeof RANGES)[number]>(90);
   const [metric, setMetric] = useState<MetricKey>("fc");
-  const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
+  const [resched, setResched] = useState<{
+    pool: Pool;
+    date: string;
+    note: string;
+    originalDate: string | null;
+  } | null>(null);
   const [saving, setSaving] = useState(false);
   const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
   const [serviceAddress, setServiceAddress] = useState<ServiceAddress | null>(null);
