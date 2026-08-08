@@ -522,6 +522,8 @@ export default function Inventory() {
                           {m.delta > 0 ? "+" : ""}{m.delta}
                         </span>
                         <span className="opacity-75">{reasonLabel(m.reason)}</span>
+                        {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
+                        {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
                         {m.note && <span className="opacity-60">· {m.note}</span>}
                         <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
                       </div>
