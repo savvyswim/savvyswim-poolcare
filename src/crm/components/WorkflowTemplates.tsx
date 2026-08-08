@@ -132,6 +132,7 @@ export default function WorkflowTemplates() {
     if (target < 0 || target >= list.length) return;
     const a = list[index];
     const b = list[target];
+    if (!a || !b) return;
     await Promise.all([
       supabase.from("ss_workflow_template_steps").update({ sort_order: target }).eq("id", a.id),
       supabase.from("ss_workflow_template_steps").update({ sort_order: index }).eq("id", b.id),
