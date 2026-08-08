@@ -78,26 +78,54 @@ export default function MarketingImport({ onDone }: { onDone?: () => void }) {
     if (!valid.length) return;
     setBusy(true);
     try {
-      const emails = valid.map((r) => r.email).filter(Boolean) as string[];
-      const { data: existing } = emails.length
-        ? await supabase.from("ss_leads").select("id,email").in("email", emails)
-        : { data: [] as { id: string; email: string | null }[] };
-      const byEmail = new Map((existing ?? []).map((e) => [String(e.email).toLowerCase(), e.id]));
+      // Pull existing pipeline leads so we can match on email AND phone.
+      const { data: existing, error: loadErr } = await supabase
+        .from("ss_leads")
+        .select("id,email,phone")
+        .limit(20000);
+      if (loadErr) throw loadErr;
+
+      const byEmail = new Map<string, string>();
+      const byPhone = new Map<string, string>();
+      for (const e of (existing ?? []) as { id: string; email: string | null; phone: string | null }[]) {
+        const em = normEmail(e.email);
+        if (em && !byEmail.has(em)) byEmail.set(em, e.id);
+        const ph = normPhone(e.phone);
+        if (ph && !byPhone.has(ph)) byPhone.set(ph, e.id);
+      }
 
       let updated = 0;
       let inserted = 0;
+      let skipped = 0;
       const toInsert: Omit<Row, "error">[] = [];
+      const seenEmail = new Set<string>();
+      const seenPhone = new Set<string>();
 
       for (const r of valid) {
-        const id = r.email ? byEmail.get(r.email.toLowerCase()) : undefined;
+        const em = normEmail(r.email);
+        const ph = normPhone(r.phone);
+
+        // Duplicate rows inside the same file
+        if ((em && seenEmail.has(em)) || (ph && seenPhone.has(ph))) {
+          skipped++;
+          continue;
+        }
+        if (em) seenEmail.add(em);
+        if (ph) seenPhone.add(ph);
+
+        const id = (em ? byEmail.get(em) : undefined) ?? (ph ? byPhone.get(ph) : undefined);
         if (id) {
-          const { error } = await supabase
-            .from("ss_leads")
-            .update({ full_name: r.full_name, phone: r.phone, address: r.address, city: r.city })
-            .eq("id", id);
+          const patch: Record<string, unknown> = { full_name: r.full_name };
+          if (r.email) patch.email = r.email;
+          if (r.phone) patch.phone = r.phone;
+          if (r.address) patch.address = r.address;
+          if (r.city) patch.city = r.city;
+          const { error } = await supabase.from("ss_leads").update(patch).eq("id", id);
           if (!error) updated++;
         } else {
           toInsert.push({ full_name: r.full_name, email: r.email, phone: r.phone, address: r.address, city: r.city, source: r.source });
+          if (em) byEmail.set(em, "pending");
+          if (ph) byPhone.set(ph, "pending");
         }
       }
 
@@ -106,6 +134,13 @@ export default function MarketingImport({ onDone }: { onDone?: () => void }) {
         if (error) throw error;
         inserted = data?.length ?? toInsert.length;
       }
+
+      toast.success(
+        `Imported ${inserted} new contact${inserted === 1 ? "" : "s"}` +
+          (updated ? `, updated ${updated}` : "") +
+          (skipped ? `, skipped ${skipped} duplicate row${skipped === 1 ? "" : "s"}` : ""),
+      );
+
 
       toast.success(`Imported ${inserted} new contact${inserted === 1 ? "" : "s"}${updated ? `, updated ${updated}` : ""}`);
       setText("");
