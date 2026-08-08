@@ -272,6 +272,24 @@ export default function Portal() {
     await refreshVisits();
     toast.success(`Visit set for ${when} — confirmation sent to the office.`);
 
+    // Updated SMS/email confirmation to the customer with the new time + note.
+    const visitId = info["visit_id"];
+    if (typeof visitId === "string") {
+      sendRescheduleNotice({
+        data: {
+          visitId,
+          previousDate: resched.originalDate,
+          note: fullNote || null,
+          created: Boolean(info["created"]),
+        },
+      })
+        .then((res) => {
+          const via = (res as { channels?: string[] } | undefined)?.channels?.[0];
+          if (via) toast.success(`Updated confirmation sent by ${via === "sms" ? "text" : "email"}.`);
+        })
+        .catch(() => undefined);
+    }
+
     supabase.functions
       .invoke("notify-office-request", {
         body: {
