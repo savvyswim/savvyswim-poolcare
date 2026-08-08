@@ -75,7 +75,20 @@ type Lead = {
   cleanup_price: number | null; message: string | null; source: string | null;
   stage_changed_at: string | null; created_at: string;
   plan_id: string | null; plan_status: string | null;
+  converted_customer_id: string | null;
 };
+
+type OpsJob = {
+  id: string; title: string; status: string; tech_id: string | null;
+  customer_id: string; details: string | null; created_at: string;
+  ss_customers: { full_name: string; city: string | null } | null;
+};
+
+const OPS_COLUMNS: { key: string; label: string }[] = [
+  { key: "open", label: "To assign" },
+  { key: "scheduled", label: "Scheduled" },
+  { key: "completed", label: "Completed" },
+];
 
 type Stage = "new_lead" | "contacted" | "quote_sent" | "follow_up" | "won" | "lost";
 
@@ -98,25 +111,64 @@ const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "gree
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
   const [converting, setConverting] = useState(false);
+  const [board, setBoard] = useState<"marketing" | "operations">("marketing");
 
   const { rows, refetch } = useTable<Lead>("pipeline", async () => {
     const { data } = await supabase
       .from("ss_leads")
-      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at,plan_id,plan_status")
+      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at,plan_id,plan_status,converted_customer_id")
       .order("created_at", { ascending: false });
     return (data ?? []) as Lead[];
   });
 
+  const { rows: opsJobs, refetch: refetchJobs } = useTable<OpsJob>("pipeline-ops", async () => {
+    const { data } = await supabase
+      .from("ss_jobs")
+      .select("id,title,status,tech_id,customer_id,details,created_at,ss_customers(full_name,city)")
+      .eq("auto_flag_source", "lead_convert")
+      .order("created_at", { ascending: false });
+    return (data ?? []) as unknown as OpsJob[];
+  });
+
+  const { rows: staff } = useTable<{ id: string; full_name: string }>("pipeline-staff", async () => {
+    const { data } = await supabase.from("ss_staff").select("id,full_name").eq("is_active", true).order("full_name");
+    return data ?? [];
+  });
+
+  const marketingRows = useMemo(() => rows.filter((r) => !r.converted_customer_id), [rows]);
+
   const byStage = useMemo(() => {
     const map: Record<string, Lead[]> = {};
     for (const s of STAGES) map[s.key] = [];
-    for (const r of rows) (map[r.stage] ??= []).push(r);
+    for (const r of marketingRows) (map[r.stage] ??= []).push(r);
     return map;
-  }, [rows]);
+  }, [marketingRows]);
+
+  const byOpsStatus = useMemo(() => {
+    const map: Record<string, OpsJob[]> = { open: [], scheduled: [], completed: [] };
+    for (const j of opsJobs) (map[j.status] ??= []).push(j);
+    return map;
+  }, [opsJobs]);
+
+  async function assignOps(job: OpsJob, techId: string) {
+    const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(techId ? "Assigned" : "Unassigned");
+    void refetchJobs();
+  }
+
+  async function moveOps(job: OpsJob, status: string) {
+    const { error } = await supabase
+      .from("ss_jobs")
+      .update({ status, completed_at: status === "completed" ? new Date().toISOString() : null })
+      .eq("id", job.id);
+    if (error) { toast.error(error.message); return; }
+    void refetchJobs();
+  }
 
   const pipelineValue = useMemo(
-    () => rows.filter((r) => !["won", "lost"].includes(r.stage)).reduce((s, r) => s + Number(r.monthly_value || 0), 0),
-    [rows],
+    () => marketingRows.filter((r) => !["won", "lost"].includes(r.stage)).reduce((s, r) => s + Number(r.monthly_value || 0), 0),
+    [marketingRows],
   );
 
   const planCounts = useMemo(() => {
@@ -204,9 +256,22 @@ export default function Pipeline() {
   return (
     <div className="space-y-4">
       <SectionTitle
-        title="Pipeline"
-        sub={`${rows.length} leads · ${money(pipelineValue)}/mo open value`}
+        title={board === "marketing" ? "Marketing pipeline" : "Operations pipeline"}
+        sub={
+          board === "marketing"
+            ? `${marketingRows.length} open leads · ${money(pipelineValue)}/mo open value`
+            : `${opsJobs.length} converted inspections · ${byOpsStatus.open?.length ?? 0} waiting to assign`
+        }
       />
+
+      <div className="flex gap-1.5">
+        <button className={`ss-btn ${board === "marketing" ? "" : "ss-btn-ghost"}`} onClick={() => setBoard("marketing")}>
+          Marketing · {marketingRows.length}
+        </button>
+        <button className={`ss-btn ${board === "operations" ? "" : "ss-btn-ghost"}`} onClick={() => setBoard("operations")}>
+          Operations · {opsJobs.length}
+        </button>
+      </div>
 
       <div className="ss-card p-4">
         <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
