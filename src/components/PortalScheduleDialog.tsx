@@ -37,11 +37,13 @@ export default function PortalScheduleDialog({
   pool,
   currentDate,
   saving,
+  serviceAddressLine,
   onClose,
   onSubmit,
 }: {
   pool: SchedulePool;
   currentDate: string | null;
+  serviceAddressLine?: string | null;
   saving: boolean;
   onClose: () => void;
   onSubmit: (date: string, note: string) => Promise<boolean>;
@@ -66,7 +68,7 @@ export default function PortalScheduleDialog({
   const [booked, setBooked] = useState<CalendarEvent | null>(null);
 
   const chosen = VISIT_SLOTS.find((s) => s.key === slot) ?? null;
-  const location = [pool.address ?? pool.full_name, pool.city].filter(Boolean).join(", ");
+  const location = serviceAddressLine || [pool.address ?? pool.full_name, pool.city].filter(Boolean).join(", ");
 
   async function confirm() {
     if (!date || !chosen) return;
@@ -105,7 +107,7 @@ export default function PortalScheduleDialog({
         onClick={(e) => e.stopPropagation()}
       >
         <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
-          {pool.address ?? pool.full_name}
+          {location}
         </p>
 
         {booked ? (

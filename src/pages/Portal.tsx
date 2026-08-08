@@ -41,6 +41,7 @@ import PortalDocuments from "@/components/PortalDocuments";
 import PortalDamageReport from "@/components/PortalDamageReport";
 
 import PortalProfile from "@/components/PortalProfile";
+import PortalAddresses, { formatAddress, type ServiceAddress } from "@/components/PortalAddresses";
 import PortalActivity from "@/components/PortalActivity";
 import PortalChemHistory from "@/components/PortalChemHistory";
 
@@ -116,6 +117,7 @@ export default function Portal() {
   const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
   const [saving, setSaving] = useState(false);
   const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
+  const [serviceAddress, setServiceAddress] = useState<ServiceAddress | null>(null);
 
 
   useEffect(() => {
@@ -241,10 +243,14 @@ export default function Portal() {
   async function submitReschedule(date: string, note: string): Promise<boolean> {
     if (!resched) return false;
     setSaving(true);
+    const addressLine = serviceAddress
+      ? `Service address: ${serviceAddress.label} — ${formatAddress(serviceAddress)}`
+      : "";
+    const fullNote = [addressLine, note].filter(Boolean).join("\n");
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
       p_date: date,
-      ...(note ? { p_note: note } : {}),
+      ...(fullNote ? { p_note: fullNote } : {}),
     });
     setSaving(false);
     if (error) {
@@ -951,7 +957,12 @@ export default function Portal() {
                 </section>
 
                 {pool && (
-                  <div className="mt-12">
+                  <div className="mt-12 space-y-6">
+                    <PortalAddresses
+                      customerId={pool.id}
+                      selectedId={serviceAddress?.id ?? null}
+                      onSelect={setServiceAddress}
+                    />
                     <PortalProfile />
                   </div>
                 )}
@@ -1027,6 +1038,7 @@ export default function Portal() {
           pool={resched.pool}
           currentDate={resched.date}
           saving={saving}
+          serviceAddressLine={serviceAddress ? `${serviceAddress.label} — ${formatAddress(serviceAddress)}` : null}
           onClose={() => setResched(null)}
           onSubmit={submitReschedule}
         />
