@@ -32,7 +32,7 @@ type TemplateStep = {
 type Step = {
   id: string;
   label: string;
-  hint?: string;
+  hint?: string | undefined;
   is_required: boolean;
   photo: ChecklistPhoto;
   custom: boolean;
