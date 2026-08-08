@@ -7,6 +7,7 @@ import { describeFlags, doseFor, evaluate, flagReadings, lsiVerdict, READING_FIE
 import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
+import ChemicalsAdded, { chemTotal, type AppliedChem } from "@/crm/components/ChemicalsAdded";
 import type { Stop } from "@/crm/pages/Route";
 
 type Task = { id: string; label: string; is_required: boolean; photo_required: boolean };
@@ -104,7 +105,15 @@ export default function VisitSheet({
       }),
     [bodies, bodyReadings],
   );
-  const totalChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
+  /** Actual products poured, per body of water. */
+  const [applied, setApplied] = useState<Record<string, AppliedChem[]>>({});
+  const loggedCost = useMemo(
+    () => Object.values(applied).reduce((s, list) => s + chemTotal(list), 0),
+    [applied],
+  );
+  const anyLogged = useMemo(() => Object.values(applied).some((l) => l.length), [applied]);
+  const estimatedChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
+  const totalChemCost = anyLogged ? loggedCost : estimatedChemCost;
 
   useEffect(() => {
     supabase
@@ -190,6 +199,15 @@ export default function VisitSheet({
           chlorine_oz: dose.chlorine_oz,
           acid_oz: dose.acid_oz,
           lsi: dose.lsi,
+          estimated_cost: estimatedChemCost,
+          applied_cost: loggedCost,
+          applied: perBody.flatMap((b) =>
+            (applied[b.id] ?? []).map((a) => ({
+              ...a,
+              body_id: b.id === "main" ? null : b.id,
+              body_name: b.name,
+            })),
+          ),
           bodies: perBody.map((b) => ({
             id: b.id === "main" ? null : b.id,
             name: b.name,
@@ -200,6 +218,8 @@ export default function VisitSheet({
             acid_oz: b.dose.acid_oz,
             lsi: b.dose.lsi,
             cost: b.dose.cost,
+            applied: applied[b.id] ?? [],
+            applied_cost: chemTotal(applied[b.id] ?? []),
           })),
         } as never,
         chem_cost: totalChemCost,
@@ -736,6 +756,23 @@ export default function VisitSheet({
                 )}
               </div>
 
+              {perBody.map((b) => (
+                <div key={b.id} className="space-y-1">
+                  {bodies.length > 1 && (
+                    <div className="ss-label">
+                      {b.name} · {b.gallons.toLocaleString()} gal
+                    </div>
+                  )}
+                  <ChemicalsAdded
+                    entries={applied[b.id] ?? []}
+                    onChange={(next) => setApplied((s) => ({ ...s, [b.id]: next }))}
+                    suggested={{ chlorine: b.dose.chlorine_oz, acid: b.dose.acid_oz }}
+                  />
+                </div>
+              ))}
+
+
+
               {bodies.length > 1 && (
                 <div className="ss-card p-3">
                   <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
@@ -760,6 +797,7 @@ export default function VisitSheet({
                   </div>
                   <div className="mt-2 border-t pt-2 text-[0.76rem]" style={{ borderColor: "hsl(var(--ss-sand))" }}>
                     Total chem cost <strong className="ss-num">{money2(totalChemCost)}</strong>
+                    <span className="opacity-60"> · {anyLogged ? "from products logged" : `estimated ${money2(estimatedChemCost)}`}</span>
                   </div>
                 </div>
               )}
