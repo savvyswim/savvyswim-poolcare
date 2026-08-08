@@ -32,6 +32,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
 import PortalTickets from "@/components/PortalTickets";
+import PortalDocuments from "@/components/PortalDocuments";
 import PortalActivity from "@/components/PortalActivity";
 import PortalPayDialog, { type PayableInvoice } from "@/components/PortalPayDialog";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
