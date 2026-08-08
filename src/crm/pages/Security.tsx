@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
 import { useAuth } from "@/hooks/useAuth";
+import TestCredentials from "@/crm/components/TestCredentials";
 
 type Finding = {
   id: string;
@@ -161,6 +162,8 @@ export default function Security() {
           </details>
         )}
       </div>
+
+      <TestCredentials />
 
       {/* Findings register */}
       {loading && <Loader2 className="animate-spin" size={18} />}
