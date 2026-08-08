@@ -1505,6 +1505,53 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_contact_verifications: {
+        Row: {
+          attempts: number
+          channel: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          customer_id: string
+          expires_at: string
+          id: string
+          new_value: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          channel: string
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          customer_id: string
+          expires_at: string
+          id?: string
+          new_value: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          customer_id?: string
+          expires_at?: string
+          id?: string
+          new_value?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_contact_verifications_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_contract_events: {
         Row: {
           contract_id: string
