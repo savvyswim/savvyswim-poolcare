@@ -331,6 +331,7 @@ export default function Inventory() {
                 <span className="opacity-70">{reasonLabel(m.reason)}</span>
                 {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
                 {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
+                {enteredNote(m) && <span className="opacity-60">· {enteredNote(m)}</span>}
                 {m.note && <span className="opacity-60">· {m.note}</span>}
                 <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
               </div>
@@ -383,6 +384,31 @@ export default function Inventory() {
                 value={draft.low_threshold}
                 onChange={(e) => setDraft({ ...draft, low_threshold: Number(e.target.value) })}
               />
+            </label>
+            <label className="space-y-1">
+              <span className="ss-label">Pack size (optional)</span>
+              <div className="flex gap-2">
+                <input
+                  className="ss-input ss-num w-full"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  placeholder="e.g. 40"
+                  value={draft.pack_size}
+                  onChange={(e) => setDraft({ ...draft, pack_size: e.target.value })}
+                />
+                <select
+                  className="ss-input w-[90px]"
+                  aria-label="Pack unit"
+                  value={draft.pack_unit}
+                  onChange={(e) => setDraft({ ...draft, pack_unit: e.target.value })}
+                >
+                  {PACK_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                </select>
+              </div>
+              <span className="block text-[0.68rem] opacity-60">
+                How much one {draft.unit} holds — lets techs enter quantities in other units.
+              </span>
             </label>
           </div>
           <button className="ss-btn" disabled={busy} onClick={() => void addItem()}>
@@ -437,6 +463,31 @@ export default function Inventory() {
                     onChange={(e) => setEdit({ ...edit, low_threshold: Number(e.target.value) })}
                   />
                 </label>
+            <label className="space-y-1">
+                      <span className="ss-label">Pack size (optional)</span>
+                      <div className="flex gap-2">
+                        <input
+                          className="ss-input ss-num w-full"
+                          type="number"
+                          min={0}
+                          step="0.01"
+                          placeholder="e.g. 40"
+                          value={edit.pack_size}
+                          onChange={(e) => setEdit({ ...edit, pack_size: e.target.value })}
+                        />
+                        <select
+                          className="ss-input w-[90px]"
+                          aria-label="Pack unit"
+                          value={edit.pack_unit}
+                          onChange={(e) => setEdit({ ...edit, pack_unit: e.target.value })}
+                        >
+                          {PACK_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                        </select>
+                      </div>
+                      <span className="block text-[0.68rem] opacity-60">
+                        How much one {edit.unit} holds — lets techs enter quantities in other units.
+                      </span>
+                    </label>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button className="ss-btn" disabled={busy} onClick={() => void saveEdit()}>
@@ -459,6 +510,7 @@ export default function Inventory() {
                 </div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
+                  {packLabel(i, i.unit ?? "unit") && ` · ${packLabel(i, i.unit ?? "unit")}`}
                   {(() => {
                     const u = usageByItem.get(i.id);
                     if (!u || !u.qty) return null;
@@ -521,15 +573,25 @@ export default function Inventory() {
                       </select>
                     </label>
                     <label className="space-y-1">
-                      <span className="ss-label">Qty ({i.unit ?? "units"})</span>
+                      <span className="ss-label">Qty</span>
                       <input
                         className="ss-input ss-num w-20"
                         type="number"
                         min={0}
-                        step={1}
+                        step="0.01"
                         value={adjustDraft.amount}
                         onChange={(e) => setAdjustDraft({ ...adjustDraft, amount: Number(e.target.value) })}
                       />
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Unit</span>
+                      <select
+                        className="ss-input w-[90px]"
+                        value={adjustDraft.unit || (i.unit ?? "ea")}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, unit: e.target.value })}
+                      >
+                        {enterableUnits(i.unit, i).map((u) => <option key={u} value={u}>{u}</option>)}
+                      </select>
                     </label>
                     <label className="space-y-1">
                       <span className="ss-label">Reason</span>
@@ -542,6 +604,18 @@ export default function Inventory() {
                       </select>
                     </label>
                   </div>
+                  {(() => {
+                    const entry = adjustDraft.unit || (i.unit ?? "ea");
+                    if (entry === (i.unit ?? "ea")) return null;
+                    const conv = convertQty(Math.abs(Number(adjustDraft.amount) || 0), entry, i.unit ?? "ea", i);
+                    return (
+                      <p className="text-[0.72rem] opacity-70">
+                        {conv == null
+                          ? `No conversion rule from ${entry} to ${i.unit ?? "ea"} — set a pack size on this item.`
+                          : `${Math.abs(Number(adjustDraft.amount) || 0)} ${entry} = ${Math.round(conv * 1000) / 1000} ${i.unit ?? "ea"}`}
+                      </p>
+                    );
+                  })()}
                   <input
                     className="ss-input w-full"
                     placeholder="Note (optional) — job, truck, invoice…"
@@ -571,6 +645,7 @@ export default function Inventory() {
                         <span className="opacity-75">{reasonLabel(m.reason)}</span>
                         {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
                         {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
+                        {enteredNote(m, i.unit) && <span className="opacity-60">· {enteredNote(m, i.unit)}</span>}
                         {m.note && <span className="opacity-60">· {m.note}</span>}
                         <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
                       </div>
