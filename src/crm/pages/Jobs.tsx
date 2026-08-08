@@ -53,26 +53,36 @@ export default function Jobs() {
       <div className="space-y-2">
         {!shown.length && <EmptyState>Nothing here.</EmptyState>}
         {shown.map((j) => (
-          <div key={j.id} className="ss-card flex flex-wrap items-center gap-3 p-3">
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[0.9rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{j.title}</span>
-                {j.auto_flag_source && <Chip tone="orange">auto: {j.auto_flag_source}</Chip>}
+          <div key={j.id} className="ss-card p-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[0.9rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{j.title}</span>
+                  {j.auto_flag_source && <Chip tone="orange">auto: {j.auto_flag_source}</Chip>}
+                </div>
+                <div className="text-[0.75rem] opacity-70">
+                  {j.ss_customers?.full_name ?? "Unassigned"} · {j.ss_customers?.city ?? "—"}
+                  {j.due_date ? ` · due ${new Date(j.due_date).toLocaleDateString()}` : ""}
+                </div>
+                {j.details && <div className="mt-1 text-[0.8rem] opacity-85">{j.details}</div>}
               </div>
-              <div className="text-[0.75rem] opacity-70">
-                {j.ss_customers?.full_name ?? "Unassigned"} · {j.ss_customers?.city ?? "—"}
-                {j.due_date ? ` · due ${new Date(j.due_date).toLocaleDateString()}` : ""}
-              </div>
-              {j.details && <div className="mt-1 text-[0.8rem] opacity-85">{j.details}</div>}
-            </div>
-            <div className="ss-num font-bold">{money(j.price ?? 0)}</div>
-            {j.status !== "completed" && (
-              <button className="ss-btn" onClick={() => setStatus(j, j.status === "open" ? "scheduled" : "completed")}>
-                {j.status === "open" ? "Schedule" : "Complete"}
+              <div className="ss-num font-bold">{money(j.price ?? 0)}</div>
+              <button
+                className="ss-btn ss-btn-ghost"
+                onClick={() => setOpenId(openId === j.id ? null : j.id)}
+              >
+                {openId === j.id ? "Hide costs" : "Costs & profit"}
               </button>
-            )}
+              {j.status !== "completed" && (
+                <button className="ss-btn" onClick={() => setStatus(j, j.status === "open" ? "scheduled" : "completed")}>
+                  {j.status === "open" ? "Schedule" : "Complete"}
+                </button>
+              )}
+            </div>
+            {openId === j.id && <JobProfit jobId={j.id} price={Number(j.price ?? 0)} />}
           </div>
         ))}
+
       </div>
     </div>
   );
