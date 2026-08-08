@@ -1535,6 +1535,7 @@ export type Database = {
           created_by: string | null
           customer_id: string | null
           declined_at: string | null
+          doc_kind: string
           id: string
           lead_id: string | null
           merge_data: Json
@@ -1562,6 +1563,7 @@ export type Database = {
           created_by?: string | null
           customer_id?: string | null
           declined_at?: string | null
+          doc_kind?: string
           id?: string
           lead_id?: string | null
           merge_data?: Json
@@ -1589,6 +1591,7 @@ export type Database = {
           created_by?: string | null
           customer_id?: string | null
           declined_at?: string | null
+          doc_kind?: string
           id?: string
           lead_id?: string | null
           merge_data?: Json
@@ -4286,6 +4289,20 @@ export type Database = {
         Returns: string
       }
       ss_my_customer_id: { Args: never; Returns: string }
+      ss_my_documents: {
+        Args: never
+        Returns: {
+          doc_kind: string
+          id: string
+          sent_at: string
+          signed_at: string
+          signer_name: string
+          status: string
+          title: string
+          token: string
+          viewed_at: string
+        }[]
+      }
       ss_my_invoice_lines: {
         Args: { _invoice_id: string }
         Returns: {
