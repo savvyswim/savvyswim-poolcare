@@ -131,7 +131,53 @@ export default function AuditTrail() {
         </div>
       </div>
 
+      <div className="border border-foreground/15 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">
+            Twilio webhook — callback token verification
+          </div>
+          <Chip tone={twilio.rejected24h > 0 ? "burgundy" : "aqua"}>
+            {twilio.rejected24h > 0 ? `${twilio.rejected24h} failed in 24h` : "no failures in 24h"}
+          </Chip>
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-4">
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Verified</div>
+            <div className="font-display text-2xl">{twilio.accepted}</div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Rejected (7d)</div>
+            <div className="font-display text-2xl">{twilio.rejected7d}</div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Failure rate</div>
+            <div className="font-display text-2xl">{twilio.rate}%</div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Last rejection</div>
+            <div className="font-display text-lg">
+              {twilio.lastRejection ? when(twilio.lastRejection) : "—"}
+            </div>
+          </div>
+        </div>
+        {twilio.reasons.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {twilio.reasons.map(([reason, count]) => (
+              <Chip key={reason} tone="ink">
+                {reason} · {count}
+              </Chip>
+            ))}
+          </div>
+        )}
+        {twilio.ips.length > 0 && (
+          <div className="mt-2 text-xs text-muted-foreground">
+            Top sources: {twilio.ips.map(([ip, c]) => `${ip} (${c})`).join(" · ")}
+          </div>
+        )}
+      </div>
+
       <div className="flex flex-wrap gap-2">
+
         {FILTERS.map((f) => (
           <button
             key={f.key}
