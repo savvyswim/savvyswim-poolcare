@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "@/lib/router-compat";
 import {
   CalendarClock,
+  CalendarPlus,
+
   CheckCircle2,
   CloudRain,
   Download,
@@ -28,6 +30,9 @@ import {
   YAxis,
 } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import PortalScheduleDialog, { VISIT_SLOTS } from "@/components/PortalScheduleDialog";
+import { downloadIcs, googleCalendarUrl } from "@/lib/calendar";
+
 import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
@@ -228,41 +233,43 @@ export default function Portal() {
     setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
   }
 
-  async function submitReschedule() {
-    if (!resched) return;
+  async function submitReschedule(date: string, note: string): Promise<boolean> {
+    if (!resched) return false;
     setSaving(true);
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
-      p_date: resched.date,
-      ...(resched.note ? { p_note: resched.note } : {}),
+      p_date: date,
+      ...(note ? { p_note: note } : {}),
     });
     setSaving(false);
     if (error) {
       toast.error(error.message);
-      return;
+      return false;
     }
     const info = (data ?? {}) as Record<string, unknown>;
-    const when = new Date(`${resched.date}T12:00:00`).toLocaleDateString();
-    setResched(null);
+    const when = new Date(`${date}T12:00:00`).toLocaleDateString();
     await refreshVisits();
     toast.success(`Visit set for ${when} — confirmation sent to the office.`);
 
     supabase.functions
       .invoke("notify-office-request", {
         body: {
-          requestType: "Portal reschedule request",
+          requestType: "Portal visit scheduling",
           name: String(info["customer_name"] ?? "Customer"),
           email: String(info["email"] ?? user?.email ?? "no-reply@savvyswim.com"),
           phone: info["phone"] ? String(info["phone"]) : undefined,
           address: info["address"] ? String(info["address"]) : undefined,
           service: `Weekly pool service — ${String(info["service_level"] ?? "service")}`,
           preferredDate: when,
-          notes: resched.note || "Rescheduled from the customer portal.",
+          notes: note || "Scheduled from the customer portal.",
           sourceUrl: window.location.href,
         },
       })
       .catch(() => undefined);
+
+    return true;
   }
+
 
   async function toggleFlag(p: Pool, flag: "lock" | "rain", value: boolean) {
     const { error } = await supabase.rpc("ss_set_visit_flag", {
@@ -607,6 +614,28 @@ export default function Portal() {
                         <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
                         {nextVisit ? "Reschedule" : "Request a visit"}
                       </button>
+                      {nextVisit && (
+                        <div className="flex gap-2">
+                          <a
+                            href={googleCalendarUrl(visitEvent(pool, nextVisit))}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex flex-1 items-center justify-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <CalendarPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                            Google
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => downloadIcs(visitEvent(pool, nextVisit))}
+                            className="inline-flex flex-1 items-center justify-center gap-2 border border-primary/25 px-3 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
+                          >
+                            <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                            .ics
+                          </button>
+                        </div>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => toggleFlag(pool, "rain", !nextVisit?.rain_hold)}
@@ -969,70 +998,15 @@ export default function Portal() {
       )}
 
       {resched && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Schedule visit"
-          onClick={() => !saving && setResched(null)}
-        >
-          <div
-            className="w-full max-w-md border border-hairline bg-background p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              {resched.pool.address ?? resched.pool.full_name}
-            </p>
-            <h2 className="mt-1 font-display text-2xl uppercase leading-tight">Set next visit</h2>
-            <p className="mt-2 font-tech text-xs text-primary/60">
-              Service runs weekly on {resched.pool.route_day ?? "your route day"}. Pick a new date only if you
-              need this week moved — we&rsquo;ll confirm with the office.
-            </p>
-
-            <label className="mt-5 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              New date
-              <input
-                type="date"
-                value={resched.date}
-                min={new Date().toISOString().slice(0, 10)}
-                onChange={(e) => setResched({ ...resched, date: e.target.value })}
-                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
-              />
-            </label>
-
-            <label className="mt-4 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              Note for the tech (optional)
-              <textarea
-                rows={3}
-                value={resched.note}
-                maxLength={500}
-                onChange={(e) => setResched({ ...resched, note: e.target.value })}
-                placeholder="Gate code changed, dog in the yard, party Saturday…"
-                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
-              />
-            </label>
-
-            <div className="mt-6 flex gap-2">
-              <button
-                type="button"
-                disabled={saving}
-                onClick={submitReschedule}
-                className="btn-quote flex-1 rounded-md px-4 py-3 text-[11px] font-bold uppercase tracking-wide disabled:opacity-60"
-              >
-                {saving ? "Sending…" : "Confirm visit"}
-              </button>
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => setResched(null)}
-                className="border border-primary/25 px-4 py-3 font-tech text-[11px] uppercase tracking-wide text-primary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <PortalScheduleDialog
+          pool={resched.pool}
+          currentDate={resched.date}
+          saving={saving}
+          onClose={() => setResched(null)}
+          onSubmit={submitReschedule}
+        />
       )}
+
     </div>
   );
 }
@@ -1058,5 +1032,18 @@ function nextStepFor(readings: Readings | null, gallons: number) {
     headline: "Correction scheduled",
     detail: report.summary,
     items: report.treatments.map((t) => `${t.chemical} — ${t.amount}. ${t.reason}`),
+  };
+}
+
+function visitEvent(pool: Pool, visit: Visit) {
+  const match = /Preferred window:\s*([^—\n]+)/.exec(visit.notes ?? "");
+  const slot = match ? VISIT_SLOTS.find((s) => s.label === match[1]?.trim()) : undefined;
+  return {
+    title: `Savvy Swim pool service — ${pool.service_level ?? "weekly service"}`,
+    description: `Arrival window ${slot?.label ?? "8:00a – 4:00p"}. Full chemistry test, brush, skim, baskets and filter check.\nQuestions? Call or text (469) 744-0379.`,
+    location: [pool.address ?? pool.full_name, pool.city].filter(Boolean).join(", "),
+    date: visit.scheduled_date,
+    startHour: slot?.startHour ?? 8,
+    endHour: slot?.endHour ?? 16,
   };
 }
