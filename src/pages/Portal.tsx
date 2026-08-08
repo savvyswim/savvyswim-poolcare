@@ -228,41 +228,43 @@ export default function Portal() {
     setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
   }
 
-  async function submitReschedule() {
-    if (!resched) return;
+  async function submitReschedule(date: string, note: string): Promise<boolean> {
+    if (!resched) return false;
     setSaving(true);
     const { data, error } = await supabase.rpc("ss_request_visit_reschedule", {
       p_customer_id: resched.pool.id,
-      p_date: resched.date,
-      ...(resched.note ? { p_note: resched.note } : {}),
+      p_date: date,
+      ...(note ? { p_note: note } : {}),
     });
     setSaving(false);
     if (error) {
       toast.error(error.message);
-      return;
+      return false;
     }
     const info = (data ?? {}) as Record<string, unknown>;
-    const when = new Date(`${resched.date}T12:00:00`).toLocaleDateString();
-    setResched(null);
+    const when = new Date(`${date}T12:00:00`).toLocaleDateString();
     await refreshVisits();
     toast.success(`Visit set for ${when} — confirmation sent to the office.`);
 
     supabase.functions
       .invoke("notify-office-request", {
         body: {
-          requestType: "Portal reschedule request",
+          requestType: "Portal visit scheduling",
           name: String(info["customer_name"] ?? "Customer"),
           email: String(info["email"] ?? user?.email ?? "no-reply@savvyswim.com"),
           phone: info["phone"] ? String(info["phone"]) : undefined,
           address: info["address"] ? String(info["address"]) : undefined,
           service: `Weekly pool service — ${String(info["service_level"] ?? "service")}`,
           preferredDate: when,
-          notes: resched.note || "Rescheduled from the customer portal.",
+          notes: note || "Scheduled from the customer portal.",
           sourceUrl: window.location.href,
         },
       })
       .catch(() => undefined);
+
+    return true;
   }
+
 
   async function toggleFlag(p: Pool, flag: "lock" | "rain", value: boolean) {
     const { error } = await supabase.rpc("ss_set_visit_flag", {
