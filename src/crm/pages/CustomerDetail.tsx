@@ -262,7 +262,13 @@ export default function CustomerDetail() {
         </div>
       )}
 
-      {tab === "Water trends" && <WaterTrends visits={visits} />}
+      {tab === "Water trends" && (
+        <div className="space-y-4">
+          <ChemHistory customerId={c.id} />
+          <WaterTrends visits={visits} />
+        </div>
+      )}
+
 
       {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
 
