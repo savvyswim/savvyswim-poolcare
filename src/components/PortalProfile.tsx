@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Bell, Home, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import PortalContactVerify from "@/components/PortalContactVerify";
+
 
 type Profile = {
   id: string;
@@ -68,8 +70,8 @@ export default function PortalProfile() {
         city: form.city ?? "",
         state: form.state ?? "",
         postal_code: form.postal_code ?? "",
-        phone: form.phone ?? "",
-        email: form.email ?? "",
+        // phone + email change only through verified codes
+
         gate_code: form.gate_code ?? "",
         dog_name: form.dog_name ?? "",
         location_notes: form.location_notes ?? "",
@@ -136,16 +138,11 @@ export default function PortalProfile() {
                 onChange={(e) => set("postal_code", e.target.value)} />
             </div>
           </div>
-          <div>
-            <label className={labelClass} htmlFor="pp-phone">Phone</label>
-            <input id="pp-phone" className={inputClass} maxLength={40} value={form.phone ?? ""}
-              onChange={(e) => set("phone", e.target.value)} />
+          <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2">
+            <PortalContactVerify channel="sms" current={form.phone} onVerified={() => void load()} />
+            <PortalContactVerify channel="email" current={form.email} onVerified={() => void load()} />
           </div>
-          <div>
-            <label className={labelClass} htmlFor="pp-email">Email</label>
-            <input id="pp-email" type="email" className={inputClass} maxLength={200} value={form.email ?? ""}
-              onChange={(e) => set("email", e.target.value)} />
-          </div>
+
           <div>
             <label className={labelClass} htmlFor="pp-gate">Gate code</label>
             <input id="pp-gate" className={inputClass} maxLength={60} value={form.gate_code ?? ""}
