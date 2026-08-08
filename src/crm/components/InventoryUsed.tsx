@@ -150,6 +150,23 @@ export default function InventoryUsed({
                   onChange(next);
                 }}
               />
+              <label className="flex items-center gap-1">
+                <span className="opacity-50">$</span>
+                <input
+                  className="ss-input ss-num w-16 text-right"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  aria-label={`Unit cost for ${r.name}`}
+                  value={r.unit_cost}
+                  onChange={(e) => {
+                    const next = [...rows];
+                    next[idx] = { ...r, unit_cost: Math.max(0, Number(e.target.value) || 0) };
+                    onChange(next);
+                  }}
+                />
+              </label>
+              <span className="ss-num w-16 text-right font-semibold">{money2(inStock * (Number(r.unit_cost) || 0))}</span>
               <select
                 className="ss-input w-[74px]"
                 aria-label={`Unit for ${r.name}`}
