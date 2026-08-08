@@ -20,7 +20,12 @@ import {
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
-import { PrivacyNotice, useWindowObscured } from "@/crm/components/TechPrivacy";
+import {
+  PrivacyNotice,
+  PrivacyWatermark,
+  useCaptureGuard,
+  useWindowObscured,
+} from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
@@ -106,6 +111,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const [claimMsg, setClaimMsg] = useState<string | null>(null);
   const claimSeat = useServerFn(claimStaffSeat);
   const obscured = useWindowObscured();
+  const techLocked = !!id.isTech;
+  const captureBlocked = useCaptureGuard(techLocked);
 
 
   useEffect(() => {
@@ -196,16 +203,18 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   }
 
 
-  const techLocked = id.isTech;
-
   return (
     <div
-      className={`savvy-crm ${techLocked ? "ss-no-select" : ""} ${
+      className={`savvy-crm ${techLocked ? "ss-no-select ss-tech-locked" : ""} ${
         techLocked && obscured ? "ss-privacy-blur" : ""
-      }`}
+      } ${techLocked && captureBlocked ? "ss-capture-masked" : ""}`}
       onContextMenu={techLocked ? (e) => e.preventDefault() : undefined}
     >
       {techLocked && obscured && <PrivacyNotice />}
+      {techLocked && captureBlocked && !obscured && (
+        <PrivacyNotice message="Copying, printing or saving customer information isn't allowed on a technician account." />
+      )}
+      {techLocked && <PrivacyWatermark label={id.staffName || user?.email || "technician"} />}
 
       {/* sticky header */}
       <header className="sticky top-0 z-40 lg:ml-[232px] xl:ml-[248px]" style={{ background: "hsl(var(--ss-cream))" }}>

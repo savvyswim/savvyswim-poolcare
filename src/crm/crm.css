@@ -220,3 +220,37 @@
   animation: ss-skeleton-sweep 1.25s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) { .ss-skel { animation: none; } }
+
+/* --- technician capture lockdown --- */
+.ss-privacy-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+  gap: 2rem;
+  transform: rotate(-24deg) scale(1.4);
+  opacity: 0.075;
+}
+.ss-privacy-watermark span {
+  font-family: var(--ss-font-mono, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: hsl(var(--ss-ink));
+}
+.ss-capture-masked > *:not(.ss-privacy-notice) { filter: blur(18px); }
+
+@media print {
+  .savvy-crm.ss-tech-locked { display: none !important; }
+  .savvy-crm.ss-tech-locked::after {
+    content: "Printing customer records is not permitted for technician accounts.";
+    display: block !important;
+    padding: 2rem;
+    font-size: 12pt;
+  }
+}
