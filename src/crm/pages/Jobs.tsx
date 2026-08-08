@@ -6,6 +6,8 @@ import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import JobProfit from "@/crm/components/JobProfit";
 import { runAutomations } from "@/crm/lib/automations";
+import { logTechAssignment } from "@/crm/lib/activity";
+
 
 
 type Job = {
