@@ -2104,6 +2104,87 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_equipment: {
+        Row: {
+          brand: string | null
+          condition: string
+          created_at: string
+          customer_id: string
+          id: string
+          installed_on: string | null
+          is_active: boolean
+          kind: string
+          last_serviced_on: string | null
+          model: string | null
+          name: string
+          notes: string | null
+          photos: Json
+          serial_number: string | null
+          sort_order: number
+          spec: Json
+          updated_at: string
+          warranty_expires_on: string | null
+          water_body_id: string | null
+        }
+        Insert: {
+          brand?: string | null
+          condition?: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          installed_on?: string | null
+          is_active?: boolean
+          kind?: string
+          last_serviced_on?: string | null
+          model?: string | null
+          name?: string
+          notes?: string | null
+          photos?: Json
+          serial_number?: string | null
+          sort_order?: number
+          spec?: Json
+          updated_at?: string
+          warranty_expires_on?: string | null
+          water_body_id?: string | null
+        }
+        Update: {
+          brand?: string | null
+          condition?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          installed_on?: string | null
+          is_active?: boolean
+          kind?: string
+          last_serviced_on?: string | null
+          model?: string | null
+          name?: string
+          notes?: string | null
+          photos?: Json
+          serial_number?: string | null
+          sort_order?: number
+          spec?: Json
+          updated_at?: string
+          warranty_expires_on?: string | null
+          water_body_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_equipment_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_equipment_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "ss_water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_expenses: {
         Row: {
           amount: number
