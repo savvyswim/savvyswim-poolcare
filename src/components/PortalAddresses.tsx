@@ -302,6 +302,16 @@ export default function PortalAddresses({
               </div>
             </div>
             <div className="sm:col-span-2">
+              <label className="flex items-center gap-2 font-tech text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={draft.is_billing}
+                  onChange={(e) => setDraft({ ...draft, is_billing: e.target.checked })}
+                />
+                Billing address (lets you keep the same street address saved twice — once for service, once for billing)
+              </label>
+            </div>
+            <div className="sm:col-span-2">
               <label className={labelClass} htmlFor="sa-notes">Access notes</label>
               <textarea id="sa-notes" rows={2} maxLength={600} className={inputClass} value={draft.notes}
                 onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
