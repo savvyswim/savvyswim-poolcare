@@ -105,7 +105,7 @@ export function useSavvyIdentity(): SavvyIdentity {
             staff?.initials ||
             (staff?.full_name ?? "").split(" ").map((p) => p[0]).join("").slice(0, 3) ||
             null,
-          customerId: cust?.id ?? null,
+          customerId,
         });
       })().finally(() => {
         inflight = null;
