@@ -584,7 +584,12 @@ export default function Portal() {
                             ? "Rain day flagged — we'll move it and confirm."
                             : "Please leave the gate unlocked and pets inside."}
                         </li>
+                        <li>
+                          Automatic reminder the afternoon before — sent by text or email to match the
+                          preference you set in Property profile below.
+                        </li>
                       </ul>
+
                       <div className="mt-3 flex flex-wrap gap-2">
                         {nextVisit?.is_locked && (
                           <span className="border border-accent px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-accent">
