@@ -30,6 +30,18 @@ export default function Jobs() {
     return (data ?? []) as unknown as Job[];
   });
 
+  const { rows: staff } = useTable<{ id: string; full_name: string; is_active: boolean }>("jobs-staff", async () => {
+    const { data } = await supabase.from("ss_staff").select("id,full_name,is_active").eq("is_active", true).order("full_name");
+    return data ?? [];
+  });
+
+  async function assign(job: Job, techId: string) {
+    const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(techId ? `Assigned to ${staff.find((s) => s.id === techId)?.full_name ?? "tech"}` : "Unassigned");
+    void refetch();
+  }
+
   const shown = useMemo(() => rows.filter((j) => j.status === filter), [rows, filter]);
   const openValue = useMemo(
     () => rows.filter((j) => j.status !== "completed").reduce((s, j) => s + Number(j.price ?? 0), 0),
@@ -81,6 +93,16 @@ export default function Jobs() {
                 {j.details && <div className="mt-1 text-[0.8rem] opacity-85">{j.details}</div>}
               </div>
               <div className="ss-num font-bold">{money(j.price ?? 0)}</div>
+              <select
+                className="ss-input !mt-0 !w-auto"
+                value={j.tech_id ?? ""}
+                onChange={(e) => assign(j, e.target.value)}
+              >
+                <option value="">Unassigned</option>
+                {staff.map((s) => (
+                  <option key={s.id} value={s.id}>{s.full_name}</option>
+                ))}
+              </select>
               <button
                 className="ss-btn ss-btn-ghost"
                 onClick={() => setOpenId(openId === j.id ? null : j.id)}

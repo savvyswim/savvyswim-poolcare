@@ -97,6 +97,7 @@ const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "gree
 
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
+  const [converting, setConverting] = useState(false);
 
   const { rows, refetch } = useTable<Lead>("pipeline", async () => {
     const { data } = await supabase
@@ -142,6 +143,62 @@ export default function Pipeline() {
     toast.success(`Plan set to ${findServicePlan(planId)?.name ?? planId}`);
     void refetch();
   }
+
+  async function convertToInspection(lead: Lead) {
+    setConverting(true);
+    try {
+      const { data: existingLead } = await supabase
+        .from("ss_leads")
+        .select("converted_customer_id")
+        .eq("id", lead.id)
+        .maybeSingle();
+
+      let customerId = existingLead?.converted_customer_id ?? null;
+
+      if (!customerId) {
+        const { data: cust, error: custErr } = await supabase
+          .from("ss_customers")
+          .insert({
+            full_name: lead.full_name,
+            email: lead.email,
+            phone: lead.phone,
+            address: lead.address,
+            city: lead.city,
+            status: "inactive",
+            monthly_price: Number(lead.monthly_value || 0),
+            location_notes: `Converted from lead (${lead.source ?? "marketing"})`,
+          })
+          .select("id")
+          .single();
+        if (custErr) throw custErr;
+        customerId = cust.id;
+      }
+
+      const { error: jobErr } = await supabase.from("ss_jobs").insert({
+        customer_id: customerId,
+        title: "Pool inspection",
+        details: [lead.address, lead.city].filter(Boolean).join(", ") || lead.message || null,
+        status: "open",
+        price: 0,
+        auto_flag_source: "lead_convert",
+      });
+      if (jobErr) throw jobErr;
+
+      await supabase
+        .from("ss_leads")
+        .update({ converted_customer_id: customerId, stage: "contacted", stage_changed_at: new Date().toISOString() })
+        .eq("id", lead.id);
+
+      toast.success("Inspection created — assign a tech in Jobs & repairs");
+      setDetail(null);
+      void refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Convert failed");
+    } finally {
+      setConverting(false);
+    }
+  }
+
 
 
   return (
@@ -250,7 +307,19 @@ export default function Pipeline() {
 
 
 
+            <button
+              className="ss-btn mt-4 w-full justify-center"
+              disabled={converting}
+              onClick={() => convertToInspection(detail)}
+            >
+              {converting ? "Converting…" : "CONVERT TO INSPECTION"}
+            </button>
+            <div className="mt-1 text-center text-[0.7rem] opacity-60">
+              Creates the customer record and an open inspection job in Jobs &amp; repairs to assign a tech.
+            </div>
+
             <div className="mt-4">
+
               <div className="ss-label mb-1.5">Move to stage</div>
               <div className="flex flex-wrap gap-1.5">
                 {STAGES.filter((s) => s.key !== detail.stage).map((s) => (
