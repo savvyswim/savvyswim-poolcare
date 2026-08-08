@@ -607,10 +607,15 @@ export default function VisitSheet({
               </div>
 
               {steps.map((t, i) => {
-                const first = t.custom && !steps[i - 1]?.custom;
+                const newPhase = steps[i - 1]?.phase !== t.phase;
                 return (
                   <div key={t.id}>
-                    {first && (
+                    {newPhase && (
+                      <div className="ss-tag px-1 pb-1 pt-3" style={{ fontSize: "0.55rem" }}>
+                        {PHASE_LABEL[t.phase]}
+                      </div>
+                    )}
+                    {t.custom && !steps[i - 1]?.custom && !newPhase && (
                       <div className="ss-tag px-1 pb-1 pt-3" style={{ fontSize: "0.55rem" }}>
                         Specific to this pool
                       </div>
