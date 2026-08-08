@@ -794,19 +794,27 @@ export default function Portal() {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="font-display text-lg">{money(i.amount)}</span>
-                          {i.status !== "paid" && i.stripe_payment_url && (
-                            <a
-                              href={i.stripe_payment_url}
+                          {i.status === "processing" && (
+                            <span className="border border-accent px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                              Processing
+                            </span>
+                          )}
+                          {i.status !== "paid" && i.status !== "processing" && (
+                            <button
+                              type="button"
+                              onClick={() => setPayInvoice(i)}
                               className="btn-quote rounded-md px-4 py-2 text-[11px] font-bold uppercase tracking-wide"
                             >
-                              Pay
-                            </a>
+                              Pay now
+                            </button>
                           )}
                         </div>
                       </div>
                     ))}
                   </div>
                 </section>
+
+                {pool && <PortalActivity customerId={pool.id} />}
               </>
             )}
           </>
