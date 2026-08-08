@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
 import ReminderSchedules from "@/crm/components/ReminderSchedules";
+import WorkflowTemplates from "@/crm/components/WorkflowTemplates";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 
 type Row = { key: string; value: Record<string, unknown> };
