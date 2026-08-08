@@ -19,6 +19,9 @@ const EVENT_TONE: Record<string, string> = {
   plan_quoted: "var(--ss-aqua)",
   plan_status: "var(--ss-aqua)",
   stage: "var(--ss-burgundy)",
+  converted: "var(--ss-burgundy)",
+  tech_assigned: "var(--ss-aqua)",
+
 };
 
 function LeadTimeline({ leadId }: { leadId: string }) {
