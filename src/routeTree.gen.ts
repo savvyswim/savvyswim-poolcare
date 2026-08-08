@@ -31,6 +31,7 @@ import { Route as CrmIndexRouteImport } from './routes/crm/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
+import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as PortalMaintenanceRouteImport } from './routes/portal_.maintenance'
 import { Route as CrmSplatRouteImport } from './routes/crm/$'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout/return'
@@ -191,6 +192,11 @@ const SignTokenRoute = SignTokenRouteImport.update({
 const ReviewTokenRoute = ReviewTokenRouteImport.update({
   id: '/review/$token',
   path: '/review/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuoteTokenRoute = QuoteTokenRouteImport.update({
+  id: '/quote/$token',
+  path: '/quote/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalMaintenanceRoute = PortalMaintenanceRouteImport.update({
@@ -489,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin/': typeof AdminIndexRoute
@@ -564,6 +571,7 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin': typeof AdminIndexRoute
@@ -641,6 +649,7 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal_/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin/': typeof AdminIndexRoute
@@ -718,6 +727,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin/'
@@ -793,6 +803,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin'
@@ -869,6 +880,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal_/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin/'
@@ -946,6 +958,7 @@ export interface RootRouteChildren {
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CrmSplatRoute: typeof CrmSplatRoute
   PortalMaintenanceRoute: typeof PortalMaintenanceRoute
+  QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1116,6 +1129,13 @@ declare module '@tanstack/react-router' {
       path: '/review/$token'
       fullPath: '/review/$token'
       preLoaderRoute: typeof ReviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quote/$token': {
+      id: '/quote/$token'
+      path: '/quote/$token'
+      fullPath: '/quote/$token'
+      preLoaderRoute: typeof QuoteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal_/maintenance': {
@@ -1587,6 +1607,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutReturnRoute: CheckoutReturnRoute,
   CrmSplatRoute: CrmSplatRoute,
   PortalMaintenanceRoute: PortalMaintenanceRoute,
+  QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
   AdminIndexRoute: AdminIndexRoute,
