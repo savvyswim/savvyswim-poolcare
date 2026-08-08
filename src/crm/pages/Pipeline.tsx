@@ -6,6 +6,8 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { SERVICE_PLANS, findServicePlan } from "@/crm/lib/pricingEngine";
+import { logCustomerActivity, logLeadEvent, logTechAssignment } from "@/crm/lib/activity";
+
 
 type LeadEvent = {
   id: string; event_type: string; label: string; detail: string | null; created_at: string;
