@@ -703,8 +703,8 @@ export default function VisitSheet({
                       {checked[t.id] && t.photo !== "none" && (
                         <label className="ss-btn ss-btn-ghost mt-2 w-full cursor-pointer">
                           <Camera size={13} />
-                          {taskPhotos[t.id]
-                            ? "Photo attached ✓"
+                          {(taskPhotos[t.id]?.length ?? 0) > 0
+                            ? `${taskPhotos[t.id].length} photo${taskPhotos[t.id].length > 1 ? "s" : ""} attached ✓ · add another`
                             : t.photo === "required"
                               ? "Capture photo"
                               : "Add photo (optional)"}
@@ -712,19 +712,22 @@ export default function VisitSheet({
                             type="file"
                             accept="image/*"
                             capture="environment"
+                            multiple
                             className="hidden"
                             onChange={async (e) => {
-                              const f = e.target.files?.[0];
-                              if (!f) return;
-                              const up = await upload(f, `task-${t.id}`);
-                              if (up) {
-                                setTaskPhotos((s) => ({ ...s, [t.id]: up.path }));
+                              const files = Array.from(e.target.files ?? []);
+                              e.target.value = "";
+                              for (const f of files) {
+                                const up = await upload(f, `task-${t.id}`);
+                                if (!up) continue;
+                                setTaskPhotos((s) => ({ ...s, [t.id]: [...(s[t.id] ?? []), up.path] }));
                                 setEvidence((s) => [...s, { label: t.label, path: up.path, url: up.url }]);
                               }
                             }}
                           />
                         </label>
                       )}
+
                     </div>
                   </div>
                 );
