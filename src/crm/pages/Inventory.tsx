@@ -201,7 +201,30 @@ export default function Inventory() {
         <button className="ss-btn" onClick={() => setAdding((v) => !v)}>
           {adding ? <X size={13} /> : <Plus size={13} />} {adding ? "Cancel" : "Add item"}
         </button>
+        <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
+          <History size={13} /> {showLog ? "Hide history" : "History"}
+        </button>
       </div>
+
+      {showLog && (
+        <div className="ss-card p-3">
+          <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Adjustment history</div>
+          {!moves.length && <p className="mt-2 text-[0.76rem] opacity-60">No adjustments logged yet.</p>}
+          <div className="mt-2 space-y-1.5">
+            {moves.slice(0, 60).map((m) => (
+              <div key={m.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[0.76rem]">
+                <span className="ss-num font-bold" style={{ color: m.delta > 0 ? "hsl(152 60% 26%)" : "hsl(var(--ss-burgundy))" }}>
+                  {m.delta > 0 ? "+" : ""}{m.delta}
+                </span>
+                <span className="font-semibold">{m.item_name}</span>
+                <span className="opacity-70">{reasonLabel(m.reason)}</span>
+                {m.note && <span className="opacity-60">· {m.note}</span>}
+                <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {adding && (
         <div className="ss-card space-y-2 p-3">
@@ -338,10 +361,95 @@ export default function Inventory() {
                   onBlur={(e) => void setQuantity(i, Number(e.target.value))}
                 />
                 <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, 1)} aria-label={`Increase ${i.name}`}>+</button>
+                <button
+                  className="ss-btn ss-btn-ghost"
+                  onClick={() => { setAdjustId(adjustId === i.id ? null : i.id); setHistoryId(null); }}
+                  aria-label={`Adjust ${i.name}`}
+                >
+                  <Minus size={13} />/<Plus size={13} />
+                </button>
+                <button
+                  className="ss-btn ss-btn-ghost"
+                  onClick={() => { setHistoryId(historyId === i.id ? null : i.id); setAdjustId(null); }}
+                  aria-label={`History for ${i.name}`}
+                >
+                  <History size={13} />
+                </button>
                 <button className="ss-btn ss-btn-ghost" onClick={() => startEdit(i)} aria-label={`Edit ${i.name}`}>
                   <Pencil size={13} />
                 </button>
               </div>
+
+              {adjustId === i.id && (
+                <div className="w-full space-y-2 border-t pt-2" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  <div className="flex flex-wrap items-end gap-2">
+                    <label className="space-y-1">
+                      <span className="ss-label">Direction</span>
+                      <select
+                        className="ss-input"
+                        value={adjustDraft.dir}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, dir: Number(e.target.value) })}
+                      >
+                        <option value={-1}>Remove</option>
+                        <option value={1}>Add</option>
+                      </select>
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Qty ({i.unit ?? "units"})</span>
+                      <input
+                        className="ss-input ss-num w-20"
+                        type="number"
+                        min={0}
+                        step={1}
+                        value={adjustDraft.amount}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, amount: Number(e.target.value) })}
+                      />
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Reason</span>
+                      <select
+                        className="ss-input"
+                        value={adjustDraft.reason}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, reason: e.target.value })}
+                      >
+                        {REASONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
+                      </select>
+                    </label>
+                  </div>
+                  <input
+                    className="ss-input w-full"
+                    placeholder="Note (optional) — job, truck, invoice…"
+                    value={adjustDraft.note}
+                    onChange={(e) => setAdjustDraft({ ...adjustDraft, note: e.target.value })}
+                  />
+                  <div className="flex gap-2">
+                    <button className="ss-btn" disabled={busy} onClick={() => void applyAdjustment(i)}>
+                      <Check size={13} /> Log adjustment
+                    </button>
+                    <button className="ss-btn ss-btn-ghost" onClick={() => setAdjustId(null)}>
+                      <X size={13} /> Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {historyId === i.id && (
+                <div className="w-full border-t pt-2 text-[0.76rem]" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  {!(movesByItem.get(i.id) ?? []).length && <p className="opacity-60">No adjustments logged yet.</p>}
+                  <div className="space-y-1">
+                    {(movesByItem.get(i.id) ?? []).slice(0, 25).map((m) => (
+                      <div key={m.id} className="flex flex-wrap items-baseline gap-x-2">
+                        <span className="ss-num font-bold" style={{ color: m.delta > 0 ? "hsl(152 60% 26%)" : "hsl(var(--ss-burgundy))" }}>
+                          {m.delta > 0 ? "+" : ""}{m.delta}
+                        </span>
+                        <span className="opacity-75">{reasonLabel(m.reason)}</span>
+                        {m.note && <span className="opacity-60">· {m.note}</span>}
+                        <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ),
         )}
