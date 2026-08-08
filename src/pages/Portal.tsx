@@ -971,70 +971,15 @@ export default function Portal() {
       )}
 
       {resched && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Schedule visit"
-          onClick={() => !saving && setResched(null)}
-        >
-          <div
-            className="w-full max-w-md border border-hairline bg-background p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              {resched.pool.address ?? resched.pool.full_name}
-            </p>
-            <h2 className="mt-1 font-display text-2xl uppercase leading-tight">Set next visit</h2>
-            <p className="mt-2 font-tech text-xs text-primary/60">
-              Service runs weekly on {resched.pool.route_day ?? "your route day"}. Pick a new date only if you
-              need this week moved — we&rsquo;ll confirm with the office.
-            </p>
-
-            <label className="mt-5 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              New date
-              <input
-                type="date"
-                value={resched.date}
-                min={new Date().toISOString().slice(0, 10)}
-                onChange={(e) => setResched({ ...resched, date: e.target.value })}
-                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
-              />
-            </label>
-
-            <label className="mt-4 block font-tech text-[10px] uppercase tracking-widest text-primary/50">
-              Note for the tech (optional)
-              <textarea
-                rows={3}
-                value={resched.note}
-                maxLength={500}
-                onChange={(e) => setResched({ ...resched, note: e.target.value })}
-                placeholder="Gate code changed, dog in the yard, party Saturday…"
-                className="mt-1.5 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm normal-case tracking-normal text-primary"
-              />
-            </label>
-
-            <div className="mt-6 flex gap-2">
-              <button
-                type="button"
-                disabled={saving}
-                onClick={submitReschedule}
-                className="btn-quote flex-1 rounded-md px-4 py-3 text-[11px] font-bold uppercase tracking-wide disabled:opacity-60"
-              >
-                {saving ? "Sending…" : "Confirm visit"}
-              </button>
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => setResched(null)}
-                className="border border-primary/25 px-4 py-3 font-tech text-[11px] uppercase tracking-wide text-primary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <PortalScheduleDialog
+          pool={resched.pool}
+          currentDate={resched.date}
+          saving={saving}
+          onClose={() => setResched(null)}
+          onSubmit={submitReschedule}
+        />
       )}
+
     </div>
   );
 }
