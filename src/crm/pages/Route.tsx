@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Lock, MapPin, Navigation, PawPrint, Send, Timer } from "lucide-react";
+import { Ban, CheckCircle2, Lock, MapPin, Navigation, PawPrint, Send, Timer } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, RouteRing, SectionTitle } from "@/crm/components/Brand";
@@ -7,7 +7,10 @@ import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import VisitSheet from "@/crm/components/VisitSheet";
 import RouteMap from "@/crm/components/RouteMap";
 import RouteBuilder from "@/crm/components/RouteBuilder";
+import RouteOptimizer from "@/crm/components/RouteOptimizer";
+import NoAccessDialog from "@/crm/components/NoAccessDialog";
 import { useGeofence } from "@/crm/lib/useGeofence";
+
 
 export type Stop = {
   id: string;
@@ -34,6 +37,8 @@ export default function RoutePage() {
   const [techFilter, setTechFilter] = useState<string>("all");
   const [techs, setTechs] = useState<{ id: string; full_name: string }[]>([]);
   const [activeVisit, setActiveVisit] = useState<Stop | null>(null);
+  const [noAccess, setNoAccess] = useState<Stop | null>(null);
+
   const [automations, setAutomations] = useState({ auto_on_my_way: true, auto_start_minutes: 5, geofence_feet: 600 });
 
   const load = useCallback(async () => {
@@ -203,7 +208,12 @@ export default function RoutePage() {
           </select>
         )}
         {!id.isTech && <RouteBuilder techs={techs} onBuilt={load} />}
+        <RouteOptimizer
+          stops={pending.map((s) => ({ id: s.id, lat: s.ss_customers.lat, lng: s.ss_customers.lng }))}
+          onOptimized={load}
+        />
       </div>
+
 
 
       {view === "map" ? (
@@ -223,8 +233,10 @@ export default function RoutePage() {
                 isTech={id.isTech}
                 onOnMyWay={() => sendOnMyWay(s)}
                 onStart={() => setActiveVisit(s)}
+                onNoAccess={() => setNoAccess(s)}
               />
             ))}
+
           </div>
 
           {!!done.length && (
@@ -259,15 +271,26 @@ export default function RoutePage() {
           onComplete={handleComplete}
         />
       )}
+
+      {noAccess && (
+        <NoAccessDialog
+          visitId={noAccess.id}
+          customerId={noAccess.customer_id}
+          customerName={noAccess.ss_customers.full_name}
+          onClose={() => setNoAccess(null)}
+          onSaved={load}
+        />
+      )}
     </div>
   );
 }
 
 function StopCard({
-  stop, isTech, onOnMyWay, onStart,
+  stop, isTech, onOnMyWay, onStart, onNoAccess,
 }: {
-  stop: Stop; isTech: boolean; onOnMyWay: () => void; onStart: () => void;
+  stop: Stop; isTech: boolean; onOnMyWay: () => void; onStart: () => void; onNoAccess: () => void;
 }) {
+
   const c = stop.ss_customers;
   const warnings = Object.entries(c.custom_fields ?? {}).filter(([, v]) => v === true);
   return (
@@ -311,9 +334,13 @@ function StopCard({
             <button className="ss-btn ss-btn-ghost" onClick={onOnMyWay}>
               <Send size={12} /> On my way
             </button>
+            <button className="ss-btn ss-btn-ghost" onClick={onNoAccess}>
+              <Ban size={12} /> No access
+            </button>
             <button className="ss-btn" onClick={onStart}>
               Start visit
             </button>
+
           </div>
         </div>
       </div>

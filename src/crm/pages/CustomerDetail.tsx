@@ -8,6 +8,8 @@ import { createCustomerLogin } from "@/lib/accounts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import CustomerContracts from "@/crm/components/CustomerContracts";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
+import ChemHistory from "@/crm/components/ChemHistory";
+
 import { money } from "@/crm/lib/pricing";
 
 type Customer = {
@@ -262,7 +264,13 @@ export default function CustomerDetail() {
         </div>
       )}
 
-      {tab === "Water trends" && <WaterTrends visits={visits} />}
+      {tab === "Water trends" && (
+        <div className="space-y-4">
+          <ChemHistory customerId={c.id} />
+          <WaterTrends visits={visits} />
+        </div>
+      )}
+
 
       {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
 

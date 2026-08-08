@@ -40,6 +40,8 @@ import PortalTickets from "@/components/PortalTickets";
 import PortalDocuments from "@/components/PortalDocuments";
 import PortalProfile from "@/components/PortalProfile";
 import PortalActivity from "@/components/PortalActivity";
+import PortalChemHistory from "@/components/PortalChemHistory";
+
 import PortalPayDialog, { type PayableInvoice } from "@/components/PortalPayDialog";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
@@ -787,7 +789,13 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {/* Chemical history */}
+                <section className="mt-12">
+                  <PortalChemHistory />
+                </section>
+
                 {/* Water reports */}
+
                 <section className="mt-12">
                   <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
                     <FlaskConical className="h-4 w-4 text-accent" aria-hidden="true" /> Water reports
