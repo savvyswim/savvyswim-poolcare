@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { recordAudit } from "@/lib/audit.server";
 
 /**
  * Twilio status callback for contract signing-link texts.
@@ -22,11 +23,25 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
           const expected = process.env["TWILIO_STATUS_WEBHOOK_SECRET"];
           if (!expected) {
             console.error("contract-sms-status: TWILIO_STATUS_WEBHOOK_SECRET is not configured");
+            await recordAudit({
+              action: "twilio_status_webhook.rejected",
+              actorLabel: "twilio",
+              success: false,
+              outcome: "Webhook secret is not configured",
+              request,
+            });
             return new Response("Forbidden", { status: 403 });
           }
 
           const provided = new URL(request.url).searchParams.get("k") ?? "";
           if (!provided || !safeEqual(provided, expected)) {
+            await recordAudit({
+              action: "twilio_status_webhook.rejected",
+              actorLabel: "twilio",
+              success: false,
+              outcome: "Invalid or missing webhook secret",
+              request,
+            });
             return new Response("Forbidden", { status: 403 });
           }
 
@@ -43,7 +58,18 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
             .select("id")
             .eq("message_sid", sid)
             .maybeSingle();
-          if (!existing) return new Response("ok");
+          if (!existing) {
+            await recordAudit({
+              action: "twilio_status_webhook.ignored",
+              actorLabel: "twilio",
+              subjectTable: "ss_contract_sms",
+              subjectId: sid,
+              success: true,
+              outcome: "No matching message on file",
+              request,
+            });
+            return new Response("ok");
+          }
 
           await supabaseAdmin
             .from("ss_contract_sms")
@@ -53,9 +79,27 @@ export const Route = createFileRoute("/api/public/twilio/contract-sms-status")({
             })
             .eq("id", existing.id);
 
+          await recordAudit({
+            action: "twilio_status_webhook.applied",
+            actorLabel: "twilio",
+            subjectTable: "ss_contract_sms",
+            subjectId: existing.id,
+            success: true,
+            outcome: `Status set to ${status}`,
+            details: { messageSid: sid, errorCode: errorCode ? String(errorCode) : null },
+            request,
+          });
+
           return new Response("ok");
         } catch (e) {
           console.error("contract-sms-status error", e);
+          await recordAudit({
+            action: "twilio_status_webhook.failed",
+            actorLabel: "twilio",
+            success: false,
+            outcome: (e as Error).message,
+            request,
+          });
           return new Response("ok");
         }
       },
