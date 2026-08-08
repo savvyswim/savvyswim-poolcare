@@ -130,6 +130,15 @@ export default function Portal() {
     if (!loading && !user) navigate("/auth?next=/portal", { replace: true });
   }, [loading, user, navigate]);
 
+  // Staff accounts (tech/office/owner) with no customer record belong in the CRM,
+  // not in the customer portal — bounce them instead of showing an empty portal.
+  useEffect(() => {
+    if (identity.loading || busy) return;
+    if (!identity.customerId && identity.level && pools.length === 0) {
+      navigate("/admin/crm", { replace: true });
+    }
+  }, [identity.loading, identity.customerId, identity.level, busy, pools.length, navigate]);
+
   useEffect(() => {
     if (!user) return;
     let alive = true;
