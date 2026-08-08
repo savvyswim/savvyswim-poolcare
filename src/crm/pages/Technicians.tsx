@@ -176,14 +176,27 @@ export default function Technicians() {
                   <button
                     className="ss-btn ss-btn-ghost !py-1 text-[0.72rem]"
                     disabled={inviting === s.id || !!s.user_id}
-                    onClick={() => sendLogin(s)}
+                    onClick={() => sendLogin(s, "invite")}
                   >
-                    {s.user_id ? "Login active" : inviting === s.id ? "Sending…" : "Send login"}
+                    {s.user_id ? "Login active" : inviting === s.id ? "Working…" : "Email invite"}
                   </button>
+                  {!s.user_id && (
+                    <button
+                      className="ss-btn ss-btn-ghost !py-1 text-[0.72rem]"
+                      disabled={inviting === s.id}
+                      onClick={() => sendLogin(s, "password")}
+                    >
+                      Create with password
+                    </button>
+                  )}
                   <button className="ss-btn ss-btn-ghost !py-1 text-[0.72rem]" onClick={() => toggleActive(s)}>
                     {s.is_active ? "Deactivate" : "Reactivate"}
                   </button>
+                  {tempPasswords[s.id] && (
+                    <span className="ss-tag">Password: <code>{tempPasswords[s.id]}</code></span>
+                  )}
                 </div>
+
               )}
             </div>
           </div>
