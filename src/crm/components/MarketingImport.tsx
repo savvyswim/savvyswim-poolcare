@@ -186,7 +186,7 @@ export default function MarketingImport({ onDone }: { onDone?: () => void }) {
       </div>
       <div className="mb-2 text-[0.75rem] opacity-70">
         Columns: name, email, phone, address, city, source. Contacts land in the pipeline as new leads.
-        Existing emails are updated, not duplicated.
+        Existing contacts are matched by email or phone and updated, never duplicated.
       </div>
 
       <input
