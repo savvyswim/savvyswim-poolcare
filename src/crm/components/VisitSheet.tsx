@@ -257,8 +257,10 @@ export default function VisitSheet({
     const checklist = steps.map((t) => ({
       label: t.label,
       done: !!checked[t.id],
-      photo: taskPhotos[t.id] ?? null,
+      photo: taskPhotos[t.id]?.[0] ?? null,
+      photos: taskPhotos[t.id] ?? [],
     }));
+
 
 
     const allPhotos: VisitPhoto[] = [
