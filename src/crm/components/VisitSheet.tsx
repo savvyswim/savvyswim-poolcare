@@ -91,6 +91,7 @@ export default function VisitSheet({
   );
 
   const dose = useMemo(() => doseFor(readings, body.gallons), [readings, body.gallons]);
+  const flags = useMemo(() => flagReadings(readings), [readings]);
   const report = useMemo(() => evaluate(readings, body.gallons), [readings, body.gallons]);
   const verdict = lsiVerdict(dose.lsi);
 
