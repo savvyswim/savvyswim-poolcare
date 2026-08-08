@@ -75,7 +75,20 @@ type Lead = {
   cleanup_price: number | null; message: string | null; source: string | null;
   stage_changed_at: string | null; created_at: string;
   plan_id: string | null; plan_status: string | null;
+  converted_customer_id: string | null;
 };
+
+type OpsJob = {
+  id: string; title: string; status: string; tech_id: string | null;
+  customer_id: string; details: string | null; created_at: string;
+  ss_customers: { full_name: string; city: string | null } | null;
+};
+
+const OPS_COLUMNS: { key: string; label: string }[] = [
+  { key: "open", label: "To assign" },
+  { key: "scheduled", label: "Scheduled" },
+  { key: "completed", label: "Completed" },
+];
 
 type Stage = "new_lead" | "contacted" | "quote_sent" | "follow_up" | "won" | "lost";
 
@@ -98,25 +111,64 @@ const PLAN_STATUS: Record<string, { label: string; tone: "aqua" | "gold" | "gree
 export default function Pipeline() {
   const [detail, setDetail] = useState<Lead | null>(null);
   const [converting, setConverting] = useState(false);
+  const [board, setBoard] = useState<"marketing" | "operations">("marketing");
 
   const { rows, refetch } = useTable<Lead>("pipeline", async () => {
     const { data } = await supabase
       .from("ss_leads")
-      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at,plan_id,plan_status")
+      .select("id,full_name,phone,email,address,city,stage,monthly_value,pool_size,condition,service_type,cleanup_price,message,source,stage_changed_at,created_at,plan_id,plan_status,converted_customer_id")
       .order("created_at", { ascending: false });
     return (data ?? []) as Lead[];
   });
 
+  const { rows: opsJobs, refetch: refetchJobs } = useTable<OpsJob>("pipeline-ops", async () => {
+    const { data } = await supabase
+      .from("ss_jobs")
+      .select("id,title,status,tech_id,customer_id,details,created_at,ss_customers(full_name,city)")
+      .eq("auto_flag_source", "lead_convert")
+      .order("created_at", { ascending: false });
+    return (data ?? []) as unknown as OpsJob[];
+  });
+
+  const { rows: staff } = useTable<{ id: string; full_name: string }>("pipeline-staff", async () => {
+    const { data } = await supabase.from("ss_staff").select("id,full_name").eq("is_active", true).order("full_name");
+    return data ?? [];
+  });
+
+  const marketingRows = useMemo(() => rows.filter((r) => !r.converted_customer_id), [rows]);
+
   const byStage = useMemo(() => {
     const map: Record<string, Lead[]> = {};
     for (const s of STAGES) map[s.key] = [];
-    for (const r of rows) (map[r.stage] ??= []).push(r);
+    for (const r of marketingRows) (map[r.stage] ??= []).push(r);
     return map;
-  }, [rows]);
+  }, [marketingRows]);
+
+  const byOpsStatus = useMemo(() => {
+    const map: Record<string, OpsJob[]> = { open: [], scheduled: [], completed: [] };
+    for (const j of opsJobs) (map[j.status] ??= []).push(j);
+    return map;
+  }, [opsJobs]);
+
+  async function assignOps(job: OpsJob, techId: string) {
+    const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(techId ? "Assigned" : "Unassigned");
+    void refetchJobs();
+  }
+
+  async function moveOps(job: OpsJob, status: string) {
+    const { error } = await supabase
+      .from("ss_jobs")
+      .update({ status, completed_at: status === "completed" ? new Date().toISOString() : null })
+      .eq("id", job.id);
+    if (error) { toast.error(error.message); return; }
+    void refetchJobs();
+  }
 
   const pipelineValue = useMemo(
-    () => rows.filter((r) => !["won", "lost"].includes(r.stage)).reduce((s, r) => s + Number(r.monthly_value || 0), 0),
-    [rows],
+    () => marketingRows.filter((r) => !["won", "lost"].includes(r.stage)).reduce((s, r) => s + Number(r.monthly_value || 0), 0),
+    [marketingRows],
   );
 
   const planCounts = useMemo(() => {
@@ -204,52 +256,109 @@ export default function Pipeline() {
   return (
     <div className="space-y-4">
       <SectionTitle
-        title="Pipeline"
-        sub={`${rows.length} leads · ${money(pipelineValue)}/mo open value`}
+        title={board === "marketing" ? "Marketing pipeline" : "Operations pipeline"}
+        sub={
+          board === "marketing"
+            ? `${marketingRows.length} open leads · ${money(pipelineValue)}/mo open value`
+            : `${opsJobs.length} converted inspections · ${byOpsStatus["open"]?.length ?? 0} waiting to assign`
+        }
       />
 
-      <div className="ss-card p-4">
-        <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-          {SERVICE_PLANS.map((p) => (
-            <div key={p.id} className="rounded-md border p-2.5" style={{ borderColor: "hsl(var(--ss-sand))" }}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[0.83rem] font-semibold">{p.name}</span>
-                <span className="ss-num text-[0.78rem] opacity-70">{planCounts[p.id] ?? 0}</span>
+      <div className="flex gap-1.5">
+        <button className={`ss-btn ${board === "marketing" ? "" : "ss-btn-ghost"}`} onClick={() => setBoard("marketing")}>
+          Marketing · {marketingRows.length}
+        </button>
+        <button className={`ss-btn ${board === "operations" ? "" : "ss-btn-ghost"}`} onClick={() => setBoard("operations")}>
+          Operations · {opsJobs.length}
+        </button>
+      </div>
+
+      {board === "marketing" && (
+        <>
+          <div className="ss-card p-4">
+            <div className="ss-label mb-2">Auto-matched plans · every new lead lands on an eligible tier</div>
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              {SERVICE_PLANS.map((p) => (
+                <div key={p.id} className="rounded-md border p-2.5" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[0.83rem] font-semibold">{p.name}</span>
+                    <span className="ss-num text-[0.78rem] opacity-70">{planCounts[p.id] ?? 0}</span>
+                  </div>
+                  <div className="mt-0.5 text-[0.7rem] opacity-65">{p.tagline}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+            {STAGES.map((s) => (
+              <div key={s.key} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="ss-tag">{s.label}</span>
+                  <span className="ss-num text-[0.72rem] opacity-60">{byStage[s.key]?.length ?? 0}</span>
+                </div>
+                {!byStage[s.key]?.length && <EmptyState>—</EmptyState>}
+                {byStage[s.key]?.map((l) => (
+                  <button key={l.id} className="ss-card w-full p-3 text-left" onClick={() => setDetail(l)}>
+                    <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{l.full_name}</div>
+                    <div className="text-[0.72rem] opacity-65">{l.city ?? "—"} · {l.pool_size ?? "—"}</div>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      <Chip tone="green">{money(l.monthly_value)}/mo</Chip>
+                      {l.plan_id && (
+                        <Chip tone={PLAN_STATUS[l.plan_status ?? "recommended"]?.tone ?? "gold"}>
+                          {findServicePlan(l.plan_id)?.name ?? l.plan_id}
+                        </Chip>
+                      )}
+                      {l.cleanup_price ? <Chip tone="gold">Clean-up {money(l.cleanup_price)}</Chip> : null}
+                      {l.source && <Chip tone="aqua">{l.source}</Chip>}
+                    </div>
+                  </button>
+                ))}
               </div>
-              <div className="mt-0.5 text-[0.7rem] opacity-65">{p.tagline}</div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {board === "operations" && (
+        <div className="grid gap-3 md:grid-cols-3">
+          {OPS_COLUMNS.map((c) => (
+            <div key={c.key} className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="ss-tag">{c.label}</span>
+                <span className="ss-num text-[0.72rem] opacity-60">{byOpsStatus[c.key]?.length ?? 0}</span>
+              </div>
+              {!byOpsStatus[c.key]?.length && <EmptyState>—</EmptyState>}
+              {byOpsStatus[c.key]?.map((j) => (
+                <div key={j.id} className="ss-card p-3">
+                  <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>
+                    {j.ss_customers?.full_name ?? "Customer"}
+                  </div>
+                  <div className="text-[0.72rem] opacity-65">{j.title} · {j.ss_customers?.city ?? j.details ?? "—"}</div>
+                  <select
+                    className="ss-input mt-2 w-full text-[0.78rem]"
+                    value={j.tech_id ?? ""}
+                    onChange={(e) => void assignOps(j, e.target.value)}
+                  >
+                    <option value="">Unassigned</option>
+                    {staff.map((t) => (
+                      <option key={t.id} value={t.id}>{t.full_name}</option>
+                    ))}
+                  </select>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {OPS_COLUMNS.filter((x) => x.key !== j.status).map((x) => (
+                      <button key={x.key} className="ss-btn ss-btn-ghost text-[0.72rem]" onClick={() => void moveOps(j, x.key)}>
+                        → {x.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
-        {STAGES.map((s) => (
-          <div key={s.key} className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="ss-tag">{s.label}</span>
-              <span className="ss-num text-[0.72rem] opacity-60">{byStage[s.key]?.length ?? 0}</span>
-            </div>
-            {!byStage[s.key]?.length && <EmptyState>—</EmptyState>}
-            {byStage[s.key]?.map((l) => (
-              <button key={l.id} className="ss-card w-full p-3 text-left" onClick={() => setDetail(l)}>
-                <div className="text-[0.86rem] font-semibold" style={{ color: "hsl(var(--ss-burgundy))" }}>{l.full_name}</div>
-                <div className="text-[0.72rem] opacity-65">{l.city ?? "—"} · {l.pool_size ?? "—"}</div>
-                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  <Chip tone="green">{money(l.monthly_value)}/mo</Chip>
-                  {l.plan_id && (
-                    <Chip tone={PLAN_STATUS[l.plan_status ?? "recommended"]?.tone ?? "gold"}>
-                      {findServicePlan(l.plan_id)?.name ?? l.plan_id}
-                    </Chip>
-                  )}
-                  {l.cleanup_price ? <Chip tone="gold">Clean-up {money(l.cleanup_price)}</Chip> : null}
-                  {l.source && <Chip tone="aqua">{l.source}</Chip>}
-                </div>
-              </button>
-            ))}
-          </div>
-        ))}
-      </div>
 
 
       {detail && (
