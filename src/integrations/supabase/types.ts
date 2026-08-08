@@ -1843,6 +1843,53 @@ export type Database = {
           },
         ]
       }
+      ss_damage_reports: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          kind: string
+          notes: string
+          occurred_on: string | null
+          office_notes: string | null
+          photos: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          kind?: string
+          notes?: string
+          occurred_on?: string | null
+          office_notes?: string | null
+          photos?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          kind?: string
+          notes?: string
+          occurred_on?: string | null
+          office_notes?: string | null
+          photos?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_damage_reports_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_deploy_health_checks: {
         Row: {
           alert_result: string | null
