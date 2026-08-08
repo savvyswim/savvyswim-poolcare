@@ -104,6 +104,17 @@ Deno.serve(async (req) => {
 
   try {
     const event = await verifyWebhook(req, env);
+    await recordAudit({
+      action: "stripe_webhook.received",
+      actorKind: "webhook",
+      actorLabel: `stripe:${env}`,
+      subjectTable: "stripe_event",
+      subjectId: event.id,
+      success: true,
+      outcome: event.type,
+      details: { env },
+      request: req,
+    });
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
