@@ -41,7 +41,8 @@ export const SIGNATURE_CHECKLIST: ChecklistStep[] = [
     id: "sig-04",
     label: "Basket & skimmer clear-out",
     hint: "Empty and rinse skimmer and pump baskets.",
-    is_required: true,
+    is_required: false,
+
     photo: "suggested",
   },
   {
