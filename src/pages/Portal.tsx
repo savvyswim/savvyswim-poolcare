@@ -207,6 +207,22 @@ export default function Portal() {
     setVisits((data as unknown as Visit[]) ?? []);
   }
 
+  async function refreshInvoices() {
+    if (!pools.length) return;
+    const { data } = await supabase
+      .from("ss_invoices")
+      .select("id,customer_id,invoice_number,amount,status,issued_on,due_date,stripe_payment_url")
+      .in(
+        "customer_id",
+        pools.map((p) => p.id),
+      )
+      .order("issued_on", { ascending: false })
+      .limit(50);
+    setInvoices((data as unknown as Invoice[]) ?? []);
+  }
+
+
+
   function openReschedule(p: Pool, current: string | null) {
     setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
   }
