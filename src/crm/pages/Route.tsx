@@ -206,7 +206,12 @@ export default function RoutePage() {
           </select>
         )}
         {!id.isTech && <RouteBuilder techs={techs} onBuilt={load} />}
+        <RouteOptimizer
+          stops={pending.map((s) => ({ id: s.id, lat: s.ss_customers.lat, lng: s.ss_customers.lng }))}
+          onOptimized={load}
+        />
       </div>
+
 
 
       {view === "map" ? (
