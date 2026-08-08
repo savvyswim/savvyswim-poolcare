@@ -3419,6 +3419,56 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_service_addresses: {
+        Row: {
+          address: string
+          city: string | null
+          created_at: string
+          customer_id: string
+          id: string
+          is_default: boolean
+          label: string
+          notes: string | null
+          postal_code: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          city?: string | null
+          created_at?: string
+          customer_id: string
+          id?: string
+          is_default?: boolean
+          label?: string
+          notes?: string | null
+          postal_code?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          city?: string | null
+          created_at?: string
+          customer_id?: string
+          id?: string
+          is_default?: boolean
+          label?: string
+          notes?: string | null
+          postal_code?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_service_addresses_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_settings: {
         Row: {
           key: string
@@ -4465,6 +4515,7 @@ export type Database = {
         }[]
       }
       ss_my_customer_id: { Args: never; Returns: string }
+      ss_my_customer_ids: { Args: never; Returns: string[] }
       ss_my_documents: {
         Args: never
         Returns: {
