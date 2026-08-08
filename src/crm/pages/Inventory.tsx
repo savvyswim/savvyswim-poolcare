@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Check, History, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
@@ -11,6 +11,27 @@ type Item = {
 
 const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
 
+type Move = {
+  id: string; item_id: string; item_name: string; delta: number;
+  quantity_after: number; reason: string; note: string | null; created_at: string;
+};
+
+const REASONS = [
+  { value: "restock", label: "Restock / delivery" },
+  { value: "used_on_job", label: "Used on a job" },
+  { value: "correction", label: "Count correction" },
+  { value: "damage", label: "Damaged / expired" },
+  { value: "transfer", label: "Moved to a truck" },
+  { value: "other", label: "Other" },
+];
+
+const reasonLabel = (v: string) => REASONS.find((r) => r.value === v)?.label ?? v;
+
+const stamp = (iso: string) =>
+  new Date(iso).toLocaleString("en-US", {
+    month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+  });
+
 const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5 };
 
 export default function Inventory() {
@@ -20,6 +41,10 @@ export default function Inventory() {
   const [editId, setEditId] = useState<string | null>(null);
   const [edit, setEdit] = useState({ ...emptyDraft });
   const [busy, setBusy] = useState(false);
+  const [adjustId, setAdjustId] = useState<string | null>(null);
+  const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
+  const [historyId, setHistoryId] = useState<string | null>(null);
+  const [showLog, setShowLog] = useState(false);
 
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
@@ -28,6 +53,37 @@ export default function Inventory() {
       .order("name");
     return (data ?? []) as Item[];
   });
+
+  const { rows: moves, refetch: refetchMoves } = useTable<Move>("inventory-moves", async () => {
+    const { data } = await supabase
+      .from("ss_inventory_moves")
+      .select("id,item_id,item_name,delta,quantity_after,reason,note,created_at")
+      .order("created_at", { ascending: false })
+      .limit(300);
+    return (data ?? []) as Move[];
+  });
+
+  const movesByItem = useMemo(() => {
+    const m = new Map<string, Move[]>();
+    for (const mv of moves) m.set(mv.item_id, [...(m.get(mv.item_id) ?? []), mv]);
+    return m;
+  }, [moves]);
+
+  async function logMove(item: Item, delta: number, quantityAfter: number, reason: string, note?: string) {
+    if (!delta) return;
+    const { data: auth } = await supabase.auth.getUser();
+    const { error } = await supabase.from("ss_inventory_moves").insert({
+      item_id: item.id,
+      item_name: item.name,
+      delta,
+      quantity_after: quantityAfter,
+      reason,
+      note: note?.trim() ? note.trim() : null,
+      actor_id: auth.user?.id ?? null,
+    });
+    if (error) { toast.error(`Adjustment saved, history not logged: ${error.message}`); return; }
+    void refetchMoves();
+  }
 
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -41,6 +97,7 @@ export default function Inventory() {
     const next = Math.max(0, item.quantity + delta);
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, delta > 0 ? "restock" : "used_on_job");
     void refetch();
   }
 
@@ -49,6 +106,23 @@ export default function Inventory() {
     if (next === item.quantity) return;
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, "correction", "Count typed directly");
+    void refetch();
+  }
+
+  async function applyAdjustment(item: Item) {
+    const amount = Math.abs(Number(adjustDraft.amount) || 0);
+    if (!amount) { toast.error("Enter how many units."); return; }
+    const delta = adjustDraft.dir * amount;
+    const next = Math.max(0, item.quantity + delta);
+    setBusy(true);
+    const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
+    if (error) { setBusy(false); toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note);
+    setBusy(false);
+    setAdjustId(null);
+    setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
+    toast.success(`${item.name} · ${delta > 0 ? "+" : ""}${delta} ${item.unit ?? "units"}`);
     void refetch();
   }
 
@@ -69,6 +143,7 @@ export default function Inventory() {
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     toast.success(`${name} added to inventory`);
+    void refetchMoves();
     setDraft({ ...emptyDraft });
     setAdding(false);
     void refetch();
