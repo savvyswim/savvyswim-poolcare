@@ -87,7 +87,9 @@ export default function JobProfit({ jobId, price }: { jobId: string; price: numb
 
   return (
     <div className="mt-3 space-y-4 border-t pt-3" style={{ borderColor: "hsl(var(--ss-burgundy) / .15)" }}>
+      <JobTimer jobId={jobId} onChange={() => void load()} />
       <div className="ss-card p-3">
+
         <div className="ss-label">Total cost to date</div>
         <div className="ss-num text-[1.6rem] font-bold" style={{ color: "hsl(var(--ss-burgundy))" }}>
           {money(cost)}
