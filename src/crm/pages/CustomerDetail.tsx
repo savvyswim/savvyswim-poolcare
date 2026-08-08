@@ -3,6 +3,8 @@ import { useParams, Link } from "@/lib/router-compat";
 import { ArrowLeft, Lock, Phone, Mail, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { createCustomerLogin } from "@/lib/accounts.functions";
+
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import CustomerContracts from "@/crm/components/CustomerContracts";
 import { useSavvyIdentity, useTable } from "@/crm/lib/useSavvy";
@@ -44,6 +46,8 @@ export default function CustomerDetail() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting] = useState(false);
   const [invited, setInvited] = useState(false);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
+
 
   const { rows: customers } = useTable<Customer>(`customer-${id}`, async () => {
     const { data } = await supabase.from("ss_customers").select("*").eq("id", id).limit(1);
@@ -75,7 +79,7 @@ export default function CustomerDetail() {
 
   const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.amount), 0), [invoices]);
 
-  const sendInvite = async () => {
+  const createLogin = async (mode: "invite" | "password") => {
     if (!c) return;
     const target = (inviteEmail || c.email || "").trim();
     if (!target) {
@@ -84,24 +88,23 @@ export default function CustomerDetail() {
     }
     setInviting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-invite-customer", {
-        body: {
-          email: target,
-          full_name: c.full_name,
-          customer_id: c.id,
-          origin: window.location.origin,
-        },
+      const res = await createCustomerLogin({
+        data: { customer_id: c.id, email: target, mode, origin: window.location.origin },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
       setInvited(true);
-      toast.success(`Login invite emailed to ${target}`);
+      if (res.password) {
+        setTempPassword(res.password);
+        toast.success("Login created — share the password below");
+      } else {
+        toast.success(`Login invite emailed to ${res.email}`);
+      }
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not send the invite");
+      toast.error(err?.message ?? "Could not create that login");
     } finally {
       setInviting(false);
     }
   };
+
 
   if (!c) return <EmptyState>Loading customer…</EmptyState>;
 
@@ -170,13 +173,20 @@ export default function CustomerDetail() {
         <div className="ss-card p-3.5">
           <div className="ss-label">Customer login</div>
           {c.user_id || invited ? (
-            <div className="mt-1 text-[0.8rem] opacity-80">
-              Portal access is active — this customer has their own login.
+            <div className="mt-1 space-y-2 text-[0.8rem] opacity-90">
+              <div>Portal access is active — this customer signs in and sees only their own property, visits, water reports, invoices and tickets.</div>
+              {tempPassword && (
+                <div className="ss-card bg-white/60 p-2 text-[0.78rem]">
+                  <div className="ss-label">Temporary password</div>
+                  <code className="text-[0.85rem]">{tempPassword}</code>
+                  <div className="opacity-70">Share it once — they can change it after signing in at /portal.</div>
+                </div>
+              )}
             </div>
           ) : (
             <>
               <p className="mt-1 text-[0.78rem] opacity-70">
-                Email an invite so this customer can set their own password and sign in.
+                Create the account here. Email an invite so they set their own password, or generate one now and hand it over.
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <input
@@ -186,12 +196,16 @@ export default function CustomerDetail() {
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                 />
-                <button className="ss-btn" onClick={sendInvite} disabled={inviting}>
-                  <Send size={13} /> {inviting ? "Sending…" : "Send login invite"}
+                <button className="ss-btn" onClick={() => createLogin("invite")} disabled={inviting}>
+                  <Send size={13} /> {inviting ? "Working…" : "Email invite"}
+                </button>
+                <button className="ss-btn ss-btn-ghost" onClick={() => createLogin("password")} disabled={inviting}>
+                  Create with password
                 </button>
               </div>
             </>
           )}
+
         </div>
       )}
 
