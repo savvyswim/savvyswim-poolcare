@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { Check, History, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { checkLowStock } from "@/lib/inventory-alerts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
+
 
 type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
