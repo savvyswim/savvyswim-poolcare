@@ -48,6 +48,7 @@ import PortalChemHistory from "@/components/PortalChemHistory";
 import PortalPayDialog, { type PayableInvoice } from "@/components/PortalPayDialog";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
+import { sendRescheduleNotice } from "@/lib/reschedule-notify.functions";
 
 
 type Pool = {
