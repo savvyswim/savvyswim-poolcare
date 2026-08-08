@@ -756,6 +756,23 @@ export default function VisitSheet({
                 )}
               </div>
 
+              {perBody.map((b) => (
+                <div key={b.id} className="space-y-1">
+                  {bodies.length > 1 && (
+                    <div className="ss-label">
+                      {b.name} · {b.gallons.toLocaleString()} gal
+                    </div>
+                  )}
+                  <ChemicalsAdded
+                    entries={applied[b.id] ?? []}
+                    onChange={(next) => setApplied((s) => ({ ...s, [b.id]: next }))}
+                    suggested={{ chlorine: b.dose.chlorine_oz, acid: b.dose.acid_oz }}
+                  />
+                </div>
+              ))}
+
+
+
               {bodies.length > 1 && (
                 <div className="ss-card p-3">
                   <div className="ss-tag" style={{ fontSize: "0.55rem" }}>
