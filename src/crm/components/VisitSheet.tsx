@@ -314,6 +314,17 @@ export default function VisitSheet({
       })
       .eq("id", stop.id);
 
+    // Draw down on-hand stock for whatever was pulled off the truck here.
+    const usedRows = used.filter((u) => u.qty > 0);
+    if (usedRows.length) {
+      const { error: invErr } = await supabase.rpc("ss_log_inventory_usage", {
+        p_items: usedRows.map((u) => ({ item_id: u.item_id, qty: u.qty })),
+        p_visit_id: stop.id,
+        p_note: `Used on ${c.full_name}'s visit`,
+      });
+      if (invErr) toast.error(`Visit saved, inventory not updated: ${invErr.message}`);
+    }
+
     await supabase.from("ss_feed").insert({
       customer_id: c.id,
       visit_id: stop.id,
