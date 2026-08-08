@@ -797,6 +797,7 @@ export default function VisitSheet({
                   </div>
                   <div className="mt-2 border-t pt-2 text-[0.76rem]" style={{ borderColor: "hsl(var(--ss-sand))" }}>
                     Total chem cost <strong className="ss-num">{money2(totalChemCost)}</strong>
+                    <span className="opacity-60"> · {anyLogged ? "from products logged" : `estimated ${money2(estimatedChemCost)}`}</span>
                   </div>
                 </div>
               )}
