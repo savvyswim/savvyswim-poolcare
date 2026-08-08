@@ -104,6 +104,7 @@ export default function Portal() {
   const [metric, setMetric] = useState<MetricKey>("fc");
   const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
 
 
   useEffect(() => {
