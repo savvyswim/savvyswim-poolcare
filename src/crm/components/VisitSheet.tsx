@@ -885,6 +885,13 @@ export default function VisitSheet({
                 </div>
               ))}
 
+              <InventoryUsed rows={used} onChange={setUsed} />
+              {used.some((u) => u.qty > 0) && (
+                <div className="text-[0.72rem] opacity-70">
+                  {used.filter((u) => u.qty > 0).length} item(s) · {money2(usedTotal(used))} will be pulled from
+                  on-hand stock when this visit is completed.
+                </div>
+              )}
 
 
               {bodies.length > 1 && (
