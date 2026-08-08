@@ -301,34 +301,31 @@ const Index = () => {
           }`}
         >
           <div className="container-tight flex h-[64px] items-center justify-between gap-2 sm:h-[76px] sm:gap-4">
-            <a href="#" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+            <a href="#" aria-label="Savvy Swim — home" className="flex shrink-0 items-center gap-3">
               <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
                 Savvy Swim
               </span>
-              <span aria-hidden="true" className="hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/60 lg:block xl:hidden">
-                On duty, so you don&rsquo;t have to be.
-              </span>
             </a>
 
-            <nav className="hidden min-w-0 shrink items-center gap-5 whitespace-nowrap font-tech text-primary/70 xl:flex 2xl:gap-7">
+            <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 whitespace-nowrap font-tech text-[13px] text-primary/70 xl:flex 2xl:gap-6 2xl:text-sm">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
               <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
               <a href="#refer" className="hover:text-accent transition">Refer &amp; Save</a>
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
               <a href="#contact" className="hover:text-accent transition">Contact</a>
-              <Link to="/portal" className="hover:text-accent transition">Customer Login</Link>
             </nav>
 
 
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <a
                 href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
-                className="hidden lg:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
+                className="hidden 2xl:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
               >
                 <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
               </a>
               <a
+
                 href={PHONE_HREF}
                 onClick={() => trackContactClick("call_click", "header_mobile")}
                 aria-label={`Call ${PHONE_DISPLAY}`}
