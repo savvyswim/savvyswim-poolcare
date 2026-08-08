@@ -104,7 +104,15 @@ export default function VisitSheet({
       }),
     [bodies, bodyReadings],
   );
-  const totalChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
+  /** Actual products poured, per body of water. */
+  const [applied, setApplied] = useState<Record<string, AppliedChem[]>>({});
+  const loggedCost = useMemo(
+    () => Object.values(applied).reduce((s, list) => s + chemTotal(list), 0),
+    [applied],
+  );
+  const anyLogged = useMemo(() => Object.values(applied).some((l) => l.length), [applied]);
+  const estimatedChemCost = perBody.reduce((sum, b) => sum + (b.dose.cost || 0), 0);
+  const totalChemCost = anyLogged ? loggedCost : estimatedChemCost;
 
   useEffect(() => {
     supabase
