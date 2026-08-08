@@ -1034,3 +1034,16 @@ function nextStepFor(readings: Readings | null, gallons: number) {
     items: report.treatments.map((t) => `${t.chemical} — ${t.amount}. ${t.reason}`),
   };
 }
+
+function visitEvent(pool: Pool, visit: Visit) {
+  const match = /Preferred window:\s*([^—\n]+)/.exec(visit.notes ?? "");
+  const slot = match ? VISIT_SLOTS.find((s) => s.label === match[1]?.trim()) : undefined;
+  return {
+    title: `Savvy Swim pool service — ${pool.service_level ?? "weekly service"}`,
+    description: `Arrival window ${slot?.label ?? "8:00a – 4:00p"}. Full chemistry test, brush, skim, baskets and filter check.\nQuestions? Call or text (469) 744-0379.`,
+    location: [pool.address ?? pool.full_name, pool.city].filter(Boolean).join(", "),
+    date: visit.scheduled_date,
+    startHour: slot?.startHour ?? 8,
+    endHour: slot?.endHour ?? 16,
+  };
+}
