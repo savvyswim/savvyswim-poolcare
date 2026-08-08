@@ -544,6 +544,81 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {/* Upcoming visit */}
+                <section className="mt-10 border border-hairline">
+                  <div className="flex flex-wrap items-start justify-between gap-4 p-6">
+                    <div className="min-w-0">
+                      <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                        Upcoming visit
+                      </p>
+                      <h2 className="mt-2 font-display text-3xl uppercase leading-none">
+                        {nextVisit
+                          ? new Date(`${nextVisit.scheduled_date}T12:00:00`).toLocaleDateString(undefined, {
+                              weekday: "long",
+                              month: "short",
+                              day: "numeric",
+                            })
+                          : "Scheduling"}
+                      </h2>
+                      <p className="mt-2 font-tech text-xs text-primary/65">
+                        {pool.address ?? pool.full_name}
+                        {pool.city ? `, ${pool.city}` : ""} · {pool.service_level} ·{" "}
+                        {pool.route_day ? `${pool.route_day} route` : "route day TBD"}
+                      </p>
+                      <ul className="mt-3 space-y-1 font-tech text-xs text-primary/65">
+                        <li>Arrival window 8:00a – 4:00p — your tech texts on the way.</li>
+                        <li>Full chemistry test, brush, skim, baskets and filter pressure check.</li>
+                        <li>
+                          {nextVisit?.rain_hold
+                            ? "Rain day flagged — we'll move it and confirm."
+                            : "Please leave the gate unlocked and pets inside."}
+                        </li>
+                      </ul>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {nextVisit?.is_locked && (
+                          <span className="border border-accent px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                            Date confirmed
+                          </span>
+                        )}
+                        {nextVisit?.rain_hold && (
+                          <span className="border border-primary/25 px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-primary/70">
+                            Rain hold
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex w-full flex-col gap-2 sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={() => toggleFlag(pool, "lock", !nextVisit?.is_locked)}
+                        disabled={!nextVisit}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit?.is_locked ? "Unconfirm date" : "Confirm this date"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openReschedule(pool, nextVisit?.scheduled_date ?? null)}
+                        disabled={!!nextVisit?.is_locked}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit ? "Reschedule" : "Request a visit"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleFlag(pool, "rain", !nextVisit?.rain_hold)}
+                        disabled={!nextVisit}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CloudRain className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit?.rain_hold ? "Clear rain day" : "Flag rain day"}
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
                 {/* Latest report + next recommended step */}
                 <section className="mt-10 border border-hairline p-6">
                   <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
