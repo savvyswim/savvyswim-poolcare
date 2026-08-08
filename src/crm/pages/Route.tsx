@@ -37,6 +37,8 @@ export default function RoutePage() {
   const [techFilter, setTechFilter] = useState<string>("all");
   const [techs, setTechs] = useState<{ id: string; full_name: string }[]>([]);
   const [activeVisit, setActiveVisit] = useState<Stop | null>(null);
+  const [noAccess, setNoAccess] = useState<Stop | null>(null);
+
   const [automations, setAutomations] = useState({ auto_on_my_way: true, auto_start_minutes: 5, geofence_feet: 600 });
 
   const load = useCallback(async () => {
