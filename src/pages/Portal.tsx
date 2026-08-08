@@ -954,7 +954,10 @@ export default function Portal() {
                   </div>
                 )}
 
+                {pool && <PortalDamageReport customerId={pool.id} />}
+
                 {pool && <PortalDocuments customerName={pool.full_name} />}
+
 
                 {pool && <PortalTickets customerId={pool.id} />}
 
