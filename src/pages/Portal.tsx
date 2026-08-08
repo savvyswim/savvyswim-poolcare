@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "@/lib/router-compat";
 import {
   CalendarClock,
+  CheckCircle2,
   CloudRain,
   Download,
   Droplets,
   FileText,
+  FlaskConical,
   Lock,
   LogOut,
   MapPin,
@@ -30,6 +32,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { MARKETING_ORIGIN } from "@/hooks/useAppHost";
 import AutopayCard from "@/components/AutopayCard";
 import PortalTickets from "@/components/PortalTickets";
+import PortalActivity from "@/components/PortalActivity";
+import PortalPayDialog, { type PayableInvoice } from "@/components/PortalPayDialog";
 import { TARGETS, evaluate, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { buildWaterReportPdf } from "@/lib/waterReportPdf";
 
@@ -100,6 +104,7 @@ export default function Portal() {
   const [metric, setMetric] = useState<MetricKey>("fc");
   const [resched, setResched] = useState<{ pool: Pool; date: string; note: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [payInvoice, setPayInvoice] = useState<PayableInvoice | null>(null);
 
 
   useEffect(() => {
@@ -201,6 +206,22 @@ export default function Portal() {
       .order("scheduled_date", { ascending: false });
     setVisits((data as unknown as Visit[]) ?? []);
   }
+
+  async function refreshInvoices() {
+    if (!pools.length) return;
+    const { data } = await supabase
+      .from("ss_invoices")
+      .select("id,customer_id,invoice_number,amount,status,issued_on,due_date,stripe_payment_url")
+      .in(
+        "customer_id",
+        pools.map((p) => p.id),
+      )
+      .order("issued_on", { ascending: false })
+      .limit(50);
+    setInvoices((data as unknown as Invoice[]) ?? []);
+  }
+
+
 
   function openReschedule(p: Pool, current: string | null) {
     setResched({ pool: p, date: current ?? new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10), note: "" });
@@ -523,6 +544,81 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {/* Upcoming visit */}
+                <section className="mt-10 border border-hairline">
+                  <div className="flex flex-wrap items-start justify-between gap-4 p-6">
+                    <div className="min-w-0">
+                      <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
+                        Upcoming visit
+                      </p>
+                      <h2 className="mt-2 font-display text-3xl uppercase leading-none">
+                        {nextVisit
+                          ? new Date(`${nextVisit.scheduled_date}T12:00:00`).toLocaleDateString(undefined, {
+                              weekday: "long",
+                              month: "short",
+                              day: "numeric",
+                            })
+                          : "Scheduling"}
+                      </h2>
+                      <p className="mt-2 font-tech text-xs text-primary/65">
+                        {pool.address ?? pool.full_name}
+                        {pool.city ? `, ${pool.city}` : ""} · {pool.service_level} ·{" "}
+                        {pool.route_day ? `${pool.route_day} route` : "route day TBD"}
+                      </p>
+                      <ul className="mt-3 space-y-1 font-tech text-xs text-primary/65">
+                        <li>Arrival window 8:00a – 4:00p — your tech texts on the way.</li>
+                        <li>Full chemistry test, brush, skim, baskets and filter pressure check.</li>
+                        <li>
+                          {nextVisit?.rain_hold
+                            ? "Rain day flagged — we'll move it and confirm."
+                            : "Please leave the gate unlocked and pets inside."}
+                        </li>
+                      </ul>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {nextVisit?.is_locked && (
+                          <span className="border border-accent px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                            Date confirmed
+                          </span>
+                        )}
+                        {nextVisit?.rain_hold && (
+                          <span className="border border-primary/25 px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-primary/70">
+                            Rain hold
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex w-full flex-col gap-2 sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={() => toggleFlag(pool, "lock", !nextVisit?.is_locked)}
+                        disabled={!nextVisit}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit?.is_locked ? "Unconfirm date" : "Confirm this date"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openReschedule(pool, nextVisit?.scheduled_date ?? null)}
+                        disabled={!!nextVisit?.is_locked}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit ? "Reschedule" : "Request a visit"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleFlag(pool, "rain", !nextVisit?.rain_hold)}
+                        disabled={!nextVisit}
+                        className="inline-flex items-center justify-center gap-2 border border-primary/25 px-4 py-2 font-tech text-[11px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent disabled:opacity-45"
+                      >
+                        <CloudRain className="h-3.5 w-3.5" aria-hidden="true" />
+                        {nextVisit?.rain_hold ? "Clear rain day" : "Flag rain day"}
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
                 {/* Latest report + next recommended step */}
                 <section className="mt-10 border border-hairline p-6">
                   <p className="font-tech text-[10px] uppercase tracking-widest text-primary/50">
@@ -660,6 +756,67 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {/* Water reports */}
+                <section className="mt-12">
+                  <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
+                    <FlaskConical className="h-4 w-4 text-accent" aria-hidden="true" /> Water reports
+                  </h2>
+                  <p className="mt-1 font-tech text-xs text-primary/55">
+                    Every balanced-water test we run, ready to download as a branded PDF.
+                  </p>
+                  <div className="mt-4 divide-y divide-primary/10 border border-hairline">
+                    {poolVisits.filter((v) => v.readings && v.status === "completed").length === 0 && (
+                      <p className="p-5 font-tech text-sm text-primary/60">
+                        Your first water report lands after the next visit.
+                      </p>
+                    )}
+                    {poolVisits
+                      .filter((v) => v.readings && v.status === "completed")
+                      .slice(0, 12)
+                      .map((v) => {
+                        const r = (v.readings ?? {}) as Record<string, number | undefined>;
+                        const summary = (["fc", "ph", "ta", "cyc"] as MetricKey[])
+                          .filter((k) => typeof r[k] === "number")
+                          .map((k) => `${TARGETS[k].label} ${r[k]}`)
+                          .join(" · ");
+                        return (
+                          <div
+                            key={`wr-${v.id}`}
+                            className="flex flex-wrap items-center justify-between gap-3 p-4"
+                          >
+                            <div className="min-w-0">
+                              <p className="font-tech text-sm font-semibold">
+                                {new Date(v.scheduled_date).toLocaleDateString(undefined, {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}{" "}
+                                water test
+                              </p>
+                              <p className="font-tech text-xs text-primary/60">{summary || "Full chemistry logged"}</p>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => downloadReport(pool, v)}
+                                className="inline-flex items-center gap-1.5 border border-primary/20 px-3 py-2 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                              >
+                                <Download className="h-3 w-3" aria-hidden="true" /> Download
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => shareReport(pool, v)}
+                                className="inline-flex items-center gap-1.5 border border-primary/20 px-3 py-2 font-tech text-[10px] uppercase tracking-widest text-primary hover:border-accent hover:text-accent"
+                              >
+                                <Share2 className="h-3 w-3" aria-hidden="true" /> Share
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </section>
+
                 {/* Service reports */}
                 <section className="mt-12">
                   <h2 className="flex items-center gap-2 font-display text-xl uppercase tracking-tight">
@@ -773,24 +930,40 @@ export default function Portal() {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="font-display text-lg">{money(i.amount)}</span>
-                          {i.status !== "paid" && i.stripe_payment_url && (
-                            <a
-                              href={i.stripe_payment_url}
+                          {i.status === "processing" && (
+                            <span className="border border-accent px-2 py-1 font-tech text-[10px] uppercase tracking-widest text-accent">
+                              Processing
+                            </span>
+                          )}
+                          {i.status !== "paid" && i.status !== "processing" && (
+                            <button
+                              type="button"
+                              onClick={() => setPayInvoice(i)}
                               className="btn-quote rounded-md px-4 py-2 text-[11px] font-bold uppercase tracking-wide"
                             >
-                              Pay
-                            </a>
+                              Pay now
+                            </button>
                           )}
                         </div>
                       </div>
                     ))}
                   </div>
                 </section>
+
+                {pool && <PortalActivity customerId={pool.id} />}
               </>
             )}
           </>
         )}
       </main>
+
+      {payInvoice && (
+        <PortalPayDialog
+          invoice={payInvoice}
+          onClose={() => setPayInvoice(null)}
+          onPaid={() => void refreshInvoices()}
+        />
+      )}
 
       {resched && (
         <div

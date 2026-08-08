@@ -4318,6 +4318,10 @@ export type Database = {
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
+      ss_portal_pay_invoice: {
+        Args: { p_invoice_id: string; p_method: string; p_reference?: string }
+        Returns: Json
+      }
       ss_recalc_visit_upsell: {
         Args: { _visit_id: string }
         Returns: undefined
