@@ -127,7 +127,11 @@ export default function PortalAddresses({
       : await supabase.from("ss_service_addresses").insert(payload);
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.message.includes("ss_service_addresses_unique_norm")
+          ? "That address is already saved for this account."
+          : error.message,
+      );
       return;
     }
     toast.success(draft.id ? "Address updated." : "Address saved.");
