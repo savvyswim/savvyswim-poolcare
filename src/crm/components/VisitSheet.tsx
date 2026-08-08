@@ -136,10 +136,38 @@ export default function VisitSheet({
   useEffect(() => {
     supabase
       .from("ss_workflow_tasks")
-      .select("id,label,is_required,photo_required")
+      .select("id,label,is_required,photo_required,phase,hint")
       .eq("customer_id", c.id)
       .order("sort_order")
-      .then(({ data }) => setTasks(data ?? []));
+      .then(({ data }) => setTasks((data ?? []) as Task[]));
+
+    /** Ordered workflow template: the one assigned to this pool, else the default. */
+    void (async () => {
+      const { data: cust } = await supabase
+        .from("ss_customers")
+        .select("workflow_template_id")
+        .eq("id", c.id)
+        .maybeSingle();
+      const assigned = (cust as { workflow_template_id?: string | null } | null)?.workflow_template_id ?? null;
+      let templateId = assigned;
+      if (!templateId) {
+        const { data: def } = await supabase
+          .from("ss_workflow_templates")
+          .select("id")
+          .eq("is_default", true)
+          .eq("is_active", true)
+          .maybeSingle();
+        templateId = def?.id ?? null;
+      }
+      if (!templateId) return;
+      const { data: rows } = await supabase
+        .from("ss_workflow_template_steps")
+        .select("id,label,hint,phase,is_required,photo_required,sort_order")
+        .eq("template_id", templateId)
+        .order("sort_order");
+      setTemplateSteps((rows ?? []) as TemplateStep[]);
+    })();
+
     void supabase.from("ss_visits").update({ started_at: new Date().toISOString(), status: "in_progress" }).eq("id", stop.id);
   }, [c.id, stop.id]);
 
