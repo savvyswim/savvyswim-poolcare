@@ -354,6 +354,18 @@ export default function Inventory() {
 
       </div>
 
+      {showAnalytics && (
+        <UsageAnalytics
+          items={rows.map((r) => ({
+            id: r.id,
+            name: r.name,
+            unit: r.unit,
+            quantity: Number(r.quantity) || 0,
+            low_threshold: Number(r.low_threshold) || 0,
+          }))}
+        />
+      )}
+
       {showImport && (
         <InventoryImport
           existing={rows.map((r) => ({ id: r.id, name: r.name }))}
