@@ -119,6 +119,7 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, delta > 0 ? "restock" : "used_on_job");
+    void notifyIfLow(item, next);
     void refetch();
   }
 
@@ -128,6 +129,7 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, "correction", "Count typed directly");
+    void notifyIfLow(item, next);
     void refetch();
   }
 
@@ -140,7 +142,9 @@ export default function Inventory() {
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { setBusy(false); toast.error(error.message); return; }
     await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note);
+    void notifyIfLow(item, next);
     setBusy(false);
+
     setAdjustId(null);
     setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
     toast.success(`${item.name} · ${delta > 0 ? "+" : ""}${delta} ${item.unit ?? "units"}`);
