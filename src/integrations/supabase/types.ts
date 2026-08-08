@@ -2351,6 +2351,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_inventory_moves: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          delta: number
+          id: string
+          item_id: string
+          item_name: string
+          note: string | null
+          quantity_after: number
+          reason: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          delta: number
+          id?: string
+          item_id: string
+          item_name: string
+          note?: string | null
+          quantity_after: number
+          reason?: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          delta?: number
+          id?: string
+          item_id?: string
+          item_name?: string
+          note?: string | null
+          quantity_after?: number
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_inventory_moves_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "ss_inventory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_invoice_items: {
         Row: {
           account_id: string | null
