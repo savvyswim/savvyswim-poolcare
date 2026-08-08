@@ -23,6 +23,7 @@ type Move = {
 };
 
 const REASONS = [
+  { value: "usage", label: "Used on a visit" },
   { value: "restock", label: "Restock / delivery" },
   { value: "used_on_job", label: "Used on a job" },
   { value: "correction", label: "Count correction" },
