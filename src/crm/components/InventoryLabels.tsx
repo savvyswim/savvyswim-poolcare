@@ -5,7 +5,7 @@ import { Printer, X } from "lucide-react";
 export type LabelItem = {
   id: string;
   name: string;
-  unit: string;
+  unit: string | null;
   sku: string | null;
   barcode: string | null;
 };
@@ -61,7 +61,7 @@ export default function InventoryLabels({
               )}
               <div className="mt-2 text-[0.8rem] font-semibold leading-tight">{i.name}</div>
               <div className="ss-num text-[0.68rem] opacity-70">{codeFor(i)}</div>
-              <div className="text-[0.65rem] opacity-55">per {i.unit}</div>
+              <div className="text-[0.65rem] opacity-55">per {i.unit ?? "unit"}</div>
             </div>
           ))}
         </div>
