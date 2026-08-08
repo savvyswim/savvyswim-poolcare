@@ -8,7 +8,9 @@ import {
   PHASE_LABEL,
   PHASE_ORDER,
   SIGNATURE_CHECKLIST,
+  photoRuleFor,
   signaturePhase,
+
   type ChecklistPhoto,
   type WorkflowPhase,
 } from "@/crm/lib/checklist";
@@ -81,7 +83,7 @@ export default function VisitSheet({
   const [tasks, setTasks] = useState<Task[]>([]);
   const [templateSteps, setTemplateSteps] = useState<TemplateStep[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
+  const [taskPhotos, setTaskPhotos] = useState<Record<string, string[]>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
   const [after, setAfter] = useState<{ url: string; path: string } | null>(null);
   const [evidence, setEvidence] = useState<VisitPhoto[]>([]);
@@ -215,7 +217,7 @@ export default function VisitSheet({
           label: s.label,
           hint: s.hint ?? undefined,
           is_required: s.is_required,
-          photo: (s.photo_required ? "required" : "suggested") as ChecklistPhoto,
+          photo: photoRuleFor(s.label),
           custom: false,
           phase: s.phase,
         }))
@@ -233,7 +235,7 @@ export default function VisitSheet({
       label: t.label,
       hint: t.hint ?? undefined,
       is_required: t.is_required,
-      photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+      photo: photoRuleFor(t.label),
       custom: true,
       phase: (t.phase ?? "in_progress") as WorkflowPhase,
     }));
@@ -244,8 +246,9 @@ export default function VisitSheet({
   const blockingTasks = steps.filter(
     (t) =>
       (t.is_required && !checked[t.id]) ||
-      (t.photo === "required" && checked[t.id] && !taskPhotos[t.id]),
+      (t.photo === "required" && checked[t.id] && !(taskPhotos[t.id] ?? []).length),
   );
+
   const doneCount = steps.filter((t) => checked[t.id]).length;
 
   async function finish() {
@@ -254,8 +257,10 @@ export default function VisitSheet({
     const checklist = steps.map((t) => ({
       label: t.label,
       done: !!checked[t.id],
-      photo: taskPhotos[t.id] ?? null,
+      photo: taskPhotos[t.id]?.[0] ?? null,
+      photos: taskPhotos[t.id] ?? [],
     }));
+
 
 
     const allPhotos: VisitPhoto[] = [
@@ -700,8 +705,9 @@ export default function VisitSheet({
                       {checked[t.id] && t.photo !== "none" && (
                         <label className="ss-btn ss-btn-ghost mt-2 w-full cursor-pointer">
                           <Camera size={13} />
-                          {taskPhotos[t.id]
-                            ? "Photo attached ✓"
+                          {(taskPhotos[t.id]?.length ?? 0) > 0
+                            ? `${taskPhotos[t.id]?.length} photo${(taskPhotos[t.id]?.length ?? 0) > 1 ? "s" : ""} attached ✓ · add another`
+
                             : t.photo === "required"
                               ? "Capture photo"
                               : "Add photo (optional)"}
@@ -709,19 +715,22 @@ export default function VisitSheet({
                             type="file"
                             accept="image/*"
                             capture="environment"
+                            multiple
                             className="hidden"
                             onChange={async (e) => {
-                              const f = e.target.files?.[0];
-                              if (!f) return;
-                              const up = await upload(f, `task-${t.id}`);
-                              if (up) {
-                                setTaskPhotos((s) => ({ ...s, [t.id]: up.path }));
+                              const files = Array.from(e.target.files ?? []);
+                              e.target.value = "";
+                              for (const f of files) {
+                                const up = await upload(f, `task-${t.id}`);
+                                if (!up) continue;
+                                setTaskPhotos((s) => ({ ...s, [t.id]: [...(s[t.id] ?? []), up.path] }));
                                 setEvidence((s) => [...s, { label: t.label, path: up.path, url: up.url }]);
                               }
                             }}
                           />
                         </label>
                       )}
+
                     </div>
                   </div>
                 );
