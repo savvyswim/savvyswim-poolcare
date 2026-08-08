@@ -3,6 +3,7 @@ import { Clock, Plus, Receipt, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { money } from "@/crm/lib/pricing";
+import JobTimer from "@/crm/components/JobTimer";
 
 type TimeEntry = {
   id: string; worked_on: string; minutes: number; hourly_rate: number; note: string | null;

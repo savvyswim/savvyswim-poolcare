@@ -5,6 +5,7 @@ import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import JobProfit from "@/crm/components/JobProfit";
+import { runAutomations } from "@/crm/lib/automations";
 
 
 type Job = {
@@ -41,6 +42,15 @@ export default function Jobs() {
       .update({ status, completed_at: status === "completed" ? new Date().toISOString() : null })
       .eq("id", job.id);
     if (error) { toast.error(error.message); return; }
+    if (status === "completed") {
+      void runAutomations("job_completed", {
+        customerId: job.customer_id,
+        customerName: job.ss_customers?.full_name ?? null,
+        city: job.ss_customers?.city ?? null,
+        amount: Number(job.price ?? 0),
+        title: job.title,
+      });
+    }
     void refetch();
   }
 
