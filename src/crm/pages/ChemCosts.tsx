@@ -267,9 +267,10 @@ export default function ChemCosts() {
         </button>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-3">
-        <StatTile label="Chemical spend" value={money2(totals.cost)} />
-        <StatTile label="Jobs with chemicals" value={String(totals.jobs)} />
+      <div className="grid gap-2 sm:grid-cols-4">
+        <StatTile label="Chemical spend" value={money2(totals.chemicals)} />
+        <StatTile label="Inventory used" value={money2(totals.inventory)} />
+        <StatTile label="Jobs with cost" value={String(totals.jobs)} />
         <StatTile label="Average per job" value={money2(totals.perJob)} />
       </div>
 
