@@ -231,16 +231,21 @@ function NewProjectDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-end justify-center p-0 sm:items-center sm:p-4">
-      <div className="absolute inset-0 bg-black/45 animate-fade-in" onClick={onClose} />
+    <div className="fixed inset-0 z-[70] flex items-end justify-center overflow-y-auto p-0 sm:items-start sm:p-6">
+      <div className="fixed inset-0 bg-black/55 animate-fade-in" onClick={onClose} />
       <div
-        className="savvy-crm relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-[18px] p-5 sm:rounded-[16px]"
-        style={{ background: "hsl(var(--ss-cream))" }}
+        className="savvy-crm relative my-0 max-h-[92vh] w-full max-w-lg overflow-y-auto p-5 shadow-2xl sm:my-auto"
+        style={{
+          background: "hsl(var(--ss-cream))",
+          border: "1px solid hsl(var(--ss-burgundy))",
+        }}
       >
-        <h2 className="text-[1.05rem]">New project file</h2>
-        <p className="mt-1 text-[0.78rem] opacity-65">
-          Stages are created automatically — you can rename or add more inside the file.
-        </p>
+        <div className="sticky -top-5 -mx-5 -mt-5 mb-4 px-5 pb-3 pt-5" style={{ background: "hsl(var(--ss-cream))" }}>
+          <h2 className="text-[1.05rem]">New project file</h2>
+          <p className="mt-1 text-[0.78rem] opacity-65">
+            Stages are created automatically — you can rename or add more inside the file.
+          </p>
+        </div>
 
         <div className="mt-4 grid gap-3">
           <Row label="Project name">
