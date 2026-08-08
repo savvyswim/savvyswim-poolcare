@@ -704,7 +704,8 @@ export default function VisitSheet({
                         <label className="ss-btn ss-btn-ghost mt-2 w-full cursor-pointer">
                           <Camera size={13} />
                           {(taskPhotos[t.id]?.length ?? 0) > 0
-                            ? `${taskPhotos[t.id].length} photo${taskPhotos[t.id].length > 1 ? "s" : ""} attached ✓ · add another`
+                            ? `${taskPhotos[t.id]?.length} photo${(taskPhotos[t.id]?.length ?? 0) > 1 ? "s" : ""} attached ✓ · add another`
+
                             : t.photo === "required"
                               ? "Capture photo"
                               : "Add photo (optional)"}
