@@ -199,6 +199,15 @@ export default function VisitSheet({
           chlorine_oz: dose.chlorine_oz,
           acid_oz: dose.acid_oz,
           lsi: dose.lsi,
+          estimated_cost: estimatedChemCost,
+          applied_cost: loggedCost,
+          applied: perBody.flatMap((b) =>
+            (applied[b.id] ?? []).map((a) => ({
+              ...a,
+              body_id: b.id === "main" ? null : b.id,
+              body_name: b.name,
+            })),
+          ),
           bodies: perBody.map((b) => ({
             id: b.id === "main" ? null : b.id,
             name: b.name,
@@ -209,6 +218,8 @@ export default function VisitSheet({
             acid_oz: b.dose.acid_oz,
             lsi: b.dose.lsi,
             cost: b.dose.cost,
+            applied: applied[b.id] ?? [],
+            applied_cost: chemTotal(applied[b.id] ?? []),
           })),
         } as never,
         chem_cost: totalChemCost,
