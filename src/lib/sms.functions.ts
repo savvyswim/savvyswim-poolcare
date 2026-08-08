@@ -83,7 +83,7 @@ export const sendThreadSms = createServerFn({ method: "POST" })
 
     await supabase
       .from("ss_sms_messages")
-      .update({ status: sent.status ?? "sent", twilio_sid: sent.sid ?? null, from_number: from })
+      .update({ status: sent.status ?? "sent", twilio_sid: sent.sid ?? null, from_number: from ?? null })
       .eq("id", logRow.id);
 
     await supabase
