@@ -17,6 +17,9 @@ const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
 type Move = {
   id: string; item_id: string; item_name: string; delta: number;
   quantity_after: number; reason: string; note: string | null; created_at: string;
+  visit_id: string | null; job_id: string | null; customer_id: string | null;
+  total_cost: number | null;
+  ss_customers?: { full_name: string } | null;
 };
 
 const REASONS = [
