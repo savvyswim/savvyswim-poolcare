@@ -288,8 +288,10 @@ const Index = () => {
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
               <Link to="/services" className="hover:opacity-80 transition">Services</Link>
               <Link to="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</Link>
+              <Link to="/portal" className="hover:opacity-80 transition">Customer Login</Link>
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
+
           </div>
         </div>
 
