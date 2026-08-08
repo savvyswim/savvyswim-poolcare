@@ -115,7 +115,13 @@ export default function MarketingImport({ onDone }: { onDone?: () => void }) {
 
         const id = (em ? byEmail.get(em) : undefined) ?? (ph ? byPhone.get(ph) : undefined);
         if (id) {
-          const patch: Record<string, unknown> = { full_name: r.full_name };
+          const patch: {
+            full_name: string;
+            email?: string;
+            phone?: string;
+            address?: string;
+            city?: string;
+          } = { full_name: r.full_name };
           if (r.email) patch.email = r.email;
           if (r.phone) patch.phone = r.phone;
           if (r.address) patch.address = r.address;
