@@ -260,7 +260,7 @@ export default function Pipeline() {
         sub={
           board === "marketing"
             ? `${marketingRows.length} open leads · ${money(pipelineValue)}/mo open value`
-            : `${opsJobs.length} converted inspections · ${byOpsStatus.open?.length ?? 0} waiting to assign`
+            : `${opsJobs.length} converted inspections · ${byOpsStatus["open"]?.length ?? 0} waiting to assign`
         }
       />
 
