@@ -184,7 +184,14 @@ export default function ChemCosts() {
 
   const totals = useMemo(() => {
     const cost = lines.reduce((s, l) => s + l.cost, 0);
-    return { cost, jobs: jobs.length, perJob: jobs.length ? cost / jobs.length : 0 };
+    const inventory = lines.filter((l) => l.body === "Truck stock").reduce((s, l) => s + l.cost, 0);
+    return {
+      cost,
+      inventory,
+      chemicals: cost - inventory,
+      jobs: jobs.length,
+      perJob: jobs.length ? cost / jobs.length : 0,
+    };
   }, [lines, jobs]);
 
   function exportCsv() {
