@@ -171,13 +171,20 @@ export default function CustomerDetail() {
         <div className="ss-card p-3.5">
           <div className="ss-label">Customer login</div>
           {c.user_id || invited ? (
-            <div className="mt-1 text-[0.8rem] opacity-80">
-              Portal access is active — this customer has their own login.
+            <div className="mt-1 space-y-2 text-[0.8rem] opacity-90">
+              <div>Portal access is active — this customer signs in and sees only their own property, visits, water reports, invoices and tickets.</div>
+              {tempPassword && (
+                <div className="ss-card bg-white/60 p-2 text-[0.78rem]">
+                  <div className="ss-label">Temporary password</div>
+                  <code className="text-[0.85rem]">{tempPassword}</code>
+                  <div className="opacity-70">Share it once — they can change it after signing in at /portal.</div>
+                </div>
+              )}
             </div>
           ) : (
             <>
               <p className="mt-1 text-[0.78rem] opacity-70">
-                Email an invite so this customer can set their own password and sign in.
+                Create the account here. Email an invite so they set their own password, or generate one now and hand it over.
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <input
@@ -187,12 +194,16 @@ export default function CustomerDetail() {
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                 />
-                <button className="ss-btn" onClick={sendInvite} disabled={inviting}>
-                  <Send size={13} /> {inviting ? "Sending…" : "Send login invite"}
+                <button className="ss-btn" onClick={() => createLogin("invite")} disabled={inviting}>
+                  <Send size={13} /> {inviting ? "Working…" : "Email invite"}
+                </button>
+                <button className="ss-btn ss-btn-ghost" onClick={() => createLogin("password")} disabled={inviting}>
+                  Create with password
                 </button>
               </div>
             </>
           )}
+
         </div>
       )}
 
