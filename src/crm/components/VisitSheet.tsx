@@ -235,6 +235,27 @@ export default function VisitSheet({
       });
     }
 
+    // Chemistry outside Savvy Swim targets — flag it to the office.
+    const chemFlags = perBody.flatMap((b) =>
+      flagReadings(b.readings).map((f) => ({ ...f, bodyName: b.name })),
+    );
+    if (chemFlags.length) {
+      const critical = chemFlags.filter((f) => f.severity === "critical");
+      await supabase.from("ss_alerts").insert({
+        customer_id: c.id,
+        tech_id: stop.tech_id,
+        priority: critical.length ? "HIGH" : "MED",
+        title: critical.length
+          ? `Chemistry out of range — ${c.full_name}`
+          : `Chemistry watch — ${c.full_name}`,
+        body:
+          chemFlags
+            .map((f) => `${f.bodyName}: ${describeFlags([f])}`)
+            .join(" | ") + (notes ? ` — ${notes}` : ""),
+      });
+    }
+
+
     if (c.email) {
       void supabase.functions.invoke("send-service-report", {
         body: {
