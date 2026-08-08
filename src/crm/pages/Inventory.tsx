@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, History, Minus, Pencil, Plus, QrCode, ShoppingCart, Trash2, Upload, X } from "lucide-react";
+import { Activity, Check, History, Minus, Pencil, Plus, QrCode, ShoppingCart, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,7 @@ import InventoryImport from "@/crm/components/InventoryImport";
 import InventoryLabels, { codeFor } from "@/crm/components/InventoryLabels";
 import CodeScanner from "@/crm/components/CodeScanner";
 import ReorderDraft from "@/crm/components/ReorderDraft";
+import UsageAnalytics from "@/crm/components/UsageAnalytics";
 import { convertQty, enterableUnits, PACK_UNITS, STOCK_UNITS, packLabel } from "@/crm/lib/units";
 
 
@@ -67,6 +68,7 @@ export default function Inventory() {
   const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "", unit: "" });
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
   const [showReorder, setShowReorder] = useState(false);
@@ -319,6 +321,9 @@ export default function Inventory() {
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowLabels(true)}>
           <QrCode size={13} /> Print labels
         </button>
+        <button className="ss-btn ss-btn-ghost" onClick={() => setShowAnalytics((v) => !v)}>
+          <Activity size={13} /> {showAnalytics ? "Hide analytics" : "Usage analytics"}
+        </button>
         <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
           <History size={13} /> {showLog ? "Hide history" : "History"}
         </button>
@@ -348,6 +353,18 @@ export default function Inventory() {
         )}
 
       </div>
+
+      {showAnalytics && (
+        <UsageAnalytics
+          items={rows.map((r) => ({
+            id: r.id,
+            name: r.name,
+            unit: r.unit,
+            quantity: Number(r.quantity) || 0,
+            low_threshold: Number(r.low_threshold) || 0,
+          }))}
+        />
+      )}
 
       {showImport && (
         <InventoryImport
