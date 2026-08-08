@@ -31,6 +31,16 @@ type VisitRow = {
   ss_staff: { full_name: string } | null;
 };
 
+type MoveRow = {
+  visit_id: string | null;
+  item_name: string;
+  delta: number;
+  unit_cost: number | null;
+  total_cost: number | null;
+  entered_qty: number | null;
+  entered_unit: string | null;
+};
+
 type Line = {
   visitId: string;
   date: string;
@@ -52,6 +62,7 @@ const csvCell = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
  */
 export default function ChemCosts() {
   const [visits, setVisits] = useState<VisitRow[]>([]);
+  const [moves, setMoves] = useState<MoveRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [from, setFrom] = useState(new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10));
   const [to, setTo] = useState(new Date().toISOString().slice(0, 10));
@@ -66,7 +77,21 @@ export default function ChemCosts() {
       .lte("scheduled_date", to)
       .order("scheduled_date", { ascending: false })
       .limit(1000);
-    setVisits((data ?? []) as unknown as VisitRow[]);
+    const rows = (data ?? []) as unknown as VisitRow[];
+    setVisits(rows);
+
+    const ids = rows.map((v) => v.id);
+    if (ids.length) {
+      const { data: mv } = await supabase
+        .from("ss_inventory_moves")
+        .select("visit_id,item_name,delta,unit_cost,total_cost,entered_qty,entered_unit")
+        .in("visit_id", ids)
+        .lt("delta", 0)
+        .limit(4000);
+      setMoves((mv ?? []) as unknown as MoveRow[]);
+    } else {
+      setMoves([]);
+    }
     setLoading(false);
   }, [from, to]);
 
@@ -76,6 +101,7 @@ export default function ChemCosts() {
 
   const lines = useMemo<Line[]>(() => {
     const out: Line[] = [];
+    const byVisit = new Map(visits.map((v) => [v.id, v]));
     for (const v of visits) {
       const d = v.dosing ?? {};
       const flat: AppliedLine[] = d.applied?.length
@@ -99,13 +125,34 @@ export default function ChemCosts() {
         });
       }
     }
+    // Truck stock pulled on the visit — costed at the unit cost recorded on the move.
+    for (const m of moves) {
+      const v = m.visit_id ? byVisit.get(m.visit_id) : null;
+      if (!v) continue;
+      const qty = Math.abs(Number(m.delta) || 0);
+      const cost = Number(m.total_cost ?? 0);
+      if (!qty && !cost) continue;
+      out.push({
+        visitId: v.id,
+        date: v.scheduled_date,
+        customer: v.ss_customers?.full_name ?? "—",
+        tech: v.ss_staff?.full_name ?? "Unassigned",
+        body: "Truck stock",
+        product: m.item_name,
+        unit: m.entered_unit || "ea",
+        qty: Number(m.entered_qty ?? qty),
+        costPerUnit: Number(m.unit_cost ?? (qty ? cost / qty : 0)),
+        cost,
+      });
+    }
+
     const needle = q.trim().toLowerCase();
     return needle
       ? out.filter((l) =>
           `${l.customer} ${l.product} ${l.body} ${l.tech}`.toLowerCase().includes(needle),
         )
       : out;
-  }, [visits, q]);
+  }, [visits, moves, q]);
 
   /** Visit → body of water → product rollup. */
   const jobs = useMemo(() => {
@@ -137,7 +184,14 @@ export default function ChemCosts() {
 
   const totals = useMemo(() => {
     const cost = lines.reduce((s, l) => s + l.cost, 0);
-    return { cost, jobs: jobs.length, perJob: jobs.length ? cost / jobs.length : 0 };
+    const inventory = lines.filter((l) => l.body === "Truck stock").reduce((s, l) => s + l.cost, 0);
+    return {
+      cost,
+      inventory,
+      chemicals: cost - inventory,
+      jobs: jobs.length,
+      perJob: jobs.length ? cost / jobs.length : 0,
+    };
   }, [lines, jobs]);
 
   function exportCsv() {
@@ -186,8 +240,8 @@ export default function ChemCosts() {
   return (
     <div className="space-y-4">
       <SectionTitle
-        title="Chemical cost by job"
-        sub="Every product poured, broken out by body of water, with per-visit totals."
+        title="Chemical & inventory cost by job"
+        sub="Every product poured plus truck stock consumed, broken out by body of water, with per-visit totals."
       />
 
       <div className="ss-card flex flex-wrap items-end gap-2 p-3.5">
@@ -213,9 +267,10 @@ export default function ChemCosts() {
         </button>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-3">
-        <StatTile label="Chemical spend" value={money2(totals.cost)} />
-        <StatTile label="Jobs with chemicals" value={String(totals.jobs)} />
+      <div className="grid gap-2 sm:grid-cols-4">
+        <StatTile label="Chemical spend" value={money2(totals.chemicals)} />
+        <StatTile label="Inventory used" value={money2(totals.inventory)} />
+        <StatTile label="Jobs with cost" value={String(totals.jobs)} />
         <StatTile label="Average per job" value={money2(totals.perJob)} />
       </div>
 

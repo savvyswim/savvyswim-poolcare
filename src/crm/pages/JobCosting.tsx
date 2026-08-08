@@ -6,24 +6,28 @@ import { money } from "@/crm/lib/pricing";
 type Job = { id: string; title: string; price: number; status: string; ss_customers: { full_name: string } | null };
 type Time = { job_id: string; minutes: number; hourly_rate: number; source: string };
 type Expense = { job_id: string; amount: number };
+type Move = { job_id: string | null; item_name: string; delta: number; total_cost: number | null };
 
 /** Company-wide job costing: revenue vs labor + materials, worst margins first. */
 export default function JobCosting() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [time, setTime] = useState<Time[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [moves, setMoves] = useState<Move[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [j, t, e] = await Promise.all([
+    const [j, t, e, m] = await Promise.all([
       supabase.from("ss_jobs").select("id,title,price,status,ss_customers(full_name)").order("created_at", { ascending: false }).limit(300),
       supabase.from("ss_job_time_entries").select("job_id,minutes,hourly_rate,source"),
       supabase.from("ss_job_expenses").select("job_id,amount"),
+      supabase.from("ss_inventory_moves").select("job_id,item_name,delta,total_cost").not("job_id", "is", null).lt("delta", 0).limit(4000),
     ]);
     setJobs((j.data ?? []) as unknown as Job[]);
     setTime((t.data ?? []) as Time[]);
     setExpenses((e.data ?? []) as Expense[]);
+    setMoves((m.data ?? []) as Move[]);
     setLoading(false);
   }, []);
 
@@ -37,27 +41,33 @@ export default function JobCosting() {
         const minutes = entries.reduce((s, x) => s + Number(x.minutes), 0);
         const autoMinutes = entries.filter((x) => x.source === "auto").reduce((s, x) => s + Number(x.minutes), 0);
         const material = expenses.filter((x) => x.job_id === job.id).reduce((s, x) => s + Number(x.amount), 0);
+        const used = moves.filter((x) => x.job_id === job.id);
+        const inventory = used.reduce((s, x) => s + (Number(x.total_cost) || 0), 0);
+        const inventoryItems = used.length;
         const revenue = Number(job.price ?? 0);
-        const cost = labor + material;
+        const cost = labor + material + inventory;
         const profit = revenue - cost;
         return {
-          job, labor, material, minutes, autoMinutes, revenue, cost, profit,
+          job, labor, material, inventory, inventoryItems, minutes, autoMinutes, revenue, cost, profit,
           margin: revenue > 0 ? (profit / revenue) * 100 : 0,
           hourly: minutes > 0 ? profit / (minutes / 60) : 0,
         };
       })
       .filter((r) => r.revenue > 0 || r.cost > 0)
       .sort((a, b) => a.margin - b.margin);
-  }, [jobs, time, expenses]);
+  }, [jobs, time, expenses, moves]);
+
 
   const totals = useMemo(() => {
     const revenue = rows.reduce((s, r) => s + r.revenue, 0);
     const cost = rows.reduce((s, r) => s + r.cost, 0);
+    const inventory = rows.reduce((s, r) => s + r.inventory, 0);
     const minutes = rows.reduce((s, r) => s + r.minutes, 0);
     const auto = rows.reduce((s, r) => s + r.autoMinutes, 0);
     return {
-      revenue, cost, profit: revenue - cost,
+      revenue, cost, inventory, profit: revenue - cost,
       margin: revenue > 0 ? ((revenue - cost) / revenue) * 100 : 0,
+      invShare: revenue > 0 ? (inventory / revenue) * 100 : 0,
       hours: minutes / 60,
       autoShare: minutes > 0 ? (auto / minutes) * 100 : 0,
     };
@@ -65,14 +75,16 @@ export default function JobCosting() {
 
   return (
     <div className="space-y-4">
-      <SectionTitle title="Job Costing" sub="Every job's true profit after labor and materials" />
+      <SectionTitle title="Job Costing" sub="Every job's true profit after labor, materials and inventory used" />
 
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">
         <StatTile label="Revenue" value={money(totals.revenue)} />
         <StatTile label="Cost" value={money(totals.cost)} />
+        <StatTile label="Inventory used" value={`${money(totals.inventory)} · ${totals.invShare.toFixed(1)}% of rev`} />
         <StatTile label="Profit" value={`${money(totals.profit)} · ${totals.margin.toFixed(1)}%`} />
         <StatTile label="Tracked hours" value={`${totals.hours.toFixed(1)}h · ${totals.autoShare.toFixed(0)}% auto`} />
       </div>
+
 
       {loading && <EmptyState>Crunching the numbers…</EmptyState>}
       {!loading && !rows.length && <EmptyState>No costed jobs yet.</EmptyState>}
@@ -95,9 +107,12 @@ export default function JobCosting() {
               </div>
             </div>
             <div className="mt-1.5 text-[0.72rem] opacity-75">
-              Revenue {money(r.revenue)} · Labor {money(r.labor)} · Materials {money(r.material)}
+              Revenue {money(r.revenue)} · Labor {money(r.labor)} · Materials {money(r.material)} · Inventory{" "}
+              {money(r.inventory)}
+              {r.inventoryItems > 0 && <> ({r.inventoryItems} item{r.inventoryItems === 1 ? "" : "s"})</>}
               {r.minutes > 0 && <> · {money(r.hourly)}/hr effective</>}
             </div>
+
           </div>
         ))}
       </div>
