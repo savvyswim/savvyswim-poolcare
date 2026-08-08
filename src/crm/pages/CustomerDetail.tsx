@@ -277,7 +277,12 @@ export default function CustomerDetail() {
 
       {tab === "Bodies of water" && <WaterBodies customerId={c.id} canEdit={level !== "technician"} />}
 
-      {tab === "Details" && <CustomerDepth customer={c} canEdit={level !== "technician"} />}
+      {tab === "Details" && (
+        <div className="space-y-3">
+          <CustomerWorkflowPicker customerId={c.id} canEdit={level !== "technician"} />
+          <CustomerDepth customer={c} canEdit={level !== "technician"} />
+        </div>
+      )}
 
       {tab === "Salt pool" && <SaltGuide gallons={c.gallons} />}
 
