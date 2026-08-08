@@ -107,9 +107,12 @@ export default function JobCosting() {
               </div>
             </div>
             <div className="mt-1.5 text-[0.72rem] opacity-75">
-              Revenue {money(r.revenue)} · Labor {money(r.labor)} · Materials {money(r.material)}
+              Revenue {money(r.revenue)} · Labor {money(r.labor)} · Materials {money(r.material)} · Inventory{" "}
+              {money(r.inventory)}
+              {r.inventoryItems > 0 && <> ({r.inventoryItems} item{r.inventoryItems === 1 ? "" : "s"})</>}
               {r.minutes > 0 && <> · {money(r.hourly)}/hr effective</>}
             </div>
+
           </div>
         ))}
       </div>
