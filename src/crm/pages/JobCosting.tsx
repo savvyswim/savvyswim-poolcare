@@ -61,11 +61,13 @@ export default function JobCosting() {
   const totals = useMemo(() => {
     const revenue = rows.reduce((s, r) => s + r.revenue, 0);
     const cost = rows.reduce((s, r) => s + r.cost, 0);
+    const inventory = rows.reduce((s, r) => s + r.inventory, 0);
     const minutes = rows.reduce((s, r) => s + r.minutes, 0);
     const auto = rows.reduce((s, r) => s + r.autoMinutes, 0);
     return {
-      revenue, cost, profit: revenue - cost,
+      revenue, cost, inventory, profit: revenue - cost,
       margin: revenue > 0 ? ((revenue - cost) / revenue) * 100 : 0,
+      invShare: revenue > 0 ? (inventory / revenue) * 100 : 0,
       hours: minutes / 60,
       autoShare: minutes > 0 ? (auto / minutes) * 100 : 0,
     };
@@ -73,14 +75,16 @@ export default function JobCosting() {
 
   return (
     <div className="space-y-4">
-      <SectionTitle title="Job Costing" sub="Every job's true profit after labor and materials" />
+      <SectionTitle title="Job Costing" sub="Every job's true profit after labor, materials and inventory used" />
 
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">
         <StatTile label="Revenue" value={money(totals.revenue)} />
         <StatTile label="Cost" value={money(totals.cost)} />
+        <StatTile label="Inventory used" value={`${money(totals.inventory)} · ${totals.invShare.toFixed(1)}% of rev`} />
         <StatTile label="Profit" value={`${money(totals.profit)} · ${totals.margin.toFixed(1)}%`} />
         <StatTile label="Tracked hours" value={`${totals.hours.toFixed(1)}h · ${totals.autoShare.toFixed(0)}% auto`} />
       </div>
+
 
       {loading && <EmptyState>Crunching the numbers…</EmptyState>}
       {!loading && !rows.length && <EmptyState>No costed jobs yet.</EmptyState>}
