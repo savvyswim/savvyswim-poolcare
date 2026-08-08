@@ -31,6 +31,7 @@ import { Route as CrmIndexRouteImport } from './routes/crm/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
+import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as PortalMaintenanceRouteImport } from './routes/portal_.maintenance'
 import { Route as CrmSplatRouteImport } from './routes/crm/$'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout/return'
@@ -45,6 +46,7 @@ import { Route as AdminCrmLoginRouteImport } from './routes/admin/crm/login'
 import { Route as AdminCrmLegacyRouteImport } from './routes/admin/crm/legacy'
 import { Route as AdminCrmAppRouteImport } from './routes/admin/crm/app'
 import { Route as CrmAdminCrmIndexRouteImport } from './routes/_crm/admin/crm/index'
+import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
@@ -63,6 +65,7 @@ import { Route as CrmAdminCrmScorecardRouteImport } from './routes/_crm/admin/cr
 import { Route as CrmAdminCrmReviewsRouteImport } from './routes/_crm/admin/crm/reviews'
 import { Route as CrmAdminCrmRevenueGrowthRouteImport } from './routes/_crm/admin/crm/revenue-growth'
 import { Route as CrmAdminCrmReportsRouteImport } from './routes/_crm/admin/crm/reports'
+import { Route as CrmAdminCrmQuotesRouteImport } from './routes/_crm/admin/crm/quotes'
 import { Route as CrmAdminCrmQcReviewRouteImport } from './routes/_crm/admin/crm/qc-review'
 import { Route as CrmAdminCrmProductsRouteImport } from './routes/_crm/admin/crm/products'
 import { Route as CrmAdminCrmPricingMatrixRouteImport } from './routes/_crm/admin/crm/pricing-matrix'
@@ -70,12 +73,15 @@ import { Route as CrmAdminCrmPipelineRouteImport } from './routes/_crm/admin/crm
 import { Route as CrmAdminCrmPayPerPoolRouteImport } from './routes/_crm/admin/crm/pay-per-pool'
 import { Route as CrmAdminCrmMarginRouteImport } from './routes/_crm/admin/crm/margin'
 import { Route as CrmAdminCrmJobsRouteImport } from './routes/_crm/admin/crm/jobs'
+import { Route as CrmAdminCrmJobCostingRouteImport } from './routes/_crm/admin/crm/job-costing'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
+import { Route as CrmAdminCrmInboxRouteImport } from './routes/_crm/admin/crm/inbox'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
 import { Route as CrmAdminCrmConnectRouteImport } from './routes/_crm/admin/crm/connect'
 import { Route as CrmAdminCrmBreakEvenRouteImport } from './routes/_crm/admin/crm/break-even'
+import { Route as CrmAdminCrmAutomationsRouteImport } from './routes/_crm/admin/crm/automations'
 import { Route as CrmAdminCrmAuditTrailRouteImport } from './routes/_crm/admin/crm/audit-trail'
 import { Route as CrmAdminCrmAlertsRouteImport } from './routes/_crm/admin/crm/alerts'
 import { Route as CrmAdminCrmProjectsIndexRouteImport } from './routes/_crm/admin/crm/projects/index'
@@ -192,6 +198,11 @@ const ReviewTokenRoute = ReviewTokenRouteImport.update({
   path: '/review/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuoteTokenRoute = QuoteTokenRouteImport.update({
+  id: '/quote/$token',
+  path: '/quote/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortalMaintenanceRoute = PortalMaintenanceRouteImport.update({
   id: '/portal_/maintenance',
   path: '/portal/maintenance',
@@ -261,6 +272,11 @@ const CrmAdminCrmIndexRoute = CrmAdminCrmIndexRouteImport.update({
   id: '/admin/crm/',
   path: '/admin/crm/',
   getParentRoute: () => CrmRoute,
+} as any)
+const ApiPublicTwilioInboundRoute = ApiPublicTwilioInboundRouteImport.update({
+  id: '/api/public/twilio/inbound',
+  path: '/api/public/twilio/inbound',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicTwilioContractSmsStatusRoute =
   ApiPublicTwilioContractSmsStatusRouteImport.update({
@@ -357,6 +373,11 @@ const CrmAdminCrmReportsRoute = CrmAdminCrmReportsRouteImport.update({
   path: '/admin/crm/reports',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmQuotesRoute = CrmAdminCrmQuotesRouteImport.update({
+  id: '/admin/crm/quotes',
+  path: '/admin/crm/quotes',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmQcReviewRoute = CrmAdminCrmQcReviewRouteImport.update({
   id: '/admin/crm/qc-review',
   path: '/admin/crm/qc-review',
@@ -393,9 +414,19 @@ const CrmAdminCrmJobsRoute = CrmAdminCrmJobsRouteImport.update({
   path: '/admin/crm/jobs',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmJobCostingRoute = CrmAdminCrmJobCostingRouteImport.update({
+  id: '/admin/crm/job-costing',
+  path: '/admin/crm/job-costing',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmInventoryRoute = CrmAdminCrmInventoryRouteImport.update({
   id: '/admin/crm/inventory',
   path: '/admin/crm/inventory',
+  getParentRoute: () => CrmRoute,
+} as any)
+const CrmAdminCrmInboxRoute = CrmAdminCrmInboxRouteImport.update({
+  id: '/admin/crm/inbox',
+  path: '/admin/crm/inbox',
   getParentRoute: () => CrmRoute,
 } as any)
 const CrmAdminCrmFinanceRoute = CrmAdminCrmFinanceRouteImport.update({
@@ -421,6 +452,11 @@ const CrmAdminCrmConnectRoute = CrmAdminCrmConnectRouteImport.update({
 const CrmAdminCrmBreakEvenRoute = CrmAdminCrmBreakEvenRouteImport.update({
   id: '/admin/crm/break-even',
   path: '/admin/crm/break-even',
+  getParentRoute: () => CrmRoute,
+} as any)
+const CrmAdminCrmAutomationsRoute = CrmAdminCrmAutomationsRouteImport.update({
+  id: '/admin/crm/automations',
+  path: '/admin/crm/automations',
   getParentRoute: () => CrmRoute,
 } as any)
 const CrmAdminCrmAuditTrailRoute = CrmAdminCrmAuditTrailRouteImport.update({
@@ -483,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin/': typeof AdminIndexRoute
@@ -493,12 +530,15 @@ export interface FileRoutesByFullPath {
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
+  '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -506,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -524,6 +565,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -557,6 +599,7 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin': typeof AdminIndexRoute
@@ -567,12 +610,15 @@ export interface FileRoutesByTo {
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
+  '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -580,6 +626,7 @@ export interface FileRoutesByTo {
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -598,6 +645,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/admin/crm': typeof CrmAdminCrmIndexRoute
   '/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -633,6 +681,7 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal_/maintenance': typeof PortalMaintenanceRoute
+  '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/admin/': typeof AdminIndexRoute
@@ -643,12 +692,15 @@ export interface FileRoutesById {
   '/api/public/health': typeof ApiPublicHealthRoute
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/_crm/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
+  '/_crm/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
   '/_crm/admin/crm/break-even': typeof CrmAdminCrmBreakEvenRoute
   '/_crm/admin/crm/connect': typeof CrmAdminCrmConnectRoute
   '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/_crm/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/_crm/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/_crm/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/_crm/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/_crm/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -656,6 +708,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
   '/_crm/admin/crm/products': typeof CrmAdminCrmProductsRoute
   '/_crm/admin/crm/qc-review': typeof CrmAdminCrmQcReviewRoute
+  '/_crm/admin/crm/quotes': typeof CrmAdminCrmQuotesRoute
   '/_crm/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/_crm/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/_crm/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
@@ -674,6 +727,7 @@ export interface FileRoutesById {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
+  '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/_crm/admin/crm/': typeof CrmAdminCrmIndexRoute
   '/_crm/admin/crm/customers/$id': typeof CrmAdminCrmCustomersIdRoute
   '/_crm/admin/crm/projects/$id': typeof CrmAdminCrmProjectsIdRoute
@@ -709,6 +763,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin/'
@@ -719,12 +774,15 @@ export interface FileRouteTypes {
     | '/api/public/health'
     | '/admin/crm/alerts'
     | '/admin/crm/audit-trail'
+    | '/admin/crm/automations'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/inbox'
     | '/admin/crm/inventory'
+    | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
     | '/admin/crm/pay-per-pool'
@@ -732,6 +790,7 @@ export interface FileRouteTypes {
     | '/admin/crm/pricing-matrix'
     | '/admin/crm/products'
     | '/admin/crm/qc-review'
+    | '/admin/crm/quotes'
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
@@ -750,6 +809,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/admin/crm/'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -783,6 +843,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin'
@@ -793,12 +854,15 @@ export interface FileRouteTypes {
     | '/api/public/health'
     | '/admin/crm/alerts'
     | '/admin/crm/audit-trail'
+    | '/admin/crm/automations'
     | '/admin/crm/break-even'
     | '/admin/crm/connect'
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/inbox'
     | '/admin/crm/inventory'
+    | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
     | '/admin/crm/pay-per-pool'
@@ -806,6 +870,7 @@ export interface FileRouteTypes {
     | '/admin/crm/pricing-matrix'
     | '/admin/crm/products'
     | '/admin/crm/qc-review'
+    | '/admin/crm/quotes'
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
@@ -824,6 +889,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/admin/crm'
     | '/admin/crm/customers/$id'
     | '/admin/crm/projects/$id'
@@ -858,6 +924,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/crm/$'
     | '/portal_/maintenance'
+    | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/admin/'
@@ -868,12 +935,15 @@ export interface FileRouteTypes {
     | '/api/public/health'
     | '/_crm/admin/crm/alerts'
     | '/_crm/admin/crm/audit-trail'
+    | '/_crm/admin/crm/automations'
     | '/_crm/admin/crm/break-even'
     | '/_crm/admin/crm/connect'
     | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
     | '/_crm/admin/crm/finance'
+    | '/_crm/admin/crm/inbox'
     | '/_crm/admin/crm/inventory'
+    | '/_crm/admin/crm/job-costing'
     | '/_crm/admin/crm/jobs'
     | '/_crm/admin/crm/margin'
     | '/_crm/admin/crm/pay-per-pool'
@@ -881,6 +951,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/pricing-matrix'
     | '/_crm/admin/crm/products'
     | '/_crm/admin/crm/qc-review'
+    | '/_crm/admin/crm/quotes'
     | '/_crm/admin/crm/reports'
     | '/_crm/admin/crm/revenue-growth'
     | '/_crm/admin/crm/reviews'
@@ -899,6 +970,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/twilio/contract-sms-status'
+    | '/api/public/twilio/inbound'
     | '/_crm/admin/crm/'
     | '/_crm/admin/crm/customers/$id'
     | '/_crm/admin/crm/projects/$id'
@@ -934,6 +1006,7 @@ export interface RootRouteChildren {
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CrmSplatRoute: typeof CrmSplatRoute
   PortalMaintenanceRoute: typeof PortalMaintenanceRoute
+  QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -947,6 +1020,7 @@ export interface RootRouteChildren {
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
+  ApiPublicTwilioInboundRoute: typeof ApiPublicTwilioInboundRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1105,6 +1179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReviewTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quote/$token': {
+      id: '/quote/$token'
+      path: '/quote/$token'
+      fullPath: '/quote/$token'
+      preLoaderRoute: typeof QuoteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portal_/maintenance': {
       id: '/portal_/maintenance'
       path: '/portal/maintenance'
@@ -1202,6 +1283,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/crm/'
       preLoaderRoute: typeof CrmAdminCrmIndexRouteImport
       parentRoute: typeof CrmRoute
+    }
+    '/api/public/twilio/inbound': {
+      id: '/api/public/twilio/inbound'
+      path: '/api/public/twilio/inbound'
+      fullPath: '/api/public/twilio/inbound'
+      preLoaderRoute: typeof ApiPublicTwilioInboundRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/twilio/contract-sms-status': {
       id: '/api/public/twilio/contract-sms-status'
@@ -1329,6 +1417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmReportsRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/quotes': {
+      id: '/_crm/admin/crm/quotes'
+      path: '/admin/crm/quotes'
+      fullPath: '/admin/crm/quotes'
+      preLoaderRoute: typeof CrmAdminCrmQuotesRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/qc-review': {
       id: '/_crm/admin/crm/qc-review'
       path: '/admin/crm/qc-review'
@@ -1378,11 +1473,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmJobsRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/job-costing': {
+      id: '/_crm/admin/crm/job-costing'
+      path: '/admin/crm/job-costing'
+      fullPath: '/admin/crm/job-costing'
+      preLoaderRoute: typeof CrmAdminCrmJobCostingRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/inventory': {
       id: '/_crm/admin/crm/inventory'
       path: '/admin/crm/inventory'
       fullPath: '/admin/crm/inventory'
       preLoaderRoute: typeof CrmAdminCrmInventoryRouteImport
+      parentRoute: typeof CrmRoute
+    }
+    '/_crm/admin/crm/inbox': {
+      id: '/_crm/admin/crm/inbox'
+      path: '/admin/crm/inbox'
+      fullPath: '/admin/crm/inbox'
+      preLoaderRoute: typeof CrmAdminCrmInboxRouteImport
       parentRoute: typeof CrmRoute
     }
     '/_crm/admin/crm/finance': {
@@ -1418,6 +1527,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/crm/break-even'
       fullPath: '/admin/crm/break-even'
       preLoaderRoute: typeof CrmAdminCrmBreakEvenRouteImport
+      parentRoute: typeof CrmRoute
+    }
+    '/_crm/admin/crm/automations': {
+      id: '/_crm/admin/crm/automations'
+      path: '/admin/crm/automations'
+      fullPath: '/admin/crm/automations'
+      preLoaderRoute: typeof CrmAdminCrmAutomationsRouteImport
       parentRoute: typeof CrmRoute
     }
     '/_crm/admin/crm/audit-trail': {
@@ -1468,12 +1584,15 @@ declare module '@tanstack/react-router' {
 interface CrmRouteChildren {
   CrmAdminCrmAlertsRoute: typeof CrmAdminCrmAlertsRoute
   CrmAdminCrmAuditTrailRoute: typeof CrmAdminCrmAuditTrailRoute
+  CrmAdminCrmAutomationsRoute: typeof CrmAdminCrmAutomationsRoute
   CrmAdminCrmBreakEvenRoute: typeof CrmAdminCrmBreakEvenRoute
   CrmAdminCrmConnectRoute: typeof CrmAdminCrmConnectRoute
   CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
+  CrmAdminCrmInboxRoute: typeof CrmAdminCrmInboxRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
+  CrmAdminCrmJobCostingRoute: typeof CrmAdminCrmJobCostingRoute
   CrmAdminCrmJobsRoute: typeof CrmAdminCrmJobsRoute
   CrmAdminCrmMarginRoute: typeof CrmAdminCrmMarginRoute
   CrmAdminCrmPayPerPoolRoute: typeof CrmAdminCrmPayPerPoolRoute
@@ -1481,6 +1600,7 @@ interface CrmRouteChildren {
   CrmAdminCrmPricingMatrixRoute: typeof CrmAdminCrmPricingMatrixRoute
   CrmAdminCrmProductsRoute: typeof CrmAdminCrmProductsRoute
   CrmAdminCrmQcReviewRoute: typeof CrmAdminCrmQcReviewRoute
+  CrmAdminCrmQuotesRoute: typeof CrmAdminCrmQuotesRoute
   CrmAdminCrmReportsRoute: typeof CrmAdminCrmReportsRoute
   CrmAdminCrmRevenueGrowthRoute: typeof CrmAdminCrmRevenueGrowthRoute
   CrmAdminCrmReviewsRoute: typeof CrmAdminCrmReviewsRoute
@@ -1504,12 +1624,15 @@ interface CrmRouteChildren {
 const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmAlertsRoute: CrmAdminCrmAlertsRoute,
   CrmAdminCrmAuditTrailRoute: CrmAdminCrmAuditTrailRoute,
+  CrmAdminCrmAutomationsRoute: CrmAdminCrmAutomationsRoute,
   CrmAdminCrmBreakEvenRoute: CrmAdminCrmBreakEvenRoute,
   CrmAdminCrmConnectRoute: CrmAdminCrmConnectRoute,
   CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
+  CrmAdminCrmInboxRoute: CrmAdminCrmInboxRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
+  CrmAdminCrmJobCostingRoute: CrmAdminCrmJobCostingRoute,
   CrmAdminCrmJobsRoute: CrmAdminCrmJobsRoute,
   CrmAdminCrmMarginRoute: CrmAdminCrmMarginRoute,
   CrmAdminCrmPayPerPoolRoute: CrmAdminCrmPayPerPoolRoute,
@@ -1517,6 +1640,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmPricingMatrixRoute: CrmAdminCrmPricingMatrixRoute,
   CrmAdminCrmProductsRoute: CrmAdminCrmProductsRoute,
   CrmAdminCrmQcReviewRoute: CrmAdminCrmQcReviewRoute,
+  CrmAdminCrmQuotesRoute: CrmAdminCrmQuotesRoute,
   CrmAdminCrmReportsRoute: CrmAdminCrmReportsRoute,
   CrmAdminCrmRevenueGrowthRoute: CrmAdminCrmRevenueGrowthRoute,
   CrmAdminCrmReviewsRoute: CrmAdminCrmReviewsRoute,
@@ -1567,6 +1691,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutReturnRoute: CheckoutReturnRoute,
   CrmSplatRoute: CrmSplatRoute,
   PortalMaintenanceRoute: PortalMaintenanceRoute,
+  QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -1580,6 +1705,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
+  ApiPublicTwilioInboundRoute: ApiPublicTwilioInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

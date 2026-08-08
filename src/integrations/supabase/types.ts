@@ -1114,6 +1114,95 @@ export type Database = {
           },
         ]
       }
+      ss_automation_runs: {
+        Row: {
+          automation_id: string
+          created_at: string
+          detail: string | null
+          id: string
+          payload: Json
+          status: string
+          subject_label: string | null
+          trigger_event: string
+        }
+        Insert: {
+          automation_id: string
+          created_at?: string
+          detail?: string | null
+          id?: string
+          payload?: Json
+          status?: string
+          subject_label?: string | null
+          trigger_event: string
+        }
+        Update: {
+          automation_id?: string
+          created_at?: string
+          detail?: string | null
+          id?: string
+          payload?: Json
+          status?: string
+          subject_label?: string | null
+          trigger_event?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_automation_runs_automation_id_fkey"
+            columns: ["automation_id"]
+            isOneToOne: false
+            referencedRelation: "ss_automations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_automations: {
+        Row: {
+          actions: Json
+          active: boolean
+          conditions: Json
+          created_at: string
+          created_by: string | null
+          delay_minutes: number
+          description: string | null
+          id: string
+          last_run_at: string | null
+          name: string
+          run_count: number
+          trigger_event: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          active?: boolean
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          delay_minutes?: number
+          description?: string | null
+          id?: string
+          last_run_at?: string | null
+          name: string
+          run_count?: number
+          trigger_event: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          active?: boolean
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          delay_minutes?: number
+          description?: string | null
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          run_count?: number
+          trigger_event?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_broadcasts: {
         Row: {
           body: string
@@ -2307,34 +2396,43 @@ export type Database = {
       ss_job_time_entries: {
         Row: {
           created_at: string
+          ended_at: string | null
           hourly_rate: number
           id: string
           job_id: string
           minutes: number
           note: string | null
+          source: string
           staff_id: string | null
+          started_at: string | null
           updated_at: string
           worked_on: string
         }
         Insert: {
           created_at?: string
+          ended_at?: string | null
           hourly_rate?: number
           id?: string
           job_id: string
           minutes?: number
           note?: string | null
+          source?: string
           staff_id?: string | null
+          started_at?: string | null
           updated_at?: string
           worked_on?: string
         }
         Update: {
           created_at?: string
+          ended_at?: string | null
           hourly_rate?: number
           id?: string
           job_id?: string
           minutes?: number
           note?: string | null
+          source?: string
           staff_id?: string | null
+          started_at?: string | null
           updated_at?: string
           worked_on?: string
         }
@@ -3239,6 +3337,155 @@ export type Database = {
           },
         ]
       }
+      ss_quote_items: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_optional: boolean
+          name: string
+          quantity: number
+          quote_id: string
+          recurring: string | null
+          selected: boolean
+          sort_order: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_optional?: boolean
+          name: string
+          quantity?: number
+          quote_id: string
+          recurring?: string | null
+          selected?: boolean
+          sort_order?: number
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_optional?: boolean
+          name?: string
+          quantity?: number
+          quote_id?: string
+          recurring?: string | null
+          selected?: boolean
+          sort_order?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "ss_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_quotes: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          declined_at: string | null
+          gallery: Json
+          hero_image_url: string | null
+          id: string
+          intro: string | null
+          lead_id: string | null
+          recipient_email: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          reviews: Json
+          sent_at: string | null
+          show_reviews: boolean
+          status: string
+          tax_pct: number
+          title: string
+          token: string
+          updated_at: string
+          valid_until: string | null
+          viewed_at: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          declined_at?: string | null
+          gallery?: Json
+          hero_image_url?: string | null
+          id?: string
+          intro?: string | null
+          lead_id?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          reviews?: Json
+          sent_at?: string | null
+          show_reviews?: boolean
+          status?: string
+          tax_pct?: number
+          title?: string
+          token?: string
+          updated_at?: string
+          valid_until?: string | null
+          viewed_at?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          declined_at?: string | null
+          gallery?: Json
+          hero_image_url?: string | null
+          id?: string
+          intro?: string | null
+          lead_id?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          reviews?: Json
+          sent_at?: string | null
+          show_reviews?: boolean
+          status?: string
+          tax_pct?: number
+          title?: string
+          token?: string
+          updated_at?: string
+          valid_until?: string | null
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_quotes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_quotes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_reading_fields: {
         Row: {
           created_at: string
@@ -3498,6 +3745,113 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      ss_sms_messages: {
+        Row: {
+          body: string
+          created_at: string
+          direction: string
+          error_detail: string | null
+          from_number: string | null
+          id: string
+          sent_by: string | null
+          status: string
+          thread_id: string
+          to_number: string | null
+          twilio_sid: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          direction: string
+          error_detail?: string | null
+          from_number?: string | null
+          id?: string
+          sent_by?: string | null
+          status?: string
+          thread_id: string
+          to_number?: string | null
+          twilio_sid?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          direction?: string
+          error_detail?: string | null
+          from_number?: string | null
+          id?: string
+          sent_by?: string | null
+          status?: string
+          thread_id?: string
+          to_number?: string | null
+          twilio_sid?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_sms_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "ss_sms_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ss_sms_threads: {
+        Row: {
+          assigned_staff_id: string | null
+          created_at: string
+          customer_id: string | null
+          display_name: string | null
+          id: string
+          last_message_at: string | null
+          last_preview: string | null
+          phone: string
+          status: string
+          unread_count: number
+          updated_at: string
+        }
+        Insert: {
+          assigned_staff_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          display_name?: string | null
+          id?: string
+          last_message_at?: string | null
+          last_preview?: string | null
+          phone: string
+          status?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Update: {
+          assigned_staff_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          display_name?: string | null
+          id?: string
+          last_message_at?: string | null
+          last_preview?: string | null
+          phone?: string
+          status?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_sms_threads_assigned_staff_id_fkey"
+            columns: ["assigned_staff_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_sms_threads_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_staff: {
         Row: {
@@ -4485,6 +4839,10 @@ export type Database = {
           read_ct: number
         }[]
       }
+      ss_accept_quote: {
+        Args: { _selected_ids: string[]; _signer_name: string; _token: string }
+        Returns: Json
+      }
       ss_default_upsell_pct: { Args: never; Returns: number }
       ss_get_contract: {
         Args: { _token: string }
@@ -4498,6 +4856,7 @@ export type Database = {
           title: string
         }[]
       }
+      ss_get_quote: { Args: { _token: string }; Returns: Json }
       ss_get_review_request: {
         Args: { _token: string }
         Returns: {
@@ -4510,6 +4869,7 @@ export type Database = {
       ss_is_office: { Args: never; Returns: boolean }
       ss_is_owner: { Args: never; Returns: boolean }
       ss_is_staff: { Args: never; Returns: boolean }
+      ss_mark_quote_viewed: { Args: { _token: string }; Returns: undefined }
       ss_mark_review_clicked: { Args: { _token: string }; Returns: undefined }
       ss_match_service_plan: {
         Args: {

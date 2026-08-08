@@ -10,6 +10,10 @@ import {
   Gauge,
   Wallet,
   SlidersHorizontal,
+  MessagesSquare,
+  FileText,
+  Calculator,
+  Workflow,
 } from "lucide-react";
 import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
@@ -31,12 +35,14 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
   { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
   { to: "/admin/crm/tickets", label: "Customer Tickets", icon: MessageSquare, module: "tickets", group: "Today" },
+  { to: "/admin/crm/inbox", label: "Text Inbox", icon: MessagesSquare, module: "inbox", group: "Today" },
   { to: "/admin/crm/water-lab", label: "Water Lab", icon: FlaskConical, module: "waterLab", group: "Today" },
   { to: "/admin/crm/pay-per-pool", label: "Payroll", icon: Wallet, module: "payPerPool", group: "Today" },
 
   // Sales
   { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
   { to: "/admin/crm/products", label: "Savvy Estimate", icon: Package, module: "products", group: "Sales" },
+  { to: "/admin/crm/quotes", label: "Savvy Quotes", icon: FileText, module: "quotes", group: "Sales" },
   { to: "/admin/crm/service-plans", label: "Service Plans", icon: ClipboardList, module: "servicePlans", group: "Sales" },
   { to: "/admin/crm/customers", label: "Customers", icon: Users, module: "customers", group: "Sales" },
 
@@ -49,6 +55,7 @@ const STAFF_NAV: NavItem[] = [
 
   // Savvy FinOps
   { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
+  { to: "/admin/crm/job-costing", label: "Job Costing", icon: Calculator, module: "jobCosting", group: "Savvy FinOps" },
   { to: "/admin/crm/margin", label: "Margin Calculator", icon: Percent, module: "margin", group: "Savvy FinOps" },
   { to: "/admin/crm/revenue-growth", label: "Revenue Growth", icon: TrendingUp, module: "finance", group: "Savvy FinOps" },
   { to: "/admin/crm/pricing-matrix", label: "Pricing Matrix", icon: Grid3x3, module: "finance", group: "Savvy FinOps" },
@@ -66,6 +73,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console", group: "Admin" },
   { to: "/admin/team", label: "Team & Access", icon: Users, module: "team", group: "Admin" },
   { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
+  { to: "/admin/crm/automations", label: "Automations", icon: Workflow, module: "automations", group: "Admin" },
   { to: "/admin/crm/service-setup", label: "Service Setup", icon: SlidersHorizontal, module: "serviceSetup", group: "Admin" },
   { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
   { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
