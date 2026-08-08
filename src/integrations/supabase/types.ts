@@ -1720,6 +1720,10 @@ export type Database = {
           tech_upsell_pct: number | null
           updated_at: string
           user_id: string | null
+          vehicle_make: string | null
+          vehicle_model: string | null
+          vehicle_vin: string | null
+          vehicle_year: number | null
         }
         Insert: {
           address?: string | null
@@ -1776,6 +1780,10 @@ export type Database = {
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_vin?: string | null
+          vehicle_year?: number | null
         }
         Update: {
           address?: string | null
@@ -1832,6 +1840,10 @@ export type Database = {
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_vin?: string | null
+          vehicle_year?: number | null
         }
         Relationships: [
           {
@@ -4580,6 +4592,10 @@ export type Database = {
           postal_code: string
           preferred_contact: string
           state: string
+          vehicle_make: string
+          vehicle_model: string
+          vehicle_vin: string
+          vehicle_year: number
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
