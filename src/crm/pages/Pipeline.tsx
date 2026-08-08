@@ -153,9 +153,12 @@ export default function Pipeline() {
   async function assignOps(job: OpsJob, techId: string) {
     const { error } = await supabase.from("ss_jobs").update({ tech_id: techId || null }).eq("id", job.id);
     if (error) { toast.error(error.message); return; }
+    const techName = techId ? (staff.find((s) => s.id === techId)?.full_name ?? "tech") : null;
+    void logTechAssignment({ customerId: job.customer_id ?? null, jobTitle: job.title, techName });
     toast.success(techId ? "Assigned" : "Unassigned");
     void refetchJobs();
   }
+
 
   async function moveOps(job: OpsJob, status: string) {
     const { error } = await supabase
