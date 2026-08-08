@@ -3,7 +3,7 @@ import { AlertTriangle, Camera, Check, Lock, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip } from "@/crm/components/Brand";
-import { doseFor, evaluate, lsiVerdict, READING_FIELDS, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
+import { describeFlags, doseFor, evaluate, flagReadings, lsiVerdict, READING_FIELDS, severityFor, severityTone, statusFor, type MetricKey, type Readings } from "@/crm/lib/chem";
 import { SIGNATURE_CHECKLIST, type ChecklistPhoto } from "@/crm/lib/checklist";
 import { money2 } from "@/crm/lib/pricing";
 import { useWaterBodies } from "@/crm/lib/serviceConfig";
