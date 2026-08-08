@@ -905,6 +905,8 @@ export default function Portal() {
                   </div>
                 </section>
 
+                {pool && <PortalDocuments customerName={pool.full_name} />}
+
                 {pool && <PortalTickets customerId={pool.id} />}
 
                 {/* Billing */}
