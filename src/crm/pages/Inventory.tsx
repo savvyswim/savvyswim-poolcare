@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, History, Minus, Pencil, Plus, QrCode, Trash2, Upload, X } from "lucide-react";
+import { Check, History, Minus, Pencil, Plus, QrCode, ShoppingCart, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,6 +69,7 @@ export default function Inventory() {
   const [showLog, setShowLog] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
+  const [showReorder, setShowReorder] = useState(false);
   const runLowStockCheck = useServerFn(checkLowStock);
 
   /** Fires the reorder notification when a change drops an item to/below its point. */
@@ -338,6 +339,11 @@ export default function Inventory() {
             }}
           >
             Send reorder alert ({low.length})
+          </button>
+        )}
+        {low.length > 0 && (
+          <button className="ss-btn" onClick={() => setShowReorder(true)}>
+            <ShoppingCart size={13} /> Create reorder ({low.length})
           </button>
         )}
 
