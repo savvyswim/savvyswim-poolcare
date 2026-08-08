@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Check, History, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
@@ -11,6 +11,27 @@ type Item = {
 
 const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
 
+type Move = {
+  id: string; item_id: string; item_name: string; delta: number;
+  quantity_after: number; reason: string; note: string | null; created_at: string;
+};
+
+const REASONS = [
+  { value: "restock", label: "Restock / delivery" },
+  { value: "used_on_job", label: "Used on a job" },
+  { value: "correction", label: "Count correction" },
+  { value: "damage", label: "Damaged / expired" },
+  { value: "transfer", label: "Moved to a truck" },
+  { value: "other", label: "Other" },
+];
+
+const reasonLabel = (v: string) => REASONS.find((r) => r.value === v)?.label ?? v;
+
+const stamp = (iso: string) =>
+  new Date(iso).toLocaleString("en-US", {
+    month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+  });
+
 const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5 };
 
 export default function Inventory() {
@@ -20,6 +41,10 @@ export default function Inventory() {
   const [editId, setEditId] = useState<string | null>(null);
   const [edit, setEdit] = useState({ ...emptyDraft });
   const [busy, setBusy] = useState(false);
+  const [adjustId, setAdjustId] = useState<string | null>(null);
+  const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
+  const [historyId, setHistoryId] = useState<string | null>(null);
+  const [showLog, setShowLog] = useState(false);
 
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
@@ -28,6 +53,37 @@ export default function Inventory() {
       .order("name");
     return (data ?? []) as Item[];
   });
+
+  const { rows: moves, refetch: refetchMoves } = useTable<Move>("inventory-moves", async () => {
+    const { data } = await supabase
+      .from("ss_inventory_moves")
+      .select("id,item_id,item_name,delta,quantity_after,reason,note,created_at")
+      .order("created_at", { ascending: false })
+      .limit(300);
+    return (data ?? []) as Move[];
+  });
+
+  const movesByItem = useMemo(() => {
+    const m = new Map<string, Move[]>();
+    for (const mv of moves) m.set(mv.item_id, [...(m.get(mv.item_id) ?? []), mv]);
+    return m;
+  }, [moves]);
+
+  async function logMove(item: Item, delta: number, quantityAfter: number, reason: string, note?: string) {
+    if (!delta) return;
+    const { data: auth } = await supabase.auth.getUser();
+    const { error } = await supabase.from("ss_inventory_moves").insert({
+      item_id: item.id,
+      item_name: item.name,
+      delta,
+      quantity_after: quantityAfter,
+      reason,
+      note: note?.trim() ? note.trim() : null,
+      actor_id: auth.user?.id ?? null,
+    });
+    if (error) { toast.error(`Adjustment saved, history not logged: ${error.message}`); return; }
+    void refetchMoves();
+  }
 
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -41,6 +97,7 @@ export default function Inventory() {
     const next = Math.max(0, item.quantity + delta);
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, delta > 0 ? "restock" : "used_on_job");
     void refetch();
   }
 
@@ -49,6 +106,23 @@ export default function Inventory() {
     if (next === item.quantity) return;
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, "correction", "Count typed directly");
+    void refetch();
+  }
+
+  async function applyAdjustment(item: Item) {
+    const amount = Math.abs(Number(adjustDraft.amount) || 0);
+    if (!amount) { toast.error("Enter how many units."); return; }
+    const delta = adjustDraft.dir * amount;
+    const next = Math.max(0, item.quantity + delta);
+    setBusy(true);
+    const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
+    if (error) { setBusy(false); toast.error(error.message); return; }
+    await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note);
+    setBusy(false);
+    setAdjustId(null);
+    setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
+    toast.success(`${item.name} · ${delta > 0 ? "+" : ""}${delta} ${item.unit ?? "units"}`);
     void refetch();
   }
 
@@ -69,6 +143,7 @@ export default function Inventory() {
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     toast.success(`${name} added to inventory`);
+    void refetchMoves();
     setDraft({ ...emptyDraft });
     setAdding(false);
     void refetch();
@@ -126,7 +201,30 @@ export default function Inventory() {
         <button className="ss-btn" onClick={() => setAdding((v) => !v)}>
           {adding ? <X size={13} /> : <Plus size={13} />} {adding ? "Cancel" : "Add item"}
         </button>
+        <button className="ss-btn ss-btn-ghost" onClick={() => setShowLog((v) => !v)}>
+          <History size={13} /> {showLog ? "Hide history" : "History"}
+        </button>
       </div>
+
+      {showLog && (
+        <div className="ss-card p-3">
+          <div className="ss-tag" style={{ fontSize: "0.55rem" }}>Adjustment history</div>
+          {!moves.length && <p className="mt-2 text-[0.76rem] opacity-60">No adjustments logged yet.</p>}
+          <div className="mt-2 space-y-1.5">
+            {moves.slice(0, 60).map((m) => (
+              <div key={m.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[0.76rem]">
+                <span className="ss-num font-bold" style={{ color: m.delta > 0 ? "hsl(152 60% 26%)" : "hsl(var(--ss-burgundy))" }}>
+                  {m.delta > 0 ? "+" : ""}{m.delta}
+                </span>
+                <span className="font-semibold">{m.item_name}</span>
+                <span className="opacity-70">{reasonLabel(m.reason)}</span>
+                {m.note && <span className="opacity-60">· {m.note}</span>}
+                <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {adding && (
         <div className="ss-card space-y-2 p-3">
@@ -263,10 +361,95 @@ export default function Inventory() {
                   onBlur={(e) => void setQuantity(i, Number(e.target.value))}
                 />
                 <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, 1)} aria-label={`Increase ${i.name}`}>+</button>
+                <button
+                  className="ss-btn ss-btn-ghost"
+                  onClick={() => { setAdjustId(adjustId === i.id ? null : i.id); setHistoryId(null); }}
+                  aria-label={`Adjust ${i.name}`}
+                >
+                  <Minus size={13} />/<Plus size={13} />
+                </button>
+                <button
+                  className="ss-btn ss-btn-ghost"
+                  onClick={() => { setHistoryId(historyId === i.id ? null : i.id); setAdjustId(null); }}
+                  aria-label={`History for ${i.name}`}
+                >
+                  <History size={13} />
+                </button>
                 <button className="ss-btn ss-btn-ghost" onClick={() => startEdit(i)} aria-label={`Edit ${i.name}`}>
                   <Pencil size={13} />
                 </button>
               </div>
+
+              {adjustId === i.id && (
+                <div className="w-full space-y-2 border-t pt-2" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  <div className="flex flex-wrap items-end gap-2">
+                    <label className="space-y-1">
+                      <span className="ss-label">Direction</span>
+                      <select
+                        className="ss-input"
+                        value={adjustDraft.dir}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, dir: Number(e.target.value) })}
+                      >
+                        <option value={-1}>Remove</option>
+                        <option value={1}>Add</option>
+                      </select>
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Qty ({i.unit ?? "units"})</span>
+                      <input
+                        className="ss-input ss-num w-20"
+                        type="number"
+                        min={0}
+                        step={1}
+                        value={adjustDraft.amount}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, amount: Number(e.target.value) })}
+                      />
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Reason</span>
+                      <select
+                        className="ss-input"
+                        value={adjustDraft.reason}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, reason: e.target.value })}
+                      >
+                        {REASONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
+                      </select>
+                    </label>
+                  </div>
+                  <input
+                    className="ss-input w-full"
+                    placeholder="Note (optional) — job, truck, invoice…"
+                    value={adjustDraft.note}
+                    onChange={(e) => setAdjustDraft({ ...adjustDraft, note: e.target.value })}
+                  />
+                  <div className="flex gap-2">
+                    <button className="ss-btn" disabled={busy} onClick={() => void applyAdjustment(i)}>
+                      <Check size={13} /> Log adjustment
+                    </button>
+                    <button className="ss-btn ss-btn-ghost" onClick={() => setAdjustId(null)}>
+                      <X size={13} /> Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {historyId === i.id && (
+                <div className="w-full border-t pt-2 text-[0.76rem]" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+                  {!(movesByItem.get(i.id) ?? []).length && <p className="opacity-60">No adjustments logged yet.</p>}
+                  <div className="space-y-1">
+                    {(movesByItem.get(i.id) ?? []).slice(0, 25).map((m) => (
+                      <div key={m.id} className="flex flex-wrap items-baseline gap-x-2">
+                        <span className="ss-num font-bold" style={{ color: m.delta > 0 ? "hsl(152 60% 26%)" : "hsl(var(--ss-burgundy))" }}>
+                          {m.delta > 0 ? "+" : ""}{m.delta}
+                        </span>
+                        <span className="opacity-75">{reasonLabel(m.reason)}</span>
+                        {m.note && <span className="opacity-60">· {m.note}</span>}
+                        <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ),
         )}
