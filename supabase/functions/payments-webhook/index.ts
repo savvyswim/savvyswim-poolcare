@@ -147,6 +147,14 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("Webhook error:", e);
+    await recordAudit({
+      action: "stripe_webhook.rejected",
+      actorKind: "webhook",
+      actorLabel: `stripe:${env}`,
+      success: false,
+      outcome: (e as Error).message,
+      request: req,
+    });
     return new Response("Webhook error", { status: 400 });
   }
 });
