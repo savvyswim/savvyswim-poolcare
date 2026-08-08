@@ -143,6 +143,62 @@ export default function Pipeline() {
     void refetch();
   }
 
+  async function convertToInspection(lead: Lead) {
+    setConverting(true);
+    try {
+      const { data: existingLead } = await supabase
+        .from("ss_leads")
+        .select("converted_customer_id")
+        .eq("id", lead.id)
+        .maybeSingle();
+
+      let customerId = existingLead?.converted_customer_id ?? null;
+
+      if (!customerId) {
+        const { data: cust, error: custErr } = await supabase
+          .from("ss_customers")
+          .insert({
+            full_name: lead.full_name,
+            email: lead.email,
+            phone: lead.phone,
+            address: lead.address,
+            city: lead.city,
+            status: "inactive",
+            monthly_price: Number(lead.monthly_value || 0),
+            notes: `Converted from lead (${lead.source ?? "marketing"})`,
+          })
+          .select("id")
+          .single();
+        if (custErr) throw custErr;
+        customerId = cust.id;
+      }
+
+      const { error: jobErr } = await supabase.from("ss_jobs").insert({
+        customer_id: customerId,
+        title: "Pool inspection",
+        details: [lead.address, lead.city].filter(Boolean).join(", ") || lead.message || null,
+        status: "open",
+        price: 0,
+        auto_flag_source: "lead_convert",
+      });
+      if (jobErr) throw jobErr;
+
+      await supabase
+        .from("ss_leads")
+        .update({ converted_customer_id: customerId, stage: "contacted", stage_changed_at: new Date().toISOString() })
+        .eq("id", lead.id);
+
+      toast.success("Inspection created — assign a tech in Jobs & repairs");
+      setDetail(null);
+      void refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Convert failed");
+    } finally {
+      setConverting(false);
+    }
+  }
+
+
 
   return (
     <div className="space-y-4">
