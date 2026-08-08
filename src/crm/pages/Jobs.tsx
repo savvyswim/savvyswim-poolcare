@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
+import JobProfit from "@/crm/components/JobProfit";
+
 
 type Job = {
   id: string; title: string; details: string | null; price: number | null;
