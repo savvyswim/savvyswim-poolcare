@@ -36,6 +36,7 @@ type Visit = {
 
 import SaltGuide from "@/crm/components/SaltGuide";
 import WaterBodies from "@/crm/components/WaterBodies";
+import EquipmentRecords from "@/crm/components/EquipmentRecords";
 import CustomerDepth from "@/crm/components/CustomerDepth";
 import WaterTrends from "@/crm/components/WaterTrends";
 
@@ -248,18 +249,20 @@ export default function CustomerDetail() {
       )}
 
       {tab === "Equipment" && (
-        <div className="ss-card p-4">
-          {Object.keys(c.equipment ?? {}).length === 0 ? (
-            <EmptyState>No equipment recorded.</EmptyState>
-          ) : (
-            <dl className="grid gap-2 sm:grid-cols-2">
-              {Object.entries(c.equipment ?? {}).map(([k, v]) => (
-                <div key={k}>
-                  <dt className="ss-label">{k}</dt>
-                  <dd className="text-[0.86rem]">{v}</dd>
-                </div>
-              ))}
-            </dl>
+        <div className="space-y-3">
+          <EquipmentRecords customerId={c.id} canEdit={level !== "technician"} />
+          {Object.keys(c.equipment ?? {}).length > 0 && (
+            <div className="ss-card p-4">
+              <div className="ss-label mb-2">Legacy notes</div>
+              <dl className="grid gap-2 sm:grid-cols-2">
+                {Object.entries(c.equipment ?? {}).map(([k, v]) => (
+                  <div key={k}>
+                    <dt className="ss-label">{k}</dt>
+                    <dd className="text-[0.86rem]">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           )}
         </div>
       )}
