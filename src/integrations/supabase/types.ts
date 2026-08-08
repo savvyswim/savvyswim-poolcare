@@ -1697,10 +1697,15 @@ export type Database = {
           location_notes: string | null
           minutes_at_stop: number | null
           monthly_price: number
+          notify_invoices: boolean
+          notify_marketing: boolean
+          notify_reports: boolean
+          notify_visits: boolean
           phone: string | null
           phones: Json
           pool_type: string
           postal_code: string | null
+          preferred_contact: string
           promo_code: string | null
           rate_override: number | null
           rate_override_note: string | null
@@ -1748,10 +1753,15 @@ export type Database = {
           location_notes?: string | null
           minutes_at_stop?: number | null
           monthly_price?: number
+          notify_invoices?: boolean
+          notify_marketing?: boolean
+          notify_reports?: boolean
+          notify_visits?: boolean
           phone?: string | null
           phones?: Json
           pool_type?: string
           postal_code?: string | null
+          preferred_contact?: string
           promo_code?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
@@ -1799,10 +1809,15 @@ export type Database = {
           location_notes?: string | null
           minutes_at_stop?: number | null
           monthly_price?: number
+          notify_invoices?: boolean
+          notify_marketing?: boolean
+          notify_reports?: boolean
+          notify_visits?: boolean
           phone?: string | null
           phones?: Json
           pool_type?: string
           postal_code?: string | null
+          preferred_contact?: string
           promo_code?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
@@ -4334,11 +4349,33 @@ export type Database = {
           status: Database["public"]["Enums"]["ss_cust_status"]
         }[]
       }
+      ss_my_profile: {
+        Args: never
+        Returns: {
+          address: string
+          city: string
+          dog_name: string
+          email: string
+          full_name: string
+          gate_code: string
+          id: string
+          location_notes: string
+          notify_invoices: boolean
+          notify_marketing: boolean
+          notify_reports: boolean
+          notify_visits: boolean
+          phone: string
+          postal_code: string
+          preferred_contact: string
+          state: string
+        }[]
+      }
       ss_my_staff_id: { Args: never; Returns: string }
       ss_portal_pay_invoice: {
         Args: { p_invoice_id: string; p_method: string; p_reference?: string }
         Returns: Json
       }
+      ss_portal_update_profile: { Args: { p_patch: Json }; Returns: Json }
       ss_recalc_visit_upsell: {
         Args: { _visit_id: string }
         Returns: undefined
