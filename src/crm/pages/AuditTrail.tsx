@@ -64,6 +64,41 @@ export default function AuditTrail() {
 
   const failures = rows.filter((r) => !r.success).length;
 
+  // Twilio callback-token verification metrics
+  const twilio = useMemo(() => {
+    const since = (h: number) => Date.now() - h * 3600_000;
+    const all = rows.filter((r) => r.action.startsWith("twilio_status_webhook"));
+    const rejected = all.filter((r) => r.action.endsWith(".rejected"));
+    const accepted = all.filter((r) => !r.action.endsWith(".rejected"));
+    const within = (list: AuditRow[], h: number) =>
+      list.filter((r) => new Date(r.created_at).getTime() >= since(h)).length;
+
+    const reasons = new Map<string, number>();
+    for (const r of rejected) {
+      const reason = String((r.details as { reason?: string } | null)?.reason ?? "unknown");
+      reasons.set(reason, (reasons.get(reason) ?? 0) + 1);
+    }
+    const ips = new Map<string, number>();
+    for (const r of rejected) {
+      if (!r.ip_address) continue;
+      ips.set(r.ip_address, (ips.get(r.ip_address) ?? 0) + 1);
+    }
+    const rate = all.length ? Math.round((rejected.length / all.length) * 100) : 0;
+
+    return {
+      total: all.length,
+      rejected: rejected.length,
+      accepted: accepted.length,
+      rejected24h: within(rejected, 24),
+      rejected7d: within(rejected, 24 * 7),
+      rate,
+      lastRejection: rejected[0]?.created_at ?? null,
+      reasons: [...reasons.entries()].sort((a, b) => b[1] - a[1]),
+      ips: [...ips.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5),
+    };
+  }, [rows]);
+
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
