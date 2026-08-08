@@ -219,6 +219,33 @@ export default function AuditTrail() {
 
       <div className="border border-foreground/15 p-4">
         <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          Failure-rate alerts (auto, 15-minute window)
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Checked every 5 minutes. An account is alerted once per hour when 25%+ of its
+          events fail (minimum 5 events), so a single bad account can&rsquo;t spam on-call.
+        </p>
+        {alerts.length === 0 ? (
+          <div className="mt-3 text-sm text-muted-foreground">No accounts have tripped the threshold.</div>
+        ) : (
+          <div className="mt-3 divide-y divide-foreground/10">
+            {alerts.map((a) => (
+              <div key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                <span className="truncate">{a.account_name ?? a.account_key}</span>
+                <span className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Chip tone="burgundy">{Number(a.failure_rate).toFixed(0)}%</Chip>
+                  {a.failed_events}/{a.total_events} failed · {a.alert_count}× alerted ·{" "}
+                  {when(a.last_alerted_at)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+
+      <div className="border border-foreground/15 p-4">
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
           Verification & delivery failures by account
         </div>
         {byAccount.length === 0 ? (
