@@ -13,6 +13,7 @@ export type ServiceAddress = {
   postal_code: string | null;
   notes: string | null;
   is_default: boolean;
+  is_billing: boolean;
 };
 
 const inputClass =
@@ -27,6 +28,7 @@ type Draft = {
   state: string;
   postal_code: string;
   notes: string;
+  is_billing: boolean;
 };
 
 const emptyDraft = (): Draft => ({
@@ -37,11 +39,19 @@ const emptyDraft = (): Draft => ({
   state: "",
   postal_code: "",
   notes: "",
+  is_billing: false,
 });
 
 export function formatAddress(a: ServiceAddress) {
   return [a.address, a.city, a.state, a.postal_code].filter(Boolean).join(", ");
 }
+
+const normalize = (v: string | null | undefined) =>
+  (v ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+
+const addressKey = (a: { address: string; city?: string | null; postal_code?: string | null }) =>
+  [normalize(a.address), normalize(a.city), normalize(a.postal_code)].join("|");
+
 
 export default function PortalAddresses({
   customerId,
@@ -61,7 +71,7 @@ export default function PortalAddresses({
     setLoading(true);
     const { data, error } = await supabase
       .from("ss_service_addresses")
-      .select("id,customer_id,label,address,city,state,postal_code,notes,is_default")
+      .select("id,customer_id,label,address,city,state,postal_code,notes,is_default,is_billing")
       .eq("customer_id", customerId)
       .order("is_default", { ascending: false })
       .order("created_at", { ascending: true });
@@ -84,23 +94,44 @@ export default function PortalAddresses({
       toast.error("Add a street address first.");
       return;
     }
+
+    // Same street address can only exist twice: once as a service address and
+    // once as the billing copy. Anything beyond that is a duplicate.
+    const key = addressKey({ address: draft.address, city: draft.city, postal_code: draft.postal_code });
+    const clash = rows.find(
+      (r) => r.id !== draft.id && addressKey(r) === key && r.is_billing === draft.is_billing,
+    );
+    if (clash) {
+      toast.error(
+        draft.is_billing
+          ? "That billing address is already saved."
+          : "That address is already saved — tick “Billing address” to keep a separate billing copy.",
+      );
+      return;
+    }
+
     setSaving(true);
     const payload = {
       customer_id: customerId,
-      label: draft.label.trim() || "Service address",
+      label: draft.label.trim() || (draft.is_billing ? "Billing address" : "Service address"),
       address: draft.address.trim(),
       city: draft.city.trim() || null,
       state: draft.state.trim() || null,
       postal_code: draft.postal_code.trim() || null,
       notes: draft.notes.trim() || null,
-      is_default: rows.length === 0,
+      is_billing: draft.is_billing,
+      is_default: rows.length === 0 && !draft.is_billing,
     };
     const { error } = draft.id
       ? await supabase.from("ss_service_addresses").update(payload).eq("id", draft.id)
       : await supabase.from("ss_service_addresses").insert(payload);
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.message.includes("ss_service_addresses_unique_norm")
+          ? "That address is already saved for this account."
+          : error.message,
+      );
       return;
     }
     toast.success(draft.id ? "Address updated." : "Address saved.");
@@ -186,6 +217,11 @@ export default function PortalAddresses({
                             Default
                           </span>
                         )}
+                        {r.is_billing && (
+                          <span className="border border-primary/40 px-1.5 py-0.5 text-[9px] tracking-widest text-primary">
+                            Billing
+                          </span>
+                        )}
                       </span>
                       <span className="mt-1 block text-xs text-muted-foreground">{formatAddress(r)}</span>
                       {r.notes && <span className="mt-1 block text-xs text-muted-foreground">{r.notes}</span>}
@@ -212,6 +248,7 @@ export default function PortalAddresses({
                             state: r.state ?? "",
                             postal_code: r.postal_code ?? "",
                             notes: r.notes ?? "",
+                            is_billing: r.is_billing,
                           })
                         }
                         className="border border-primary/20 px-2 py-1.5 font-tech text-[10px] uppercase tracking-wide text-primary hover:border-accent hover:text-accent"
@@ -263,6 +300,16 @@ export default function PortalAddresses({
                 <input id="sa-zip" className={inputClass} maxLength={20} value={draft.postal_code}
                   onChange={(e) => setDraft({ ...draft, postal_code: e.target.value })} />
               </div>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="flex items-center gap-2 font-tech text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={draft.is_billing}
+                  onChange={(e) => setDraft({ ...draft, is_billing: e.target.checked })}
+                />
+                Billing address (lets you keep the same street address saved twice — once for service, once for billing)
+              </label>
             </div>
             <div className="sm:col-span-2">
               <label className={labelClass} htmlFor="sa-notes">Access notes</label>

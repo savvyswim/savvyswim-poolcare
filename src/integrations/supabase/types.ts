@@ -4024,6 +4024,7 @@ export type Database = {
           created_at: string
           customer_id: string
           id: string
+          is_billing: boolean
           is_default: boolean
           label: string
           notes: string | null
@@ -4037,6 +4038,7 @@ export type Database = {
           created_at?: string
           customer_id: string
           id?: string
+          is_billing?: boolean
           is_default?: boolean
           label?: string
           notes?: string | null
@@ -4050,6 +4052,7 @@ export type Database = {
           created_at?: string
           customer_id?: string
           id?: string
+          is_billing?: boolean
           is_default?: boolean
           label?: string
           notes?: string | null
