@@ -73,6 +73,7 @@ export default function VisitSheet({
   const [bodyReadings, setBodyReadings] = useState<Record<string, Readings>>({});
   const [activeBody, setActiveBody] = useState<string>("main");
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [templateSteps, setTemplateSteps] = useState<TemplateStep[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [taskPhotos, setTaskPhotos] = useState<Record<string, string>>({});
   const [before, setBefore] = useState<{ url: string; path: string } | null>(null);
