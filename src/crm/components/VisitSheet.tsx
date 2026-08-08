@@ -188,27 +188,39 @@ export default function VisitSheet({
     [c.id, stop.id],
   );
 
-  /** Signature checklist first, then anything specific to this pool. */
-  const steps: Step[] = useMemo(
-    () => [
-      ...SIGNATURE_CHECKLIST.map((s) => ({
-        id: s.id,
-        label: s.label,
-        hint: s.hint,
-        is_required: s.is_required,
-        photo: s.photo,
-        custom: false,
-      })),
-      ...tasks.map((t) => ({
-        id: t.id,
-        label: t.label,
-        is_required: t.is_required,
-        photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
-        custom: true,
-      })),
-    ],
-    [tasks],
-  );
+  /** Template sequence (or the built-in signature list), then anything specific to this pool. */
+  const steps: Step[] = useMemo(() => {
+    const base: Step[] = templateSteps.length
+      ? templateSteps.map((s) => ({
+          id: s.id,
+          label: s.label,
+          hint: s.hint ?? undefined,
+          is_required: s.is_required,
+          photo: (s.photo_required ? "required" : "suggested") as ChecklistPhoto,
+          custom: false,
+          phase: s.phase,
+        }))
+      : SIGNATURE_CHECKLIST.map((s) => ({
+          id: s.id,
+          label: s.label,
+          hint: s.hint,
+          is_required: s.is_required,
+          photo: s.photo,
+          custom: false,
+          phase: signaturePhase(s.id),
+        }));
+    const custom: Step[] = tasks.map((t) => ({
+      id: t.id,
+      label: t.label,
+      hint: t.hint ?? undefined,
+      is_required: t.is_required,
+      photo: (t.photo_required ? "required" : "suggested") as ChecklistPhoto,
+      custom: true,
+      phase: (t.phase ?? "in_progress") as WorkflowPhase,
+    }));
+    const all = [...base, ...custom];
+    return PHASE_ORDER.flatMap((p) => all.filter((s) => s.phase === p));
+  }, [tasks, templateSteps]);
 
   const blockingTasks = steps.filter(
     (t) =>
