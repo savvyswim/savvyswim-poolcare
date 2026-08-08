@@ -75,7 +75,7 @@ export default function CustomerDetail() {
 
   const lifetime = useMemo(() => invoices.reduce((s, i) => s + Number(i.amount), 0), [invoices]);
 
-  const sendInvite = async () => {
+  const createLogin = async (mode: "invite" | "password") => {
     if (!c) return;
     const target = (inviteEmail || c.email || "").trim();
     if (!target) {
@@ -84,24 +84,23 @@ export default function CustomerDetail() {
     }
     setInviting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("admin-invite-customer", {
-        body: {
-          email: target,
-          full_name: c.full_name,
-          customer_id: c.id,
-          origin: window.location.origin,
-        },
+      const res = await createCustomerLogin({
+        data: { customer_id: c.id, email: target, mode, origin: window.location.origin },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
       setInvited(true);
-      toast.success(`Login invite emailed to ${target}`);
+      if (res.password) {
+        setTempPassword(res.password);
+        toast.success("Login created — share the password below");
+      } else {
+        toast.success(`Login invite emailed to ${res.email}`);
+      }
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not send the invite");
+      toast.error(err?.message ?? "Could not create that login");
     } finally {
       setInviting(false);
     }
   };
+
 
   if (!c) return <EmptyState>Loading customer…</EmptyState>;
 
