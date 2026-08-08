@@ -2329,6 +2329,7 @@ export type Database = {
           name: string
           quantity: number
           unit: string
+          unit_cost: number
           updated_at: string
         }
         Insert: {
@@ -2338,6 +2339,7 @@ export type Database = {
           name: string
           quantity?: number
           unit?: string
+          unit_cost?: number
           updated_at?: string
         }
         Update: {
@@ -2347,6 +2349,7 @@ export type Database = {
           name?: string
           quantity?: number
           unit?: string
+          unit_cost?: number
           updated_at?: string
         }
         Relationships: []
@@ -2355,42 +2358,78 @@ export type Database = {
         Row: {
           actor_id: string | null
           created_at: string
+          customer_id: string | null
           delta: number
           id: string
           item_id: string
           item_name: string
+          job_id: string | null
           note: string | null
           quantity_after: number
           reason: string
+          total_cost: number | null
+          unit_cost: number | null
+          visit_id: string | null
         }
         Insert: {
           actor_id?: string | null
           created_at?: string
+          customer_id?: string | null
           delta: number
           id?: string
           item_id: string
           item_name: string
+          job_id?: string | null
           note?: string | null
           quantity_after: number
           reason?: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          visit_id?: string | null
         }
         Update: {
           actor_id?: string | null
           created_at?: string
+          customer_id?: string | null
           delta?: number
           id?: string
           item_id?: string
           item_name?: string
+          job_id?: string | null
           note?: string | null
           quantity_after?: number
           reason?: string
+          total_cost?: number | null
+          unit_cost?: number | null
+          visit_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ss_inventory_moves_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ss_inventory_moves_item_id_fkey"
             columns: ["item_id"]
             isOneToOne: false
             referencedRelation: "ss_inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_inventory_moves_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "ss_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_inventory_moves_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
             referencedColumns: ["id"]
           },
         ]
@@ -5241,6 +5280,15 @@ export type Database = {
       ss_is_office: { Args: never; Returns: boolean }
       ss_is_owner: { Args: never; Returns: boolean }
       ss_is_staff: { Args: never; Returns: boolean }
+      ss_log_inventory_usage: {
+        Args: {
+          p_items: Json
+          p_job_id?: string
+          p_note?: string
+          p_visit_id?: string
+        }
+        Returns: Json
+      }
       ss_mark_quote_viewed: { Args: { _token: string }; Returns: undefined }
       ss_mark_review_clicked: { Args: { _token: string }; Returns: undefined }
       ss_match_service_plan: {

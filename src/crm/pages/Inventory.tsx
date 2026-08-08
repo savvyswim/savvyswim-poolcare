@@ -17,9 +17,13 @@ const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
 type Move = {
   id: string; item_id: string; item_name: string; delta: number;
   quantity_after: number; reason: string; note: string | null; created_at: string;
+  visit_id: string | null; job_id: string | null; customer_id: string | null;
+  total_cost: number | null;
+  ss_customers?: { full_name: string } | null;
 };
 
 const REASONS = [
+  { value: "usage", label: "Used on a visit" },
   { value: "restock", label: "Restock / delivery" },
   { value: "used_on_job", label: "Used on a job" },
   { value: "correction", label: "Count correction" },
@@ -78,10 +82,12 @@ export default function Inventory() {
   const { rows: moves, refetch: refetchMoves } = useTable<Move>("inventory-moves", async () => {
     const { data } = await supabase
       .from("ss_inventory_moves")
-      .select("id,item_id,item_name,delta,quantity_after,reason,note,created_at")
+      .select(
+        "id,item_id,item_name,delta,quantity_after,reason,note,created_at,visit_id,job_id,customer_id,total_cost,ss_customers(full_name)",
+      )
       .order("created_at", { ascending: false })
       .limit(300);
-    return (data ?? []) as Move[];
+    return (data ?? []) as unknown as Move[];
   });
 
   const movesByItem = useMemo(() => {
@@ -89,6 +95,32 @@ export default function Inventory() {
     for (const mv of moves) m.set(mv.item_id, [...(m.get(mv.item_id) ?? []), mv]);
     return m;
   }, [moves]);
+
+  /** Consumption tied to a visit or job over the last 30 days, per item. */
+  const usageByItem = useMemo(() => {
+    const since = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const m = new Map<string, { qty: number; cost: number; jobs: number }>();
+    for (const mv of moves) {
+      if (mv.delta >= 0) continue;
+      if (!mv.visit_id && !mv.job_id && mv.reason !== "usage" && mv.reason !== "used_on_job") continue;
+      if (new Date(mv.created_at).getTime() < since) continue;
+      const cur = m.get(mv.item_id) ?? { qty: 0, cost: 0, jobs: 0 };
+      cur.qty += Math.abs(mv.delta);
+      cur.cost += Number(mv.total_cost) || 0;
+      if (mv.visit_id || mv.job_id) cur.jobs += 1;
+      m.set(mv.item_id, cur);
+    }
+    return m;
+  }, [moves]);
+
+  const usageContext = (m: Move) => {
+    const who = m.ss_customers?.full_name;
+    if (m.visit_id) return who ? `visit · ${who}` : "visit";
+    if (m.job_id) return who ? `job · ${who}` : "job";
+    return null;
+  };
+
+
 
   async function logMove(item: Item, delta: number, quantityAfter: number, reason: string, note?: string) {
     if (!delta) return;
@@ -263,6 +295,8 @@ export default function Inventory() {
                 </span>
                 <span className="font-semibold">{m.item_name}</span>
                 <span className="opacity-70">{reasonLabel(m.reason)}</span>
+                {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
+                {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
                 {m.note && <span className="opacity-60">· {m.note}</span>}
                 <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
               </div>
@@ -391,7 +425,20 @@ export default function Inventory() {
                 </div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
+                  {(() => {
+                    const u = usageByItem.get(i.id);
+                    if (!u || !u.qty) return null;
+                    const days = u.qty / 30;
+                    return (
+                      <>
+                        {" · "}used {Math.round(u.qty * 100) / 100} {i.unit ?? "units"} on {u.jobs} job(s) in 30 days
+                        {u.cost > 0 && ` · $${u.cost.toFixed(2)}`}
+                        {days > 0 && ` · ~${Math.floor(i.quantity / days)} days of stock left`}
+                      </>
+                    );
+                  })()}
                 </div>
+
               </div>
               <div className="flex items-center gap-2">
                 <button className="ss-btn ss-btn-ghost" onClick={() => void adjust(i, -1)} aria-label={`Decrease ${i.name}`}>−</button>
@@ -488,6 +535,8 @@ export default function Inventory() {
                           {m.delta > 0 ? "+" : ""}{m.delta}
                         </span>
                         <span className="opacity-75">{reasonLabel(m.reason)}</span>
+                        {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
+                        {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
                         {m.note && <span className="opacity-60">· {m.note}</span>}
                         <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
                       </div>
