@@ -63,6 +63,14 @@ export function parseMarketingCsv(text: string): Row[] {
   });
 }
 
+const normEmail = (v: string | null | undefined) => (v ?? "").trim().toLowerCase() || null;
+
+// Match phones on their last 10 digits so formatting differences don't create duplicates.
+const normPhone = (v: string | null | undefined) => {
+  const digits = (v ?? "").replace(/\D/g, "");
+  return digits.length >= 10 ? digits.slice(-10) : null;
+};
+
 const TEMPLATE = "name,email,phone,address,city,source\nJane Doe,jane@example.com,469-555-0134,123 Palm Dr,Frisco,facebook\n";
 
 export default function MarketingImport({ onDone }: { onDone?: () => void }) {
