@@ -9,6 +9,7 @@ import { useTable } from "@/crm/lib/useSavvy";
 import InventoryImport from "@/crm/components/InventoryImport";
 import InventoryLabels, { codeFor } from "@/crm/components/InventoryLabels";
 import CodeScanner from "@/crm/components/CodeScanner";
+import ReorderDraft from "@/crm/components/ReorderDraft";
 import { convertQty, enterableUnits, PACK_UNITS, STOCK_UNITS, packLabel } from "@/crm/lib/units";
 
 
@@ -16,6 +17,7 @@ type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
   pack_size: number | null; pack_unit: string | null;
   sku: string | null; barcode: string | null;
+  unit_cost?: number | null;
 };
 
 const UNITS = STOCK_UNITS;
@@ -89,7 +91,7 @@ export default function Inventory() {
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
       .from("ss_inventory")
-      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit,sku,barcode")
+      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit,sku,barcode,unit_cost")
       .order("name");
     return (data ?? []) as Item[];
   });
