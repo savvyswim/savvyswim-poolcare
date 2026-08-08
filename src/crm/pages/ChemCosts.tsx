@@ -233,8 +233,8 @@ export default function ChemCosts() {
   return (
     <div className="space-y-4">
       <SectionTitle
-        title="Chemical cost by job"
-        sub="Every product poured, broken out by body of water, with per-visit totals."
+        title="Chemical & inventory cost by job"
+        sub="Every product poured plus truck stock consumed, broken out by body of water, with per-visit totals."
       />
 
       <div className="ss-card flex flex-wrap items-end gap-2 p-3.5">
