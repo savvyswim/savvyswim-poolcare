@@ -70,8 +70,8 @@ export default function JobCosting() {
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
         <StatTile label="Revenue" value={money(totals.revenue)} />
         <StatTile label="Cost" value={money(totals.cost)} />
-        <StatTile label="Profit" value={money(totals.profit)} sub={`${totals.margin.toFixed(1)}% margin`} />
-        <StatTile label="Tracked hours" value={totals.hours.toFixed(1)} sub={`${totals.autoShare.toFixed(0)}% auto-timed`} />
+        <StatTile label="Profit" value={`${money(totals.profit)} · ${totals.margin.toFixed(1)}%`} />
+        <StatTile label="Tracked hours" value={`${totals.hours.toFixed(1)}h · ${totals.autoShare.toFixed(0)}% auto`} />
       </div>
 
       {loading && <EmptyState>Crunching the numbers…</EmptyState>}
