@@ -6,17 +6,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { checkLowStock } from "@/lib/inventory-alerts.functions";
 import { Chip, EmptyState, SectionTitle } from "@/crm/components/Brand";
 import { useTable } from "@/crm/lib/useSavvy";
+import { convertQty, enterableUnits, PACK_UNITS, STOCK_UNITS, packLabel } from "@/crm/lib/units";
 
 
 type Item = {
   id: string; name: string; unit: string | null; quantity: number; low_threshold: number;
+  pack_size: number | null; pack_unit: string | null;
 };
 
-const UNITS = ["ea", "lb", "gal", "bucket", "bag", "box", "case", "qt", "oz"];
+const UNITS = STOCK_UNITS;
 
 type Move = {
   id: string; item_id: string; item_name: string; delta: number;
   quantity_after: number; reason: string; note: string | null; created_at: string;
+  entered_qty: number | null; entered_unit: string | null;
   visit_id: string | null; job_id: string | null; customer_id: string | null;
   total_cost: number | null;
   ss_customers?: { full_name: string } | null;
@@ -39,7 +42,13 @@ const stamp = (iso: string) =>
     month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
   });
 
-const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5 };
+const emptyDraft = { name: "", unit: "ea", quantity: 0, low_threshold: 5, pack_size: "", pack_unit: "lb" };
+
+/** "+2 (5 lb)" — shows what the tech typed when it differed from the stock unit. */
+const enteredNote = (m: Move, unit?: string | null) =>
+  m.entered_unit && m.entered_unit !== (unit ?? "") && m.entered_qty
+    ? `entered ${Math.round(Number(m.entered_qty) * 1000) / 1000} ${m.entered_unit}`
+    : null;
 
 export default function Inventory() {
   const [q, setQ] = useState("");
@@ -49,7 +58,7 @@ export default function Inventory() {
   const [edit, setEdit] = useState({ ...emptyDraft });
   const [busy, setBusy] = useState(false);
   const [adjustId, setAdjustId] = useState<string | null>(null);
-  const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
+  const [adjustDraft, setAdjustDraft] = useState({ amount: 1, dir: -1, reason: "used_on_job", note: "", unit: "" });
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
   const runLowStockCheck = useServerFn(checkLowStock);
@@ -74,7 +83,7 @@ export default function Inventory() {
   const { rows, refetch } = useTable<Item>("inventory", async () => {
     const { data } = await supabase
       .from("ss_inventory")
-      .select("id,name,unit,quantity,low_threshold")
+      .select("id,name,unit,quantity,low_threshold,pack_size,pack_unit")
       .order("name");
     return (data ?? []) as Item[];
   });
@@ -83,12 +92,17 @@ export default function Inventory() {
     const { data } = await supabase
       .from("ss_inventory_moves")
       .select(
-        "id,item_id,item_name,delta,quantity_after,reason,note,created_at,visit_id,job_id,customer_id,total_cost,ss_customers(full_name)",
+        "id,item_id,item_name,delta,quantity_after,reason,note,created_at,visit_id,job_id,customer_id,total_cost,entered_qty,entered_unit,ss_customers(full_name)",
       )
       .order("created_at", { ascending: false })
       .limit(300);
     return (data ?? []) as unknown as Move[];
   });
+
+  const unitById = useMemo(
+    () => new Map(rows.map((r) => [r.id, r.unit ?? "ea"])),
+    [rows],
+  );
 
   const movesByItem = useMemo(() => {
     const m = new Map<string, Move[]>();
@@ -122,7 +136,14 @@ export default function Inventory() {
 
 
 
-  async function logMove(item: Item, delta: number, quantityAfter: number, reason: string, note?: string) {
+  async function logMove(
+    item: Item,
+    delta: number,
+    quantityAfter: number,
+    reason: string,
+    note?: string,
+    entered?: { qty: number; unit: string },
+  ) {
     if (!delta) return;
     const { data: auth } = await supabase.auth.getUser();
     const { error } = await supabase.from("ss_inventory_moves").insert({
@@ -133,6 +154,8 @@ export default function Inventory() {
       reason,
       note: note?.trim() ? note.trim() : null,
       actor_id: auth.user?.id ?? null,
+      entered_qty: entered?.qty ?? null,
+      entered_unit: entered?.unit ?? null,
     });
     if (error) { toast.error(`Adjustment saved, history not logged: ${error.message}`); return; }
     void refetchMoves();
@@ -166,20 +189,30 @@ export default function Inventory() {
   }
 
   async function applyAdjustment(item: Item) {
-    const amount = Math.abs(Number(adjustDraft.amount) || 0);
-    if (!amount) { toast.error("Enter how many units."); return; }
+    const typed = Math.abs(Number(adjustDraft.amount) || 0);
+    if (!typed) { toast.error("Enter how many units."); return; }
+    const stockUnit = item.unit ?? "ea";
+    const entryUnit = adjustDraft.unit || stockUnit;
+    const amount = convertQty(typed, entryUnit, stockUnit, item);
+    if (amount == null) { toast.error(`Cannot convert ${entryUnit} into ${stockUnit}.`); return; }
     const delta = adjustDraft.dir * amount;
     const next = Math.max(0, item.quantity + delta);
     setBusy(true);
     const { error } = await supabase.from("ss_inventory").update({ quantity: next }).eq("id", item.id);
     if (error) { setBusy(false); toast.error(error.message); return; }
-    await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note);
+    await logMove(item, next - item.quantity, next, adjustDraft.reason, adjustDraft.note, {
+      qty: typed,
+      unit: entryUnit,
+    });
     void notifyIfLow(item, next);
     setBusy(false);
 
     setAdjustId(null);
-    setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "" });
-    toast.success(`${item.name} · ${delta > 0 ? "+" : ""}${delta} ${item.unit ?? "units"}`);
+    setAdjustDraft({ amount: 1, dir: -1, reason: "used_on_job", note: "", unit: "" });
+    toast.success(
+      `${item.name} · ${delta > 0 ? "+" : ""}${Math.round(delta * 1000) / 1000} ${stockUnit}` +
+        (entryUnit !== stockUnit ? ` (entered ${typed} ${entryUnit})` : ""),
+    );
     void refetch();
   }
 
@@ -196,6 +229,8 @@ export default function Inventory() {
       unit: draft.unit || "ea",
       quantity: Math.max(0, Number(draft.quantity) || 0),
       low_threshold: Math.max(0, Number(draft.low_threshold) || 0),
+      pack_size: Number(draft.pack_size) > 0 ? Number(draft.pack_size) : null,
+      pack_unit: Number(draft.pack_size) > 0 ? draft.pack_unit : null,
     });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
@@ -213,6 +248,8 @@ export default function Inventory() {
       unit: i.unit ?? "ea",
       quantity: i.quantity,
       low_threshold: i.low_threshold,
+      pack_size: i.pack_size == null ? "" : String(i.pack_size),
+      pack_unit: i.pack_unit ?? "lb",
     });
   }
 
@@ -228,6 +265,8 @@ export default function Inventory() {
         unit: edit.unit || "ea",
         quantity: Math.max(0, Number(edit.quantity) || 0),
         low_threshold: Math.max(0, Number(edit.low_threshold) || 0),
+        pack_size: Number(edit.pack_size) > 0 ? Number(edit.pack_size) : null,
+        pack_unit: Number(edit.pack_size) > 0 ? edit.pack_unit : null,
       })
       .eq("id", editId);
     setBusy(false);
@@ -297,6 +336,9 @@ export default function Inventory() {
                 <span className="opacity-70">{reasonLabel(m.reason)}</span>
                 {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
                 {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
+                {enteredNote(m, unitById.get(m.item_id)) && (
+                  <span className="opacity-60">· {enteredNote(m, unitById.get(m.item_id))}</span>
+                )}
                 {m.note && <span className="opacity-60">· {m.note}</span>}
                 <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
               </div>
@@ -349,6 +391,31 @@ export default function Inventory() {
                 value={draft.low_threshold}
                 onChange={(e) => setDraft({ ...draft, low_threshold: Number(e.target.value) })}
               />
+            </label>
+            <label className="space-y-1">
+              <span className="ss-label">Pack size (optional)</span>
+              <div className="flex gap-2">
+                <input
+                  className="ss-input ss-num w-full"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  placeholder="e.g. 40"
+                  value={draft.pack_size}
+                  onChange={(e) => setDraft({ ...draft, pack_size: e.target.value })}
+                />
+                <select
+                  className="ss-input w-[90px]"
+                  aria-label="Pack unit"
+                  value={draft.pack_unit}
+                  onChange={(e) => setDraft({ ...draft, pack_unit: e.target.value })}
+                >
+                  {PACK_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                </select>
+              </div>
+              <span className="block text-[0.68rem] opacity-60">
+                How much one {draft.unit} holds — lets techs enter quantities in other units.
+              </span>
             </label>
           </div>
           <button className="ss-btn" disabled={busy} onClick={() => void addItem()}>
@@ -403,6 +470,31 @@ export default function Inventory() {
                     onChange={(e) => setEdit({ ...edit, low_threshold: Number(e.target.value) })}
                   />
                 </label>
+            <label className="space-y-1">
+                      <span className="ss-label">Pack size (optional)</span>
+                      <div className="flex gap-2">
+                        <input
+                          className="ss-input ss-num w-full"
+                          type="number"
+                          min={0}
+                          step="0.01"
+                          placeholder="e.g. 40"
+                          value={edit.pack_size}
+                          onChange={(e) => setEdit({ ...edit, pack_size: e.target.value })}
+                        />
+                        <select
+                          className="ss-input w-[90px]"
+                          aria-label="Pack unit"
+                          value={edit.pack_unit}
+                          onChange={(e) => setEdit({ ...edit, pack_unit: e.target.value })}
+                        >
+                          {PACK_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                        </select>
+                      </div>
+                      <span className="block text-[0.68rem] opacity-60">
+                        How much one {edit.unit} holds — lets techs enter quantities in other units.
+                      </span>
+                    </label>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button className="ss-btn" disabled={busy} onClick={() => void saveEdit()}>
@@ -425,6 +517,7 @@ export default function Inventory() {
                 </div>
                 <div className="text-[0.72rem] opacity-60">
                   Reorder at {i.low_threshold} {i.unit ?? "units"}
+                  {packLabel(i, i.unit ?? "unit") && ` · ${packLabel(i, i.unit ?? "unit")}`}
                   {(() => {
                     const u = usageByItem.get(i.id);
                     if (!u || !u.qty) return null;
@@ -487,15 +580,25 @@ export default function Inventory() {
                       </select>
                     </label>
                     <label className="space-y-1">
-                      <span className="ss-label">Qty ({i.unit ?? "units"})</span>
+                      <span className="ss-label">Qty</span>
                       <input
                         className="ss-input ss-num w-20"
                         type="number"
                         min={0}
-                        step={1}
+                        step="0.01"
                         value={adjustDraft.amount}
                         onChange={(e) => setAdjustDraft({ ...adjustDraft, amount: Number(e.target.value) })}
                       />
+                    </label>
+                    <label className="space-y-1">
+                      <span className="ss-label">Unit</span>
+                      <select
+                        className="ss-input w-[90px]"
+                        value={adjustDraft.unit || (i.unit ?? "ea")}
+                        onChange={(e) => setAdjustDraft({ ...adjustDraft, unit: e.target.value })}
+                      >
+                        {enterableUnits(i.unit, i).map((u) => <option key={u} value={u}>{u}</option>)}
+                      </select>
                     </label>
                     <label className="space-y-1">
                       <span className="ss-label">Reason</span>
@@ -508,6 +611,18 @@ export default function Inventory() {
                       </select>
                     </label>
                   </div>
+                  {(() => {
+                    const entry = adjustDraft.unit || (i.unit ?? "ea");
+                    if (entry === (i.unit ?? "ea")) return null;
+                    const conv = convertQty(Math.abs(Number(adjustDraft.amount) || 0), entry, i.unit ?? "ea", i);
+                    return (
+                      <p className="text-[0.72rem] opacity-70">
+                        {conv == null
+                          ? `No conversion rule from ${entry} to ${i.unit ?? "ea"} — set a pack size on this item.`
+                          : `${Math.abs(Number(adjustDraft.amount) || 0)} ${entry} = ${Math.round(conv * 1000) / 1000} ${i.unit ?? "ea"}`}
+                      </p>
+                    );
+                  })()}
                   <input
                     className="ss-input w-full"
                     placeholder="Note (optional) — job, truck, invoice…"
@@ -537,6 +652,7 @@ export default function Inventory() {
                         <span className="opacity-75">{reasonLabel(m.reason)}</span>
                         {usageContext(m) && <span className="opacity-75">· {usageContext(m)}</span>}
                         {!!m.total_cost && <span className="ss-num opacity-70">· ${Number(m.total_cost).toFixed(2)}</span>}
+                        {enteredNote(m, i.unit) && <span className="opacity-60">· {enteredNote(m, i.unit)}</span>}
                         {m.note && <span className="opacity-60">· {m.note}</span>}
                         <span className="ml-auto opacity-55">{stamp(m.created_at)} · now {m.quantity_after}</span>
                       </div>
