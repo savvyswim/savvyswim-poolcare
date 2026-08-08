@@ -3,6 +3,8 @@ import { Boxes, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { money2 } from "@/crm/lib/pricing";
 import { convertQty, enterableUnits, packLabel } from "@/crm/lib/units";
+import CodeScanner from "@/crm/components/CodeScanner";
+import { toast } from "sonner";
 
 export type UsedItem = {
   item_id: string;
@@ -21,6 +23,7 @@ export type UsedItem = {
 type InvItem = {
   id: string; name: string; unit: string; quantity: number; unit_cost: number;
   pack_size: number | null; pack_unit: string | null;
+  sku: string | null; barcode: string | null;
 };
 
 /** Quantity in the item's own stock unit, after applying the conversion rule. */
@@ -53,7 +56,7 @@ export default function InventoryUsed({
     void (async () => {
       const { data } = await supabase
         .from("ss_inventory")
-        .select("id,name,unit,quantity,unit_cost,pack_size,pack_unit")
+        .select("id,name,unit,quantity,unit_cost,pack_size,pack_unit,sku,barcode")
         .order("name");
       setItems((data ?? []) as InvItem[]);
     })();
@@ -64,9 +67,12 @@ export default function InventoryUsed({
     [items, rows],
   );
 
-  function add() {
-    const it = items.find((i) => i.id === pick);
-    if (!it) return;
+  function addItem(it: InvItem) {
+    if (rows.some((r) => r.item_id === it.id)) {
+      const next = rows.map((r) => (r.item_id === it.id ? { ...r, qty: (Number(r.qty) || 0) + 1 } : r));
+      onChange(next);
+      return;
+    }
     onChange([
       ...rows,
       {
@@ -81,7 +87,23 @@ export default function InventoryUsed({
         pack_unit: it.pack_unit ?? null,
       },
     ]);
+  }
+
+  function add() {
+    const it = items.find((i) => i.id === pick);
+    if (!it) return;
+    addItem(it);
     setPick("");
+  }
+
+  function scan(code: string) {
+    const c = code.trim().toLowerCase();
+    const it = items.find(
+      (i) => (i.barcode ?? "").toLowerCase() === c || (i.sku ?? "").toLowerCase() === c || i.id.toLowerCase() === c,
+    );
+    if (!it) { toast.error(`No product matches ${code}`); return; }
+    addItem(it);
+    toast.success(`${it.name} added`);
   }
 
   const total = usedTotal(rows);
@@ -164,6 +186,7 @@ export default function InventoryUsed({
           <button type="button" className="ss-btn-ghost flex items-center gap-1" disabled={!pick} onClick={add}>
             <Plus size={13} /> Add
           </button>
+          <CodeScanner label="Scan" onScan={scan} />
         </div>
       </div>
     </div>
