@@ -20,13 +20,7 @@ type Profile = {
   notify_invoices: boolean;
   notify_reports: boolean;
   notify_marketing: boolean;
-  vehicle_make: string | null;
-  vehicle_model: string | null;
-  vehicle_year: number | null;
-  vehicle_vin: string | null;
 };
-
-const VIN_RE = /^[A-HJ-NPR-Z0-9]{11,17}$/;
 
 const CONTACT_OPTIONS: { value: string; label: string; hint: string }[] = [
   { value: "email", label: "Email", hint: "Reports and receipts land in your inbox" },
@@ -67,16 +61,6 @@ export default function PortalProfile() {
 
   const save = async () => {
     if (!form) return;
-    const vin = (form.vehicle_vin ?? "").trim().toUpperCase();
-    if (vin && !VIN_RE.test(vin)) {
-      toast.error("Enter a valid VIN — 11 to 17 letters or numbers, no I, O or Q.");
-      return;
-    }
-    const year = form.vehicle_year;
-    if (year != null && (!Number.isInteger(year) || year < 1900 || year > new Date().getFullYear() + 2)) {
-      toast.error("Enter a valid vehicle year.");
-      return;
-    }
     setSaving(true);
     const { error } = await supabase.rpc("ss_portal_update_profile" as never, {
       p_patch: {
@@ -89,10 +73,6 @@ export default function PortalProfile() {
         gate_code: form.gate_code ?? "",
         dog_name: form.dog_name ?? "",
         location_notes: form.location_notes ?? "",
-        vehicle_make: (form.vehicle_make ?? "").trim(),
-        vehicle_model: (form.vehicle_model ?? "").trim(),
-        vehicle_year: year == null ? "" : String(year),
-        vehicle_vin: vin,
         preferred_contact: form.preferred_contact,
         notify_visits: form.notify_visits,
         notify_invoices: form.notify_invoices,
@@ -176,38 +156,6 @@ export default function PortalProfile() {
             <input id="pp-dog" className={inputClass} maxLength={80} value={form.dog_name ?? ""}
               onChange={(e) => set("dog_name", e.target.value)} placeholder="Name, or leave blank" />
           </div>
-          <div className="sm:col-span-2 mt-1 border-t border-primary/10 pt-3">
-            <p className={labelClass}>Vehicle on site (for inspections)</p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className={labelClass} htmlFor="pp-vmake">Make</label>
-                <input id="pp-vmake" className={inputClass} maxLength={60} value={form.vehicle_make ?? ""}
-                  onChange={(e) => set("vehicle_make", e.target.value)} placeholder="Ford" />
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="pp-vmodel">Model</label>
-                <input id="pp-vmodel" className={inputClass} maxLength={60} value={form.vehicle_model ?? ""}
-                  onChange={(e) => set("vehicle_model", e.target.value)} placeholder="F-150" />
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="pp-vyear">Year</label>
-                <input id="pp-vyear" inputMode="numeric" className={inputClass} maxLength={4}
-                  value={form.vehicle_year == null ? "" : String(form.vehicle_year)}
-                  onChange={(e) => {
-                    const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
-                    set("vehicle_year", digits ? Number(digits) : null);
-                  }} placeholder="2021" />
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="pp-vvin">VIN</label>
-                <input id="pp-vvin" className={`${inputClass} uppercase`} maxLength={17}
-                  value={form.vehicle_vin ?? ""}
-                  onChange={(e) => set("vehicle_vin", e.target.value.replace(/[^a-hj-npr-zA-HJ-NPR-Z0-9]/g, "").toUpperCase())}
-                  placeholder="1FTFW1E52MFA00000" />
-              </div>
-            </div>
-          </div>
-
           <div className="sm:col-span-2">
             <label className={labelClass} htmlFor="pp-notes">Access notes for the tech</label>
             <textarea id="pp-notes" rows={3} maxLength={1000} className={inputClass}
