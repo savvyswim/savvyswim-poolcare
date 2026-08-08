@@ -73,6 +73,7 @@ import { Route as CrmAdminCrmPipelineRouteImport } from './routes/_crm/admin/crm
 import { Route as CrmAdminCrmPayPerPoolRouteImport } from './routes/_crm/admin/crm/pay-per-pool'
 import { Route as CrmAdminCrmMarginRouteImport } from './routes/_crm/admin/crm/margin'
 import { Route as CrmAdminCrmJobsRouteImport } from './routes/_crm/admin/crm/jobs'
+import { Route as CrmAdminCrmJobCostingRouteImport } from './routes/_crm/admin/crm/job-costing'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
 import { Route as CrmAdminCrmInboxRouteImport } from './routes/_crm/admin/crm/inbox'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
@@ -413,6 +414,11 @@ const CrmAdminCrmJobsRoute = CrmAdminCrmJobsRouteImport.update({
   path: '/admin/crm/jobs',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmJobCostingRoute = CrmAdminCrmJobCostingRouteImport.update({
+  id: '/admin/crm/job-costing',
+  path: '/admin/crm/job-costing',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmInventoryRoute = CrmAdminCrmInventoryRouteImport.update({
   id: '/admin/crm/inventory',
   path: '/admin/crm/inventory',
@@ -532,6 +538,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -611,6 +618,7 @@ export interface FileRoutesByTo {
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -692,6 +700,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
   '/_crm/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
+  '/_crm/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/_crm/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/_crm/admin/crm/margin': typeof CrmAdminCrmMarginRoute
   '/_crm/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
@@ -773,6 +782,7 @@ export interface FileRouteTypes {
     | '/admin/crm/finance'
     | '/admin/crm/inbox'
     | '/admin/crm/inventory'
+    | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
     | '/admin/crm/pay-per-pool'
@@ -852,6 +862,7 @@ export interface FileRouteTypes {
     | '/admin/crm/finance'
     | '/admin/crm/inbox'
     | '/admin/crm/inventory'
+    | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
     | '/admin/crm/pay-per-pool'
@@ -932,6 +943,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/finance'
     | '/_crm/admin/crm/inbox'
     | '/_crm/admin/crm/inventory'
+    | '/_crm/admin/crm/job-costing'
     | '/_crm/admin/crm/jobs'
     | '/_crm/admin/crm/margin'
     | '/_crm/admin/crm/pay-per-pool'
@@ -1461,6 +1473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmJobsRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/job-costing': {
+      id: '/_crm/admin/crm/job-costing'
+      path: '/admin/crm/job-costing'
+      fullPath: '/admin/crm/job-costing'
+      preLoaderRoute: typeof CrmAdminCrmJobCostingRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/inventory': {
       id: '/_crm/admin/crm/inventory'
       path: '/admin/crm/inventory'
@@ -1573,6 +1592,7 @@ interface CrmRouteChildren {
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
   CrmAdminCrmInboxRoute: typeof CrmAdminCrmInboxRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
+  CrmAdminCrmJobCostingRoute: typeof CrmAdminCrmJobCostingRoute
   CrmAdminCrmJobsRoute: typeof CrmAdminCrmJobsRoute
   CrmAdminCrmMarginRoute: typeof CrmAdminCrmMarginRoute
   CrmAdminCrmPayPerPoolRoute: typeof CrmAdminCrmPayPerPoolRoute
@@ -1612,6 +1632,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
   CrmAdminCrmInboxRoute: CrmAdminCrmInboxRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
+  CrmAdminCrmJobCostingRoute: CrmAdminCrmJobCostingRoute,
   CrmAdminCrmJobsRoute: CrmAdminCrmJobsRoute,
   CrmAdminCrmMarginRoute: CrmAdminCrmMarginRoute,
   CrmAdminCrmPayPerPoolRoute: CrmAdminCrmPayPerPoolRoute,
