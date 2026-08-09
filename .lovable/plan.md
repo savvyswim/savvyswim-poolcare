@@ -38,9 +38,22 @@ New top section on Savvy Ledger: Invoices card (unpaid / overdue / paid split ba
 
 Jobs, Customers, Quotes, Invoices, Inspection Requests, Tickets, Inventory all get: page header + primary action, a 3–4 card overview strip specific to that page, pill filters + search, then the clean table with status pills, sortable columns and empty states.
 
-## 6. Technician view
+## 6. Technician mobile app (Pool Brain style)
 
-Simplified mobile-first day view: date strip, ordered stop cards (customer, address, window, badges), one tap into the visit sheet, big Start/Complete buttons, offline-safe photo capture UI, no dense tables or finance data. Existing tech privacy lockdown behavior is preserved.
+Mobile-first tech experience, big touch targets, no dense tables and no finance data:
+
+- Bottom tab bar: Home, Customers, Scheduling, Quotes, with a center "+" quick-create.
+- Home day view: date arrows, progress ring (stops completed / total), counters for route stops and jobs, then stop cards showing job number, customer, pool badge, address, phone, and quick actions: "On the way" text, Chemical history, Customer history, plus "No access" and "Start job".
+- Work-in-progress screen: running timer in the header, equipment and gallons shortcuts, service checklist rows with due-in-visits badges and "last done" text, camera / readings / notes / issue icons in a bottom action bar, and one full-width "Complete job" button.
+- Chemical history screen: reading-type chips (chlorine, pH, alkalinity, CYA, salt, phosphates, TDS, calcium, water temp, bromine, borates, LSI), range selector, trend chart, empty state when no readings.
+- Scheduling: Routes / Map toggle, route card with drive time, distance and duration, ordered stop list with optimize-route action.
+- Customer quick view for techs: property, pool type, gate/lock/dog icons, equipment link, and Jobs tab only — quotes, invoices and payments stay hidden for technician role.
+- Existing tech privacy lockdown behavior is preserved.
+
+## 6b. Job costing card
+
+Per-job "Total cost to date" card (revenue bar, cost bar, profit % and amount, expandable cost breakdown) shown on job and project detail pages, plus a Notes panel matching the reference layout.
+
 
 ## 7. Customer portal
 
