@@ -167,17 +167,24 @@ export default function Inspections() {
         (filter === "all" || r.status === filter) &&
         inRange(r.created_at, range) &&
         (!source || sourceOf(r) === source) &&
+        (!landing || pageOf(r) === landing) &&
         (!needle ||
           [r.full_name, r.phone, r.address, r.email, r.reference_number]
             .join(" ")
             .toLowerCase()
             .includes(needle)),
     );
-  }, [rows, filter, q, range, source]);
+  }, [rows, filter, q, range, source, landing]);
 
   const inWindow = useMemo(
-    () => rows.filter((r) => inRange(r.created_at, range) && (!source || sourceOf(r) === source)),
-    [rows, range, source],
+    () =>
+      rows.filter(
+        (r) =>
+          inRange(r.created_at, range) &&
+          (!source || sourceOf(r) === source) &&
+          (!landing || pageOf(r) === landing),
+      ),
+    [rows, range, source, landing],
   );
 
   const newCount = rows.filter((r) => r.status === "new").length;
@@ -195,7 +202,10 @@ export default function Inspections() {
         onRangeChange={setRange}
         activeSource={source}
         onSelectSource={setSource}
+        activeLanding={landing}
+        onSelectLanding={setLanding}
       />
+
 
       <div className="ss-card flex flex-wrap items-center gap-2 p-3">
         <input
