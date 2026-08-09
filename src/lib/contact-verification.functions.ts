@@ -87,6 +87,7 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
       to,
       from: "Savvy Swim <noreply@notify.savvyswim.com>",
       sender_domain: "notify.savvyswim.com",
+      reply_to: "hi@savvyswim.com",
       subject: `${code} is your Savvy Swim confirmation code`,
       html,
       text: `Hi ${firstName}, your Savvy Swim confirmation code is ${code}. It expires in ${CODE_TTL_MINUTES} minutes.`,

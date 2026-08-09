@@ -157,6 +157,7 @@ async function emailReminder(
         to,
         from: FROM_EMAIL,
         sender_domain: SENDER_DOMAIN,
+        reply_to: "hi@savvyswim.com",
         subject,
         html: `<div style="font-family:Helvetica,Arial,sans-serif;color:#1c1c1c;max-width:560px">
   <p style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#8E1F2C;margin:0 0 12px">Savvy Swim · Visit reminder</p>

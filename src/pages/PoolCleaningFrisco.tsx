@@ -12,7 +12,7 @@ import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
-const EMAIL = "hello@savvyswim.com";
+const EMAIL = "hi@savvyswim.com";
 const SMS_PHONE = "+14697440379";
 
 const NEIGHBORHOODS = [

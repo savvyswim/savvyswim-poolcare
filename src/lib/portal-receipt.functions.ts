@@ -102,6 +102,7 @@ Savvy Swim · savvyswim.com`;
             to: customer.email,
             from: "Savvy Swim <noreply@notify.savvyswim.com>",
             sender_domain: "notify.savvyswim.com",
+            reply_to: "hi@savvyswim.com",
             subject: `Receipt for ${invoice.invoice_number} — ${amount}`,
             html,
             text,
