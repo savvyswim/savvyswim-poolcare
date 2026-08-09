@@ -36,20 +36,21 @@ Nav shows only workspaces the person's role allows. Each workspace remembers the
 
 Rework the CRM token layer (`src/crm/crm.css`, scoped to `.savvy-crm` so the marketing site is untouched):
 
-- Canvas `#F7F8F7` warm-neutral, cards pure white with a 1px `#E3E5E3` border and a soft shadow, 8px rounded corners inside the CRM only (marketing site keeps square corners).
+- Canvas `#F7F8F7` warm-neutral (or the person's chosen photo/dark background), cards white/glass with a 1px hairline border and soft shadow, 8px rounded corners inside the app only (marketing site keeps square corners).
 - Ink `#12303C` for headings/body, muted `#5C6B72` for labels — no more all-caps Oswald body text.
 - Type: Inter/system UI everywhere, headings semibold sentence case ("Jobs", "Insights"), tabular numerals for money. Anton/Oswald stay only in the sidebar wordmark.
-- Accents: burgundy `#8E1F2C` for primary buttons/active nav, aqua `#1FA9BE` for info, green/amber/red for status pills — used sparingly, like the reference screenshots.
+- Accents: burgundy `#8E1F2C` for primary buttons/active nav, aqua `#1FA9BE` for info, green/amber/red for status pills — used sparingly.
 - Retire the heavy cabana stripe band and burgundy gradient hero from interior pages (wordmark keeps a thin stripe).
-- Component primitives: `PageHeader` (title + subtitle + primary action + overflow "More actions"), `StatCard` (label, big number, trend chip, sub value), `Panel` (title row + optional filter + body), `DataTable` (sortable headers, zebra-free rows, hover, status pills, right-aligned money), `FilterBar` (pill filters + search), `EmptyState` (icon, one line, one button), `Skeleton` loading rows.
+- Component primitives: `PageHeader`, `StatCard`, `Panel`, `DataTable`, `FilterBar`, `EmptyState`, `Skeleton`.
 
-## 2. Admin shell
+## 4. App shell (shared by every workspace)
 
-- Sidebar: white, grouped, sentence case, 6 top-level groups collapsed by default with the active group open; collapsible to an icon rail.
-- Top bar: global search, quick-create "+" menu (new customer, quote, job, invoice), notifications, help, settings, account.
-- Page frame: breadcrumb + page title + primary action row on every page, consistent 24px gutters and max width.
+- App launcher grid → workspace switcher; left sidebar changes per workspace, grouped, sentence case, collapsible to an icon rail.
+- Top bar: global search, quick-create "+" menu, notifications, help, settings, avatar, and the Savvy AI button.
+- Page frame: breadcrumb + page title + primary action row, consistent gutters and max width.
 
-## 3. New Insights dashboard (`/admin/crm/insights`, becomes the CRM home)
+## 5. Workspace home screens
+
 
 Built with recharts on existing data:
 
