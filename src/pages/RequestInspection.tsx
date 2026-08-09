@@ -116,7 +116,9 @@ const RequestInspection = () => {
         preferred_date: parsed.data.preferred_date || null,
         pool_details: parsed.data.pool_details || null,
         preferred_contact_time: parsed.data.preferred_contact_time || null,
+        preferred_slot: slot || null,
         notes: parsed.data.notes || null,
+
         campaign_id: a.campaignId,
         utm_source: a.utmSource,
         utm_medium: a.utmMedium,
