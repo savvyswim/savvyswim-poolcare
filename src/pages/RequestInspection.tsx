@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { notifyInspectionRequest } from "@/lib/inspection-notify.functions";
 import { getAttribution, getSessionId, trackContactClick } from "@/lib/contactTracking";
 
 const PHONE_DISPLAY = "(469) 744-0379";
@@ -102,6 +103,9 @@ const RequestInspection = () => {
     }
 
     setReference(data.reference_number);
+    void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
+      console.warn("inspection notification not sent", err),
+    );
     void supabase.functions
       .invoke("send-inspection-sms", { body: { requestId: data.id } })
       .then(({ error: smsError }) => {

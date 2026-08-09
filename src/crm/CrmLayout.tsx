@@ -49,6 +49,7 @@ const STAFF_NAV: NavItem[] = [
 
   // Sales
   { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
+  { to: "/admin/crm/inspections", label: "Inspection Requests", icon: ClipboardList, module: "inspections", group: "Sales" },
   { to: "/admin/crm/products", label: "Savvy Estimate", icon: Package, module: "products", group: "Sales" },
   { to: "/admin/crm/quotes", label: "Savvy Quotes", icon: FileText, module: "quotes", group: "Sales" },
   { to: "/admin/crm/service-plans", label: "Service Plans", icon: ClipboardList, module: "servicePlans", group: "Sales" },

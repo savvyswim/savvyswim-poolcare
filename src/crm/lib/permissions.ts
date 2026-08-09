@@ -5,6 +5,7 @@ export type ModuleKey =
   | "route"
   | "customers"
   | "pipeline"
+  | "inspections"
   | "jobs"
   | "quotes"
   | "inbox"
@@ -60,6 +61,7 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
   tickets: OFFICE,
   customers: OFFICE,
   pipeline: OFFICE,
+  inspections: OFFICE,
   technicians: OFFICE,
   products: OFFICE,
   servicePlans: OFFICE,
@@ -94,6 +96,7 @@ export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm": "route",
   "/admin/crm/customers": "customers",
   "/admin/crm/pipeline": "pipeline",
+  "/admin/crm/inspections": "inspections",
   "/admin/crm/jobs": "jobs",
   "/admin/crm/alerts": "alerts",
   "/admin/crm/inbox": "inbox",

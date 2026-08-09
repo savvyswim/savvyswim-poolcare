@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
+import ReplyToRoutingCheck from "@/crm/components/ReplyToRoutingCheck";
 import ReminderSchedules from "@/crm/components/ReminderSchedules";
 import WorkflowTemplates from "@/crm/components/WorkflowTemplates";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
@@ -90,6 +91,7 @@ export default function Settings() {
         <div className="ss-card p-3 text-[0.82rem] opacity-75">Read-only — only the owner can change settings.</div>
       )}
       <PrivacyOverlayToggle canEdit={level === "owner"} />
+      <ReplyToRoutingCheck canEdit={level === "owner"} />
       <ReminderSchedules />
       <WorkflowTemplates />
       <div className="grid gap-3 lg:grid-cols-2">
