@@ -197,6 +197,17 @@ export default function SignContract() {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-10">
+        {inPerson && !signed && !expired && (
+          <div className="mb-8 rounded-xl border border-border bg-card p-4">
+            <p className="font-tech text-[0.65rem] tracking-[0.22em] uppercase text-muted-foreground">
+              In-person signing
+            </p>
+            <p className="mt-1 text-sm text-foreground">
+              Hand the device to the customer. After they sign, a copy is emailed automatically to the
+              address on file.
+            </p>
+          </div>
+        )}
         {signed && (
           <div className="mb-8 rounded-xl border border-border bg-card p-6 flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary shrink-0" />
@@ -207,11 +218,13 @@ export default function SignContract() {
               <p className="mt-1 text-sm text-muted-foreground">
                 Signed by {contract.signer_name}
                 {contract.signed_at ? ` on ${new Date(contract.signed_at).toLocaleDateString()}` : ""}.
-                A copy is kept on file with your customer account.
+                {" "}
+                {copyNote ?? "A copy is kept on file with your customer account."}
               </p>
             </div>
           </div>
         )}
+
 
         <h1 className="font-display text-2xl sm:text-3xl text-foreground">{contract.title}</h1>
 
