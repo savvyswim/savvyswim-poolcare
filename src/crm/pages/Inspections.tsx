@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
+import { convertInspectionToCustomer } from "@/lib/inspection-convert.functions";
+import { notifyInspectionStatus } from "@/lib/inspection-status-notify.functions";
 import InspectionSourceAnalytics, {
   RANGES,
   inRange,
@@ -18,15 +21,18 @@ type Row = {
   postal_code: string;
   preferred_date: string | null;
   preferred_contact_time: string | null;
+  preferred_slot: string | null;
   pool_details: string | null;
   notes: string | null;
   status: string;
+  converted_customer_id: string | null;
   utm_source: string | null;
   utm_campaign: string | null;
   created_at: string;
 };
 
-const STATUSES = ["new", "contacted", "scheduled", "won", "lost"] as const;
+const STATUSES = ["new", "contacted", "scheduled", "completed", "won", "lost"] as const;
+
 
 const when = (iso: string) =>
   new Date(iso).toLocaleString("en-US", {
