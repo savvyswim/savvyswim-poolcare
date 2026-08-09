@@ -7,7 +7,7 @@ import { Chip, EmptyState } from "@/crm/components/Brand";
 import { useTable, useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
-import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE } from "@/crm/lib/esign";
+import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE, type EsignStatus } from "@/crm/lib/esign";
 import ContractTimeline from "@/crm/components/ContractTimeline";
 
 type Contract = {
@@ -62,8 +62,11 @@ const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"
 
 const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : null);
 
+const FILTERS: EsignStatus[] = ["draft", "sent", "viewed", "in_progress", "signed", "expired"];
+
 export default function CustomerContracts({ customer }: { customer: CustomerLite }) {
   const [creating, setCreating] = useState(false);
+  const [filter, setFilter] = useState<EsignStatus | "all">("all");
   const [templateId, setTemplateId] = useState<string>("");
   const [termMonths, setTermMonths] = useState(12);
   const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
@@ -103,6 +106,20 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       .order("created_at", { ascending: false });
     return (data ?? []) as SmsLog[];
   });
+
+  const counts = useMemo(() => {
+    const c: Partial<Record<EsignStatus, number>> = {};
+    for (const k of contracts) {
+      const s = esignStatus(k);
+      c[s] = (c[s] ?? 0) + 1;
+    }
+    return c;
+  }, [contracts]);
+
+  const visible = useMemo(
+    () => (filter === "all" ? contracts : contracts.filter((k) => esignStatus(k) === filter)),
+    [contracts, filter],
+  );
 
   const selectedTemplate = useMemo(
     () => templates.find((t) => t.id === templateId) ?? templates.find((t) => t.is_default) ?? templates[0],
@@ -248,11 +265,36 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
         </div>
       )}
 
+      {contracts.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          <button
+            className={`ss-btn ${filter === "all" ? "" : "ss-btn-ghost"}`}
+            onClick={() => setFilter("all")}
+          >
+            All ({contracts.length})
+          </button>
+          {FILTERS.map((s) => (
+            <button
+              key={s}
+              className={`ss-btn ${filter === s ? "" : "ss-btn-ghost"}`}
+              onClick={() => setFilter(s)}
+              disabled={!counts[s]}
+            >
+              {ESIGN_LABEL[s]} ({counts[s] ?? 0})
+            </button>
+          ))}
+        </div>
+      )}
+
       {!contracts.length && !creating && (
         <EmptyState>No contracts yet — create one and send it for signature.</EmptyState>
       )}
 
-      {contracts.map((k) => {
+      {contracts.length > 0 && !visible.length && (
+        <EmptyState>No {ESIGN_LABEL[filter as EsignStatus]?.toLowerCase()} contracts.</EmptyState>
+      )}
+
+      {visible.map((k) => {
         const es = esignStatus(k);
         const note = esignNote(k);
         return (
