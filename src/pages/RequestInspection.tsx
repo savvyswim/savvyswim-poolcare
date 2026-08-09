@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { Phone, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
