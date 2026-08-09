@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -290,7 +290,8 @@ export default function Inspections() {
             </thead>
             <tbody>
               {shown.map((r) => (
-                <tr key={r.id} className="border-t border-black/10 align-top">
+                <Fragment key={r.id}>
+                <tr className="border-t border-black/10 align-top">
                   <td className="whitespace-nowrap p-3">
                     {when(r.created_at)}
                     <div className="opacity-60">{r.reference_number}</div>
@@ -383,7 +384,7 @@ export default function Inspections() {
                     </td>
                   </tr>
                 )}
-
+                </Fragment>
               ))}
             </tbody>
           </table>
