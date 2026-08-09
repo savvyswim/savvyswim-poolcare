@@ -22,7 +22,6 @@ import "@/crm/crm.css";
 import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
 import {
   PrivacyNotice,
-  PrivacyWatermark,
   useCaptureGuard,
   useWindowObscured,
 } from "@/crm/components/TechPrivacy";
@@ -214,7 +213,6 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
       {techLocked && captureBlocked && !obscured && (
         <PrivacyNotice message="Copying, printing or saving customer information isn't allowed on a technician account." />
       )}
-      {techLocked && <PrivacyWatermark label={id.staffName || user?.email || "technician"} />}
 
       {/* sticky header */}
       <header className="sticky top-0 z-40 lg:ml-[232px] xl:ml-[248px]" style={{ background: "hsl(var(--ss-cream))" }}>
