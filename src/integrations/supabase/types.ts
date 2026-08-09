@@ -4730,6 +4730,48 @@ export type Database = {
           },
         ]
       }
+      ss_user_prefs: {
+        Row: {
+          accent: string
+          background: string
+          created_at: string
+          density: string
+          last_paths: Json
+          last_workspace: string | null
+          pinned_widgets: Json
+          sidebar_collapsed: boolean
+          theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accent?: string
+          background?: string
+          created_at?: string
+          density?: string
+          last_paths?: Json
+          last_workspace?: string | null
+          pinned_widgets?: Json
+          sidebar_collapsed?: boolean
+          theme?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accent?: string
+          background?: string
+          created_at?: string
+          density?: string
+          last_paths?: Json
+          last_workspace?: string | null
+          pinned_widgets?: Json
+          sidebar_collapsed?: boolean
+          theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ss_visits: {
         Row: {
           after_photo_url: string | null

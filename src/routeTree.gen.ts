@@ -63,6 +63,7 @@ import { Route as CrmAdminCrmServiceSetupRouteImport } from './routes/_crm/admin
 import { Route as CrmAdminCrmServicePlansRouteImport } from './routes/_crm/admin/crm/service-plans'
 import { Route as CrmAdminCrmSecurityRouteImport } from './routes/_crm/admin/crm/security'
 import { Route as CrmAdminCrmScorecardRouteImport } from './routes/_crm/admin/crm/scorecard'
+import { Route as CrmAdminCrmSalesRouteImport } from './routes/_crm/admin/crm/sales'
 import { Route as CrmAdminCrmReviewsRouteImport } from './routes/_crm/admin/crm/reviews'
 import { Route as CrmAdminCrmRevenueGrowthRouteImport } from './routes/_crm/admin/crm/revenue-growth'
 import { Route as CrmAdminCrmReportsRouteImport } from './routes/_crm/admin/crm/reports'
@@ -72,12 +73,16 @@ import { Route as CrmAdminCrmProductsRouteImport } from './routes/_crm/admin/crm
 import { Route as CrmAdminCrmPricingMatrixRouteImport } from './routes/_crm/admin/crm/pricing-matrix'
 import { Route as CrmAdminCrmPipelineRouteImport } from './routes/_crm/admin/crm/pipeline'
 import { Route as CrmAdminCrmPayPerPoolRouteImport } from './routes/_crm/admin/crm/pay-per-pool'
+import { Route as CrmAdminCrmOperationsRouteImport } from './routes/_crm/admin/crm/operations'
+import { Route as CrmAdminCrmMarketingRouteImport } from './routes/_crm/admin/crm/marketing'
 import { Route as CrmAdminCrmMarginRouteImport } from './routes/_crm/admin/crm/margin'
 import { Route as CrmAdminCrmJobsRouteImport } from './routes/_crm/admin/crm/jobs'
 import { Route as CrmAdminCrmJobCostingRouteImport } from './routes/_crm/admin/crm/job-costing'
 import { Route as CrmAdminCrmInventoryRouteImport } from './routes/_crm/admin/crm/inventory'
 import { Route as CrmAdminCrmInspectionsRouteImport } from './routes/_crm/admin/crm/inspections'
 import { Route as CrmAdminCrmInboxRouteImport } from './routes/_crm/admin/crm/inbox'
+import { Route as CrmAdminCrmHomeRouteImport } from './routes/_crm/admin/crm/home'
+import { Route as CrmAdminCrmFinancialRouteImport } from './routes/_crm/admin/crm/financial'
 import { Route as CrmAdminCrmFinanceRouteImport } from './routes/_crm/admin/crm/finance'
 import { Route as CrmAdminCrmEmailRouteImport } from './routes/_crm/admin/crm/email'
 import { Route as CrmAdminCrmDeployHealthRouteImport } from './routes/_crm/admin/crm/deploy-health'
@@ -366,6 +371,11 @@ const CrmAdminCrmScorecardRoute = CrmAdminCrmScorecardRouteImport.update({
   path: '/admin/crm/scorecard',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmSalesRoute = CrmAdminCrmSalesRouteImport.update({
+  id: '/admin/crm/sales',
+  path: '/admin/crm/sales',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmReviewsRoute = CrmAdminCrmReviewsRouteImport.update({
   id: '/admin/crm/reviews',
   path: '/admin/crm/reviews',
@@ -413,6 +423,16 @@ const CrmAdminCrmPayPerPoolRoute = CrmAdminCrmPayPerPoolRouteImport.update({
   path: '/admin/crm/pay-per-pool',
   getParentRoute: () => CrmRoute,
 } as any)
+const CrmAdminCrmOperationsRoute = CrmAdminCrmOperationsRouteImport.update({
+  id: '/admin/crm/operations',
+  path: '/admin/crm/operations',
+  getParentRoute: () => CrmRoute,
+} as any)
+const CrmAdminCrmMarketingRoute = CrmAdminCrmMarketingRouteImport.update({
+  id: '/admin/crm/marketing',
+  path: '/admin/crm/marketing',
+  getParentRoute: () => CrmRoute,
+} as any)
 const CrmAdminCrmMarginRoute = CrmAdminCrmMarginRouteImport.update({
   id: '/admin/crm/margin',
   path: '/admin/crm/margin',
@@ -441,6 +461,16 @@ const CrmAdminCrmInspectionsRoute = CrmAdminCrmInspectionsRouteImport.update({
 const CrmAdminCrmInboxRoute = CrmAdminCrmInboxRouteImport.update({
   id: '/admin/crm/inbox',
   path: '/admin/crm/inbox',
+  getParentRoute: () => CrmRoute,
+} as any)
+const CrmAdminCrmHomeRoute = CrmAdminCrmHomeRouteImport.update({
+  id: '/admin/crm/home',
+  path: '/admin/crm/home',
+  getParentRoute: () => CrmRoute,
+} as any)
+const CrmAdminCrmFinancialRoute = CrmAdminCrmFinancialRouteImport.update({
+  id: '/admin/crm/financial',
+  path: '/admin/crm/financial',
   getParentRoute: () => CrmRoute,
 } as any)
 const CrmAdminCrmFinanceRoute = CrmAdminCrmFinanceRouteImport.update({
@@ -556,12 +586,16 @@ export interface FileRoutesByFullPath {
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/financial': typeof CrmAdminCrmFinancialRoute
+  '/admin/crm/home': typeof CrmAdminCrmHomeRoute
   '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inspections': typeof CrmAdminCrmInspectionsRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
+  '/admin/crm/marketing': typeof CrmAdminCrmMarketingRoute
+  '/admin/crm/operations': typeof CrmAdminCrmOperationsRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
   '/admin/crm/pipeline': typeof CrmAdminCrmPipelineRoute
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
@@ -571,6 +605,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
+  '/admin/crm/sales': typeof CrmAdminCrmSalesRoute
   '/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
@@ -639,12 +674,16 @@ export interface FileRoutesByTo {
   '/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/admin/crm/financial': typeof CrmAdminCrmFinancialRoute
+  '/admin/crm/home': typeof CrmAdminCrmHomeRoute
   '/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/admin/crm/inspections': typeof CrmAdminCrmInspectionsRoute
   '/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/admin/crm/margin': typeof CrmAdminCrmMarginRoute
+  '/admin/crm/marketing': typeof CrmAdminCrmMarketingRoute
+  '/admin/crm/operations': typeof CrmAdminCrmOperationsRoute
   '/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
   '/admin/crm/pipeline': typeof CrmAdminCrmPipelineRoute
   '/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
@@ -654,6 +693,7 @@ export interface FileRoutesByTo {
   '/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
+  '/admin/crm/sales': typeof CrmAdminCrmSalesRoute
   '/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
@@ -724,12 +764,16 @@ export interface FileRoutesById {
   '/_crm/admin/crm/deploy-health': typeof CrmAdminCrmDeployHealthRoute
   '/_crm/admin/crm/email': typeof CrmAdminCrmEmailRoute
   '/_crm/admin/crm/finance': typeof CrmAdminCrmFinanceRoute
+  '/_crm/admin/crm/financial': typeof CrmAdminCrmFinancialRoute
+  '/_crm/admin/crm/home': typeof CrmAdminCrmHomeRoute
   '/_crm/admin/crm/inbox': typeof CrmAdminCrmInboxRoute
   '/_crm/admin/crm/inspections': typeof CrmAdminCrmInspectionsRoute
   '/_crm/admin/crm/inventory': typeof CrmAdminCrmInventoryRoute
   '/_crm/admin/crm/job-costing': typeof CrmAdminCrmJobCostingRoute
   '/_crm/admin/crm/jobs': typeof CrmAdminCrmJobsRoute
   '/_crm/admin/crm/margin': typeof CrmAdminCrmMarginRoute
+  '/_crm/admin/crm/marketing': typeof CrmAdminCrmMarketingRoute
+  '/_crm/admin/crm/operations': typeof CrmAdminCrmOperationsRoute
   '/_crm/admin/crm/pay-per-pool': typeof CrmAdminCrmPayPerPoolRoute
   '/_crm/admin/crm/pipeline': typeof CrmAdminCrmPipelineRoute
   '/_crm/admin/crm/pricing-matrix': typeof CrmAdminCrmPricingMatrixRoute
@@ -739,6 +783,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/reports': typeof CrmAdminCrmReportsRoute
   '/_crm/admin/crm/revenue-growth': typeof CrmAdminCrmRevenueGrowthRoute
   '/_crm/admin/crm/reviews': typeof CrmAdminCrmReviewsRoute
+  '/_crm/admin/crm/sales': typeof CrmAdminCrmSalesRoute
   '/_crm/admin/crm/scorecard': typeof CrmAdminCrmScorecardRoute
   '/_crm/admin/crm/security': typeof CrmAdminCrmSecurityRoute
   '/_crm/admin/crm/service-plans': typeof CrmAdminCrmServicePlansRoute
@@ -809,12 +854,16 @@ export interface FileRouteTypes {
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/financial'
+    | '/admin/crm/home'
     | '/admin/crm/inbox'
     | '/admin/crm/inspections'
     | '/admin/crm/inventory'
     | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
+    | '/admin/crm/marketing'
+    | '/admin/crm/operations'
     | '/admin/crm/pay-per-pool'
     | '/admin/crm/pipeline'
     | '/admin/crm/pricing-matrix'
@@ -824,6 +873,7 @@ export interface FileRouteTypes {
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
+    | '/admin/crm/sales'
     | '/admin/crm/scorecard'
     | '/admin/crm/security'
     | '/admin/crm/service-plans'
@@ -892,12 +942,16 @@ export interface FileRouteTypes {
     | '/admin/crm/deploy-health'
     | '/admin/crm/email'
     | '/admin/crm/finance'
+    | '/admin/crm/financial'
+    | '/admin/crm/home'
     | '/admin/crm/inbox'
     | '/admin/crm/inspections'
     | '/admin/crm/inventory'
     | '/admin/crm/job-costing'
     | '/admin/crm/jobs'
     | '/admin/crm/margin'
+    | '/admin/crm/marketing'
+    | '/admin/crm/operations'
     | '/admin/crm/pay-per-pool'
     | '/admin/crm/pipeline'
     | '/admin/crm/pricing-matrix'
@@ -907,6 +961,7 @@ export interface FileRouteTypes {
     | '/admin/crm/reports'
     | '/admin/crm/revenue-growth'
     | '/admin/crm/reviews'
+    | '/admin/crm/sales'
     | '/admin/crm/scorecard'
     | '/admin/crm/security'
     | '/admin/crm/service-plans'
@@ -976,12 +1031,16 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/deploy-health'
     | '/_crm/admin/crm/email'
     | '/_crm/admin/crm/finance'
+    | '/_crm/admin/crm/financial'
+    | '/_crm/admin/crm/home'
     | '/_crm/admin/crm/inbox'
     | '/_crm/admin/crm/inspections'
     | '/_crm/admin/crm/inventory'
     | '/_crm/admin/crm/job-costing'
     | '/_crm/admin/crm/jobs'
     | '/_crm/admin/crm/margin'
+    | '/_crm/admin/crm/marketing'
+    | '/_crm/admin/crm/operations'
     | '/_crm/admin/crm/pay-per-pool'
     | '/_crm/admin/crm/pipeline'
     | '/_crm/admin/crm/pricing-matrix'
@@ -991,6 +1050,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/reports'
     | '/_crm/admin/crm/revenue-growth'
     | '/_crm/admin/crm/reviews'
+    | '/_crm/admin/crm/sales'
     | '/_crm/admin/crm/scorecard'
     | '/_crm/admin/crm/security'
     | '/_crm/admin/crm/service-plans'
@@ -1441,6 +1501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmScorecardRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/sales': {
+      id: '/_crm/admin/crm/sales'
+      path: '/admin/crm/sales'
+      fullPath: '/admin/crm/sales'
+      preLoaderRoute: typeof CrmAdminCrmSalesRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/reviews': {
       id: '/_crm/admin/crm/reviews'
       path: '/admin/crm/reviews'
@@ -1504,6 +1571,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmAdminCrmPayPerPoolRouteImport
       parentRoute: typeof CrmRoute
     }
+    '/_crm/admin/crm/operations': {
+      id: '/_crm/admin/crm/operations'
+      path: '/admin/crm/operations'
+      fullPath: '/admin/crm/operations'
+      preLoaderRoute: typeof CrmAdminCrmOperationsRouteImport
+      parentRoute: typeof CrmRoute
+    }
+    '/_crm/admin/crm/marketing': {
+      id: '/_crm/admin/crm/marketing'
+      path: '/admin/crm/marketing'
+      fullPath: '/admin/crm/marketing'
+      preLoaderRoute: typeof CrmAdminCrmMarketingRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/margin': {
       id: '/_crm/admin/crm/margin'
       path: '/admin/crm/margin'
@@ -1544,6 +1625,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/crm/inbox'
       fullPath: '/admin/crm/inbox'
       preLoaderRoute: typeof CrmAdminCrmInboxRouteImport
+      parentRoute: typeof CrmRoute
+    }
+    '/_crm/admin/crm/home': {
+      id: '/_crm/admin/crm/home'
+      path: '/admin/crm/home'
+      fullPath: '/admin/crm/home'
+      preLoaderRoute: typeof CrmAdminCrmHomeRouteImport
+      parentRoute: typeof CrmRoute
+    }
+    '/_crm/admin/crm/financial': {
+      id: '/_crm/admin/crm/financial'
+      path: '/admin/crm/financial'
+      fullPath: '/admin/crm/financial'
+      preLoaderRoute: typeof CrmAdminCrmFinancialRouteImport
       parentRoute: typeof CrmRoute
     }
     '/_crm/admin/crm/finance': {
@@ -1650,12 +1745,16 @@ interface CrmRouteChildren {
   CrmAdminCrmDeployHealthRoute: typeof CrmAdminCrmDeployHealthRoute
   CrmAdminCrmEmailRoute: typeof CrmAdminCrmEmailRoute
   CrmAdminCrmFinanceRoute: typeof CrmAdminCrmFinanceRoute
+  CrmAdminCrmFinancialRoute: typeof CrmAdminCrmFinancialRoute
+  CrmAdminCrmHomeRoute: typeof CrmAdminCrmHomeRoute
   CrmAdminCrmInboxRoute: typeof CrmAdminCrmInboxRoute
   CrmAdminCrmInspectionsRoute: typeof CrmAdminCrmInspectionsRoute
   CrmAdminCrmInventoryRoute: typeof CrmAdminCrmInventoryRoute
   CrmAdminCrmJobCostingRoute: typeof CrmAdminCrmJobCostingRoute
   CrmAdminCrmJobsRoute: typeof CrmAdminCrmJobsRoute
   CrmAdminCrmMarginRoute: typeof CrmAdminCrmMarginRoute
+  CrmAdminCrmMarketingRoute: typeof CrmAdminCrmMarketingRoute
+  CrmAdminCrmOperationsRoute: typeof CrmAdminCrmOperationsRoute
   CrmAdminCrmPayPerPoolRoute: typeof CrmAdminCrmPayPerPoolRoute
   CrmAdminCrmPipelineRoute: typeof CrmAdminCrmPipelineRoute
   CrmAdminCrmPricingMatrixRoute: typeof CrmAdminCrmPricingMatrixRoute
@@ -1665,6 +1764,7 @@ interface CrmRouteChildren {
   CrmAdminCrmReportsRoute: typeof CrmAdminCrmReportsRoute
   CrmAdminCrmRevenueGrowthRoute: typeof CrmAdminCrmRevenueGrowthRoute
   CrmAdminCrmReviewsRoute: typeof CrmAdminCrmReviewsRoute
+  CrmAdminCrmSalesRoute: typeof CrmAdminCrmSalesRoute
   CrmAdminCrmScorecardRoute: typeof CrmAdminCrmScorecardRoute
   CrmAdminCrmSecurityRoute: typeof CrmAdminCrmSecurityRoute
   CrmAdminCrmServicePlansRoute: typeof CrmAdminCrmServicePlansRoute
@@ -1692,12 +1792,16 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmDeployHealthRoute: CrmAdminCrmDeployHealthRoute,
   CrmAdminCrmEmailRoute: CrmAdminCrmEmailRoute,
   CrmAdminCrmFinanceRoute: CrmAdminCrmFinanceRoute,
+  CrmAdminCrmFinancialRoute: CrmAdminCrmFinancialRoute,
+  CrmAdminCrmHomeRoute: CrmAdminCrmHomeRoute,
   CrmAdminCrmInboxRoute: CrmAdminCrmInboxRoute,
   CrmAdminCrmInspectionsRoute: CrmAdminCrmInspectionsRoute,
   CrmAdminCrmInventoryRoute: CrmAdminCrmInventoryRoute,
   CrmAdminCrmJobCostingRoute: CrmAdminCrmJobCostingRoute,
   CrmAdminCrmJobsRoute: CrmAdminCrmJobsRoute,
   CrmAdminCrmMarginRoute: CrmAdminCrmMarginRoute,
+  CrmAdminCrmMarketingRoute: CrmAdminCrmMarketingRoute,
+  CrmAdminCrmOperationsRoute: CrmAdminCrmOperationsRoute,
   CrmAdminCrmPayPerPoolRoute: CrmAdminCrmPayPerPoolRoute,
   CrmAdminCrmPipelineRoute: CrmAdminCrmPipelineRoute,
   CrmAdminCrmPricingMatrixRoute: CrmAdminCrmPricingMatrixRoute,
@@ -1707,6 +1811,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmReportsRoute: CrmAdminCrmReportsRoute,
   CrmAdminCrmRevenueGrowthRoute: CrmAdminCrmRevenueGrowthRoute,
   CrmAdminCrmReviewsRoute: CrmAdminCrmReviewsRoute,
+  CrmAdminCrmSalesRoute: CrmAdminCrmSalesRoute,
   CrmAdminCrmScorecardRoute: CrmAdminCrmScorecardRoute,
   CrmAdminCrmSecurityRoute: CrmAdminCrmSecurityRoute,
   CrmAdminCrmServicePlansRoute: CrmAdminCrmServicePlansRoute,
@@ -1774,13 +1879,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
