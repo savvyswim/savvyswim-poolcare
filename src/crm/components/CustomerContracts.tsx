@@ -4,9 +4,11 @@ import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare } from "l
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
-import { useTable } from "@/crm/lib/useSavvy";
+import { useTable, useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
+import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE } from "@/crm/lib/esign";
+import ContractTimeline from "@/crm/components/ContractTimeline";
 
 type Contract = {
   id: string;
@@ -17,7 +19,9 @@ type Contract = {
   recipient_phone: string | null;
   sent_at: string | null;
   viewed_at: string | null;
+  signing_started_at: string | null;
   signed_at: string | null;
+  expires_at: string | null;
   signer_name: string | null;
   created_at: string;
 };
