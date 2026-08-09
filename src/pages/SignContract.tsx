@@ -280,6 +280,44 @@ export default function SignContract() {
           </div>
         )}
 
+        {certificate && (
+          <section className="mb-8 rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <h2 className="font-tech text-[0.65rem] tracking-[0.25em] uppercase text-muted-foreground">
+                Certificate of completion
+              </h2>
+            </div>
+            <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+              {[
+                ["Envelope ID", certificate.contractId ?? "—"],
+                ["Document", certificate.title ?? contract.title],
+                ["Signer", certificate.signerName],
+                ["Email on file", certificate.email ?? "—"],
+                ["Sent", certificate.sentAt ? new Date(certificate.sentAt).toLocaleString() : "—"],
+                ["Viewed", certificate.viewedAt ? new Date(certificate.viewedAt).toLocaleString() : "—"],
+                ["Signature started", certificate.startedAt ? new Date(certificate.startedAt).toLocaleString() : "—"],
+                ["Signed", new Date(certificate.signedAt).toLocaleString()],
+                ["Signer IP address", certificate.ip ?? "Not recorded"],
+                ["Device", certificate.userAgent || "—"],
+              ].map(([label, value]) => (
+                <div key={label as string} className="min-w-0">
+                  <dt className="font-tech text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground">
+                    {label}
+                  </dt>
+                  <dd className="truncate text-foreground" title={String(value)}>{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-muted-foreground">
+              This record confirms the identity signals captured at signing time and is stored with your
+              agreement. Our office keeps a matching copy in the audit timeline.
+            </p>
+          </section>
+        )}
+
+
+
 
         <h1 className="font-display text-2xl sm:text-3xl text-foreground">{contract.title}</h1>
 
