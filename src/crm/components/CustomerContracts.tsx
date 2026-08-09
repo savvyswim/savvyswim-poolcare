@@ -7,7 +7,7 @@ import { Chip, EmptyState } from "@/crm/components/Brand";
 import { useTable, useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
-import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE } from "@/crm/lib/esign";
+import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE, type EsignStatus } from "@/crm/lib/esign";
 import ContractTimeline from "@/crm/components/ContractTimeline";
 
 type Contract = {
