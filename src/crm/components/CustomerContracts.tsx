@@ -252,7 +252,10 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
         <EmptyState>No contracts yet — create one and send it for signature.</EmptyState>
       )}
 
-      {contracts.map((k) => (
+      {contracts.map((k) => {
+        const es = esignStatus(k);
+        const note = esignNote(k);
+        return (
         <div key={k.id} className="ss-card p-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
@@ -261,10 +264,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 Created {fmt(k.created_at)}
                 {k.sent_at && <> · Sent {fmt(k.sent_at)}</>}
                 {k.viewed_at && <> · Opened {fmt(k.viewed_at)}</>}
+                {k.signing_started_at && !k.signed_at && <> · Started signing {fmt(k.signing_started_at)}</>}
                 {k.signed_at && <> · Signed by {k.signer_name} on {fmt(k.signed_at)}</>}
               </div>
             </div>
-            <Chip tone={STATUS_TONE[k.status] ?? "aqua"}>{k.status}</Chip>
+            <div className="text-right">
+              <div className="ss-label mb-1">E-sign status</div>
+              <Chip tone={ESIGN_TONE[es]}>{ESIGN_LABEL[es]}</Chip>
+              {note && <div className="mt-1 text-[0.65rem] opacity-60">{note}</div>}
+            </div>
           </div>
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {k.status !== "signed" && k.status !== "voided" && (
