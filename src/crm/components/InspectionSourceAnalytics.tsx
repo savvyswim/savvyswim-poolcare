@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 export type InspectionAnalyticsRow = {
   status: string;
@@ -7,42 +7,65 @@ export type InspectionAnalyticsRow = {
   created_at: string;
 };
 
-const RANGES = [
+export const RANGES = [
   { key: "30", label: "Last 30 days", days: 30 },
   { key: "90", label: "Last 90 days", days: 90 },
   { key: "all", label: "All time", days: 0 },
 ] as const;
 
 const SCHEDULED = new Set(["scheduled", "won"]);
+// Anything past first contact counts as contacted for the funnel.
+const CONTACTED = new Set(["contacted", "scheduled", "won", "lost"]);
 
-function sourceOf(r: InspectionAnalyticsRow) {
+export function sourceOf(r: { utm_source: string | null }) {
   const s = (r.utm_source ?? "").trim().toLowerCase();
-  if (!s) return "direct / referral";
-  return s;
+  return s || "direct / referral";
 }
 
-export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAnalyticsRow[] }) {
-  const [range, setRange] = useState<string>("90");
+export function inRange(iso: string, rangeKey: string) {
+  const cfg = RANGES.find((r) => r.key === rangeKey);
+  if (!cfg || cfg.days === 0) return true;
+  return new Date(iso).getTime() >= Date.now() - cfg.days * 86400000;
+}
 
-  const scoped = useMemo(() => {
-    const cfg = RANGES.find((r) => r.key === range);
-    if (!cfg || cfg.days === 0) return rows;
-    const cutoff = Date.now() - cfg.days * 86400000;
-    return rows.filter((r) => new Date(r.created_at).getTime() >= cutoff);
-  }, [rows, range]);
+type Props = {
+  rows: InspectionAnalyticsRow[];
+  range: string;
+  onRangeChange: (r: string) => void;
+  activeSource: string | null;
+  onSelectSource: (s: string | null) => void;
+};
+
+export default function InspectionSourceAnalytics({
+  rows,
+  range,
+  onRangeChange,
+  activeSource,
+  onSelectSource,
+}: Props) {
+  const scoped = useMemo(() => rows.filter((r) => inRange(r.created_at, range)), [rows, range]);
 
   const stats = useMemo(() => {
     const map = new Map<
       string,
-      { source: string; total: number; scheduled: number; won: number; lost: number }
+      {
+        source: string;
+        total: number;
+        contacted: number;
+        scheduled: number;
+        completed: number;
+        lost: number;
+      }
     >();
     for (const r of scoped) {
       const key = sourceOf(r);
       const cur =
-        map.get(key) ?? { source: key, total: 0, scheduled: 0, won: 0, lost: 0 };
+        map.get(key) ??
+        { source: key, total: 0, contacted: 0, scheduled: 0, completed: 0, lost: 0 };
       cur.total += 1;
+      if (CONTACTED.has(r.status)) cur.contacted += 1;
       if (SCHEDULED.has(r.status)) cur.scheduled += 1;
-      if (r.status === "won") cur.won += 1;
+      if (r.status === "won") cur.completed += 1;
       if (r.status === "lost") cur.lost += 1;
       map.set(key, cur);
     }
@@ -50,10 +73,37 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
   }, [scoped]);
 
   const total = scoped.length;
+  const contactedTotal = scoped.filter((r) => CONTACTED.has(r.status)).length;
   const scheduledTotal = scoped.filter((r) => SCHEDULED.has(r.status)).length;
+  const completedTotal = scoped.filter((r) => r.status === "won").length;
   const rate = total ? Math.round((scheduledTotal / total) * 100) : 0;
-  const best = stats.filter((s) => s.total >= 2).sort((a, b) => b.scheduled / b.total - a.scheduled / a.total)[0];
+  const best = stats
+    .filter((s) => s.total >= 2)
+    .sort((a, b) => b.scheduled / b.total - a.scheduled / a.total)[0];
   const max = stats[0]?.total ?? 1;
+
+  const funnel = [
+    { label: "Requests", value: total },
+    { label: "Contacted", value: contactedTotal },
+    { label: "Scheduled", value: scheduledTotal },
+    { label: "Completed", value: completedTotal },
+  ];
+
+  // Biggest leak per source: the stage that loses the most requests.
+  const leaks = stats
+    .filter((s) => s.total >= 2)
+    .map((s) => {
+      const steps = [
+        { stage: "never contacted", lost: s.total - s.contacted },
+        { stage: "contacted, never scheduled", lost: s.contacted - s.scheduled },
+        { stage: "scheduled, not completed", lost: s.scheduled - s.completed },
+      ];
+      const worst = steps.sort((a, b) => b.lost - a.lost)[0]!;
+      return { source: s.source, ...worst, pct: Math.round((worst.lost / s.total) * 100) };
+    })
+    .filter((l) => l.lost > 0)
+    .sort((a, b) => b.lost - a.lost)
+    .slice(0, 3);
 
   return (
     <div className="ss-card space-y-4 p-4">
@@ -67,7 +117,7 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
               key={r.key}
               className="ss-btn"
               style={range === r.key ? undefined : { opacity: 0.55 }}
-              onClick={() => setRange(r.key)}
+              onClick={() => onRangeChange(r.key)}
             >
               {r.label}
             </button>
@@ -97,6 +147,45 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
         </div>
       </div>
 
+      <div className="space-y-2">
+        <div className="text-[0.65rem] uppercase tracking-[0.16em] opacity-60">Funnel</div>
+        <div className="grid gap-2 sm:grid-cols-4">
+          {funnel.map((f, i) => {
+            const prev = i === 0 ? f.value : funnel[i - 1]!.value;
+            const step = prev ? Math.round((f.value / prev) * 100) : 0;
+            const overall = total ? Math.round((f.value / total) * 100) : 0;
+            return (
+              <div key={f.label} className="border border-current/15 p-3">
+                <div className="text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
+                  {f.label}
+                </div>
+                <div className="text-xl font-semibold">{f.value}</div>
+                <div className="mt-1 h-1 w-full bg-current/10">
+                  <div className="h-1 bg-current/60" style={{ width: `${overall}%` }} />
+                </div>
+                <div className="mt-1 text-[0.7rem] opacity-60">
+                  {i === 0 ? "100% of requests" : `${step}% of previous · ${overall}% overall`}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {leaks.length > 0 && (
+          <div className="text-[0.75rem] opacity-75">
+            Biggest drop-off:{" "}
+            {leaks.map((l, i) => (
+              <span key={l.source}>
+                {i > 0 ? " · " : ""}
+                <button className="underline" onClick={() => onSelectSource(l.source)}>
+                  {l.source}
+                </button>{" "}
+                — {l.lost} {l.stage} ({l.pct}%)
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
       {stats.length === 0 ? (
         <div className="text-[0.85rem] opacity-70">No requests in this period.</div>
       ) : (
@@ -106,8 +195,9 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
               <tr className="text-left text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
                 <th className="py-2 pr-3">Source</th>
                 <th className="py-2 pr-3">Requests</th>
+                <th className="py-2 pr-3">Contacted</th>
                 <th className="py-2 pr-3">Scheduled</th>
-                <th className="py-2 pr-3">Won</th>
+                <th className="py-2 pr-3">Completed</th>
                 <th className="py-2 pr-3">Lost</th>
                 <th className="py-2">Conversion</th>
               </tr>
@@ -115,10 +205,17 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
             <tbody>
               {stats.map((s) => {
                 const pct = s.total ? Math.round((s.scheduled / s.total) * 100) : 0;
+                const active = activeSource === s.source;
                 return (
-                  <tr key={s.source} className="border-t border-current/10">
+                  <tr
+                    key={s.source}
+                    className="cursor-pointer border-t border-current/10 hover:bg-current/5"
+                    style={active ? { background: "rgba(31,169,190,0.14)" } : undefined}
+                    onClick={() => onSelectSource(active ? null : s.source)}
+                    title="Show these requests in the list below"
+                  >
                     <td className="py-2 pr-3">
-                      <div>{s.source}</div>
+                      <div className="underline-offset-2 hover:underline">{s.source}</div>
                       <div className="mt-1 h-1 w-32 bg-current/10">
                         <div
                           className="h-1 bg-current/60"
@@ -127,8 +224,9 @@ export default function InspectionSourceAnalytics({ rows }: { rows: InspectionAn
                       </div>
                     </td>
                     <td className="py-2 pr-3">{s.total}</td>
+                    <td className="py-2 pr-3">{s.contacted}</td>
                     <td className="py-2 pr-3">{s.scheduled}</td>
-                    <td className="py-2 pr-3">{s.won}</td>
+                    <td className="py-2 pr-3">{s.completed}</td>
                     <td className="py-2 pr-3">{s.lost}</td>
                     <td className="py-2 font-semibold">{pct}%</td>
                   </tr>
