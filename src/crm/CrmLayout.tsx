@@ -26,6 +26,7 @@ import {
   useWindowObscured,
 } from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
+import { usePrivacyOverlayConfig } from "@/crm/lib/usePrivacyOverlay";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
@@ -110,7 +111,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const [claimMsg, setClaimMsg] = useState<string | null>(null);
   const claimSeat = useServerFn(claimStaffSeat);
   const obscured = useWindowObscured();
-  const techLocked = !!id.isTech;
+  const { config: privacyConfig } = usePrivacyOverlayConfig();
+  const techLocked = !!id.isTech && privacyConfig.enabled;
   const captureBlocked = useCaptureGuard(techLocked);
 
 
