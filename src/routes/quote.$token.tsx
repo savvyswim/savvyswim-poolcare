@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, Star } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,6 +58,7 @@ export const Route = createFileRoute("/quote/$token")({
 
 function QuotePage() {
   const { token } = Route.useParams();
+  const navigate = useNavigate();
   const [quote, setQuote] = useState<QuoteView | null>(null);
   const [loading, setLoading] = useState(true);
   const [picked, setPicked] = useState<Record<string, boolean>>({});
@@ -102,8 +103,13 @@ function QuotePage() {
       _selected_ids: selected,
     });
     setSaving(false);
-    const res = data as { ok?: boolean; error?: string } | null;
+    const res = data as { ok?: boolean; error?: string; contract_token?: string } | null;
     if (error || !res?.ok) { toast.error(error?.message ?? res?.error ?? "Could not approve"); return; }
+    if (res.contract_token) {
+      toast.success("Approved — your service agreement is ready to sign.");
+      void navigate({ to: "/sign/$token", params: { token: res.contract_token } });
+      return;
+    }
     toast.success("Approved — we'll be in touch shortly.");
     void load();
   }
