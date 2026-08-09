@@ -8,8 +8,10 @@ import { notifyInspectionStatus } from "@/lib/inspection-status-notify.functions
 import InspectionSourceAnalytics, {
   RANGES,
   inRange,
+  pageOf,
   sourceOf,
 } from "@/crm/components/InspectionSourceAnalytics";
+
 
 type Row = {
   id: string;
@@ -26,12 +28,31 @@ type Row = {
   notes: string | null;
   status: string;
   converted_customer_id: string | null;
+  campaign_id: string | null;
   utm_source: string | null;
+  utm_medium: string | null;
   utm_campaign: string | null;
+  utm_content: string | null;
+  landing_page: string | null;
+  page_path: string | null;
+  referrer: string | null;
+  session_id: string | null;
   created_at: string;
 };
 
+type Touch = { calls: number; texts: number; first: string | null };
+
 const STATUSES = ["new", "contacted", "scheduled", "completed", "won", "lost"] as const;
+
+const host = (url: string | null) => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+};
+
 
 
 const when = (iso: string) =>
@@ -45,11 +66,13 @@ const when = (iso: string) =>
 
 export default function Inspections() {
   const [rows, setRows] = useState<Row[]>([]);
+  const [touches, setTouches] = useState<Record<string, Touch>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
   const [q, setQ] = useState("");
   const [range, setRange] = useState<string>("90");
   const [source, setSource] = useState<string | null>(null);
+  const [landing, setLanding] = useState<string | null>(null);
   const [converting, setConverting] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -58,7 +81,7 @@ export default function Inspections() {
     const { data, error } = await supabase
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, utm_source, utm_campaign, created_at",
+        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, campaign_id, utm_source, utm_medium, utm_campaign, utm_content, landing_page, page_path, referrer, session_id, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(300);
@@ -67,8 +90,29 @@ export default function Inspections() {
       toast.error(error.message);
       return;
     }
-    setRows((data ?? []) as Row[]);
+    const list = (data ?? []) as Row[];
+    setRows(list);
+
+    // Call / text clicks made from the same browser session as the form fill.
+    const sessions = [...new Set(list.map((r) => r.session_id).filter(Boolean))] as string[];
+    if (sessions.length) {
+      const { data: events } = await supabase
+        .from("contact_events")
+        .select("session_id, event_type, created_at")
+        .in("session_id", sessions.slice(0, 200));
+      const map: Record<string, Touch> = {};
+      for (const e of events ?? []) {
+        const key = e.session_id as string;
+        const cur = map[key] ?? { calls: 0, texts: 0, first: null };
+        if (e.event_type === "call_click") cur.calls += 1;
+        if (e.event_type === "text_click") cur.texts += 1;
+        if (!cur.first || e.created_at < cur.first) cur.first = e.created_at;
+        map[key] = cur;
+      }
+      setTouches(map);
+    }
   }
+
 
   useEffect(() => {
     void load();
@@ -125,17 +169,24 @@ export default function Inspections() {
         (filter === "all" || r.status === filter) &&
         inRange(r.created_at, range) &&
         (!source || sourceOf(r) === source) &&
+        (!landing || pageOf(r) === landing) &&
         (!needle ||
           [r.full_name, r.phone, r.address, r.email, r.reference_number]
             .join(" ")
             .toLowerCase()
             .includes(needle)),
     );
-  }, [rows, filter, q, range, source]);
+  }, [rows, filter, q, range, source, landing]);
 
   const inWindow = useMemo(
-    () => rows.filter((r) => inRange(r.created_at, range) && (!source || sourceOf(r) === source)),
-    [rows, range, source],
+    () =>
+      rows.filter(
+        (r) =>
+          inRange(r.created_at, range) &&
+          (!source || sourceOf(r) === source) &&
+          (!landing || pageOf(r) === landing),
+      ),
+    [rows, range, source, landing],
   );
 
   const newCount = rows.filter((r) => r.status === "new").length;
@@ -153,7 +204,10 @@ export default function Inspections() {
         onRangeChange={setRange}
         activeSource={source}
         onSelectSource={setSource}
+        activeLanding={landing}
+        onSelectLanding={setLanding}
       />
+
 
       <div className="ss-card flex flex-wrap items-center gap-2 p-3">
         <input
@@ -179,20 +233,23 @@ export default function Inspections() {
         </button>
       </div>
 
-      {(source || range !== "90" || filter !== "all") && (
+      {(source || landing || range !== "90" || filter !== "all") && (
         <div className="ss-card flex flex-wrap items-center gap-2 p-3 text-[0.8rem]">
           <span className="opacity-60">Showing:</span>
           <span>{RANGES.find((r) => r.key === range)?.label}</span>
           {source && <span>· source “{source}”</span>}
+          {landing && <span>· landing page “{landing}”</span>}
           {filter !== "all" && <span>· status {filter}</span>}
           <button
             className="ss-btn ml-auto"
             onClick={() => {
               setSource(null);
+              setLanding(null);
               setFilter("all");
               setRange("90");
             }}
           >
+
             Clear filters
           </button>
         </div>
@@ -246,8 +303,32 @@ export default function Inspections() {
                     </div>
                   </td>
                   <td className="p-3 opacity-75">
-                    {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
+                    <div className="font-semibold">
+                      {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
+                    </div>
+                    <div className="text-[0.75rem] opacity-70">
+                      {[r.utm_medium, r.utm_content].filter(Boolean).join(" · ") || "no medium"}
+                    </div>
+                    <div className="text-[0.75rem] opacity-70">Landed: {pageOf(r)}</div>
+                    {host(r.referrer) && (
+                      <div className="text-[0.75rem] opacity-70">Ref: {host(r.referrer)}</div>
+                    )}
+                    {r.campaign_id && (
+                      <div className="text-[0.7rem] opacity-50">{r.campaign_id}</div>
+                    )}
+                    {(() => {
+                      const t = r.session_id ? touches[r.session_id] : undefined;
+                      if (!t || (!t.calls && !t.texts)) return null;
+                      return (
+                        <div className="mt-1 text-[0.72rem]" style={{ color: "#1FA9BE" }}>
+                          Also {t.calls ? `${t.calls} call tap` : ""}
+                          {t.calls && t.texts ? " · " : ""}
+                          {t.texts ? `${t.texts} text tap` : ""} before the form
+                        </div>
+                      );
+                    })()}
                   </td>
+
                   <td className="p-3">
                     <select
                       className="ss-input"

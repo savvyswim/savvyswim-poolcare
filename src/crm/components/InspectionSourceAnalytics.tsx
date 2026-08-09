@@ -4,6 +4,9 @@ export type InspectionAnalyticsRow = {
   status: string;
   utm_source: string | null;
   utm_campaign: string | null;
+  utm_medium?: string | null;
+  landing_page?: string | null;
+  page_path?: string | null;
   created_at: string;
 };
 
@@ -22,6 +25,13 @@ export function sourceOf(r: { utm_source: string | null }) {
   return s || "direct / referral";
 }
 
+/** Landing page (first page of the session), falling back to the form page. */
+export function pageOf(r: { landing_page?: string | null; page_path?: string | null }) {
+  const raw = (r.landing_page ?? r.page_path ?? "").trim();
+  if (!raw) return "unknown";
+  return raw.split("?")[0] || "/";
+}
+
 export function inRange(iso: string, rangeKey: string) {
   const cfg = RANGES.find((r) => r.key === rangeKey);
   if (!cfg || cfg.days === 0) return true;
@@ -34,7 +44,10 @@ type Props = {
   onRangeChange: (r: string) => void;
   activeSource: string | null;
   onSelectSource: (s: string | null) => void;
+  activeLanding?: string | null;
+  onSelectLanding?: (p: string | null) => void;
 };
+
 
 export default function InspectionSourceAnalytics({
   rows,
@@ -42,8 +55,33 @@ export default function InspectionSourceAnalytics({
   onRangeChange,
   activeSource,
   onSelectSource,
+  activeLanding = null,
+  onSelectLanding,
 }: Props) {
   const scoped = useMemo(() => rows.filter((r) => inRange(r.created_at, range)), [rows, range]);
+
+  const pages = useMemo(() => {
+    const m = new Map<string, { page: string; total: number; scheduled: number }>();
+    for (const r of scoped) {
+      const key = pageOf(r);
+      const cur = m.get(key) ?? { page: key, total: 0, scheduled: 0 };
+      cur.total += 1;
+      if (SCHEDULED.has(r.status)) cur.scheduled += 1;
+      m.set(key, cur);
+    }
+    return [...m.values()].sort((a, b) => b.total - a.total).slice(0, 6);
+  }, [scoped]);
+
+  const mediums = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of scoped) {
+      const key = (r.utm_medium ?? "").trim().toLowerCase() || "none";
+      m.set(key, (m.get(key) ?? 0) + 1);
+    }
+    return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
+  }, [scoped]);
+
+
 
   const stats = useMemo(() => {
     const map = new Map<
@@ -185,6 +223,56 @@ export default function InspectionSourceAnalytics({
           </div>
         )}
       </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="border border-current/15 p-3">
+          <div className="mb-2 text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
+            Landing page
+          </div>
+          {pages.length === 0 ? (
+            <div className="text-[0.8rem] opacity-70">No data yet.</div>
+          ) : (
+            <div className="space-y-1">
+              {pages.map((p) => {
+                const active = activeLanding === p.page;
+                return (
+                  <button
+                    key={p.page}
+                    className="flex w-full items-center justify-between gap-3 text-left text-[0.8rem] hover:underline"
+                    style={active ? { fontWeight: 700 } : undefined}
+                    onClick={() => onSelectLanding?.(active ? null : p.page)}
+                  >
+                    <span className="truncate">{p.page}</span>
+                    <span className="whitespace-nowrap opacity-70">
+                      {p.total} · {p.total ? Math.round((p.scheduled / p.total) * 100) : 0}%
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="border border-current/15 p-3">
+          <div className="mb-2 text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
+            Campaign medium
+          </div>
+          {mediums.length === 0 ? (
+            <div className="text-[0.8rem] opacity-70">No data yet.</div>
+          ) : (
+            <div className="space-y-1">
+              {mediums.map(([m, n]) => (
+                <div key={m} className="flex items-center justify-between text-[0.8rem]">
+                  <span>{m}</span>
+                  <span className="opacity-70">{n}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+
 
       {stats.length === 0 ? (
         <div className="text-[0.85rem] opacity-70">No requests in this period.</div>
