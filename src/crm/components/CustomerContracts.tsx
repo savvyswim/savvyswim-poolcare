@@ -37,7 +37,16 @@ type SmsLog = {
   updated_at: string;
 };
 
+type CopyEvent = {
+  id: string;
+  contract_id: string;
+  event: string;
+  detail: string | null;
+  created_at: string;
+};
+
 type Template = { id: string; name: string; body: string; is_default: boolean };
+
 
 type CustomerLite = {
   id: string;
