@@ -124,6 +124,7 @@ export async function sendEmail(to: string, n: RescheduleNotice, key: string): P
         to,
         from: "Savvy Swim <noreply@notify.savvyswim.com>",
         sender_domain: "notify.savvyswim.com",
+        reply_to: "hi@savvyswim.com",
         subject,
         html,
         text,

@@ -37,7 +37,7 @@ const LOCAL_BUSINESS_JSONLD = JSON.stringify({
   url: "https://savvyswim.com",
   description: "Weekly pool cleaning, equipment repair, and service across Texas.",
   telephone: "+1-469-744-0379",
-  email: "hi@savagepools.us",
+  email: "hi@savvyswim.com",
   areaServed: "Texas",
 });
 
