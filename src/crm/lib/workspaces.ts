@@ -20,7 +20,7 @@ export type WorkspaceKey =
 export type NavItem = {
   to: string;
   label: string;
-  icon: typeof Map;
+  icon: typeof MapIcon;
   module: ModuleKey;
   group: string;
 };
@@ -29,7 +29,7 @@ export type Workspace = {
   key: WorkspaceKey;
   label: string;
   blurb: string;
-  icon: typeof Map;
+  icon: typeof MapIcon;
   home: string;
   groups: string[];
   items: NavItem[];
@@ -49,7 +49,7 @@ export const WORKSPACES: Workspace[] = [
     groups: ["Today"],
     items: [
       { to: "/admin/crm/home", label: "My day", icon: Home, module: "route", group: "Today" },
-      { to: "/admin/crm", label: "Today's route", icon: Map, module: "route", group: "Today" },
+      { to: "/admin/crm", label: "Today's route", icon: MapIcon, module: "route", group: "Today" },
       { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
       { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
       { to: "/admin/crm/tickets", label: "Customer tickets", icon: MessageSquare, module: "tickets", group: "Today" },
@@ -99,7 +99,7 @@ export const WORKSPACES: Workspace[] = [
     groups: ["Overview", "Field", "Quality", "Assets"],
     items: [
       { to: "/admin/crm/operations", label: "Operations home", icon: BarChart3, module: "route", group: "Overview" },
-      { to: "/admin/crm", label: "Today's route", icon: Map, module: "route", group: "Field" },
+      { to: "/admin/crm", label: "Today's route", icon: MapIcon, module: "route", group: "Field" },
       { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Field" },
       { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Field" },
       { to: "/admin/crm/projects", label: "Construction & remodel", icon: Hammer, module: "projects", group: "Field" },
@@ -138,7 +138,7 @@ export const WORKSPACES: Workspace[] = [
     home: "/admin/crm",
     groups: ["Field"],
     items: [
-      { to: "/admin/crm", label: "My route", icon: Map, module: "route", group: "Field" },
+      { to: "/admin/crm", label: "My route", icon: MapIcon, module: "route", group: "Field" },
       { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Field" },
       { to: "/admin/crm/water-lab", label: "Water lab", icon: FlaskConical, module: "waterLab", group: "Field" },
       { to: "/admin/crm/inbox", label: "Text inbox", icon: MessagesSquare, module: "inbox", group: "Field" },
