@@ -157,7 +157,7 @@
 
 .savvy-crm a { color: hsl(var(--ss-aqua)); }
 
-/* --- tech privacy watermark --- */
+/* --- tech privacy --- */
 .ss-privacy-blur > *:not(.ss-privacy-notice) { filter: blur(14px); }
 .ss-no-select { user-select: none; -webkit-user-select: none; }
 
