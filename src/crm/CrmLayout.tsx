@@ -111,7 +111,8 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const [claimMsg, setClaimMsg] = useState<string | null>(null);
   const claimSeat = useServerFn(claimStaffSeat);
   const obscured = useWindowObscured();
-  const techLocked = !!id.isTech;
+  const { config: privacyConfig } = usePrivacyOverlayConfig();
+  const techLocked = !!id.isTech && privacyConfig.enabled;
   const captureBlocked = useCaptureGuard(techLocked);
 
 
