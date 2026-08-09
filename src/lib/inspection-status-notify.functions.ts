@@ -197,3 +197,34 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
 
     return { ok: true as const, ...result };
   });
+
+/**
+ * Records a status move that does not send an alert (contacted, lost, new…),
+ * so the attribution timeline stays complete for every stage of the funnel.
+ */
+export const logInspectionStatusChange = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        requestId: z.string().uuid(),
+        statusFrom: z.string().max(40).nullable().optional(),
+        statusTo: z.string().max(40),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isStaff } = await context.supabase.rpc("ss_is_staff");
+    if (!isStaff) throw new Error("Forbidden");
+
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(data.requestId, [
+      {
+        eventType: "status_change",
+        statusFrom: data.statusFrom ?? null,
+        statusTo: data.statusTo,
+        detail: `Moved to ${data.statusTo}`,
+      },
+    ]);
+    return { ok: true as const };
+  });
