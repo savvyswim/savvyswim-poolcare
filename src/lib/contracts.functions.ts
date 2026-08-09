@@ -223,3 +223,107 @@ export const sendContractSms = createServerFn({ method: "POST" })
 
     return { sent: true, to, signUrl, sid: sent.sid ?? null };
   });
+
+/**
+ * Emails a copy of a SIGNED agreement to the recipient email on file.
+ * Public by design (called right after in-person / remote signing) but safe:
+ * it only ever sends to the address already stored on the contract, only for
+ * contracts that are already signed, and it is idempotent per contract.
+ */
+export const emailSignedContractCopy = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({ token: z.string().min(10).max(200) }).parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: contract, error } = await supabaseAdmin
+      .from("ss_contracts")
+      .select("id, title, body, token, status, signed_at, signer_name, recipient_name, recipient_email")
+      .eq("token", data.token)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!contract) return { sent: false, reason: "not_found" as const };
+    if (contract.status !== "signed" || !contract.signed_at) {
+      return { sent: false, reason: "not_signed" as const };
+    }
+    if (!contract.recipient_email) return { sent: false, reason: "no_email" as const };
+
+    const { data: already } = await supabaseAdmin
+      .from("ss_contract_events")
+      .select("id")
+      .eq("contract_id", contract.id)
+      .eq("event", "copy_emailed")
+      .limit(1);
+    if (already && already.length) return { sent: false, reason: "already_sent" as const };
+
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) return { sent: false, reason: "not_configured" as const };
+
+    const escape = (s: string) =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const firstName = (contract.recipient_name ?? contract.signer_name ?? "there").split(" ")[0] ?? "there";
+    const signedOn = new Date(contract.signed_at).toLocaleString("en-US", {
+      dateStyle: "long",
+      timeStyle: "short",
+    });
+
+    const html = `
+<div style="background:#F4EFE3;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;color:#2b2320;">
+  <div style="max-width:600px;margin:0 auto;background:#fffdf8;border:1px solid #e5dcc9;overflow:hidden;">
+    <div style="background:#8E1F2C;color:#F4EFE3;padding:20px 28px;">
+      <div style="font-size:20px;font-weight:800;letter-spacing:.08em;">SAVVY SWIM</div>
+      <div style="font-size:11px;letter-spacing:.14em;opacity:.85;margin-top:2px;">SIGNED SERVICE AGREEMENT</div>
+    </div>
+    <div style="padding:28px;">
+      <p style="margin:0 0 12px;font-size:15px;">Hi ${escape(firstName)},</p>
+      <p style="margin:0 0 16px;font-size:14px;line-height:1.6;">
+        Here is your copy of <strong>“${escape(contract.title)}”</strong>, signed by
+        ${escape(contract.signer_name ?? "you")} on ${escape(signedOn)}.
+      </p>
+      <pre style="white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;background:#fff;border:1px solid #e5dcc9;padding:18px;margin:0 0 18px;">${escape(contract.body ?? "")}</pre>
+      <p style="margin:0 0 6px;font-size:13px;"><strong>Signed by:</strong> ${escape(contract.signer_name ?? "")}</p>
+      <p style="margin:0 0 16px;font-size:13px;"><strong>Signed on:</strong> ${escape(signedOn)}</p>
+      <p style="margin:0;font-size:12px;color:#7a6f63;line-height:1.6;">
+        Keep this email for your records. Questions? Call or text (469) 744-0379.
+      </p>
+    </div>
+    <div style="border-top:1px solid #e5dcc9;padding:14px 28px;font-size:11px;color:#9a8f82;">
+      Savvy Swim · Dallas–Fort Worth · savvyswim.com
+    </div>
+  </div>
+</div>`;
+
+    const text = `Hi ${firstName},
+
+Here is your copy of "${contract.title}", signed by ${contract.signer_name ?? "you"} on ${signedOn}.
+
+${contract.body ?? ""}
+
+Signed by: ${contract.signer_name ?? ""}
+Signed on: ${signedOn}
+
+Questions? Call or text (469) 744-0379.
+Savvy Swim · savvyswim.com`;
+
+    const { sendLovableEmail } = await import("@lovable.dev/email-js");
+    await sendLovableEmail(
+      {
+        to: contract.recipient_email,
+        from: "Savvy Swim <noreply@notify.savvyswim.com>",
+        sender_domain: "notify.savvyswim.com",
+        subject: `Your signed Savvy Swim agreement — ${contract.title}`,
+        html,
+        text,
+        label: "contract-signed-copy",
+        idempotency_key: `contract-signed-copy-${contract.id}`,
+      },
+      { apiKey },
+    );
+
+    await supabaseAdmin.from("ss_contract_events").insert({
+      contract_id: contract.id,
+      event: "copy_emailed",
+      detail: `Signed copy emailed to ${contract.recipient_email}`,
+    });
+
+    return { sent: true, to: contract.recipient_email };
+  });

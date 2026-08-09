@@ -3637,6 +3637,7 @@ export type Database = {
         Row: {
           accepted_at: string | null
           accepted_by: string | null
+          contract_template_id: string | null
           created_at: string
           created_by: string | null
           customer_id: string | null
@@ -3663,6 +3664,7 @@ export type Database = {
         Insert: {
           accepted_at?: string | null
           accepted_by?: string | null
+          contract_template_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -3689,6 +3691,7 @@ export type Database = {
         Update: {
           accepted_at?: string | null
           accepted_by?: string | null
+          contract_template_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -3713,6 +3716,13 @@ export type Database = {
           viewed_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ss_quotes_contract_template_id_fkey"
+            columns: ["contract_template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_contract_templates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ss_quotes_customer_id_fkey"
             columns: ["customer_id"]
@@ -5329,6 +5339,10 @@ export type Database = {
         Args: { _selected_ids: string[]; _signer_name: string; _token: string }
         Returns: Json
       }
+      ss_build_contract_body: {
+        Args: { _quote_id: string; _signer_name?: string }
+        Returns: Json
+      }
       ss_convert_qty: {
         Args: {
           p_from: string
@@ -5497,6 +5511,10 @@ export type Database = {
           _user_agent?: string
         }
         Returns: Json
+      }
+      ss_sync_quote_contract: {
+        Args: { _quote_id: string }
+        Returns: undefined
       }
       ss_unit_factor: { Args: { p_unit: string }; Returns: number }
       ss_unit_family: { Args: { p_unit: string }; Returns: string }
