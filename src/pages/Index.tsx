@@ -20,6 +20,8 @@ import {
   X,
 } from "lucide-react";
 
+import { AppHandoffLink } from "@/components/AppHandoff";
+import { PORTAL_PATH, STAFF_LOGIN_PATH } from "@/lib/app-links";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
