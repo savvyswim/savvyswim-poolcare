@@ -105,7 +105,7 @@ import { Link } from "@/lib/router-compat";
 import { supabase } from "@/integrations/supabase/client";
 
 
-const EMAIL = "hi@savagepools.us";
+const EMAIL = "hi@savvyswim.com";
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 const SMS_PHONE = "+14697440379";

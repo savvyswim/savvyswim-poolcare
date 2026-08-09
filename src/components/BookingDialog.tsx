@@ -28,7 +28,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { trackContactClick } from "@/lib/contactTracking";
 
 
-const EMAIL = "hi@savagepools.us";
+const EMAIL = "hi@savvyswim.com";
 
 const SERVICES = [
   "Weekly Service & Maintenance",
