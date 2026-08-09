@@ -241,7 +241,9 @@ export default function Inspections() {
                   </td>
                   <td className="p-3">
                     {r.preferred_date ?? "—"}
-                    <div className="opacity-60">{r.preferred_contact_time ?? ""}</div>
+                    <div className="opacity-60">
+                      {r.preferred_slot ?? r.preferred_contact_time ?? ""}
+                    </div>
                   </td>
                   <td className="p-3 opacity-75">
                     {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
@@ -259,7 +261,22 @@ export default function Inspections() {
                       ))}
                     </select>
                   </td>
+                  <td className="whitespace-nowrap p-3">
+                    <button
+                      type="button"
+                      className="ss-btn"
+                      disabled={converting === r.id}
+                      onClick={() => void convert(r)}
+                    >
+                      {r.converted_customer_id
+                        ? "Open customer"
+                        : converting === r.id
+                          ? "Converting…"
+                          : "Convert → estimate"}
+                    </button>
+                  </td>
                 </tr>
+
               ))}
             </tbody>
           </table>
