@@ -2,6 +2,9 @@
 
 Not one flat CRM: a suite. Each part of the business gets its own workspace (its own home screen, its own nav, its own reports), reached from an app launcher in the top bar. Every person can personalize their workspace background/theme, and a built-in AI assistant panel sits on the right of any screen.
 
+**Nothing is removed.** Every page, tool and report that exists today (pricing engine, promos, contracts & e-sign, ledger, payroll, break-even, water lab, QC, routes, inventory, tickets, inspections, attribution, audit trail, security, deploy health, site speed, portal, store, city pages) stays exactly as it is functionally — it is only regrouped into the right workspace, restyled, and given a clean home screen. Before building, every existing CRM route is inventoried and mapped to a workspace so nothing is orphaned, and old URLs keep working (redirects where a path moves).
+
+
 ## 0. Workspaces (the big change)
 
 An app launcher (grid icon, top-left) switches between workspaces. Each has a distinct home screen and its own left nav:
