@@ -4,7 +4,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
 import { convertInspectionToCustomer } from "@/lib/inspection-convert.functions";
-import { notifyInspectionStatus } from "@/lib/inspection-status-notify.functions";
+import {
+  logInspectionStatusChange,
+  notifyInspectionStatus,
+} from "@/lib/inspection-status-notify.functions";
+import InspectionTimeline from "@/crm/components/InspectionTimeline";
 import InspectionSourceAnalytics, {
   RANGES,
   inRange,
@@ -74,6 +78,7 @@ export default function Inspections() {
   const [source, setSource] = useState<string | null>(null);
   const [landing, setLanding] = useState<string | null>(null);
   const [converting, setConverting] = useState<string | null>(null);
+  const [openTimeline, setOpenTimeline] = useState<string | null>(null);
   const navigate = useNavigate();
 
   async function load() {
@@ -119,12 +124,19 @@ export default function Inspections() {
   }, []);
 
   async function setStatus(id: string, status: string) {
+    const previous = rows.find((r) => r.id === id)?.status ?? null;
     const { error } = await supabase.from("inspection_requests").update({ status }).eq("id", id);
     if (error) {
       toast.error(error.message);
       return;
     }
     setRows((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
+
+    if (status !== "scheduled" && status !== "completed") {
+      void logInspectionStatusChange({
+        data: { requestId: id, statusFrom: previous, statusTo: status },
+      }).catch((e) => console.warn("status not logged", e));
+    }
 
     if (status === "scheduled" || status === "completed") {
       void notifyInspectionStatus({ data: { requestId: id, status } })
@@ -355,8 +367,22 @@ export default function Inspections() {
                           ? "Converting…"
                           : "Convert → estimate"}
                     </button>
+                    <button
+                      type="button"
+                      className="ss-btn mt-1 block"
+                      onClick={() => setOpenTimeline(openTimeline === r.id ? null : r.id)}
+                    >
+                      {openTimeline === r.id ? "Hide tracking" : "Tracking"}
+                    </button>
                   </td>
                 </tr>
+                {openTimeline === r.id && (
+                  <tr className="border-t border-black/10">
+                    <td colSpan={8} className="bg-black/[0.03] p-0">
+                      <InspectionTimeline requestId={r.id} />
+                    </td>
+                  </tr>
+                )}
 
               ))}
             </tbody>
