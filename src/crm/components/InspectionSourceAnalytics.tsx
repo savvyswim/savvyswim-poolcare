@@ -224,6 +224,56 @@ export default function InspectionSourceAnalytics({
         )}
       </div>
 
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="border border-current/15 p-3">
+          <div className="mb-2 text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
+            Landing page
+          </div>
+          {pages.length === 0 ? (
+            <div className="text-[0.8rem] opacity-70">No data yet.</div>
+          ) : (
+            <div className="space-y-1">
+              {pages.map((p) => {
+                const active = activeLanding === p.page;
+                return (
+                  <button
+                    key={p.page}
+                    className="flex w-full items-center justify-between gap-3 text-left text-[0.8rem] hover:underline"
+                    style={active ? { fontWeight: 700 } : undefined}
+                    onClick={() => onSelectLanding?.(active ? null : p.page)}
+                  >
+                    <span className="truncate">{p.page}</span>
+                    <span className="whitespace-nowrap opacity-70">
+                      {p.total} · {p.total ? Math.round((p.scheduled / p.total) * 100) : 0}%
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="border border-current/15 p-3">
+          <div className="mb-2 text-[0.65rem] uppercase tracking-[0.16em] opacity-60">
+            Campaign medium
+          </div>
+          {mediums.length === 0 ? (
+            <div className="text-[0.8rem] opacity-70">No data yet.</div>
+          ) : (
+            <div className="space-y-1">
+              {mediums.map(([m, n]) => (
+                <div key={m} className="flex items-center justify-between text-[0.8rem]">
+                  <span>{m}</span>
+                  <span className="opacity-70">{n}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+
+
       {stats.length === 0 ? (
         <div className="text-[0.85rem] opacity-70">No requests in this period.</div>
       ) : (
