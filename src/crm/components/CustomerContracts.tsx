@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare } from "lucide-react";
+import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare, PenLine, Mail } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
 import { useTable, useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
-import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
+import { sendContractEmail, sendContractSms, emailSignedContractCopy } from "@/lib/contracts.functions";
+
 import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE, type EsignStatus } from "@/crm/lib/esign";
 import ContractTimeline from "@/crm/components/ContractTimeline";
 
@@ -73,6 +74,8 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [busy, setBusy] = useState<string | null>(null);
   const sendEmail = useServerFn(sendContractEmail);
   const sendSms = useServerFn(sendContractSms);
+  const sendSignedCopy = useServerFn(emailSignedContractCopy);
+
   const [smsFor, setSmsFor] = useState<string | null>(null);
   const [smsPhone, setSmsPhone] = useState("");
 
@@ -203,10 +206,27 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
     }
   };
 
+  const mailCopy = async (contract: Contract) => {
+    setBusy(contract.id);
+    try {
+      const res = await sendSignedCopy({ data: { token: contract.token } });
+      if (res.sent) toast.success(`Signed copy emailed to ${res.to}`);
+      else if (res.reason === "already_sent") toast.info("A signed copy was already emailed to this customer");
+      else if (res.reason === "no_email") toast.error("This customer has no email on file");
+      else toast.error("Could not email the signed copy");
+      refetch();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not email the signed copy");
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const copyLink = async (contract: Contract) => {
     await navigator.clipboard.writeText(`${window.location.origin}/sign/${contract.token}`);
     toast.success("Signing link copied");
   };
+
 
   return (
     <div className="space-y-3">
