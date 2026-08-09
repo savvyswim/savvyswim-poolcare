@@ -3637,6 +3637,7 @@ export type Database = {
         Row: {
           accepted_at: string | null
           accepted_by: string | null
+          contract_template_id: string | null
           created_at: string
           created_by: string | null
           customer_id: string | null
@@ -3663,6 +3664,7 @@ export type Database = {
         Insert: {
           accepted_at?: string | null
           accepted_by?: string | null
+          contract_template_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -3689,6 +3691,7 @@ export type Database = {
         Update: {
           accepted_at?: string | null
           accepted_by?: string | null
+          contract_template_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -3713,6 +3716,13 @@ export type Database = {
           viewed_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ss_quotes_contract_template_id_fkey"
+            columns: ["contract_template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_contract_templates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ss_quotes_customer_id_fkey"
             columns: ["customer_id"]
