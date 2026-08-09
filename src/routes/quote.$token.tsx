@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, Star } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,6 +58,7 @@ export const Route = createFileRoute("/quote/$token")({
 
 function QuotePage() {
   const { token } = Route.useParams();
+  const navigate = useNavigate();
   const [quote, setQuote] = useState<QuoteView | null>(null);
   const [loading, setLoading] = useState(true);
   const [picked, setPicked] = useState<Record<string, boolean>>({});
