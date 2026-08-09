@@ -91,6 +91,8 @@ export default function Inspections() {
         sub={`${rows.length} total · ${newCount} awaiting first contact`}
       />
 
+      <InspectionSourceAnalytics rows={rows} />
+
       <div className="ss-card flex flex-wrap items-center gap-2 p-3">
         <input
           className="ss-input max-w-xs"
