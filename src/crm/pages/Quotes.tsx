@@ -26,6 +26,7 @@ type Quote = {
   tax_pct: number;
   accepted_at: string | null;
   accepted_by: string | null;
+  contract_template_id: string | null;
 };
 
 type Item = {
@@ -54,21 +55,24 @@ export default function Quotes() {
   const [items, setItems] = useState<Item[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [customers, setCustomers] = useState<{ id: string; full_name: string; phone: string | null; email: string | null }[]>([]);
+  const [templates, setTemplates] = useState<{ id: string; name: string; is_default: boolean }[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [q, c] = await Promise.all([
+    const [q, c, t] = await Promise.all([
       supabase
         .from("ss_quotes")
         .select(
-          "id,customer_id,title,intro,hero_image_url,gallery,reviews,show_reviews,status,token,recipient_name,recipient_email,recipient_phone,valid_until,tax_pct,accepted_at,accepted_by",
+          "id,customer_id,title,intro,hero_image_url,gallery,reviews,show_reviews,status,token,recipient_name,recipient_email,recipient_phone,valid_until,tax_pct,accepted_at,accepted_by,contract_template_id",
         )
         .order("created_at", { ascending: false }),
       supabase.from("ss_customers").select("id,full_name,phone,email").order("full_name").limit(400),
+      supabase.from("ss_contract_templates").select("id,name,is_default").eq("is_active", true).order("created_at"),
     ]);
     setQuotes((q.data ?? []) as unknown as Quote[]);
     setCustomers((c.data ?? []) as { id: string; full_name: string; phone: string | null; email: string | null }[]);
+    setTemplates((t.data ?? []) as { id: string; name: string; is_default: boolean }[]);
     setLoading(false);
   }, []);
 
@@ -238,6 +242,19 @@ export default function Quotes() {
                     Good through
                     <input type="date" className="ss-input mt-1 w-full" value={open.valid_until ?? ""}
                       onChange={(e) => patch(q.id, { valid_until: e.target.value || null })} />
+                  </label>
+                  <label className="text-[0.7rem] uppercase tracking-wide opacity-70">
+                    Agreement template
+                    <select className="ss-input mt-1 w-full" value={open.contract_template_id ?? ""}
+                      onChange={(e) => patch(q.id, { contract_template_id: e.target.value || null })}>
+                      <option value="">Default agreement</option>
+                      {templates.map((t) => (
+                        <option key={t.id} value={t.id}>{t.name}{t.is_default ? " (default)" : ""}</option>
+                      ))}
+                    </select>
+                    <span className="mt-1 block text-[0.62rem] normal-case tracking-normal opacity-60">
+                      Used when the customer approves this proposal.
+                    </span>
                   </label>
                   <label className="text-[0.7rem] uppercase tracking-wide opacity-70">
                     Cover photo URL
