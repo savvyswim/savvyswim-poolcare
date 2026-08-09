@@ -102,8 +102,13 @@ function QuotePage() {
       _selected_ids: selected,
     });
     setSaving(false);
-    const res = data as { ok?: boolean; error?: string } | null;
+    const res = data as { ok?: boolean; error?: string; contract_token?: string } | null;
     if (error || !res?.ok) { toast.error(error?.message ?? res?.error ?? "Could not approve"); return; }
+    if (res.contract_token) {
+      toast.success("Approved — your service agreement is ready to sign.");
+      void navigate({ to: "/sign/$token", params: { token: res.contract_token } });
+      return;
+    }
     toast.success("Approved — we'll be in touch shortly.");
     void load();
   }
