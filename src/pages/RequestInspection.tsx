@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { Phone, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -40,10 +40,41 @@ const TIME_OPTIONS = [
   "Anytime",
 ];
 
+/** Bookable arrival windows, Monday–Saturday. */
+const SLOTS = ["8:00 AM", "9:30 AM", "11:00 AM", "1:00 PM", "2:30 PM", "4:00 PM"];
+
+type Day = { iso: string; weekday: string; day: string; month: string };
+
+function buildDays(): Day[] {
+  const out: Day[] = [];
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  cursor.setDate(cursor.getDate() + 1); // earliest booking is tomorrow
+  while (out.length < 14) {
+    if (cursor.getDay() !== 0) {
+      out.push({
+        iso: `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(
+          cursor.getDate(),
+        ).padStart(2, "0")}`,
+        weekday: cursor.toLocaleDateString("en-US", { weekday: "short" }),
+        day: String(cursor.getDate()),
+        month: cursor.toLocaleDateString("en-US", { month: "short" }),
+      });
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return out;
+}
+
 const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
   const [contactTime, setContactTime] = useState("");
+  const days = useMemo(buildDays, []);
+  const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
+  const [slot, setSlot] = useState<string>("");
+  const [confirmed, setConfirmed] = useState<{ date: string; slot: string } | null>(null);
+
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,11 +85,17 @@ const RequestInspection = () => {
       phone: String(fd.get("phone") ?? ""),
       address: String(fd.get("address") ?? ""),
       postal_code: String(fd.get("postal_code") ?? ""),
-      preferred_date: String(fd.get("preferred_date") ?? ""),
+      preferred_date: slotDate,
       pool_details: String(fd.get("pool_details") ?? ""),
-      preferred_contact_time: contactTime,
+      preferred_contact_time: slot || contactTime,
       notes: String(fd.get("notes") ?? ""),
     };
+
+    if (!slot) {
+      toast.error("Pick an arrival window so we can lock your visit in");
+      return;
+    }
+
 
     const parsed = schema.safeParse(raw);
     if (!parsed.success) {
@@ -79,7 +116,9 @@ const RequestInspection = () => {
         preferred_date: parsed.data.preferred_date || null,
         pool_details: parsed.data.pool_details || null,
         preferred_contact_time: parsed.data.preferred_contact_time || null,
+        preferred_slot: slot || null,
         notes: parsed.data.notes || null,
+
         campaign_id: a.campaignId,
         utm_source: a.utmSource,
         utm_medium: a.utmMedium,
@@ -103,6 +142,8 @@ const RequestInspection = () => {
     }
 
     setReference(data.reference_number);
+    setConfirmed({ date: slotDate, slot });
+
     void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
       console.warn("inspection notification not sent", err),
     );
@@ -152,12 +193,22 @@ const RequestInspection = () => {
             <h1 className="mt-5 font-display text-[2rem] uppercase leading-none tracking-tight sm:text-[2.6rem]">
               Request received
             </h1>
+            {confirmed && (
+              <p className="mt-4 border-l-2 border-accent pl-4 font-tech text-[12px] uppercase tracking-[0.18em]">
+                {new Date(`${confirmed.date}T12:00:00`).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}{" "}
+                · {confirmed.slot}
+              </p>
+            )}
             <p className="mt-4 text-muted-foreground">
               Your reference number is{" "}
               <span className="font-tech text-foreground">{reference}</span>. We just texted you a
-              confirmation with next steps — a tech reviews your address within one business day and
-              sends two visit windows to choose from.
+              confirmation with next steps — your tech confirms this window within one business day.
             </p>
+
             <a
               href={PHONE_HREF}
               onClick={() => trackContactClick("call_click", "inspection_confirmation")}
@@ -212,27 +263,81 @@ const RequestInspection = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="preferred_date">Preferred service date</Label>
-                  <Input id="preferred_date" name="preferred_date" type="date" />
+              <div className="space-y-3 border-t border-hairline pt-6">
+                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Pick your day
+                </Label>
+                <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1">
+                  {days.map((d) => {
+                    const active = d.iso === slotDate;
+                    return (
+                      <button
+                        key={d.iso}
+                        type="button"
+                        onClick={() => setSlotDate(d.iso)}
+                        aria-pressed={active}
+                        className={`min-w-[68px] shrink-0 snap-start border px-3 py-2.5 text-center transition ${
+                          active
+                            ? "border-accent bg-accent text-accent-foreground"
+                            : "border-hairline hover:border-accent"
+                        }`}
+                      >
+                        <span className="block font-tech text-[10px] uppercase tracking-[0.18em] opacity-80">
+                          {d.weekday}
+                        </span>
+                        <span className="block font-display text-[1.4rem] leading-none">{d.day}</span>
+                        <span className="block font-tech text-[10px] uppercase tracking-[0.18em] opacity-80">
+                          {d.month}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="preferred_contact_time">Best time to reach you</Label>
-                  <Select value={contactTime} onValueChange={setContactTime}>
-                    <SelectTrigger id="preferred_contact_time">
-                      <SelectValue placeholder="Pick a window" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background">
-                      {TIME_OPTIONS.map((t) => (
-                        <SelectItem key={t} value={t}>
-                          {t}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+
+                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Arrival window
+                </Label>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {SLOTS.map((s) => {
+                    const active = s === slot;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSlot(s)}
+                        aria-pressed={active}
+                        className={`border px-3 py-3 text-sm font-semibold transition ${
+                          active
+                            ? "border-accent bg-accent text-accent-foreground"
+                            : "border-hairline hover:border-accent"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Windows are ~2 hours. We confirm by text right after you submit.
+                </p>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="preferred_contact_time">Best time to reach you</Label>
+                <Select value={contactTime} onValueChange={setContactTime}>
+                  <SelectTrigger id="preferred_contact_time">
+                    <SelectValue placeholder="Pick a window" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background">
+                    {TIME_OPTIONS.map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
 
               <div className="space-y-2">
                 <Label htmlFor="pool_details">Pool details (size, type, equipment)</Label>

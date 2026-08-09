@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
+import { convertInspectionToCustomer } from "@/lib/inspection-convert.functions";
+import { notifyInspectionStatus } from "@/lib/inspection-status-notify.functions";
 import InspectionSourceAnalytics, {
   RANGES,
   inRange,
@@ -18,15 +21,18 @@ type Row = {
   postal_code: string;
   preferred_date: string | null;
   preferred_contact_time: string | null;
+  preferred_slot: string | null;
   pool_details: string | null;
   notes: string | null;
   status: string;
+  converted_customer_id: string | null;
   utm_source: string | null;
   utm_campaign: string | null;
   created_at: string;
 };
 
-const STATUSES = ["new", "contacted", "scheduled", "won", "lost"] as const;
+const STATUSES = ["new", "contacted", "scheduled", "completed", "won", "lost"] as const;
+
 
 const when = (iso: string) =>
   new Date(iso).toLocaleString("en-US", {
@@ -44,13 +50,15 @@ export default function Inspections() {
   const [q, setQ] = useState("");
   const [range, setRange] = useState<string>("90");
   const [source, setSource] = useState<string | null>(null);
+  const [converting, setConverting] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function load() {
     setLoading(true);
     const { data, error } = await supabase
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, status, utm_source, utm_campaign, created_at",
+        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, utm_source, utm_campaign, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(300);
@@ -73,7 +81,42 @@ export default function Inspections() {
       return;
     }
     setRows((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
+
+    if (status === "scheduled" || status === "completed") {
+      void notifyInspectionStatus({ data: { requestId: id, status } })
+        .then(() => toast.success(`Alert sent — inspection ${status}`))
+        .catch((e) => {
+          console.warn("status alert failed", e);
+          toast.error("Status saved, but the alert could not be sent");
+        });
+    }
   }
+
+  async function convert(row: Row) {
+    if (row.converted_customer_id) {
+      void navigate({
+        to: "/admin/crm/customers/$id",
+        params: { id: row.converted_customer_id },
+      });
+      return;
+    }
+    setConverting(row.id);
+    try {
+      const res = await convertInspectionToCustomer({ data: { requestId: row.id } });
+      setRows((r) =>
+        r.map((x) =>
+          x.id === row.id ? { ...x, converted_customer_id: res.customerId, status: "won" } : x,
+        ),
+      );
+      toast.success("Converted — you can build the estimate now");
+      void navigate({ to: "/admin/crm/customers/$id", params: { id: res.customerId } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not convert this request");
+    } finally {
+      setConverting(null);
+    }
+  }
+
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -172,7 +215,9 @@ export default function Inspections() {
                 <th className="p-3">Preferred</th>
                 <th className="p-3">Source</th>
                 <th className="p-3">Status</th>
+                <th className="p-3">CRM</th>
               </tr>
+
             </thead>
             <tbody>
               {shown.map((r) => (
@@ -196,7 +241,9 @@ export default function Inspections() {
                   </td>
                   <td className="p-3">
                     {r.preferred_date ?? "—"}
-                    <div className="opacity-60">{r.preferred_contact_time ?? ""}</div>
+                    <div className="opacity-60">
+                      {r.preferred_slot ?? r.preferred_contact_time ?? ""}
+                    </div>
                   </td>
                   <td className="p-3 opacity-75">
                     {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
@@ -214,7 +261,22 @@ export default function Inspections() {
                       ))}
                     </select>
                   </td>
+                  <td className="whitespace-nowrap p-3">
+                    <button
+                      type="button"
+                      className="ss-btn"
+                      disabled={converting === r.id}
+                      onClick={() => void convert(r)}
+                    >
+                      {r.converted_customer_id
+                        ? "Open customer"
+                        : converting === r.id
+                          ? "Converting…"
+                          : "Convert → estimate"}
+                    </button>
+                  </td>
                 </tr>
+
               ))}
             </tbody>
           </table>

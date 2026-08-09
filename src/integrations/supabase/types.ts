@@ -578,6 +578,8 @@ export type Database = {
         Row: {
           address: string
           campaign_id: string | null
+          converted_at: string | null
+          converted_customer_id: string | null
           created_at: string
           email: string
           full_name: string
@@ -590,6 +592,7 @@ export type Database = {
           postal_code: string
           preferred_contact_time: string | null
           preferred_date: string | null
+          preferred_slot: string | null
           reference_number: string
           referrer: string | null
           session_id: string | null
@@ -605,6 +608,8 @@ export type Database = {
         Insert: {
           address: string
           campaign_id?: string | null
+          converted_at?: string | null
+          converted_customer_id?: string | null
           created_at?: string
           email: string
           full_name: string
@@ -617,6 +622,7 @@ export type Database = {
           postal_code: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
+          preferred_slot?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -632,6 +638,8 @@ export type Database = {
         Update: {
           address?: string
           campaign_id?: string | null
+          converted_at?: string | null
+          converted_customer_id?: string | null
           created_at?: string
           email?: string
           full_name?: string
@@ -644,6 +652,7 @@ export type Database = {
           postal_code?: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
+          preferred_slot?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -656,7 +665,15 @@ export type Database = {
           utm_source?: string | null
           utm_term?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "inspection_requests_converted_customer_id_fkey"
+            columns: ["converted_customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pool_designs: {
         Row: {
