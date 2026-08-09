@@ -66,7 +66,7 @@ Each workspace gets its own dashboard, built with recharts on existing data:
 Jobs, Customers, Quotes, Invoices, Inspection Requests, Tickets, Inventory all get: page header + primary action, a 3–4 card overview strip specific to that page, pill filters + search, then the clean table with status pills, sortable columns and empty states.
 
 
-## 6. Technician mobile app (Pool Brain style)
+## 7. Field workspace — technician mobile app (Pool Brain style)
 
 Mobile-first tech experience, big touch targets, no dense tables and no finance data:
 
@@ -78,20 +78,21 @@ Mobile-first tech experience, big touch targets, no dense tables and no finance 
 - Customer quick view for techs: property, pool type, gate/lock/dog icons, equipment link, and Jobs tab only — quotes, invoices and payments stay hidden for technician role.
 - Existing tech privacy lockdown behavior is preserved.
 
-## 6b. Job costing card
+## 8. Job costing card
 
 Per-job "Total cost to date" card (revenue bar, cost bar, profit % and amount, expandable cost breakdown) shown on job and project detail pages, plus a Notes panel matching the reference layout.
 
-
-## 7. Customer portal
+## 9. Customer portal
 
 Cleaner `/portal`: friendly header, tab bar (Overview, Visits, Water reports, Invoices, Documents, Support), a next-visit card, chemistry trend chart, invoice list with a single Pay button, and simple support ticket flow. Same tokens, larger type, fewer controls per screen.
 
 ## Technical notes
 
-- Purely presentational: new/updated components under `src/crm/components/ui/*`, tokens in `src/crm/crm.css`, no schema or business-logic changes except the new insights aggregation queries (read-only) and a `revenue_goal` entry in existing `ss_settings`.
-- Charts use the already-installed `recharts`; colors read from CSS variables.
-- Rollout order: (1) tokens + primitives, (2) shell + Insights dashboard, (3) list pages, (4) finance overview, (5) tech day view, (6) portal.
+- Mostly presentational: new primitives under `src/crm/components/ui/*`, tokens in `src/crm/crm.css`, workspace shell in `CrmLayout.tsx`, workspace homes as new pages/routes.
+- Two backend additions: `ss_user_prefs` (per-user theme, background, density, pinned widgets — RLS scoped to the signed-in user) and a `savvy-ai` server function on Lovable AI that answers with the caller's own permissions.
+- Charts use the already-installed `recharts`; colors read from CSS variables so photo/dark backgrounds work.
+- Rollout order: (1) tokens + primitives, (2) shell + launcher + personalization, (3) workspace homes (Marketing, Sales, Operations, Financial, My day), (4) list pages, (5) field app, (6) portal, (7) Savvy AI dock.
+
 
 ## Open items
 
