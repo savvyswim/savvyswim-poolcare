@@ -3,23 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { claimStaffSeat } from "@/lib/accounts.functions";
 
 import { Link, Outlet, useLocation, useNavigate } from "@/lib/router-compat";
-import {
-  AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, LogOut, Mail,
-  Map, Menu, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, X, KanbanSquare,
-  Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck, ScrollText, Star, FlaskConical,
-  TrendingUp,
-  MessageSquare,
-  Grid3x3,
-  Gauge,
-  Wallet,
-  SlidersHorizontal,
-  MessagesSquare,
-  FileText,
-  Calculator,
-  Workflow,
-} from "lucide-react";
+import { LogOut, Menu, X, Search, Bell, PanelLeftClose, PanelLeft } from "lucide-react";
 import "@/crm/crm.css";
-import { SavvyLogo, StripeBand } from "@/crm/components/Brand";
+import { SavvyLogo } from "@/crm/components/Brand";
 import {
   PrivacyNotice,
   useCaptureGuard,
@@ -28,78 +14,27 @@ import {
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { usePrivacyOverlayConfig } from "@/crm/lib/usePrivacyOverlay";
 import { useAuth } from "@/hooks/useAuth";
-import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
+import { canAccess, canAccessPath } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
 import { CrmErrorBoundary } from "@/crm/components/CrmErrorBoundary";
-
-type NavGroup = "Today" | "Sales" | "Operations" | "Marketing" | "Savvy FinOps" | "Admin";
-type NavItem = { to: string; label: string; icon: typeof Map; module: ModuleKey; group: NavGroup };
-
-const GROUP_ORDER: NavGroup[] = ["Today", "Sales", "Operations", "Marketing", "Savvy FinOps", "Admin"];
-
-const STAFF_NAV: NavItem[] = [
-  // Today
-  { to: "/admin/crm", label: "Today's Route", icon: Map, module: "route", group: "Today" },
-  { to: "/admin/crm/jobs", label: "Jobs", icon: Wrench, module: "jobs", group: "Today" },
-  { to: "/admin/crm/alerts", label: "Alerts", icon: AlertTriangle, module: "alerts", group: "Today" },
-  { to: "/admin/crm/tickets", label: "Customer Tickets", icon: MessageSquare, module: "tickets", group: "Today" },
-  { to: "/admin/crm/inbox", label: "Text Inbox", icon: MessagesSquare, module: "inbox", group: "Today" },
-  { to: "/admin/crm/water-lab", label: "Water Lab", icon: FlaskConical, module: "waterLab", group: "Today" },
-  { to: "/admin/crm/pay-per-pool", label: "Payroll", icon: Wallet, module: "payPerPool", group: "Today" },
-
-  // Sales
-  { to: "/admin/crm/pipeline", label: "Leads & Pipeline", icon: KanbanSquare, module: "pipeline", group: "Sales" },
-  { to: "/admin/crm/inspections", label: "Inspection Requests", icon: ClipboardList, module: "inspections", group: "Sales" },
-  { to: "/admin/crm/products", label: "Savvy Estimate", icon: Package, module: "products", group: "Sales" },
-  { to: "/admin/crm/quotes", label: "Savvy Quotes", icon: FileText, module: "quotes", group: "Sales" },
-  { to: "/admin/crm/service-plans", label: "Service Plans", icon: ClipboardList, module: "servicePlans", group: "Sales" },
-  { to: "/admin/crm/customers", label: "Customers", icon: Users, module: "customers", group: "Sales" },
-
-  // Operations
-  { to: "/admin/crm/technicians", label: "Technicians", icon: Users, module: "technicians", group: "Operations" },
-  { to: "/admin/crm/scorecard", label: "Tech Scorecard", icon: Timer, module: "scorecard", group: "Operations" },
-  { to: "/admin/crm/qc-review", label: "Weekly QC Review", icon: ClipboardCheck, module: "qcReview", group: "Operations" },
-  { to: "/admin/crm/trucks", label: "Trucks & Tools", icon: Truck, module: "trucks", group: "Operations" },
-  { to: "/admin/crm/inventory", label: "Inventory", icon: Building2, module: "inventory", group: "Operations" },
-
-  // Savvy FinOps
-  { to: "/admin/crm/finance", label: "Savvy Ledger", icon: DollarSign, module: "finance", group: "Savvy FinOps" },
-  { to: "/admin/crm/job-costing", label: "Job Costing", icon: Calculator, module: "jobCosting", group: "Savvy FinOps" },
-  { to: "/admin/crm/chem-costs", label: "Chemical Costs", icon: FlaskConical, module: "jobCosting", group: "Savvy FinOps" },
-  { to: "/admin/crm/margin", label: "Margin Calculator", icon: Percent, module: "margin", group: "Savvy FinOps" },
-  { to: "/admin/crm/revenue-growth", label: "Revenue Growth", icon: TrendingUp, module: "finance", group: "Savvy FinOps" },
-  { to: "/admin/crm/pricing-matrix", label: "Pricing Matrix", icon: Grid3x3, module: "finance", group: "Savvy FinOps" },
-  { to: "/admin/crm/break-even", label: "Break-Even & Profit", icon: Gauge, module: "finance", group: "Savvy FinOps" },
-  { to: "/admin/store", label: "Store & Orders", icon: ShoppingBag, module: "store", group: "Savvy FinOps" },
-
-  // Marketing & website
-  { to: "/admin/crm/email", label: "Email Center", icon: Mail, module: "email", group: "Marketing" },
-  { to: "/admin/crm/reviews", label: "Google Reviews", icon: Star, module: "reviews", group: "Marketing" },
-  { to: "/admin/crm/connect", label: "Website Connect", icon: Plug, module: "connect", group: "Marketing" },
-  { to: "/admin/designs", label: "Media Library", icon: BookOpen, module: "designs", group: "Marketing" },
-
-  // Admin
-  { to: "/admin/crm/reports", label: "Reports", icon: BarChart3, module: "reports", group: "Admin" },
-  { to: "/admin/crm/app", label: "Operations Console", icon: LayoutDashboard, module: "console", group: "Admin" },
-  { to: "/admin/team", label: "Team & Access", icon: Users, module: "team", group: "Admin" },
-  { to: "/admin/activity", label: "Activity Log", icon: Activity, module: "activity", group: "Admin" },
-  { to: "/admin/crm/automations", label: "Automations", icon: Workflow, module: "automations", group: "Admin" },
-  { to: "/admin/crm/service-setup", label: "Service Setup", icon: SlidersHorizontal, module: "serviceSetup", group: "Admin" },
-  { to: "/admin/crm/settings", label: "Settings", icon: SettingsIcon, module: "settings", group: "Admin" },
-  { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Admin" },
-  { to: "/admin/crm/audit-trail", label: "Audit Trail", icon: ScrollText, module: "security", group: "Admin" },
-  { to: "/admin/crm/site-speed", label: "Site Speed", icon: Gauge, module: "siteSpeed", group: "Admin" },
-  { to: "/admin/crm/deploy-health", label: "Deploy Health", icon: Activity, module: "deployHealth", group: "Admin" },
-  { to: "/admin/cleaning", label: "Website Plans", icon: Sparkles, module: "cleaning", group: "Admin" },
-  { to: "/admin/crm/projects", label: "Construction & Remodel", icon: Hammer, module: "projects", group: "Admin" },
-];
-
-
+import {
+  WORKSPACES,
+  getWorkspace,
+  workspaceForPath,
+  type NavItem,
+  type Workspace,
+  type WorkspaceKey,
+} from "@/crm/lib/workspaces";
+import { AppLauncher } from "@/crm/components/AppLauncher";
+import { PersonalizeMenu, backgroundUrl } from "@/crm/components/PersonalizeMenu";
+import { SavvyAiDock } from "@/crm/components/SavvyAiDock";
+import { useCrmPrefs } from "@/crm/lib/useCrmPrefs";
 
 const LEVEL_LABEL: Record<string, string> = {
   owner: "Owner",
-  office_manager: "Office Manager",
+  office_manager: "Office manager",
   technician: "Technician",
+  contractor: "Contractor",
 };
 
 export default function CrmLayout({ children }: { children?: React.ReactNode }) {
@@ -110,12 +45,13 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
   const [drawer, setDrawer] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [claimMsg, setClaimMsg] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
   const claimSeat = useServerFn(claimStaffSeat);
   const obscured = useWindowObscured();
   const { config: privacyConfig } = usePrivacyOverlayConfig();
+  const { prefs, update } = useCrmPrefs();
   const techLocked = !!id.isTech && privacyConfig.enabled;
   const captureBlocked = useCaptureGuard(techLocked);
-
 
   useEffect(() => {
     if (!authLoading && !user) nav("/admin/crm/login", { replace: true, state: { from: loc.pathname } });
@@ -127,27 +63,52 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
 
   useEffect(() => setDrawer(false), [loc.pathname]);
 
+  /** Workspaces this person is allowed to open at all. */
+  const available = useMemo<Workspace[]>(() => {
+    const list = WORKSPACES.map((w) => ({
+      ...w,
+      items: w.items.filter((i) => canAccess(id.level, i.module)),
+    })).filter((w) => w.items.length > 0);
+    // A technician gets the Field workspace as their world.
+    return id.isTech ? list.filter((w) => w.key === "field" || w.key === "myday") : list;
+  }, [id.level, id.isTech]);
 
+  const [manualWs, setManualWs] = useState<WorkspaceKey | null>(null);
+  const activeKey: WorkspaceKey =
+    workspaceForPath(loc.pathname) === null
+      ? manualWs ?? prefs.last_workspace ?? available[0]?.key ?? "myday"
+      : manualWs && getWorkspace(manualWs).items.some((i) => i.to === loc.pathname)
+        ? manualWs
+        : (workspaceForPath(loc.pathname) as WorkspaceKey);
 
-
-  const items = useMemo(
-    () => STAFF_NAV.filter((i) => canAccess(id.level, i.module)),
-    [id.level],
+  const activeWs = useMemo(
+    () => available.find((w) => w.key === activeKey) ?? available[0] ?? getWorkspace("myday"),
+    [available, activeKey],
   );
 
   const groups = useMemo(
     () =>
-      GROUP_ORDER.map((g) => ({ group: g, items: items.filter((i) => i.group === g) })).filter(
-        (g) => g.items.length > 0,
-      ),
-    [items],
+      activeWs.groups
+        .map((g) => ({ group: g, items: activeWs.items.filter((i) => i.group === g) }))
+        .filter((g) => g.items.length > 0),
+    [activeWs],
   );
 
+  const allItems = useMemo(
+    () => available.flatMap((w) => w.items.map((i) => ({ ...i, ws: w.label }))),
+    [available],
+  );
+  const results = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return [];
+    return allItems.filter((i) => i.label.toLowerCase().includes(q) || i.ws.toLowerCase().includes(q)).slice(0, 8);
+  }, [search, allItems]);
+
   const allowed = canAccessPath(id.level, loc.pathname);
-
-
-  const mobilePrimary = items.slice(0, 4);
-
+  const mobilePrimary = activeWs.items.slice(0, 4);
+  const collapsed = prefs.sidebar_collapsed;
+  const sidebarW = collapsed ? 68 : 244;
+  const bgUrl = backgroundUrl(prefs.background);
 
   if (authLoading || id.loading) {
     return (
@@ -204,12 +165,15 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
     );
   }
 
-
   return (
     <div
-      className={`savvy-crm ${techLocked ? "ss-no-select ss-tech-locked" : ""} ${
+      className={`savvy-crm min-h-screen ${techLocked ? "ss-no-select ss-tech-locked" : ""} ${
         techLocked && obscured ? "ss-privacy-blur" : ""
       } ${techLocked && captureBlocked ? "ss-capture-masked" : ""}`}
+      data-theme={prefs.theme}
+      data-density={prefs.density}
+      data-bg={bgUrl ? "photo" : "plain"}
+      style={bgUrl ? { backgroundImage: `linear-gradient(hsl(var(--ss-canvas) / .82), hsl(var(--ss-canvas) / .92)), url(${bgUrl})` } : undefined}
       onContextMenu={techLocked ? (e) => e.preventDefault() : undefined}
     >
       {techLocked && obscured && <PrivacyNotice />}
@@ -217,40 +181,106 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         <PrivacyNotice message="Copying, printing or saving customer information isn't allowed on a technician account." />
       )}
 
-      {/* sticky header */}
-      <header className="sticky top-0 z-40 lg:ml-[232px] xl:ml-[248px]" style={{ background: "hsl(var(--ss-cream))" }}>
-        <div className="flex items-center justify-between gap-3 px-4 py-2.5">
-          <div className="flex items-center gap-3">
-            <button
-              className="lg:hidden"
-              aria-label="Open menu"
-              onClick={() => setDrawer(true)}
-            >
-              <Menu size={20} />
-            </button>
-            <div className="lg:hidden">
-              <SavvyLogo size="sm" />
-            </div>
+      {/* top bar */}
+      <header
+        className="ss-shell-panel sticky top-0 z-40 border-b"
+        style={{ marginLeft: 0, paddingLeft: 0 }}
+      >
+        <div
+          className="flex items-center gap-3 px-3 py-2"
+          style={{ paddingLeft: undefined }}
+        >
+          <button className="lg:hidden" aria-label="Open menu" onClick={() => setDrawer(true)}>
+            <Menu size={20} />
+          </button>
+          <div className="lg:hidden">
+            <SavvyLogo size="sm" />
           </div>
-          <div className="flex items-center gap-3" />
 
+          <div className="hidden lg:block" style={{ width: sidebarW - 12 }} />
+
+          <AppLauncher
+            active={activeWs.key}
+            available={available}
+            onPick={(w) => {
+              setManualWs(w.key);
+              update({ last_workspace: w.key });
+            }}
+          />
+
+          <div className="relative ml-auto hidden min-w-0 flex-1 max-w-md md:block">
+            <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 opacity-40" />
+            <input
+              className="ss-input w-full pl-8"
+              placeholder="Search the workspace…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {results.length > 0 ? (
+              <div className="ss-card absolute left-0 right-0 z-50 mt-1 p-1">
+                {results.map((r) => {
+                  const Icon = r.icon;
+                  return (
+                    <Link
+                      key={r.ws + r.to + r.label}
+                      to={r.to}
+                      className="flex items-center gap-2 rounded-[7px] px-2 py-1.5 !no-underline !text-inherit hover:bg-black/5"
+                      onClick={() => setSearch("")}
+                    >
+                      <Icon size={14} className="opacity-50" />
+                      <span className="text-[0.82rem]">{r.label}</span>
+                      <span className="ml-auto text-[0.68rem] opacity-50">{r.ws}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="ml-auto flex items-center gap-1.5 md:ml-0">
+            <Link to="/admin/crm/alerts" className="ss-btn ss-btn-ghost" aria-label="Alerts" title="Alerts">
+              <Bell size={15} />
+            </Link>
+            <PersonalizeMenu prefs={prefs} update={update} />
+          </div>
         </div>
-        <StripeBand />
       </header>
 
       {/* desktop sidebar */}
       <aside
-        className="fixed left-0 top-0 z-50 hidden h-screen w-[232px] xl:w-[248px] min-w-0 flex-col overflow-hidden border-r p-4 lg:flex"
-        style={{ borderColor: "hsl(var(--ss-sand))", background: "hsl(var(--ss-white))" }}
+        className="ss-shell-panel fixed left-0 top-0 z-50 hidden h-screen min-w-0 flex-col overflow-hidden border-r p-3 lg:flex"
+        style={{ width: sidebarW }}
       >
-        <SavvyLogo size="md" />
-        <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+        <div className="flex items-start justify-between gap-2">
+          {collapsed ? <SavvyLogo size="sm" /> : <SavvyLogo size="md" />}
+          <button
+            aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+            className="opacity-50 hover:opacity-100"
+            onClick={() => update({ sidebar_collapsed: !collapsed })}
+          >
+            {collapsed ? <PanelLeft size={15} /> : <PanelLeftClose size={15} />}
+          </button>
+        </div>
+
+        {!collapsed ? (
+          <div className="ss-tag mt-4" style={{ fontSize: "0.5rem" }}>
+            {activeWs.label}
+          </div>
+        ) : null}
+
+        <nav className="mt-2 flex-1 space-y-3 overflow-y-auto">
           {groups.map((g) => (
-            <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
+            <NavGroupBlock
+              key={g.group}
+              group={g.group}
+              items={g.items}
+              pathname={loc.pathname}
+              collapsed={collapsed}
+            />
           ))}
         </nav>
 
-        <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} />
+        <SidebarFooter level={id.level} name={id.staffName} onSignOut={signOut} collapsed={collapsed} />
       </aside>
 
       {/* mobile drawer */}
@@ -258,8 +288,7 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setDrawer(false)} />
           <div
-            className="absolute left-0 top-0 flex h-full w-[min(84vw,264px)] min-w-0 flex-col overflow-hidden p-4"
-            style={{ background: "hsl(var(--ss-white))" }}
+            className="ss-shell-panel absolute left-0 top-0 flex h-full w-[min(86vw,280px)] min-w-0 flex-col overflow-hidden p-4"
           >
             <div className="flex items-start justify-between">
               <SavvyLogo size="md" />
@@ -267,7 +296,32 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
                 <X size={18} />
               </button>
             </div>
-            <nav className="mt-6 flex-1 space-y-3 overflow-y-auto">
+
+            <div className="mt-4 grid grid-cols-2 gap-1.5">
+              {available.map((w) => {
+                const Icon = w.icon;
+                return (
+                  <Link
+                    key={w.key}
+                    to={w.home}
+                    className="flex items-center gap-1.5 rounded-[8px] border px-2 py-1.5 !no-underline !text-inherit"
+                    style={{
+                      borderColor: "hsl(var(--ss-line))",
+                      background: w.key === activeWs.key ? "hsl(var(--ss-burgundy) / .08)" : undefined,
+                    }}
+                    onClick={() => {
+                      setManualWs(w.key);
+                      update({ last_workspace: w.key });
+                    }}
+                  >
+                    <Icon size={13} />
+                    <span className="truncate text-[0.74rem]">{w.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <nav className="mt-4 flex-1 space-y-3 overflow-y-auto">
               {groups.map((g) => (
                 <NavGroupBlock key={g.group} group={g.group} items={g.items} pathname={loc.pathname} />
               ))}
@@ -278,26 +332,32 @@ export default function CrmLayout({ children }: { children?: React.ReactNode }) 
         </div>
       )}
 
-      <main className="px-4 pb-28 pt-4 lg:pb-10 lg:pl-[248px] lg:pr-8 xl:pl-[264px]">
-        <div key={loc.pathname} className="ss-page-enter mx-auto max-w-[1440px]">
+      <main
+        className="px-4 pb-28 pt-4 lg:pb-10 lg:pr-8"
+        style={{ paddingLeft: undefined }}
+      >
+        <div
+          key={loc.pathname}
+          className="ss-page-enter mx-auto max-w-[1440px] lg:pl-[var(--ss-sidebar)]"
+          style={{ ["--ss-sidebar" as string]: `${sidebarW - 16}px` }}
+        >
           <CrmErrorBoundary resetKey={loc.pathname}>
             {allowed ? children ?? <Outlet /> : <AccessDenied />}
           </CrmErrorBoundary>
         </div>
       </main>
 
+      <SavvyAiDock workspace={activeWs.label} page={loc.pathname} />
+
       {/* mobile bottom tabs */}
       {mobilePrimary.length > 1 && (
-        <nav
-          className="fixed bottom-0 left-0 right-0 z-40 flex border-t lg:hidden"
-          style={{ background: "hsl(var(--ss-white))", borderColor: "hsl(var(--ss-sand))" }}
-        >
+        <nav className="ss-shell-panel fixed bottom-0 left-0 right-0 z-40 flex border-t lg:hidden">
           {mobilePrimary.map((i) => {
             const active = loc.pathname === i.to;
             const Icon = i.icon;
             return (
               <Link
-                key={i.to}
+                key={i.to + i.label}
                 to={i.to}
                 className="flex flex-1 flex-col items-center gap-0.5 py-2 !no-underline"
                 style={{ color: active ? "hsl(var(--ss-burgundy))" : "hsl(var(--ss-ink) / .5)" }}
@@ -329,20 +389,25 @@ function NavGroupBlock({
   group,
   items,
   pathname,
+  collapsed = false,
 }: {
-  group: NavGroup;
+  group: string;
   items: NavItem[];
   pathname: string;
+  collapsed?: boolean;
 }) {
   return (
     <div className="space-y-0.5">
-      <div className="ss-tag px-2.5" style={{ fontSize: "0.5rem", opacity: 0.5 }}>
-        {group}
-      </div>
+      {!collapsed ? (
+        <div className="ss-tag px-2.5" style={{ fontSize: "0.5rem", opacity: 0.5 }}>
+          {group}
+        </div>
+      ) : null}
       {items.map((i) => (
         <NavRow
-          key={i.to}
+          key={i.to + i.label}
           item={i}
+          collapsed={collapsed}
           active={pathname === i.to || (i.to !== "/admin/crm" && pathname.startsWith(`${i.to}/`))}
         />
       ))}
@@ -350,27 +415,17 @@ function NavGroupBlock({
   );
 }
 
-
-function NavRow({ item, active }: { item: NavItem; active: boolean }) {
+function NavRow({ item, active, collapsed }: { item: NavItem; active: boolean; collapsed?: boolean }) {
   const Icon = item.icon;
   return (
     <Link
       to={item.to}
-      className="flex min-w-0 items-center gap-2.5 rounded-[9px] px-2.5 py-2 !no-underline"
+      className={`ss-navrow !no-underline ${collapsed ? "justify-center" : ""}`}
+      data-active={active}
       title={item.label}
-      style={{
-        background: active ? "hsl(var(--ss-burgundy) / .1)" : "transparent",
-        color: active ? "hsl(var(--ss-burgundy))" : "hsl(var(--ss-ink) / .78)",
-        fontFamily: "Oswald, sans-serif",
-        fontSize: "0.72rem",
-        fontWeight: 600,
-        letterSpacing: "0.04em",
-        lineHeight: 1.2,
-        textTransform: "uppercase",
-      }}
     >
-      <Icon size={15} className="shrink-0" />
-      <span className="min-w-0 flex-1 truncate">{item.label}</span>
+      <Icon size={16} className="shrink-0" />
+      {!collapsed ? <span className="min-w-0 flex-1 truncate">{item.label}</span> : null}
     </Link>
   );
 }
@@ -379,24 +434,29 @@ function SidebarFooter({
   level,
   name,
   onSignOut,
+  collapsed = false,
 }: {
   level: string;
   name: string | null;
   onSignOut: () => Promise<void>;
+  collapsed?: boolean;
 }) {
+  if (collapsed) {
+    return (
+      <button className="ss-btn ss-btn-ghost mt-3 w-full" aria-label="Sign out" onClick={() => void onSignOut()}>
+        <LogOut size={14} />
+      </button>
+    );
+  }
   return (
-    <div className="mt-4 border-t pt-3" style={{ borderColor: "hsl(var(--ss-sand))" }}>
+    <div className="mt-4 border-t pt-3" style={{ borderColor: "hsl(var(--ss-line))" }}>
       <div className="ss-tag" style={{ fontSize: "0.5rem" }}>
         {LEVEL_LABEL[level] ?? level} access
       </div>
       <div className="mt-0.5 truncate text-[0.82rem] font-medium" title={name ?? undefined}>
         {name}
       </div>
-
-      <button
-        className="ss-btn ss-btn-ghost mt-2 w-full"
-        onClick={() => void onSignOut()}
-      >
+      <button className="ss-btn ss-btn-ghost mt-2 w-full" onClick={() => void onSignOut()}>
         <LogOut size={13} /> Sign out
       </button>
     </div>
