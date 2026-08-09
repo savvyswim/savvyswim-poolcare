@@ -94,7 +94,7 @@ export default function Settings() {
       <WorkflowTemplates />
       <div className="grid gap-3 lg:grid-cols-2">
 
-        {rows.map((r) => (
+        {rows.filter((r) => r.key !== PRIVACY_SETTINGS_KEY).map((r) => (
           <div key={r.key} className="ss-card p-4">
             <div className="ss-label mb-2">{r.key.replace(/_/g, " ")}</div>
             <textarea
