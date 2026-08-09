@@ -1,67 +1,85 @@
-# Split the CRM into its own project (still sharing one backend)
+# Split: Website project + CRM project (two apps, one shared backend)
 
-## Your admin login (ready now)
+Goal: the CRM becomes its own separate project, the public website stays here, and both
+keep talking to the SAME database. The website only carries links that hand off to the
+CRM app (staff login and customer portal).
 
-- URL: https://savvyswim.com/admin/crm/login
-- Email: admin@savvyswim.com
-- Password: SavvyOS-8acaaadc!
+## Step 0 — Finish your admin login
 
-Owner-level access, email already confirmed. Change the password after first sign-in from CRM → Admin → Security.
+An owner account was created: `admin@savvyswim.com` / `SavvyOS-8acaaadc!` (email already
+confirmed). It still needs to be attached to the staff roster and given the admin role,
+otherwise it lands on "No staff access". That is a one-line database change and is the
+first thing I do on approval. Change the password afterwards in CRM → Admin → Security.
 
-## The key constraint
+## Target shape
 
-The website and the CRM must read and write the SAME database (customers, visits,
-invoices, contracts, inspection requests). A Lovable Cloud project creates its own
-isolated backend, so a plain remix would start with an empty database and the two
-apps would drift apart immediately.
+```text
+savvyswim.com            (this project — public website)
+  marketing pages, city pages, services, booking, free inspection
+  header buttons:  [Customer login] -> portal.savvyswim.com
+                   [Staff login]    -> crm.savvyswim.com
 
-There are two honest ways to get "separate project, same data".
+crm.savvyswim.com        (new project — Savvy Swim OS)
+  /                staff sign-in
+  /crm/*           Marketing, Sales, Operations, Financial, Field, Admin workspaces
+  /portal/*        customer portal (invoices, visits, water reports, tickets)
+  /sign/*          contract e-sign pages
+  /quote/*         public proposal links
 
-### Option A — Two projects, one shared backend (true split)
+both -> the SAME Lovable Cloud backend (customers, visits, invoices, contracts,
+        inspections, auth users, roles, RLS)
+```
 
-1. Remix this project into "Savvy Swim CRM".
-2. In the remix, delete the public marketing pages and keep only the CRM/portal.
-3. In this project, delete the CRM routes and keep only the public site + portal login link.
-4. Point the remix at THIS project's existing backend instead of its own (connect it as
-   an external backend using this project's URL and keys). Both apps then share the same
-   tables, auth users, roles and RLS policies.
-5. Domains: website stays on savvyswim.com, CRM goes to crm.savvyswim.com. The website's
-   "Staff login" button links to the CRM domain.
+## How the split is done
 
-Trade-offs: one database, one set of accounts, clean separation of code and deploys.
-But schema changes must be made in the backend-owning project, and every new table needs
-its grants/policies kept in sync with both apps. Auth sessions are per-domain, so staff
-sign in once on the CRM domain.
+1. **Prepare this project (I do this).**
+   - Move every CRM-only file under one clearly separated folder tree so the remix can
+     drop the website cleanly and this project can drop the CRM cleanly.
+   - Add a shared "handoff" module: the two public entry buttons (Customer login, Staff
+     login) plus a `/portal` and `/admin/crm` redirect that forwards to the CRM domain,
+     so old links and bookmarks never break.
+   - Verify no website page imports CRM code and no CRM page imports website code.
 
-### Option B — Keep one project, separate the surfaces (lower risk)
+2. **You remix the project** into "Savvy Swim CRM" (project menu → Remix).
 
-Keep everything where it is, and treat the CRM as its own app inside the same project:
+3. **Wire the remix to the existing backend (I do this in the new project).**
+   - Connect it to THIS project's backend instead of letting it create an empty one, so
+     both apps read/write identical data and the same staff/customer accounts work.
+   - Delete the marketing pages there; keep CRM, portal, sign, quote.
+   - Set the CRM home route to the staff sign-in.
 
-- Serve the CRM from crm.savvyswim.com and the marketing site from savvyswim.com, with
-  the CRM routes blocked on the public hostname.
-- Keep the current route split (`/admin/crm/*` staff, `/portal` customers, public pages).
+4. **Clean this project (I do this).**
+   - Remove the CRM screens, keep the website, keep the booking/inspection forms that
+     write leads into the shared database.
+   - Keep the redirect stubs so `savvyswim.com/portal` and `/admin/crm` bounce to the CRM
+     app.
 
-Trade-offs: nothing to migrate, no schema sync, one deploy. But CRM and website ship
-together and the code stays in one repo.
+5. **Domains.**
+   - `crm.savvyswim.com` -> CRM project. Optionally `portal.savvyswim.com` -> same CRM
+     project (portal routes).
+   - `savvyswim.com` and `www` stay on the website project.
 
-## Recommendation
+## What stays working
 
-Option B unless you specifically need separate deploys/teams for the CRM. If you do want
-the real split, Option A is the correct shape — the one thing that must not change is the
-backend: the CRM project must connect to the existing backend, never create a new one.
+Inspection requests submitted on the website appear instantly in the CRM. Quotes,
+contracts, e-sign, invoices, routes, chemistry, inventory, attribution, notifications and
+the customer portal all keep functioning — same data, same accounts, same permissions.
+Nothing is deleted, only relocated.
 
-## What I would do next (on approval)
+## Trade-offs to know
 
-For Option A: prepare this project for the split — isolate CRM code under one folder,
-document the shared backend keys, add the staff-login handoff link on the website, then
-you remix and I finish the wiring in the new project.
-
-For Option B: add the hostname-based split, wire crm.savvyswim.com, and add the staff
-login entry point on the public site.
+- Schema changes are made in the backend-owning project (this one) and both apps see them.
+- Two deploys instead of one: website changes ship independently from CRM changes.
+- Sign-in is per-domain, so staff and customers sign in on the CRM domain; the website
+  only links there.
 
 ## Technical notes
 
-- Shared backend means shared `auth.users`, `user_roles`, `ss_staff` and every `ss_*`
-  table; RLS keeps techs, office and customers scoped exactly as today.
-- Both apps must keep the same Supabase client env values for the shared backend.
-- Cross-domain sign-in is not shared automatically; staff sign in on the CRM domain.
+- Shared backend = shared `auth.users`, `user_roles`, `ss_staff`, and all `ss_*` tables;
+  RLS keeps technician / office / customer scoping exactly as today.
+- The CRM project must be pointed at the existing backend URL and publishable key; it must
+  not provision a new one, or it starts with an empty database.
+- Redirect stubs use the CRM base URL from an environment value, so the domain can change
+  without a code edit.
+- Server functions that back the website (booking, inspection notify, attribution) stay in
+  the website project; CRM-only server functions move with the CRM.
