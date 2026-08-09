@@ -52,22 +52,19 @@ Rework the CRM token layer (`src/crm/crm.css`, scoped to `.savvy-crm` so the mar
 ## 5. Workspace home screens
 
 
-Built with recharts on existing data:
+Each workspace gets its own dashboard, built with recharts on existing data:
 
-- Overview strip: new leads, new inspection requests, converted quotes, jobs scheduled, invoiced value, collected — each with period-over-period trend chip and a date-range picker (this month / last 30 / quarter / year).
-- Revenue over time (bar + goal line, editable monthly revenue goal).
-- Sales pipeline funnel: requests → contacted → scheduled → completed → won, with drop-off callouts (reuses existing inspection funnel logic).
-- Lead source donut + revenue by source.
-- Today's operations: visits scheduled, completed, unassigned, open alerts.
-- Activity feed of recent CRM events.
+- **My day**: greeting + date, my tasks, my numbers, quick actions, pinned widgets.
+- **Marketing home**: new leads, cost per lead, leads by campaign (bar), lead source dynamics (multi-line over 12 months), landing page + city page performance, inspection request funnel with drop-off by source.
+- **Sales home**: pipeline value by stage, quotes sent/accepted, win rate, contracts awaiting signature, conversion trend.
+- **Operations home**: today's visits scheduled / completed / unassigned, route efficiency, open alerts, QC scores, low stock.
+- **Financial home** (QuickBooks style): Invoices card (unpaid / overdue / paid split bars), Expenses donut by category, Profit & Loss bars, cash collected trend, top services by revenue, break-even. Existing ledger tabs stay, restyled.
+- Shared: date-range picker (this month / last 30 / quarter / year), period-over-period trend chips, activity feed.
 
-## 4. Finance overview (QuickBooks style)
-
-New top section on Savvy Ledger: Invoices card (unpaid / overdue / paid split bars), Expenses donut by category, Profit & Loss bars (income vs expenses, net), Cash collected trend, and Top services by revenue. Existing ledger tabs stay, restyled.
-
-## 5. List pages restyled to the Jobber pattern
+## 6. List pages restyled to the Jobber pattern
 
 Jobs, Customers, Quotes, Invoices, Inspection Requests, Tickets, Inventory all get: page header + primary action, a 3–4 card overview strip specific to that page, pill filters + search, then the clean table with status pills, sortable columns and empty states.
+
 
 ## 6. Technician mobile app (Pool Brain style)
 
