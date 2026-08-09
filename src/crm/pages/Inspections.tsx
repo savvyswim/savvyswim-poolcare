@@ -233,20 +233,23 @@ export default function Inspections() {
         </button>
       </div>
 
-      {(source || range !== "90" || filter !== "all") && (
+      {(source || landing || range !== "90" || filter !== "all") && (
         <div className="ss-card flex flex-wrap items-center gap-2 p-3 text-[0.8rem]">
           <span className="opacity-60">Showing:</span>
           <span>{RANGES.find((r) => r.key === range)?.label}</span>
           {source && <span>· source “{source}”</span>}
+          {landing && <span>· landing page “{landing}”</span>}
           {filter !== "all" && <span>· status {filter}</span>}
           <button
             className="ss-btn ml-auto"
             onClick={() => {
               setSource(null);
+              setLanding(null);
               setFilter("all");
               setRange("90");
             }}
           >
+
             Clear filters
           </button>
         </div>
