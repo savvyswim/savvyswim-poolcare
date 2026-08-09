@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "@/lib/router-compat";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { emailSignedContractCopy } from "@/lib/contracts.functions";
 import { CheckCircle2, Eraser, PenLine } from "lucide-react";
+
 
 type ContractView = {
   title: string;
