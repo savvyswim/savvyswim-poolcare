@@ -143,5 +143,19 @@ export const notifyInspectionRequest = createServerFn({ method: "POST" })
       results[req.email] = "failed";
     }
 
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(req.id, [
+      { eventType: "status_change", statusTo: "new", detail: "Request submitted" },
+      ...Object.entries(results).map(([to, outcome]) => ({
+        eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
+          | "email_sent"
+          | "email_failed",
+        channel: "email",
+        recipient: to,
+        outcome,
+        detail: to === req.email ? "Homeowner confirmation" : "Office new-request alert",
+      })),
+    ]);
+
     return { sent: true as const, recipients: results };
   });

@@ -170,5 +170,30 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
       }
     }
 
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(req.id, [
+      {
+        eventType: "status_change",
+        statusTo: data.status,
+        detail: `Marked ${data.status} — ${req.reference_number}`,
+      },
+      ...Object.entries(result.email).map(([to, outcome]) => ({
+        eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
+          | "email_sent"
+          | "email_failed",
+        channel: "email",
+        recipient: to,
+        outcome,
+        detail: headline,
+      })),
+      ...Object.entries(result.sms).map(([to, outcome]) => ({
+        eventType: (outcome === "sent" ? "sms_sent" : "sms_failed") as "sms_sent" | "sms_failed",
+        channel: "sms",
+        recipient: to,
+        outcome,
+        detail: headline,
+      })),
+    ]);
+
     return { ok: true as const, ...result };
   });
