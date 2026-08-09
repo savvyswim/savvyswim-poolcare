@@ -72,6 +72,10 @@ export default function SignContract() {
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
     drawing.current = true;
+    if (!progressSent.current) {
+      progressSent.current = true;
+      void supabase.rpc("ss_mark_contract_progress", { _token: token });
+    }
     const ctx = e.currentTarget.getContext("2d");
     if (!ctx) return;
     const { x, y } = pos(e);
