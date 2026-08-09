@@ -50,13 +50,15 @@ export default function Inspections() {
   const [q, setQ] = useState("");
   const [range, setRange] = useState<string>("90");
   const [source, setSource] = useState<string | null>(null);
+  const [converting, setConverting] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function load() {
     setLoading(true);
     const { data, error } = await supabase
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, status, utm_source, utm_campaign, created_at",
+        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, utm_source, utm_campaign, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(300);
@@ -79,7 +81,42 @@ export default function Inspections() {
       return;
     }
     setRows((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
+
+    if (status === "scheduled" || status === "completed") {
+      void notifyInspectionStatus({ data: { requestId: id, status } })
+        .then(() => toast.success(`Alert sent — inspection ${status}`))
+        .catch((e) => {
+          console.warn("status alert failed", e);
+          toast.error("Status saved, but the alert could not be sent");
+        });
+    }
   }
+
+  async function convert(row: Row) {
+    if (row.converted_customer_id) {
+      void navigate({
+        to: "/admin/crm/customers/$id",
+        params: { id: row.converted_customer_id },
+      });
+      return;
+    }
+    setConverting(row.id);
+    try {
+      const res = await convertInspectionToCustomer({ data: { requestId: row.id } });
+      setRows((r) =>
+        r.map((x) =>
+          x.id === row.id ? { ...x, converted_customer_id: res.customerId, status: "won" } : x,
+        ),
+      );
+      toast.success("Converted — you can build the estimate now");
+      void navigate({ to: "/admin/crm/customers/$id", params: { id: res.customerId } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not convert this request");
+    } finally {
+      setConverting(null);
+    }
+  }
+
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
