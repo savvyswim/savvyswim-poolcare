@@ -198,7 +198,16 @@ export default function SignContract() {
           </pre>
         </article>
 
-        {!signed && (
+        {expired && (
+          <div className="mt-8 rounded-xl border border-border bg-card p-6">
+            <p className="font-semibold text-foreground">This signing link has expired.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Call or text <a className="underline" href="tel:+14697440379">(469) 744-0379</a> and we’ll send you a fresh one.
+            </p>
+          </div>
+        )}
+
+        {!signed && !expired && (
           <section className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8">
             <h2 className="font-tech text-xs tracking-[0.2em] uppercase text-muted-foreground flex items-center gap-2">
               <PenLine className="h-3.5 w-3.5" /> Sign below
