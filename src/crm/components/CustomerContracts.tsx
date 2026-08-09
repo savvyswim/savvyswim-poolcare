@@ -66,6 +66,7 @@ const FILTERS: EsignStatus[] = ["draft", "sent", "viewed", "in_progress", "signe
 
 export default function CustomerContracts({ customer }: { customer: CustomerLite }) {
   const [creating, setCreating] = useState(false);
+  const [filter, setFilter] = useState<EsignStatus | "all">("all");
   const [templateId, setTemplateId] = useState<string>("");
   const [termMonths, setTermMonths] = useState(12);
   const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
