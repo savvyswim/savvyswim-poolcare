@@ -74,13 +74,20 @@ export default function Inspections() {
     return rows.filter(
       (r) =>
         (filter === "all" || r.status === filter) &&
+        inRange(r.created_at, range) &&
+        (!source || sourceOf(r) === source) &&
         (!needle ||
           [r.full_name, r.phone, r.address, r.email, r.reference_number]
             .join(" ")
             .toLowerCase()
             .includes(needle)),
     );
-  }, [rows, filter, q]);
+  }, [rows, filter, q, range, source]);
+
+  const inWindow = useMemo(
+    () => rows.filter((r) => inRange(r.created_at, range) && (!source || sourceOf(r) === source)),
+    [rows, range, source],
+  );
 
   const newCount = rows.filter((r) => r.status === "new").length;
 
@@ -91,7 +98,13 @@ export default function Inspections() {
         sub={`${rows.length} total · ${newCount} awaiting first contact`}
       />
 
-      <InspectionSourceAnalytics rows={rows} />
+      <InspectionSourceAnalytics
+        rows={rows}
+        range={range}
+        onRangeChange={setRange}
+        activeSource={source}
+        onSelectSource={setSource}
+      />
 
       <div className="ss-card flex flex-wrap items-center gap-2 p-3">
         <input
@@ -107,13 +120,35 @@ export default function Inspections() {
             style={filter === s ? undefined : { opacity: 0.55 }}
             onClick={() => setFilter(s)}
           >
-            {s === "all" ? `All (${rows.length})` : `${s} (${rows.filter((r) => r.status === s).length})`}
+            {s === "all"
+              ? `All (${inWindow.length})`
+              : `${s} (${inWindow.filter((r) => r.status === s).length})`}
           </button>
         ))}
         <button className="ss-btn ml-auto" onClick={() => void load()}>
           Refresh
         </button>
       </div>
+
+      {(source || range !== "90" || filter !== "all") && (
+        <div className="ss-card flex flex-wrap items-center gap-2 p-3 text-[0.8rem]">
+          <span className="opacity-60">Showing:</span>
+          <span>{RANGES.find((r) => r.key === range)?.label}</span>
+          {source && <span>· source “{source}”</span>}
+          {filter !== "all" && <span>· status {filter}</span>}
+          <button
+            className="ss-btn ml-auto"
+            onClick={() => {
+              setSource(null);
+              setFilter("all");
+              setRange("90");
+            }}
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
+
 
       {loading ? (
         <div className="ss-card p-4 text-[0.85rem] opacity-70">Loading requests…</div>
