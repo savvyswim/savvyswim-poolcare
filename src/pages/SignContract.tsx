@@ -387,7 +387,9 @@ export default function SignContract() {
               </span>
             </label>
 
+            {retryNote && <p className="mt-4 text-sm text-muted-foreground">{retryNote}</p>}
             {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+
 
             <button
               type="button"
