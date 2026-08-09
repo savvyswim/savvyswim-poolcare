@@ -233,3 +233,145 @@
     font-size: 12pt;
   }
 }
+
+/* ===========================================================
+   SAVVY SWIM OS — professional workspace layer
+   Softer canvas, quiet cards, per-user themes and backgrounds.
+   =========================================================== */
+
+.savvy-crm {
+  --ss-radius: 10px;
+  --ss-surface: 0 0% 100%;
+  --ss-canvas: 100 8% 97%;
+  --ss-line: 100 6% 89%;
+  --ss-muted: 199 12% 40%;
+  --ss-shadow: 0 1px 2px hsl(202 30% 15% / 0.06), 0 8px 24px -14px hsl(202 30% 15% / 0.22);
+  --ss-surface-alpha: 1;
+  background: hsl(var(--ss-canvas));
+}
+
+/* photo / dark backgrounds */
+.savvy-crm[data-bg="photo"] {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  --ss-surface-alpha: 0.9;
+}
+.savvy-crm[data-theme="dark"] {
+  --ss-canvas: 202 26% 11%;
+  --ss-surface: 202 24% 15%;
+  --ss-line: 202 16% 26%;
+  --ss-ink: 40 30% 95%;
+  --ss-muted: 200 14% 70%;
+  --ss-cream: 202 26% 11%;
+  --ss-white: 202 24% 15%;
+  --ss-sand: 202 16% 26%;
+  --ss-shadow: 0 1px 2px hsl(0 0% 0% / 0.4), 0 10px 30px -16px hsl(0 0% 0% / 0.7);
+  color: hsl(var(--ss-ink));
+}
+.savvy-crm[data-density="compact"] { font-size: 0.94rem; }
+
+/* headings become calm sentence case */
+.savvy-crm h1,
+.savvy-crm h2,
+.savvy-crm h3 {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+.savvy-crm .ss-head { text-transform: none; }
+
+/* quiet cards */
+.savvy-crm .ss-card,
+.savvy-crm .ss-modal {
+  background: hsl(var(--ss-surface) / var(--ss-surface-alpha));
+  border: 1px solid hsl(var(--ss-line));
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
+  backdrop-filter: blur(6px);
+}
+.savvy-crm .ss-panel {
+  background: hsl(var(--ss-surface) / var(--ss-surface-alpha));
+  border: 1px solid hsl(var(--ss-line));
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+.savvy-crm .ss-panel-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  padding: 0.7rem 0.9rem; border-bottom: 1px solid hsl(var(--ss-line));
+}
+.savvy-crm .ss-panel-body { padding: 0.9rem; }
+
+.savvy-crm .ss-btn,
+.savvy-crm .ss-chip,
+.savvy-crm .ss-input,
+.savvy-crm select.ss-input,
+.savvy-crm textarea.ss-input { border-radius: 8px; }
+
+.savvy-crm .ss-btn {
+  font-family: "Inter", system-ui, sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 0.5rem 0.9rem;
+  background: hsl(var(--ss-burgundy));
+  box-shadow: 0 1px 2px hsl(202 30% 15% / 0.14);
+}
+.savvy-crm .ss-btn-ghost {
+  background: hsl(var(--ss-surface) / var(--ss-surface-alpha));
+  color: hsl(var(--ss-ink) / 0.8);
+  border: 1px solid hsl(var(--ss-line));
+  box-shadow: none;
+}
+.savvy-crm .ss-btn-aqua { background: hsl(var(--ss-aqua)); }
+
+.savvy-crm .ss-input,
+.savvy-crm select.ss-input,
+.savvy-crm textarea.ss-input {
+  background: hsl(var(--ss-surface));
+  border-color: hsl(var(--ss-line));
+  color: hsl(var(--ss-ink));
+}
+.savvy-crm .ss-label,
+.savvy-crm .ss-tag { color: hsl(var(--ss-muted)); }
+.savvy-crm .ss-chip { font-family: "Inter", system-ui, sans-serif; letter-spacing: 0.02em; text-transform: none; font-size: 0.7rem; }
+
+/* data tables */
+.savvy-crm .ss-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.savvy-crm .ss-table th {
+  text-align: left; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.04em;
+  text-transform: uppercase; color: hsl(var(--ss-muted));
+  padding: 0.55rem 0.75rem; border-bottom: 1px solid hsl(var(--ss-line));
+  white-space: nowrap;
+}
+.savvy-crm .ss-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid hsl(var(--ss-line) / 0.7); }
+.savvy-crm .ss-table tbody tr:hover { background: hsl(var(--ss-ink) / 0.035); }
+.savvy-crm .ss-num-cell { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* app shell */
+.savvy-crm .ss-shell-panel {
+  background: hsl(var(--ss-surface) / var(--ss-surface-alpha));
+  border-color: hsl(var(--ss-line));
+  backdrop-filter: blur(10px);
+}
+.savvy-crm .ss-navrow {
+  display: flex; align-items: center; gap: 0.6rem; min-width: 0;
+  border-radius: 8px; padding: 0.44rem 0.6rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.83rem; font-weight: 520; letter-spacing: 0;
+  text-transform: none; color: hsl(var(--ss-ink) / 0.78);
+}
+.savvy-crm .ss-navrow:hover { background: hsl(var(--ss-ink) / 0.05); }
+.savvy-crm .ss-navrow[data-active="true"] {
+  background: hsl(var(--ss-burgundy) / 0.1);
+  color: hsl(var(--ss-burgundy));
+  font-weight: 650;
+}
+.savvy-crm[data-theme="dark"] .ss-navrow[data-active="true"] {
+  background: hsl(var(--ss-aqua) / 0.16);
+  color: hsl(var(--ss-aqua));
+}
