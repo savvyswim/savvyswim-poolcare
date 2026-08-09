@@ -89,6 +89,7 @@ export default function Settings() {
       {level !== "owner" && (
         <div className="ss-card p-3 text-[0.82rem] opacity-75">Read-only — only the owner can change settings.</div>
       )}
+      <PrivacyOverlayToggle canEdit={level === "owner"} />
       <ReminderSchedules />
       <WorkflowTemplates />
       <div className="grid gap-3 lg:grid-cols-2">
