@@ -15,10 +15,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
-import { CartDrawer } from "@/components/CartDrawer";
+import { DeferredOverlays } from "@/components/DeferredOverlays";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
-import { ChatWidget } from "@/components/ChatWidget";
 
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
@@ -115,9 +114,8 @@ function RootComponent() {
               <ScrollToTop />
               <PerfMonitor />
 
-              <CartDrawer />
               <Outlet />
-              <ChatWidget />
+              <DeferredOverlays />
             </CartProvider>
 
 
