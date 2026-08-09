@@ -62,6 +62,8 @@ const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"
 
 const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : null);
 
+const FILTERS: EsignStatus[] = ["draft", "sent", "viewed", "in_progress", "signed", "expired"];
+
 export default function CustomerContracts({ customer }: { customer: CustomerLite }) {
   const [creating, setCreating] = useState(false);
   const [templateId, setTemplateId] = useState<string>("");
