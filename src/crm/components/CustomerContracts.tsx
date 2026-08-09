@@ -265,11 +265,36 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
         </div>
       )}
 
+      {contracts.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          <button
+            className={`ss-btn ${filter === "all" ? "" : "ss-btn-ghost"}`}
+            onClick={() => setFilter("all")}
+          >
+            All ({contracts.length})
+          </button>
+          {FILTERS.map((s) => (
+            <button
+              key={s}
+              className={`ss-btn ${filter === s ? "" : "ss-btn-ghost"}`}
+              onClick={() => setFilter(s)}
+              disabled={!counts[s]}
+            >
+              {ESIGN_LABEL[s]} ({counts[s] ?? 0})
+            </button>
+          ))}
+        </div>
+      )}
+
       {!contracts.length && !creating && (
         <EmptyState>No contracts yet — create one and send it for signature.</EmptyState>
       )}
 
-      {contracts.map((k) => {
+      {contracts.length > 0 && !visible.length && (
+        <EmptyState>No {ESIGN_LABEL[filter as EsignStatus]?.toLowerCase()} contracts.</EmptyState>
+      )}
+
+      {visible.map((k) => {
         const es = esignStatus(k);
         const note = esignNote(k);
         return (
