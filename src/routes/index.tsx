@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         as: "image",
         href: photoPoolWaterMobile.url,
-        fetchpriority: "high",
+        fetchPriority: "high",
       },
     ],
   }),
