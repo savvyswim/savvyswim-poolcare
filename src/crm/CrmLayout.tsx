@@ -26,6 +26,7 @@ import {
   useWindowObscured,
 } from "@/crm/components/TechPrivacy";
 import { useSavvyIdentity } from "@/crm/lib/useSavvy";
+import { usePrivacyOverlayConfig } from "@/crm/lib/usePrivacyOverlay";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccess, canAccessPath, type ModuleKey } from "@/crm/lib/permissions";
 import { AccessDenied } from "@/crm/components/RequireModule";
