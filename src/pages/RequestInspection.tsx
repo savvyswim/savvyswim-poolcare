@@ -142,6 +142,8 @@ const RequestInspection = () => {
     }
 
     setReference(data.reference_number);
+    setConfirmed({ date: slotDate, slot });
+
     void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
       console.warn("inspection notification not sent", err),
     );
