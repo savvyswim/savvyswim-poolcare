@@ -21,7 +21,7 @@ const Privacy = () => (
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
-        <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a>{" "}·{" "}
+        <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a>{" "}·{" "}
         <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(469) 744-0379</a>
       </p>
 
@@ -110,14 +110,14 @@ const Privacy = () => (
       <ul className="list-disc pl-6 space-y-1 mb-4">
         <li><strong>SMS opt-out:</strong> Reply STOP, CANCEL, UNSUBSCRIBE, or QUIT to any text message from us at any time.</li>
         <li><strong>Email opt-out:</strong> Use the unsubscribe link in any email, or contact us.</li>
-        <li><strong>Access, correction, deletion:</strong> You may request access to, correction of, or deletion of your personal information by emailing hi@savagepools.us.</li>
+        <li><strong>Access, correction, deletion:</strong> You may request access to, correction of, or deletion of your personal information by emailing hi@savvyswim.com.</li>
         <li><strong>Do Not Call:</strong> You may request to be added to our internal Do Not Call list.</li>
       </ul>
       <p className="mb-4">
         Residents of California, Virginia, Colorado, and other states with comprehensive privacy
         laws may have additional rights, including the right to know what personal information we
         process and the right to opt out of certain processing. To exercise these rights, contact
-        us at hi@savagepools.us.
+        us at hi@savvyswim.com.
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">9. Children's Privacy</h2>
@@ -153,7 +153,7 @@ const Privacy = () => (
         Questions about this Privacy Policy or our data practices? Contact:
       </p>
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
-      <p className="mb-1">Email: <a href="mailto:hi@savagepools.us" className="text-amber-brand">hi@savagepools.us</a></p>
+      <p className="mb-1">Email: <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a></p>
       <p className="mb-1">Phone: <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(469) 744-0379</a></p>
       <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
