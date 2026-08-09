@@ -1,8 +1,38 @@
-# Clean, professional CRM redesign (Jobber / QuickBooks style)
+# Savvy Swim OS — multi-workspace SaaS console
 
-Goal: make the CRM look and feel like the reference tools — calm white workspace, clear headings, quiet cards, real charts for reporting — while keeping Savvy Swim identity as accent only. Three audiences: office/admin (dense but clean), technician (simple, big touch targets), customer portal (easy, friendly, visual).
+Not one flat CRM: a suite. Each part of the business gets its own workspace (its own home screen, its own nav, its own reports), reached from an app launcher in the top bar. Every person can personalize their workspace background/theme, and a built-in AI assistant panel sits on the right of any screen.
 
-## 1. New CRM design system
+## 0. Workspaces (the big change)
+
+An app launcher (grid icon, top-left) switches between workspaces. Each has a distinct home screen and its own left nav:
+
+- **Home / My day** — personalized greeting ("Hello Alex"), today's tasks, my numbers, quick actions, pinned reports.
+- **Marketing** — leads, campaigns, landing pages, city pages, lead source dynamics, inspection requests, attribution, reviews.
+- **Sales** — pipeline, quotes/proposals, contracts & e-sign, conversion reporting.
+- **Operations** — routes, scheduling, jobs, techs, water lab, QC, alerts, inventory, trucks.
+- **Financial** — Savvy Ledger, invoices, expenses, payroll, margins, break-even, job costing.
+- **Field (tech app)** — mobile-first day view, work-in-progress, chemical history, route.
+- **Customer portal** — separate friendly surface (section 7).
+- **Admin** — settings, permissions, pricing engine, security, audit, deploy health.
+
+Nav shows only workspaces the person's role allows. Each workspace remembers the last page you were on.
+
+## 1. Personalization (per person)
+
+- Background picker per user: photo backgrounds (Savvy pool/riviera photo set), solid canvas, or dark mode — like the reference screenshot, with translucent glass cards over a photo.
+- Light / dark / auto, accent color, compact vs comfortable density, sidebar collapsed by default.
+- Stored per user in a new `ss_user_prefs` table (user_id, workspace, theme, background, density, pinned widgets) so it follows them across devices.
+- Home screen widgets are drag-to-arrange and per user.
+
+## 2. Built-in AI assistant ("Savvy AI")
+
+- Right-side dock, openable from any screen, aware of the current workspace and the dashboard on screen.
+- Answers about the data it can see, drafts messages/estimates, explains numbers, and suggests actions ("why did this source drop?").
+- Runs on Lovable AI through a server function; permissions and row access follow the signed-in user — techs never get finance answers.
+- Streams answers, shows suggested follow-ups, and can deep-link to the record it's talking about.
+
+## 3. Shared design system
+
 
 Rework the CRM token layer (`src/crm/crm.css`, scoped to `.savvy-crm` so the marketing site is untouched):
 
