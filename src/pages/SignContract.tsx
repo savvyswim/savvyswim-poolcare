@@ -30,7 +30,11 @@ export default function SignContract() {
   const [justSigned, setJustSigned] = useState(false);
   const [copyNote, setCopyNote] = useState<string | null>(null);
   const [inPerson, setInPerson] = useState(false);
+  const [retryNote, setRetryNote] = useState<string | null>(null);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const emailCopy = useServerFn(emailSignedContractCopy);
+  const signNow = useServerFn(signContractWithAudit);
+
 
   useEffect(() => {
     setInPerson(new URLSearchParams(window.location.search).get("mode") === "inperson");
