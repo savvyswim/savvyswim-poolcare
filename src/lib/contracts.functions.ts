@@ -260,7 +260,7 @@ export const emailSignedContractCopy = createServerFn({ method: "POST" })
 
     const escape = (s: string) =>
       s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const firstName = (contract.recipient_name ?? contract.signer_name ?? "there").split(" ")[0];
+    const firstName = (contract.recipient_name ?? contract.signer_name ?? "there").split(" ")[0] ?? "there";
     const signedOn = new Date(contract.signed_at).toLocaleString("en-US", {
       dateStyle: "long",
       timeStyle: "short",
@@ -305,7 +305,7 @@ Questions? Call or text (469) 744-0379.
 Savvy Swim · savvyswim.com`;
 
     const { sendLovableEmail } = await import("@lovable.dev/email-js");
-    const result = await sendLovableEmail(
+    await sendLovableEmail(
       {
         to: contract.recipient_email,
         from: "Savvy Swim <noreply@notify.savvyswim.com>",
@@ -325,5 +325,5 @@ Savvy Swim · savvyswim.com`;
       detail: `Signed copy emailed to ${contract.recipient_email}`,
     });
 
-    return { sent: result?.sent !== false, to: contract.recipient_email };
+    return { sent: true, to: contract.recipient_email };
   });
