@@ -55,8 +55,33 @@ export default function InspectionSourceAnalytics({
   onRangeChange,
   activeSource,
   onSelectSource,
+  activeLanding = null,
+  onSelectLanding,
 }: Props) {
   const scoped = useMemo(() => rows.filter((r) => inRange(r.created_at, range)), [rows, range]);
+
+  const pages = useMemo(() => {
+    const m = new Map<string, { page: string; total: number; scheduled: number }>();
+    for (const r of scoped) {
+      const key = pageOf(r);
+      const cur = m.get(key) ?? { page: key, total: 0, scheduled: 0 };
+      cur.total += 1;
+      if (SCHEDULED.has(r.status)) cur.scheduled += 1;
+      m.set(key, cur);
+    }
+    return [...m.values()].sort((a, b) => b.total - a.total).slice(0, 6);
+  }, [scoped]);
+
+  const mediums = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of scoped) {
+      const key = (r.utm_medium ?? "").trim().toLowerCase() || "none";
+      m.set(key, (m.get(key) ?? 0) + 1);
+    }
+    return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
+  }, [scoped]);
+
+
 
   const stats = useMemo(() => {
     const map = new Map<
