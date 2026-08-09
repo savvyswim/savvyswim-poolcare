@@ -1672,6 +1672,7 @@ export type Database = {
           customer_id: string | null
           declined_at: string | null
           doc_kind: string
+          expires_at: string | null
           id: string
           lead_id: string | null
           merge_data: Json
@@ -1685,6 +1686,7 @@ export type Database = {
           signer_ip: string | null
           signer_name: string | null
           signer_user_agent: string | null
+          signing_started_at: string | null
           status: string
           template_id: string | null
           title: string
@@ -1700,6 +1702,7 @@ export type Database = {
           customer_id?: string | null
           declined_at?: string | null
           doc_kind?: string
+          expires_at?: string | null
           id?: string
           lead_id?: string | null
           merge_data?: Json
@@ -1713,6 +1716,7 @@ export type Database = {
           signer_ip?: string | null
           signer_name?: string | null
           signer_user_agent?: string | null
+          signing_started_at?: string | null
           status?: string
           template_id?: string | null
           title: string
@@ -1728,6 +1732,7 @@ export type Database = {
           customer_id?: string | null
           declined_at?: string | null
           doc_kind?: string
+          expires_at?: string | null
           id?: string
           lead_id?: string | null
           merge_data?: Json
@@ -1741,6 +1746,7 @@ export type Database = {
           signer_ip?: string | null
           signer_name?: string | null
           signer_user_agent?: string | null
+          signing_started_at?: string | null
           status?: string
           template_id?: string | null
           title?: string
@@ -5361,6 +5367,10 @@ export type Database = {
           p_visit_id?: string
         }
         Returns: Json
+      }
+      ss_mark_contract_progress: {
+        Args: { _token: string }
+        Returns: undefined
       }
       ss_mark_quote_viewed: { Args: { _token: string }; Returns: undefined }
       ss_mark_review_clicked: { Args: { _token: string }; Returns: undefined }

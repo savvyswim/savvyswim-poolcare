@@ -4,9 +4,11 @@ import { FileSignature, Link2, Send, ExternalLink, Plus, MessageSquare } from "l
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Chip, EmptyState } from "@/crm/components/Brand";
-import { useTable } from "@/crm/lib/useSavvy";
+import { useTable, useSavvyIdentity } from "@/crm/lib/useSavvy";
 import { money } from "@/crm/lib/pricing";
 import { sendContractEmail, sendContractSms } from "@/lib/contracts.functions";
+import { esignStatus, esignNote, ESIGN_LABEL, ESIGN_TONE } from "@/crm/lib/esign";
+import ContractTimeline from "@/crm/components/ContractTimeline";
 
 type Contract = {
   id: string;
@@ -17,7 +19,9 @@ type Contract = {
   recipient_phone: string | null;
   sent_at: string | null;
   viewed_at: string | null;
+  signing_started_at: string | null;
   signed_at: string | null;
+  expires_at: string | null;
   signer_name: string | null;
   created_at: string;
 };
@@ -45,14 +49,6 @@ type CustomerLite = {
   service_level: string;
 };
 
-const STATUS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
-  draft: "gold",
-  sent: "aqua",
-  viewed: "orange",
-  signed: "green",
-  declined: "burgundy",
-  voided: "burgundy",
-};
 
 const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
   queued: "gold",
@@ -77,10 +73,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [smsFor, setSmsFor] = useState<string | null>(null);
   const [smsPhone, setSmsPhone] = useState("");
 
+  const { level } = useSavvyIdentity();
+  const isAdmin = level === "owner" || level === "office_manager";
+
   const { rows: contracts, refetch } = useTable<Contract>(`contracts-${customer.id}`, async () => {
     const { data } = await supabase
       .from("ss_contracts")
-      .select("id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signed_at,signer_name,created_at")
+      .select(
+        "id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signing_started_at,signed_at,expires_at,signer_name,created_at",
+      )
       .eq("customer_id", customer.id)
       .order("created_at", { ascending: false });
     return (data ?? []) as Contract[];
@@ -251,7 +252,10 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
         <EmptyState>No contracts yet — create one and send it for signature.</EmptyState>
       )}
 
-      {contracts.map((k) => (
+      {contracts.map((k) => {
+        const es = esignStatus(k);
+        const note = esignNote(k);
+        return (
         <div key={k.id} className="ss-card p-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
@@ -260,10 +264,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 Created {fmt(k.created_at)}
                 {k.sent_at && <> · Sent {fmt(k.sent_at)}</>}
                 {k.viewed_at && <> · Opened {fmt(k.viewed_at)}</>}
+                {k.signing_started_at && !k.signed_at && <> · Started signing {fmt(k.signing_started_at)}</>}
                 {k.signed_at && <> · Signed by {k.signer_name} on {fmt(k.signed_at)}</>}
               </div>
             </div>
-            <Chip tone={STATUS_TONE[k.status] ?? "aqua"}>{k.status}</Chip>
+            <div className="text-right">
+              <div className="ss-label mb-1">E-sign status</div>
+              <Chip tone={ESIGN_TONE[es]}>{ESIGN_LABEL[es]}</Chip>
+              {note && <div className="mt-1 text-[0.65rem] opacity-60">{note}</div>}
+            </div>
           </div>
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {k.status !== "signed" && k.status !== "voided" && (
@@ -328,8 +337,11 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 ))}
             </div>
           )}
+
+          {isAdmin && <ContractTimeline contractId={k.id} />}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
