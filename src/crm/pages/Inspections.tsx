@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
+import InspectionSourceAnalytics from "@/crm/components/InspectionSourceAnalytics";
 
 type Row = {
   id: string;
@@ -89,6 +90,8 @@ export default function Inspections() {
         title="Inspection Requests"
         sub={`${rows.length} total · ${newCount} awaiting first contact`}
       />
+
+      <InspectionSourceAnalytics rows={rows} />
 
       <div className="ss-card flex flex-wrap items-center gap-2 p-3">
         <input
