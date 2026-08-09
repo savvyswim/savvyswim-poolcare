@@ -4,6 +4,9 @@ export type InspectionAnalyticsRow = {
   status: string;
   utm_source: string | null;
   utm_campaign: string | null;
+  utm_medium?: string | null;
+  landing_page?: string | null;
+  page_path?: string | null;
   created_at: string;
 };
 
@@ -22,6 +25,13 @@ export function sourceOf(r: { utm_source: string | null }) {
   return s || "direct / referral";
 }
 
+/** Landing page (first page of the session), falling back to the form page. */
+export function pageOf(r: { landing_page?: string | null; page_path?: string | null }) {
+  const raw = (r.landing_page ?? r.page_path ?? "").trim();
+  if (!raw) return "unknown";
+  return raw.split("?")[0] || "/";
+}
+
 export function inRange(iso: string, rangeKey: string) {
   const cfg = RANGES.find((r) => r.key === rangeKey);
   if (!cfg || cfg.days === 0) return true;
@@ -34,7 +44,10 @@ type Props = {
   onRangeChange: (r: string) => void;
   activeSource: string | null;
   onSelectSource: (s: string | null) => void;
+  activeLanding?: string | null;
+  onSelectLanding?: (p: string | null) => void;
 };
+
 
 export default function InspectionSourceAnalytics({
   rows,
