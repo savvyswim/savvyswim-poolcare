@@ -64,11 +64,13 @@ const when = (iso: string) =>
 
 export default function Inspections() {
   const [rows, setRows] = useState<Row[]>([]);
+  const [touches, setTouches] = useState<Record<string, Touch>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
   const [q, setQ] = useState("");
   const [range, setRange] = useState<string>("90");
   const [source, setSource] = useState<string | null>(null);
+  const [landing, setLanding] = useState<string | null>(null);
   const [converting, setConverting] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -77,7 +79,7 @@ export default function Inspections() {
     const { data, error } = await supabase
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, utm_source, utm_campaign, created_at",
+        "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, preferred_slot, pool_details, notes, status, converted_customer_id, campaign_id, utm_source, utm_medium, utm_campaign, utm_content, landing_page, page_path, referrer, session_id, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(300);
@@ -86,8 +88,29 @@ export default function Inspections() {
       toast.error(error.message);
       return;
     }
-    setRows((data ?? []) as Row[]);
+    const list = (data ?? []) as Row[];
+    setRows(list);
+
+    // Call / text clicks made from the same browser session as the form fill.
+    const sessions = [...new Set(list.map((r) => r.session_id).filter(Boolean))] as string[];
+    if (sessions.length) {
+      const { data: events } = await supabase
+        .from("contact_events")
+        .select("session_id, event_type, created_at")
+        .in("session_id", sessions.slice(0, 200));
+      const map: Record<string, Touch> = {};
+      for (const e of events ?? []) {
+        const key = e.session_id as string;
+        const cur = map[key] ?? { calls: 0, texts: 0, first: null };
+        if (e.event_type === "call_click") cur.calls += 1;
+        if (e.event_type === "text_click") cur.texts += 1;
+        if (!cur.first || e.created_at < cur.first) cur.first = e.created_at;
+        map[key] = cur;
+      }
+      setTouches(map);
+    }
   }
+
 
   useEffect(() => {
     void load();
