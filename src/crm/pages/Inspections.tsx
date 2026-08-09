@@ -42,6 +42,8 @@ export default function Inspections() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
   const [q, setQ] = useState("");
+  const [range, setRange] = useState<string>("90");
+  const [source, setSource] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
