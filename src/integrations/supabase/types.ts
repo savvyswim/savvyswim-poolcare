@@ -5329,6 +5329,10 @@ export type Database = {
         Args: { _selected_ids: string[]; _signer_name: string; _token: string }
         Returns: Json
       }
+      ss_build_contract_body: {
+        Args: { _quote_id: string; _signer_name?: string }
+        Returns: Json
+      }
       ss_convert_qty: {
         Args: {
           p_from: string
@@ -5497,6 +5501,10 @@ export type Database = {
           _user_agent?: string
         }
         Returns: Json
+      }
+      ss_sync_quote_contract: {
+        Args: { _quote_id: string }
+        Returns: undefined
       }
       ss_unit_factor: { Args: { p_unit: string }; Returns: number }
       ss_unit_family: { Args: { p_unit: string }; Returns: string }
