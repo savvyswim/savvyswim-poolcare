@@ -107,6 +107,20 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
     return (data ?? []) as SmsLog[];
   });
 
+  const counts = useMemo(() => {
+    const c: Partial<Record<EsignStatus, number>> = {};
+    for (const k of contracts) {
+      const s = esignStatus(k);
+      c[s] = (c[s] ?? 0) + 1;
+    }
+    return c;
+  }, [contracts]);
+
+  const visible = useMemo(
+    () => (filter === "all" ? contracts : contracts.filter((k) => esignStatus(k) === filter)),
+    [contracts, filter],
+  );
+
   const selectedTemplate = useMemo(
     () => templates.find((t) => t.id === templateId) ?? templates.find((t) => t.is_default) ?? templates[0],
     [templates, templateId],
