@@ -18,6 +18,20 @@ type ContractView = {
   sent_at: string | null;
 };
 
+/** Audit facts captured at signature time, shown as a certificate of completion. */
+type Certificate = {
+  contractId: string | null;
+  title: string | null;
+  signerName: string;
+  signedAt: string;
+  sentAt: string | null;
+  viewedAt: string | null;
+  startedAt: string | null;
+  email: string | null;
+  ip: string | null;
+  userAgent: string;
+};
+
 export default function SignContract() {
   const { token = "" } = useParams();
   const [contract, setContract] = useState<ContractView | null>(null);
