@@ -85,19 +85,3 @@ export function PrivacyNotice({
     </div>
   );
 }
-
-/**
- * Diagonal identity watermark. It cannot stop a phone camera, but every
- * screenshot then carries the account and timestamp that took it.
- */
-export function PrivacyWatermark({ label }: { label: string }) {
-  const stamp = new Date().toLocaleDateString("en-US");
-  const text = `${label} · ${stamp} · confidential`;
-  return (
-    <div className="ss-privacy-watermark" aria-hidden="true">
-      {Array.from({ length: 14 }, (_, i) => (
-        <span key={i}>{text}</span>
-      ))}
-    </div>
-  );
-}

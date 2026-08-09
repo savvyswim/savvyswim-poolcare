@@ -157,7 +157,7 @@
 
 .savvy-crm a { color: hsl(var(--ss-aqua)); }
 
-/* --- tech privacy watermark --- */
+/* --- tech privacy --- */
 .ss-privacy-blur > *:not(.ss-privacy-notice) { filter: blur(14px); }
 .ss-no-select { user-select: none; -webkit-user-select: none; }
 
@@ -222,27 +222,6 @@
 @media (prefers-reduced-motion: reduce) { .ss-skel { animation: none; } }
 
 /* --- technician capture lockdown --- */
-.ss-privacy-watermark {
-  position: fixed;
-  inset: 0;
-  z-index: 45;
-  pointer-events: none;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-around;
-  gap: 2rem;
-  transform: rotate(-24deg) scale(1.4);
-  opacity: 0.075;
-}
-.ss-privacy-watermark span {
-  font-family: var(--ss-font-mono, monospace);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: hsl(var(--ss-ink));
-}
 .ss-capture-masked > *:not(.ss-privacy-notice) { filter: blur(18px); }
 
 @media print {
