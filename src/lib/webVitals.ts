@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-type MetricName = "LCP" | "CLS" | "INP" | "FCP" | "TTFB" | "LOAD";
+type MetricName = "LCP" | "CLS" | "INP" | "FCP" | "TTFB" | "LOAD" | "TTI";
 
 export type VitalSample = {
   path: string;
@@ -25,6 +25,41 @@ function connectionType(): string | null {
 }
 
 const sent = new Set<string>();
+
+function observeTimeToInteractive(onReady: (value: number) => void) {
+  const startedAt = performance.timeOrigin;
+  let lastBusyAt = performance.now();
+  let settled = false;
+  let observer: PerformanceObserver | undefined;
+
+  const finish = () => {
+    if (settled) return;
+    const now = performance.now();
+    if (document.readyState !== "complete" || now - lastBusyAt < 2_000) return;
+    settled = true;
+    observer?.disconnect();
+    onReady(Math.round(performance.timeOrigin + now - startedAt));
+  };
+
+  try {
+    observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const latest = entries.at(-1);
+      if (latest) lastBusyAt = latest.startTime + latest.duration;
+    });
+    observer.observe({ type: "longtask", buffered: true });
+  } catch {
+    // Long-task observation is unavailable in some browsers; load + quiet time
+    // still gives us a useful production approximation.
+  }
+
+  const timer = window.setInterval(finish, 500);
+  window.setTimeout(() => {
+    finish();
+    window.clearInterval(timer);
+    observer?.disconnect();
+  }, 15_000);
+}
 
 function send(sample: VitalSample) {
   const key = `${sample.path}:${sample.metric}`;
@@ -67,6 +102,9 @@ export async function reportWebVitals(pathname: string) {
     onINP(push("INP"));
     onFCP(push("FCP"));
     onTTFB(push("TTFB"));
+    observeTimeToInteractive((value) =>
+      send({ ...base, metric: "TTI", value, rating: null }),
+    );
 
     // Total load time (navigation duration) once the page is fully loaded.
     const reportLoad = () => {
@@ -91,6 +129,7 @@ export const VITAL_THRESHOLDS: Record<string, { good: number; poor: number; unit
   FCP: { good: 1800, poor: 3000, unit: "ms", label: "First Contentful Paint" },
   TTFB: { good: 800, poor: 1800, unit: "ms", label: "Time to First Byte" },
   LOAD: { good: 3000, poor: 6000, unit: "ms", label: "Full page load" },
+  TTI: { good: 3800, poor: 7300, unit: "ms", label: "Time to Interactive" },
 };
 
 export function formatVital(metric: string, value: number): string {

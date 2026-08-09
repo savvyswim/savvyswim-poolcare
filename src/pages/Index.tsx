@@ -36,7 +36,6 @@ import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { SmoothLoopVideo } from "@/components/SmoothLoopVideo";
 import type { OrderItem } from "@/components/OrderDialog";
 
 // Dialogs are only needed after a click — keep them out of the first payload.
@@ -408,7 +407,7 @@ const Index = () => {
             width={1920}
             height={1280}
             loading="eager"
-            decoding="sync"
+            decoding="async"
             fetchPriority="high"
             className="h-full w-full object-cover object-center [image-rendering:auto] [transform:translateZ(0)]"
           />
@@ -465,6 +464,9 @@ const Index = () => {
                       alt={p.alt}
                       loading="lazy"
                       decoding="async"
+                      width={720}
+                      height={960}
+                      sizes="(min-width: 1024px) 19vw, 30vw"
                       className="aspect-[3/4] w-full object-cover"
                     />
                   </figure>
@@ -549,6 +551,9 @@ const Index = () => {
               alt=""
               loading="lazy"
               decoding="async"
+              width={960}
+              height={640}
+              sizes="100vw"
               className="h-full w-full object-cover object-center"
             />
             {/* Neutral scrim keeps the pool water blue while text stays legible. */}
@@ -678,6 +683,7 @@ const Index = () => {
                   decoding="async"
                   width={1920}
                   height={1280}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className="w-full h-auto"
                 />
                 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
@@ -751,6 +757,9 @@ const Index = () => {
                   alt={p.alt}
                   loading="lazy"
                   decoding="async"
+                  width={720}
+                  height={540}
+                  sizes="(min-width: 640px) 33vw, 100vw"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-105"
                 />
               </div>
