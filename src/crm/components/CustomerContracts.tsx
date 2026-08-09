@@ -337,8 +337,11 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
                 ))}
             </div>
           )}
+
+          {isAdmin && <ContractTimeline contractId={k.id} />}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
