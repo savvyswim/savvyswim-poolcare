@@ -304,26 +304,44 @@ Signed on: ${signedOn}
 Questions? Call or text (469) 744-0379.
 Savvy Swim · savvyswim.com`;
 
+    // Delivery is tracked as events so admins can see queued → sent/failed.
+    await supabaseAdmin.from("ss_contract_events").insert({
+      contract_id: contract.id,
+      event: "copy_queued",
+      detail: `Queued signed copy to ${contract.recipient_email}`,
+    });
+
     const { sendLovableEmail } = await import("@lovable.dev/email-js");
-    await sendLovableEmail(
-      {
-        to: contract.recipient_email,
-        from: "Savvy Swim <noreply@notify.savvyswim.com>",
-        sender_domain: "notify.savvyswim.com",
-        subject: `Your signed Savvy Swim agreement — ${contract.title}`,
-        html,
-        text,
-        label: "contract-signed-copy",
-        idempotency_key: `contract-signed-copy-${contract.id}`,
-      },
-      { apiKey },
-    );
+    try {
+      await sendLovableEmail(
+        {
+          to: contract.recipient_email,
+          from: "Savvy Swim <noreply@notify.savvyswim.com>",
+          sender_domain: "notify.savvyswim.com",
+          subject: `Your signed Savvy Swim agreement — ${contract.title}`,
+          html,
+          text,
+          label: "contract-signed-copy",
+          idempotency_key: `contract-signed-copy-${contract.id}`,
+        },
+        { apiKey },
+      );
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Email provider rejected the message";
+      await supabaseAdmin.from("ss_contract_events").insert({
+        contract_id: contract.id,
+        event: "copy_failed",
+        detail: `Failed to email ${contract.recipient_email}: ${message.slice(0, 300)}`,
+      });
+      return { sent: false, reason: "failed" as const, error: message.slice(0, 300) };
+    }
 
     await supabaseAdmin.from("ss_contract_events").insert({
       contract_id: contract.id,
       event: "copy_emailed",
       detail: `Signed copy emailed to ${contract.recipient_email}`,
     });
+
 
     return { sent: true, to: contract.recipient_email };
   });
