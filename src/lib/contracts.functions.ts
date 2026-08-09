@@ -89,9 +89,11 @@ Savvy Swim · savvyswim.com`;
       { apiKey },
     );
 
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
     const { error: updateError } = await supabase
       .from("ss_contracts")
-      .update({ status: "sent", sent_at: new Date().toISOString() })
+      .update({ status: "sent", sent_at: now.toISOString(), expires_at: expiresAt.toISOString() })
       .eq("id", contract.id);
     if (updateError) throw new Error(updateError.message);
 
