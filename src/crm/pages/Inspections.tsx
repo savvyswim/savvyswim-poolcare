@@ -26,12 +26,31 @@ type Row = {
   notes: string | null;
   status: string;
   converted_customer_id: string | null;
+  campaign_id: string | null;
   utm_source: string | null;
+  utm_medium: string | null;
   utm_campaign: string | null;
+  utm_content: string | null;
+  landing_page: string | null;
+  page_path: string | null;
+  referrer: string | null;
+  session_id: string | null;
   created_at: string;
 };
 
+type Touch = { calls: number; texts: number; first: string | null };
+
 const STATUSES = ["new", "contacted", "scheduled", "completed", "won", "lost"] as const;
+
+const host = (url: string | null) => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+};
+
 
 
 const when = (iso: string) =>
