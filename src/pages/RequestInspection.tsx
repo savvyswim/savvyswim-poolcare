@@ -193,12 +193,22 @@ const RequestInspection = () => {
             <h1 className="mt-5 font-display text-[2rem] uppercase leading-none tracking-tight sm:text-[2.6rem]">
               Request received
             </h1>
+            {confirmed && (
+              <p className="mt-4 border-l-2 border-accent pl-4 font-tech text-[12px] uppercase tracking-[0.18em]">
+                {new Date(`${confirmed.date}T12:00:00`).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}{" "}
+                · {confirmed.slot}
+              </p>
+            )}
             <p className="mt-4 text-muted-foreground">
               Your reference number is{" "}
               <span className="font-tech text-foreground">{reference}</span>. We just texted you a
-              confirmation with next steps — a tech reviews your address within one business day and
-              sends two visit windows to choose from.
+              confirmation with next steps — your tech confirms this window within one business day.
             </p>
+
             <a
               href={PHONE_HREF}
               onClick={() => trackContactClick("call_click", "inspection_confirmation")}
