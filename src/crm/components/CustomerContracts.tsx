@@ -110,6 +110,34 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
     return (data ?? []) as SmsLog[];
   });
 
+  /** queued / sent / failed events for the emailed signed copy. */
+  const { rows: copyLog, refetch: refetchCopy } = useTable<CopyEvent>(
+    `contract-copy-events-${customer.id}`,
+    async () => {
+      const { data } = await supabase
+        .from("ss_contract_events")
+        .select("id,contract_id,event,detail,created_at")
+        .in("event", ["copy_queued", "copy_emailed", "copy_failed"])
+        .order("created_at", { ascending: false });
+      return (data ?? []) as CopyEvent[];
+    },
+  );
+
+  /** Latest outcome per contract; a queued row with no outcome stays "queued". */
+  const copyStatus = useMemo(() => {
+    const map: Record<string, { status: "queued" | "sent" | "failed"; detail: string | null; at: string }> = {};
+    for (const e of copyLog) {
+      if (map[e.contract_id]) continue; // rows are newest-first
+      map[e.contract_id] = {
+        status: e.event === "copy_emailed" ? "sent" : e.event === "copy_failed" ? "failed" : "queued",
+        detail: e.detail,
+        at: e.created_at,
+      };
+    }
+    return map;
+  }, [copyLog]);
+
+
   const counts = useMemo(() => {
     const c: Partial<Record<EsignStatus, number>> = {};
     for (const k of contracts) {
