@@ -26,6 +26,14 @@ export default function SignContract() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [justSigned, setJustSigned] = useState(false);
+  const [copyNote, setCopyNote] = useState<string | null>(null);
+  const [inPerson, setInPerson] = useState(false);
+  const emailCopy = useServerFn(emailSignedContractCopy);
+
+  useEffect(() => {
+    setInPerson(new URLSearchParams(window.location.search).get("mode") === "inperson");
+  }, []);
+
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
