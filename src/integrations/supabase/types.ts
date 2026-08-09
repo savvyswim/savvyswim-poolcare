@@ -1677,6 +1677,7 @@ export type Database = {
           lead_id: string | null
           merge_data: Json
           pdf_path: string | null
+          quote_id: string | null
           recipient_email: string | null
           recipient_name: string | null
           recipient_phone: string | null
@@ -1707,6 +1708,7 @@ export type Database = {
           lead_id?: string | null
           merge_data?: Json
           pdf_path?: string | null
+          quote_id?: string | null
           recipient_email?: string | null
           recipient_name?: string | null
           recipient_phone?: string | null
@@ -1737,6 +1739,7 @@ export type Database = {
           lead_id?: string | null
           merge_data?: Json
           pdf_path?: string | null
+          quote_id?: string | null
           recipient_email?: string | null
           recipient_name?: string | null
           recipient_phone?: string | null
@@ -1768,6 +1771,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_contracts_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "ss_quotes"
             referencedColumns: ["id"]
           },
           {
