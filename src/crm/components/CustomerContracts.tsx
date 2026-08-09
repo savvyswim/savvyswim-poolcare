@@ -73,10 +73,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
   const [smsFor, setSmsFor] = useState<string | null>(null);
   const [smsPhone, setSmsPhone] = useState("");
 
+  const { level } = useSavvyIdentity();
+  const isAdmin = level === "owner" || level === "office_manager";
+
   const { rows: contracts, refetch } = useTable<Contract>(`contracts-${customer.id}`, async () => {
     const { data } = await supabase
       .from("ss_contracts")
-      .select("id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signed_at,signer_name,created_at")
+      .select(
+        "id,title,status,token,recipient_email,recipient_phone,sent_at,viewed_at,signing_started_at,signed_at,expires_at,signer_name,created_at",
+      )
       .eq("customer_id", customer.id)
       .order("created_at", { ascending: false });
     return (data ?? []) as Contract[];
