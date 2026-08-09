@@ -574,6 +574,80 @@ export type Database = {
         }
         Relationships: []
       }
+      inspection_events: {
+        Row: {
+          campaign_id: string | null
+          channel: string | null
+          created_at: string
+          detail: string | null
+          event_type: string
+          id: string
+          landing_page: string | null
+          outcome: string | null
+          page_path: string | null
+          recipient: string | null
+          referrer: string | null
+          request_id: string
+          session_id: string | null
+          status_from: string | null
+          status_to: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          channel?: string | null
+          created_at?: string
+          detail?: string | null
+          event_type: string
+          id?: string
+          landing_page?: string | null
+          outcome?: string | null
+          page_path?: string | null
+          recipient?: string | null
+          referrer?: string | null
+          request_id: string
+          session_id?: string | null
+          status_from?: string | null
+          status_to?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          channel?: string | null
+          created_at?: string
+          detail?: string | null
+          event_type?: string
+          id?: string
+          landing_page?: string | null
+          outcome?: string | null
+          page_path?: string | null
+          recipient?: string | null
+          referrer?: string | null
+          request_id?: string
+          session_id?: string | null
+          status_from?: string | null
+          status_to?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspection_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "inspection_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inspection_requests: {
         Row: {
           address: string

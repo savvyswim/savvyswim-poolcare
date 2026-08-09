@@ -170,5 +170,61 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
       }
     }
 
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(req.id, [
+      {
+        eventType: "status_change",
+        statusTo: data.status,
+        detail: `Marked ${data.status} — ${req.reference_number}`,
+      },
+      ...Object.entries(result.email).map(([to, outcome]) => ({
+        eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
+          | "email_sent"
+          | "email_failed",
+        channel: "email",
+        recipient: to,
+        outcome,
+        detail: headline,
+      })),
+      ...Object.entries(result.sms).map(([to, outcome]) => ({
+        eventType: (outcome === "sent" ? "sms_sent" : "sms_failed") as "sms_sent" | "sms_failed",
+        channel: "sms",
+        recipient: to,
+        outcome,
+        detail: headline,
+      })),
+    ]);
+
     return { ok: true as const, ...result };
+  });
+
+/**
+ * Records a status move that does not send an alert (contacted, lost, new…),
+ * so the attribution timeline stays complete for every stage of the funnel.
+ */
+export const logInspectionStatusChange = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        requestId: z.string().uuid(),
+        statusFrom: z.string().max(40).nullable().optional(),
+        statusTo: z.string().max(40),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isStaff } = await context.supabase.rpc("ss_is_staff");
+    if (!isStaff) throw new Error("Forbidden");
+
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(data.requestId, [
+      {
+        eventType: "status_change",
+        statusFrom: data.statusFrom ?? null,
+        statusTo: data.statusTo,
+        detail: `Moved to ${data.statusTo}`,
+      },
+    ]);
+    return { ok: true as const };
   });

@@ -60,5 +60,14 @@ export const convertInspectionToCustomer = createServerFn({ method: "POST" })
       .eq("id", req.id);
     if (linkError) throw new Error(linkError.message);
 
+    const { logInspectionEvents } = await import("./inspection-events.server");
+    await logInspectionEvents(req.id, [
+      {
+        eventType: "converted",
+        statusTo: "won",
+        detail: `Converted to customer ${req.full_name}`,
+      },
+    ]);
+
     return { customerId: customer.id, created: true as const };
   });
