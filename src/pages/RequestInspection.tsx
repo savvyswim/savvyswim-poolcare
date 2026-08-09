@@ -40,10 +40,41 @@ const TIME_OPTIONS = [
   "Anytime",
 ];
 
+/** Bookable arrival windows, Monday–Saturday. */
+const SLOTS = ["8:00 AM", "9:30 AM", "11:00 AM", "1:00 PM", "2:30 PM", "4:00 PM"];
+
+type Day = { iso: string; weekday: string; day: string; month: string };
+
+function buildDays(): Day[] {
+  const out: Day[] = [];
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  cursor.setDate(cursor.getDate() + 1); // earliest booking is tomorrow
+  while (out.length < 14) {
+    if (cursor.getDay() !== 0) {
+      out.push({
+        iso: `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(
+          cursor.getDate(),
+        ).padStart(2, "0")}`,
+        weekday: cursor.toLocaleDateString("en-US", { weekday: "short" }),
+        day: String(cursor.getDate()),
+        month: cursor.toLocaleDateString("en-US", { month: "short" }),
+      });
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return out;
+}
+
 const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
   const [contactTime, setContactTime] = useState("");
+  const days = useMemo(buildDays, []);
+  const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
+  const [slot, setSlot] = useState<string>("");
+  const [confirmed, setConfirmed] = useState<{ date: string; slot: string } | null>(null);
+
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
