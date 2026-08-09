@@ -303,8 +303,32 @@ export default function Inspections() {
                     </div>
                   </td>
                   <td className="p-3 opacity-75">
-                    {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
+                    <div className="font-semibold">
+                      {[r.utm_source, r.utm_campaign].filter(Boolean).join(" · ") || "Direct"}
+                    </div>
+                    <div className="text-[0.75rem] opacity-70">
+                      {[r.utm_medium, r.utm_content].filter(Boolean).join(" · ") || "no medium"}
+                    </div>
+                    <div className="text-[0.75rem] opacity-70">Landed: {pageOf(r)}</div>
+                    {host(r.referrer) && (
+                      <div className="text-[0.75rem] opacity-70">Ref: {host(r.referrer)}</div>
+                    )}
+                    {r.campaign_id && (
+                      <div className="text-[0.7rem] opacity-50">{r.campaign_id}</div>
+                    )}
+                    {(() => {
+                      const t = r.session_id ? touches[r.session_id] : undefined;
+                      if (!t || (!t.calls && !t.texts)) return null;
+                      return (
+                        <div className="mt-1 text-[0.72rem]" style={{ color: "#1FA9BE" }}>
+                          Also {t.calls ? `${t.calls} call tap` : ""}
+                          {t.calls && t.texts ? " · " : ""}
+                          {t.texts ? `${t.texts} text tap` : ""} before the form
+                        </div>
+                      );
+                    })()}
                   </td>
+
                   <td className="p-3">
                     <select
                       className="ss-input"
