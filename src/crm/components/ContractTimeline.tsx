@@ -21,6 +21,9 @@ const EVENT_LABEL: Record<string, string> = {
   declined: "Declined by recipient",
   voided: "Voided by office",
   expired: "Signing link expired",
+  copy_queued: "Signed copy queued",
+  copy_emailed: "Signed copy emailed",
+  copy_failed: "Signed copy failed",
 };
 
 const DOT: Record<string, string> = {
@@ -31,7 +34,11 @@ const DOT: Record<string, string> = {
   expired: "bg-[#8E1F2C]",
   declined: "bg-[#8E1F2C]",
   voided: "bg-[#8E1F2C]",
+  copy_queued: "bg-[#C98A2B]",
+  copy_emailed: "bg-[#2F7D4F]",
+  copy_failed: "bg-[#8E1F2C]",
 };
+
 
 /**
  * Admin-only audit trail for a single contract. RLS on ss_contract_events

@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "@/lib/router-compat";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { emailSignedContractCopy } from "@/lib/contracts.functions";
-import { CheckCircle2, Eraser, PenLine } from "lucide-react";
+import { emailSignedContractCopy, signContractWithAudit } from "@/lib/contracts.functions";
+import { classifyError, retryMessage, withRetry } from "@/crm/lib/retry";
+import { CheckCircle2, Eraser, PenLine, ShieldCheck } from "lucide-react";
+
 
 
 type ContractView = {
@@ -14,6 +16,20 @@ type ContractView = {
   signer_name: string | null;
   signed_at: string | null;
   sent_at: string | null;
+};
+
+/** Audit facts captured at signature time, shown as a certificate of completion. */
+type Certificate = {
+  contractId: string | null;
+  title: string | null;
+  signerName: string;
+  signedAt: string;
+  sentAt: string | null;
+  viewedAt: string | null;
+  startedAt: string | null;
+  email: string | null;
+  ip: string | null;
+  userAgent: string;
 };
 
 export default function SignContract() {
@@ -28,7 +44,11 @@ export default function SignContract() {
   const [justSigned, setJustSigned] = useState(false);
   const [copyNote, setCopyNote] = useState<string | null>(null);
   const [inPerson, setInPerson] = useState(false);
+  const [retryNote, setRetryNote] = useState<string | null>(null);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const emailCopy = useServerFn(emailSignedContractCopy);
+  const signNow = useServerFn(signContractWithAudit);
+
 
   useEffect(() => {
     setInPerson(new URLSearchParams(window.location.search).get("mode") === "inperson");
@@ -120,6 +140,7 @@ export default function SignContract() {
   const submit = async () => {
     if (!canvasRef.current) return;
     setError(null);
+    setRetryNote(null);
     if (signerName.trim().length < 2) {
       setError("Please type your full legal name.");
       return;
@@ -133,31 +154,65 @@ export default function SignContract() {
       return;
     }
     setSubmitting(true);
-    const { error: rpcError } = await supabase.rpc("ss_sign_contract", {
-      _token: token,
-      _signer_name: signerName.trim(),
-      _signature_data_url: canvasRef.current.toDataURL("image/png"),
-      _user_agent: navigator.userAgent,
-    });
-    setSubmitting(false);
-    if (rpcError) {
-      setError(rpcError.message);
+    const dataUrl = canvasRef.current.toDataURL("image/png");
+    try {
+      // Network blips on a phone in a backyard are the norm, not the
+      // exception — transient failures retry automatically with backoff.
+      const res = await withRetry(
+        () =>
+          signNow({
+            data: {
+              token,
+              signerName: signerName.trim(),
+              signatureDataUrl: dataUrl,
+              userAgent: navigator.userAgent,
+              consent: true,
+            },
+          }),
+        {
+          retries: 3,
+          timeoutMs: 20_000,
+          onRetry: ({ kind, attempt }) => setRetryNote(`${retryMessage(kind)} (attempt ${attempt + 1} of 4)`),
+        },
+      );
+      setRetryNote(null);
+      setJustSigned(true);
+      setCertificate(res.certificate);
+      setContract((c) =>
+        c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
+      );
+    } catch (err) {
+      const kind = classifyError(err);
+      const raw = err instanceof Error ? err.message : "";
+      setRetryNote(null);
+      setError(
+        kind === "network"
+          ? "We couldn't reach the server — check your connection and tap Sign again. Your signature is still on the pad."
+          : kind === "timeout"
+            ? "The connection is slow right now. Tap Sign again — nothing was lost."
+            : kind === "rate_limit" || kind === "server"
+              ? "Our server is busy for a moment. Tap Sign again in a few seconds."
+              : raw || "We couldn't save your signature. Call or text (469) 744-0379 and we'll help.",
+      );
       return;
+    } finally {
+      setSubmitting(false);
     }
-    setJustSigned(true);
-    setContract((c) => (c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: new Date().toISOString() } : c));
 
     try {
-      const res = await emailCopy({ data: { token } });
+      const res = await withRetry(() => emailCopy({ data: { token } }), { retries: 2, timeoutMs: 20_000 });
       setCopyNote(
         res.sent && res.to
           ? `A signed copy was emailed to ${res.to}.`
-          : "A signed copy is on file with your account.",
+          : res.reason === "failed"
+            ? "Your agreement is signed and saved — the email copy didn't go through, so our office will resend it."
+            : "A signed copy is on file with your account.",
       );
     } catch {
-      setCopyNote("A signed copy is on file with your account.");
+      setCopyNote("Your agreement is signed and saved. Our office will email your copy shortly.");
     }
   };
+
 
 
   if (loading) {
@@ -224,6 +279,44 @@ export default function SignContract() {
             </div>
           </div>
         )}
+
+        {certificate && (
+          <section className="mb-8 rounded-xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <h2 className="font-tech text-[0.65rem] tracking-[0.25em] uppercase text-muted-foreground">
+                Certificate of completion
+              </h2>
+            </div>
+            <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+              {[
+                ["Envelope ID", certificate.contractId ?? "—"],
+                ["Document", certificate.title ?? contract.title],
+                ["Signer", certificate.signerName],
+                ["Email on file", certificate.email ?? "—"],
+                ["Sent", certificate.sentAt ? new Date(certificate.sentAt).toLocaleString() : "—"],
+                ["Viewed", certificate.viewedAt ? new Date(certificate.viewedAt).toLocaleString() : "—"],
+                ["Signature started", certificate.startedAt ? new Date(certificate.startedAt).toLocaleString() : "—"],
+                ["Signed", new Date(certificate.signedAt).toLocaleString()],
+                ["Signer IP address", certificate.ip ?? "Not recorded"],
+                ["Device", certificate.userAgent || "—"],
+              ].map(([label, value]) => (
+                <div key={label as string} className="min-w-0">
+                  <dt className="font-tech text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground">
+                    {label}
+                  </dt>
+                  <dd className="truncate text-foreground" title={String(value)}>{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-muted-foreground">
+              This record confirms the identity signals captured at signing time and is stored with your
+              agreement. Our office keeps a matching copy in the audit timeline.
+            </p>
+          </section>
+        )}
+
+
 
 
         <h1 className="font-display text-2xl sm:text-3xl text-foreground">{contract.title}</h1>
@@ -294,7 +387,9 @@ export default function SignContract() {
               </span>
             </label>
 
+            {retryNote && <p className="mt-4 text-sm text-muted-foreground">{retryNote}</p>}
             {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+
 
             <button
               type="button"

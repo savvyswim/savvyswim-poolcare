@@ -37,7 +37,16 @@ type SmsLog = {
   updated_at: string;
 };
 
+type CopyEvent = {
+  id: string;
+  contract_id: string;
+  event: string;
+  detail: string | null;
+  created_at: string;
+};
+
 type Template = { id: string; name: string; body: string; is_default: boolean };
+
 
 type CustomerLite = {
   id: string;
@@ -109,6 +118,34 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       .order("created_at", { ascending: false });
     return (data ?? []) as SmsLog[];
   });
+
+  /** queued / sent / failed events for the emailed signed copy. */
+  const { rows: copyLog, refetch: refetchCopy } = useTable<CopyEvent>(
+    `contract-copy-events-${customer.id}`,
+    async () => {
+      const { data } = await supabase
+        .from("ss_contract_events")
+        .select("id,contract_id,event,detail,created_at")
+        .in("event", ["copy_queued", "copy_emailed", "copy_failed"])
+        .order("created_at", { ascending: false });
+      return (data ?? []) as CopyEvent[];
+    },
+  );
+
+  /** Latest outcome per contract; a queued row with no outcome stays "queued". */
+  const copyStatus = useMemo(() => {
+    const map: Record<string, { status: "queued" | "sent" | "failed"; detail: string | null; at: string }> = {};
+    for (const e of copyLog) {
+      if (map[e.contract_id]) continue; // rows are newest-first
+      map[e.contract_id] = {
+        status: e.event === "copy_emailed" ? "sent" : e.event === "copy_failed" ? "failed" : "queued",
+        detail: e.detail,
+        at: e.created_at,
+      };
+    }
+    return map;
+  }, [copyLog]);
+
 
   const counts = useMemo(() => {
     const c: Partial<Record<EsignStatus, number>> = {};
@@ -213,13 +250,17 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       if (res.sent) toast.success(`Signed copy emailed to ${res.to}`);
       else if (res.reason === "already_sent") toast.info("A signed copy was already emailed to this customer");
       else if (res.reason === "no_email") toast.error("This customer has no email on file");
+      else if (res.reason === "failed") toast.error(`Email failed: ${res.error}`);
       else toast.error("Could not email the signed copy");
       refetch();
+      refetchCopy();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not email the signed copy");
+      refetchCopy();
     } finally {
       setBusy(null);
     }
+
   };
 
   const copyLink = async (contract: Contract) => {
@@ -365,9 +406,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
             )}
             {k.status === "signed" && (
               <button className="ss-btn ss-btn-ghost" onClick={() => mailCopy(k)} disabled={busy === k.id}>
-                <Mail size={12} /> {busy === k.id ? "Sending…" : "Email signed copy"}
+                <Mail size={12} />{" "}
+                {busy === k.id
+                  ? "Sending…"
+                  : copyStatus[k.id]?.status === "failed"
+                    ? "Retry signed copy"
+                    : "Email signed copy"}
               </button>
             )}
+
             <button className="ss-btn ss-btn-ghost" onClick={() => copyLink(k)}>
               <Link2 size={12} /> Copy link
             </button>
@@ -416,7 +463,36 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
             </div>
           )}
 
+          {k.status === "signed" && (
+            <div className="mt-2.5 space-y-1 border-t border-black/10 pt-2.5">
+              <div className="ss-label">Signed copy email</div>
+              {copyStatus[k.id] ? (
+                <div className="flex flex-wrap items-center gap-2 text-[0.7rem] opacity-80">
+                  <Chip
+                    tone={
+                      copyStatus[k.id]!.status === "sent"
+                        ? "green"
+                        : copyStatus[k.id]!.status === "failed"
+                          ? "burgundy"
+                          : "gold"
+                    }
+                  >
+                    {copyStatus[k.id]!.status}
+                  </Chip>
+                  {k.recipient_email && <span>{k.recipient_email}</span>}
+                  <span className="opacity-60">{new Date(copyStatus[k.id]!.at).toLocaleString()}</span>
+                  {copyStatus[k.id]!.status === "failed" && copyStatus[k.id]!.detail && (
+                    <span className="text-[0.68rem] opacity-70">· {copyStatus[k.id]!.detail}</span>
+                  )}
+                </div>
+              ) : (
+                <div className="text-[0.7rem] opacity-60">Not emailed yet.</div>
+              )}
+            </div>
+          )}
+
           {isAdmin && <ContractTimeline contractId={k.id} />}
+
         </div>
         );
       })}

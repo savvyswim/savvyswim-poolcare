@@ -304,20 +304,37 @@ Signed on: ${signedOn}
 Questions? Call or text (469) 744-0379.
 Savvy Swim · savvyswim.com`;
 
+    // Delivery is tracked as events so admins can see queued → sent/failed.
+    await supabaseAdmin.from("ss_contract_events").insert({
+      contract_id: contract.id,
+      event: "copy_queued",
+      detail: `Queued signed copy to ${contract.recipient_email}`,
+    });
+
     const { sendLovableEmail } = await import("@lovable.dev/email-js");
-    await sendLovableEmail(
-      {
-        to: contract.recipient_email,
-        from: "Savvy Swim <noreply@notify.savvyswim.com>",
-        sender_domain: "notify.savvyswim.com",
-        subject: `Your signed Savvy Swim agreement — ${contract.title}`,
-        html,
-        text,
-        label: "contract-signed-copy",
-        idempotency_key: `contract-signed-copy-${contract.id}`,
-      },
-      { apiKey },
-    );
+    try {
+      await sendLovableEmail(
+        {
+          to: contract.recipient_email,
+          from: "Savvy Swim <noreply@notify.savvyswim.com>",
+          sender_domain: "notify.savvyswim.com",
+          subject: `Your signed Savvy Swim agreement — ${contract.title}`,
+          html,
+          text,
+          label: "contract-signed-copy",
+          idempotency_key: `contract-signed-copy-${contract.id}`,
+        },
+        { apiKey },
+      );
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Email provider rejected the message";
+      await supabaseAdmin.from("ss_contract_events").insert({
+        contract_id: contract.id,
+        event: "copy_failed",
+        detail: `Failed to email ${contract.recipient_email}: ${message.slice(0, 300)}`,
+      });
+      return { sent: false, reason: "failed" as const, error: message.slice(0, 300) };
+    }
 
     await supabaseAdmin.from("ss_contract_events").insert({
       contract_id: contract.id,
@@ -325,5 +342,84 @@ Savvy Swim · savvyswim.com`;
       detail: `Signed copy emailed to ${contract.recipient_email}`,
     });
 
+
     return { sent: true, to: contract.recipient_email };
+  });
+
+/**
+ * Signs a contract server-side so the audit record can include the signer's
+ * IP address (the browser cannot see it). Wraps the ss_sign_contract RPC and
+ * then stamps IP + device on the contract and its "signed" event.
+ */
+export const signContractWithAudit = createServerFn({ method: "POST" })
+  .inputValidator((data) =>
+    z
+      .object({
+        token: z.string().min(10).max(200),
+        signerName: z.string().min(2).max(120),
+        signatureDataUrl: z.string().min(50).max(400_000),
+        userAgent: z.string().max(400).optional(),
+        consent: z.boolean(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data }) => {
+    if (!data.consent) throw new Error("Please confirm you agree to the terms.");
+
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const req = getRequest();
+    const ip =
+      req.headers.get("cf-connecting-ip") ??
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      null;
+    const userAgent = data.userAgent ?? req.headers.get("user-agent") ?? "";
+
+    const { error } = await supabaseAdmin.rpc("ss_sign_contract", {
+      _token: data.token,
+      _signer_name: data.signerName,
+      _signature_data_url: data.signatureDataUrl,
+      _user_agent: userAgent.slice(0, 400),
+    });
+    if (error) throw new Error(error.message);
+
+    const { data: contract } = await supabaseAdmin
+      .from("ss_contracts")
+      .select("id, title, signer_name, signed_at, sent_at, viewed_at, signing_started_at, recipient_email")
+      .eq("token", data.token)
+      .maybeSingle();
+
+    if (contract) {
+      await supabaseAdmin.from("ss_contracts").update({ signer_ip: ip }).eq("id", contract.id);
+      const { data: ev } = await supabaseAdmin
+        .from("ss_contract_events")
+        .select("id")
+        .eq("contract_id", contract.id)
+        .eq("event", "signed")
+        .order("created_at", { ascending: false })
+        .limit(1);
+      if (ev?.[0]) {
+        await supabaseAdmin
+          .from("ss_contract_events")
+          .update({ ip, user_agent: userAgent.slice(0, 300) })
+          .eq("id", ev[0].id);
+      }
+    }
+
+    return {
+      signed: true,
+      certificate: {
+        contractId: contract?.id ?? null,
+        title: contract?.title ?? null,
+        signerName: contract?.signer_name ?? data.signerName,
+        signedAt: contract?.signed_at ?? new Date().toISOString(),
+        sentAt: contract?.sent_at ?? null,
+        viewedAt: contract?.viewed_at ?? null,
+        startedAt: contract?.signing_started_at ?? null,
+        email: contract?.recipient_email ?? null,
+        ip,
+        userAgent: userAgent.slice(0, 300),
+      },
+    };
   });
