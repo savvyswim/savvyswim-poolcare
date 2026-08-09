@@ -204,9 +204,14 @@ export const sendContractSms = createServerFn({ method: "POST" })
       .eq("id", logRow.id);
 
     if (contract.status === "draft") {
+      const smsNow = new Date();
       await supabase
         .from("ss_contracts")
-        .update({ status: "sent", sent_at: new Date().toISOString() })
+        .update({
+          status: "sent",
+          sent_at: smsNow.toISOString(),
+          expires_at: new Date(smsNow.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        })
         .eq("id", contract.id);
     }
 
