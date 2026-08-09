@@ -382,13 +382,20 @@ const Index = () => {
                 >
                   Service &amp; Repair
                 </Link>
-                <Link
-                  to="/portal"
+                <AppHandoffLink
+                  href={PORTAL_PATH}
                   onClick={() => setMenuOpen(false)}
                   className="py-3.5 text-[13px] uppercase tracking-[0.14em] text-accent transition-colors hover:opacity-80"
                 >
                   Customer Login
-                </Link>
+                </AppHandoffLink>
+                <AppHandoffLink
+                  href={STAFF_LOGIN_PATH}
+                  onClick={() => setMenuOpen(false)}
+                  className="py-3.5 text-[13px] uppercase tracking-[0.14em] opacity-70 transition-colors hover:opacity-100"
+                >
+                  Staff Login
+                </AppHandoffLink>
               </div>
             </nav>
           )}
