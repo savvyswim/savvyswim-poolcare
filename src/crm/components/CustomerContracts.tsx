@@ -463,7 +463,36 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
             </div>
           )}
 
+          {k.status === "signed" && (
+            <div className="mt-2.5 space-y-1 border-t border-black/10 pt-2.5">
+              <div className="ss-label">Signed copy email</div>
+              {copyStatus[k.id] ? (
+                <div className="flex flex-wrap items-center gap-2 text-[0.7rem] opacity-80">
+                  <Chip
+                    tone={
+                      copyStatus[k.id]!.status === "sent"
+                        ? "green"
+                        : copyStatus[k.id]!.status === "failed"
+                          ? "burgundy"
+                          : "gold"
+                    }
+                  >
+                    {copyStatus[k.id]!.status}
+                  </Chip>
+                  {k.recipient_email && <span>{k.recipient_email}</span>}
+                  <span className="opacity-60">{new Date(copyStatus[k.id]!.at).toLocaleString()}</span>
+                  {copyStatus[k.id]!.status === "failed" && copyStatus[k.id]!.detail && (
+                    <span className="text-[0.68rem] opacity-70">· {copyStatus[k.id]!.detail}</span>
+                  )}
+                </div>
+              ) : (
+                <div className="text-[0.7rem] opacity-60">Not emailed yet.</div>
+              )}
+            </div>
+          )}
+
           {isAdmin && <ContractTimeline contractId={k.id} />}
+
         </div>
         );
       })}
