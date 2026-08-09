@@ -1,6 +1,6 @@
 import {
   AlertTriangle, BarChart3, Building2, ClipboardCheck, Percent, ClipboardList, DollarSign, Mail,
-  Map, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, KanbanSquare,
+  Map as MapIcon, Package, Plug, Settings as SettingsIcon, Truck, Users, Wrench, KanbanSquare,
   Activity, BookOpen, Timer, LayoutDashboard, ShoppingBag, Sparkles, Hammer, ShieldCheck,
   ScrollText, Star, FlaskConical, TrendingUp, MessageSquare, Grid3x3, Gauge, Wallet,
   SlidersHorizontal, MessagesSquare, FileText, Calculator, Workflow, Home, Megaphone,
