@@ -250,13 +250,17 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
       if (res.sent) toast.success(`Signed copy emailed to ${res.to}`);
       else if (res.reason === "already_sent") toast.info("A signed copy was already emailed to this customer");
       else if (res.reason === "no_email") toast.error("This customer has no email on file");
+      else if (res.reason === "failed") toast.error(`Email failed: ${res.error}`);
       else toast.error("Could not email the signed copy");
       refetch();
+      refetchCopy();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not email the signed copy");
+      refetchCopy();
     } finally {
       setBusy(null);
     }
+
   };
 
   const copyLink = async (contract: Contract) => {
