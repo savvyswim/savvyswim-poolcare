@@ -253,27 +253,81 @@ const RequestInspection = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="preferred_date">Preferred service date</Label>
-                  <Input id="preferred_date" name="preferred_date" type="date" />
+              <div className="space-y-3 border-t border-hairline pt-6">
+                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Pick your day
+                </Label>
+                <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1">
+                  {days.map((d) => {
+                    const active = d.iso === slotDate;
+                    return (
+                      <button
+                        key={d.iso}
+                        type="button"
+                        onClick={() => setSlotDate(d.iso)}
+                        aria-pressed={active}
+                        className={`min-w-[68px] shrink-0 snap-start border px-3 py-2.5 text-center transition ${
+                          active
+                            ? "border-accent bg-accent text-accent-foreground"
+                            : "border-hairline hover:border-accent"
+                        }`}
+                      >
+                        <span className="block font-tech text-[10px] uppercase tracking-[0.18em] opacity-80">
+                          {d.weekday}
+                        </span>
+                        <span className="block font-display text-[1.4rem] leading-none">{d.day}</span>
+                        <span className="block font-tech text-[10px] uppercase tracking-[0.18em] opacity-80">
+                          {d.month}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="preferred_contact_time">Best time to reach you</Label>
-                  <Select value={contactTime} onValueChange={setContactTime}>
-                    <SelectTrigger id="preferred_contact_time">
-                      <SelectValue placeholder="Pick a window" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background">
-                      {TIME_OPTIONS.map((t) => (
-                        <SelectItem key={t} value={t}>
-                          {t}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+
+                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Arrival window
+                </Label>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {SLOTS.map((s) => {
+                    const active = s === slot;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSlot(s)}
+                        aria-pressed={active}
+                        className={`border px-3 py-3 text-sm font-semibold transition ${
+                          active
+                            ? "border-accent bg-accent text-accent-foreground"
+                            : "border-hairline hover:border-accent"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Windows are ~2 hours. We confirm by text right after you submit.
+                </p>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="preferred_contact_time">Best time to reach you</Label>
+                <Select value={contactTime} onValueChange={setContactTime}>
+                  <SelectTrigger id="preferred_contact_time">
+                    <SelectValue placeholder="Pick a window" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background">
+                    {TIME_OPTIONS.map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
 
               <div className="space-y-2">
                 <Label htmlFor="pool_details">Pool details (size, type, equipment)</Label>
