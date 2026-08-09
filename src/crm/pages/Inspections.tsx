@@ -215,7 +215,9 @@ export default function Inspections() {
                 <th className="p-3">Preferred</th>
                 <th className="p-3">Source</th>
                 <th className="p-3">Status</th>
+                <th className="p-3">CRM</th>
               </tr>
+
             </thead>
             <tbody>
               {shown.map((r) => (
