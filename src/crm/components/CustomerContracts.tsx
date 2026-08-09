@@ -406,9 +406,15 @@ export default function CustomerContracts({ customer }: { customer: CustomerLite
             )}
             {k.status === "signed" && (
               <button className="ss-btn ss-btn-ghost" onClick={() => mailCopy(k)} disabled={busy === k.id}>
-                <Mail size={12} /> {busy === k.id ? "Sending…" : "Email signed copy"}
+                <Mail size={12} />{" "}
+                {busy === k.id
+                  ? "Sending…"
+                  : copyStatus[k.id]?.status === "failed"
+                    ? "Retry signed copy"
+                    : "Email signed copy"}
               </button>
             )}
+
             <button className="ss-btn ss-btn-ghost" onClick={() => copyLink(k)}>
               <Link2 size={12} /> Copy link
             </button>
