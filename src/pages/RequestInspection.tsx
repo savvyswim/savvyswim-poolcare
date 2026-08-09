@@ -85,11 +85,17 @@ const RequestInspection = () => {
       phone: String(fd.get("phone") ?? ""),
       address: String(fd.get("address") ?? ""),
       postal_code: String(fd.get("postal_code") ?? ""),
-      preferred_date: String(fd.get("preferred_date") ?? ""),
+      preferred_date: slotDate,
       pool_details: String(fd.get("pool_details") ?? ""),
-      preferred_contact_time: contactTime,
+      preferred_contact_time: slot || contactTime,
       notes: String(fd.get("notes") ?? ""),
     };
+
+    if (!slot) {
+      toast.error("Pick an arrival window so we can lock your visit in");
+      return;
+    }
+
 
     const parsed = schema.safeParse(raw);
     if (!parsed.success) {
