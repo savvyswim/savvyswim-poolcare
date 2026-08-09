@@ -120,6 +120,7 @@ export default function SignContract() {
   const submit = async () => {
     if (!canvasRef.current) return;
     setError(null);
+    setRetryNote(null);
     if (signerName.trim().length < 2) {
       setError("Please type your full legal name.");
       return;
@@ -133,31 +134,65 @@ export default function SignContract() {
       return;
     }
     setSubmitting(true);
-    const { error: rpcError } = await supabase.rpc("ss_sign_contract", {
-      _token: token,
-      _signer_name: signerName.trim(),
-      _signature_data_url: canvasRef.current.toDataURL("image/png"),
-      _user_agent: navigator.userAgent,
-    });
-    setSubmitting(false);
-    if (rpcError) {
-      setError(rpcError.message);
+    const dataUrl = canvasRef.current.toDataURL("image/png");
+    try {
+      // Network blips on a phone in a backyard are the norm, not the
+      // exception — transient failures retry automatically with backoff.
+      const res = await withRetry(
+        () =>
+          signNow({
+            data: {
+              token,
+              signerName: signerName.trim(),
+              signatureDataUrl: dataUrl,
+              userAgent: navigator.userAgent,
+              consent: true,
+            },
+          }),
+        {
+          retries: 3,
+          timeoutMs: 20_000,
+          onRetry: ({ kind, attempt }) => setRetryNote(`${retryMessage(kind)} (attempt ${attempt + 1} of 4)`),
+        },
+      );
+      setRetryNote(null);
+      setJustSigned(true);
+      setCertificate(res.certificate);
+      setContract((c) =>
+        c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
+      );
+    } catch (err) {
+      const kind = classifyError(err);
+      const raw = err instanceof Error ? err.message : "";
+      setRetryNote(null);
+      setError(
+        kind === "network"
+          ? "We couldn't reach the server — check your connection and tap Sign again. Your signature is still on the pad."
+          : kind === "timeout"
+            ? "The connection is slow right now. Tap Sign again — nothing was lost."
+            : kind === "rate_limit" || kind === "server"
+              ? "Our server is busy for a moment. Tap Sign again in a few seconds."
+              : raw || "We couldn't save your signature. Call or text (469) 744-0379 and we'll help.",
+      );
       return;
+    } finally {
+      setSubmitting(false);
     }
-    setJustSigned(true);
-    setContract((c) => (c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: new Date().toISOString() } : c));
 
     try {
-      const res = await emailCopy({ data: { token } });
+      const res = await withRetry(() => emailCopy({ data: { token } }), { retries: 2, timeoutMs: 20_000 });
       setCopyNote(
         res.sent && res.to
           ? `A signed copy was emailed to ${res.to}.`
-          : "A signed copy is on file with your account.",
+          : res.reason === "failed"
+            ? "Your agreement is signed and saved — the email copy didn't go through, so our office will resend it."
+            : "A signed copy is on file with your account.",
       );
     } catch {
-      setCopyNote("A signed copy is on file with your account.");
+      setCopyNote("Your agreement is signed and saved. Our office will email your copy shortly.");
     }
   };
+
 
 
   if (loading) {
