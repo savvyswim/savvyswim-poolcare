@@ -160,6 +160,7 @@ export default function SignContract() {
   }
 
   const signed = contract.status === "signed";
+  const expired = contract.status === "expired";
 
   return (
     <div className="min-h-screen bg-background">
