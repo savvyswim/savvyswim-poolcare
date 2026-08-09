@@ -146,7 +146,19 @@ export default function SignContract() {
     }
     setJustSigned(true);
     setContract((c) => (c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: new Date().toISOString() } : c));
+
+    try {
+      const res = await emailCopy({ data: { token } });
+      setCopyNote(
+        res.sent && res.to
+          ? `A signed copy was emailed to ${res.to}.`
+          : "A signed copy is on file with your account.",
+      );
+    } catch {
+      setCopyNote("A signed copy is on file with your account.");
+    }
   };
+
 
   if (loading) {
     return (
