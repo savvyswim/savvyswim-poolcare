@@ -13,7 +13,7 @@ type Sample = {
   created_at: string;
 };
 
-const METRICS = ["LCP", "CLS", "INP", "FCP", "TTFB", "LOAD"] as const;
+const METRICS = ["LCP", "FCP", "TTI", "CLS", "INP", "TTFB", "LOAD"] as const;
 const RANGES = [
   { label: "7 days", days: 7 },
   { label: "30 days", days: 30 },
@@ -99,6 +99,7 @@ export default function SiteSpeed() {
         lcp: p75(metrics["LCP"] ?? []),
         cls: p75(metrics["CLS"] ?? []),
         inp: p75(metrics["INP"] ?? []),
+        tti: p75(metrics["TTI"] ?? []),
         load: p75(metrics["LOAD"] ?? []),
         samples: Object.values(metrics).reduce((s, v) => s + v.length, 0),
       }));
@@ -205,6 +206,7 @@ export default function SiteSpeed() {
                     <th className="p-1.5 text-right">LCP</th>
                     <th className="p-1.5 text-right">CLS</th>
                     <th className="p-1.5 text-right">INP</th>
+                    <th className="p-1.5 text-right">TTI</th>
                     <th className="p-1.5 text-right">Load</th>
                     <th className="p-1.5 text-right">Samples</th>
                   </tr>
@@ -213,9 +215,17 @@ export default function SiteSpeed() {
                   {daily.map((d) => (
                     <tr key={d.day} style={{ borderTop: "1px solid hsl(var(--ss-sand))" }}>
                       <td className="p-1.5 font-semibold">{d.day}</td>
-                      {(["LCP", "CLS", "INP", "LOAD"] as const).map((m) => {
+                      {(["LCP", "CLS", "INP", "TTI", "LOAD"] as const).map((m) => {
                         const v =
-                          m === "LCP" ? d.lcp : m === "CLS" ? d.cls : m === "INP" ? d.inp : d.load;
+                          m === "LCP"
+                            ? d.lcp
+                            : m === "CLS"
+                              ? d.cls
+                              : m === "INP"
+                                ? d.inp
+                                : m === "TTI"
+                                  ? d.tti
+                                  : d.load;
                         return (
                           <td
                             key={m}

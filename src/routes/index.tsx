@@ -3,6 +3,7 @@ import Index from "@/pages/Index";
 import { Navigate } from "@/lib/router-compat";
 import { isAppHost } from "@/hooks/useAppHost";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
+import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 
 const TITLE = "Savvy Swim | Weekly Pool Service & Repair in DFW";
 const DESCRIPTION =
@@ -24,6 +25,8 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         as: "image",
         href: photoPoolWaterMobile.url,
+        imageSrcSet: `${photoPoolWaterMobile.url} 960w, ${photoPoolWater.url} 1600w`,
+        imageSizes: "100vw",
         fetchPriority: "high",
       },
     ],
