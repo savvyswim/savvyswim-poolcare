@@ -94,6 +94,11 @@ export const MODULE_ACCESS: Record<ModuleKey, SsLevel[]> = {
 /** Route path -> module. Longest match wins. */
 export const PATH_MODULE: Record<string, ModuleKey> = {
   "/admin/crm": "route",
+  "/admin/crm/home": "route",
+  "/admin/crm/marketing": "pipeline",
+  "/admin/crm/sales": "quotes",
+  "/admin/crm/operations": "route",
+  "/admin/crm/financial": "finance",
   "/admin/crm/customers": "customers",
   "/admin/crm/pipeline": "pipeline",
   "/admin/crm/inspections": "inspections",
