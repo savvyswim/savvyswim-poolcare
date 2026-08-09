@@ -8,8 +8,10 @@ import { notifyInspectionStatus } from "@/lib/inspection-status-notify.functions
 import InspectionSourceAnalytics, {
   RANGES,
   inRange,
+  pageOf,
   sourceOf,
 } from "@/crm/components/InspectionSourceAnalytics";
+
 
 type Row = {
   id: string;
