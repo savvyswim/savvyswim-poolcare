@@ -26,6 +26,7 @@ export default function SignContract() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
+  const progressSent = useRef(false);
   const [hasInk, setHasInk] = useState(false);
 
   useEffect(() => {
