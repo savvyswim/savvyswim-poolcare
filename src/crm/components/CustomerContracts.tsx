@@ -49,14 +49,6 @@ type CustomerLite = {
   service_level: string;
 };
 
-const STATUS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
-  draft: "gold",
-  sent: "aqua",
-  viewed: "orange",
-  signed: "green",
-  declined: "burgundy",
-  voided: "burgundy",
-};
 
 const SMS_TONE: Record<string, "green" | "aqua" | "gold" | "orange" | "burgundy"> = {
   queued: "gold",
