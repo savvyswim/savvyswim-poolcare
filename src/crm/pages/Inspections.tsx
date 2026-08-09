@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle } from "@/crm/components/Brand";
-import InspectionSourceAnalytics from "@/crm/components/InspectionSourceAnalytics";
+import InspectionSourceAnalytics, {
+  RANGES,
+  inRange,
+  sourceOf,
+} from "@/crm/components/InspectionSourceAnalytics";
 
 type Row = {
   id: string;
