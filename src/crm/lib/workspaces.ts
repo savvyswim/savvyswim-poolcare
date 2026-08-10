@@ -162,6 +162,7 @@ export const WORKSPACES: Workspace[] = [
       { to: "/admin/activity", label: "Activity log", icon: Activity, module: "activity", group: "People" },
       { to: "/admin/crm/security", label: "Security", icon: ShieldCheck, module: "security", group: "Platform" },
       { to: "/admin/crm/audit-trail", label: "Audit trail", icon: ScrollText, module: "security", group: "Platform" },
+      { to: "/admin/crm/webhook-tester", label: "Webhook tester", icon: Activity, module: "security", group: "Platform" },
       { to: "/admin/crm/site-speed", label: "Site speed", icon: Gauge, module: "siteSpeed", group: "Platform" },
       { to: "/admin/crm/deploy-health", label: "Deploy health", icon: Activity, module: "deployHealth", group: "Platform" },
       { to: "/admin/crm/app", label: "Operations console", icon: LayoutDashboard, module: "console", group: "Platform" },
