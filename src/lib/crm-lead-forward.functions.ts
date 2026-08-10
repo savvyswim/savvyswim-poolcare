@@ -67,7 +67,7 @@ export const forwardLeadToCrm = createServerFn({ method: "POST" })
       const { logInspectionEvents } = await import("./inspection-events.server");
       await logInspectionEvents(req.id, [
         {
-          eventType: "note",
+          eventType: "status_change",
           detail: `Lead forwarded to CRM (${endpoint})`,
           outcome: "sent",
         },
