@@ -1205,6 +1205,69 @@ export type Database = {
           },
         ]
       }
+      ss_appointment_webhook_events: {
+        Row: {
+          appointment_id: string | null
+          arrival_window: string | null
+          created_at: string
+          customer_email: string | null
+          customer_id: string | null
+          customer_phone: string | null
+          error: string | null
+          event_id: string
+          id: string
+          message: string | null
+          notified_email: boolean
+          notified_sms: boolean
+          payload: Json
+          previous_status: string | null
+          scheduled_date: string | null
+          status: string
+          technician: string | null
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          arrival_window?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          customer_phone?: string | null
+          error?: string | null
+          event_id: string
+          id?: string
+          message?: string | null
+          notified_email?: boolean
+          notified_sms?: boolean
+          payload?: Json
+          previous_status?: string | null
+          scheduled_date?: string | null
+          status: string
+          technician?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          arrival_window?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          customer_phone?: string | null
+          error?: string | null
+          event_id?: string
+          id?: string
+          message?: string | null
+          notified_email?: boolean
+          notified_sms?: boolean
+          payload?: Json
+          previous_status?: string | null
+          scheduled_date?: string | null
+          status?: string
+          technician?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_automation_runs: {
         Row: {
           automation_id: string
