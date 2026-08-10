@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { notifyInspectionRequest } from "@/lib/inspection-notify.functions";
+import { forwardLeadToCrm } from "@/lib/crm-lead-forward.functions";
 import { getAttribution, getSessionId, trackContactClick } from "@/lib/contactTracking";
 
 const PHONE_DISPLAY = "(469) 744-0379";
