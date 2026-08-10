@@ -289,8 +289,8 @@ const Index = () => {
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
               <Link to="/services" className="hover:opacity-80 transition">Services</Link>
               <Link to="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</Link>
-              <AppHandoffLink href={PORTAL_PATH} className="hover:opacity-80 transition">Customer Login</AppHandoffLink>
-              <AppHandoffLink href={STAFF_LOGIN_PATH} className="hover:opacity-80 transition opacity-70">Staff Login</AppHandoffLink>
+              <a href={CUSTOMER_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">Customer Login</a>
+
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
 
