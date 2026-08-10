@@ -3893,6 +3893,33 @@ export type Database = {
           },
         ]
       }
+      ss_rate_limits: {
+        Row: {
+          bucket: string
+          created_at: string
+          hits: number
+          id: string
+          identifier: string
+          window_start: string
+        }
+        Insert: {
+          bucket: string
+          created_at?: string
+          hits?: number
+          id?: string
+          identifier: string
+          window_start: string
+        }
+        Update: {
+          bucket?: string
+          created_at?: string
+          hits?: number
+          id?: string
+          identifier?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       ss_reading_fields: {
         Row: {
           created_at: string
@@ -5683,6 +5710,15 @@ export type Database = {
         Returns: Json
       }
       ss_portal_update_profile: { Args: { p_patch: Json }; Returns: Json }
+      ss_rate_limit_hit: {
+        Args: {
+          _bucket: string
+          _identifier: string
+          _max_hits: number
+          _window_seconds: number
+        }
+        Returns: boolean
+      }
       ss_recalc_visit_upsell: {
         Args: { _visit_id: string }
         Returns: undefined
