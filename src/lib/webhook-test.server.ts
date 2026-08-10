@@ -24,7 +24,7 @@ export type SimulateResult = {
   eventId: string;
   url: string;
   requestBody: string;
-  response: unknown;
+  response: string;
 };
 
 export async function runWebhookSimulation(
@@ -68,9 +68,9 @@ export async function runWebhookSimulation(
 
   const res = await fetch(url, { method: "POST", headers, body: raw });
   const text = await res.text();
-  let parsed: unknown = text;
+  let parsed = text;
   try {
-    parsed = JSON.parse(text) as unknown;
+    parsed = JSON.stringify(JSON.parse(text) as unknown, null, 2);
   } catch {
     /* keep raw text */
   }
