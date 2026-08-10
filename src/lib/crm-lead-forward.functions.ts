@@ -8,7 +8,7 @@ import { z } from "zod";
  * CRM app's public lead endpoint so sales works one inbox. The URL can be
  * overridden with CRM_LEADS_URL without a code change.
  */
-const DEFAULT_CRM_LEADS_URL = "https://savvyservices.app/api/public/leads";
+const DEFAULT_CRM_LEADS_URL = "https://savvyswim.app/api/public/leads";
 
 export const forwardLeadToCrm = createServerFn({ method: "POST" })
   .inputValidator((data) => z.object({ requestId: z.string().uuid() }).parse(data))
