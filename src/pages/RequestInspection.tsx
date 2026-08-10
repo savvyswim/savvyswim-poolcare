@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { notifyInspectionRequest } from "@/lib/inspection-notify.functions";
+import { forwardLeadToCrm } from "@/lib/crm-lead-forward.functions";
 import { getAttribution, getSessionId, trackContactClick } from "@/lib/contactTracking";
 
 const PHONE_DISPLAY = "(469) 744-0379";
@@ -146,6 +147,10 @@ const RequestInspection = () => {
 
     void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
       console.warn("inspection notification not sent", err),
+    );
+    // Hand the lead straight to the CRM app so sales works one inbox.
+    void forwardLeadToCrm({ data: { requestId: data.id } }).catch((err) =>
+      console.warn("crm lead forward failed", err),
     );
     void supabase.functions
       .invoke("send-inspection-sms", { body: { requestId: data.id } })
