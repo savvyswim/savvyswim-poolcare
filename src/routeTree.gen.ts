@@ -35,7 +35,6 @@ import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as PortalMaintenanceRouteImport } from './routes/portal_.maintenance'
 import { Route as CrmSplatRouteImport } from './routes/crm/$'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout/return'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AdminTeamRouteImport } from './routes/admin/team'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
@@ -227,11 +226,6 @@ const CrmSplatRoute = CrmSplatRouteImport.update({
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTeamRoute = AdminTeamRouteImport.update({
@@ -584,7 +578,6 @@ export interface FileRoutesByFullPath {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
@@ -675,7 +668,6 @@ export interface FileRoutesByTo {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
@@ -768,7 +760,6 @@ export interface FileRoutesById {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal_/maintenance': typeof PortalMaintenanceRoute
@@ -861,7 +852,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
@@ -952,7 +942,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
@@ -1044,7 +1033,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal_/maintenance'
@@ -1137,7 +1125,6 @@ export interface RootRouteChildren {
   AdminDesignsRoute: typeof AdminDesignsRoute
   AdminStoreRoute: typeof AdminStoreRoute
   AdminTeamRoute: typeof AdminTeamRoute
-  ApiChatRoute: typeof ApiChatRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CrmSplatRoute: typeof CrmSplatRoute
   PortalMaintenanceRoute: typeof PortalMaintenanceRoute
@@ -1343,13 +1330,6 @@ declare module '@tanstack/react-router' {
       path: '/checkout/return'
       fullPath: '/checkout/return'
       preLoaderRoute: typeof CheckoutReturnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/team': {
@@ -1918,7 +1898,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminDesignsRoute: AdminDesignsRoute,
   AdminStoreRoute: AdminStoreRoute,
   AdminTeamRoute: AdminTeamRoute,
-  ApiChatRoute: ApiChatRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   CrmSplatRoute: CrmSplatRoute,
   PortalMaintenanceRoute: PortalMaintenanceRoute,
