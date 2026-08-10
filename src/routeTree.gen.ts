@@ -54,6 +54,7 @@ import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/publ
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
 import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
+import { Route as CrmAdminCrmWebhookTesterRouteImport } from './routes/_crm/admin/crm/webhook-tester'
 import { Route as CrmAdminCrmWaterLabRouteImport } from './routes/_crm/admin/crm/water-lab'
 import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/trucks'
 import { Route as CrmAdminCrmTicketsRouteImport } from './routes/_crm/admin/crm/tickets'
@@ -328,6 +329,12 @@ const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
   path: '/api/public/hooks/canary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CrmAdminCrmWebhookTesterRoute =
+  CrmAdminCrmWebhookTesterRouteImport.update({
+    id: '/admin/crm/webhook-tester',
+    path: '/admin/crm/webhook-tester',
+    getParentRoute: () => CrmRoute,
+  } as any)
 const CrmAdminCrmWaterLabRoute = CrmAdminCrmWaterLabRouteImport.update({
   id: '/admin/crm/water-lab',
   path: '/admin/crm/water-lab',
@@ -623,6 +630,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/admin/crm/webhook-tester': typeof CrmAdminCrmWebhookTesterRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
@@ -712,6 +720,7 @@ export interface FileRoutesByTo {
   '/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/admin/crm/webhook-tester': typeof CrmAdminCrmWebhookTesterRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
@@ -803,6 +812,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/tickets': typeof CrmAdminCrmTicketsRoute
   '/_crm/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/_crm/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
+  '/_crm/admin/crm/webhook-tester': typeof CrmAdminCrmWebhookTesterRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
@@ -894,6 +904,7 @@ export interface FileRouteTypes {
     | '/admin/crm/tickets'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/admin/crm/webhook-tester'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
@@ -983,6 +994,7 @@ export interface FileRouteTypes {
     | '/admin/crm/tickets'
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
+    | '/admin/crm/webhook-tester'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
@@ -1073,6 +1085,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/tickets'
     | '/_crm/admin/crm/trucks'
     | '/_crm/admin/crm/water-lab'
+    | '/_crm/admin/crm/webhook-tester'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
@@ -1452,6 +1465,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksCanaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_crm/admin/crm/webhook-tester': {
+      id: '/_crm/admin/crm/webhook-tester'
+      path: '/admin/crm/webhook-tester'
+      fullPath: '/admin/crm/webhook-tester'
+      preLoaderRoute: typeof CrmAdminCrmWebhookTesterRouteImport
+      parentRoute: typeof CrmRoute
+    }
     '/_crm/admin/crm/water-lab': {
       id: '/_crm/admin/crm/water-lab'
       path: '/admin/crm/water-lab'
@@ -1796,6 +1816,7 @@ interface CrmRouteChildren {
   CrmAdminCrmTicketsRoute: typeof CrmAdminCrmTicketsRoute
   CrmAdminCrmTrucksRoute: typeof CrmAdminCrmTrucksRoute
   CrmAdminCrmWaterLabRoute: typeof CrmAdminCrmWaterLabRoute
+  CrmAdminCrmWebhookTesterRoute: typeof CrmAdminCrmWebhookTesterRoute
   CrmAdminCrmIndexRoute: typeof CrmAdminCrmIndexRoute
   CrmAdminCrmCustomersIdRoute: typeof CrmAdminCrmCustomersIdRoute
   CrmAdminCrmProjectsIdRoute: typeof CrmAdminCrmProjectsIdRoute
@@ -1843,6 +1864,7 @@ const CrmRouteChildren: CrmRouteChildren = {
   CrmAdminCrmTicketsRoute: CrmAdminCrmTicketsRoute,
   CrmAdminCrmTrucksRoute: CrmAdminCrmTrucksRoute,
   CrmAdminCrmWaterLabRoute: CrmAdminCrmWaterLabRoute,
+  CrmAdminCrmWebhookTesterRoute: CrmAdminCrmWebhookTesterRoute,
   CrmAdminCrmIndexRoute: CrmAdminCrmIndexRoute,
   CrmAdminCrmCustomersIdRoute: CrmAdminCrmCustomersIdRoute,
   CrmAdminCrmProjectsIdRoute: CrmAdminCrmProjectsIdRoute,
