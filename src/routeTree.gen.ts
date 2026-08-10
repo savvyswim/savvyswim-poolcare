@@ -35,12 +35,12 @@ import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as PortalMaintenanceRouteImport } from './routes/portal_.maintenance'
 import { Route as CrmSplatRouteImport } from './routes/crm/$'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout/return'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AdminTeamRouteImport } from './routes/admin/team'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as AdminDesignsRouteImport } from './routes/admin/designs'
 import { Route as AdminCleaningRouteImport } from './routes/admin/cleaning'
 import { Route as AdminActivityRouteImport } from './routes/admin/activity'
+import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as AdminCrmLoginRouteImport } from './routes/admin/crm/login'
 import { Route as AdminCrmLegacyRouteImport } from './routes/admin/crm/legacy'
@@ -228,11 +228,6 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   path: '/checkout/return',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminTeamRoute = AdminTeamRouteImport.update({
   id: '/admin/team',
   path: '/admin/team',
@@ -256,6 +251,11 @@ const AdminCleaningRoute = AdminCleaningRouteImport.update({
 const AdminActivityRoute = AdminActivityRouteImport.update({
   id: '/admin/activity',
   path: '/admin/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
+  id: '/api/public/leads',
+  path: '/api/public/leads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
@@ -578,7 +578,6 @@ export interface FileRoutesByFullPath {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
@@ -591,6 +590,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/leads': typeof ApiPublicLeadsRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
@@ -668,7 +668,6 @@ export interface FileRoutesByTo {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal/maintenance': typeof PortalMaintenanceRoute
@@ -681,6 +680,7 @@ export interface FileRoutesByTo {
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/leads': typeof ApiPublicLeadsRoute
   '/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
@@ -760,7 +760,6 @@ export interface FileRoutesById {
   '/admin/designs': typeof AdminDesignsRoute
   '/admin/store': typeof AdminStoreRoute
   '/admin/team': typeof AdminTeamRoute
-  '/api/chat': typeof ApiChatRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/crm/$': typeof CrmSplatRoute
   '/portal_/maintenance': typeof PortalMaintenanceRoute
@@ -773,6 +772,7 @@ export interface FileRoutesById {
   '/admin/crm/legacy': typeof AdminCrmLegacyRoute
   '/admin/crm/login': typeof AdminCrmLoginRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/public/leads': typeof ApiPublicLeadsRoute
   '/_crm/admin/crm/alerts': typeof CrmAdminCrmAlertsRoute
   '/_crm/admin/crm/audit-trail': typeof CrmAdminCrmAuditTrailRoute
   '/_crm/admin/crm/automations': typeof CrmAdminCrmAutomationsRoute
@@ -852,7 +852,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
@@ -865,6 +864,7 @@ export interface FileRouteTypes {
     | '/admin/crm/legacy'
     | '/admin/crm/login'
     | '/api/public/health'
+    | '/api/public/leads'
     | '/admin/crm/alerts'
     | '/admin/crm/audit-trail'
     | '/admin/crm/automations'
@@ -942,7 +942,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal/maintenance'
@@ -955,6 +954,7 @@ export interface FileRouteTypes {
     | '/admin/crm/legacy'
     | '/admin/crm/login'
     | '/api/public/health'
+    | '/api/public/leads'
     | '/admin/crm/alerts'
     | '/admin/crm/audit-trail'
     | '/admin/crm/automations'
@@ -1033,7 +1033,6 @@ export interface FileRouteTypes {
     | '/admin/designs'
     | '/admin/store'
     | '/admin/team'
-    | '/api/chat'
     | '/checkout/return'
     | '/crm/$'
     | '/portal_/maintenance'
@@ -1046,6 +1045,7 @@ export interface FileRouteTypes {
     | '/admin/crm/legacy'
     | '/admin/crm/login'
     | '/api/public/health'
+    | '/api/public/leads'
     | '/_crm/admin/crm/alerts'
     | '/_crm/admin/crm/audit-trail'
     | '/_crm/admin/crm/automations'
@@ -1125,7 +1125,6 @@ export interface RootRouteChildren {
   AdminDesignsRoute: typeof AdminDesignsRoute
   AdminStoreRoute: typeof AdminStoreRoute
   AdminTeamRoute: typeof AdminTeamRoute
-  ApiChatRoute: typeof ApiChatRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CrmSplatRoute: typeof CrmSplatRoute
   PortalMaintenanceRoute: typeof PortalMaintenanceRoute
@@ -1138,6 +1137,7 @@ export interface RootRouteChildren {
   AdminCrmLegacyRoute: typeof AdminCrmLegacyRoute
   AdminCrmLoginRoute: typeof AdminCrmLoginRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
+  ApiPublicLeadsRoute: typeof ApiPublicLeadsRoute
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
   ApiPublicHooksCrmAppointmentStatusRoute: typeof ApiPublicHooksCrmAppointmentStatusRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
@@ -1332,13 +1332,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/team': {
       id: '/admin/team'
       path: '/admin/team'
@@ -1372,6 +1365,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/activity'
       fullPath: '/admin/activity'
       preLoaderRoute: typeof AdminActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/leads': {
+      id: '/api/public/leads'
+      path: '/api/public/leads'
+      fullPath: '/api/public/leads'
+      preLoaderRoute: typeof ApiPublicLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/health': {
@@ -1898,7 +1898,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminDesignsRoute: AdminDesignsRoute,
   AdminStoreRoute: AdminStoreRoute,
   AdminTeamRoute: AdminTeamRoute,
-  ApiChatRoute: ApiChatRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   CrmSplatRoute: CrmSplatRoute,
   PortalMaintenanceRoute: PortalMaintenanceRoute,
@@ -1911,6 +1910,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmLegacyRoute: AdminCrmLegacyRoute,
   AdminCrmLoginRoute: AdminCrmLoginRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
+  ApiPublicLeadsRoute: ApiPublicLeadsRoute,
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
   ApiPublicHooksCrmAppointmentStatusRoute:
     ApiPublicHooksCrmAppointmentStatusRoute,
@@ -1924,13 +1924,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
