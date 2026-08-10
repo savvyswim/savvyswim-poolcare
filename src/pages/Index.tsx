@@ -391,8 +391,6 @@ const Index = () => {
                 >
                   Customer Login
                 </a>
-
-                </AppHandoffLink>
               </div>
             </nav>
           )}
