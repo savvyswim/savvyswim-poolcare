@@ -140,9 +140,9 @@ export const Route = createFileRoute("/api/public/leads")({
           .insert({
             full_name: lead.full_name,
             email: lead.email,
-            phone: lead.phone ?? null,
-            address: lead.address ?? lead.city ?? null,
-            postal_code: lead.postal_code ?? null,
+            phone: lead.phone ?? "",
+            address: lead.address ?? lead.city ?? "",
+            postal_code: lead.postal_code ?? "",
             preferred_date: lead.preferred_date ?? null,
             preferred_contact_time: lead.preferred_contact_time ?? null,
             pool_details: lead.pool_details ?? null,
