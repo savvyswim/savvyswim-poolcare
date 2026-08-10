@@ -21,8 +21,8 @@ import {
 } from "lucide-react";
 
 
-/** Customer + staff logins now live in the separate Savvy Services CRM app. */
-const CUSTOMER_LOGIN_URL = "https://savvyservices.app";
+/** Customer + staff logins now live in the separate Savvy Swim app. */
+const CUSTOMER_LOGIN_URL = "https://savvyswim.app";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
