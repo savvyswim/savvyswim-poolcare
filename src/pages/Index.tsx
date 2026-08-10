@@ -20,8 +20,10 @@ import {
   X,
 } from "lucide-react";
 
-import { AppHandoffLink } from "@/components/AppHandoff";
-import { PORTAL_PATH, STAFF_LOGIN_PATH } from "@/lib/app-links";
+
+/** Customer + staff logins now live in the separate Savvy Services CRM app. */
+const CUSTOMER_LOGIN_URL = "https://savvyservices.app";
+
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
