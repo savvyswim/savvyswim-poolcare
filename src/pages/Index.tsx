@@ -20,8 +20,10 @@ import {
   X,
 } from "lucide-react";
 
-import { AppHandoffLink } from "@/components/AppHandoff";
-import { PORTAL_PATH, STAFF_LOGIN_PATH } from "@/lib/app-links";
+
+/** Customer + staff logins now live in the separate Savvy Services CRM app. */
+const CUSTOMER_LOGIN_URL = "https://savvyservices.app";
+
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
@@ -289,8 +291,8 @@ const Index = () => {
               <a href="#cleaning" className="hover:opacity-80 transition">Pool Cleaning</a>
               <Link to="/services" className="hover:opacity-80 transition">Services</Link>
               <Link to="/privacy-policy" className="hover:opacity-80 transition">Warranty &amp; Privacy</Link>
-              <AppHandoffLink href={PORTAL_PATH} className="hover:opacity-80 transition">Customer Login</AppHandoffLink>
-              <AppHandoffLink href={STAFF_LOGIN_PATH} className="hover:opacity-80 transition opacity-70">Staff Login</AppHandoffLink>
+              <a href={CUSTOMER_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">Customer Login</a>
+
               <span className="font-semibold">Service: {PHONE_DISPLAY}</span>
             </div>
 
@@ -382,20 +384,15 @@ const Index = () => {
                 >
                   Service &amp; Repair
                 </Link>
-                <AppHandoffLink
-                  href={PORTAL_PATH}
+                <a
+                  href={CUSTOMER_LOGIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
                   className="py-3.5 text-[13px] uppercase tracking-[0.14em] text-accent transition-colors hover:opacity-80"
                 >
                   Customer Login
-                </AppHandoffLink>
-                <AppHandoffLink
-                  href={STAFF_LOGIN_PATH}
-                  onClick={() => setMenuOpen(false)}
-                  className="py-3.5 text-[13px] uppercase tracking-[0.14em] opacity-70 transition-colors hover:opacity-100"
-                >
-                  Staff Login
-                </AppHandoffLink>
+                </a>
               </div>
             </nav>
           )}
@@ -1197,7 +1194,7 @@ const Index = () => {
             <Link to="/pool-cleaning-frisco-tx" className="hover:text-foreground transition">Pool Cleaning Frisco TX</Link>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
-            <Link to="/auth" className="hover:text-foreground transition">Admin</Link>
+            <a href={CUSTOMER_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition">Admin</a>
           </div>
         </div>
       </footer>

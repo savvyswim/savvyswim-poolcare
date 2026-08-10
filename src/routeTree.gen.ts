@@ -52,6 +52,7 @@ import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/p
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
+import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
 import { Route as CrmAdminCrmWaterLabRouteImport } from './routes/_crm/admin/crm/water-lab'
 import { Route as CrmAdminCrmTrucksRouteImport } from './routes/_crm/admin/crm/trucks'
@@ -314,6 +315,12 @@ const ApiPublicHooksFailureRateWatchRoute =
   ApiPublicHooksFailureRateWatchRouteImport.update({
     id: '/api/public/hooks/failure-rate-watch',
     path: '/api/public/hooks/failure-rate-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksCrmAppointmentStatusRoute =
+  ApiPublicHooksCrmAppointmentStatusRouteImport.update({
+    id: '/api/public/hooks/crm-appointment-status',
+    path: '/api/public/hooks/crm-appointment-status',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
@@ -617,6 +624,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
+  '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -705,6 +713,7 @@ export interface FileRoutesByTo {
   '/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
+  '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -795,6 +804,7 @@ export interface FileRoutesById {
   '/_crm/admin/crm/trucks': typeof CrmAdminCrmTrucksRoute
   '/_crm/admin/crm/water-lab': typeof CrmAdminCrmWaterLabRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
+  '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -885,6 +895,7 @@ export interface FileRouteTypes {
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
     | '/api/public/hooks/canary'
+    | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -973,6 +984,7 @@ export interface FileRouteTypes {
     | '/admin/crm/trucks'
     | '/admin/crm/water-lab'
     | '/api/public/hooks/canary'
+    | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -1062,6 +1074,7 @@ export interface FileRouteTypes {
     | '/_crm/admin/crm/trucks'
     | '/_crm/admin/crm/water-lab'
     | '/api/public/hooks/canary'
+    | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -1113,6 +1126,7 @@ export interface RootRouteChildren {
   AdminCrmLoginRoute: typeof AdminCrmLoginRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
+  ApiPublicHooksCrmAppointmentStatusRoute: typeof ApiPublicHooksCrmAppointmentStatusRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
@@ -1422,6 +1436,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/hooks/failure-rate-watch'
       fullPath: '/api/public/hooks/failure-rate-watch'
       preLoaderRoute: typeof ApiPublicHooksFailureRateWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/crm-appointment-status': {
+      id: '/api/public/hooks/crm-appointment-status'
+      path: '/api/public/hooks/crm-appointment-status'
+      fullPath: '/api/public/hooks/crm-appointment-status'
+      preLoaderRoute: typeof ApiPublicHooksCrmAppointmentStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/canary': {
@@ -1869,6 +1890,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmLoginRoute: AdminCrmLoginRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
+  ApiPublicHooksCrmAppointmentStatusRoute:
+    ApiPublicHooksCrmAppointmentStatusRoute,
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
@@ -1879,13 +1902,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
