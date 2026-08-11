@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CONSENT_EVENT, getConsent, loadLeadEmbed, setConsent } from "@/lib/consent";
+import { trackSiteEvent } from "@/lib/site-analytics";
 
 /**
  * Cookie / tracking consent bar.
@@ -9,23 +10,37 @@ import { CONSENT_EVENT, getConsent, loadLeadEmbed, setConsent } from "@/lib/cons
  */
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
+  const seen = useRef(false);
 
   useEffect(() => {
     const choice = getConsent();
     if (choice === "accepted") loadLeadEmbed();
     if (choice === null) setVisible(true);
 
-    const onChange = () => setVisible(getConsent() === null);
+    const onChange = () => {
+      const reopened = getConsent() === null;
+      setVisible(reopened);
+      if (reopened) trackSiteEvent("banner_reopened");
+    };
     window.addEventListener(CONSENT_EVENT, onChange);
     return () => window.removeEventListener(CONSENT_EVENT, onChange);
   }, []);
 
+  useEffect(() => {
+    if (visible && !seen.current) {
+      seen.current = true;
+      trackSiteEvent("banner_shown");
+    }
+  }, [visible]);
+
   if (!visible) return null;
 
   const choose = (value: "accepted" | "declined") => {
+    trackSiteEvent(value === "accepted" ? "banner_accepted" : "banner_declined");
     setConsent(value);
     setVisible(false);
   };
+
 
   return (
     <div
