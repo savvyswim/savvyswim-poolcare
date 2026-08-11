@@ -1,4 +1,4 @@
-# Slim the website down, move cart + payments to the CRM app
+# Website = marketing only; every action button hands off to the CRM app
 
 ## Where things stand
 
