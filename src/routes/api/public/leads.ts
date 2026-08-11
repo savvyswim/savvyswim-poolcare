@@ -27,6 +27,8 @@ const leadSchema = z
     pool_details: z.string().trim().max(1000).optional().nullable(),
     message: z.string().trim().max(2000).optional().nullable(),
     notes: z.string().trim().max(2000).optional().nullable(),
+    sms_opt_in: z.boolean().optional().nullable(),
+
     source: z.string().trim().max(80).optional().nullable(),
     page: z.string().trim().max(255).optional().nullable(),
     utm_source: z.string().trim().max(120).optional().nullable(),
