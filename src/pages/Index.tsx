@@ -201,15 +201,25 @@ const Index = () => {
     const t = window.setTimeout(start, 2000);
     return () => window.clearTimeout(t);
   }, []);
+  // Announced to screen readers before we navigate off-site, so a keyboard or
+  // reader user knows the button worked and where they are being taken.
+  const [handoffStatus, setHandoffStatus] = useState("");
   /** Billing, checkout and memberships are handled in the Savvy Swim app. */
   const goToApp = (path: string, params: Record<string, string> = {}) => {
+    setHandoffStatus("Opening the Savvy Swim app…");
     window.location.href = buildCrmLink(path, params);
   };
-  const joinSwimClub = (source: string) => goToSwimClub(source);
+  const joinSwimClub = (source: string) => {
+    setHandoffStatus("Opening Swim Club checkout…");
+    goToSwimClub(source);
+  };
   const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
   /** Every lead button hands off to the booking form in the Savvy Swim app. */
-  const openBooking = (service?: string) =>
+  const openBooking = (service?: string) => {
+    setHandoffStatus("Opening the booking form…");
     goToLead("home", service ? { service } : {});
+  };
+
 
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
@@ -282,7 +292,12 @@ const Index = () => {
           url: "https://savvyswimservices.com",
         }}
       />
+      {/* Handoff announcements for screen readers (buttons navigate off-site). */}
+      <p aria-live="polite" role="status" className="sr-only">
+        {handoffStatus}
+      </p>
       {/* NAV */}
+
       <header className="fixed top-0 left-0 right-0 z-50">
         {/* Utility bar */}
         <div className="topbar hidden md:block text-[13px]">
@@ -345,7 +360,8 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => openBooking()}
-                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition sm:px-5 sm:py-3 sm:text-[13px]"
+                aria-label="Request a quote — opens the Savvy Swim booking form"
+                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
               >
                 <span className="sm:hidden">Quote</span>
                 <span className="hidden sm:inline">Request Quote</span>
@@ -516,24 +532,31 @@ const Index = () => {
                   <button
                     type="button"
                     onClick={() => openBooking("Weekly Service & Maintenance")}
-                    className="btn-quote font-tech inline-flex items-center gap-2 px-7 py-3.5"
+                    aria-label="Start weekly service — opens the Savvy Swim booking form"
+                    className="btn-quote font-tech inline-flex min-h-11 items-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <CalendarCheck className="h-4 w-4" /> Start Service
+                    <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Start Service
                   </button>
                   <a
                     href={PHONE_HREF}
                     onClick={() => trackContactClick("call_click", "hero")}
-                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                    aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
+                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                    <Phone className="h-4 w-4" aria-hidden="true" /> {PHONE_DISPLAY}
                   </a>
                   <button
                     type="button"
-                    onClick={() => goToLead("home_hero_visit")}
-                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                    onClick={() => {
+                      setHandoffStatus("Opening the booking form…");
+                      goToLead("home_hero_visit");
+                    }}
+                    aria-label="Request a free pool visit — opens the Savvy Swim booking form"
+                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <MessageSquare className="h-4 w-4" /> Request free pool visit
+                    <MessageSquare className="h-4 w-4" aria-hidden="true" /> Request free pool visit
                   </button>
+
 
 
                 </div>
@@ -663,7 +686,8 @@ const Index = () => {
       <button
         type="button"
         onClick={() => openBooking()}
-        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta"
+        aria-label="Request a quote — opens the Savvy Swim booking form"
+        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         style={{ writingMode: "vertical-rl" }}
       >
         Request a Quote
@@ -1176,10 +1200,12 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => openBooking("Weekly Pool Cleaning")}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                  aria-label="Book a free water test — opens the Savvy Swim booking form"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  <CalendarCheck className="h-4 w-4" /> Book my free water test
+                  <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book my free water test
                 </button>
+
                 <a
                   href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
