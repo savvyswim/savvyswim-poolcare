@@ -17,6 +17,17 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
   const titleId = useId();
   const descId = useId();
 
+  // The cookie bar owns the bottom of the screen until the visitor answers it.
+  // Showing the offer underneath it made the Join button unclickable, so we
+  // wait for a consent choice (or a later re-check) before appearing.
+  const [consentSettled, setConsentSettled] = useState(false);
+  useEffect(() => {
+    const sync = () => setConsentSettled(getConsent() !== null);
+    sync();
+    window.addEventListener(CONSENT_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_EVENT, sync);
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem(DISMISS_KEY)) return;
@@ -39,6 +50,8 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
+
+
 
   const dismiss = () => {
     setVisible(false);
