@@ -14,7 +14,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
 
 import NotFound from "@/pages/NotFound";
