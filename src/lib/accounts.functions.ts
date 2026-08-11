@@ -62,7 +62,7 @@ export const createCustomerLogin = createServerFn({ method: "POST" })
       throw new Error("Add a valid email address for this customer first");
     }
 
-    const origin = data.origin ? new URL(data.origin).origin : "https://savvyswim.com";
+    const origin = data.origin ? new URL(data.origin).origin : "https://savvyswimservices.com";
     let userId: string | undefined;
     let tempPassword: string | undefined;
 
@@ -137,7 +137,7 @@ export const createStaffLogin = createServerFn({ method: "POST" })
       throw new Error("Add a valid email address for this team member first");
     }
 
-    const origin = data.origin ? new URL(data.origin).origin : "https://savvyswim.com";
+    const origin = data.origin ? new URL(data.origin).origin : "https://savvyswimservices.com";
     let userId: string | undefined;
     let tempPassword: string | undefined;
 

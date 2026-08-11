@@ -1,6 +1,6 @@
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
 
-export const SITE_URL = "https://savvyswim.com";
+export const SITE_URL = "https://savvyswimservices.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 
 const PHONE = "+1-469-744-0379";

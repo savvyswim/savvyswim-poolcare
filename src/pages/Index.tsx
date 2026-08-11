@@ -279,7 +279,7 @@ const Index = () => {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Savvy Swim",
-          url: "https://savvyswim.com",
+          url: "https://savvyswimservices.com",
         }}
       />
       {/* NAV */}

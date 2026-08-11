@@ -163,7 +163,7 @@ export async function runCanary(options?: {
   timeoutMs?: number;
   delayMs?: number;
 }): Promise<CanaryRun> {
-  const target = (options?.target ?? "https://savvyswim.com").replace(/\/$/, "");
+  const target = (options?.target ?? "https://savvyswimservices.com").replace(/\/$/, "");
   const routes = options?.routes ?? DEFAULT_CANARY_ROUTES;
   const rounds = Math.max(1, Math.min(options?.rounds ?? 3, 10));
   const timeoutMs = options?.timeoutMs ?? 15000;
