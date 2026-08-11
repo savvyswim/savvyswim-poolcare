@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WeeklyPoolServiceRouteImport } from './routes/weekly-pool-service'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -39,6 +40,11 @@ import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api
 import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
 
+const WeeklyPoolServiceRoute = WeeklyPoolServiceRouteImport.update({
+  id: '/weekly-pool-service',
+  path: '/weekly-pool-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
   id: '/terms-and-conditions',
   path: '/terms-and-conditions',
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -238,6 +245,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/weekly-pool-service'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -334,6 +344,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/weekly-pool-service'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -365,6 +376,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/weekly-pool-service'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -397,6 +409,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  WeeklyPoolServiceRoute: typeof WeeklyPoolServiceRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -416,6 +429,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/weekly-pool-service': {
+      id: '/weekly-pool-service'
+      path: '/weekly-pool-service'
+      fullPath: '/weekly-pool-service'
+      preLoaderRoute: typeof WeeklyPoolServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms-and-conditions': {
       id: '/terms-and-conditions'
       path: '/terms-and-conditions'
@@ -637,6 +657,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  WeeklyPoolServiceRoute: WeeklyPoolServiceRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
