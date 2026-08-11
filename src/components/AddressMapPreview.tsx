@@ -18,6 +18,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
 
   useEffect(() => {
     if (!placeId) return;
+    setError(null);
     let cancelled = false;
 
     (async () => {
