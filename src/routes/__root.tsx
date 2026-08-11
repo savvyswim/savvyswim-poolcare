@@ -106,17 +106,10 @@ function RootComponent() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <AuthProvider>
-            <CartProvider>
-              <ScrollToTop />
-              <PerfMonitor />
+          <ScrollToTop />
+          <PerfMonitor />
 
-              <Outlet />
-              <DeferredOverlays />
-            </CartProvider>
-
-
-          </AuthProvider>
+          <Outlet />
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>
