@@ -32,10 +32,41 @@ const leadSchema = z
     utm_source: z.string().trim().max(120).optional().nullable(),
     utm_medium: z.string().trim().max(120).optional().nullable(),
     utm_campaign: z.string().trim().max(120).optional().nullable(),
+    // Milliseconds between the form rendering and submit — bots fill instantly.
+    elapsed_ms: z.number().int().min(0).max(86_400_000).optional().nullable(),
+    // Cloudflare Turnstile token, when the embed is configured with a site key.
+    turnstile_token: z.string().max(4000).optional().nullable(),
     // Honeypot: real people never fill this in.
     company: z.string().max(0).optional().nullable(),
   })
   .strip();
+
+/** Anything faster than this is a script, not a person filling in a form. */
+const MIN_FILL_MS = 2500;
+
+/** Verify a Turnstile token. Returns true when Turnstile isn't configured. */
+async function turnstileOk(token: string | null | undefined, ip: string): Promise<boolean> {
+  const secret = process.env['TURNSTILE_SECRET_KEY'];
+  if (!secret) return true; // not configured — other checks still apply
+  if (!token) return false;
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret, response: token, remoteip: ip }),
+    });
+    if (!res.ok) {
+      console.error("turnstile verify failed", res.status, await res.text());
+      return true; // fail open rather than dropping real leads on an outage
+    }
+    const body = (await res.json()) as { success?: boolean };
+    return body.success === true;
+  } catch (err) {
+    console.error("turnstile verify error", err);
+    return true;
+  }
+}
+
 
 const json = (body: unknown, status = 200, extra?: Record<string, string>) =>
   new Response(JSON.stringify(body), {
