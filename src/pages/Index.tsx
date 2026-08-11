@@ -301,7 +301,9 @@ const Index = () => {
 
             <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 whitespace-nowrap font-tech text-[13px] text-primary/70 xl:flex 2xl:gap-6 2xl:text-sm">
               <a href="#cleaning" className="hover:text-accent transition">Pool Cleaning</a>
+              <Link to="/weekly-pool-service" className="hover:text-accent transition">Weekly Service</Link>
               <Link to="/services" className="hover:text-accent transition">Service &amp; Repair</Link>
+
               <a href="#refer" className="hover:text-accent transition">Refer &amp; Save</a>
               <a href="#portfolio" className="hover:text-accent transition">Our Work</a>
               <a href="#about" className="hover:text-accent transition">About Us</a>
