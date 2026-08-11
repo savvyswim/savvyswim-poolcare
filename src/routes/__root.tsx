@@ -20,6 +20,9 @@ import { PerfMonitor } from "@/components/PerfMonitor";
 const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
 // On-site lead capture — opened by every quote / booking CTA.
 const QuoteModal = lazy(() => import("@/components/QuoteModal"));
+// Free water test side tab.
+const WaterTestTab = lazy(() => import("@/components/WaterTestTab"));
+
 
 
 
@@ -134,8 +137,10 @@ function RootComponent() {
 
           <Suspense fallback={null}>
             <QuoteModal />
+            <WaterTestTab />
             <ConsentBanner />
           </Suspense>
+
 
         </TooltipProvider>
       </HelmetProvider>

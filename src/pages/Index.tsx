@@ -42,6 +42,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
+import { openWaterTestModal } from "@/components/QuoteModal";
+
 import { resetConsent } from "@/lib/consent";
 
 // Only needed after a click — keep it out of the first payload.
@@ -1202,8 +1204,9 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   type="button"
-                  onClick={() => openBooking("Weekly Pool Cleaning")}
-                  aria-label="Book a free water test — opens the Savvy Swim booking form"
+                  onClick={() => openWaterTestModal("final_cta")}
+                  data-savvy-cta="water_test"
+                  aria-label="Book a free water test — opens the Savvy Swim water test form"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book my free water test

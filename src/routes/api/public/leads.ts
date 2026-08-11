@@ -27,6 +27,8 @@ const leadSchema = z
     pool_details: z.string().trim().max(1000).optional().nullable(),
     message: z.string().trim().max(2000).optional().nullable(),
     notes: z.string().trim().max(2000).optional().nullable(),
+    sms_opt_in: z.boolean().optional().nullable(),
+
     source: z.string().trim().max(80).optional().nullable(),
     page: z.string().trim().max(255).optional().nullable(),
     utm_source: z.string().trim().max(120).optional().nullable(),
@@ -190,7 +192,11 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ ok: true, deduped: true, id: dupe.id, reference: dupe.reference_number });
         }
 
-        const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
+        const notes =
+          [lead.notes, lead.message, lead.sms_opt_in ? "SMS opt-in: yes" : null]
+            .filter(Boolean)
+            .join("\n\n") || null;
+
 
         const { data, error } = await supabaseAdmin
           .from("inspection_requests")
