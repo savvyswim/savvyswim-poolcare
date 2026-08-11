@@ -26,6 +26,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
+import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
@@ -123,6 +124,11 @@ const QuoteTokenRoute = QuoteTokenRouteImport.update({
   path: '/quote/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
+  id: '/admin/webhook-health',
+  path: '/admin/webhook-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
   id: '/api/public/leads',
   path: '/api/public/leads',
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -294,6 +303,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -354,6 +365,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -385,6 +397,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
@@ -522,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuoteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/webhook-health': {
+      id: '/admin/webhook-health'
+      path: '/admin/webhook-health'
+      fullPath: '/admin/webhook-health'
+      preLoaderRoute: typeof AdminWebhookHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/leads': {
       id: '/api/public/leads'
       path: '/api/public/leads'
@@ -617,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
