@@ -314,13 +314,10 @@ export const buildCityMeta = (area: ServiceArea) => {
   const withPrice = `${base} from ${price} | Savvy Swim`;
   const title = withPrice.length <= 62 ? withPrice : `${base} | Savvy Swim`;
 
+  const lead = `Weekly pool cleaning in ${area.name}, TX from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit`;
   const hoods = area.neighborhoods.slice(0, 2).join(", ");
-  const description =
-    `Weekly pool cleaning in ${area.name}, TX from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit — ` +
-    `${hoods} and citywide.`;
+  const withHoods = `${lead} — ${hoods} and citywide.`;
+  const description = withHoods.length <= 158 ? withHoods : `${lead}. Book a free inspection.`;
 
-  return {
-    title,
-    description: description.length > 158 ? `${description.slice(0, 155).trimEnd()}…` : description,
-  };
+  return { title, description };
 };
