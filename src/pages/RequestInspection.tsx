@@ -70,7 +70,7 @@ function buildDays(): Day[] {
   return out;
 }
 
-function FieldError({ id, message }: { id: string; message?: string }) {
+function FieldError({ id, message }: { id: string; message?: string | undefined }) {
   if (!message) return null;
   return (
     <p id={id} role="alert" className="text-xs font-semibold text-destructive">
