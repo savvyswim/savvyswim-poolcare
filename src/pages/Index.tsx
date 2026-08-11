@@ -666,20 +666,25 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="container-tight mx-auto grid max-w-4xl grid-cols-1 gap-8 pb-16 text-center sm:grid-cols-3 sm:gap-6 lg:pb-24">
-
-
-            {[
-              { k: "500+", v: "Pools serviced" },
-              { k: "5★", v: "5-star service" },
-              { k: "52", v: "Visits per year" },
-            ].map((s) => (
-              <div key={s.v} className="flex flex-col items-center">
-                <div className="font-editorial italic leading-none text-primary-foreground text-4xl sm:text-5xl lg:text-6xl">{s.k}</div>
-                <div className="mt-3 tech-label">{s.v}</div>
-              </div>
-            ))}
+          <div className="container-tight mx-auto max-w-4xl pb-16 lg:pb-24">
+            <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-3 sm:gap-6">
+              {[
+                { k: "500+", v: "Pools serviced" },
+                { k: "5★", v: "Rated service, every visit" },
+                { k: "52", v: "Visits per year" },
+              ].map((s) => (
+                <div key={s.v} className="flex flex-col items-center">
+                  <div className="font-editorial italic leading-none text-primary-foreground text-4xl sm:text-5xl lg:text-6xl">{s.k}</div>
+                  <div className="mt-3 tech-label">{s.v}</div>
+                </div>
+              ))}
+            </div>
+            <p className="mx-auto mt-10 max-w-2xl text-center text-[16px] leading-relaxed text-primary-foreground/85">
+              The five-star rating comes from the routine, not a pitch: the same technician, a written
+              inspection of water and equipment on arrival, and photos of the work before we leave.
+            </p>
           </div>
+
           </div>
         </div>
 
