@@ -26,7 +26,6 @@ export default function ConsentBanner() {
 
   useEffect(() => {
     const choice = getConsent();
-    if (choice === "accepted") loadLeadEmbed();
     if (choice === null) setVisible(true);
 
     const onChange = () => {
