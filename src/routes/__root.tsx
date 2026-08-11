@@ -134,8 +134,10 @@ function RootComponent() {
 
           <Suspense fallback={null}>
             <QuoteModal />
+            <WaterTestTab />
             <ConsentBanner />
           </Suspense>
+
 
         </TooltipProvider>
       </HelmetProvider>
