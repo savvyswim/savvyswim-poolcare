@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { CONSENT_EVENT, getConsent, setConsent, loadCrmLeadMirror } from "@/lib/consent";
+import { CONSENT_EVENT, getConsent, setConsent } from "@/lib/consent";
 import { trackSiteEvent } from "@/lib/site-analytics";
 
 /**
@@ -27,7 +27,7 @@ export default function ConsentBanner() {
   useEffect(() => {
     const choice = getConsent();
     if (choice === null) setVisible(true);
-    if (choice === "accepted") loadCrmLeadMirror();
+
 
 
     const onChange = () => {
@@ -65,7 +65,7 @@ export default function ConsentBanner() {
     (value: "accepted" | "declined") => {
       trackSiteEvent(value === "accepted" ? "banner_accepted" : "banner_declined");
       setConsent(value);
-      if (value === "accepted") loadCrmLeadMirror();
+
       close();
     },
     [close],

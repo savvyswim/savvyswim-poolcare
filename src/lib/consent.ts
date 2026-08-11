@@ -1,27 +1,14 @@
 /**
  * Cookie / tracking consent.
  *
- * Lead capture lives on this site (see QuoteModal). After consent we also load
- * the Savvy Swim CRM connector, which mirrors submissions into the CRM lead
- * inbox with page / campaign attribution. Nothing here runs during SSR.
+ * Lead capture lives entirely on this site (see QuoteModal) and posts to our
+ * own /api/public/leads endpoint. No third-party lead embed is loaded.
  */
 
 export type ConsentValue = "accepted" | "declined";
 
 const STORAGE_KEY = "ss_consent_v1";
 export const CONSENT_EVENT = "ss:consent-change";
-
-/** CRM lead-mirror connector. Loaded only after the visitor accepts. */
-const CRM_EMBED_SRC = "https://savvyswim.app/embed/savvy-leads.js";
-
-export function loadCrmLeadMirror() {
-  if (typeof document === "undefined") return;
-  if (document.querySelector(`script[src="${CRM_EMBED_SRC}"]`)) return;
-  const s = document.createElement("script");
-  s.src = CRM_EMBED_SRC;
-  s.defer = true;
-  document.head.appendChild(s);
-}
 
 
 
