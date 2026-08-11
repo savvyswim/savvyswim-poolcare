@@ -408,10 +408,15 @@ const RequestInspection = () => {
                   })}
                 </div>
 
-                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                <Label
+                  id="arrival-window"
+                  tabIndex={-1}
+                  className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+                >
                   Arrival window
                 </Label>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+
                   {SLOTS.map((s) => {
                     const active = s === slot;
                     return (
