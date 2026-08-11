@@ -4295,6 +4295,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_site_events: {
+        Row: {
+          button: string | null
+          consent_state: string
+          created_at: string
+          event: string
+          id: string
+          page: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          button?: string | null
+          consent_state?: string
+          created_at?: string
+          event: string
+          id?: string
+          page: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          button?: string | null
+          consent_state?: string
+          created_at?: string
+          event?: string
+          id?: string
+          page?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       ss_sms_messages: {
         Row: {
           body: string
