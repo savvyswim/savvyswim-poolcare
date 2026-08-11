@@ -92,21 +92,28 @@ export function leadUrl(
   return buildCrmLink(LEAD_PATH, { source, ...params });
 }
 
-const RAW_SWIM_CLUB_URL = (
-  import.meta.env['VITE_SWIM_CLUB_STRIPE_URL'] as string | undefined
-)?.trim();
-
 /**
- * Swim Club ($19.99/mo) purchase link. Points at the Stripe payment link
- * issued by the CRM when VITE_SWIM_CLUB_STRIPE_URL is set; otherwise it falls
- * back to the CRM's join screen, which creates the same checkout session.
+ * Stripe payment link for the Swim Club membership. The CRM issues the link;
+ * set VITE_SWIM_CLUB_STRIPE_URL to swap the test link for the live one.
  */
+const DEFAULT_SWIM_CLUB_URL = "https://buy.stripe.com/test_dRm28q3SU1G3ek4bk02Ji00";
+
+const RAW_SWIM_CLUB_URL =
+  (import.meta.env['VITE_SWIM_CLUB_STRIPE_URL'] as string | undefined)?.trim() ||
+  DEFAULT_SWIM_CLUB_URL;
+
+/** Swim Club ($19.99/mo) purchase link, tagged with the button that sent it. */
 export function swimClubCheckoutUrl(source: string): string {
-  if (RAW_SWIM_CLUB_URL) {
+  try {
     const url = new URL(RAW_SWIM_CLUB_URL);
     url.searchParams.set("utm_source", "savvyswim.com");
     url.searchParams.set("utm_content", source);
+    if (typeof window !== "undefined") {
+      url.searchParams.set("client_reference_id", `web_${source}`);
+    }
     return url.toString();
+  } catch {
+    return buildCrmLink("/join/swim-club", { source });
   }
-  return buildCrmLink("/join/swim-club", { source });
 }
+
