@@ -34,3 +34,5 @@ A twin of the booking form, opened from a slim vertical tab pinned to the side o
 - Extend the leads endpoint's Zod schema with optional `service`, `preferred_date`, `preferred_time`, and `sms_opt_in` fields so the new inputs are accepted and stored.
 - Keep the existing focus trap, Escape handling, and ARIA labelling on the dialog.
 - No change to CTA wiring; every "Request a quote" / "Book free inspection" button opens this same modal.
+- Share one internal form component between both modals; the booking and water-test versions pass their own copy, dropdown options, and CTA tag.
+- Add a `WaterTestTab` side trigger component rendered once in the root layout so it appears on every page.
