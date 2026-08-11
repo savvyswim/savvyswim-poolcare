@@ -73,3 +73,40 @@ export function buildCrmLink(
 
   return url.toString();
 }
+
+/* ------------------------------------------------------------------ *
+ * Lead capture + membership checkout — both live in the CRM app.
+ * ------------------------------------------------------------------ */
+
+/** Booking / free-inspection form inside the Savvy Swim app. */
+export const LEAD_PATH = "/book";
+
+/**
+ * Handoff URL for every lead button on the marketing site (Book, Request a
+ * free inspection, city-page CTAs). Attribution is appended automatically.
+ */
+export function leadUrl(
+  source: string,
+  params: Record<string, string | number | undefined | null> = {},
+): string {
+  return buildCrmLink(LEAD_PATH, { source, ...params });
+}
+
+const RAW_SWIM_CLUB_URL = (
+  import.meta.env['VITE_SWIM_CLUB_STRIPE_URL'] as string | undefined
+)?.trim();
+
+/**
+ * Swim Club ($19.99/mo) purchase link. Points at the Stripe payment link
+ * issued by the CRM when VITE_SWIM_CLUB_STRIPE_URL is set; otherwise it falls
+ * back to the CRM's join screen, which creates the same checkout session.
+ */
+export function swimClubCheckoutUrl(source: string): string {
+  if (RAW_SWIM_CLUB_URL) {
+    const url = new URL(RAW_SWIM_CLUB_URL);
+    url.searchParams.set("utm_source", "savvyswim.com");
+    url.searchParams.set("utm_content", source);
+    return url.toString();
+  }
+  return buildCrmLink("/join/swim-club", { source });
+}
