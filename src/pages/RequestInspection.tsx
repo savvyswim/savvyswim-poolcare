@@ -265,11 +265,30 @@ const RequestInspection = () => {
             <a
               href={PHONE_HREF}
               onClick={() => trackContactClick("call_click", "inspection_confirmation")}
-              className="btn-quote mt-8 inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+              className="btn-quote mt-8 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-md px-6 text-[13px] font-bold uppercase tracking-wide transition sm:w-auto"
             >
               <Phone className="h-4 w-4" /> Call us now
             </a>
+            {confirmed && (
+              <button
+                type="button"
+                onClick={() => {
+                  const startHour = parseSlotHour(confirmed.slot);
+                  downloadIcs({
+                    title: "Savvy Swim — free pool visit",
+                    description: `Reference ${reference}. Your tech confirms this window within one business day.`,
+                    date: confirmed.date,
+                    startHour,
+                    endHour: startHour + 2,
+                  });
+                }}
+                className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center gap-2 border border-hairline px-6 text-[13px] font-bold uppercase tracking-wide transition hover:border-accent sm:ml-3 sm:mt-8 sm:w-auto"
+              >
+                <CalendarPlus className="h-4 w-4" /> Add to calendar
+              </button>
+            )}
           </div>
+
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
