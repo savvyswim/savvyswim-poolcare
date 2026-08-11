@@ -187,8 +187,8 @@ const Services = () => {
           <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
             <Link to="/" className="hover:text-accent transition">Home</Link>
             <Link to="/services" className="text-accent">Services</Link>
-            <Link to="/#membership" className="hover:text-accent transition">Swim Club</Link>
-            <Link to="/#contact" className="hover:text-accent transition">Contact</Link>
+            <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
+            <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
           </nav>
           <a
             href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
