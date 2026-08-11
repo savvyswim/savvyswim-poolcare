@@ -313,13 +313,14 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
               </Field>
 
               <Field label="Property address" error={errors["address"]}>
-                <Input
-                  autoComplete="street-address"
+                <AddressAutocomplete
+                  maxLength={200}
                   value={values.address ?? ""}
-                  onChange={(e) => set("address", e.target.value)}
+                  onChange={(v) => set("address", v)}
                   placeholder="123 Lakeshore Dr, Austin, TX"
                 />
               </Field>
+
 
               <Field label="Service" error={errors["service"]}>
                 <Select
