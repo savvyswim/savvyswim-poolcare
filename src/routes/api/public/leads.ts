@@ -192,7 +192,11 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ ok: true, deduped: true, id: dupe.id, reference: dupe.reference_number });
         }
 
-        const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
+        const notes =
+          [lead.notes, lead.message, lead.sms_opt_in ? "SMS opt-in: yes" : null]
+            .filter(Boolean)
+            .join("\n\n") || null;
+
 
         const { data, error } = await supabaseAdmin
           .from("inspection_requests")
