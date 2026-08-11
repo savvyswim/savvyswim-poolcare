@@ -92,6 +92,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     smsOptIn: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [addressPlaceId, setAddressPlaceId] = useState("");
 
   useEffect(() => {
     if (open) {

@@ -74,6 +74,7 @@ const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
   const [contactTime, setContactTime] = useState("");
+  const [addressPlace, setAddressPlace] = useState<{ address: string; placeId: string }>({ address: "", placeId: "" });
   const days = useMemo(buildDays, []);
   const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
   const [slot, setSlot] = useState<string>("");
