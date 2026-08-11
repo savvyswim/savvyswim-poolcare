@@ -19,11 +19,11 @@ savvyswim.app   -> CRM + customer portal + cart/checkout + all payments
 - Anything that linked to them now links out to savvyswim.app through `app-links.ts` with `VITE_CRM_URL=https://savvyswim.app`, so "Customer login", "Staff login", portal, and invoice links all hand off.
 - Keep legacy paths working: `/portal`, `/admin/crm`, `/crm` become instant redirects to the matching page on savvyswim.app.
 
-### 2. Cart and payments stay on the website
-- The shop, cart drawer, order/subscribe/membership dialogs and checkout all remain on savvyswim.com — customers buy without ever leaving the marketing site.
-- Payments get set up on this project with Stripe (a hands-on pool service plus physical products, so Stripe with tax calculation and collection at checkout; you stay the seller of record). Product and price setup happens right after payments are enabled.
-- Every completed order, subscription and payment is written to the shared database, so the CRM sees orders, invoices and Swim Club members in real time without any sync layer.
-- Store admin screens (orders, products, promos, plans) move to the CRM app, since that's where staff work.
+### 2. Every action button hands off to savvyswim.app
+- Buy, Subscribe, Join Swim Club, Pay invoice, Book, My account, Login — all become handoff links into the matching screen on savvyswim.app, carrying the selected plan/product and attribution in the URL.
+- Cart, checkout dialogs and Stripe components come out of the website bundle. Billing, orders, subscriptions and customer records are tracked in one place: the CRM.
+- Product and pricing pages stay on savvyswim.com as marketing content, so the shop is still browsable here — the purchase itself completes in the app.
+- Payments therefore get set up in the CRM project, not this one: one set of payment keys, one webhook path, one source of truth.
 
 ### 3. All leads go to the CRM
 - Every lead source on the site — free inspection form, booking dialog, city landing pages, contact CTAs — posts to the CRM lead endpoint at savvyswim.app, with UTM/attribution attached.
