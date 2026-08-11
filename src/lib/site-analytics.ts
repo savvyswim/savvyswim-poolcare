@@ -80,3 +80,24 @@ if (typeof document !== "undefined") {
     if (document.visibilityState === "hidden") flush();
   });
 }
+
+/* ------------------------------------------------------------------ *
+ * Handoff helpers — track the click, then send the visitor to the app.
+ * ------------------------------------------------------------------ */
+
+import { leadUrl, swimClubCheckoutUrl } from "./app-links";
+
+/** Send the visitor to the CRM booking form, tagged with the button. */
+export function goToLead(
+  source: string,
+  params: Record<string, string | number | undefined | null> = {},
+) {
+  trackSiteEvent("lead_click", source);
+  window.location.href = leadUrl(source, params);
+}
+
+/** Send the visitor to the Swim Club Stripe checkout, tagged with the button. */
+export function goToSwimClub(source: string) {
+  trackSiteEvent("swim_club_click", source);
+  window.location.href = swimClubCheckoutUrl(source);
+}
