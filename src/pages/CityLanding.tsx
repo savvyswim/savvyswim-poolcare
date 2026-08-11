@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
-import { buildCityFaq, type ServiceArea } from "@/lib/serviceAreas";
+import { buildCityFaq, SERVICE_AREAS, type ServiceArea } from "@/lib/serviceAreas";
 
 import {
   IMG_5507_2_JPG as photoNavyCabana,
@@ -58,6 +58,10 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
   ];
 
   const faq = buildCityFaq(area);
+
+  const nearby = SERVICE_AREAS.filter((a) => a.slug !== area.slug)
+    .slice(0, 6)
+    .map((a) => ({ name: a.name, to: `/${a.slug}` }));
 
   const gallery = [
     { src: photoWater.url, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
@@ -316,7 +320,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 Nearby service areas
               </div>
               <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[0.92rem]">
-                {nearby.map((n) => (
+                {nearby.map((n: { name: string; to: string }) => (
                   <li key={n.to}>
                     <Link to={n.to} className="hover:text-accent transition underline underline-offset-4 decoration-hairline">
                       Pool service in {n.name}
