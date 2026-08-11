@@ -312,12 +312,12 @@ export const buildCityMeta = (area: ServiceArea) => {
   const price = area.startingPrice.replace(/\s*\/\s*month/i, "/mo");
   const base = `Pool Cleaning in ${area.name}, TX`;
   const withPrice = `${base} from ${price} | Savvy Swim`;
-  const title = withPrice.length <= 62 ? withPrice : `${base} — Weekly Service | Savvy Swim`;
+  const title = withPrice.length <= 62 ? withPrice : `${base} | Savvy Swim`;
 
-  const hood = area.neighborhoods.slice(0, 2).join(" and ");
+  const hoods = area.neighborhoods.slice(0, 2).join(", ");
   const description =
-    `Weekly pool cleaning in ${area.name} from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit — ` +
-    `${hood} and citywide. Book a free inspection.`;
+    `Weekly pool cleaning in ${area.name}, TX from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit — ` +
+    `${hoods} and citywide.`;
 
   return {
     title,
