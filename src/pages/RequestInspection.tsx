@@ -70,6 +70,14 @@ function buildDays(): Day[] {
   return out;
 }
 
+/** (469) 744-0379 style formatting as the visitor types. */
+function formatPhone(input: string): string {
+  const d = input.replace(/\D/g, "").slice(0, 10);
+  if (d.length <= 3) return d;
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
 const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
@@ -79,10 +87,21 @@ const RequestInspection = () => {
   const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
   const [slot, setSlot] = useState<string>("");
   const [confirmed, setConfirmed] = useState<{ date: string; slot: string } | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [phone, setPhone] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
+  const focusField = (field: string) => {
+    if (typeof document === "undefined") return;
+    const el = document.getElementById(field) as HTMLElement | null;
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => el?.focus({ preventScroll: true }), 250);
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
     const fd = new FormData(e.currentTarget);
     const raw = {
       full_name: String(fd.get("full_name") ?? ""),
@@ -96,17 +115,26 @@ const RequestInspection = () => {
       notes: String(fd.get("notes") ?? ""),
     };
 
-    if (!slot) {
-      toast.error("Pick an arrival window so we can lock your visit in");
-      return;
-    }
-
+    setSubmitError(null);
 
     const parsed = schema.safeParse(raw);
+    const fieldErrors: Record<string, string> = {};
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form");
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "");
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+    }
+    if (!slot) fieldErrors["slot"] = "Pick an arrival window so we can lock your visit in";
+
+    if (Object.keys(fieldErrors).length > 0 || !parsed.success) {
+      setErrors(fieldErrors);
+      const first = Object.keys(fieldErrors)[0];
+      if (first && first !== "slot") focusField(first);
+      else if (first === "slot") focusField("arrival-window");
       return;
     }
+    setErrors({});
 
     setSubmitting(true);
     const a = getAttribution();
@@ -142,12 +170,18 @@ const RequestInspection = () => {
 
     if (error || !data) {
       console.error("inspection request failed", error?.message);
-      toast.error("Something went wrong — please call us at " + PHONE_DISPLAY);
+      // Keep everything the visitor typed and offer a call fallback instead of
+      // a toast that disappears on a phone.
+      setSubmitError(
+        "We couldn't send that request just now. Check your connection and try again — or call us and we'll book it for you.",
+      );
+      toast.error("Request didn't go through — please try again");
       return;
     }
 
     setReference(data.reference_number);
     setConfirmed({ date: slotDate, slot });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
 
     void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
       console.warn("inspection notification not sent", err),
@@ -162,6 +196,7 @@ const RequestInspection = () => {
         if (smsError) console.warn("confirmation sms not sent", smsError.message);
       });
   };
+
 
   return (
     <div className="min-h-screen overflow-x-hidden">
