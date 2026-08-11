@@ -1,22 +1,25 @@
 /**
  * On-site lead capture.
  *
- * Every "Request a quote" / "Book free inspection" button on the marketing
- * site opens this modal instead of handing the visitor off to another app.
- * Submissions go to our own hardened endpoint (POST /api/public/leads), which
- * validates, rate limits and writes the lead where the CRM reads it.
+ * Two variants share one form:
+ *  - "booking"    — Book your inspection or 3D quote (every quote CTA)
+ *  - "water_test" — Free water test (side tab)
  *
  * Opening is event driven so any page can trigger it without prop drilling:
  *   window.dispatchEvent(new CustomEvent("ss:open-quote", { detail: { source } }))
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { trackSiteEvent } from "@/lib/site-analytics";
+import { format } from "date-fns";
+import LeadForm, { SERVICES, WATER_TESTS } from "@/components/LeadForm";
 
 export const QUOTE_EVENT = "ss:open-quote";
+
+export type QuoteVariant = "booking" | "water_test";
 
 export type QuoteDetail = {
   source?: string;
   service?: string | undefined;
+  variant?: QuoteVariant;
 };
 
 /** Open the quote modal from anywhere (client only). */
@@ -25,27 +28,59 @@ export function openQuoteModal(detail: QuoteDetail = {}) {
   window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail }));
 }
 
-type Status = "idle" | "sending" | "done" | "error";
+/** Open the free water test form (client only). */
+export function openWaterTestModal(source = "water_test_tab") {
+  openQuoteModal({ source, variant: "water_test" });
+}
 
-const FIELD =
-  "w-full min-h-[48px] border border-[#8E1F2C]/25 bg-white px-4 py-3 text-[15px] text-[#2a1013] placeholder:text-[#2a1013]/45 outline-none focus-visible:border-[#8E1F2C] focus-visible:ring-2 focus-visible:ring-[#8E1F2C]/30";
+const COPY: Record<
+  QuoteVariant,
+  {
+    eyebrow: string;
+    title: string;
+    desc: string;
+    optionsLabel: string;
+    options: readonly string[];
+    cta: string;
+    submit: string;
+  }
+> = {
+  booking: {
+    eyebrow: "Free · No obligation",
+    title: "Book your inspection or 3D quote",
+    desc: "Pick a time — we'll confirm by phone or email within one business day.",
+    optionsLabel: "Which service?",
+    options: SERVICES,
+    cta: "free_pool_visit",
+    submit: "Book it",
+  },
+  water_test: {
+    eyebrow: "Free · Lab-grade accuracy",
+    title: "Book your free water test",
+    desc: "Drop a sample or we'll test on site — full chemistry report within one business day.",
+    optionsLabel: "Which test?",
+    options: WATER_TESTS,
+    cta: "water_test",
+    submit: "Book my water test",
+  },
+};
 
 export default function QuoteModal() {
   const [open, setOpen] = useState(false);
+  const [variant, setVariant] = useState<QuoteVariant>("booking");
   const [source, setSource] = useState("site");
   const [service, setService] = useState<string | undefined>(undefined);
-  const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<null | { date?: Date | undefined; time?: string | undefined }>(
+    null,
+  );
 
   const openedAt = useRef<number>(0);
   const dialogRef = useRef<HTMLDivElement | null>(null);
-  const firstFieldRef = useRef<HTMLInputElement | null>(null);
   const returnFocusTo = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => {
     setOpen(false);
-    setStatus("idle");
-    setError(null);
+    setDone(null);
     const el = returnFocusTo.current;
     if (el && typeof el.focus === "function") window.setTimeout(() => el.focus(), 0);
   }, []);
@@ -55,10 +90,10 @@ export default function QuoteModal() {
     const onOpen = (e: Event) => {
       const detail = (e as CustomEvent<QuoteDetail>).detail || {};
       returnFocusTo.current = (document.activeElement as HTMLElement) ?? null;
+      setVariant(detail.variant ?? "booking");
       setSource(detail.source || "site");
       setService(detail.service);
-      setStatus("idle");
-      setError(null);
+      setDone(null);
       openedAt.current = Date.now();
       setOpen(true);
     };
@@ -76,7 +111,9 @@ export default function QuoteModal() {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    window.setTimeout(() => firstFieldRef.current?.focus(), 30);
+    window.setTimeout(() => {
+      dialogRef.current?.querySelector<HTMLElement>("input,select,textarea,button")?.focus();
+    }, 30);
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -106,56 +143,9 @@ export default function QuoteModal() {
     };
   }, [open, close]);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (status === "sending") return;
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-    const get = (k: string) => (fd.get(k) || "").toString().trim();
-
-    const params = new URLSearchParams(window.location.search);
-    const body: Record<string, unknown> = {
-      full_name: get("full_name"),
-      email: get("email"),
-      phone: get("phone") || null,
-      address: get("address") || null,
-      message: get("message") || null,
-      pool_details: service ?? null,
-      source,
-      page: window.location.pathname.slice(0, 200),
-      utm_source: params.get("utm_source") || "savvyswim.com",
-      utm_medium: params.get("utm_medium") || null,
-      utm_campaign: params.get("utm_campaign") || null,
-      elapsed_ms: Math.max(0, Date.now() - openedAt.current),
-      company: get("company"),
-    };
-
-    setStatus("sending");
-    setError(null);
-    try {
-      const res = await fetch("/api/public/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      if (res.ok && data.ok) {
-        trackSiteEvent("lead_click", `${source}_submitted`);
-        setStatus("done");
-        return;
-      }
-      setStatus("error");
-      setError(
-        data.error ||
-          "We couldn't send that just now. Try again, or call us at (469) 744-0379.",
-      );
-    } catch {
-      setStatus("error");
-      setError("Network hiccup. Try again, or call us at (469) 744-0379.");
-    }
-  }
-
   if (!open) return null;
+
+  const copy = COPY[variant];
 
   return (
     <div
@@ -170,21 +160,21 @@ export default function QuoteModal() {
         aria-modal="true"
         aria-labelledby="ss-quote-title"
         aria-describedby="ss-quote-desc"
-        className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto border border-[#8E1F2C]/25 bg-[#F4EFE3] p-6 shadow-2xl sm:p-8"
+        className="relative max-h-[92vh] w-full max-w-xl overflow-y-auto border border-[#8E1F2C]/25 bg-[#F4EFE3] p-6 shadow-2xl sm:p-8"
       >
         <button
           type="button"
           onClick={close}
-          aria-label="Close the quote form"
+          aria-label="Close the form"
           className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center text-2xl leading-none text-[#8E1F2C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8E1F2C]"
         >
           ×
         </button>
 
-        {status === "done" ? (
+        {done ? (
           <div className="py-6 text-center">
             <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#1FA9BE]">
-              Lead received
+              Request received
             </p>
             <h2
               id="ss-quote-title"
@@ -193,132 +183,61 @@ export default function QuoteModal() {
               You&apos;re on the board
             </h2>
             <p id="ss-quote-desc" className="mt-3 text-[15px] text-[#2a1013]/75">
-              A Savvy Swim tech will reach out within one business day. Need us sooner? Call{" "}
-              <a className="underline" href="tel:+14697440379">
-                (469) 744-0379
-              </a>
-              .
+              {done.date ? (
+                <>
+                  We&apos;ve got you down for{" "}
+                  <strong>
+                    {format(done.date, "EEE, MMM d")}
+                    {done.time ? ` at ${done.time}` : ""}
+                  </strong>
+                  . We&apos;ll confirm by phone or email within one business day.
+                </>
+              ) : (
+                <>A Savvy Swim tech will reach out within one business day.</>
+              )}
             </p>
-            <button
-              type="button"
-              onClick={close}
-              className="mt-6 min-h-[48px] w-full bg-[#8E1F2C] px-6 font-semibold uppercase tracking-[0.12em] text-[#F4EFE3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1FA9BE]"
-            >
-              Done
-            </button>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="tel:+14697440379"
+                className="min-h-[48px] flex-1 border border-[#8E1F2C]/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#8E1F2C]"
+              >
+                Call us now
+              </a>
+              <button
+                type="button"
+                onClick={close}
+                className="min-h-[48px] flex-1 bg-[#8E1F2C] px-6 font-semibold uppercase tracking-[0.12em] text-[#F4EFE3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1FA9BE]"
+              >
+                Done
+              </button>
+            </div>
           </div>
         ) : (
           <>
             <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#1FA9BE]">
-              Free · No obligation
+              {copy.eyebrow}
             </p>
             <h2
               id="ss-quote-title"
               className="mt-2 font-display text-3xl uppercase leading-[0.95] text-[#8E1F2C] sm:text-4xl"
             >
-              Request a quote
+              {copy.title}
             </h2>
             <p id="ss-quote-desc" className="mt-2 text-[15px] text-[#2a1013]/75">
-              Tell us where the pool is and we&apos;ll call you right back — usually the same day.
+              {copy.desc}
             </p>
 
-            <form
-              onSubmit={onSubmit}
-              data-savvy-cta="free_pool_visit"
-              className="mt-6 space-y-3"
-              noValidate={false}
-            >
-
-              <label className="block">
-                <span className="sr-only">Full name</span>
-                <input
-                  ref={firstFieldRef}
-                  name="full_name"
-                  required
-                  minLength={2}
-                  autoComplete="name"
-                  placeholder="Your name"
-                  className={FIELD}
-                />
-              </label>
-              <label className="block">
-                <span className="sr-only">Phone number</span>
-                <input
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="Phone"
-                  className={FIELD}
-                />
-              </label>
-              <label className="block">
-                <span className="sr-only">Email address</span>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  inputMode="email"
-                  autoComplete="email"
-                  placeholder="Email"
-                  className={FIELD}
-                />
-              </label>
-              <label className="block">
-                <span className="sr-only">Pool address</span>
-                <input
-                  name="address"
-                  autoComplete="street-address"
-                  placeholder="Pool address"
-                  className={FIELD}
-                />
-              </label>
-              <label className="block">
-                <span className="sr-only">Anything we should know?</span>
-                <textarea
-                  name="message"
-                  rows={3}
-                  placeholder="Anything we should know? (green pool, equipment, timing…)"
-                  className={FIELD}
-                />
-              </label>
-
-              {/* Honeypot — real people never fill this in. */}
-              <input
-                name="company"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                className="hidden"
-              />
-
-              <div aria-live="polite" className="min-h-[1.25rem]">
-                {error ? <p className="text-sm font-medium text-[#8E1F2C]">{error}</p> : null}
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="min-h-[52px] w-full bg-[#8E1F2C] px-6 font-semibold uppercase tracking-[0.12em] text-[#F4EFE3] transition-opacity disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1FA9BE]"
-              >
-                {status === "sending" ? "Sending…" : "Send it"}
-              </button>
-              <div className="flex items-center justify-between gap-4 pt-1">
-                <button
-                  type="button"
-                  onClick={close}
-                  className="min-h-[44px] text-sm uppercase tracking-[0.12em] text-[#2a1013]/60 underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8E1F2C]"
-                >
-                  Never mind
-                </button>
-                <a
-                  href="tel:+14697440379"
-                  className="min-h-[44px] text-sm uppercase tracking-[0.12em] text-[#8E1F2C] underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8E1F2C]"
-                >
-                  Call instead
-                </a>
-              </div>
-            </form>
+            <LeadForm
+              cta={copy.cta}
+              optionsLabel={copy.optionsLabel}
+              options={copy.options}
+              defaultOption={variant === "booking" ? service : undefined}
+              source={source}
+              submitLabel={copy.submit}
+              openedAt={openedAt.current}
+              onCancel={close}
+              onDone={(summary) => setDone(summary)}
+            />
           </>
         )}
       </div>
