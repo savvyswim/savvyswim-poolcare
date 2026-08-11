@@ -5,6 +5,14 @@ import { loadMaps } from "@/lib/google-maps";
 
 type Suggestion = { text: string; placeId: string };
 
+/**
+ * Service-area bias — centred between Plano and Frisco, covering the DFW
+ * routes we actually run. Google ranks addresses inside this circle first, so
+ * a homeowner sees their own street after a few characters.
+ */
+const SERVICE_AREA_CENTER = { lat: 33.035, lng: -96.75 };
+const SERVICE_AREA_RADIUS_M = 50000; // Places API (New) maximum
+
 interface Props {
   id?: string;
   name?: string;
@@ -61,6 +69,12 @@ export default function AddressAutocomplete({
           input: q,
           sessionToken: tokenRef.current,
           includedRegionCodes: ["us"],
+          // Rank our routes first, then fall back to the rest of the US.
+          locationBias: {
+            center: SERVICE_AREA_CENTER,
+            radius: SERVICE_AREA_RADIUS_M,
+          },
+          origin: SERVICE_AREA_CENTER,
         });
         if (id !== seq.current) return;
         setItems(
