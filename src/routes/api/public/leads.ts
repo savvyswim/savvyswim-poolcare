@@ -123,13 +123,39 @@ export const Route = createFileRoute("/api/public/leads")({
           );
         }
         const lead = parsed.data;
+        const ip = clientIp(request);
 
-        // Honeypot hit — accept silently so bots don't learn anything.
-        if (lead.company) return json({ ok: true, deduped: true });
+        /** Log spam we turned away, then answer 200 so bots learn nothing. */
+        const rejectQuietly = async (reason: string) => {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          await supabaseAdmin
+            .from("ss_site_events")
+            .insert({
+              event: "lead_blocked",
+              page: lead.page ?? "/api/public/leads",
+              button: reason,
+              consent_state: "unset",
+              utm_source: lead.utm_source ?? lead.source ?? null,
+            })
+            .then(undefined, () => undefined);
+          return json({ ok: true, deduped: true });
+        };
+
+        // Honeypot hit.
+        if (lead.company) return rejectQuietly("honeypot");
+
+        // Filled in faster than a human can type.
+        if (typeof lead.elapsed_ms === "number" && lead.elapsed_ms < MIN_FILL_MS) {
+          return rejectQuietly("too_fast");
+        }
+
+        if (!(await turnstileOk(lead.turnstile_token, ip))) {
+          return rejectQuietly("turnstile");
+        }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        const ip = clientIp(request);
+
         const limits: Array<[string, string, number, number]> = [
           ["leads_ip", ip, 3600, 10],
           ["leads_email", lead.email.toLowerCase(), 3600, 3],
