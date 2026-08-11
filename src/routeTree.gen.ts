@@ -30,6 +30,7 @@ import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
 import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
@@ -145,6 +146,11 @@ const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
   path: '/api/public/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEventsRoute = ApiPublicEventsRouteImport.update({
+  id: '/api/public/events',
+  path: '/api/public/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTwilioInboundRoute = ApiPublicTwilioInboundRouteImport.update({
   id: '/api/public/twilio/inbound',
   path: '/api/public/twilio/inbound',
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
     | '/api/public/hooks/canary'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
     | '/api/public/hooks/canary'
@@ -381,6 +392,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
     | '/api/public/hooks/canary'
@@ -414,6 +426,7 @@ export interface RootRouteChildren {
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
+  ApiPublicEventsRoute: typeof ApiPublicEventsRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicLeadsRoute: typeof ApiPublicLeadsRoute
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
@@ -576,6 +589,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/events': {
+      id: '/api/public/events'
+      path: '/api/public/events'
+      fullPath: '/api/public/events'
+      preLoaderRoute: typeof ApiPublicEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/twilio/inbound': {
       id: '/api/public/twilio/inbound'
       path: '/api/public/twilio/inbound'
@@ -662,6 +682,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
+  ApiPublicEventsRoute: ApiPublicEventsRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicLeadsRoute: ApiPublicLeadsRoute,
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
