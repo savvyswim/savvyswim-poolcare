@@ -93,7 +93,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
     }
   };
 
-  if (!visible) return null;
+  if (!visible || !consentSettled) return null;
 
   return (
     <div
