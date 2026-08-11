@@ -506,12 +506,14 @@ const Index = () => {
                   >
                     <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                   </a>
-                  <Link
-                    to="/request-inspection"
+                  <button
+                    type="button"
+                    onClick={() => goToLead("home_hero_visit")}
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
                     <MessageSquare className="h-4 w-4" /> Request free pool visit
-                  </Link>
+                  </button>
+
 
                 </div>
               </div>
