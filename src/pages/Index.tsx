@@ -189,7 +189,6 @@ const CLEANING_PLANS: CleaningPlan[] = [
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookingOpen, setBookingOpen] = useState(false);
   // Defer the swim-club prompt until the page is interactive on mobile.
   const [promptReady, setPromptReady] = useState(false);
   useEffect(() => {
@@ -202,17 +201,16 @@ const Index = () => {
     const t = window.setTimeout(start, 2000);
     return () => window.clearTimeout(t);
   }, []);
-  const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   /** Billing, checkout and memberships are handled in the Savvy Swim app. */
   const goToApp = (path: string, params: Record<string, string> = {}) => {
     window.location.href = buildCrmLink(path, params);
   };
-  const joinSwimClub = (source: string) => goToApp("/join/swim-club", { source });
+  const joinSwimClub = (source: string) => goToSwimClub(source);
   const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
-  const openBooking = (service?: string) => {
-    setBookingService(service);
-    setBookingOpen(true);
-  };
+  /** Every lead button hands off to the booking form in the Savvy Swim app. */
+  const openBooking = (service?: string) =>
+    goToLead("home", service ? { service } : {});
+
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
 
