@@ -5057,6 +5057,63 @@ export type Database = {
           },
         ]
       }
+      ss_webhook_deliveries: {
+        Row: {
+          attempts: number
+          channel: string
+          created_at: string
+          direction: string
+          endpoint: string | null
+          event_key: string | null
+          http_status: number | null
+          id: string
+          last_attempt_at: string
+          last_error: string | null
+          outcome: string
+          reference: string | null
+          request: Json
+          response: string | null
+          retried_at: string | null
+          retried_by: string | null
+        }
+        Insert: {
+          attempts?: number
+          channel: string
+          created_at?: string
+          direction?: string
+          endpoint?: string | null
+          event_key?: string | null
+          http_status?: number | null
+          id?: string
+          last_attempt_at?: string
+          last_error?: string | null
+          outcome?: string
+          reference?: string | null
+          request?: Json
+          response?: string | null
+          retried_at?: string | null
+          retried_by?: string | null
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          created_at?: string
+          direction?: string
+          endpoint?: string | null
+          event_key?: string | null
+          http_status?: number | null
+          id?: string
+          last_attempt_at?: string
+          last_error?: string | null
+          outcome?: string
+          reference?: string | null
+          request?: Json
+          response?: string | null
+          retried_at?: string | null
+          retried_by?: string | null
+        }
+        Relationships: []
+      }
       ss_work_order_types: {
         Row: {
           color: string
