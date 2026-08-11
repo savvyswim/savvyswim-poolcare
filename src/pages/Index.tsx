@@ -866,7 +866,7 @@ const Index = () => {
                   </ul>
 
                   <button
-                    onClick={() => setMembershipOpen(true)}
+                    onClick={() => joinSwimClub("summer_offer")}
                     className="font-display mt-auto w-full bg-lifeguard py-5 text-xl uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-navy"
                   >
                     Claim the summer offer
@@ -938,7 +938,7 @@ const Index = () => {
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <button
-                  onClick={() => setMembershipOpen(true)}
+                  onClick={() => joinSwimClub("referral")}
                   className="font-display bg-lifeguard px-8 py-4 text-base uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-canvas hover:text-navy-brand"
                 >
                   Get my referral code
