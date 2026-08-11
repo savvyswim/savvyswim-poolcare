@@ -268,6 +268,8 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 <Field label="Full name" error={errors["name"]}>
                   <Input
                     autoComplete="name"
+                    autoCapitalize="words"
+                    enterKeyHint="next"
                     value={values.name ?? ""}
                     onChange={(e) => set("name", e.target.value)}
                     placeholder="Jane Doe"
@@ -276,6 +278,8 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                 <Field label="Phone" error={errors["phone"]}>
                   <Input
                     type="tel"
+                    inputMode="tel"
+                    enterKeyHint="next"
                     autoComplete="tel"
                     value={values.phone ?? ""}
                     onChange={(e) => set("phone", e.target.value)}
@@ -307,6 +311,11 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
               <Field label="Email" error={errors["email"]}>
                 <Input
                   type="email"
+                  inputMode="email"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  enterKeyHint="next"
                   autoComplete="email"
                   value={values.email ?? ""}
                   onChange={(e) => set("email", e.target.value)}

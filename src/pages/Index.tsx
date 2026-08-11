@@ -41,6 +41,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
+import { resetConsent } from "@/lib/consent";
 
 // Dialogs are only needed after a click — keep them out of the first payload.
 const BookingDialog = lazy(() =>
@@ -1181,7 +1182,15 @@ const Index = () => {
             <Link to="/pool-cleaning-frisco-tx" className="hover:text-foreground transition">Pool Cleaning Frisco TX</Link>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
+            <button
+              type="button"
+              onClick={() => resetConsent()}
+              className="hover:text-foreground transition"
+            >
+              Cookie settings
+            </button>
             <a href={CUSTOMER_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition">Admin</a>
+
           </div>
         </div>
       </footer>

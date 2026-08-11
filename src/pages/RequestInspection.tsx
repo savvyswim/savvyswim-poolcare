@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@/lib/router-compat";
-import { Phone, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { Phone, ArrowLeft, CheckCircle2, Loader2, CalendarPlus } from "lucide-react";
 import { z } from "zod";
 import Seo from "@/components/Seo";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,7 @@ import {
 import { notifyInspectionRequest } from "@/lib/inspection-notify.functions";
 import { forwardLeadToCrm } from "@/lib/crm-lead-forward.functions";
 import { getAttribution, getSessionId, trackContactClick } from "@/lib/contactTracking";
+import { downloadIcs } from "@/lib/calendar";
 
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
@@ -70,6 +71,32 @@ function buildDays(): Day[] {
   return out;
 }
 
+/** "1:00 PM" -> 13 */
+function parseSlotHour(slot: string): number {
+  const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(slot.trim());
+  if (!m) return 9;
+  let h = Number(m[1]) % 12;
+  if (/pm/i.test(m[3] ?? "")) h += 12;
+  return h;
+}
+
+function FieldError({ id, message }: { id: string; message?: string | undefined }) {
+  if (!message) return null;
+  return (
+    <p id={id} role="alert" className="text-xs font-semibold text-destructive">
+      {message}
+    </p>
+  );
+}
+
+/** (469) 744-0379 style formatting as the visitor types. */
+function formatPhone(input: string): string {
+  const d = input.replace(/\D/g, "").slice(0, 10);
+  if (d.length <= 3) return d;
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
 const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
@@ -79,10 +106,21 @@ const RequestInspection = () => {
   const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
   const [slot, setSlot] = useState<string>("");
   const [confirmed, setConfirmed] = useState<{ date: string; slot: string } | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [phone, setPhone] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
+  const focusField = (field: string) => {
+    if (typeof document === "undefined") return;
+    const el = document.getElementById(field) as HTMLElement | null;
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => el?.focus({ preventScroll: true }), 250);
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
     const fd = new FormData(e.currentTarget);
     const raw = {
       full_name: String(fd.get("full_name") ?? ""),
@@ -96,17 +134,26 @@ const RequestInspection = () => {
       notes: String(fd.get("notes") ?? ""),
     };
 
-    if (!slot) {
-      toast.error("Pick an arrival window so we can lock your visit in");
-      return;
-    }
-
+    setSubmitError(null);
 
     const parsed = schema.safeParse(raw);
+    const fieldErrors: Record<string, string> = {};
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form");
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "");
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+    }
+    if (!slot) fieldErrors["slot"] = "Pick an arrival window so we can lock your visit in";
+
+    if (Object.keys(fieldErrors).length > 0 || !parsed.success) {
+      setErrors(fieldErrors);
+      const first = Object.keys(fieldErrors)[0];
+      if (first && first !== "slot") focusField(first);
+      else if (first === "slot") focusField("arrival-window");
       return;
     }
+    setErrors({});
 
     setSubmitting(true);
     const a = getAttribution();
@@ -142,12 +189,18 @@ const RequestInspection = () => {
 
     if (error || !data) {
       console.error("inspection request failed", error?.message);
-      toast.error("Something went wrong — please call us at " + PHONE_DISPLAY);
+      // Keep everything the visitor typed and offer a call fallback instead of
+      // a toast that disappears on a phone.
+      setSubmitError(
+        "We couldn't send that request just now. Check your connection and try again — or call us and we'll book it for you.",
+      );
+      toast.error("Request didn't go through — please try again");
       return;
     }
 
     setReference(data.reference_number);
     setConfirmed({ date: slotDate, slot });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
 
     void notifyInspectionRequest({ data: { requestId: data.id } }).catch((err) =>
       console.warn("inspection notification not sent", err),
@@ -162,6 +215,7 @@ const RequestInspection = () => {
         if (smsError) console.warn("confirmation sms not sent", smsError.message);
       });
   };
+
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -221,11 +275,30 @@ const RequestInspection = () => {
             <a
               href={PHONE_HREF}
               onClick={() => trackContactClick("call_click", "inspection_confirmation")}
-              className="btn-quote mt-8 inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+              className="btn-quote mt-8 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-md px-6 text-[13px] font-bold uppercase tracking-wide transition sm:w-auto"
             >
               <Phone className="h-4 w-4" /> Call us now
             </a>
+            {confirmed && (
+              <button
+                type="button"
+                onClick={() => {
+                  const startHour = parseSlotHour(confirmed.slot);
+                  downloadIcs({
+                    title: "Savvy Swim — free pool visit",
+                    description: `Reference ${reference}. Your tech confirms this window within one business day.`,
+                    date: confirmed.date,
+                    startHour,
+                    endHour: startHour + 2,
+                  });
+                }}
+                className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center gap-2 border border-hairline px-6 text-[13px] font-bold uppercase tracking-wide transition hover:border-accent sm:ml-3 sm:mt-8 sm:w-auto"
+              >
+                <CalendarPlus className="h-4 w-4" /> Add to calendar
+              </button>
+            )}
           </div>
+
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
@@ -244,21 +317,60 @@ const RequestInspection = () => {
               </div>
             </div>
 
-            <form onSubmit={onSubmit} className="space-y-5 lg:col-span-7">
+            <form onSubmit={onSubmit} noValidate className="space-y-5 lg:col-span-7">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="full_name">Full name *</Label>
-                  <Input id="full_name" name="full_name" required maxLength={120} autoComplete="name" />
+                  <Input
+                    id="full_name"
+                    name="full_name"
+                    maxLength={120}
+                    autoComplete="name"
+                    autoCapitalize="words"
+                    enterKeyHint="next"
+                    aria-invalid={!!errors["full_name"]}
+                    aria-describedby={errors["full_name"] ? "full_name-error" : undefined}
+                  />
+                  <FieldError id="full_name-error" message={errors["full_name"]} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Mobile phone *</Label>
-                  <Input id="phone" name="phone" type="tel" required maxLength={40} autoComplete="tel" />
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    inputMode="tel"
+                    maxLength={40}
+                    autoComplete="tel"
+                    enterKeyHint="next"
+                    placeholder="(469) 555-0199"
+                    value={phone}
+                    onChange={(e) => setPhone(formatPhone(e.target.value))}
+                    aria-invalid={!!errors["phone"]}
+                    aria-describedby={errors["phone"] ? "phone-error" : undefined}
+                  />
+                  <FieldError id="phone-error" message={errors["phone"]} />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email *</Label>
-                <Input id="email" name="email" type="email" required maxLength={255} autoComplete="email" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  inputMode="email"
+                  maxLength={255}
+                  autoComplete="email"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  enterKeyHint="next"
+                  placeholder="you@email.com"
+                  aria-invalid={!!errors["email"]}
+                  aria-describedby={errors["email"] ? "email-error" : undefined}
+                />
+                <FieldError id="email-error" message={errors["email"]} />
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -267,18 +379,32 @@ const RequestInspection = () => {
                   <AddressAutocomplete
                     id="address"
                     name="address"
-                    required
                     maxLength={300}
                     placeholder="Start typing your address…"
                     onSelect={(v, pid) => setAddressPlace({ address: v, placeId: pid })}
                   />
+                  <FieldError id="address-error" message={errors["address"]} />
                   <AddressMapPreview placeId={addressPlace.placeId} address={addressPlace.address} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postal_code">ZIP *</Label>
-                  <Input id="postal_code" name="postal_code" required maxLength={20} autoComplete="postal-code" />
+                  <Input
+                    id="postal_code"
+                    name="postal_code"
+                    inputMode="numeric"
+                    maxLength={5}
+                    autoComplete="postal-code"
+                    enterKeyHint="done"
+                    placeholder="75024"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                    aria-invalid={!!errors["postal_code"]}
+                    aria-describedby={errors["postal_code"] ? "postal_code-error" : undefined}
+                  />
+                  <FieldError id="postal_code-error" message={errors["postal_code"]} />
                 </div>
               </div>
+
 
               <div className="space-y-3 border-t border-hairline pt-6">
                 <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -311,10 +437,15 @@ const RequestInspection = () => {
                   })}
                 </div>
 
-                <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                <Label
+                  id="arrival-window"
+                  tabIndex={-1}
+                  className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+                >
                   Arrival window
                 </Label>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+
                   {SLOTS.map((s) => {
                     const active = s === slot;
                     return (
@@ -334,9 +465,11 @@ const RequestInspection = () => {
                     );
                   })}
                 </div>
+                <FieldError id="slot-error" message={errors["slot"]} />
                 <p className="text-xs text-muted-foreground">
                   Windows are ~2 hours. We confirm by text right after you submit.
                 </p>
+
               </div>
 
               <div className="space-y-2">
@@ -371,14 +504,32 @@ const RequestInspection = () => {
                 <Textarea id="notes" name="notes" rows={4} maxLength={1000} />
               </div>
 
+              {submitError && (
+                <div
+                  role="alert"
+                  className="border-l-2 border-destructive bg-destructive/5 p-4 text-sm text-foreground"
+                >
+                  <p>{submitError}</p>
+                  <a
+                    href={PHONE_HREF}
+                    onClick={() => trackContactClick("call_click", "inspection_error")}
+                    className="mt-3 inline-flex min-h-[44px] items-center gap-2 border border-hairline px-4 text-[12px] font-bold uppercase tracking-wide"
+                  >
+                    <Phone className="h-4 w-4" /> Call {PHONE_DISPLAY}
+                  </a>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn-quote inline-flex items-center gap-2 rounded-md px-7 py-3.5 text-[13px] font-bold uppercase tracking-wide transition disabled:opacity-60"
+                aria-busy={submitting}
+                className="btn-quote inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-md px-7 text-[13px] font-bold uppercase tracking-wide transition disabled:opacity-60 sm:w-auto"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 {submitting ? "Sending" : "Request free pool visit"}
               </button>
+
 
               <p className="text-xs text-muted-foreground">
                 By submitting you agree to receive a confirmation text about this request. Message

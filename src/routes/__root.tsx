@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -15,6 +15,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
+
+// Consent bar is post-hydration only — keep it out of the first payload.
+const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
+
 
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
@@ -88,10 +92,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
     ],
-    scripts: [
-      { type: "application/ld+json", children: SITE_JSONLD },
-      { src: "https://savvyswim.app/embed/savvy-leads.js", defer: true },
-    ],
+    scripts: [{ type: "application/ld+json", children: SITE_JSONLD }],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -125,6 +127,11 @@ function RootComponent() {
           <PerfMonitor />
 
           <Outlet />
+
+          <Suspense fallback={null}>
+            <ConsentBanner />
+          </Suspense>
+
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>
