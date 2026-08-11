@@ -127,6 +127,11 @@ function RootComponent() {
           <PerfMonitor />
 
           <Outlet />
+
+          <Suspense fallback={null}>
+            <ConsentBanner />
+          </Suspense>
+
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>
