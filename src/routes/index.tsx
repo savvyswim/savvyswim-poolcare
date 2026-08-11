@@ -4,9 +4,9 @@ import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-data";
 
-const TITLE = "Savvy Swim | Weekly Pool Service & Repair in DFW";
+const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
-  "Weekly pool cleaning, water chemistry and equipment repair across Dallas–Fort Worth. Licensed techs, photo-verified visits, and the Savvy Swim Club membership.";
+  "Weekly pool cleaning, chemistry and repair across Dallas–Fort Worth from $129.99/mo. Same tech every week, photo report every visit, no contracts. Free inspection.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

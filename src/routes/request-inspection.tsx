@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import RequestInspection from "@/pages/RequestInspection";
 
 const URL = "https://savvyswim.com/request-inspection";
-const TITLE = "Free Pool Inspection Request | Savvy Swim DFW";
+const TITLE = "Request a Free Pool Inspection in DFW | Savvy Swim";
 const DESCRIPTION =
-  "Request a free pool inspection in Dallas–Fort Worth. A Savvy Swim tech checks water chemistry, equipment and surfaces, then sends a clear service quote.";
+  "Get a free pool inspection in Dallas–Fort Worth. A Savvy Swim tech tests chemistry, checks equipment and surfaces, then sends a flat-rate quote — no obligation.";
 
 export const Route = createFileRoute("/request-inspection")({
   component: RequestInspection,
