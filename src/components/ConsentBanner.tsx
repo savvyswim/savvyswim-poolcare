@@ -27,6 +27,8 @@ export default function ConsentBanner() {
   useEffect(() => {
     const choice = getConsent();
     if (choice === null) setVisible(true);
+    if (choice === "accepted") loadCrmLeadMirror();
+
 
     const onChange = () => {
       const reopened = getConsent() === null;
