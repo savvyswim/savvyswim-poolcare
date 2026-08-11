@@ -544,7 +544,13 @@ const Index = () => {
 
         {/* Every visit includes — under the panel */}
         <div className="relative bg-canvas">
-          <div className="container-tight grid gap-6 py-12 lg:gap-8 lg:py-16 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="container-tight pt-12 lg:pt-16">
+            <h2 className="font-display text-[1.4rem] sm:text-[1.7rem] uppercase tracking-[0.1em] text-primary">
+              Every weekly visit includes
+            </h2>
+          </div>
+          <div className="container-tight grid gap-6 pb-12 pt-8 lg:gap-8 lg:pb-16 sm:grid-cols-2 lg:grid-cols-4">
+
             {[
               { n: "01", t: "Skim, brush & vacuum" },
               { n: "02", t: "Full chemistry balance" },
