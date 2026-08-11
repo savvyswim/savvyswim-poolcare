@@ -41,12 +41,11 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
+import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import { resetConsent } from "@/lib/consent";
 
-// Dialogs are only needed after a click — keep them out of the first payload.
-const BookingDialog = lazy(() =>
-  import("@/components/BookingDialog").then((m) => ({ default: m.BookingDialog })),
-);
+// Only needed after a click — keep it out of the first payload.
+
 const SwimClubPrompt = lazy(() =>
   import("@/components/SwimClubPrompt").then((m) => ({ default: m.SwimClubPrompt })),
 );
