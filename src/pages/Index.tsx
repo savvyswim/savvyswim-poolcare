@@ -214,43 +214,60 @@ const Index = () => {
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
 
-
+  // Plan overrides are a nice-to-have: fetch them once the page is idle so the
+  // network and main thread stay free for the first paint.
   useEffect(() => {
     let active = true;
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from("cleaning_plans")
         .select("id,name,blurb,price,cadence,items,featured")
         .eq("is_active", true)
         .order("display_order");
       if (active && data && data.length) setCleaningPlans(data as CleaningPlan[]);
-    })();
+    };
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number };
+    const timer = w.requestIdleCallback
+      ? w.requestIdleCallback(() => void load())
+      : window.setTimeout(() => void load(), 1200);
     return () => {
       active = false;
+      window.clearTimeout(timer as number);
     };
   }, []);
-
-
-
 
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // One passive, rAF-throttled scroll handler drives both the sticky nav and
+  // the hero parallax. Parallax is skipped on small screens and for reduced
+  // motion, where the per-frame transform costs more than it adds.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const parallax =
+      window.innerWidth >= 1024 &&
+      !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+
+    const apply = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      if (parallax && heroRef.current) {
+        heroRef.current.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0004})`;
+      }
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(apply);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    apply();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
-  // Parallax for hero
-  useEffect(() => {
-    const onScroll = () => {
-      if (!heroRef.current) return;
-      const y = window.scrollY;
-      heroRef.current.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0004})`;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden">
