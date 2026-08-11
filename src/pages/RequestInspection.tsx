@@ -475,14 +475,32 @@ const RequestInspection = () => {
                 <Textarea id="notes" name="notes" rows={4} maxLength={1000} />
               </div>
 
+              {submitError && (
+                <div
+                  role="alert"
+                  className="border-l-2 border-destructive bg-destructive/5 p-4 text-sm text-foreground"
+                >
+                  <p>{submitError}</p>
+                  <a
+                    href={PHONE_HREF}
+                    onClick={() => trackContactClick("call_click", "inspection_error")}
+                    className="mt-3 inline-flex min-h-[44px] items-center gap-2 border border-hairline px-4 text-[12px] font-bold uppercase tracking-wide"
+                  >
+                    <Phone className="h-4 w-4" /> Call {PHONE_DISPLAY}
+                  </a>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn-quote inline-flex items-center gap-2 rounded-md px-7 py-3.5 text-[13px] font-bold uppercase tracking-wide transition disabled:opacity-60"
+                aria-busy={submitting}
+                className="btn-quote inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-md px-7 text-[13px] font-bold uppercase tracking-wide transition disabled:opacity-60 sm:w-auto"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 {submitting ? "Sending" : "Request free pool visit"}
               </button>
+
 
               <p className="text-xs text-muted-foreground">
                 By submitting you agree to receive a confirmation text about this request. Message
