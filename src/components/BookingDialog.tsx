@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -311,13 +313,14 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
               </Field>
 
               <Field label="Property address" error={errors["address"]}>
-                <Input
-                  autoComplete="street-address"
+                <AddressAutocomplete
+                  maxLength={200}
                   value={values.address ?? ""}
-                  onChange={(e) => set("address", e.target.value)}
+                  onChange={(v) => set("address", v)}
                   placeholder="123 Lakeshore Dr, Austin, TX"
                 />
               </Field>
+
 
               <Field label="Service" error={errors["service"]}>
                 <Select

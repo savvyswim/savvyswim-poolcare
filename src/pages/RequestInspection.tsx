@@ -6,6 +6,8 @@ import Seo from "@/components/Seo";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -260,7 +262,7 @@ const RequestInspection = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor="address">Property address *</Label>
-                  <Input id="address" name="address" required maxLength={300} autoComplete="street-address" />
+                  <AddressAutocomplete id="address" name="address" required maxLength={300} placeholder="Start typing your address…" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postal_code">ZIP *</Label>
