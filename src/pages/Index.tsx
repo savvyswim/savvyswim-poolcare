@@ -1200,10 +1200,12 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => openBooking("Weekly Pool Cleaning")}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
+                  aria-label="Book a free water test — opens the Savvy Swim booking form"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-amber-brand px-7 py-4 text-sm font-semibold text-primary-foreground shadow-cta transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  <CalendarCheck className="h-4 w-4" /> Book my free water test
+                  <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book my free water test
                 </button>
+
                 <a
                   href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
