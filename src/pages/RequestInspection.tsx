@@ -6,6 +6,8 @@ import Seo from "@/components/Seo";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
