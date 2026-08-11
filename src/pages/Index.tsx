@@ -360,7 +360,8 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => openBooking()}
-                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition sm:px-5 sm:py-3 sm:text-[13px]"
+                aria-label="Request a quote — opens the Savvy Swim booking form"
+                className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
               >
                 <span className="sm:hidden">Quote</span>
                 <span className="hidden sm:inline">Request Quote</span>
