@@ -43,3 +43,14 @@ export function loadLeadEmbed() {
   s.dataset["ssConsent"] = "granted";
   document.head.appendChild(s);
 }
+
+/** Clear the stored choice so the banner reappears (footer "Cookie settings"). */
+export function resetConsent() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: null }));
+}

@@ -41,6 +41,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
+import { resetConsent } from "@/lib/consent";
 
 // Dialogs are only needed after a click — keep them out of the first payload.
 const BookingDialog = lazy(() =>
