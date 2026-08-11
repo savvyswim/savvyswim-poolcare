@@ -671,7 +671,7 @@ const Index = () => {
 
             {[
               { k: "500+", v: "Pools serviced" },
-              { k: "4.9★", v: "Avg client rating" },
+              { k: "5★", v: "5-star service" },
               { k: "52", v: "Visits per year" },
             ].map((s) => (
               <div key={s.v} className="flex flex-col items-center">
