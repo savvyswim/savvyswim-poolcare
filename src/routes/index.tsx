@@ -1,7 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import Index from "@/pages/Index";
-import { Navigate } from "@/lib/router-compat";
-import { isAppHost } from "@/hooks/useAppHost";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 
