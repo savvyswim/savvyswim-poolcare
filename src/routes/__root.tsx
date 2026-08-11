@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   createRootRouteWithContext,
   HeadContent,
