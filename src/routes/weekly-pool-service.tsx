@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import WeeklyPoolService, { WEEKLY_FAQ } from "@/pages/WeeklyPoolService";
 import { serviceSchema } from "@/lib/structured-data";
 
-const TITLE = "Weekly Pool Service Near Me | DFW Pool Cleaning — Savvy Swim";
+const TITLE = "Weekly Pool Service Near Me in DFW | Savvy Swim";
 const DESC =
-  "What weekly pool service includes: full water test, chemicals, cleaning, filter check and a photo report every visit. Same tech, fixed route day. From $129.99/mo in DFW.";
+  "See exactly what weekly pool service includes: water test, chemicals, cleaning, filter check and a photo report. Same tech, fixed day, from $129.99/mo in DFW.";
 const URL = "https://savvyswim.com/weekly-pool-service";
 
 export const Route = createFileRoute("/weekly-pool-service")({

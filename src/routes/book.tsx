@@ -2,9 +2,9 @@ import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookingDialog } from "@/components/BookingDialog";
 
-const TITLE = "Book a Free Pool Inspection or 3D Quote | Savvy Swim";
+const TITLE = "Book a Pool Inspection or 3D Quote — Free | Savvy Swim";
 const DESCRIPTION =
-  "Book your free, no-obligation pool inspection or 3D quote with Savvy Swim. Pick a time and we'll confirm by phone or email within one business day.";
+  "Pick a time for your free pool inspection or 3D remodel quote in DFW. We confirm by phone or email within one business day — no obligation, no contracts.";
 const URL = "https://savvyswim.com/book";
 const OG_IMAGE = "https://savvyswim.com/og-book.jpg";
 

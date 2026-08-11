@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import CityLanding from "@/pages/CityLanding";
-import { buildCityFaq, getServiceArea, SERVICE_AREAS } from "@/lib/serviceAreas";
+import { buildCityFaq, buildCityMeta, getServiceArea, SERVICE_AREAS } from "@/lib/serviceAreas";
 
 
 export const Route = createFileRoute("/$city")({
@@ -14,8 +14,7 @@ export const Route = createFileRoute("/$city")({
     if (!area) {
       return { meta: [{ title: "Page not found | Savvy Swim" }, { name: "robots", content: "noindex" }] };
     }
-    const title = `Pool Cleaning ${area.name} TX — Weekly Service & Repair | Savvy Swim`;
-    const description = `Pool cleaning in ${area.name}, TX from ${area.startingPrice}. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts.`;
+    const { title, description } = buildCityMeta(area);
     const url = `https://savvyswim.com/${area.slug}`;
     return {
       meta: [

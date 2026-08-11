@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import Services from "@/pages/Services";
 import { SERVICE_CATALOG, serviceSchema, SITE_URL } from "@/lib/structured-data";
 
-const TITLE = "Pool Service & Repair in DFW | Savvy Swim";
+const TITLE = "Pool Cleaning & Repair Services in DFW | Savvy Swim";
 const DESCRIPTION =
-  "Pool service and repair across Dallas–Fort Worth: weekly cleaning, green pool recovery, filter cleans, and pump, heater and salt-cell repair by licensed techs.";
+  "Weekly cleaning, green pool recovery, filter cleans and pump, heater or salt-cell repair across DFW. Licensed techs, upfront pricing, free inspection.";
 const URL = `${SITE_URL}/services`;
 
 export const Route = createFileRoute("/services")({
