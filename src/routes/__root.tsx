@@ -13,9 +13,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/hooks/useAuth";
-import { CartProvider } from "@/hooks/useCart";
-import { DeferredOverlays } from "@/components/DeferredOverlays";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
 
@@ -109,17 +106,10 @@ function RootComponent() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <AuthProvider>
-            <CartProvider>
-              <ScrollToTop />
-              <PerfMonitor />
+          <ScrollToTop />
+          <PerfMonitor />
 
-              <Outlet />
-              <DeferredOverlays />
-            </CartProvider>
-
-
-          </AuthProvider>
+          <Outlet />
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>

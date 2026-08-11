@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Portal from "@/pages/Portal";
-import { CRM_IS_EXTERNAL, portalUrl } from "@/lib/app-links";
 import { CrmMovedRedirect } from "@/components/AppHandoff";
+import { portalUrl } from "@/lib/app-links";
 
 export const Route = createFileRoute("/portal")({
   head: () => ({
@@ -10,7 +9,7 @@ export const Route = createFileRoute("/portal")({
       {
         name: "description",
         content:
-          "Sign in to your Savvy Swim customer portal for invoices, visit history, water reports and support.",
+          "The Savvy Swim customer portal — invoices, visits, water reports and support — now lives in the Savvy Swim app.",
       },
       { property: "og:title", content: "Customer Portal — Savvy Swim" },
       {
@@ -22,5 +21,5 @@ export const Route = createFileRoute("/portal")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (CRM_IS_EXTERNAL ? <CrmMovedRedirect to={portalUrl()} /> : <Portal />),
+  component: () => <CrmMovedRedirect to={portalUrl()} />,
 });
