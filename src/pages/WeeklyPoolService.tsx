@@ -109,8 +109,8 @@ export default function WeeklyPoolService() {
           <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
             <Link to="/" className="hover:text-accent transition">Home</Link>
             <Link to="/services" className="hover:text-accent transition">Services</Link>
-            <Link to="/#membership" className="hover:text-accent transition">Swim Club</Link>
-            <Link to="/#contact" className="hover:text-accent transition">Contact</Link>
+            <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
+            <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
           </nav>
           <a
             href={PHONE_HREF}
@@ -149,6 +149,7 @@ export default function WeeklyPoolService() {
                     <button
                       type="button"
                       onClick={() => goToLead("weekly_hub")}
+                      data-savvy-cta="request_quote"
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Book free inspection
@@ -156,6 +157,7 @@ export default function WeeklyPoolService() {
                     <button
                       type="button"
                       onClick={() => goToLead("weekly_hub")}
+                      data-savvy-cta="request_quote"
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       Request a quote
@@ -364,6 +366,7 @@ export default function WeeklyPoolService() {
                 <button
                   type="button"
                   onClick={() => goToLead("weekly_hub")}
+                      data-savvy-cta="request_quote"
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book free inspection

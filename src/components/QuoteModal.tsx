@@ -222,7 +222,13 @@ export default function QuoteModal() {
               Tell us where the pool is and we&apos;ll call you right back — usually the same day.
             </p>
 
-            <form onSubmit={onSubmit} className="mt-6 space-y-3" noValidate={false}>
+            <form
+              onSubmit={onSubmit}
+              data-savvy-cta="free_pool_visit"
+              className="mt-6 space-y-3"
+              noValidate={false}
+            >
+
               <label className="block">
                 <span className="sr-only">Full name</span>
                 <input

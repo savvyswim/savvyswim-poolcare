@@ -360,6 +360,7 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => openBooking()}
+                data-savvy-cta="request_quote"
                 aria-label="Request a quote — opens the Savvy Swim booking form"
                 className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
               >
@@ -686,6 +687,7 @@ const Index = () => {
       <button
         type="button"
         onClick={() => openBooking()}
+        data-savvy-cta="request_quote"
         aria-label="Request a quote — opens the Savvy Swim booking form"
         className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         style={{ writingMode: "vertical-rl" }}
@@ -853,6 +855,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => requestPlanQuote(plan.name)}
+                  data-savvy-cta="get_my_quote"
                   className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
                   Get my quote <ArrowRight className="h-4 w-4" />

@@ -187,8 +187,8 @@ const Services = () => {
           <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
             <Link to="/" className="hover:text-accent transition">Home</Link>
             <Link to="/services" className="text-accent">Services</Link>
-            <Link to="/#membership" className="hover:text-accent transition">Swim Club</Link>
-            <Link to="/#contact" className="hover:text-accent transition">Contact</Link>
+            <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
+            <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
           </nav>
           <a
             href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
@@ -232,6 +232,7 @@ const Services = () => {
                     <button
                       type="button"
                       onClick={() => openBooking()}
+                  data-savvy-cta="request_quote"
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Start Service <ArrowRight className="h-4 w-4" />
@@ -369,6 +370,7 @@ const Services = () => {
                       <button
                         type="button"
                         onClick={() => openBooking(s.title)}
+                        data-savvy-cta="request_quote"
                         aria-label={`Book a free quote for ${s.title}`}
                         className="mt-auto inline-flex w-full items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground hover:text-primary transition"
                       >
@@ -437,6 +439,7 @@ const Services = () => {
                 <button
                   type="button"
                   onClick={() => openBooking()}
+                  data-savvy-cta="request_quote"
                   className="btn-quote mt-7 inline-flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-4 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Request a quote
