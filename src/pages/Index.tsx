@@ -201,15 +201,25 @@ const Index = () => {
     const t = window.setTimeout(start, 2000);
     return () => window.clearTimeout(t);
   }, []);
+  // Announced to screen readers before we navigate off-site, so a keyboard or
+  // reader user knows the button worked and where they are being taken.
+  const [handoffStatus, setHandoffStatus] = useState("");
   /** Billing, checkout and memberships are handled in the Savvy Swim app. */
   const goToApp = (path: string, params: Record<string, string> = {}) => {
+    setHandoffStatus("Opening the Savvy Swim app…");
     window.location.href = buildCrmLink(path, params);
   };
-  const joinSwimClub = (source: string) => goToSwimClub(source);
+  const joinSwimClub = (source: string) => {
+    setHandoffStatus("Opening Swim Club checkout…");
+    goToSwimClub(source);
+  };
   const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
   /** Every lead button hands off to the booking form in the Savvy Swim app. */
-  const openBooking = (service?: string) =>
+  const openBooking = (service?: string) => {
+    setHandoffStatus("Opening the booking form…");
     goToLead("home", service ? { service } : {});
+  };
+
 
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
