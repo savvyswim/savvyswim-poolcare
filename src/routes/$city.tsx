@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import CityLanding from "@/pages/CityLanding";
-import { getServiceArea, SERVICE_AREAS } from "@/lib/serviceAreas";
+import { buildCityFaq, getServiceArea, SERVICE_AREAS } from "@/lib/serviceAreas";
+
 
 export const Route = createFileRoute("/$city")({
   loader: ({ params }) => {
