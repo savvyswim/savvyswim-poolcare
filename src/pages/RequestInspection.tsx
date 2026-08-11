@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
+import AddressMapPreview from "@/components/AddressMapPreview";
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -73,6 +74,7 @@ const RequestInspection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
   const [contactTime, setContactTime] = useState("");
+  const [addressPlace, setAddressPlace] = useState<{ address: string; placeId: string }>({ address: "", placeId: "" });
   const days = useMemo(buildDays, []);
   const [slotDate, setSlotDate] = useState<string>(days[0]?.iso ?? "");
   const [slot, setSlot] = useState<string>("");
@@ -262,7 +264,15 @@ const RequestInspection = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor="address">Property address *</Label>
-                  <AddressAutocomplete id="address" name="address" required maxLength={300} placeholder="Start typing your address…" />
+                  <AddressAutocomplete
+                    id="address"
+                    name="address"
+                    required
+                    maxLength={300}
+                    placeholder="Start typing your address…"
+                    onSelect={(v, pid) => setAddressPlace({ address: v, placeId: pid })}
+                  />
+                  <AddressMapPreview placeId={addressPlace.placeId} address={addressPlace.address} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postal_code">ZIP *</Label>

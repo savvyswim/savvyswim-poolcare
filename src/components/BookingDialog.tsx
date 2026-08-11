@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
+import AddressMapPreview from "@/components/AddressMapPreview";
 
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -91,6 +92,7 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
     smsOptIn: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [addressPlaceId, setAddressPlaceId] = useState("");
 
   useEffect(() => {
     if (open) {
@@ -318,7 +320,12 @@ export const BookingDialog = ({ open, onOpenChange, defaultService }: BookingDia
                   value={values.address ?? ""}
                   onChange={(v) => set("address", v)}
                   placeholder="123 Lakeshore Dr, Austin, TX"
+                  onSelect={(v, pid) => {
+                    set("address", v);
+                    setAddressPlaceId(pid);
+                  }}
                 />
+                <AddressMapPreview placeId={addressPlaceId} address={values.address ?? ""} />
               </Field>
 
 
