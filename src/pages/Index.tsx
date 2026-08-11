@@ -292,7 +292,12 @@ const Index = () => {
           url: "https://savvyswimservices.com",
         }}
       />
+      {/* Handoff announcements for screen readers (buttons navigate off-site). */}
+      <p aria-live="polite" role="status" className="sr-only">
+        {handoffStatus}
+      </p>
       {/* NAV */}
+
       <header className="fixed top-0 left-0 right-0 z-50">
         {/* Utility bar */}
         <div className="topbar hidden md:block text-[13px]">
