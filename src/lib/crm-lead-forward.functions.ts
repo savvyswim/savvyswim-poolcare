@@ -53,6 +53,9 @@ export const forwardLeadToCrm = createServerFn({ method: "POST" })
     const token = process.env["CRM_LEADS_TOKEN"];
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
+    const { logWebhookDelivery } = await import("./webhook-log.server");
+    const reference = `${req.reference_number ?? req.id} · ${req.full_name ?? "lead"}`;
+
     try {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -62,6 +65,17 @@ export const forwardLeadToCrm = createServerFn({ method: "POST" })
       const body = await res.text();
       if (!res.ok) {
         console.error("CRM lead forward failed", res.status, body.slice(0, 500));
+        await logWebhookDelivery({
+          channel: "lead",
+          eventKey: req.id,
+          endpoint,
+          reference,
+          outcome: "failed",
+          httpStatus: res.status,
+          error: `CRM responded ${res.status}`,
+          request: payload,
+          response: body,
+        });
         return { forwarded: false as const, status: res.status };
       }
       const { logInspectionEvents } = await import("./inspection-events.server");
@@ -72,9 +86,29 @@ export const forwardLeadToCrm = createServerFn({ method: "POST" })
           outcome: "sent",
         },
       ]);
+      await logWebhookDelivery({
+        channel: "lead",
+        eventKey: req.id,
+        endpoint,
+        reference,
+        outcome: "success",
+        httpStatus: res.status,
+        request: payload,
+        response: body,
+      });
       return { forwarded: true as const, status: res.status };
     } catch (e) {
       console.error("CRM lead forward error", e);
+      await logWebhookDelivery({
+        channel: "lead",
+        eventKey: req.id,
+        endpoint,
+        reference,
+        outcome: "failed",
+        httpStatus: 0,
+        error: e instanceof Error ? e.message : String(e),
+        request: payload,
+      });
       return { forwarded: false as const, status: 0 };
     }
   });
