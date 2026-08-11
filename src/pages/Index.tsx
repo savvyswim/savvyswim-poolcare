@@ -42,6 +42,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
+import { openWaterTestModal } from "@/components/QuoteModal";
+
 import { resetConsent } from "@/lib/consent";
 
 // Only needed after a click — keep it out of the first payload.
