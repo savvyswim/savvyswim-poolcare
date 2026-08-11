@@ -70,6 +70,15 @@ function buildDays(): Day[] {
   return out;
 }
 
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={id} role="alert" className="text-xs font-semibold text-destructive">
+      {message}
+    </p>
+  );
+}
+
 /** (469) 744-0379 style formatting as the visitor types. */
 function formatPhone(input: string): string {
   const d = input.replace(/\D/g, "").slice(0, 10);
