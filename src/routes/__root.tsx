@@ -26,15 +26,26 @@ const SITE_DESCRIPTION =
 const OG_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/7GbNeRz73ROCzqUdADLL8vqrNGq2/social-images/social-1785866500939-social-image.webp";
 
-const LOCAL_BUSINESS_JSONLD = JSON.stringify({
+const SITE_JSONLD = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Savvy Swim",
-  url: "https://savvyswim.com",
-  description: "Weekly pool cleaning, equipment repair, and service across Texas.",
-  telephone: "+1-469-744-0379",
-  email: "hi@savvyswim.com",
-  areaServed: "Texas",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://savvyswim.com/#organization",
+      name: "Savvy Swim",
+      url: "https://savvyswim.com/",
+      logo: "https://savvyswim.com/apple-touch-icon.png",
+      email: "hi@savvyswim.com",
+      telephone: "+1-469-744-0379",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://savvyswim.com/#website",
+      url: "https://savvyswim.com/",
+      name: "Savvy Swim",
+      publisher: { "@id": "https://savvyswim.com/#organization" },
+    },
+  ],
 });
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -76,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
     ],
-    scripts: [{ type: "application/ld+json", children: LOCAL_BUSINESS_JSONLD }],
+    scripts: [{ type: "application/ld+json", children: SITE_JSONLD }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
