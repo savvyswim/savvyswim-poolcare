@@ -17,7 +17,17 @@ The current quote popup is the short version (name, phone, email, address, notes
 - The form keeps `data-savvy-cta="free_pool_visit"` so the CRM connector mirrors it into the lead inbox with page and UTM attribution.
 - One modal only — no second unstyled popup.
 
+## Second form: free water test (side panel)
+
+A twin of the booking form, opened from a slim vertical tab pinned to the side of the page (mirroring the existing "Request a Quote" side tab, on the opposite edge; on mobile it becomes a small floating pill above the thumb line).
+
+- Header: "FREE · IN-STORE ACCURACY" eyebrow, headline "Book your free water test", subline "Drop a sample or we'll test on site — full chemistry report within one business day."
+- Same field set and layout as the booking form: name, phone, email, property address with autocomplete + map, preferred date, preferred time, notes, SMS consent.
+- Service dropdown is replaced by a water-test dropdown: Full chemistry panel, Green pool diagnosis, Salt cell / chlorinator check, Scale & hardness (NTMWD water), Not sure — help me decide.
+- Same confirmation screen, same Riviera styling, same hardened `/api/public/leads` submission, tagged `data-savvy-cta="water_test"` so it lands in the CRM as its own intent.
+
 ## Technical notes
+
 
 - Rebuild `src/components/QuoteModal.tsx` around the recovered pre-deletion `BookingDialog` structure (schema, service and time lists, field layout, confirmation state), swapping its old direct database write for the current `/api/public/leads` POST and analytics tracking.
 - Reuse existing `AddressAutocomplete` and `AddressMapPreview` components and the fixed `ui/calendar`.
