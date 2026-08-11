@@ -260,7 +260,7 @@ const RequestInspection = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor="address">Property address *</Label>
-                  <Input id="address" name="address" required maxLength={300} autoComplete="street-address" />
+                  <AddressAutocomplete id="address" name="address" required maxLength={300} placeholder="Start typing your address…" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postal_code">ZIP *</Label>
