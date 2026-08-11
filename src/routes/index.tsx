@@ -6,7 +6,7 @@ import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-d
 
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
-  "Weekly pool cleaning, chemistry and repair across Dallas–Fort Worth from $129.99/mo. Same tech every week, photo report every visit, no contracts. Free inspection.";
+  "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

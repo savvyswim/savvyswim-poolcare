@@ -4,7 +4,7 @@ import { SERVICE_CATALOG, serviceSchema, SITE_URL } from "@/lib/structured-data"
 
 const TITLE = "Pool Cleaning & Repair Services in DFW | Savvy Swim";
 const DESCRIPTION =
-  "Weekly cleaning, green pool recovery, filter cleans and pump, heater or salt-cell repair across Dallas–Fort Worth. Licensed techs, upfront pricing, free inspection.";
+  "Weekly cleaning, green pool recovery, filter cleans and pump, heater or salt-cell repair across DFW. Licensed techs, upfront pricing, free inspection.";
 const URL = `${SITE_URL}/services`;
 
 export const Route = createFileRoute("/services")({

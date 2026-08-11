@@ -4,7 +4,7 @@ import RequestInspection from "@/pages/RequestInspection";
 const URL = "https://savvyswim.com/request-inspection";
 const TITLE = "Request a Free Pool Inspection in DFW | Savvy Swim";
 const DESCRIPTION =
-  "Get a free pool inspection in Dallas–Fort Worth. A Savvy Swim tech tests chemistry, checks equipment and surfaces, then sends a flat-rate quote — no obligation.";
+  "Get a free pool inspection in DFW. A Savvy Swim tech tests chemistry, checks equipment and surfaces, then sends a flat-rate quote — no obligation.";
 
 export const Route = createFileRoute("/request-inspection")({
   component: RequestInspection,
