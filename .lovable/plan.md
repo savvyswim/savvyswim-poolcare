@@ -48,6 +48,40 @@ change.
 Pricing, plan descriptions, city pages, SEO content and schema all stay. Only
 the transactional steps (filling the lead form, paying) move to the app.
 
+### 4. Consent + conversion analytics
+
+A small event log so you can see how consent affects conversions:
+
+- Banner shown, accepted, declined, reopened from the footer "Cookie settings"
+- Lead button clicked (which page, which button, consent state at that moment)
+- Swim Club button clicked (which button, consent state)
+
+Everything is stored first-party in your own database — no cookies needed for
+the counting itself, so declined visitors are still counted anonymously (no
+identifiers, just page, button, consent state, timestamp).
+
+A dashboard section in the CRM (Marketing) shows: banner accept rate, lead
+clicks split by accepted vs declined vs undecided, and click-to-submission rate
+per page, so you can tell whether the banner is costing you leads.
+
+### 5. Bot and spam protection
+
+Since the form itself moves to the app, the protection goes where submissions
+actually arrive on this site: `POST /api/public/leads`, which the CRM embed and
+any stray form still hit. On top of the existing Zod validation, honeypot and
+IP/email rate limits, it gets:
+
+- A timing check (submissions faster than a human can type are rejected)
+- Duplicate collapse on the same email/phone within a short window
+- Cloudflare Turnstile, invisible by default and only challenging suspicious
+  traffic, so mobile users normally see nothing and never solve a puzzle
+- Blocked attempts logged so you can see spam volume rather than guess
+
+Turnstile needs a site key and secret from Cloudflare (free) — I will ask for
+them when it is time to wire it up. Until they exist, the other checks run and
+Turnstile stays off.
+
+
 ## Technical notes
 
 - `src/lib/app-links.ts` gains `leadUrl(source, params)` and
