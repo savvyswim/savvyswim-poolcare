@@ -49,7 +49,20 @@ export const Route = createFileRoute("/$city")({
             areaServed: { "@type": "City", name: area.name, addressRegion: "TX" },
           }),
         },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: buildCityFaq(area).map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }),
+        },
       ],
+
     };
   },
   component: CityPage,
