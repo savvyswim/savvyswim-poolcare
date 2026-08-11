@@ -303,3 +303,24 @@ export const buildCityFaq = (area: ServiceArea): CityFaqItem[] => [
     a: "We come back free, same day, if it's our fault. If landscaping, a storm, or a third party caused it, you still get one complimentary return visit.",
   },
 ];
+
+/**
+ * Unique, CTR-focused title + description per city page.
+ * Titles stay under ~60 chars, descriptions under ~158.
+ */
+export const buildCityMeta = (area: ServiceArea) => {
+  const price = area.startingPrice.replace(/\s*\/\s*month/i, "/mo");
+  const base = `Pool Cleaning in ${area.name}, TX`;
+  const withPrice = `${base} from ${price} | Savvy Swim`;
+  const title = withPrice.length <= 62 ? withPrice : `${base} — Weekly Service | Savvy Swim`;
+
+  const hood = area.neighborhoods.slice(0, 2).join(" and ");
+  const description =
+    `Weekly pool cleaning in ${area.name} from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit — ` +
+    `${hood} and citywide. Book a free inspection.`;
+
+  return {
+    title,
+    description: description.length > 158 ? `${description.slice(0, 155).trimEnd()}…` : description,
+  };
+};
