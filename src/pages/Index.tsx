@@ -670,7 +670,7 @@ const Index = () => {
 
 
             {[
-              { k: "1,200+", v: "Pools serviced" },
+              { k: "500+", v: "Pools serviced" },
               { k: "4.9★", v: "Avg client rating" },
               { k: "52", v: "Visits per year" },
             ].map((s) => (
