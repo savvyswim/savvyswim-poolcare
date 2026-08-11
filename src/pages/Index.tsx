@@ -792,10 +792,7 @@ const Index = () => {
                 </ul>
                 <button
                   type="button"
-                  onClick={() => {
-                    setSubscribePlan(`Request a quote — ${plan.name}`);
-                    setSubscribeOpen(true);
-                  }}
+                  onClick={() => requestPlanQuote(plan.name)}
                   className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-amber-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-cta hover:brightness-110 transition"
                 >
                   Get my quote <ArrowRight className="h-4 w-4" />
