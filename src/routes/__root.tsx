@@ -16,6 +16,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
 
+// Consent bar is post-hydration only — keep it out of the first payload.
+const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
+
+
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import appCss from "../styles.css?url";
