@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { CONSENT_EVENT, getConsent, loadLeadEmbed, setConsent } from "@/lib/consent";
+import { CONSENT_EVENT, getConsent, setConsent } from "@/lib/consent";
 import { trackSiteEvent } from "@/lib/site-analytics";
 
 /**
  * Cookie / tracking consent bar.
  *
- * The lead-capture embed is only injected once a visitor accepts. Rendered
- * after hydration so it never blocks first paint or shifts layout.
+ * Lead capture happens on this site, so nothing third-party is injected here.
+ * Rendered after hydration so it never blocks first paint or shifts layout.
  *
  * Accessibility notes:
  * - Non-modal dialog: it never traps focus on first load (that would hijack a
@@ -26,7 +26,6 @@ export default function ConsentBanner() {
 
   useEffect(() => {
     const choice = getConsent();
-    if (choice === "accepted") loadLeadEmbed();
     if (choice === null) setVisible(true);
 
     const onChange = () => {

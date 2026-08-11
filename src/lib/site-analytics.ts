@@ -82,18 +82,23 @@ if (typeof document !== "undefined") {
 }
 
 /* ------------------------------------------------------------------ *
- * Handoff helpers — track the click, then send the visitor to the app.
+ * Lead capture happens on this site; only checkout/portal links hand off.
  * ------------------------------------------------------------------ */
 
-import { leadUrl, swimClubCheckoutUrl } from "./app-links";
+import { swimClubCheckoutUrl } from "./app-links";
+import { openQuoteModal } from "@/components/QuoteModal";
 
-/** Send the visitor to the CRM booking form, tagged with the button. */
+/** Open the on-site quote form, tagged with the button that triggered it. */
 export function goToLead(
   source: string,
   params: Record<string, string | number | undefined | null> = {},
 ) {
   trackSiteEvent("lead_click", source);
-  window.location.href = leadUrl(source, params);
+  const service = params['service'];
+  openQuoteModal({
+    source,
+    service: service === undefined || service === null ? undefined : `${service}`,
+  });
 }
 
 /** Send the visitor to the Swim Club Stripe checkout, tagged with the button. */

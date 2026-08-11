@@ -1,15 +1,11 @@
 /**
- * /free-inspection — legacy lead form URL, now handled by the Savvy Swim app.
+ * /free-inspection — legacy lead form URL. Lead capture now lives on the home
+ * page, so this permanently redirects there with the quote form auto-opened.
  */
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { leadUrl } from "@/lib/app-links";
 
 export const Route = createFileRoute("/free-inspection")({
-  beforeLoad: ({ search }) => {
-    throw redirect({
-      href: leadUrl("legacy_free_inspection", search as Record<string, string>),
-      statusCode: 301,
-      reloadDocument: true,
-    });
+  beforeLoad: () => {
+    throw redirect({ to: "/", search: { quote: "1", source: "legacy_free_inspection" }, statusCode: 301 });
   },
 });

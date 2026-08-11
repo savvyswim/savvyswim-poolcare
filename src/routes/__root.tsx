@@ -18,6 +18,10 @@ import { PerfMonitor } from "@/components/PerfMonitor";
 
 // Consent bar is post-hydration only — keep it out of the first payload.
 const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
+// On-site lead capture — opened by every quote / booking CTA.
+const QuoteModal = lazy(() => import("@/components/QuoteModal"));
+
+
 
 
 import NotFound from "@/pages/NotFound";
@@ -129,6 +133,7 @@ function RootComponent() {
           <Outlet />
 
           <Suspense fallback={null}>
+            <QuoteModal />
             <ConsentBanner />
           </Suspense>
 
