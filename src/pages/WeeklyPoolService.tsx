@@ -10,7 +10,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
-import { BookingDialog } from "@/components/BookingDialog";
+import { goToLead } from "@/lib/site-analytics";
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
 import {
   IMG_5504_2_JPG as photoRivieraLoungers,
@@ -88,7 +88,6 @@ export const WEEKLY_FAQ = [
 ];
 
 export default function WeeklyPoolService() {
-  const [bookingOpen, setBookingOpen] = useState(false);
 
   const cities = [
     ...SERVICE_AREAS.map((a) => ({ name: a.name, to: `/${a.slug}`, zips: a.zips })),
@@ -156,7 +155,7 @@ export default function WeeklyPoolService() {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => setBookingOpen(true)}
+                      onClick={() => goToLead("weekly_hub")}
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       Request a quote
@@ -381,7 +380,6 @@ export default function WeeklyPoolService() {
         </section>
       </main>
 
-      <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
     </div>
   );
 }
