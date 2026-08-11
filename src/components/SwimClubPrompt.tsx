@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { X, ArrowRight } from "lucide-react";
+import { CONSENT_EVENT, getConsent } from "@/lib/consent";
+
 
 const DISMISS_KEY = "savvy_swim_club_prompt_dismissed";
 
@@ -16,6 +18,17 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const titleId = useId();
   const descId = useId();
+
+  // The cookie bar owns the bottom of the screen until the visitor answers it.
+  // Showing the offer underneath it made the Join button unclickable, so we
+  // wait for a consent choice (or a later re-check) before appearing.
+  const [consentSettled, setConsentSettled] = useState(false);
+  useEffect(() => {
+    const sync = () => setConsentSettled(getConsent() !== null);
+    sync();
+    window.addEventListener(CONSENT_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_EVENT, sync);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -39,6 +52,8 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
+
+
 
   const dismiss = () => {
     setVisible(false);
@@ -78,7 +93,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
     }
   };
 
-  if (!visible) return null;
+  if (!visible || !consentSettled) return null;
 
   return (
     <div
