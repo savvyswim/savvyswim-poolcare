@@ -686,7 +686,8 @@ const Index = () => {
       <button
         type="button"
         onClick={() => openBooking()}
-        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta"
+        aria-label="Request a quote — opens the Savvy Swim booking form"
+        className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         style={{ writingMode: "vertical-rl" }}
       >
         Request a Quote
