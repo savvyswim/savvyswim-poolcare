@@ -224,6 +224,14 @@ const Services = () => {
                   <p className="mt-4 font-serif italic text-lg sm:text-xl leading-snug text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    See exactly{" "}
+                    <Link to="/weekly-pool-service" className="text-accent underline underline-offset-4">
+                      what weekly pool service includes
+                    </Link>{" "}
+                    — visit checklist, photo report, and the same-tech promise.
+                  </p>
+
                   <div className="mt-8 flex flex-wrap gap-3">
                     <button
                       type="button"
