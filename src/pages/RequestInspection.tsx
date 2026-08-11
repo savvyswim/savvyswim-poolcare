@@ -436,9 +436,11 @@ const RequestInspection = () => {
                     );
                   })}
                 </div>
+                <FieldError id="slot-error" message={errors["slot"]} />
                 <p className="text-xs text-muted-foreground">
                   Windows are ~2 hours. We confirm by text right after you submit.
                 </p>
+
               </div>
 
               <div className="space-y-2">
