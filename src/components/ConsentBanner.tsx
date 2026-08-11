@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { CONSENT_EVENT, getConsent, loadLeadEmbed, setConsent } from "@/lib/consent";
+import { CONSENT_EVENT, getConsent, setConsent } from "@/lib/consent";
 import { trackSiteEvent } from "@/lib/site-analytics";
 
 /**
