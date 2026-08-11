@@ -670,8 +670,15 @@ const Index = () => {
       </button>
 
       {/* MARQUEE — telemetry ticker */}
-      <section className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden">
+      <section
+        aria-labelledby="service-details"
+        className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden"
+      >
+        <h2 id="service-details" className="sr-only">
+          Pool service details we handle every week
+        </h2>
         <div className="flex animate-marquee gap-10 whitespace-nowrap font-tech">
+
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-10 items-center shrink-0 opacity-90">
               <span>Weekly Cleaning</span><span className="text-accent">/</span>
