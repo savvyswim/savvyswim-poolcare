@@ -15,6 +15,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
@@ -64,6 +65,11 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
+    | '/portal'
     | '/privacy'
     | '/privacy-policy'
     | '/request-inspection'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
+    | '/portal'
     | '/privacy'
     | '/privacy-policy'
     | '/request-inspection'
@@ -324,6 +335,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/pool-cleaning-frisco-tx'
+    | '/portal'
     | '/privacy'
     | '/privacy-policy'
     | '/request-inspection'
@@ -353,6 +365,7 @@ export interface RootRouteChildren {
   BookingRoute: typeof BookingRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
+  PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RequestInspectionRoute: typeof RequestInspectionRoute
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pool-cleaning-frisco-tx': {
@@ -569,6 +589,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRoute: BookingRoute,
   FreeInspectionRoute: FreeInspectionRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
+  PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RequestInspectionRoute: RequestInspectionRoute,
