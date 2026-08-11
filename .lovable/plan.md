@@ -39,12 +39,12 @@ savvyswim.app   -> CRM + customer portal + cart/checkout + all payments
 
 ## Technical notes
 
-- Set `VITE_CRM_URL=https://savvyswim.app` so `appUrl`/`portalUrl`/`staffLoginUrl` resolve externally; add small redirect routes for the old in-app paths.
-- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`.
-- Files kept: shop/cart/checkout (`useCart`, `CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `/checkout/return`) and their checkout/webhook backends.
-- Payments: enable Stripe on this project, then create the products/prices (service plans, Swim Club membership, store items) with tax codes, and wire the checkout + webhook handler.
-- Server functions kept: lead intake/validation/rate limiting, lead forwarding to the CRM, inspection notifications, appointment-status webhook, health/canary endpoints, checkout and payment webhooks.
-- Server functions removed: CRM-only ones (savvy AI, webhook tester, finance, contracts, test credentials).
+- Set `VITE_CRM_URL=https://savvyswim.app` so `appUrl`/`portalUrl`/`staffLoginUrl`/checkout links resolve externally; add small redirect routes for the old in-app paths.
+- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`, plus cart/checkout (`useCart`, `CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `/checkout/*`).
+- Every removed button is replaced by a `buildCrmLink()` handoff that appends plan/product id and UTM/session params.
+- Server functions kept: lead intake/validation/rate limiting, lead forwarding to the CRM, inspection notifications, appointment-status webhook, health/canary endpoints.
+- Server functions removed: CRM-only and payment ones (savvy AI, webhook tester, finance, contracts, checkout/Stripe webhooks, test credentials).
+- No payment provider is enabled on this project; payments live in the CRM app.
 - Anything shared by both apps stays in the database, not in code.
 
 ## Confirm before I start
