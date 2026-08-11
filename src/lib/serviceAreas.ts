@@ -1,3 +1,21 @@
+export interface CityFaqItem {
+  q: string;
+  a: string;
+}
+
+export interface CityLocalDetail {
+  /** Short lede shown above the local water section. */
+  waterHeadline: string;
+  waterNotes: { title: string; body: string }[];
+  /** Weekly route coverage, grouped by area of the city. */
+  routeDays: { area: string; zips: string; window: string }[];
+  routeNote: string;
+  /** Exactly what a weekly visit includes in this city. */
+  inclusions: { group: string; items: string[] }[];
+  /** City-specific FAQ appended to the shared set. */
+  extraFaq?: CityFaqItem[];
+}
+
 export interface ServiceArea {
   slug: string;
   name: string;
@@ -5,6 +23,7 @@ export interface ServiceArea {
   intro: string;
   neighborhoods: string[];
   startingPrice: string;
+  local?: CityLocalDetail;
 }
 
 export const SERVICE_AREAS: ServiceArea[] = [
