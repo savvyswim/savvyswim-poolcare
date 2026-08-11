@@ -302,8 +302,32 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </li>
               ))}
             </ul>
+
+            <p className="mt-8 text-sm text-muted-foreground">
+              New to weekly service?{" "}
+              <Link to="/weekly-pool-service" className="text-accent underline underline-offset-4">
+                See exactly what a weekly pool visit includes
+              </Link>
+              .
+            </p>
+
+            <div className="mt-8 border-t border-hairline pt-6">
+              <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                Nearby service areas
+              </div>
+              <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[0.92rem]">
+                {nearby.map((n) => (
+                  <li key={n.to}>
+                    <Link to={n.to} className="hover:text-accent transition underline underline-offset-4 decoration-hairline">
+                      Pool service in {n.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
+
 
         {/* FAQ */}
         <section className="perf-section py-16 sm:py-20 border-b border-hairline">
