@@ -65,10 +65,12 @@ export default function ConsentBanner() {
     (value: "accepted" | "declined") => {
       trackSiteEvent(value === "accepted" ? "banner_accepted" : "banner_declined");
       setConsent(value);
+      if (value === "accepted") loadCrmLeadMirror();
       close();
     },
     [close],
   );
+
 
   // Escape dismisses the bar without recording a choice; Tab cycles within it.
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
