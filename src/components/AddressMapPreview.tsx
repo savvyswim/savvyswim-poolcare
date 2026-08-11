@@ -46,7 +46,9 @@ export default function AddressMapPreview({ placeId, address, className }: Props
         }
         setError(null);
       } catch {
-        if (!cancelled) setError("Map preview unavailable");
+        // Key blocked on this domain, offline, or Places failed — hide the map
+        // entirely rather than leaving a dead grey box in the form.
+        if (!cancelled) setError("unavailable");
       }
     })();
 
