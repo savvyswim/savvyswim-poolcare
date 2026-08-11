@@ -181,6 +181,110 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
           </div>
         </section>
 
+        {local && (
+          <>
+            {/* LOCAL WATER */}
+            <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+              <div className="container-tight">
+                <div className="flex items-center gap-2 font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                  <FlaskConical className="h-3.5 w-3.5" /> Local water report
+                </div>
+                <h2 className="mt-4 font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
+                  {city} water &amp; scale<span className="text-accent">.</span>
+                </h2>
+                <p className="mt-4 max-w-2xl text-muted-foreground leading-relaxed">{local.waterHeadline}</p>
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                  {local.waterNotes.map((n) => (
+                    <div key={n.title} className="border-t border-hairline pt-5">
+                      <h3 className="font-display text-[1.15rem] uppercase tracking-tight">{n.title}</h3>
+                      <p className="mt-2 text-muted-foreground text-[0.95rem] leading-relaxed">{n.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* ROUTE DAYS */}
+            <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+              <div className="container-tight">
+                <div className="flex items-center gap-2 font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                  <CalendarDays className="h-3.5 w-3.5" /> Weekly route
+                </div>
+                <h2 className="mt-4 font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
+                  {city} route days<span className="text-accent">.</span>
+                </h2>
+                <div className="mt-8 overflow-x-auto">
+                  <table className="w-full min-w-[520px] border-collapse text-left">
+                    <thead>
+                      <tr className="border-y border-hairline font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        <th className="py-3 pr-4 font-normal">Area</th>
+                        <th className="py-3 pr-4 font-normal">Zip codes</th>
+                        <th className="py-3 font-normal">Service window</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-hairline">
+                      {local.routeDays.map((r) => (
+                        <tr key={r.area}>
+                          <td className="py-4 pr-4 font-display text-[1.05rem] uppercase tracking-tight">{r.area}</td>
+                          <td className="py-4 pr-4 font-tech text-[0.9rem] text-muted-foreground">{r.zips}</td>
+                          <td className="py-4 text-[0.95rem]">{r.window}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="mt-5 max-w-2xl text-muted-foreground text-[0.95rem] leading-relaxed">{local.routeNote}</p>
+              </div>
+            </section>
+
+            {/* INCLUSIONS */}
+            <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+              <div className="container-tight">
+                <h2 className="font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
+                  What's included in {city}<span className="text-accent">.</span>
+                </h2>
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10">
+                  {local.inclusions.map((g) => (
+                    <div key={g.group} className="border-t border-hairline pt-5">
+                      <h3 className="font-display text-[1.05rem] uppercase tracking-tight">{g.group}</h3>
+                      <ul className="mt-4 space-y-2.5">
+                        {g.items.map((item) => (
+                          <li key={item} className="flex gap-2 text-[0.92rem] leading-relaxed">
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-brand" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* GALLERY */}
+            <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+              <div className="container-tight">
+                <h2 className="font-display text-[1.9rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
+                  {city} pools we keep<span className="text-accent">.</span>
+                </h2>
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {gallery.map((g) => (
+                    <img
+                      key={g.src}
+                      src={g.src}
+                      alt={g.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full aspect-[4/3] object-cover rounded-sm border border-hairline"
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+
         {/* NEIGHBORHOODS */}
         <section className="perf-section py-16 sm:py-20 border-b border-hairline">
           <div className="container-tight max-w-3xl">
