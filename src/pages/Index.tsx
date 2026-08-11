@@ -279,7 +279,7 @@ const Index = () => {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Savvy Swim",
-          url: "https://savvyswim.com",
+          url: "https://savvyswimservices.com",
         }}
       />
       {/* NAV */}
@@ -485,13 +485,17 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* giant wordmark */}
+              {/* giant wordmark + what we actually do (keeps the H1 descriptive) */}
               <h1 className="mt-10 sm:mt-14">
                 <span className="type-mega block" style={{ fontSize: "clamp(3.4rem, 15vw, 11rem)" }}>
                   Savvy
                   <span className="block">Swim</span>
                 </span>
+                <span className="mt-3 block font-display text-[clamp(0.95rem,2.4vw,1.4rem)] uppercase tracking-[0.14em] text-primary/70">
+                  Pool cleaning &amp; service in DFW
+                </span>
               </h1>
+
 
               <div className="mt-8 flex flex-col gap-8 border-t border-primary/10 pt-8 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-lg">
@@ -540,7 +544,13 @@ const Index = () => {
 
         {/* Every visit includes — under the panel */}
         <div className="relative bg-canvas">
-          <div className="container-tight grid gap-6 py-12 lg:gap-8 lg:py-16 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="container-tight pt-12 lg:pt-16">
+            <h2 className="font-display text-[1.4rem] sm:text-[1.7rem] uppercase tracking-[0.1em] text-primary">
+              Every weekly visit includes
+            </h2>
+          </div>
+          <div className="container-tight grid gap-6 pb-12 pt-8 lg:gap-8 lg:pb-16 sm:grid-cols-2 lg:grid-cols-4">
+
             {[
               { n: "01", t: "Skim, brush & vacuum" },
               { n: "02", t: "Full chemistry balance" },
@@ -660,8 +670,15 @@ const Index = () => {
       </button>
 
       {/* MARQUEE — telemetry ticker */}
-      <section className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden">
+      <section
+        aria-labelledby="service-details"
+        className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden"
+      >
+        <h2 id="service-details" className="sr-only">
+          Pool service details we handle every week
+        </h2>
         <div className="flex animate-marquee gap-10 whitespace-nowrap font-tech">
+
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-10 items-center shrink-0 opacity-90">
               <span>Weekly Cleaning</span><span className="text-accent">/</span>

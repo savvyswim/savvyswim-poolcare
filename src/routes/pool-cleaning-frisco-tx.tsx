@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PoolCleaningFrisco from "@/pages/PoolCleaningFrisco";
 
-const URL = "https://savvyswim.com/pool-cleaning-frisco-tx";
+const URL = "https://savvyswimservices.com/pool-cleaning-frisco-tx";
 const TITLE = "Pool Cleaning in Frisco, TX from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
   "Weekly pool cleaning in Frisco, TX from $129.99/mo. Chemistry, cleaning and equipment checks with a photo report every visit — Starwood, Stonebriar and citywide.";

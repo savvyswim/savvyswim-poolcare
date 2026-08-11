@@ -15,7 +15,7 @@ import { sendLovableEmail } from "@lovable.dev/email-js";
 
 import { runCanary, summarizeCanary, DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
 
-const DEFAULT_TARGET = "https://savvyswim.com";
+const DEFAULT_TARGET = "https://savvyswimservices.com";
 const PREVIEW_TARGET = "https://id-preview--beff0d54-4ac3-49d5-8d2c-3d4520824e41.lovable.app";
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
 const DEFAULT_PHONE = "+14697440379";

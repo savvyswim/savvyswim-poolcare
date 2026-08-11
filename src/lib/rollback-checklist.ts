@@ -83,7 +83,7 @@ export function buildRollbackChecklist(pings: DeployPing[], failures: string[]):
     );
   }
 
-  steps.push("After restoring, re-run `BASE_URL=https://savvyswim.com bun run test:smoke` and confirm 200s.");
+  steps.push("After restoring, re-run `BASE_URL=https://savvyswimservices.com bun run test:smoke` and confirm 200s.");
   steps.push("Then fix forward on the broken change and publish again.");
 
   return {
