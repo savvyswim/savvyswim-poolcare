@@ -44,7 +44,7 @@ export type CanaryRun = {
 export const DEFAULT_CANARY_ROUTES = [
   "/",
   "/services",
-  "/weekly-pool-service-near-me",
+  "/weekly-pool-service",
   "/pool-cleaning-frisco-tx",
   "/app",
   "/portal",
@@ -53,7 +53,7 @@ export const DEFAULT_CANARY_ROUTES = [
   "/api/public/health",
 ];
 
-export const SMOKE_ROUTES = ["/", "/services", "/weekly-pool-service-near-me"];
+export const SMOKE_ROUTES = ["/", "/services", "/weekly-pool-service"];
 
 const BODY_SNIPPET_LIMIT = 1200;
 const MIN_HTML_BYTES = 500;
