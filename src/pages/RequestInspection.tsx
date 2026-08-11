@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@/lib/router-compat";
-import { Phone, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { Phone, ArrowLeft, CheckCircle2, Loader2, CalendarPlus } from "lucide-react";
 import { z } from "zod";
 import Seo from "@/components/Seo";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,7 @@ import {
 import { notifyInspectionRequest } from "@/lib/inspection-notify.functions";
 import { forwardLeadToCrm } from "@/lib/crm-lead-forward.functions";
 import { getAttribution, getSessionId, trackContactClick } from "@/lib/contactTracking";
+import { downloadIcs } from "@/lib/calendar";
 
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
@@ -68,6 +69,15 @@ function buildDays(): Day[] {
     cursor.setDate(cursor.getDate() + 1);
   }
   return out;
+}
+
+/** "1:00 PM" -> 13 */
+function parseSlotHour(slot: string): number {
+  const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(slot.trim());
+  if (!m) return 9;
+  let h = Number(m[1]) % 12;
+  if (/pm/i.test(m[3] ?? "")) h += 12;
+  return h;
 }
 
 function FieldError({ id, message }: { id: string; message?: string | undefined }) {
