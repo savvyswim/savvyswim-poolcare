@@ -1192,20 +1192,7 @@ const Index = () => {
             {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
           />
         )}
-        {orderOpen && (
-          <OrderDialog item={orderItem} open={orderOpen} onOpenChange={setOrderOpen} />
-        )}
-        {subscribeOpen && (
-          <SubscribeDialog
-            open={subscribeOpen}
-            onOpenChange={setSubscribeOpen}
-            {...(subscribePlan !== undefined ? { planName: subscribePlan } : {})}
-          />
-        )}
-        {membershipOpen && (
-          <MembershipDialog open={membershipOpen} onOpenChange={setMembershipOpen} />
-        )}
-        {promptReady && <SwimClubPrompt onJoin={() => setMembershipOpen(true)} />}
+        {promptReady && <SwimClubPrompt onJoin={() => joinSwimClub("prompt")} />}
       </Suspense>
 
 
