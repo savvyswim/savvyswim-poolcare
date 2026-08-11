@@ -195,6 +195,20 @@ async function handle(request: Request): Promise<Response> {
     payload: payload as never,
   });
 
+  const { logWebhookDelivery } = await import("@/lib/webhook-log.server");
+  await logWebhookDelivery({
+    channel: "appointment",
+    direction: "inbound",
+    eventKey: eventId,
+    endpoint: "/api/public/hooks/crm-appointment-status",
+    reference: `${evt.customerName ?? evt.email ?? appointmentId ?? "appointment"} · ${status.replace(/_/g, " ")}`,
+    outcome: notifiedEmail || notifiedSms ? "success" : error ? "failed" : "skipped",
+    httpStatus: 200,
+    error,
+    request: payload,
+    response: JSON.stringify({ email: notifiedEmail, sms: notifiedSms }),
+  });
+
   return json({ ok: true, event_id: eventId, notified: { email: notifiedEmail, sms: notifiedSms }, error });
 }
 

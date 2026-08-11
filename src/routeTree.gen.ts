@@ -26,6 +26,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
+import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
@@ -34,6 +35,7 @@ import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/p
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
+import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api/public/hooks/crm-payment-status'
 import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
 
@@ -122,6 +124,11 @@ const QuoteTokenRoute = QuoteTokenRouteImport.update({
   path: '/quote/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
+  id: '/admin/webhook-health',
+  path: '/admin/webhook-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
   id: '/api/public/leads',
   path: '/api/public/leads',
@@ -167,6 +174,12 @@ const ApiPublicHooksFailureRateWatchRoute =
     path: '/api/public/hooks/failure-rate-watch',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksCrmPaymentStatusRoute =
+  ApiPublicHooksCrmPaymentStatusRouteImport.update({
+    id: '/api/public/hooks/crm-payment-status',
+    path: '/api/public/hooks/crm-payment-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksCrmAppointmentStatusRoute =
   ApiPublicHooksCrmAppointmentStatusRouteImport.update({
     id: '/api/public/hooks/crm-appointment-status',
@@ -194,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -201,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -223,6 +238,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -230,6 +246,7 @@ export interface FileRoutesByTo {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -253,6 +270,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
+  '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
@@ -260,6 +278,7 @@ export interface FileRoutesById {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -284,6 +303,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -291,6 +311,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -313,6 +334,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -320,6 +342,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -342,6 +365,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
+    | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
@@ -349,6 +373,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -372,6 +397,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
@@ -379,6 +405,7 @@ export interface RootRouteChildren {
   ApiPublicLeadsRoute: typeof ApiPublicLeadsRoute
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
   ApiPublicHooksCrmAppointmentStatusRoute: typeof ApiPublicHooksCrmAppointmentStatusRoute
+  ApiPublicHooksCrmPaymentStatusRoute: typeof ApiPublicHooksCrmPaymentStatusRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
@@ -508,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuoteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/webhook-health': {
+      id: '/admin/webhook-health'
+      path: '/admin/webhook-health'
+      fullPath: '/admin/webhook-health'
+      preLoaderRoute: typeof AdminWebhookHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/leads': {
       id: '/api/public/leads'
       path: '/api/public/leads'
@@ -564,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksFailureRateWatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/crm-payment-status': {
+      id: '/api/public/hooks/crm-payment-status'
+      path: '/api/public/hooks/crm-payment-status'
+      fullPath: '/api/public/hooks/crm-payment-status'
+      preLoaderRoute: typeof ApiPublicHooksCrmPaymentStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/crm-appointment-status': {
       id: '/api/public/hooks/crm-appointment-status'
       path: '/api/public/hooks/crm-appointment-status'
@@ -596,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
@@ -604,6 +646,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
   ApiPublicHooksCrmAppointmentStatusRoute:
     ApiPublicHooksCrmAppointmentStatusRoute,
+  ApiPublicHooksCrmPaymentStatusRoute: ApiPublicHooksCrmPaymentStatusRoute,
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
