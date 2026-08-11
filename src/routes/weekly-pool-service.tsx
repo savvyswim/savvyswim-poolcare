@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import WeeklyPoolService, { WEEKLY_FAQ } from "@/pages/WeeklyPoolService";
+import { serviceSchema } from "@/lib/structured-data";
 
 const TITLE = "Weekly Pool Service Near Me | DFW Pool Cleaning — Savvy Swim";
 const DESC =
@@ -21,25 +22,16 @@ export const Route = createFileRoute("/weekly-pool-service")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          name: "Weekly pool service",
-          serviceType: "Weekly pool cleaning and maintenance",
-          provider: {
-            "@type": "LocalBusiness",
-            name: "Savvy Swim",
-            telephone: "+1-469-744-0379",
-            url: "https://savvyswim.com/",
-          },
-          areaServed: "Dallas–Fort Worth, Texas",
-          offers: {
-            "@type": "Offer",
-            price: "129.99",
-            priceCurrency: "USD",
+        children: JSON.stringify(
+          serviceSchema({
+            name: "Weekly pool service",
+            serviceType: "Weekly pool cleaning and maintenance",
+            description:
+              "Full water test, chemicals, skim, brush, vacuum, basket and filter check, with a photo report every visit.",
             url: URL,
-          },
-        }),
+            price: "129.99",
+          }),
+        ),
       },
       {
         type: "application/ld+json",
