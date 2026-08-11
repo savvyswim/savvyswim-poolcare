@@ -283,3 +283,23 @@ export const SERVICE_AREAS: ServiceArea[] = [
 
 export const getServiceArea = (slug: string) =>
   SERVICE_AREAS.find((a) => a.slug === slug);
+
+export const buildCityFaq = (area: ServiceArea): CityFaqItem[] => [
+  {
+    q: `How much does pool cleaning in ${area.name}, TX cost?`,
+    a: `${area.name} weekly service starts at ${area.startingPrice}, chemicals included. Pool size, spa, and condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.`,
+  },
+  {
+    q: `What day do you service ${area.name} pools?`,
+    a: `${area.name} runs on a fixed weekly route day with the same assigned technician. You get an on-my-way text before arrival and a photo report with chemistry readings after every visit.`,
+  },
+  ...(area.local?.extraFaq ?? []),
+  {
+    q: "Do I have to be home?",
+    a: "No. We work around gate codes, dogs, and locked side yards — that's the whole point of on duty, so you don't have to be.",
+  },
+  {
+    q: "What if the water isn't clear after a visit?",
+    a: "We come back free, same day, if it's our fault. If landscaping, a storm, or a third party caused it, you still get one complimentary return visit.",
+  },
+];
