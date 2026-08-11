@@ -19,14 +19,15 @@ savvyswim.app   -> CRM + customer portal + cart/checkout + all payments
 - Anything that linked to them now links out to savvyswim.app through `app-links.ts` with `VITE_CRM_URL=https://savvyswim.app`, so "Customer login", "Staff login", portal, and invoice links all hand off.
 - Keep legacy paths working: `/portal`, `/admin/crm`, `/crm` become instant redirects to the matching page on savvyswim.app.
 
-### 2. Move cart and payments to the CRM
-- Remove the on-site cart drawer, order dialog, subscribe/membership dialogs, and the embedded Stripe checkout from the website.
-- Product/pricing pages stay, but every "Buy", "Subscribe", and "Pay" button becomes a handoff link to the CRM app's checkout with the selected item passed in the URL.
-- Invoice payment stays in the portal on the CRM side (it already runs there).
-- Result: only one app holds payment logic, one set of payment keys, one webhook path. Payments are therefore set up in the CRM project, not here — no payment provider gets enabled on the website.
+### 2. Cart and payments stay on the website
+- The shop, cart drawer, order/subscribe/membership dialogs and checkout all remain on savvyswim.com — customers buy without ever leaving the marketing site.
+- Payments get set up on this project with Stripe (a hands-on pool service plus physical products, so Stripe with tax calculation and collection at checkout; you stay the seller of record). Product and price setup happens right after payments are enabled.
+- Every completed order, subscription and payment is written to the shared database, so the CRM sees orders, invoices and Swim Club members in real time without any sync layer.
+- Store admin screens (orders, products, promos, plans) move to the CRM app, since that's where staff work.
 
-### 3. Keep the two apps talking
-- Leads: the marketing forms keep posting to the CRM lead endpoint (already in place), plus the hardened public endpoint on this site.
+### 3. All leads go to the CRM
+- Every lead source on the site — free inspection form, booking dialog, city landing pages, contact CTAs — posts to the CRM lead endpoint at savvyswim.app, with UTM/attribution attached.
+- The hardened public lead endpoint on this site keeps validation, rate limiting and duplicate collapse, then forwards to the CRM so nothing is lost if a form posts here directly.
 - Appointment status webhook from the CRM back to the website stays as-is for customer email/SMS.
 - Both apps continue to read and write the same shared database, so nothing needs syncing.
 
@@ -39,11 +40,14 @@ savvyswim.app   -> CRM + customer portal + cart/checkout + all payments
 ## Technical notes
 
 - Set `VITE_CRM_URL=https://savvyswim.app` so `appUrl`/`portalUrl`/`staffLoginUrl` resolve externally; add small redirect routes for the old in-app paths.
-- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`, plus cart/checkout components (`CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `useCart`) and their Supabase edge-function callers where the website was the only caller.
-- Server functions kept on the website: lead intake/validation/rate limiting, inspection notifications, appointment-status webhook, health/canary endpoints.
+- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`.
+- Files kept: shop/cart/checkout (`useCart`, `CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `/checkout/return`) and their checkout/webhook backends.
+- Payments: enable Stripe on this project, then create the products/prices (service plans, Swim Club membership, store items) with tax codes, and wire the checkout + webhook handler.
+- Server functions kept: lead intake/validation/rate limiting, lead forwarding to the CRM, inspection notifications, appointment-status webhook, health/canary endpoints, checkout and payment webhooks.
 - Server functions removed: CRM-only ones (savvy AI, webhook tester, finance, contracts, test credentials).
 - Anything shared by both apps stays in the database, not in code.
 
 ## Confirm before I start
 
-Deleting the CRM from this project is not reversible from the website side — the CRM app must already have those screens live at savvyswim.app.
+Deleting the CRM screens from this project is not reversible from the website side — those screens must already be live at savvyswim.app.
+
