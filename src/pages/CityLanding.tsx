@@ -328,17 +328,25 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
             <div className="border border-hairline rounded-sm p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8 justify-between">
               <div>
                 <h2 className="font-display text-[1.8rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
-                  Book pool cleaning in {city}
+                  Book a free {city} pool inspection
                 </h2>
                 <p className="mt-3 text-muted-foreground max-w-md">
-                  Free walkthrough, flat monthly quote, and your first service on the next route day.
+                  A tech walks the pool and equipment pad, tests the water, and gives you a flat
+                  monthly quote — no charge, no contract, first service on the next {city} route day.
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
+                <Link
+                  to="/request-inspection"
+                  onClick={() => trackContactClick("form_open", `${area.slug}_cta_inspection`)}
+                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                >
+                  Book free inspection
+                </Link>
                 <button
                   type="button"
                   onClick={() => setBookingOpen(true)}
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   Request a quote
                 </button>
@@ -350,6 +358,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
               </div>
+
             </div>
           </div>
         </section>
