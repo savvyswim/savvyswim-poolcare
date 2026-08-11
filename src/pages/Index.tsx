@@ -1193,15 +1193,9 @@ const Index = () => {
       </footer>
 
       <Suspense fallback={null}>
-        {bookingOpen && (
-          <BookingDialog
-            open={bookingOpen}
-            onOpenChange={setBookingOpen}
-            {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-          />
-        )}
         {promptReady && <SwimClubPrompt onJoin={() => joinSwimClub("prompt")} />}
       </Suspense>
+
 
 
     </div>
