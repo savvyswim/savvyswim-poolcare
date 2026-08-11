@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 
-/** Customer + staff logins now live in the separate Savvy Swim app. */
+/** Customer + staff logins, billing and checkout live in the Savvy Swim app. */
 const CUSTOMER_LOGIN_URL = "https://savvyswim.app";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
