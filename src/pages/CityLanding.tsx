@@ -8,12 +8,19 @@ import {
   ShieldCheck,
   CheckCircle2,
   MapPin,
+  CalendarDays,
+  FlaskConical,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
 import { BookingDialog } from "@/components/BookingDialog";
-import type { ServiceArea } from "@/lib/serviceAreas";
+import { buildCityFaq, type ServiceArea } from "@/lib/serviceAreas";
 
-import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
+import {
+  IMG_5507_2_JPG as photoNavyCabana,
+  IMG_5504_2_JPG as photoRivieraLoungers,
+  IMG_5512_PNG as photoSavvyRings,
+  pool_water_hd_jpg as photoWater,
+} from "@/assets/photos";
 
 const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
@@ -21,6 +28,7 @@ const PHONE_HREF = "tel:+14697440379";
 export default function CityLanding({ area }: { area: ServiceArea }) {
   const [bookingOpen, setBookingOpen] = useState(false);
   const city = area.name;
+  const local = area.local;
 
   const services = [
     {
@@ -49,24 +57,14 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
     },
   ];
 
-  const faq = [
-    {
-      q: `How much does pool cleaning in ${city}, TX cost?`,
-      a: `${city} weekly service starts at ${area.startingPrice}, chemicals included. Pool size, spa, and condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.`,
-    },
-    {
-      q: `What day do you service ${city} pools?`,
-      a: `${city} runs on a fixed weekly route day with the same assigned technician. You get an on-my-way text before arrival and a photo report with chemistry readings after every visit.`,
-    },
-    {
-      q: "Do I have to be home?",
-      a: "No. We work around gate codes, dogs, and locked side yards — that's the whole point of on duty, so you don't have to be.",
-    },
-    {
-      q: "What if the water isn't clear after a visit?",
-      a: "We come back free, same day, if it's our fault. If landscaping, a storm, or a third party caused it, you still get one complimentary return visit.",
-    },
+  const faq = buildCityFaq(area);
+
+  const gallery = [
+    { src: photoWater.url, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
+    { src: photoRivieraLoungers.url, alt: `Striped loungers beside a serviced ${city}, Texas backyard pool` },
+    { src: photoSavvyRings.url, alt: `Savvy Swim rings floating in a clean ${city}, Texas pool` },
   ];
+
 
   return (
     <div className="min-h-screen overflow-x-hidden">
