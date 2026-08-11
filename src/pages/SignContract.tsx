@@ -3,7 +3,7 @@ import { useParams } from "@/lib/router-compat";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { emailSignedContractCopy, signContractWithAudit } from "@/lib/contracts.functions";
-import { classifyError, retryMessage, withRetry } from "@/crm/lib/retry";
+import { classifyError, retryMessage, withRetry } from "@/lib/retry";
 import { CheckCircle2, Eraser, PenLine, ShieldCheck } from "lucide-react";
 
 
