@@ -82,6 +82,23 @@ them when it is time to wire it up. Until they exist, the other checks run and
 Turnstile stays off.
 
 
+### 6. Speed and smoothness
+
+Removing the form pages, booking dialog, Google Maps autocomplete and map
+preview takes a large chunk of JavaScript off the site by itself. On top of
+that:
+
+- Split the 1,200-line homepage into sections so only the top of the page
+  loads up front; everything below the fold streams in as you scroll
+- Load the Maps script and the CRM lead embed only when needed (the embed
+  already waits for consent)
+- Serve the hero at mobile size on phones, keep the preload for it, and defer
+  every other image
+- Trim animation work on scroll (the biggest cause of jank on mid-range
+  phones) and honor reduced-motion settings
+- Report before/after load, LCP and CLS numbers on mobile and desktop when
+  it's done
+
 ## Technical notes
 
 - `src/lib/app-links.ts` gains `leadUrl(source, params)` and
@@ -96,6 +113,15 @@ Turnstile stays off.
 - Redirect routes use `beforeLoad` with a 301 to the CRM booking URL.
 - Sitemap entries for `/book`, `/free-inspection`, `/request-inspection` are
   dropped since they no longer render content.
+- Analytics: new `public.ss_site_events` table (page, event, button, consent
+  state, utm fields, timestamp; anon insert only, no read) written through a
+  batched `sendBeacon` call; CRM reads it for the dashboard.
+- Spam: Turnstile verification plus timing/duplicate checks added inside
+  `src/routes/api/public/leads.ts`; secrets requested via the secure form.
+- Perf: homepage sections lazy-mounted with `React.lazy` + `content-visibility`,
+  `ScrollReveal` switched to a single IntersectionObserver, hero `<picture>`
+  with mobile/desktop sources.
+
 
 ## Confirm
 
