@@ -279,21 +279,60 @@ const RequestInspection = () => {
               </div>
             </div>
 
-            <form onSubmit={onSubmit} className="space-y-5 lg:col-span-7">
+            <form onSubmit={onSubmit} noValidate className="space-y-5 lg:col-span-7">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="full_name">Full name *</Label>
-                  <Input id="full_name" name="full_name" required maxLength={120} autoComplete="name" />
+                  <Input
+                    id="full_name"
+                    name="full_name"
+                    maxLength={120}
+                    autoComplete="name"
+                    autoCapitalize="words"
+                    enterKeyHint="next"
+                    aria-invalid={!!errors["full_name"]}
+                    aria-describedby={errors["full_name"] ? "full_name-error" : undefined}
+                  />
+                  <FieldError id="full_name-error" message={errors["full_name"]} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Mobile phone *</Label>
-                  <Input id="phone" name="phone" type="tel" required maxLength={40} autoComplete="tel" />
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    inputMode="tel"
+                    maxLength={40}
+                    autoComplete="tel"
+                    enterKeyHint="next"
+                    placeholder="(469) 555-0199"
+                    value={phone}
+                    onChange={(e) => setPhone(formatPhone(e.target.value))}
+                    aria-invalid={!!errors["phone"]}
+                    aria-describedby={errors["phone"] ? "phone-error" : undefined}
+                  />
+                  <FieldError id="phone-error" message={errors["phone"]} />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email *</Label>
-                <Input id="email" name="email" type="email" required maxLength={255} autoComplete="email" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  inputMode="email"
+                  maxLength={255}
+                  autoComplete="email"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  enterKeyHint="next"
+                  placeholder="you@email.com"
+                  aria-invalid={!!errors["email"]}
+                  aria-describedby={errors["email"] ? "email-error" : undefined}
+                />
+                <FieldError id="email-error" message={errors["email"]} />
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -302,18 +341,32 @@ const RequestInspection = () => {
                   <AddressAutocomplete
                     id="address"
                     name="address"
-                    required
                     maxLength={300}
                     placeholder="Start typing your address…"
                     onSelect={(v, pid) => setAddressPlace({ address: v, placeId: pid })}
                   />
+                  <FieldError id="address-error" message={errors["address"]} />
                   <AddressMapPreview placeId={addressPlace.placeId} address={addressPlace.address} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postal_code">ZIP *</Label>
-                  <Input id="postal_code" name="postal_code" required maxLength={20} autoComplete="postal-code" />
+                  <Input
+                    id="postal_code"
+                    name="postal_code"
+                    inputMode="numeric"
+                    maxLength={5}
+                    autoComplete="postal-code"
+                    enterKeyHint="done"
+                    placeholder="75024"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                    aria-invalid={!!errors["postal_code"]}
+                    aria-describedby={errors["postal_code"] ? "postal_code-error" : undefined}
+                  />
+                  <FieldError id="postal_code-error" message={errors["postal_code"]} />
                 </div>
               </div>
+
 
               <div className="space-y-3 border-t border-hairline pt-6">
                 <Label className="font-tech text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
