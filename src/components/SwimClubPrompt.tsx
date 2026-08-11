@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { X, ArrowRight } from "lucide-react";
 
 const DISMISS_KEY = "savvy_swim_club_prompt_dismissed";
@@ -13,6 +13,9 @@ interface SwimClubPromptProps {
  */
 export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
   const [visible, setVisible] = useState(false);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const titleId = useId();
+  const descId = useId();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -46,12 +49,45 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
     }
   };
 
+  // Escape closes the offer from anywhere on the page, as with any dialog.
+  useEffect(() => {
+    if (!visible) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismiss();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [visible]);
+
+  // Tab cycles inside the offer once focus enters it, so a keyboard user can
+  // always reach "Later" and the close button.
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Tab") return;
+    const focusables = panelRef.current?.querySelectorAll<HTMLElement>(
+      "a[href], button:not([disabled])",
+    );
+    if (!focusables || focusables.length === 0) return;
+    const first = focusables[0]!;
+    const last = focusables[focusables.length - 1]!;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   if (!visible) return null;
 
   return (
     <div
+      ref={panelRef}
       role="dialog"
-      aria-label="Savvy Swim Club"
+      aria-modal="false"
+      aria-labelledby={titleId}
+      aria-describedby={descId}
+      onKeyDown={onKeyDown}
       className="fixed inset-x-3 bottom-3 z-[60] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[360px] animate-slide-in-right"
     >
       <div className="relative border border-primary/20 bg-background shadow-card">
@@ -59,9 +95,9 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
           type="button"
           onClick={dismiss}
           aria-label="Dismiss Swim Club offer"
-          className="absolute right-2 top-2 p-1.5 text-primary/40 transition-colors hover:text-primary"
+          className="absolute right-1 top-1 inline-flex min-h-11 min-w-11 items-center justify-center text-primary/40 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4" aria-hidden="true" />
         </button>
 
         <div className="flex items-center gap-2 border-b border-primary/10 px-4 py-2.5">
@@ -72,11 +108,11 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
         </div>
 
         <div className="px-4 py-4">
-          <p className="font-display uppercase leading-[0.95] tracking-tight text-primary text-[26px]">
+          <h2 id={titleId} className="font-display uppercase leading-[0.95] tracking-tight text-primary text-[26px]">
             First service
             <span className="block text-accent">visit free.</span>
-          </p>
-          <ul className="mt-3 space-y-1.5">
+          </h2>
+          <ul id={descId} className="mt-3 space-y-1.5">
             {[
               "Join the Swim Club bundle on a 12-month agreement",
               "25% off filter cleans",
@@ -97,14 +133,16 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
                 dismiss();
                 onJoin();
               }}
-              className="font-tech inline-flex flex-1 items-center justify-center gap-2 bg-primary px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent"
+              aria-label="Join Swim Club — opens the Savvy Swim checkout"
+              className="font-tech inline-flex min-h-11 flex-1 items-center justify-center gap-2 bg-primary px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent"
             >
-              Join in 60 seconds <ArrowRight className="h-3.5 w-3.5" />
+              Join in 60 seconds <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
             <button
               type="button"
               onClick={dismiss}
-              className="font-tech px-3 py-3 text-[11px] uppercase tracking-[0.18em] text-primary/45 transition-colors hover:text-primary"
+              aria-label="Dismiss Swim Club offer"
+              className="font-tech min-h-11 px-3 py-3 text-[11px] uppercase tracking-[0.18em] text-primary/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors hover:text-primary"
             >
               Later
             </button>
