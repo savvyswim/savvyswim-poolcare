@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "@/lib/router-compat";
 import {
   Phone,
@@ -363,12 +362,13 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/request-inspection"
+                <button
+                  type="button"
+                  onClick={() => goToLead("city")}
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book free inspection
-                </Link>
+                </button>
                 <button
                   type="button"
                   onClick={() => goToLead("city")}

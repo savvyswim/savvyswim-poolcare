@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "@/lib/router-compat";
 import {
   Phone,
@@ -147,12 +146,13 @@ export default function WeeklyPoolService() {
                     On duty, so you don't have to be.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
-                    <Link
-                      to="/request-inspection"
+                    <button
+                      type="button"
+                      onClick={() => goToLead("weekly_hub")}
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Book free inspection
-                    </Link>
+                    </button>
                     <button
                       type="button"
                       onClick={() => goToLead("weekly_hub")}
@@ -361,12 +361,13 @@ export default function WeeklyPoolService() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/request-inspection"
+                <button
+                  type="button"
+                  onClick={() => goToLead("weekly_hub")}
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book free inspection
-                </Link>
+                </button>
                 <a
                   href={PHONE_HREF}
                   onClick={() => trackContactClick("call_click", "weekly_hub_cta")}
