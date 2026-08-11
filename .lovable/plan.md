@@ -40,11 +40,14 @@ savvyswim.app   -> CRM + customer portal + cart/checkout + all payments
 ## Technical notes
 
 - Set `VITE_CRM_URL=https://savvyswim.app` so `appUrl`/`portalUrl`/`staffLoginUrl` resolve externally; add small redirect routes for the old in-app paths.
-- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`, plus cart/checkout components (`CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `useCart`) and their Supabase edge-function callers where the website was the only caller.
-- Server functions kept on the website: lead intake/validation/rate limiting, inspection notifications, appointment-status webhook, health/canary endpoints.
+- Files removed: `src/crm/**`, `src/routes/_crm/**`, `src/routes/admin/**`, `src/routes/crm/**`, `src/routes/portal*`, `src/pages/Admin*.tsx`, `src/pages/Portal*.tsx`, `src/pages/CrmApp.tsx`.
+- Files kept: shop/cart/checkout (`useCart`, `CartDrawer`, `OrderDialog`, `SubscribeDialog`, `MembershipDialog`, `StripeEmbeddedCheckout`, `/checkout/return`) and their checkout/webhook backends.
+- Payments: enable Stripe on this project, then create the products/prices (service plans, Swim Club membership, store items) with tax codes, and wire the checkout + webhook handler.
+- Server functions kept: lead intake/validation/rate limiting, lead forwarding to the CRM, inspection notifications, appointment-status webhook, health/canary endpoints, checkout and payment webhooks.
 - Server functions removed: CRM-only ones (savvy AI, webhook tester, finance, contracts, test credentials).
 - Anything shared by both apps stays in the database, not in code.
 
 ## Confirm before I start
 
-Deleting the CRM from this project is not reversible from the website side — the CRM app must already have those screens live at savvyswim.app.
+Deleting the CRM screens from this project is not reversible from the website side — those screens must already be live at savvyswim.app.
+
