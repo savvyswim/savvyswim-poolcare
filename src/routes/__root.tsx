@@ -133,6 +133,7 @@ function RootComponent() {
           <Outlet />
 
           <Suspense fallback={null}>
+            <QuoteModal />
             <ConsentBanner />
           </Suspense>
 
