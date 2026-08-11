@@ -1,23 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
-import RequestInspection from "@/pages/RequestInspection";
-
-const URL = "https://savvyswim.com/request-inspection";
-const TITLE = "Request a Free Pool Inspection in DFW | Savvy Swim";
-const DESCRIPTION =
-  "Get a free pool inspection in DFW. A Savvy Swim tech tests chemistry, checks equipment and surfaces, then sends a flat-rate quote — no obligation.";
+/**
+ * /request-inspection — legacy lead form URL, now handled by the Savvy Swim app.
+ */
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { leadUrl } from "@/lib/app-links";
 
 export const Route = createFileRoute("/request-inspection")({
-  component: RequestInspection,
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: URL },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-  }),
+  beforeLoad: ({ search }) => {
+    throw redirect({
+      href: leadUrl("legacy_request_inspection", search as Record<string, string>),
+      statusCode: 301,
+      reloadDocument: true,
+    });
+  },
 });

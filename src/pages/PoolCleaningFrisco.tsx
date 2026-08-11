@@ -3,7 +3,7 @@ import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { BookingDialog } from "@/components/BookingDialog";
+import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
@@ -67,7 +67,6 @@ const FAQ = [
 ];
 
 const FriscoPoolCleaning = () => {
-  const [bookingOpen, setBookingOpen] = useState(false);
 
   const jsonLd = [
     {
@@ -165,7 +164,7 @@ const FriscoPoolCleaning = () => {
                   <div className="mt-8 flex flex-wrap gap-3">
                     <button
                       type="button"
-                      onClick={() => setBookingOpen(true)}
+                      onClick={() => goToLead("frisco")}
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Get a Frisco quote
@@ -300,7 +299,7 @@ const FriscoPoolCleaning = () => {
               <div className="flex gap-3 flex-shrink-0">
                 <button
                   type="button"
-                  onClick={() => setBookingOpen(true)}
+                  onClick={() => goToLead("frisco")}
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Request Quote
@@ -341,7 +340,6 @@ const FriscoPoolCleaning = () => {
         </div>
       </footer>
 
-      <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} defaultService="Weekly Pool Cleaning" />
     </div>
   );
 };

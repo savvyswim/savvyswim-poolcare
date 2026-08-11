@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { BookingDialog } from "@/components/BookingDialog";
+import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -159,14 +159,10 @@ const PROCESS = [
 ];
 
 const Services = () => {
-  const [bookingOpen, setBookingOpen] = useState(false);
   const [openCard, setOpenCard] = useState<string | null>(null);
-  const [bookingService, setBookingService] = useState<string | undefined>();
 
-  const openBooking = (service?: string) => {
-    setBookingService(service);
-    setBookingOpen(true);
-  };
+  const openBooking = (service?: string) =>
+    goToLead("services", service ? { service } : {});
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -478,8 +474,9 @@ const Services = () => {
                     <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
                   </a>
                 ))}
-                <Link
-                  to="/request-inspection"
+                <button
+                  type="button"
+                  onClick={() => goToLead("services")}
                   className="group flex items-center gap-5 px-8 sm:px-10 py-7 transition hover:bg-primary/[0.05]"
                 >
                   <Waves className="h-5 w-5 text-accent flex-shrink-0" />
@@ -488,7 +485,7 @@ const Services = () => {
                     <span className="block text-sm text-muted-foreground truncate">We inspect on site, then quote</span>
                   </span>
                   <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -513,11 +510,6 @@ const Services = () => {
         </div>
       </footer>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-      />
     </div>
   );
 };

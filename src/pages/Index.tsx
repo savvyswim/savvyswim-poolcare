@@ -41,12 +41,11 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { buildCrmLink } from "@/lib/app-links";
+import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import { resetConsent } from "@/lib/consent";
 
-// Dialogs are only needed after a click — keep them out of the first payload.
-const BookingDialog = lazy(() =>
-  import("@/components/BookingDialog").then((m) => ({ default: m.BookingDialog })),
-);
+// Only needed after a click — keep it out of the first payload.
+
 const SwimClubPrompt = lazy(() =>
   import("@/components/SwimClubPrompt").then((m) => ({ default: m.SwimClubPrompt })),
 );
@@ -190,7 +189,6 @@ const CLEANING_PLANS: CleaningPlan[] = [
 const Index = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookingOpen, setBookingOpen] = useState(false);
   // Defer the swim-club prompt until the page is interactive on mobile.
   const [promptReady, setPromptReady] = useState(false);
   useEffect(() => {
@@ -203,57 +201,73 @@ const Index = () => {
     const t = window.setTimeout(start, 2000);
     return () => window.clearTimeout(t);
   }, []);
-  const [bookingService, setBookingService] = useState<string | undefined>(undefined);
   /** Billing, checkout and memberships are handled in the Savvy Swim app. */
   const goToApp = (path: string, params: Record<string, string> = {}) => {
     window.location.href = buildCrmLink(path, params);
   };
-  const joinSwimClub = (source: string) => goToApp("/join/swim-club", { source });
+  const joinSwimClub = (source: string) => goToSwimClub(source);
   const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
-  const openBooking = (service?: string) => {
-    setBookingService(service);
-    setBookingOpen(true);
-  };
+  /** Every lead button hands off to the booking form in the Savvy Swim app. */
+  const openBooking = (service?: string) =>
+    goToLead("home", service ? { service } : {});
+
 
   const [cleaningPlans, setCleaningPlans] = useState<CleaningPlan[]>(CLEANING_PLANS);
 
-
+  // Plan overrides are a nice-to-have: fetch them once the page is idle so the
+  // network and main thread stay free for the first paint.
   useEffect(() => {
     let active = true;
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from("cleaning_plans")
         .select("id,name,blurb,price,cadence,items,featured")
         .eq("is_active", true)
         .order("display_order");
       if (active && data && data.length) setCleaningPlans(data as CleaningPlan[]);
-    })();
+    };
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number };
+    const timer = w.requestIdleCallback
+      ? w.requestIdleCallback(() => void load())
+      : window.setTimeout(() => void load(), 1200);
     return () => {
       active = false;
+      window.clearTimeout(timer as number);
     };
   }, []);
-
-
-
 
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // One passive, rAF-throttled scroll handler drives both the sticky nav and
+  // the hero parallax. Parallax is skipped on small screens and for reduced
+  // motion, where the per-frame transform costs more than it adds.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const parallax =
+      window.innerWidth >= 1024 &&
+      !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+
+    const apply = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      if (parallax && heroRef.current) {
+        heroRef.current.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0004})`;
+      }
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(apply);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    apply();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
-  // Parallax for hero
-  useEffect(() => {
-    const onScroll = () => {
-      if (!heroRef.current) return;
-      const y = window.scrollY;
-      heroRef.current.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0004})`;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -509,12 +523,14 @@ const Index = () => {
                   >
                     <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                   </a>
-                  <Link
-                    to="/request-inspection"
+                  <button
+                    type="button"
+                    onClick={() => goToLead("home_hero_visit")}
                     className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
                   >
                     <MessageSquare className="h-4 w-4" /> Request free pool visit
-                  </Link>
+                  </button>
+
 
                 </div>
               </div>
@@ -1196,15 +1212,9 @@ const Index = () => {
       </footer>
 
       <Suspense fallback={null}>
-        {bookingOpen && (
-          <BookingDialog
-            open={bookingOpen}
-            onOpenChange={setBookingOpen}
-            {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-          />
-        )}
         {promptReady && <SwimClubPrompt onJoin={() => joinSwimClub("prompt")} />}
       </Suspense>
+
 
 
     </div>

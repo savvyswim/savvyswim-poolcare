@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "@/lib/router-compat";
 import {
   Phone,
@@ -12,7 +11,7 @@ import {
   FlaskConical,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
-import { BookingDialog } from "@/components/BookingDialog";
+import { goToLead } from "@/lib/site-analytics";
 import { buildCityFaq, SERVICE_AREAS, type ServiceArea } from "@/lib/serviceAreas";
 
 import {
@@ -26,7 +25,6 @@ const PHONE_DISPLAY = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 
 export default function CityLanding({ area }: { area: ServiceArea }) {
-  const [bookingOpen, setBookingOpen] = useState(false);
   const city = area.name;
   const local = area.local;
 
@@ -116,7 +114,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   <div className="mt-8 flex flex-wrap gap-3">
                     <button
                       type="button"
-                      onClick={() => setBookingOpen(true)}
+                      onClick={() => goToLead("city")}
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Get a {city} quote
@@ -364,15 +362,16 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/request-inspection"
+                <button
+                  type="button"
+                  onClick={() => goToLead("city")}
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book free inspection
-                </Link>
+                </button>
                 <button
                   type="button"
-                  onClick={() => setBookingOpen(true)}
+                  onClick={() => goToLead("city")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   Request a quote
@@ -391,7 +390,6 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
         </section>
       </main>
 
-      <BookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
     </div>
   );
 }
