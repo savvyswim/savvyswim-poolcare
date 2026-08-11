@@ -532,24 +532,31 @@ const Index = () => {
                   <button
                     type="button"
                     onClick={() => openBooking("Weekly Service & Maintenance")}
-                    className="btn-quote font-tech inline-flex items-center gap-2 px-7 py-3.5"
+                    aria-label="Start weekly service — opens the Savvy Swim booking form"
+                    className="btn-quote font-tech inline-flex min-h-11 items-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <CalendarCheck className="h-4 w-4" /> Start Service
+                    <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Start Service
                   </button>
                   <a
                     href={PHONE_HREF}
                     onClick={() => trackContactClick("call_click", "hero")}
-                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                    aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
+                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                    <Phone className="h-4 w-4" aria-hidden="true" /> {PHONE_DISPLAY}
                   </a>
                   <button
                     type="button"
-                    onClick={() => goToLead("home_hero_visit")}
-                    className="font-tech inline-flex items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary"
+                    onClick={() => {
+                      setHandoffStatus("Opening the booking form…");
+                      goToLead("home_hero_visit");
+                    }}
+                    aria-label="Request a free pool visit — opens the Savvy Swim booking form"
+                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    <MessageSquare className="h-4 w-4" /> Request free pool visit
+                    <MessageSquare className="h-4 w-4" aria-hidden="true" /> Request free pool visit
                   </button>
+
 
 
                 </div>
