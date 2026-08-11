@@ -203,15 +203,12 @@ const Index = () => {
     return () => window.clearTimeout(t);
   }, []);
   const [bookingService, setBookingService] = useState<string | undefined>(undefined);
-  const [subscribeOpen, setSubscribeOpen] = useState(false);
-  const [membershipOpen, setMembershipOpen] = useState(false);
-  const [subscribePlan, setSubscribePlan] = useState<string | undefined>(undefined);
-  const [orderItem, setOrderItem] = useState<OrderItem | null>(null);
-  const [orderOpen, setOrderOpen] = useState(false);
-  const openOrder = (item: OrderItem) => {
-    setOrderItem(item);
-    setOrderOpen(true);
+  /** Billing, checkout and memberships are handled in the Savvy Swim app. */
+  const goToApp = (path: string, params: Record<string, string> = {}) => {
+    window.location.href = buildCrmLink(path, params);
   };
+  const joinSwimClub = (source: string) => goToApp("/join/swim-club", { source });
+  const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
   const openBooking = (service?: string) => {
     setBookingService(service);
     setBookingOpen(true);
