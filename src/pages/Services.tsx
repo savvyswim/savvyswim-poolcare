@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { BookingDialog } from "@/components/BookingDialog";
+import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -159,14 +159,10 @@ const PROCESS = [
 ];
 
 const Services = () => {
-  const [bookingOpen, setBookingOpen] = useState(false);
   const [openCard, setOpenCard] = useState<string | null>(null);
-  const [bookingService, setBookingService] = useState<string | undefined>();
 
-  const openBooking = (service?: string) => {
-    setBookingService(service);
-    setBookingOpen(true);
-  };
+  const openBooking = (service?: string) =>
+    goToLead("services", service ? { service } : {});
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -514,11 +510,6 @@ const Services = () => {
         </div>
       </footer>
 
-      <BookingDialog
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        {...(bookingService !== undefined ? { defaultService: bookingService } : {})}
-      />
     </div>
   );
 };
