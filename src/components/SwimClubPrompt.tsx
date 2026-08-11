@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { X, ArrowRight } from "lucide-react";
+import { CONSENT_EVENT, getConsent } from "@/lib/consent";
+
 
 const DISMISS_KEY = "savvy_swim_club_prompt_dismissed";
 
