@@ -109,8 +109,11 @@ export async function sendPaymentEmail(to: string, e: PaymentEvent): Promise<boo
   <p style="font-size:15px;line-height:1.6;margin:16px 0">Manage invoices in your <a href="${PORTAL_URL}" style="color:#1FA9BE">customer portal</a>, or call ${OFFICE_PHONE}.</p>
 </div>`,
         text,
+        purpose: "transactional",
+        label: `payment-${e.status}`,
+        idempotency_key: `payment-status:${e.eventId}`,
       },
-      apiKey,
+      { apiKey },
     );
     return true;
   } catch (error) {
