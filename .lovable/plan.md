@@ -1,22 +1,21 @@
-# Verify savvyswim.com in Search Console without touching DNS
+# Snap the map preview to the chosen address
 
-The screen you're on is Google's **domain property** flow, which only accepts a DNS TXT record. You don't need that route. A **URL-prefix property** verifies through a meta tag on the site itself, which I can place and verify for you end to end — same reports, same sitemap coverage, no registrar work.
+Today the preview map does center on the selected address and sits at a fixed zoom 17, but it jumps hard on every change and ignores the property's actual footprint — a large lot or a long driveway can land half off-frame, and re-selecting a nearby address teleports the view. This makes the confirm step instant and obvious.
 
-## What happens
+## What changes
 
-1. Request a fresh meta-tag verification token from Search Console for `https://savvyswim.com/` (and the same again for `https://www.savvyswim.com/` and the two savvyswimservices.com hosts, so every live domain has its own verified property).
-2. Add each `google-site-verification` tag to the site's `<head>` in `src/routes/__root.tsx`, keeping the existing tag already there.
-3. You publish once so the tags go live on the custom domains.
-4. I call Google's verify step, add each verified property to your Search Console list, and submit `sitemap.xml` against the primary one.
-5. I report back which properties came back verified and the sitemap status.
+- **Fit the property, not a fixed zoom.** Use the place's own viewport bounds when Google returns one and fit the map to it with a small padding, then clamp so a tiny viewport can't zoom past street level (max ~19) and a sprawling one can't pull back past ~16. If no viewport comes back, keep centering on the point at zoom 17.
+- **Glide instead of jump.** When the map already exists, pan/zoom to the new address smoothly so it reads as "moving to your house" rather than a flash of a different place.
+- **Marker lands with it.** The pin repositions with a short drop animation on each new address so the eye catches where it settled.
+- **Recenter control.** A small "Recenter" button in the map corner returns to the address after the user pans or zooms away, so they can explore and get back in one tap.
+- **Slightly taller frame on mobile** (h-56 instead of h-48) so a house and its street are both visible at confirm zoom.
 
-## On the screen you're looking at
-
-You can leave that domain property pending or press "Remove property" — nothing there is needed once the URL-prefix properties are verified. If you'd rather keep the domain property too, the TXT record can be added later under Project Settings > Domains > Configure > Manage DNS records, since the domain was bought through Lovable.
+Everything else stays: the map still hides itself entirely if Maps can't load on the domain, and the address caption stays beneath.
 
 ## Technical notes
 
-- Verification runs through the Google Search Console connector gateway: `POST /siteVerification/v1/token` (type `SITE`, method `META`) → tag in `__root.tsx` head → `POST /siteVerification/v1/webResource?verificationMethod=META` → `PUT /webmasters/v3/sites/{encoded}`.
-- Only `src/routes/__root.tsx` changes; existing verification tags stay in place.
-- Sitemap submission uses the exact `siteUrl` returned by a fresh `GET /webmasters/v3/sites` after the add, not a constructed one.
-- A publish is required between steps 2 and 4 — Google fetches the live domain, not the preview.
+- Only `src/components/AddressMapPreview.tsx` changes.
+- Add `viewport` to the existing `place.fetchFields` field list; call `map.fitBounds(place.viewport, padding)` then clamp with `map.getZoom()` inside a one-shot `idle` listener.
+- Use `panTo` + `setZoom` for subsequent updates; keep the existing `Marker` (no `AdvancedMarkerElement`, which would need a Map ID).
+- Recenter button is a plain overlay `button`, brand-styled, square corners; it re-applies the stored center/zoom.
+- No backend, form, or autocomplete changes.
