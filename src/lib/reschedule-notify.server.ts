@@ -83,7 +83,10 @@ export function emailParts(n: RescheduleNotice): { subject: string; html: string
   return { subject, html, text };
 }
 
-export async function sendSms(to: string, body: string): Promise<boolean> {
+export async function sendSms(to: string, rawBody: string): Promise<boolean> {
+  const { hasSmsOptIn, withSmsFooter } = await import("./sms-compliance.server");
+  if (!(await hasSmsOptIn(to))) return false;
+  const body = withSmsFooter(rawBody);
   const apiKey = process.env["LOVABLE_API_KEY"];
   const twilioKey = process.env["TWILIO_API_KEY"];
   if (!apiKey || !twilioKey) return false;
