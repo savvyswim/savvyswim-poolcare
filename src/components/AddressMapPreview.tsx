@@ -61,13 +61,14 @@ export default function AddressMapPreview({ placeId, address, className }: Props
   if (!placeId || error) return null;
 
   return (
-    <div className={cn("mt-3", className)}>
+    <div className="mt-3">
       <div
         ref={divRef}
         aria-label={address ? `Map of ${address}` : "Map of selected address"}
-        className="h-48 w-full border border-hairline bg-muted"
+        className={cn("h-48 w-full border border-hairline bg-muted", className)}
       />
       {address ? <p className="mt-1.5 text-xs text-muted-foreground">{address}</p> : null}
     </div>
   );
+
 }

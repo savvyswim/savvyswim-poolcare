@@ -237,7 +237,7 @@ export default function LeadForm({
         />
         {err("address")}
         {placeId ? (
-          <AddressMapPreview placeId={placeId} address={address} className="mt-2 h-36 w-full" />
+          <AddressMapPreview placeId={placeId} address={address} className="h-40" />
         ) : null}
       </div>
 
