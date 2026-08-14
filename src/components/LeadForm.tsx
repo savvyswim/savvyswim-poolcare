@@ -91,6 +91,7 @@ export default function LeadForm({
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [smsOptIn, setSmsOptIn] = useState(false);
+  const [contactConsent, setContactConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
   const [errors, setErrors] = useState<Errors>({});
