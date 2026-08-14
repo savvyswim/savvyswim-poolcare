@@ -1,19 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 
-import { loadMaps } from "@/lib/google-maps";
-import { reverseGeocode } from "@/lib/geo.functions";
+import { reverseGeocode, suggestAddresses } from "@/lib/geo.functions";
 
 
 type Suggestion = { text: string; placeId: string };
-
-/**
- * Service-area bias — centred between Plano and Frisco, covering the DFW
- * routes we actually run. Google ranks addresses inside this circle first, so
- * a homeowner sees their own street after a few characters.
- */
-const SERVICE_AREA_CENTER = { lat: 33.035, lng: -96.75 };
-const SERVICE_AREA_RADIUS_M = 50000; // Places API (New) maximum
 
 interface Props {
   id?: string;
@@ -49,7 +40,7 @@ export default function AddressAutocomplete({
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState<string | null>(null);
-  const tokenRef = useRef<any>(null);
+  const tokenRef = useRef<string | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const seq = useRef(0);
 
@@ -68,38 +59,30 @@ export default function AddressAutocomplete({
     const id = ++seq.current;
     const timer = window.setTimeout(async () => {
       try {
-        await loadMaps();
-        const places: any = await (window as any).google.maps.importLibrary("places");
-        if (!tokenRef.current) tokenRef.current = new places.AutocompleteSessionToken();
-        const { suggestions } = await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
-          input: q,
-          sessionToken: tokenRef.current,
-          includedRegionCodes: ["us"],
-          // Rank the homeowner's own area first (their device location when
-          // shared), then our routes, then the rest of the US.
-          locationBias: {
-            center: coords ?? SERVICE_AREA_CENTER,
-            radius: SERVICE_AREA_RADIUS_M,
+        if (!tokenRef.current) {
+          tokenRef.current =
+            typeof crypto !== "undefined" && "randomUUID" in crypto
+              ? crypto.randomUUID()
+              : String(Date.now());
+        }
+        // Suggestions come back through the server so they work on every
+        // domain, not just the referrer-allowed preview hosts.
+        const suggestions = await suggestAddresses({
+          data: {
+            input: q,
+            sessionToken: tokenRef.current,
+            ...(coords ? { lat: coords.lat, lng: coords.lng } : {}),
           },
-          origin: coords ?? SERVICE_AREA_CENTER,
-
         });
         if (id !== seq.current) return;
-        setItems(
-          (suggestions ?? [])
-            .map((s: any) => ({
-              text: s.placePrediction?.text?.toString?.() ?? "",
-              placeId: s.placePrediction?.placeId ?? "",
-            }))
-            .filter((s: Suggestion) => s.text)
-            .slice(0, 5),
-        );
+        setItems(suggestions);
       } catch {
         setItems([]);
       }
     }, 250);
     return () => window.clearTimeout(timer);
-  }, [text, open]);
+  }, [text, open, coords]);
+
 
   const update = (v: string) => {
     if (!controlled) setInternal(v);
