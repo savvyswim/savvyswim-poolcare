@@ -331,25 +331,15 @@ export default function LeadForm({
           className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
         />
         <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-          I agree that <strong className="text-[#2a1013]">Savvy Swim</strong> may contact me by
-          phone, text or email about this request. Consent is not a condition of purchase.
+          I authorize <strong className="text-[#2a1013]">Savvy Swim</strong> to contact me by phone
+          call, text message and email about this request, including automated or prerecorded
+          messages and appointment updates at the number I provided. Message and data rates may
+          apply; message frequency varies. Reply <strong>STOP</strong> to opt out or{" "}
+          <strong>HELP</strong> for help. I have read and agree to the Privacy Policy and Terms.
         </span>
       </label>
       {err("contactConsent")}
 
-      <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
-        <input
-          type="checkbox"
-          checked={smsOptIn}
-          onChange={(e) => setSmsOptIn(e.target.checked)}
-          className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
-        />
-        <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-          Optional: send me SMS updates about my appointment. Message and data rates may apply.
-          Message frequency varies. Reply <strong>STOP</strong> to opt out or <strong>HELP</strong>{" "}
-          for help.
-        </span>
-      </label>
 
       <p className="text-[11px] leading-relaxed text-[#2a1013]/55">
         We never sell or share your information with third parties for marketing. See our{" "}
