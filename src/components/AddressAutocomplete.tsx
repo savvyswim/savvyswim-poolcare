@@ -114,6 +114,42 @@ export default function AddressAutocomplete({
     onSelect?.(s.text, s.placeId);
   };
 
+  const useMyLocation = () => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setLocError("Location isn't available on this device — type your address instead.");
+      return;
+    }
+    setLocError(null);
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const next = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setCoords(next);
+        try {
+          const res = await reverseGeocode({ data: next });
+          if (res.formattedAddress) {
+            update(res.formattedAddress);
+            setItems([]);
+            setOpen(false);
+            tokenRef.current = null;
+            onSelect?.(res.formattedAddress, res.placeId);
+          } else {
+            setLocError("Couldn't read an address there — type it in instead.");
+          }
+        } catch {
+          setLocError("Couldn't read an address there — type it in instead.");
+        } finally {
+          setLocating(false);
+        }
+      },
+      () => {
+        setLocating(false);
+        setLocError("Location off — type your address instead.");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+    );
+  };
+
   return (
     <div ref={wrapRef} className="relative">
       <Input
@@ -131,6 +167,34 @@ export default function AddressAutocomplete({
         }}
         onFocus={() => setOpen(true)}
       />
+
+      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <button
+          type="button"
+          onClick={useMyLocation}
+          disabled={locating}
+          className="inline-flex items-center gap-1.5 rounded-none text-xs font-semibold uppercase tracking-[0.12em] text-[#1FA9BE] disabled:opacity-60"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            className="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M12 21s7-5.686 7-11a7 7 0 1 0-14 0c0 5.314 7 11 7 11Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          {locating ? "Locating…" : "Use my current location"}
+        </button>
+        {locError ? (
+          <span role="status" className="text-xs text-muted-foreground">
+            {locError}
+          </span>
+        ) : null}
+      </div>
+
       {open && items.length > 0 && (
         <ul
           className={cn(
@@ -151,5 +215,6 @@ export default function AddressAutocomplete({
         </ul>
       )}
     </div>
+
   );
 }
