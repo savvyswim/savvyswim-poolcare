@@ -46,9 +46,13 @@ export default function AddressAutocomplete({
 
   const [items, setItems] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [locError, setLocError] = useState<string | null>(null);
   const tokenRef = useRef<any>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const seq = useRef(0);
+
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
