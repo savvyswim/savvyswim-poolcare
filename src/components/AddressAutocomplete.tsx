@@ -213,26 +213,6 @@ export default function AddressAutocomplete({
           </span>
         ) : null}
       </div>
-
-      {open && items.length > 0 && (
-        <ul
-          className={cn(
-            "absolute z-50 mt-1 w-full overflow-hidden border border-hairline bg-background shadow-lg",
-          )}
-        >
-          {items.map((s) => (
-            <li key={s.placeId || s.text}>
-              <button
-                type="button"
-                onClick={() => pick(s)}
-                className="block w-full px-3 py-2 text-left text-sm hover:bg-muted"
-              >
-                {s.text}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
 
   );
