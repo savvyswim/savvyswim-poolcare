@@ -323,16 +323,43 @@ export default function LeadForm({
       <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
         <input
           type="checkbox"
+          checked={contactConsent}
+          onChange={(e) => setContactConsent(e.target.checked)}
+          className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
+        />
+        <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
+          I agree that <strong className="text-[#2a1013]">Savvy Swim</strong> may contact me by
+          phone, text or email about this request. Consent is not a condition of purchase.
+        </span>
+      </label>
+      {err("contactConsent")}
+
+      <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
+        <input
+          type="checkbox"
           checked={smsOptIn}
           onChange={(e) => setSmsOptIn(e.target.checked)}
           className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
         />
         <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-          I agree to receive SMS text messages from{" "}
-          <strong className="text-[#2a1013]">Savvy Swim</strong> about my appointment. Message and
-          data rates may apply. Reply <strong>STOP</strong> to opt out at any time.
+          Optional: send me SMS updates about my appointment. Message and data rates may apply.
+          Message frequency varies. Reply <strong>STOP</strong> to opt out or <strong>HELP</strong>{" "}
+          for help.
         </span>
       </label>
+
+      <p className="text-[11px] leading-relaxed text-[#2a1013]/55">
+        We never sell or share your information with third parties for marketing. See our{" "}
+        <a href="/privacy" className="underline hover:text-[#8E1F2C]">
+          Privacy Policy
+        </a>{" "}
+        and{" "}
+        <a href="/terms" className="underline hover:text-[#8E1F2C]">
+          Terms
+        </a>
+        .
+      </p>
+
 
       {/* Honeypot — real people never fill this in. */}
       <input
