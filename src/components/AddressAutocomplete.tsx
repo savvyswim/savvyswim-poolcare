@@ -75,12 +75,14 @@ export default function AddressAutocomplete({
           input: q,
           sessionToken: tokenRef.current,
           includedRegionCodes: ["us"],
-          // Rank our routes first, then fall back to the rest of the US.
+          // Rank the homeowner's own area first (their device location when
+          // shared), then our routes, then the rest of the US.
           locationBias: {
-            center: SERVICE_AREA_CENTER,
+            center: coords ?? SERVICE_AREA_CENTER,
             radius: SERVICE_AREA_RADIUS_M,
           },
-          origin: SERVICE_AREA_CENTER,
+          origin: coords ?? SERVICE_AREA_CENTER,
+
         });
         if (id !== seq.current) return;
         setItems(
