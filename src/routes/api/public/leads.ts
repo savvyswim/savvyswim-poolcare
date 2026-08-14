@@ -28,6 +28,7 @@ const leadSchema = z
     message: z.string().trim().max(2000).optional().nullable(),
     notes: z.string().trim().max(2000).optional().nullable(),
     sms_opt_in: z.boolean().optional().nullable(),
+    contact_consent: z.boolean().optional().nullable(),
 
     source: z.string().trim().max(80).optional().nullable(),
     page: z.string().trim().max(255).optional().nullable(),
@@ -193,7 +194,12 @@ export const Route = createFileRoute("/api/public/leads")({
         }
 
         const notes =
-          [lead.notes, lead.message, lead.sms_opt_in ? "SMS opt-in: yes" : null]
+          [
+            lead.notes,
+            lead.message,
+            lead.contact_consent ? "Consent to contact (call/text/email): yes" : null,
+            lead.sms_opt_in ? "SMS opt-in: yes" : null,
+          ]
             .filter(Boolean)
             .join("\n\n") || null;
 
