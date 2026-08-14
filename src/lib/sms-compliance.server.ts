@@ -110,5 +110,56 @@ export async function hasSmsOptIn(phone: string) {
     .select("opted_in, revoked_at")
     .eq("phone", normalized)
     .maybeSingle();
-  return Boolean(data?.opted_in && !data.revoked_at);
+  if (data) return Boolean(data.opted_in && !data.revoked_at);
+
+  // No consent row yet: honor a pre-existing opt-in captured on the older
+  // booking / inspection forms, and migrate it into the consent ledger so the
+  // audit trail is complete. Never opts anyone in who did not check the box.
+  return hasLegacySmsOptIn(normalized);
 }
+
+/** Looks for an explicit opt-in recorded on the legacy booking/inspection forms. */
+async function hasLegacySmsOptIn(normalized: string): Promise<boolean> {
+  const digits = normalized.replace(/^\+1/, "");
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const [bookings, inspections] = await Promise.all([
+    supabaseAdmin
+      .from("bookings")
+      .select("created_at")
+      .eq("sms_opt_in", true)
+      .ilike("phone", `%${digits}%`)
+      .limit(1),
+    supabaseAdmin
+      .from("inspection_requests")
+      .select("created_at")
+      .eq("sms_opt_in", true)
+      .ilike("phone", `%${digits}%`)
+      .limit(1),
+  ]);
+
+  const source = bookings.data?.[0]
+    ? "legacy_booking"
+    : inspections.data?.[0]
+      ? "legacy_inspection_request"
+      : null;
+  if (!source) return false;
+
+  const consentedAt =
+    bookings.data?.[0]?.created_at ?? inspections.data?.[0]?.created_at ?? new Date().toISOString();
+
+  await recordSmsConsent({
+    phone: normalized,
+    optedIn: true,
+    source,
+    consentText: "Legacy opt-in migrated from prior booking/inspection form SMS checkbox",
+  });
+  // recordSmsConsent stamps consented_at with now(); keep the original date.
+  await supabaseAdmin
+    .from("ss_sms_consent")
+    .update({ consented_at: consentedAt })
+    .eq("phone", normalized);
+
+  return true;
+}
+
