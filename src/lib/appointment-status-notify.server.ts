@@ -170,7 +170,10 @@ export function smsBody(e: AppointmentEvent): string {
   return `Savvy Swim: ${body}${note} ${PORTAL_URL} or ${OFFICE_PHONE}`.slice(0, 320);
 }
 
-export async function sendStatusSms(to: string, body: string): Promise<boolean> {
+export async function sendStatusSms(to: string, rawBody: string): Promise<boolean> {
+  const { hasSmsOptIn, withSmsFooter } = await import("./sms-compliance.server");
+  if (!(await hasSmsOptIn(to))) return false;
+  const body = withSmsFooter(rawBody);
   const apiKey = process.env["LOVABLE_API_KEY"];
   const twilioKey = process.env["TWILIO_API_KEY"];
   if (!apiKey || !twilioKey) return false;
