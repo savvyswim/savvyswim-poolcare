@@ -199,8 +199,11 @@ export const Route = createFileRoute("/api/public/leads")({
           [
             lead.notes,
             lead.message,
-            lead.contact_consent ? "Consent to contact (call/text/email): yes" : null,
-            lead.sms_opt_in ? "SMS opt-in: yes" : null,
+            lead.contact_consent
+              ? `Authorized calls/texts/email (combined consent): yes${
+                  lead.consent_text ? `\n"${lead.consent_text}"` : ""
+                }`
+              : null,
           ]
             .filter(Boolean)
             .join("\n\n") || null;
