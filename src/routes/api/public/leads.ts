@@ -29,6 +29,8 @@ const leadSchema = z
     notes: z.string().trim().max(2000).optional().nullable(),
     sms_opt_in: z.boolean().optional().nullable(),
     contact_consent: z.boolean().optional().nullable(),
+    // Exact authorization wording the visitor saw, stored with the consent record.
+    consent_text: z.string().trim().max(1000).optional().nullable(),
 
     source: z.string().trim().max(80).optional().nullable(),
     page: z.string().trim().max(255).optional().nullable(),
@@ -197,8 +199,11 @@ export const Route = createFileRoute("/api/public/leads")({
           [
             lead.notes,
             lead.message,
-            lead.contact_consent ? "Consent to contact (call/text/email): yes" : null,
-            lead.sms_opt_in ? "SMS opt-in: yes" : null,
+            lead.contact_consent
+              ? `Authorized calls/texts/email (combined consent): yes${
+                  lead.consent_text ? `\n"${lead.consent_text}"` : ""
+                }`
+              : null,
           ]
             .filter(Boolean)
             .join("\n\n") || null;
@@ -231,9 +236,10 @@ export const Route = createFileRoute("/api/public/leads")({
             phone: lead.phone,
             optedIn: lead.sms_opt_in === true,
             consentText:
-              lead.sms_opt_in === true
-                ? "Web form: opted in to SMS updates about my appointment. Msg & data rates may apply. Reply STOP to opt out, HELP for help."
-                : "Web form: SMS opt-in checkbox left unchecked",
+              lead.consent_text ||
+              (lead.sms_opt_in === true
+                ? "Web form: authorized calls, texts and email about this request. Msg & data rates may apply. Reply STOP to opt out, HELP for help."
+                : "Web form: authorization checkbox left unchecked"),
             source: lead.source ?? "website_lead_form",
             url: lead.page ?? null,
           });

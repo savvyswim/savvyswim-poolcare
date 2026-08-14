@@ -52,6 +52,10 @@ const FIELD =
 const PHONE = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 
+/** Single combined authorization shown on the form — stored verbatim as the consent record. */
+export const CONSENT_TEXT =
+  "I authorize Savvy Swim to contact me by phone call, text message and email about this request, including automated or prerecorded messages and appointment updates at the number I provided. Message and data rates may apply; message frequency varies. Reply STOP to opt out or HELP for help. I have read and agree to the Privacy Policy and Terms.";
+
 export type LeadFormProps = {
   /** CRM connector intent tag. */
   cta: string;
@@ -90,7 +94,6 @@ export default function LeadForm({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
-  const [smsOptIn, setSmsOptIn] = useState(false);
   const [contactConsent, setContactConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
@@ -136,8 +139,9 @@ export default function LeadForm({
       preferred_date: date ? format(date, "yyyy-MM-dd") : null,
       preferred_contact_time: time,
       message: notes.trim() || null,
-      sms_opt_in: smsOptIn,
+      sms_opt_in: contactConsent,
       contact_consent: contactConsent,
+      consent_text: CONSENT_TEXT,
       source,
       page: window.location.pathname.slice(0, 200),
       utm_source: params.get("utm_source") || "savvyswim.com",
@@ -332,25 +336,15 @@ export default function LeadForm({
           className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
         />
         <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-          I agree that <strong className="text-[#2a1013]">Savvy Swim</strong> may contact me by
-          phone, text or email about this request. Consent is not a condition of purchase.
+          I authorize <strong className="text-[#2a1013]">Savvy Swim</strong> to contact me by phone
+          call, text message and email about this request, including automated or prerecorded
+          messages and appointment updates at the number I provided. Message and data rates may
+          apply; message frequency varies. Reply <strong>STOP</strong> to opt out or{" "}
+          <strong>HELP</strong> for help. I have read and agree to the Privacy Policy and Terms.
         </span>
       </label>
       {err("contactConsent")}
 
-      <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
-        <input
-          type="checkbox"
-          checked={smsOptIn}
-          onChange={(e) => setSmsOptIn(e.target.checked)}
-          className="mt-1 h-4 w-4 shrink-0 accent-[#8E1F2C]"
-        />
-        <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-          Optional: send me SMS updates about my appointment. Message and data rates may apply.
-          Message frequency varies. Reply <strong>STOP</strong> to opt out or <strong>HELP</strong>{" "}
-          for help.
-        </span>
-      </label>
 
       <p className="text-[11px] leading-relaxed text-[#2a1013]/55">
         We never sell or share your information with third parties for marketing. See our{" "}
