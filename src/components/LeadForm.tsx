@@ -114,6 +114,8 @@ export default function LeadForm({
     if (!choice) next['choice'] = `Pick ${optionsLabel.toLowerCase()}`;
     if (!date) next['date'] = "Pick a preferred date";
     if (!time) next['time'] = "Pick a preferred time";
+    if (!contactConsent)
+      next['contactConsent'] = "Please agree to be contacted so we can reply";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -135,6 +137,7 @@ export default function LeadForm({
       preferred_contact_time: time,
       message: notes.trim() || null,
       sms_opt_in: smsOptIn,
+      contact_consent: contactConsent,
       source,
       page: window.location.pathname.slice(0, 200),
       utm_source: params.get("utm_source") || "savvyswim.com",
