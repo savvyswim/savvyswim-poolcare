@@ -52,6 +52,10 @@ const FIELD =
 const PHONE = "(469) 744-0379";
 const PHONE_HREF = "tel:+14697440379";
 
+/** Single combined authorization shown on the form — stored verbatim as the consent record. */
+export const CONSENT_TEXT =
+  "I authorize Savvy Swim to contact me by phone call, text message and email about this request, including automated or prerecorded messages and appointment updates at the number I provided. Message and data rates may apply; message frequency varies. Reply STOP to opt out or HELP for help. I have read and agree to the Privacy Policy and Terms.";
+
 export type LeadFormProps = {
   /** CRM connector intent tag. */
   cta: string;
