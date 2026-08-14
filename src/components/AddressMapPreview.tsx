@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { loadMaps } from "@/lib/google-maps";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { addressMapPreview } from "@/lib/geo.functions";
 
 interface Props {
   /** Google place ID from the address autocomplete selection. */
@@ -10,65 +10,63 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Static map rendered server-side through the Maps connector gateway, so it
+ * works on savvyswim.com and savvyswimservices.com as well as preview — the
+ * browser Maps key is locked to the preview domains.
+ */
 export default function AddressMapPreview({ placeId, address, className }: Props) {
-  const divRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [label, setLabel] = useState<string>(address ?? "");
 
   useEffect(() => {
-    if (!placeId) return;
-    setError(null);
+    if (!placeId && !address) {
+      setImage(null);
+      return;
+    }
     let cancelled = false;
+    setImage(null);
 
     (async () => {
       try {
-        await loadMaps();
-        const g = (window as any).google;
-        const { Place } = await g.maps.importLibrary("places");
-        const place = new Place({ id: placeId });
-        await place.fetchFields({ fields: ["location", "formattedAddress"] });
-        if (cancelled || !divRef.current || !place.location) return;
-
-        const center = place.location;
-        if (!mapRef.current) {
-          mapRef.current = new g.maps.Map(divRef.current, {
-            center,
+        const res = await addressMapPreview({
+          data: {
+            ...(placeId ? { placeId } : {}),
+            ...(address ? { address } : {}),
+            width: 640,
+            height: 320,
             zoom: 17,
-            disableDefaultUI: true,
-            zoomControl: true,
-            gestureHandling: "cooperative",
-          });
-          markerRef.current = new g.maps.Marker({ map: mapRef.current, position: center });
+          },
+        });
+        if (cancelled) return;
+        if (res?.image) {
+          setImage(res.image);
+          setLabel(res.address || address || "");
         } else {
-          mapRef.current.setCenter(center);
-          mapRef.current.setZoom(17);
-          markerRef.current?.setPosition(center);
+          setImage(null);
         }
-        setError(null);
       } catch {
-        // Key blocked on this domain, offline, or Places failed — hide the map
-        // entirely rather than leaving a dead grey box in the form.
-        if (!cancelled) setError("unavailable");
+        // Map is a convenience — hide it rather than leaving a dead grey box.
+        if (!cancelled) setImage(null);
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [placeId]);
+  }, [placeId, address]);
 
-  if (!placeId || error) return null;
+  if (!image) return null;
 
   return (
     <div className="mt-3">
-      <div
-        ref={divRef}
-        aria-label={address ? `Map of ${address}` : "Map of selected address"}
-        className={cn("h-48 w-full border border-hairline bg-muted", className)}
+      <img
+        src={image}
+        alt={label ? `Map of ${label}` : "Map of the selected address"}
+        loading="lazy"
+        className={cn("h-48 w-full border border-hairline object-cover", className)}
       />
-      {address ? <p className="mt-1.5 text-xs text-muted-foreground">{address}</p> : null}
+      {label ? <p className="mt-1.5 text-xs text-muted-foreground">{label}</p> : null}
     </div>
   );
-
 }
