@@ -17,11 +17,18 @@ function safeEqual(a: string, b: string) {
   return diff === 0;
 }
 
-const twiml = (status = 200) =>
-  new Response('<?xml version="1.0" encoding="UTF-8"?><Response></Response>', {
-    status,
-    headers: { "Content-Type": "text/xml" },
-  });
+const escapeXml = (value: string) =>
+  value.replace(/[<>&'"]/g, (c) =>
+    ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[c] ?? c,
+  );
+
+const twiml = (status = 200, reply?: string) =>
+  new Response(
+    `<?xml version="1.0" encoding="UTF-8"?><Response>${
+      reply ? `<Message>${escapeXml(reply)}</Message>` : ""
+    }</Response>`,
+    { status, headers: { "Content-Type": "text/xml" } },
+  );
 
 function log(event: string, payload: Record<string, unknown>) {
   console.log(JSON.stringify({ scope: "twilio.inbound_sms", event, at: new Date().toISOString(), ...payload }));
@@ -44,6 +51,32 @@ export const Route = createFileRoute("/api/public/twilio/inbound")({
         const body = String(form.get("Body") ?? "").trim().slice(0, 1500);
         const sid = String(form.get("MessageSid") ?? "").trim() || null;
         if (!from || !body) return twiml();
+
+        const {
+          classifySmsKeyword,
+          recordSmsConsent,
+          recordHelpRequest,
+          SMS_HELP_REPLY,
+          SMS_STOP_REPLY,
+          SMS_START_REPLY,
+        } = await import("@/lib/sms-compliance.server");
+
+        // STOP / START / HELP are handled first and always answered the same way.
+        const keyword = classifySmsKeyword(body);
+        let autoReply: string | undefined;
+        if (keyword === "stop") {
+          await recordSmsConsent({ phone: from, optedIn: false, consentText: `Inbound reply: ${body}`, source: "sms_keyword_stop" });
+          autoReply = SMS_STOP_REPLY;
+          log("opt_out", { from: from.slice(-4) });
+        } else if (keyword === "start") {
+          await recordSmsConsent({ phone: from, optedIn: true, consentText: `Inbound reply: ${body}`, source: "sms_keyword_start" });
+          autoReply = SMS_START_REPLY;
+          log("opt_in", { from: from.slice(-4) });
+        } else if (keyword === "help") {
+          await recordHelpRequest(from);
+          autoReply = SMS_HELP_REPLY;
+          log("help", { from: from.slice(-4) });
+        }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -74,7 +107,7 @@ export const Route = createFileRoute("/api/public/twilio/inbound")({
             .single();
           if (error) {
             console.error(`inbound sms: thread create failed: ${error.message}`);
-            return twiml();
+            return twiml(200, autoReply);
           }
           thread = created;
         }
@@ -99,8 +132,8 @@ export const Route = createFileRoute("/api/public/twilio/inbound")({
           })
           .eq("id", thread.id);
 
-        log("received", { threadId: thread.id, length: body.length });
-        return twiml();
+        log("received", { threadId: thread.id, length: body.length, keyword });
+        return twiml(200, autoReply);
       },
     },
   },
