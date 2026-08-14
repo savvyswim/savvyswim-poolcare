@@ -145,7 +145,11 @@ export const sendContractSms = createServerFn({ method: "POST" })
     const origin = new URL(data.origin).origin;
     const signUrl = `${origin}/sign/${contract.token}`;
     const firstName = (contract.recipient_name ?? "there").split(" ")[0];
-    const body = `Hi ${firstName}, your Savvy Swim service agreement is ready to sign: ${signUrl}\n\nQuestions? Call or text (469) 744-0379.`;
+    const { isSmsAllowed, withSmsFooter } = await import("./sms-compliance.server");
+    if (!(await isSmsAllowed(to))) throw new Error("This number has opted out of text messages (replied STOP)");
+    const body = withSmsFooter(
+      `Hi ${firstName}, your Savvy Swim service agreement is ready to sign: ${signUrl}\n\nQuestions? Call or text (469) 744-0379.`,
+    );
 
     const { data: logRow, error: logError } = await supabase
       .from("ss_contract_sms")
