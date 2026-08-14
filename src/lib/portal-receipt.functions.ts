@@ -121,8 +121,9 @@ Savvy Swim · savvyswim.com`;
     if (customer?.phone && apiKey && twilioKey) {
       try {
         const { normalizePhone } = await import("./phone");
+        const { isSmsAllowed, withSmsFooter } = await import("./sms-compliance.server");
         const to = normalizePhone(customer.phone);
-        if (to) {
+        if (to && (await isSmsAllowed(to))) {
           const gwHeaders = {
             Authorization: `Bearer ${apiKey}`,
             "X-Connection-Api-Key": twilioKey,
@@ -145,7 +146,9 @@ Savvy Swim · savvyswim.com`;
                 body: new URLSearchParams({
                   To: to,
                   From: from,
-                  Body: `Savvy Swim receipt: ${amount} paid on invoice ${invoice.invoice_number} (${methodLabel}, ${paidOn}). Thank you!`,
+                  Body: withSmsFooter(
+                    `Savvy Swim receipt: ${amount} paid on invoice ${invoice.invoice_number} (${methodLabel}, ${paidOn}). Thank you!`,
+                  ),
                 }),
               });
               if (!sendRes.ok) {

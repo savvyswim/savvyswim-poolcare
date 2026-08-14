@@ -220,9 +220,24 @@ export const Route = createFileRoute("/api/public/leads")({
             utm_medium: lead.utm_medium ?? null,
             utm_campaign: lead.utm_campaign ?? null,
             page_path: lead.page ?? null,
+            sms_opt_in: lead.sms_opt_in === true,
           })
           .select("id, reference_number")
           .single();
+
+        if (lead.phone) {
+          const { recordSmsConsent } = await import("@/lib/sms-compliance.server");
+          await recordSmsConsent({
+            phone: lead.phone,
+            optedIn: lead.sms_opt_in === true,
+            consentText:
+              lead.sms_opt_in === true
+                ? "Web form: opted in to SMS updates about my appointment. Msg & data rates may apply. Reply STOP to opt out, HELP for help."
+                : "Web form: SMS opt-in checkbox left unchecked",
+            source: lead.source ?? "website_lead_form",
+            url: lead.page ?? null,
+          });
+        }
 
         if (error || !data) {
           console.error("public lead insert failed", error?.message);

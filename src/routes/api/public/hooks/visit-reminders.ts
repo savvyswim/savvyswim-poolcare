@@ -105,7 +105,10 @@ function esc(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-async function twilioSend(to: string, body: string): Promise<boolean> {
+async function twilioSend(to: string, rawBody: string): Promise<boolean> {
+  const { hasSmsOptIn, withSmsFooter } = await import("@/lib/sms-compliance.server");
+  if (!(await hasSmsOptIn(to))) return false;
+  const body = withSmsFooter(rawBody);
   const apiKey = process.env["LOVABLE_API_KEY"];
   const twilioKey = process.env["TWILIO_API_KEY"];
   if (!apiKey || !twilioKey) return false;

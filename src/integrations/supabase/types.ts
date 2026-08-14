@@ -4331,6 +4331,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_sms_consent: {
+        Row: {
+          consent_source: string | null
+          consent_text: string | null
+          consent_url: string | null
+          consented_at: string | null
+          created_at: string
+          id: string
+          last_help_at: string | null
+          opted_in: boolean
+          phone: string
+          revoked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          consent_source?: string | null
+          consent_text?: string | null
+          consent_url?: string | null
+          consented_at?: string | null
+          created_at?: string
+          id?: string
+          last_help_at?: string | null
+          opted_in?: boolean
+          phone: string
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          consent_source?: string | null
+          consent_text?: string | null
+          consent_url?: string | null
+          consented_at?: string | null
+          created_at?: string
+          id?: string
+          last_help_at?: string | null
+          opted_in?: boolean
+          phone?: string
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_sms_messages: {
         Row: {
           body: string
