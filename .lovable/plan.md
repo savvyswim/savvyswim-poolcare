@@ -1,21 +1,27 @@
-# Snap the map preview to the chosen address
+# "Use my current location" in the address field
 
-Today the preview map does center on the selected address and sits at a fixed zoom 17, but it jumps hard on every change and ignores the property's actual footprint — a large lot or a long driveway can land half off-frame, and re-selecting a nearby address teleports the view. This makes the confirm step instant and obvious.
+Add a one-tap location option to the address input used in the booking and water-test forms, so a homeowner can fill their pool address without typing and see nearby suggestions first.
 
-## What changes
+## What the user sees
 
-- **Fit the property, not a fixed zoom.** Use the place's own viewport bounds when Google returns one and fit the map to it with a small padding, then clamp so a tiny viewport can't zoom past street level (max ~19) and a sprawling one can't pull back past ~16. If no viewport comes back, keep centering on the point at zoom 17.
-- **Glide instead of jump.** When the map already exists, pan/zoom to the new address smoothly so it reads as "moving to your house" rather than a flash of a different place.
-- **Marker lands with it.** The pin repositions with a short drop animation on each new address so the eye catches where it settled.
-- **Recenter control.** A small "Recenter" button in the map corner returns to the address after the user pans or zooms away, so they can explore and get back in one tap.
-- **Slightly taller frame on mobile** (h-56 instead of h-48) so a house and its street are both visible at confirm zoom.
-
-Everything else stays: the map still hides itself entirely if Maps can't load on the domain, and the address caption stays beneath.
+- A small "Use my current location" button in the address field row (pin icon, brand-styled, square corners).
+- Tap it: the browser asks for location permission.
+  - Allowed: the field fills with the nearest street address, the map preview centers on it, and any further typing ranks suggestions around that spot instead of the default Plano/Frisco center.
+  - Denied or unavailable: a short inline note ("Location off — type your address instead"), field untouched, autocomplete keeps today's service-area bias.
+- While resolving, the button shows a "Locating…" state and is disabled.
 
 ## Technical notes
 
-- Only `src/components/AddressMapPreview.tsx` changes.
-- Add `viewport` to the existing `place.fetchFields` field list; call `map.fitBounds(place.viewport, padding)` then clamp with `map.getZoom()` inside a one-shot `idle` listener.
-- Use `panTo` + `setZoom` for subsequent updates; keep the existing `Marker` (no `AdvancedMarkerElement`, which would need a Map ID).
-- Recenter button is a plain overlay `button`, brand-styled, square corners; it re-applies the stored center/zoom.
-- No backend, form, or autocomplete changes.
+- `src/components/AddressAutocomplete.tsx`
+  - Add the locate button plus `locating` / `locError` state using `navigator.geolocation.getCurrentPosition` (high accuracy, ~10s timeout), called from the click handler only.
+  - Store resolved coords in state and use them for `locationBias.center` and `origin`, falling back to `SERVICE_AREA_CENTER` when absent.
+  - On success, set the input text to the reverse-geocoded address and fire `onSelect(address, placeId)` so the map preview and parent form update.
+- New server function `src/lib/geo.functions.ts` — `reverseGeocode({ lat, lng })`:
+  - `createServerFn({ method: 'POST' })` with a zod-validated lat/lng range check.
+  - Calls the Google Maps connector gateway `/maps/api/geocode/json?latlng=...` with `Authorization: Bearer LOVABLE_API_KEY` and `X-Connection-Api-Key`, both read inside the handler.
+  - Returns `{ formattedAddress, placeId }` for the best street-level result; surfaces the gateway status and body on failure, mapping the 403 referrer/service-blocked cases to a clear message.
+- No database or schema changes; nothing else on the page changes.
+
+## Note
+
+The geocoding call runs server-side through the gateway, so it works on savvyswim.com even though the managed browser key is restricted to `*.lovable.app`. The inline map preview still needs your own browser key on the custom domain.
