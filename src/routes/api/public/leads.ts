@@ -236,9 +236,10 @@ export const Route = createFileRoute("/api/public/leads")({
             phone: lead.phone,
             optedIn: lead.sms_opt_in === true,
             consentText:
-              lead.sms_opt_in === true
-                ? "Web form: opted in to SMS updates about my appointment. Msg & data rates may apply. Reply STOP to opt out, HELP for help."
-                : "Web form: SMS opt-in checkbox left unchecked",
+              lead.consent_text ||
+              (lead.sms_opt_in === true
+                ? "Web form: authorized calls, texts and email about this request. Msg & data rates may apply. Reply STOP to opt out, HELP for help."
+                : "Web form: authorization checkbox left unchecked"),
             source: lead.source ?? "website_lead_form",
             url: lead.page ?? null,
           });
