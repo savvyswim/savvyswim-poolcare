@@ -122,8 +122,8 @@ export async function sendEmail(to: string, n: RescheduleNotice, key: string): P
     await sendLovableEmail(
       {
         to,
-        from: "Savvy Swim <noreply@notify.savvyswim.com>",
-        sender_domain: "notify.savvyswim.com",
+        from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
+        sender_domain: "notify.savvyswimservices.com",
         reply_to: "hi@savvyswim.com",
         subject,
         html,

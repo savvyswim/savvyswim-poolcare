@@ -1,6 +1,6 @@
 /** Shared sender identity for every customer-facing Savvy Swim email. */
 export const REPLY_TO_ADDRESS = "hi@savvyswim.com";
-export const SENDER_DOMAIN = "notify.savvyswim.com";
+export const SENDER_DOMAIN = "notify.savvyswimservices.com";
 export const FROM_ADDRESS = `Savvy Swim <noreply@${SENDER_DOMAIN}>`;
 export const REPLY_TO_SETTINGS_KEY = "reply_to_routing";
 
