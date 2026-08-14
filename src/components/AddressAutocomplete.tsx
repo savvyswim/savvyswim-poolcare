@@ -151,22 +151,41 @@ export default function AddressAutocomplete({
   };
 
   return (
-    <div ref={wrapRef} className="relative">
-      <Input
-        id={id}
-        name={name}
-        required={required}
-        maxLength={maxLength}
-        placeholder={placeholder}
-        className={className}
-        autoComplete="off"
-        value={text}
-        onChange={(e) => {
-          update(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-      />
+    <div ref={wrapRef}>
+      <div className="relative">
+        <Input
+          id={id}
+          name={name}
+          required={required}
+          maxLength={maxLength}
+          placeholder={placeholder}
+          className={className}
+          autoComplete="off"
+          value={text}
+          onChange={(e) => {
+            update(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+        />
+
+        {open && items.length > 0 && (
+          <ul className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden border border-hairline bg-background shadow-lg">
+            {items.map((s) => (
+              <li key={s.placeId || s.text}>
+                <button
+                  type="button"
+                  onClick={() => pick(s)}
+                  className="block w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                >
+                  {s.text}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
 
       <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
         <button
