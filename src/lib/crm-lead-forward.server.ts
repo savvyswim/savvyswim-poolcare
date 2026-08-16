@@ -103,7 +103,12 @@ export async function forwardInspectionToCrm(
       });
       return { forwarded: false, status: res.status };
     }
+    await supabaseAdmin
+      .from("inspection_requests")
+      .update({ crm_synced_at: new Date().toISOString() })
+      .eq("id", req.id);
     const { logInspectionEvents } = await import("./inspection-events.server");
+
     await logInspectionEvents(req.id, [
       {
         eventType: "status_change",
