@@ -212,7 +212,7 @@ const Index = () => {
     window.location.href = buildCrmLink(path, params);
   };
   const joinSwimClub = (source: string) => {
-    setHandoffStatus("Opening Swim Club checkout…");
+    setHandoffStatus("Opening Swim Club sign-up…");
     goToSwimClub(source);
   };
   const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
