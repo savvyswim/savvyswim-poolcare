@@ -272,14 +272,13 @@ export const Route = createFileRoute("/api/public/leads")({
         // Hand every lead off to the CRM. Never block the visitor on it —
         // failures are logged to ss_webhook_deliveries and retryable there.
         try {
-          const { forwardInspectionToCrm, leadTypeFromSource } = await import(
-            "@/lib/crm-lead-forward.server"
-          );
+          const { forwardInspectionToCrm } = await import("@/lib/crm-lead-forward.server");
           await forwardInspectionToCrm(data.id, {
-            leadType: leadTypeFromSource(lead.source),
+            leadType,
             smsOptIn: lead.sms_opt_in === true,
             contactConsent: lead.contact_consent === true,
           });
+
         } catch (err) {
           console.error("CRM lead forward threw", err);
         }
