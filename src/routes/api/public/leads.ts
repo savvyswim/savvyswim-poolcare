@@ -37,6 +37,12 @@ const leadSchema = z
     utm_source: z.string().trim().max(120).optional().nullable(),
     utm_medium: z.string().trim().max(120).optional().nullable(),
     utm_campaign: z.string().trim().max(120).optional().nullable(),
+    utm_term: z.string().trim().max(120).optional().nullable(),
+    utm_content: z.string().trim().max(120).optional().nullable(),
+    referrer: z.string().trim().max(255).optional().nullable(),
+    landing_page: z.string().trim().max(255).optional().nullable(),
+    session_id: z.string().trim().max(64).optional().nullable(),
+
     // Milliseconds between the form rendering and submit — bots fill instantly.
     elapsed_ms: z.number().int().min(0).max(86_400_000).optional().nullable(),
     // Cloudflare Turnstile token, when the embed is configured with a site key.
