@@ -130,6 +130,24 @@ export default function LeadForm({
     if (!validate()) return;
 
     const params = new URLSearchParams(window.location.search);
+    // Session + first-touch landing page, kept for the whole browsing session.
+    let sessionId: string | null = null;
+    let landingPage: string | null = null;
+    try {
+      sessionId = sessionStorage.getItem("ss_sid");
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem("ss_sid", sessionId);
+      }
+      landingPage = sessionStorage.getItem("ss_landing");
+      if (!landingPage) {
+        landingPage = `${window.location.pathname}${window.location.search}`.slice(0, 255);
+        sessionStorage.setItem("ss_landing", landingPage);
+      }
+    } catch {
+      /* private mode — attribution is best effort */
+    }
+
     const body = {
       full_name: name.trim(),
       email: email.trim(),
@@ -147,9 +165,15 @@ export default function LeadForm({
       utm_source: params.get("utm_source") || "savvyswim.com",
       utm_medium: params.get("utm_medium") || null,
       utm_campaign: params.get("utm_campaign") || null,
+      utm_term: params.get("utm_term") || null,
+      utm_content: params.get("utm_content") || null,
+      referrer: document.referrer ? document.referrer.slice(0, 255) : null,
+      landing_page: landingPage,
+      session_id: sessionId,
       elapsed_ms: Math.max(0, Date.now() - openedAt),
       company,
     };
+
 
     setSending(true);
     try {
