@@ -230,8 +230,18 @@ export const Route = createFileRoute("/api/public/leads")({
             utm_source: lead.utm_source ?? lead.source ?? null,
             utm_medium: lead.utm_medium ?? null,
             utm_campaign: lead.utm_campaign ?? null,
+            utm_term: lead.utm_term ?? null,
+            utm_content: lead.utm_content ?? null,
+            referrer: lead.referrer ?? null,
+            landing_page: lead.landing_page ?? null,
+            session_id: lead.session_id ?? null,
             page_path: lead.page ?? null,
             sms_opt_in: lead.sms_opt_in === true,
+            contact_consent: lead.contact_consent === true,
+            consent_text: lead.consent_text ?? null,
+            source: lead.source ?? null,
+            lead_type: leadType,
+
           })
           .select("id, reference_number")
           .single();
