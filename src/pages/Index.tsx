@@ -481,39 +481,45 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16 xl:px-20 xl:py-24">
-              {/* photo trio */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:ml-auto lg:w-[58%]">
-                {[
-                  { src: photoLifeguardChair.url, alt: "Savvy Swim lifeguard chair beside a serviced pool" },
-                  { src: photoSavvyRings.url, alt: "Savvy Swim branded rescue rings" },
-                  { src: photoRescueTube.url, alt: "Savvy Swim rescue tube poolside" },
-                ].map((p) => (
-                  <figure key={p.src} className="photo-tile">
-                    <img
-                      src={p.src}
-                      alt={p.alt}
-                      loading="lazy"
-                      decoding="async"
-                      width={720}
-                      height={960}
-                      sizes="(min-width: 1024px) 19vw, 30vw"
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                  </figure>
-                ))}
+            <div className="px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-14 xl:px-20 xl:py-16">
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,46%)] lg:items-center lg:gap-10">
+                {/* giant wordmark + what we actually do (keeps the H1 descriptive) */}
+                <h1 className="order-2 min-w-0 lg:order-1">
+                  <span
+                    className="type-mega block"
+                    style={{ fontSize: "clamp(3.4rem, 11vw, 8.5rem)" }}
+                  >
+                    Savvy
+                    <span className="block">Swim</span>
+                  </span>
+                  <span className="mt-3 block font-display text-[clamp(0.95rem,2.4vw,1.4rem)] uppercase tracking-[0.14em] text-primary/70">
+                    Pool cleaning &amp; service in DFW
+                  </span>
+                </h1>
+
+                {/* photo trio */}
+                <div className="order-1 grid min-w-0 grid-cols-3 gap-3 sm:gap-4 lg:order-2">
+                  {[
+                    { src: photoLifeguardChair.url, alt: "Savvy Swim lifeguard chair beside a serviced pool" },
+                    { src: photoSavvyRings.url, alt: "Savvy Swim branded rescue rings" },
+                    { src: photoRescueTube.url, alt: "Savvy Swim rescue tube poolside" },
+                  ].map((p) => (
+                    <figure key={p.src} className="photo-tile">
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        loading="lazy"
+                        decoding="async"
+                        width={720}
+                        height={960}
+                        sizes="(min-width: 1024px) 16vw, 30vw"
+                        className="aspect-[3/4] w-full object-cover"
+                      />
+                    </figure>
+                  ))}
+                </div>
               </div>
 
-              {/* giant wordmark + what we actually do (keeps the H1 descriptive) */}
-              <h1 className="mt-10 sm:mt-14">
-                <span className="type-mega block" style={{ fontSize: "clamp(3.4rem, 15vw, 11rem)" }}>
-                  Savvy
-                  <span className="block">Swim</span>
-                </span>
-                <span className="mt-3 block font-display text-[clamp(0.95rem,2.4vw,1.4rem)] uppercase tracking-[0.14em] text-primary/70">
-                  Pool cleaning &amp; service in DFW
-                </span>
-              </h1>
 
 
               <div className="mt-8 flex flex-col gap-8 border-t border-primary/10 pt-8 lg:flex-row lg:items-end lg:justify-between">
