@@ -652,13 +652,17 @@ export type Database = {
         Row: {
           address: string
           campaign_id: string | null
+          consent_text: string | null
+          contact_consent: boolean
           converted_at: string | null
           converted_customer_id: string | null
           created_at: string
+          crm_synced_at: string | null
           email: string
           full_name: string
           id: string
           landing_page: string | null
+          lead_type: string | null
           notes: string | null
           page_path: string | null
           phone: string
@@ -671,6 +675,7 @@ export type Database = {
           referrer: string | null
           session_id: string | null
           sms_opt_in: boolean
+          source: string | null
           status: string
           updated_at: string
           utm_campaign: string | null
@@ -682,13 +687,17 @@ export type Database = {
         Insert: {
           address: string
           campaign_id?: string | null
+          consent_text?: string | null
+          contact_consent?: boolean
           converted_at?: string | null
           converted_customer_id?: string | null
           created_at?: string
+          crm_synced_at?: string | null
           email: string
           full_name: string
           id?: string
           landing_page?: string | null
+          lead_type?: string | null
           notes?: string | null
           page_path?: string | null
           phone: string
@@ -701,6 +710,7 @@ export type Database = {
           referrer?: string | null
           session_id?: string | null
           sms_opt_in?: boolean
+          source?: string | null
           status?: string
           updated_at?: string
           utm_campaign?: string | null
@@ -712,13 +722,17 @@ export type Database = {
         Update: {
           address?: string
           campaign_id?: string | null
+          consent_text?: string | null
+          contact_consent?: boolean
           converted_at?: string | null
           converted_customer_id?: string | null
           created_at?: string
+          crm_synced_at?: string | null
           email?: string
           full_name?: string
           id?: string
           landing_page?: string | null
+          lead_type?: string | null
           notes?: string | null
           page_path?: string | null
           phone?: string
@@ -731,6 +745,7 @@ export type Database = {
           referrer?: string | null
           session_id?: string | null
           sms_opt_in?: boolean
+          source?: string | null
           status?: string
           updated_at?: string
           utm_campaign?: string | null

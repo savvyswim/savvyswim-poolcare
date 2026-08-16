@@ -37,6 +37,12 @@ const leadSchema = z
     utm_source: z.string().trim().max(120).optional().nullable(),
     utm_medium: z.string().trim().max(120).optional().nullable(),
     utm_campaign: z.string().trim().max(120).optional().nullable(),
+    utm_term: z.string().trim().max(120).optional().nullable(),
+    utm_content: z.string().trim().max(120).optional().nullable(),
+    referrer: z.string().trim().max(255).optional().nullable(),
+    landing_page: z.string().trim().max(255).optional().nullable(),
+    session_id: z.string().trim().max(64).optional().nullable(),
+
     // Milliseconds between the form rendering and submit — bots fill instantly.
     elapsed_ms: z.number().int().min(0).max(86_400_000).optional().nullable(),
     // Cloudflare Turnstile token, when the embed is configured with a site key.
@@ -209,6 +215,9 @@ export const Route = createFileRoute("/api/public/leads")({
             .join("\n\n") || null;
 
 
+        const { leadTypeFromSource } = await import("@/lib/crm-lead-forward.server");
+        const leadType = leadTypeFromSource(lead.source);
+
         const { data, error } = await supabaseAdmin
           .from("inspection_requests")
           .insert({
@@ -224,8 +233,18 @@ export const Route = createFileRoute("/api/public/leads")({
             utm_source: lead.utm_source ?? lead.source ?? null,
             utm_medium: lead.utm_medium ?? null,
             utm_campaign: lead.utm_campaign ?? null,
+            utm_term: lead.utm_term ?? null,
+            utm_content: lead.utm_content ?? null,
+            referrer: lead.referrer ?? null,
+            landing_page: lead.landing_page ?? null,
+            session_id: lead.session_id ?? null,
             page_path: lead.page ?? null,
             sms_opt_in: lead.sms_opt_in === true,
+            contact_consent: lead.contact_consent === true,
+            consent_text: lead.consent_text ?? null,
+            source: lead.source ?? null,
+            lead_type: leadType,
+
           })
           .select("id, reference_number")
           .single();
@@ -253,14 +272,13 @@ export const Route = createFileRoute("/api/public/leads")({
         // Hand every lead off to the CRM. Never block the visitor on it —
         // failures are logged to ss_webhook_deliveries and retryable there.
         try {
-          const { forwardInspectionToCrm, leadTypeFromSource } = await import(
-            "@/lib/crm-lead-forward.server"
-          );
+          const { forwardInspectionToCrm } = await import("@/lib/crm-lead-forward.server");
           await forwardInspectionToCrm(data.id, {
-            leadType: leadTypeFromSource(lead.source),
+            leadType,
             smsOptIn: lead.sms_opt_in === true,
             contactConsent: lead.contact_consent === true,
           });
+
         } catch (err) {
           console.error("CRM lead forward threw", err);
         }

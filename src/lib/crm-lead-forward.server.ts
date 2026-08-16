@@ -26,18 +26,32 @@ export async function forwardInspectionToCrm(
   const { data: req, error } = await supabaseAdmin
     .from("inspection_requests")
     .select(
-      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_medium, utm_campaign, page_path, sms_opt_in",
+      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, landing_page, session_id, page_path, sms_opt_in, contact_consent, consent_text, source, lead_type",
     )
     .eq("id", requestId)
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!req) throw new Error("Request not found");
 
+  const leadType = extra?.leadType || req.lead_type || "free_inspection";
+  const attribution = {
+    source: req.source,
+    utm_source: req.utm_source,
+    utm_medium: req.utm_medium,
+    utm_campaign: req.utm_campaign,
+    utm_term: req.utm_term,
+    utm_content: req.utm_content,
+    referrer: req.referrer,
+    landing_page: req.landing_page,
+    session_id: req.session_id,
+    page_path: req.page_path,
+  };
+
   const payload = {
     external_id: req.id,
     reference: req.reference_number,
-    type: extra?.leadType || "free_inspection",
-    lead_type: extra?.leadType || "free_inspection",
+    type: leadType,
+    lead_type: leadType,
     origin: "savvyswim.com",
     full_name: req.full_name,
     email: req.email,
@@ -48,16 +62,17 @@ export async function forwardInspectionToCrm(
     preferred_contact_time: req.preferred_contact_time,
     pool_details: req.pool_details,
     notes: req.notes,
+    message: req.notes,
     sms_opt_in: extra?.smsOptIn ?? req.sms_opt_in ?? false,
-    contact_consent: extra?.contactConsent ?? null,
+    contact_consent: extra?.contactConsent ?? req.contact_consent ?? false,
+    consent_text: req.consent_text,
     submitted_at: req.created_at,
-    attribution: {
-      utm_source: req.utm_source,
-      utm_medium: req.utm_medium,
-      utm_campaign: req.utm_campaign,
-      page_path: req.page_path,
-    },
+    created_at: req.created_at,
+    // Flat copies so the CRM matches whichever shape it reads.
+    ...attribution,
+    attribution,
   };
+
 
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   const token = process.env["CRM_LEADS_TOKEN"];
@@ -88,7 +103,12 @@ export async function forwardInspectionToCrm(
       });
       return { forwarded: false, status: res.status };
     }
+    await supabaseAdmin
+      .from("inspection_requests")
+      .update({ crm_synced_at: new Date().toISOString() })
+      .eq("id", req.id);
     const { logInspectionEvents } = await import("./inspection-events.server");
+
     await logInspectionEvents(req.id, [
       {
         eventType: "status_change",
