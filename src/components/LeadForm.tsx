@@ -14,6 +14,8 @@ import AddressAutocomplete from "@/components/AddressAutocomplete";
 import AddressMapPreview from "@/components/AddressMapPreview";
 import { trackSiteEvent } from "@/lib/site-analytics";
 
+export const SWIM_CLUB_OPTION = "Savvy Swim Club membership — $19.99/mo";
+
 export const SERVICES = [
   "Weekly Service & Maintenance",
   "Equipment Repair",
@@ -22,6 +24,7 @@ export const SERVICES = [
   "Filter Clean",
   "Surface & Tile Care",
   "On-site Inspection",
+  SWIM_CLUB_OPTION,
   "Not sure — help me decide",
 ] as const;
 

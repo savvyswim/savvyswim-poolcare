@@ -101,8 +101,21 @@ export function goToLead(
   });
 }
 
-/** Send the visitor to the Swim Club Stripe checkout, tagged with the button. */
+/**
+ * Send the visitor to the Swim Club checkout, tagged with the button.
+ * If no live checkout is configured yet, open the on-site form pre-tagged
+ * with the membership so the lead still reaches us.
+ */
 export function goToSwimClub(source: string) {
   trackSiteEvent("swim_club_click", source);
-  window.location.href = swimClubCheckoutUrl(source);
+  const url = swimClubCheckoutUrl(source);
+  if (url) {
+    window.location.href = url;
+    return;
+  }
+  openQuoteModal({
+    source: `swim_club_${source}`,
+    service: "Savvy Swim Club membership — $19.99/mo",
+  });
 }
+
