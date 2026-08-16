@@ -215,6 +215,9 @@ export const Route = createFileRoute("/api/public/leads")({
             .join("\n\n") || null;
 
 
+        const { leadTypeFromSource } = await import("@/lib/crm-lead-forward.server");
+        const leadType = leadTypeFromSource(lead.source);
+
         const { data, error } = await supabaseAdmin
           .from("inspection_requests")
           .insert({
