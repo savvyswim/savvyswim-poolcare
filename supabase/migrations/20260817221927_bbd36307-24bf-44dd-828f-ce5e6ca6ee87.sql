@@ -1,0 +1,2 @@
+DELETE FROM public.inspection_events WHERE request_id IN (SELECT id FROM public.inspection_requests WHERE email LIKE 'hi+%@savvyswim.com');
+DELETE FROM public.inspection_requests WHERE email LIKE 'hi+%@savvyswim.com';
