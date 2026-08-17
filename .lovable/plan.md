@@ -1,45 +1,42 @@
-# Bind the website lead form to the CRM lead pipeline
+# New phone number: (817) 663-POOL
 
-The website already captures every lead through one hardened endpoint and already
-signs the handoff to the CRM. The only missing piece is the shared password that
-both apps must hold, plus a live end-to-end confirmation.
+Replace the old (469) 744-0379 number everywhere with **817-663-7665**, shown to
+customers as **817-663-POOL** (POOL = 7665) wherever there's room for the vanity
+version.
 
-## What happens after this
+## Display rules
 
-1. Visitor submits any form on the site (booking modal, water test tab, city pages).
-2. The lead is saved on the website and immediately pushed to the CRM lead pipeline.
-3. The CRM verifies the shared secret and creates the lead in its Leads / Marketing pipeline.
-4. Success or failure is recorded on the website so nothing gets silently lost.
+- Buttons, headers, hero, footer, city pages, service pages: `817-663-POOL`.
+- Legal pages (Privacy, Terms), SMS footers, email bodies, and structured data:
+  `(817) 663-7665` — plain digits, since compliance text and search engines should
+  not see a vanity spelling.
+- Every click-to-call link dials `tel:+18176637665` regardless of how it's shown.
+- Optional nicety used on the marketing pages: `817-663-POOL (7665)` on first
+  mention so nobody has to guess.
 
-## Steps
+## One source of truth
 
-1. **Create the shared value.** You generate one strong random value (a password
-   manager, or `openssl rand -hex 32`). It must be the exact same string in both
-   projects — Lovable never reveals a value it generates, so it has to come from you.
-2. **Save it on the website.** I reopen the secure form and you paste it as
-   `WEBSITE_WEBHOOK_SECRET`.
-3. **Save it in the CRM.** In the CRM project, save the identical value under the
-   name its lead endpoint expects (`WEBSITE_WEBHOOK_SECRET`).
-4. **Make the CRM accept the lead.** The CRM currently answers
-   "Lead intake is not configured" (503) — its lead endpoint must read the secret,
-   compare it, and insert into the lead pipeline. That change is made in the CRM
-   project, not here.
-5. **Live test.** I submit a real lead through the site, confirm the CRM returns a
-   success, and confirm the sync status turns green. Test records are cleaned up after.
+Add a small shared module with the number in each form (dial href, plain display,
+vanity display) and point every page and email at it, so the next change is one edit
+instead of thirty.
 
-## Technical notes
+## Where it changes
 
-- Handoff lives in `src/lib/crm-lead-forward.server.ts`; it reads
-  `CRM_LEADS_TOKEN` or `WEBSITE_WEBHOOK_SECRET` and sends the secret four ways
-  (`Authorization: Bearer`, `x-website-secret`, `x-webhook-secret`, plus an
-  HMAC-SHA256 `x-webhook-signature` over the raw body), so whichever scheme the
-  CRM checks will match. No code change needed on this side.
-- Target endpoint defaults to `https://savvyswim.app/api/public/leads`, overridable
-  with `CRM_LEADS_URL`.
-- Every attempt is logged to `ss_webhook_deliveries` with status and error text, and
-  a successful sync stamps `inspection_requests.crm_synced_at`.
+- Marketing pages: home, services, weekly pool service, all city landings, Frisco page.
+- Forms and modals: quote modal, lead form, contract signing page.
+- Legal: privacy, terms.
+- Emails and texts: inspection confirmations, contract emails, receipts, reschedule
+  and appointment notices, SMS compliance footer.
+- SEO: LocalBusiness structured data in the site head and on city pages.
 
-## Out of scope here
+## Internal ops alerts
 
-The CRM-side endpoint change (step 4) has to be done in the CRM project. If you want,
-paste this plan there and I can pick it up from that side.
+Several internal alert paths (error monitor, health checks, inventory alerts) text a
+default staff number. I'll point those at the new number too, so nothing keeps ringing
+the retired line.
+
+## Still open from the last plan
+
+The website→CRM lead handoff is coded and ready; it just needs the shared secret saved
+on both sides and the CRM's lead endpoint to accept it. I'll pick that back up after
+the phone change, or in parallel once you have the secret value.
