@@ -107,11 +107,11 @@ export default function WeeklyPoolService() {
               Savvy Swim
             </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-7 font-tech text-primary/70">
-            <Link to="/" className="hover:text-accent transition">Home</Link>
-            <Link to="/services" className="hover:text-accent transition">Services</Link>
-            <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
-            <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-hidden whitespace-nowrap font-tech text-primary/70 md:flex lg:gap-7">
+            <Link to="/" className="shrink-0 hover:text-accent transition">Home</Link>
+            <Link to="/services" className="shrink-0 hover:text-accent transition">Services</Link>
+            <Link to="/" hash="membership" className="shrink-0 hover:text-accent transition">Swim Club</Link>
+            <Link to="/" hash="contact" className="shrink-0 hover:text-accent transition">Contact</Link>
           </nav>
           <CallButton location="weekly_hub_header" />
         </div>
