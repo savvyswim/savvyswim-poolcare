@@ -136,6 +136,8 @@ function RootComponent() {
 
           <Outlet />
 
+          <CallOptionsCard />
+
           <Suspense fallback={null}>
             <QuoteModal />
             <WaterTestTab />
