@@ -32,6 +32,7 @@ import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
@@ -160,6 +161,11 @@ const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   path: '/admin/webhook-health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
+  id: '/admin/lead-sync',
+  path: '/admin/lead-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
   id: '/api/public/leads',
   path: '/api/public/leads',
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -285,6 +292,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -323,6 +331,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -362,6 +371,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -399,6 +409,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -436,6 +447,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -474,6 +486,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   WeeklyPoolServiceRoute: typeof WeeklyPoolServiceRoute
+  AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -655,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWebhookHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/lead-sync': {
+      id: '/admin/lead-sync'
+      path: '/admin/lead-sync'
+      fullPath: '/admin/lead-sync'
+      preLoaderRoute: typeof AdminLeadSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/leads': {
       id: '/api/public/leads'
       path: '/api/public/leads'
@@ -762,6 +782,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   WeeklyPoolServiceRoute: WeeklyPoolServiceRoute,
+  AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
