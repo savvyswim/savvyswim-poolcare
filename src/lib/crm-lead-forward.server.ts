@@ -104,6 +104,8 @@ export async function forwardInspectionToCrm(
     const signature = createHmac("sha256", token).update(requestBody).digest("hex");
     headers["x-webhook-signature"] = signature;
     headers["x-signature"] = `sha256=${signature}`;
+    // The CRM verifies the shared secret verbatim in this header.
+    headers["x-savvy-signature"] = token;
   }
 
 
