@@ -12,7 +12,7 @@ export const SMS_FOOTER = "Reply STOP to opt out, HELP for help.";
 
 /** Auto-reply sent when someone texts HELP. */
 export const SMS_HELP_REPLY =
-  "Savvy Swim pool service. Msg & data rates may apply. Msg frequency varies. Reply STOP to opt out. Help: (469) 744-0379 or hi@savvyswim.com";
+  "Savvy Swim pool service. Msg & data rates may apply. Msg frequency varies. Reply STOP to opt out. Help: (817) 663-7665 or hi@savvyswim.com";
 
 /** Auto-reply confirming an opt-out. */
 export const SMS_STOP_REPLY =

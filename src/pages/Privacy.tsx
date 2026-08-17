@@ -22,7 +22,7 @@ const Privacy = () => (
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
         <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a>{" "}·{" "}
-        <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(469) 744-0379</a>
+        <a href="tel:+18176637665" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(817) 663-7665</a>
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Introduction</h2>
@@ -154,7 +154,7 @@ const Privacy = () => (
       </p>
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a></p>
-      <p className="mb-1">Phone: <a href="tel:+14697440379" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(469) 744-0379</a></p>
+      <p className="mb-1">Phone: <a href="tel:+18176637665" onClick={() => trackContactClick("call_click", "privacy_body")} className="text-amber-brand">(817) 663-7665</a></p>
       <p className="mb-1">Website: <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a></p>
     </article>
   </main>

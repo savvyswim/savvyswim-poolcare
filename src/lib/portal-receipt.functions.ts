@@ -77,7 +77,7 @@ export const sendPortalReceipt = createServerFn({ method: "POST" })
         ${data.reference ? `<tr><td style="padding:8px 0;color:#7a6f63;">Reference</td><td style="padding:8px 0;text-align:right;">${data.reference}</td></tr>` : ""}
       </table>
       <p style="margin:20px 0 0;font-size:12px;color:#7a6f63;line-height:1.6;">
-        Questions about this receipt? Call or text us at (469) 744-0379.
+        Questions about this receipt? Call or text us at (817) 663-7665.
       </p>
     </div>
     <div style="border-top:1px solid #e5dcc9;padding:14px 28px;font-size:11px;color:#9a8f82;">
@@ -92,7 +92,7 @@ We received your payment of ${amount} for invoice ${invoice.invoice_number}.
 Method: ${methodLabel}
 Date: ${paidOn}${data.reference ? `\nReference: ${data.reference}` : ""}
 
-Questions? Call or text (469) 744-0379.
+Questions? Call or text (817) 663-7665.
 Savvy Swim · savvyswim.com`;
 
       try {

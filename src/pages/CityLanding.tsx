@@ -21,8 +21,8 @@ import {
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
 
-const PHONE_DISPLAY = "(469) 744-0379";
-const PHONE_HREF = "tel:+14697440379";
+const PHONE_DISPLAY = "(817) 663-7665";
+const PHONE_HREF = "tel:+18176637665";
 
 export default function CityLanding({ area }: { area: ServiceArea }) {
   const city = area.name;

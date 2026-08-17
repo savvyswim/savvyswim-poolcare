@@ -9,7 +9,7 @@ import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const SENDER_DOMAIN = "notify.savvyswimservices.com";
 const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswimservices.com>";
-const OFFICE_PHONE = "(469) 744-0379";
+const OFFICE_PHONE = "(817) 663-7665";
 const PORTAL_URL = "https://savvyswim.app/portal";
 
 export type PaymentStatus = "succeeded" | "failed" | "refunded" | "pending";

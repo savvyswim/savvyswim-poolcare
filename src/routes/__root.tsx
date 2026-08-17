@@ -47,7 +47,7 @@ const SITE_JSONLD = JSON.stringify({
       url: "https://savvyswimservices.com/",
       logo: "https://savvyswimservices.com/apple-touch-icon.png",
       email: "hi@savvyswim.com",
-      telephone: "+1-469-744-0379",
+      telephone: "+1-817-663-7665",
     },
     {
       "@type": "WebSite",

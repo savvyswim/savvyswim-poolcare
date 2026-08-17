@@ -12,7 +12,7 @@
 import { describeError } from "./error-capture";
 
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
-const DEFAULT_PHONE = "+14697440379";
+const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 
 // One alert per distinct failure per window — a crashing route can fire
