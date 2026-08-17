@@ -72,7 +72,12 @@ export type LeadFormProps = {
   submitLabel: string;
   openedAt: number;
   onCancel: () => void;
-  onDone: (summary: { date?: Date | undefined; time?: string | undefined }) => void;
+  onDone: (summary: {
+    date?: Date | undefined;
+    time?: string | undefined;
+    reference?: string | undefined;
+    email?: string | undefined;
+  }) => void;
 };
 
 type Errors = Partial<Record<string, string>>;
