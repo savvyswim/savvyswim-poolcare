@@ -216,9 +216,9 @@ const Index = () => {
     goToLead("home_plan", { service: planName });
   };
   /** Every lead button hands off to the booking form in the Savvy Swim app. */
-  const openBooking = (service?: string) => {
+  const openBooking = (slot: string, service?: string) => {
     setHandoffStatus("Opening the booking form…");
-    goToLead("home", service ? { service } : {});
+    goToLead(`home_${slot}`, service ? { service } : {});
   };
 
 
@@ -347,7 +347,7 @@ const Index = () => {
               <CallButton location="header" className="px-2 py-2 sm:px-3" />
               <button
                 type="button"
-                onClick={() => openBooking()}
+                onClick={() => openBooking("nav")}
                 data-savvy-cta="request_quote"
                 aria-label="Request a quote — opens the Savvy Swim booking form"
                 className="btn-quote inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
@@ -526,7 +526,7 @@ const Index = () => {
                 <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
                   <button
                     type="button"
-                    onClick={() => openBooking("Weekly Service & Maintenance")}
+                    onClick={() => openBooking("weekly_card", "Weekly Service & Maintenance")}
                     aria-label="Start weekly service — opens the Savvy Swim booking form"
                     className="btn-quote font-tech inline-flex min-h-12 w-full items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:justify-start"
                   >
@@ -686,7 +686,7 @@ const Index = () => {
       {/* Side quote tab */}
       <button
         type="button"
-        onClick={() => openBooking()}
+        onClick={() => openBooking("midpage")}
         data-savvy-cta="request_quote"
         aria-label="Request a quote — opens the Savvy Swim booking form"
         className="btn-quote hidden lg:flex fixed right-0 top-1/2 z-40 -translate-y-1/2 items-center px-3 py-6 text-[11px] font-bold uppercase tracking-[0.22em] shadow-cta focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"

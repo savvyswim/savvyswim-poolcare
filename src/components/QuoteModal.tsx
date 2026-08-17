@@ -23,16 +23,31 @@ export type QuoteDetail = {
   variant?: QuoteVariant;
 };
 
+/**
+ * Stamp a CTA name with the page it was clicked on ("<cta>:<path>") so every
+ * lead — homepage, weekly plan hub, city page — reports and syncs with the
+ * page it came from. Already-stamped sources pass through untouched.
+ */
+function withPage(source: string): string {
+  if (typeof window === "undefined" || source.includes(":")) return source;
+  const path = window.location.pathname.replace(/\/+$/, "") || "/home";
+  return `${source}:${path.slice(0, 60)}`;
+}
+
 /** Open the quote modal from anywhere (client only). */
 export function openQuoteModal(detail: QuoteDetail = {}) {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail }));
+  const stamped: QuoteDetail = detail.source
+    ? { ...detail, source: withPage(detail.source) }
+    : detail;
+  window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));
 }
 
 /** Open the free water test form (client only). */
 export function openWaterTestModal(source = "water_test_tab") {
   openQuoteModal({ source, variant: "water_test" });
 }
+
 
 const COPY: Record<
   QuoteVariant,
@@ -92,7 +107,7 @@ export default function QuoteModal() {
       const detail = (e as CustomEvent<QuoteDetail>).detail || {};
       returnFocusTo.current = (document.activeElement as HTMLElement) ?? null;
       setVariant(detail.variant ?? "booking");
-      setSource(detail.source || "site");
+      setSource(withPage(detail.source || "site"));
       setService(detail.service);
       setDone(null);
       openedAt.current = Date.now();
