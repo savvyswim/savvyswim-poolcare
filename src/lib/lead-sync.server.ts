@@ -7,7 +7,7 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
 
   const { data: leads, error } = await supabaseAdmin
     .from("inspection_requests")
-    .select("id, created_at, full_name, email, phone, city, source, lead_type, crm_synced_at")
+    .select("id, created_at, full_name, email, phone, postal_code, source, lead_type, crm_synced_at, postal_code")
     .gte("created_at", since)
     .order("created_at", { ascending: false })
     .limit(200);
@@ -48,7 +48,7 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
       full_name: r.full_name ?? null,
       email: r.email ?? null,
       phone: r.phone ?? null,
-      city: r.city ?? null,
+      city: r.postal_code ?? null,
       source: r.source ?? null,
       lead_type: r.lead_type ?? null,
       crm_synced_at: r.crm_synced_at ?? null,
