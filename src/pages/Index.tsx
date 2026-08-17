@@ -434,7 +434,7 @@ const Index = () => {
         <div className="relative container-tight pb-10 pt-6 sm:pb-16 sm:pt-10">
           <div className="canvas-panel overflow-hidden">
             {/* ticker inside the panel */}
-            <div className="overflow-hidden border-b border-primary/10">
+            <div className="hidden overflow-hidden border-b border-primary/10 sm:block">
               <div className="marquee-pause marquee-fade py-2.5">
                 <div className="flex w-max animate-marquee-slow">
                   {[0, 1].map((dup) => (
