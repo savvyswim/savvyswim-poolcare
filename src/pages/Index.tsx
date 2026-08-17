@@ -698,7 +698,7 @@ const Index = () => {
       {/* MARQUEE — telemetry ticker */}
       <section
         aria-labelledby="service-details"
-        className="border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden"
+        className="hidden border-y border-primary/15 bg-primary text-primary-foreground py-4 overflow-hidden sm:block"
       >
         <h2 id="service-details" className="sr-only">
           Pool service details we handle every week
