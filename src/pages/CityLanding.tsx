@@ -109,7 +109,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   <div className="mt-8 flex flex-wrap gap-3">
                     <button
                       type="button"
-                      onClick={() => goToLead("city")}
+                      onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
                       className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
@@ -360,7 +360,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() => goToLead("city")}
+                  onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
@@ -368,7 +368,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => goToLead("city")}
+                  onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
