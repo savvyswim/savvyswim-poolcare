@@ -24,14 +24,19 @@ function track(location: string) {
   }
 }
 
-/** True only on a real desktop browser, which may have no dialer for `tel:`. */
+/**
+ * True only on a real desktop browser, which may have no dialer for `tel:`.
+ * Decided by device capability — never by window width, so a narrow desktop
+ * window or preview panel still gets the call card.
+ */
 function isDesktop() {
   if (typeof window === "undefined") return false;
   const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
   const mobileUa = /android|iphone|ipad|ipod|mobile|silk|kindle/i.test(navigator.userAgent);
-  const narrow = window.innerWidth <= 820;
-  return !touch && !mobileUa && !narrow;
+  const coarse = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
+  return !touch && !mobileUa && !coarse;
 }
+
 
 type CardDetail = { location: string; x: number; y: number };
 
