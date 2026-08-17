@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
+import { CallButton, StickyCallBar } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
