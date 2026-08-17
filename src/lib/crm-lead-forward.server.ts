@@ -81,6 +81,8 @@ export async function forwardInspectionToCrm(
     sms_opt_in: extra?.smsOptIn ?? req.sms_opt_in ?? false,
     contact_consent: extra?.contactConsent ?? req.contact_consent ?? false,
     consent_text: req.consent_text,
+    lead_status: req.status ?? "new",
+    status: req.status ?? "new",
     submitted_at: req.created_at,
     created_at: req.created_at,
     // Flat copies so the CRM matches whichever shape it reads.

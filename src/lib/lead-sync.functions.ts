@@ -9,6 +9,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * re-send one that failed. Office/owner only, verified server-side.
  */
 
+export const LEAD_STATUSES = ["new", "scheduled", "confirmed", "declined", "converted"] as const;
+export type LeadStatus = (typeof LEAD_STATUSES)[number];
+
 export type LeadSyncRow = {
   id: string;
   created_at: string;
@@ -21,6 +24,7 @@ export type LeadSyncRow = {
   source: string | null;
   lead_type: string | null;
   crm_synced_at: string | null;
+  lead_status: LeadStatus;
   status: "synced" | "failed" | "pending";
   last_attempt_at: string | null;
   attempts: number;
@@ -56,4 +60,22 @@ export const retryLeadSync = createServerFn({ method: "POST" })
         ? "Lead delivered to the CRM"
         : `CRM handoff failed${res.status ? ` (HTTP ${res.status})` : ""}`,
     };
+  });
+
+export const setLeadStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z
+      .object({ id: z.string().uuid(), status: z.enum(LEAD_STATUSES) })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertOffice(context.supabase as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("inspection_requests")
+      .update({ status: data.status })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const, status: data.status };
   });
