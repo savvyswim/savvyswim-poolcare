@@ -17,6 +17,7 @@ import { Route as RequestInspectionRouteImport } from './routes/request-inspecti
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PoolCleaningPlanoRouteImport } from './routes/pool-cleaning-plano'
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
 import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
 import { Route as PlanoRouteImport } from './routes/plano'
@@ -82,6 +83,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PortalRoute = PortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolCleaningPlanoRoute = PoolCleaningPlanoRouteImport.update({
+  id: '/pool-cleaning-plano',
+  path: '/pool-cleaning-plano',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -269,6 +276,7 @@ export interface FileRoutesByTo {
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -306,6 +314,7 @@ export interface FileRoutesById {
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -344,6 +353,7 @@ export interface FileRouteTypes {
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -380,6 +390,7 @@ export interface FileRouteTypes {
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -453,6 +465,7 @@ export interface RootRouteChildren {
   PlanoRoute: typeof PlanoRoute
   PoolCleaningFriscoRoute: typeof PoolCleaningFriscoRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
+  PoolCleaningPlanoRoute: typeof PoolCleaningPlanoRoute
   PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -535,6 +548,13 @@ declare module '@tanstack/react-router' {
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pool-cleaning-plano': {
+      id: '/pool-cleaning-plano'
+      path: '/pool-cleaning-plano'
+      fullPath: '/pool-cleaning-plano'
+      preLoaderRoute: typeof PoolCleaningPlanoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pool-cleaning-frisco-tx': {
@@ -733,6 +753,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanoRoute: PlanoRoute,
   PoolCleaningFriscoRoute: PoolCleaningFriscoRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
+  PoolCleaningPlanoRoute: PoolCleaningPlanoRoute,
   PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
