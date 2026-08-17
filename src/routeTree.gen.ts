@@ -18,6 +18,8 @@ import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
+import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
+import { Route as FriscoRouteImport } from './routes/frisco'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as BookRouteImport } from './routes/book'
@@ -84,6 +86,16 @@ const PortalRoute = PortalRouteImport.update({
 const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
   id: '/pool-cleaning-frisco-tx',
   path: '/pool-cleaning-frisco-tx',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolCleaningFriscoRoute = PoolCleaningFriscoRouteImport.update({
+  id: '/pool-cleaning-frisco',
+  path: '/pool-cleaning-frisco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FriscoRoute = FriscoRouteImport.update({
+  id: '/frisco',
+  path: '/frisco',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FreeInspectionRoute = FreeInspectionRouteImport.update({
@@ -211,6 +223,8 @@ export interface FileRoutesByFullPath {
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
+  '/frisco': typeof FriscoRoute
+  '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
@@ -244,6 +258,8 @@ export interface FileRoutesByTo {
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
+  '/frisco': typeof FriscoRoute
+  '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
@@ -278,6 +294,8 @@ export interface FileRoutesById {
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
+  '/frisco': typeof FriscoRoute
+  '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
@@ -313,6 +331,8 @@ export interface FileRouteTypes {
     | '/book'
     | '/booking'
     | '/free-inspection'
+    | '/frisco'
+    | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
     | '/privacy'
@@ -346,6 +366,8 @@ export interface FileRouteTypes {
     | '/book'
     | '/booking'
     | '/free-inspection'
+    | '/frisco'
+    | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
     | '/privacy'
@@ -379,6 +401,8 @@ export interface FileRouteTypes {
     | '/book'
     | '/booking'
     | '/free-inspection'
+    | '/frisco'
+    | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
     | '/portal'
     | '/privacy'
@@ -413,6 +437,8 @@ export interface RootRouteChildren {
   BookRoute: typeof BookRoute
   BookingRoute: typeof BookingRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
+  FriscoRoute: typeof FriscoRoute
+  PoolCleaningFriscoRoute: typeof PoolCleaningFriscoRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
   PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -503,6 +529,20 @@ declare module '@tanstack/react-router' {
       path: '/pool-cleaning-frisco-tx'
       fullPath: '/pool-cleaning-frisco-tx'
       preLoaderRoute: typeof PoolCleaningFriscoTxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pool-cleaning-frisco': {
+      id: '/pool-cleaning-frisco'
+      path: '/pool-cleaning-frisco'
+      fullPath: '/pool-cleaning-frisco'
+      preLoaderRoute: typeof PoolCleaningFriscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frisco': {
+      id: '/frisco'
+      path: '/frisco'
+      fullPath: '/frisco'
+      preLoaderRoute: typeof FriscoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-inspection': {
@@ -669,6 +709,8 @@ const rootRouteChildren: RootRouteChildren = {
   BookRoute: BookRoute,
   BookingRoute: BookingRoute,
   FreeInspectionRoute: FreeInspectionRoute,
+  FriscoRoute: FriscoRoute,
+  PoolCleaningFriscoRoute: PoolCleaningFriscoRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
   PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,

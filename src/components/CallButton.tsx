@@ -1,16 +1,12 @@
-import type { MouseEvent } from "react";
 import { Phone } from "lucide-react";
-import { toast } from "sonner";
-import { PHONE_E164, PHONE_HREF, PHONE_PLAIN, PHONE_VANITY } from "@/lib/contact-info";
+import { PHONE_HREF, PHONE_PLAIN, PHONE_VANITY } from "@/lib/contact-info";
 import { trackContactClick } from "@/lib/contactTracking";
 
 /**
  * Tap-to-call controls.
  *
- * On a phone the anchor's `tel:` href opens the dialer directly. On desktop
- * (and inside the preview iframe, where `tel:` navigation is blocked) the
- * browser would otherwise sit on a blank pending tab, so we cancel the
- * navigation, copy the number and show it in a toast instead.
+ * These remain plain `tel:` anchors so the device—not the website—handles
+ * the click and opens its native phone app directly.
  */
 
 function track(location: string) {
@@ -21,32 +17,9 @@ function track(location: string) {
   }
 }
 
-function canDial(): boolean {
-  if (typeof window === "undefined") return true;
-  // Any touch device dials directly, even inside an embedded preview.
-  const coarse = window.matchMedia?.("(pointer: coarse)")?.matches;
-  const touch = (navigator.maxTouchPoints ?? 0) > 0;
-  const mobileUa = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
-  if (coarse || touch || mobileUa) return true;
-  // Narrow viewports are phones too.
-  if (window.innerWidth <= 820) return true;
-  return false;
-}
-
-
 function handleCall(location: string) {
-  return (e: MouseEvent<HTMLAnchorElement>) => {
+  return () => {
     track(location);
-    if (canDial()) return; // let the dialer open
-    e.preventDefault();
-    try {
-      void navigator.clipboard?.writeText(PHONE_E164);
-    } catch {
-      /* clipboard may be unavailable */
-    }
-    toast.success(`Call ${PHONE_VANITY}`, {
-      description: `${PHONE_PLAIN} — copied to your clipboard.`,
-    });
   };
 }
 
