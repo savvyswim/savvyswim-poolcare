@@ -193,10 +193,14 @@ export default function LeadForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        reference?: string;
+      };
       if (res.ok && data.ok) {
         trackSiteEvent("lead_click", `${source}_submitted`);
-        onDone({ date, time });
+        onDone({ date, time, reference: data.reference, email: email.trim() });
         return;
       }
       setError(data.error || `We couldn't send that just now. Try again, or call ${PHONE}.`);
