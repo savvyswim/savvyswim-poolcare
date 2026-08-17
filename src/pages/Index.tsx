@@ -523,12 +523,12 @@ const Index = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
                   <button
                     type="button"
                     onClick={() => openBooking("Weekly Service & Maintenance")}
                     aria-label="Start weekly service — opens the Savvy Swim booking form"
-                    className="btn-quote font-tech inline-flex min-h-11 items-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="btn-quote font-tech inline-flex min-h-12 w-full items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:justify-start"
                   >
                     <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Start Service
                   </button>
@@ -536,7 +536,7 @@ const Index = () => {
                     href={PHONE_HREF}
                     onClick={onCallClick("hero")}
                     aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
-                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="font-tech inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:justify-start"
                   >
                     <Phone className="h-4 w-4" aria-hidden="true" /> {PHONE_DISPLAY}
                   </a>
@@ -547,10 +547,11 @@ const Index = () => {
                       goToLead("home_hero_visit");
                     }}
                     aria-label="Request a free pool visit — opens the Savvy Swim booking form"
-                    className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="font-tech hidden min-h-12 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex"
                   >
                     <MessageSquare className="h-4 w-4" aria-hidden="true" /> Request free pool visit
                   </button>
+
 
 
 
