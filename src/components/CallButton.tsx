@@ -24,14 +24,19 @@ function track(location: string) {
   }
 }
 
-/** True only on a real desktop browser, which may have no dialer for `tel:`. */
+/**
+ * True only on a real desktop browser, which may have no dialer for `tel:`.
+ * Decided by device capability — never by window width, so a narrow desktop
+ * window or preview panel still gets the call card.
+ */
 function isDesktop() {
   if (typeof window === "undefined") return false;
   const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
   const mobileUa = /android|iphone|ipad|ipod|mobile|silk|kindle/i.test(navigator.userAgent);
-  const narrow = window.innerWidth <= 820;
-  return !touch && !mobileUa && !narrow;
+  const coarse = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
+  return !touch && !mobileUa && !coarse;
 }
+
 
 type CardDetail = { location: string; x: number; y: number };
 
@@ -40,15 +45,20 @@ export function handleCall(location: string) {
     track(location);
     // Phones and tablets: let the OS open the dialer (never intercept).
     if (!isDesktop()) return;
-    e.preventDefault();
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    window.dispatchEvent(
-      new CustomEvent<CardDetail>(CALL_CARD_EVENT, {
-        detail: { location, x: rect.left + rect.width / 2, y: rect.bottom },
-      }),
-    );
+    try {
+      window.dispatchEvent(
+        new CustomEvent<CardDetail>(CALL_CARD_EVENT, {
+          detail: { location, x: rect.left + rect.width / 2, y: rect.bottom },
+        }),
+      );
+      e.preventDefault();
+    } catch {
+      /* card unavailable — let the plain tel: link run so it's never a dead click */
+    }
   };
 }
+
 
 /** Alias used inline on existing anchors. */
 export const onCallClick = handleCall;
@@ -97,9 +107,10 @@ export function CallOptionsCard() {
     }
   };
 
-  const width = 288;
-  const left = Math.min(Math.max(state.x - width / 2, 12), window.innerWidth - width - 12);
-  const top = Math.min(state.y + 10, window.innerHeight - 430);
+  const width = Math.min(288, window.innerWidth - 24);
+  const left = Math.min(Math.max(state.x - width / 2, 12), Math.max(window.innerWidth - width - 12, 12));
+  const top = Math.max(Math.min(state.y + 10, window.innerHeight - 430), 12);
+
 
   const rowClass =
     "inline-flex w-full items-center gap-3 whitespace-nowrap border border-hairline bg-background px-4 py-3 text-[12px] font-bold uppercase tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";

@@ -93,64 +93,75 @@ export async function forwardInspectionToCrm(
   const { logWebhookDelivery } = await import("./webhook-log.server");
   const reference = `${req.reference_number ?? req.id} · ${req.full_name ?? "lead"}`;
 
-  try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers,
-      body: requestBody,
-    });
-    const body = await res.text();
-    if (!res.ok) {
-      console.error("CRM lead forward failed", res.status, body.slice(0, 500));
-      await logWebhookDelivery({
-        channel: "lead",
-        eventKey: req.id,
-        endpoint,
-        reference,
-        outcome: "failed",
-        httpStatus: res.status,
-        error: `CRM responded ${res.status}`,
-        request: payload,
-        response: body,
-      });
-      return { forwarded: false, status: res.status };
-    }
-    await supabaseAdmin
-      .from("inspection_requests")
-      .update({ crm_synced_at: new Date().toISOString() })
-      .eq("id", req.id);
-    const { logInspectionEvents } = await import("./inspection-events.server");
+  // Bounded retry: transient CRM downtime should never drop a lead.
+  const attempts = 3;
+  let lastStatus = 0;
+  let lastBody = "";
+  let lastError = "";
 
-    await logInspectionEvents(req.id, [
-      {
-        eventType: "status_change",
-        detail: `Lead forwarded to CRM (${endpoint})`,
-        outcome: "sent",
-      },
-    ]);
-    await logWebhookDelivery({
-      channel: "lead",
-      eventKey: req.id,
-      endpoint,
-      reference,
-      outcome: "success",
-      httpStatus: res.status,
-      request: payload,
-      response: body,
-    });
-    return { forwarded: true, status: res.status };
-  } catch (e) {
-    console.error("CRM lead forward error", e);
-    await logWebhookDelivery({
-      channel: "lead",
-      eventKey: req.id,
-      endpoint,
-      reference,
-      outcome: "failed",
-      httpStatus: 0,
-      error: e instanceof Error ? e.message : String(e),
-      request: payload,
-    });
-    return { forwarded: false, status: 0 };
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const res = await fetch(endpoint, { method: "POST", headers, body: requestBody });
+      lastStatus = res.status;
+      lastBody = await res.text();
+
+      if (res.ok) {
+        await supabaseAdmin
+          .from("inspection_requests")
+          .update({ crm_synced_at: new Date().toISOString() })
+          .eq("id", req.id);
+        const { logInspectionEvents } = await import("./inspection-events.server");
+        await logInspectionEvents(req.id, [
+          {
+            eventType: "status_change",
+            detail: `Lead forwarded to CRM (${endpoint})`,
+            outcome: "sent",
+          },
+        ]);
+        await logWebhookDelivery({
+          channel: "lead",
+          eventKey: req.id,
+          endpoint,
+          reference,
+          outcome: "success",
+          httpStatus: res.status,
+          request: payload,
+          response: lastBody,
+        });
+        return { forwarded: true, status: res.status };
+      }
+
+      lastError = `CRM responded ${res.status}`;
+      console.error("CRM lead forward failed", res.status, lastBody.slice(0, 500));
+      // 4xx other than 408/429 will not succeed on retry.
+      if (res.status < 500 && res.status !== 408 && res.status !== 429) break;
+    } catch (e) {
+      lastStatus = 0;
+      lastError = e instanceof Error ? e.message : String(e);
+      console.error("CRM lead forward error", lastError);
+    }
+
+    if (attempt < attempts) {
+      await new Promise((r) => setTimeout(r, attempt * 750));
+    }
   }
+
+  await logWebhookDelivery({
+    channel: "lead",
+    eventKey: req.id,
+    endpoint,
+    reference,
+    outcome: "failed",
+    httpStatus: lastStatus,
+    error: lastError || "CRM handoff failed",
+    request: payload,
+    response: lastBody || null,
+  });
+  return { forwarded: false, status: lastStatus };
 }
+
+/** Re-send a lead that previously failed to reach the CRM. */
+export async function retryInspectionToCrm(requestId: string): Promise<CrmForwardResult> {
+  return forwardInspectionToCrm(requestId);
+}
+
