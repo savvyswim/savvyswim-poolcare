@@ -107,9 +107,10 @@ export function CallOptionsCard() {
     }
   };
 
-  const width = 288;
-  const left = Math.min(Math.max(state.x - width / 2, 12), window.innerWidth - width - 12);
-  const top = Math.min(state.y + 10, window.innerHeight - 430);
+  const width = Math.min(288, window.innerWidth - 24);
+  const left = Math.min(Math.max(state.x - width / 2, 12), Math.max(window.innerWidth - width - 12, 12));
+  const top = Math.max(Math.min(state.y + 10, window.innerHeight - 430), 12);
+
 
   const rowClass =
     "inline-flex w-full items-center gap-3 whitespace-nowrap border border-hairline bg-background px-4 py-3 text-[12px] font-bold uppercase tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
