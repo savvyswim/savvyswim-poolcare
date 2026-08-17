@@ -6,6 +6,13 @@
 import { Droplets } from "lucide-react";
 import { openWaterTestModal } from "@/components/QuoteModal";
 
+/** Tag the water-test lead with the page the tab was clicked on. */
+function tabSource(base: string): string {
+  if (typeof window === "undefined") return base;
+  const path = window.location.pathname.replace(/\/$/, "") || "/home";
+  return `${base}:${path.slice(0, 60)}`;
+}
+
 export default function WaterTestTab() {
   return (
     <>
