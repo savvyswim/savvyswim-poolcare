@@ -34,8 +34,22 @@ export async function forwardInspectionToCrm(
   if (!req) throw new Error("Request not found");
 
   const leadType = extra?.leadType || req.lead_type || "free_inspection";
+
+  // Sources are stamped "<cta>:<page>" (e.g. "weekly_hub_hero:/weekly-pool-service").
+  // Split them so the CRM pipeline can filter by button and by page/city without
+  // parsing strings on its side.
+  const rawSource = req.source ?? "";
+  const [ctaRaw, sourcePageRaw] = rawSource.split(":");
+  const cta = (ctaRaw || rawSource || "site").slice(0, 80);
+  const pagePath = (sourcePageRaw || req.page_path || req.landing_page || "/").split("?")[0]!;
+  const { cityFromPath } = await import("./lead-sources.server");
+  const city = cityFromPath(pagePath, rawSource);
+
   const attribution = {
     source: req.source,
+    cta,
+    source_page: pagePath,
+    city,
     utm_source: req.utm_source,
     utm_medium: req.utm_medium,
     utm_campaign: req.utm_campaign,
@@ -44,8 +58,9 @@ export async function forwardInspectionToCrm(
     referrer: req.referrer,
     landing_page: req.landing_page,
     session_id: req.session_id,
-    page_path: req.page_path,
+    page_path: req.page_path || pagePath,
   };
+
 
   const payload = {
     external_id: req.id,
