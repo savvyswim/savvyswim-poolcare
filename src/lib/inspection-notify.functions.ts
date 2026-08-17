@@ -128,10 +128,10 @@ export const notifyInspectionRequest = createServerFn({ method: "POST" })
   <p style="line-height:1.6;">Reference <strong>${req.reference_number}</strong>${
     req.preferred_date ? ` · you asked for <strong>${req.preferred_date}</strong>` : ""
   }.</p>
-  <p style="line-height:1.6;">Need us sooner? Call or text (469) 744-0379, or just reply to this email.</p>
+  <p style="line-height:1.6;">Need us sooner? Call or text (817) 663-7665, or just reply to this email.</p>
   <p style="font-size:12px;color:#7a6f63;">Savvy Swim · Dallas–Fort Worth · savvyswim.com</p>
 </div>`,
-          text: `Thanks, ${firstName}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text (469) 744-0379.`,
+          text: `Thanks, ${firstName}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text (817) 663-7665.`,
           label: "inspection-confirmation",
           idempotency_key: `inspection-confirm-${req.id}`,
         },

@@ -4,7 +4,7 @@
  * wrapper so server-fn splitting never strips these helpers.
  */
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
-const OFFICE_PHONE = "(469) 744-0379";
+const OFFICE_PHONE = "(817) 663-7665";
 
 export type RescheduleNotice = {
   firstName: string;

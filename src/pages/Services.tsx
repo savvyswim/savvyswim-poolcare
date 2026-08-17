@@ -28,10 +28,10 @@ import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 import { IMG_5494_JPG as photoOliveRings } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
-const PHONE_DISPLAY = "(469) 744-0379";
-const PHONE_HREF = "tel:+14697440379";
+const PHONE_DISPLAY = "817-663-POOL";
+const PHONE_HREF = "tel:+18176637665";
 const EMAIL = "hi@savvyswim.com";
-const SMS_PHONE = "+14697440379";
+const SMS_PHONE = "+18176637665";
 
 
 const SERVICES = [

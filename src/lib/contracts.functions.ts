@@ -53,7 +53,7 @@ export const sendContractEmail = createServerFn({ method: "POST" })
         </a>
       </div>
       <p style="margin:0;font-size:12px;color:#7a6f63;line-height:1.6;">
-        This link is unique to you. Questions? Call or text us at (469) 744-0379.
+        This link is unique to you. Questions? Call or text us at (817) 663-7665.
       </p>
     </div>
     <div style="border-top:1px solid #e5dcc9;padding:14px 28px;font-size:11px;color:#9a8f82;">
@@ -68,7 +68,7 @@ Your Savvy Swim service agreement "${contract.title}" is ready for your signatur
 
 Review and sign here: ${signUrl}
 
-Questions? Call or text (469) 744-0379.
+Questions? Call or text (817) 663-7665.
 Savvy Swim · savvyswim.com`;
 
     const apiKey = process.env["LOVABLE_API_KEY"];
@@ -148,7 +148,7 @@ export const sendContractSms = createServerFn({ method: "POST" })
     const { isSmsAllowed, withSmsFooter } = await import("./sms-compliance.server");
     if (!(await isSmsAllowed(to))) throw new Error("This number has opted out of text messages (replied STOP)");
     const body = withSmsFooter(
-      `Hi ${firstName}, your Savvy Swim service agreement is ready to sign: ${signUrl}\n\nQuestions? Call or text (469) 744-0379.`,
+      `Hi ${firstName}, your Savvy Swim service agreement is ready to sign: ${signUrl}\n\nQuestions? Call or text (817) 663-7665.`,
     );
 
     const { data: logRow, error: logError } = await supabase
@@ -288,7 +288,7 @@ export const emailSignedContractCopy = createServerFn({ method: "POST" })
       <p style="margin:0 0 6px;font-size:13px;"><strong>Signed by:</strong> ${escape(contract.signer_name ?? "")}</p>
       <p style="margin:0 0 16px;font-size:13px;"><strong>Signed on:</strong> ${escape(signedOn)}</p>
       <p style="margin:0;font-size:12px;color:#7a6f63;line-height:1.6;">
-        Keep this email for your records. Questions? Call or text (469) 744-0379.
+        Keep this email for your records. Questions? Call or text (817) 663-7665.
       </p>
     </div>
     <div style="border-top:1px solid #e5dcc9;padding:14px 28px;font-size:11px;color:#9a8f82;">
@@ -306,7 +306,7 @@ ${contract.body ?? ""}
 Signed by: ${contract.signer_name ?? ""}
 Signed on: ${signedOn}
 
-Questions? Call or text (469) 744-0379.
+Questions? Call or text (817) 663-7665.
 Savvy Swim · savvyswim.com`;
 
     // Delivery is tracked as events so admins can see queued → sent/failed.

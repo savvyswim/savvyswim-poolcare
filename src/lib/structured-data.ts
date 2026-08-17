@@ -3,7 +3,7 @@ import { SERVICE_AREAS } from "@/lib/serviceAreas";
 export const SITE_URL = "https://savvyswimservices.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 
-const PHONE = "+1-469-744-0379";
+const PHONE = "+1-817-663-7665";
 const EMAIL = "hi@savvyswim.com";
 const LOGO = `${SITE_URL}/apple-touch-icon.png`;
 

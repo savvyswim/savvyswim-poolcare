@@ -9,7 +9,7 @@ import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
-const DEFAULT_PHONE = "+14697440379";
+const DEFAULT_PHONE = "+18176637665";
 
 export type LowItem = {
   id: string;

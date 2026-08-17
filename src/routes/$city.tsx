@@ -42,7 +42,7 @@ export const Route = createFileRoute("/$city")({
             provider: {
               "@type": "LocalBusiness",
               name: "Savvy Swim",
-              telephone: "+1-469-744-0379",
+              telephone: "+1-817-663-7665",
               url: "https://savvyswimservices.com",
             },
             areaServed: { "@type": "City", name: area.name, addressRegion: "TX" },

@@ -76,7 +76,7 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
       <div style="font-size:30px;letter-spacing:.32em;font-weight:800;color:#8E1F2C;">${code}</div>
       <p style="margin:18px 0 0;font-size:12px;color:#7a6f63;line-height:1.6;">
         The code expires in ${CODE_TTL_MINUTES} minutes. If you did not request this change, ignore this email
-        and call us at (469) 744-0379.
+        and call us at (817) 663-7665.
       </p>
     </div>
   </div>
