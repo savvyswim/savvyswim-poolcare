@@ -22,7 +22,7 @@ const Terms = () => (
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
         <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a>{" "}·{" "}
-        <a href="tel:+18176637665" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(817) 663-7665</a>
+        <a href="tel:+18176637665" onClick={onCallClick("terms_body")} className="text-amber-brand">(817) 663-7665</a>
       </p>
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
@@ -84,7 +84,7 @@ const Terms = () => (
           <strong>Help (HELP):</strong> If you need assistance, reply <strong>HELP</strong> to any
           message and you will receive a message with our contact information, or contact us at{" "}
           <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a> or{" "}
-          <a href="tel:+18176637665" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(817) 663-7665</a>.
+          <a href="tel:+18176637665" onClick={onCallClick("terms_body")} className="text-amber-brand">(817) 663-7665</a>.
         </li>
         <li>
           <strong>Sample Message:</strong> "Savvy Swim: Hi Jane, this is a reminder of your pool
@@ -200,7 +200,7 @@ const Terms = () => (
       <h2 className="text-xl font-semibold mt-8 mb-2">13. Contact Us</h2>
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a></p>
-      <p className="mb-1">Phone: <a href="tel:+18176637665" onClick={() => trackContactClick("call_click", "terms_body")} className="text-amber-brand">(817) 663-7665</a></p>
+      <p className="mb-1">Phone: <a href="tel:+18176637665" onClick={onCallClick("terms_body")} className="text-amber-brand">(817) 663-7665</a></p>
       <p className="mb-1">Website: <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a></p>
     </article>
   </main>

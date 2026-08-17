@@ -117,7 +117,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                     </button>
                     <a
                       href={PHONE_HREF}
-                      onClick={() => trackContactClick("call_click", `${area.slug}_hero`)}
+                      onClick={onCallClick(`${area.slug}_hero`)}
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -376,7 +376,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </button>
                 <a
                   href={PHONE_HREF}
-                  onClick={() => trackContactClick("call_click", `${area.slug}_cta`)}
+                  onClick={onCallClick(`${area.slug}_cta`)}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
