@@ -670,7 +670,6 @@ export type Database = {
           postal_code: string
           preferred_contact_time: string | null
           preferred_date: string | null
-          preferred_slot: string | null
           reference_number: string
           referrer: string | null
           session_id: string | null
@@ -705,7 +704,6 @@ export type Database = {
           postal_code: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
-          preferred_slot?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -740,7 +738,6 @@ export type Database = {
           postal_code?: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
-          preferred_slot?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
