@@ -91,7 +91,7 @@ export function CallOptionsCard() {
 
   const sub = (action: string) => {
     try {
-      trackContactClick(action, state.location);
+      trackContactClick(action === "sms_click" ? "text_click" : "call_click", `${state.location}:${action}`);
     } catch {
       /* non-blocking */
     }
