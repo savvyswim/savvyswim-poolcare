@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import AddressMapPreview from "@/components/AddressMapPreview";
 import { trackSiteEvent } from "@/lib/site-analytics";
+import { extractZip } from "@/lib/postal";
 
 export const SWIM_CLUB_OPTION = "Savvy Swim Club membership — $19.99/mo";
 
@@ -157,6 +158,7 @@ export default function LeadForm({
       email: email.trim(),
       phone: phone.trim(),
       address: address.trim(),
+      postal_code: extractZip(address),
       pool_details: choice,
       preferred_date: date ? format(date, "yyyy-MM-dd") : null,
       preferred_contact_time: time,

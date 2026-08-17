@@ -221,6 +221,8 @@ function LeadSyncPage() {
             <tr>
               <th className="p-3 text-left">Lead</th>
               <th className="p-3 text-left">Received</th>
+              <th className="p-3 text-left">ZIP</th>
+              <th className="p-3 text-left">Consent</th>
               <th className="p-3 text-left">Source</th>
               <th className="p-3 text-left">CRM status</th>
               <th className="p-3 text-left">Last attempt</th>
@@ -231,7 +233,7 @@ function LeadSyncPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td className="p-6 text-foreground/50" colSpan={7}>
+                <td className="p-6 text-foreground/50" colSpan={9}>
                   No {filter === "all" ? "" : `${filter} `}leads in the last 30 days.
                 </td>
               </tr>
@@ -245,6 +247,19 @@ function LeadSyncPage() {
                     </span>
                   </td>
                   <td className="p-3 whitespace-nowrap">{when(r.created_at)}</td>
+                  <td className="p-3 whitespace-nowrap text-xs text-foreground/70">
+                    {r.postal_code ?? "—"}
+                  </td>
+                  <td className="p-3 text-xs">
+                    <span
+                      className={
+                        r.contact_consent ? "text-[#1FA9BE]" : "text-foreground/50"
+                      }
+                      title={r.consent_text ?? undefined}
+                    >
+                      Calls/texts/email: {r.contact_consent ? "Yes" : "No"}
+                    </span>
+                  </td>
                   <td className="p-3 text-xs text-foreground/70">
                     {r.source ?? "—"}
                     {r.lead_type ? ` · ${r.lead_type}` : ""}

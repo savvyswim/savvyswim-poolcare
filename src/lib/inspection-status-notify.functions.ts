@@ -31,14 +31,14 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     const { data: req, error } = await supabaseAdmin
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, phone, email, address, postal_code, preferred_date, preferred_slot, preferred_contact_time",
+        "id, reference_number, full_name, phone, email, address, postal_code, preferred_date, preferred_contact_time",
       )
       .eq("id", data.requestId)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!req) throw new Error("Request not found");
 
-    const slot = req.preferred_slot ?? req.preferred_contact_time ?? "—";
+    const slot = req.preferred_contact_time ?? "—";
     const headline =
       data.status === "scheduled"
         ? `Inspection SCHEDULED — ${req.full_name}`
