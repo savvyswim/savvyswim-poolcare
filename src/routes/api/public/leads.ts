@@ -283,6 +283,17 @@ export const Route = createFileRoute("/api/public/leads")({
           console.error("CRM lead forward threw", err);
         }
 
+        // Confirmation to the homeowner + new-request alert to the office.
+        // Also never blocks the visitor; failures are logged to inspection_events.
+        try {
+          const { sendInspectionNotifications } = await import("@/lib/inspection-notify.server");
+          await sendInspectionNotifications(data.id);
+        } catch (err) {
+          console.error("inspection notification threw", err);
+        }
+
+
+
         return json({ ok: true, id: data.id, reference: data.reference_number }, 201);
       },
     },

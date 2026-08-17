@@ -107,6 +107,7 @@ Savvy Swim · savvyswim.com`;
             html,
             text,
             label: "portal-payment-receipt",
+            purpose: "transactional",
             idempotency_key: `portal-receipt-${invoice.id}`,
           },
           { apiKey },

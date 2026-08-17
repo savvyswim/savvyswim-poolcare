@@ -92,6 +92,8 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
       html,
       text: `Hi ${firstName}, your Savvy Swim confirmation code is ${code}. It expires in ${CODE_TTL_MINUTES} minutes.`,
       label: "portal-contact-verification",
+      purpose: "transactional",
+      idempotency_key: `contact-verify-${to}-${code}`,
     },
     { apiKey },
   );
