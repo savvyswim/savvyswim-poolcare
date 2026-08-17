@@ -155,7 +155,7 @@ export async function forwardInspectionToCrm(
     httpStatus: lastStatus,
     error: lastError || "CRM handoff failed",
     request: payload,
-    response: lastBody || undefined,
+    response: lastBody || null,
   });
   return { forwarded: false, status: lastStatus };
 }
