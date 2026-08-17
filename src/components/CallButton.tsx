@@ -1,4 +1,5 @@
 import { Phone } from "lucide-react";
+import { toast } from "sonner";
 import { PHONE_HREF, PHONE_PLAIN, PHONE_VANITY } from "@/lib/contact-info";
 import { trackContactClick } from "@/lib/contactTracking";
 
@@ -17,9 +18,29 @@ function track(location: string) {
   }
 }
 
+/** True only on a real desktop browser, which has no dialer for `tel:`. */
+function isDesktop() {
+  if (typeof window === "undefined") return false;
+  const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const mobileUa = /android|iphone|ipad|ipod|mobile|silk|kindle/i.test(navigator.userAgent);
+  const narrow = window.innerWidth <= 820;
+  return !touch && !mobileUa && !narrow;
+}
+
 function handleCall(location: string) {
-  return () => {
+  return (e: React.MouseEvent<HTMLAnchorElement>) => {
     track(location);
+    // Phones and tablets: let the OS open the dialer (never intercept).
+    if (!isDesktop()) return;
+    // Desktop has no dialer — a `tel:` click opens a blank tab or a handler
+    // page, so copy the number and tell the visitor instead.
+    e.preventDefault();
+    try {
+      void navigator.clipboard?.writeText(PHONE_PLAIN);
+      toast.success(`Call ${PHONE_VANITY}`, { description: `${PHONE_PLAIN} copied to your clipboard.` });
+    } catch {
+      toast.success(`Call ${PHONE_VANITY}`, { description: PHONE_PLAIN });
+    }
   };
 }
 

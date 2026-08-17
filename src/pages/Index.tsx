@@ -41,7 +41,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar } from "@/components/CallButton";
-import { buildCrmLink } from "@/lib/app-links";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import { openWaterTestModal } from "@/components/QuoteModal";
 
@@ -207,16 +206,15 @@ const Index = () => {
   // Announced to screen readers before we navigate off-site, so a keyboard or
   // reader user knows the button worked and where they are being taken.
   const [handoffStatus, setHandoffStatus] = useState("");
-  /** Billing, checkout and memberships are handled in the Savvy Swim app. */
-  const goToApp = (path: string, params: Record<string, string> = {}) => {
-    setHandoffStatus("Opening the Savvy Swim app…");
-    window.location.href = buildCrmLink(path, params);
-  };
   const joinSwimClub = (source: string) => {
     setHandoffStatus("Opening Swim Club sign-up…");
     goToSwimClub(source);
   };
-  const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
+  /** Plan quotes use the same on-site booking form as every other CTA. */
+  const requestPlanQuote = (planName: string) => {
+    setHandoffStatus("Opening the booking form…");
+    goToLead("home_plan", { service: planName });
+  };
   /** Every lead button hands off to the booking form in the Savvy Swim app. */
   const openBooking = (service?: string) => {
     setHandoffStatus("Opening the booking form…");
