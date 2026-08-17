@@ -102,7 +102,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 
 const EMAIL = "hi@savvyswim.com";
-const PHONE_DISPLAY = "(817) 663-7665";
+const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
 const SMS_PHONE = "+18176637665";
 
