@@ -121,6 +121,7 @@ export async function sendInspectionNotifications(
           html: officeHtml,
           text: officeText,
           label: "inspection-office-alert",
+          purpose: "transactional",
           idempotency_key: `inspection-office-${req.id}-${to}`,
         },
         { apiKey },
@@ -174,6 +175,7 @@ export async function sendInspectionNotifications(
           ? `Thanks, ${req.full_name.split(" ")[0]}. Your free water test request (${req.reference_number}) for ${req.address} is in. We'll send your full chemistry readings and what the water needs. Call or text 817-663-POOL (817-663-7665).`
           : `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-POOL (817-663-7665).`,
         label: "inspection-confirmation",
+        purpose: "transactional",
         idempotency_key: `inspection-confirm-${req.id}`,
       },
       { apiKey },

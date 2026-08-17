@@ -121,6 +121,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
               html,
               text: line,
               label: "inspection-status-alert",
+              purpose: "transactional",
               idempotency_key: `inspection-status-${req.id}-${data.status}-${to}`,
             },
             { apiKey },

@@ -208,6 +208,7 @@ export const checkReplyToRouting = createServerFn({ method: "POST" })
               html,
               text,
               label: "reply-to-alert",
+              purpose: "transactional",
               idempotency_key: `reply-to-alert-${address}-${checkedAt.slice(0, 13)}`,
             },
             { apiKey },
