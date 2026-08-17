@@ -7,6 +7,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { extractZip } from "@/lib/postal";
 
 const MAX_BODY_BYTES = 8 * 1024;
 
@@ -201,18 +202,9 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ ok: true, deduped: true, id: dupe.id, reference: dupe.reference_number });
         }
 
-        const notes =
-          [
-            lead.notes,
-            lead.message,
-            lead.contact_consent
-              ? `Authorized calls/texts/email (combined consent): yes${
-                  lead.consent_text ? `\n"${lead.consent_text}"` : ""
-                }`
-              : null,
-          ]
-            .filter(Boolean)
-            .join("\n\n") || null;
+        // Consent lives in its own columns (contact_consent / consent_text) —
+        // notes stay clean and hold only what the customer typed.
+        const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
 
 
         const { leadTypeFromSource } = await import("@/lib/crm-lead-forward.server");
@@ -225,7 +217,7 @@ export const Route = createFileRoute("/api/public/leads")({
             email: lead.email,
             phone: lead.phone ?? "",
             address: lead.address ?? lead.city ?? "",
-            postal_code: lead.postal_code ?? "",
+            postal_code: lead.postal_code || extractZip(lead.address ?? ""),
             preferred_date: lead.preferred_date ?? null,
             preferred_contact_time: lead.preferred_contact_time ?? null,
             pool_details: lead.pool_details ?? null,
