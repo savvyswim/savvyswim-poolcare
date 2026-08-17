@@ -3,6 +3,7 @@ import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
+import { CallButton, StickyCallBar } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -130,13 +131,7 @@ const FriscoPoolCleaning = () => {
             <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
             <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
           </nav>
-          <a
-            href={PHONE_HREF}
-            onClick={() => trackContactClick("call_click", "frisco_header")}
-            className="inline-flex items-center gap-2 text-sm font-semibold hover:text-primary transition"
-          >
-            <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
-          </a>
+          <CallButton location="frisco_header" />
         </div>
       </header>
 
@@ -340,7 +335,8 @@ const FriscoPoolCleaning = () => {
         </div>
       </footer>
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 };
 
