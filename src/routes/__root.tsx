@@ -15,6 +15,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
+import { CallOptionsCard } from "@/components/CallButton";
 
 // Consent bar is post-hydration only — keep it out of the first payload.
 const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
@@ -134,6 +135,8 @@ function RootComponent() {
           <PerfMonitor />
 
           <Outlet />
+
+          <CallOptionsCard />
 
           <Suspense fallback={null}>
             <QuoteModal />
