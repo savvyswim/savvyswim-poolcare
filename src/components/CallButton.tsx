@@ -99,7 +99,7 @@ export function CallOptionsCard() {
 
   const width = 288;
   const left = Math.min(Math.max(state.x - width / 2, 12), window.innerWidth - width - 12);
-  const top = Math.min(state.y + 10, window.innerHeight - 320);
+  const top = Math.min(state.y + 10, window.innerHeight - 430);
 
   const rowClass =
     "flex items-center gap-3 border border-[#8E1F2C]/20 px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8E1F2C] transition hover:bg-[#8E1F2C] hover:text-[#F4EFE3]";
