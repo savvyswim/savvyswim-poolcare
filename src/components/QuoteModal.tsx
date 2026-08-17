@@ -11,6 +11,7 @@ import { onCallClick } from "@/components/CallButton";
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
+import { useNavigate } from "@tanstack/react-router";
 import LeadForm, { SERVICES, WATER_TESTS } from "@/components/LeadForm";
 
 export const QUOTE_EVENT = "ss:open-quote";
@@ -89,6 +90,8 @@ export default function QuoteModal() {
   const [done, setDone] = useState<null | { date?: Date | undefined; time?: string | undefined }>(
     null,
   );
+
+  const navigate = useNavigate();
 
   const openedAt = useRef<number>(0);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -253,7 +256,22 @@ export default function QuoteModal() {
               submitLabel={copy.submit}
               openedAt={openedAt.current}
               onCancel={close}
-              onDone={(summary) => setDone(summary)}
+              onDone={(summary) => {
+                // Branded confirmation page — reference number, call link and
+                // "save our contact" vCard live there.
+                setDone(summary);
+                setOpen(false);
+                void navigate({
+                  to: "/thank-you",
+                  search: {
+                    ...(summary.reference ? { ref: summary.reference } : {}),
+                    ...(summary.date ? { date: format(summary.date, "yyyy-MM-dd") } : {}),
+                    ...(summary.time ? { time: summary.time } : {}),
+                    ...(summary.email ? { email: summary.email } : {}),
+                    kind: variant,
+                  },
+                });
+              }}
             />
           </>
         )}
