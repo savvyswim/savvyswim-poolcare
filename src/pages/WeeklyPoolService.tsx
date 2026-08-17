@@ -379,6 +379,7 @@ export default function WeeklyPoolService() {
         </section>
       </main>
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 }

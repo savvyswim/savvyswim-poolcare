@@ -1264,7 +1264,8 @@ const Index = () => {
 
 
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 };
 

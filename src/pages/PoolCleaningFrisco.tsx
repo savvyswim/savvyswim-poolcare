@@ -335,7 +335,8 @@ const FriscoPoolCleaning = () => {
         </div>
       </footer>
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 };
 

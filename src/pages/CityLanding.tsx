@@ -388,6 +388,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
         </section>
       </main>
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 }

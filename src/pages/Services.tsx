@@ -509,7 +509,8 @@ const Services = () => {
         </div>
       </footer>
 
-    </div>
+      <StickyCallBar />
+      </div>
   );
 };
 
