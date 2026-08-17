@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -163,12 +163,20 @@ function LeadSyncPage() {
             Every website lead from the last 30 days and whether it reached the CRM.
           </p>
         </div>
-        <button
-          className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em]"
-          onClick={() => void query.refetch()}
-        >
-          Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/admin/lead-sources"
+            className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em] hover:text-[#8E1F2C]"
+          >
+            Lead sources
+          </Link>
+          <button
+            className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em]"
+            onClick={() => void query.refetch()}
+          >
+            Refresh
+          </button>
+        </div>
       </header>
 
       {err ? (
