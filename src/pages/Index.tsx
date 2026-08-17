@@ -344,21 +344,7 @@ const Index = () => {
 
 
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-              <a
-                href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
-                className="hidden 2xl:inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition"
-              >
-                <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
-              </a>
-              <a
-                href={PHONE_HREF}
-                onClick={() => trackContactClick("call_click", "header_mobile")}
-                aria-label={`Call ${PHONE_DISPLAY}`}
-                className="inline-flex items-center justify-center border border-primary/20 p-2.5 text-primary transition-colors hover:border-primary 2xl:hidden"
-
-              >
-                <Phone className="h-4 w-4" />
-              </a>
+              <CallButton location="header" className="px-2 py-2 sm:px-3" />
               <button
                 type="button"
                 onClick={() => openBooking()}
