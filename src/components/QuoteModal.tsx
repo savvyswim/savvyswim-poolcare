@@ -11,6 +11,7 @@ import { onCallClick } from "@/components/CallButton";
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
+import { useNavigate } from "@tanstack/react-router";
 import LeadForm, { SERVICES, WATER_TESTS } from "@/components/LeadForm";
 
 export const QUOTE_EVENT = "ss:open-quote";
