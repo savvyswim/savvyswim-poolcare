@@ -33,6 +33,7 @@ import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
+import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
@@ -168,6 +169,11 @@ const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
   path: '/admin/lead-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLeadSourcesRoute = AdminLeadSourcesRouteImport.update({
+  id: '/admin/lead-sources',
+  path: '/admin/lead-sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
   id: '/api/public/leads',
   path: '/api/public/leads',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -347,6 +355,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -389,6 +398,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
@@ -429,6 +439,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/terms-and-conditions'
     | '/weekly-pool-service'
+    | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/webhook-health'
     | '/quote/$token'
@@ -510,6 +522,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   WeeklyPoolServiceRoute: typeof WeeklyPoolServiceRoute
+  AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
@@ -701,6 +714,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/lead-sources': {
+      id: '/admin/lead-sources'
+      path: '/admin/lead-sources'
+      fullPath: '/admin/lead-sources'
+      preLoaderRoute: typeof AdminLeadSourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/leads': {
       id: '/api/public/leads'
       path: '/api/public/leads'
@@ -822,6 +842,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   WeeklyPoolServiceRoute: WeeklyPoolServiceRoute,
+  AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
