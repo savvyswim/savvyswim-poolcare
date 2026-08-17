@@ -45,15 +45,20 @@ export function handleCall(location: string) {
     track(location);
     // Phones and tablets: let the OS open the dialer (never intercept).
     if (!isDesktop()) return;
-    e.preventDefault();
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    window.dispatchEvent(
-      new CustomEvent<CardDetail>(CALL_CARD_EVENT, {
-        detail: { location, x: rect.left + rect.width / 2, y: rect.bottom },
-      }),
-    );
+    try {
+      window.dispatchEvent(
+        new CustomEvent<CardDetail>(CALL_CARD_EVENT, {
+          detail: { location, x: rect.left + rect.width / 2, y: rect.bottom },
+        }),
+      );
+      e.preventDefault();
+    } catch {
+      /* card unavailable — let the plain tel: link run so it's never a dead click */
+    }
   };
 }
+
 
 /** Alias used inline on existing anchors. */
 export const onCallClick = handleCall;
