@@ -9,7 +9,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
 import {
@@ -159,7 +159,7 @@ export default function WeeklyPoolService() {
                     </button>
                     <a
                       href={PHONE_HREF}
-                      onClick={() => trackContactClick("call_click", "weekly_hub_hero")}
+                      onClick={onCallClick("weekly_hub_hero")}
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -368,7 +368,7 @@ export default function WeeklyPoolService() {
                 </button>
                 <a
                   href={PHONE_HREF}
-                  onClick={() => trackContactClick("call_click", "weekly_hub_cta")}
+                  onClick={onCallClick("weekly_hub_cta")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}

@@ -3,7 +3,7 @@ import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -166,7 +166,7 @@ const PlanoPoolCleaning = () => {
                     </button>
                     <a
                       href={PHONE_HREF}
-                      onClick={() => trackContactClick("call_click", "plano_hero")}
+                      onClick={onCallClick("plano_hero")}
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -301,7 +301,7 @@ const PlanoPoolCleaning = () => {
                 </button>
                 <a
                   href={PHONE_HREF}
-                  onClick={() => trackContactClick("call_click", "plano_final_cta")}
+                  onClick={onCallClick("plano_final_cta")}
                   className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> Call
@@ -327,7 +327,7 @@ const PlanoPoolCleaning = () => {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "plano_footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={PHONE_HREF} onClick={onCallClick("plano_footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
             <a href="https://www.instagram.com/hi.savvyswim?igsh=a2g5eWpndHA0Zm5j&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Savvy Swim on Instagram" className="inline-flex items-center gap-1.5 hover:text-foreground transition"><Instagram className="h-4 w-4" />Instagram</a>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>

@@ -1,3 +1,4 @@
+import { onCallClick } from "@/components/CallButton";
 /**
  * Shared lead form used by both modals (booking / free water test).
  *
@@ -419,6 +420,7 @@ export default function LeadForm({
         </button>
         <a
           href={PHONE_HREF}
+          onClick={onCallClick("lead_form_call_instead")}
           className="min-h-[44px] text-sm uppercase tracking-[0.12em] text-[#8E1F2C] underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8E1F2C]"
         >
           Call instead

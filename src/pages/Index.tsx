@@ -40,7 +40,7 @@ import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import { openWaterTestModal } from "@/components/QuoteModal";
 
@@ -533,7 +533,7 @@ const Index = () => {
                   </button>
                   <a
                     href={PHONE_HREF}
-                    onClick={() => trackContactClick("call_click", "hero")}
+                    onClick={onCallClick("hero")}
                     aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
                     className="font-tech inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/25 px-7 py-3.5 text-primary transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
@@ -1209,7 +1209,7 @@ const Index = () => {
                 </button>
 
                 <a
-                  href={PHONE_HREF} onClick={() => trackContactClick("call_click", "final_cta")}
+                  href={PHONE_HREF} onClick={onCallClick("final_cta")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-ink-soft/60 px-7 py-4 text-sm font-semibold hover:bg-ink-soft transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
@@ -1238,7 +1238,7 @@ const Index = () => {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} title="Email us" className="hover:text-foreground transition">{EMAIL}</a>
-            <a href={PHONE_HREF} onClick={() => trackContactClick("call_click", "footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
+            <a href={PHONE_HREF} onClick={onCallClick("footer")} title="Call us" className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
             <a href="https://www.instagram.com/hi.savvyswim?igsh=a2g5eWpndHA0Zm5j&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Savvy Swim on Instagram" className="inline-flex items-center gap-1.5 hover:text-foreground transition"><Instagram className="h-4 w-4" />Instagram</a>
             <Link to="/pool-cleaning-frisco-tx" className="hover:text-foreground transition">Pool Cleaning Frisco TX</Link>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
