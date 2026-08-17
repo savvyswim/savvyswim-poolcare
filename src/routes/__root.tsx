@@ -73,7 +73,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "Savvy Swim" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "application-name", content: "Savvy Swim" },
+      // Search Console ownership: legacy savvyswim.com property + the primary domain.
       { name: "google-site-verification", content: "gG7n9rWUtSYPZ63aEOvuErjGt8T79b1dLm8JuZdzk0s" },
+      { name: "google-site-verification", content: "2FRszHPuGg1y3-bG0fWEVl2AyvPaiW9eYkFHRDDJRlw" },
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESCRIPTION },
       { property: "og:type", content: "website" },
