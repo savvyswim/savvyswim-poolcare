@@ -191,12 +191,7 @@ const Services = () => {
             <Link to="/" hash="membership" className="hover:text-accent transition">Swim Club</Link>
             <Link to="/" hash="contact" className="hover:text-accent transition">Contact</Link>
           </nav>
-          <a
-            href={PHONE_HREF} onClick={() => trackContactClick("call_click", "header")}
-            className="inline-flex items-center gap-2 text-sm font-semibold hover:text-primary transition"
-          >
-            <Phone className="h-4 w-4 text-amber-brand" /> {PHONE_DISPLAY}
-          </a>
+          <CallButton location="header" />
         </div>
       </header>
 
