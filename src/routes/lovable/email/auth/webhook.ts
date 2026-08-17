@@ -11,7 +11,6 @@ import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 // Configuration
 const SITE_NAME = "Savvy Swim"
 const SENDER_DOMAIN = "notify.savvyswimservices.com"
-const _ROOT_DOMAIN = "savvyswimservices.com"
 const FROM_DOMAIN = "notify.savvyswimservices.com"
 const SITE_URL = `https://www.savvyswim.com`
 
