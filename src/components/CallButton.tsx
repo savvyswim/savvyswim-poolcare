@@ -120,9 +120,14 @@ export function CallOptionsCard() {
 
 
       <div className="mt-4 flex flex-col gap-2">
-        <a href={PHONE_HREF} onClick={() => sub("call_now")} className={rowClass}>
+        <a
+          href={PHONE_HREF}
+          onClick={() => sub("call_now")}
+          className="btn-quote inline-flex w-full items-center gap-3 whitespace-nowrap px-4 py-3 text-[12px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
           <Phone className="h-4 w-4 shrink-0" aria-hidden="true" /> Call now (phone app)
         </a>
+
         <a href={`facetime-audio://${PHONE_E164}`} onClick={() => sub("facetime")} className={rowClass}>
           <Video className="h-4 w-4 shrink-0" aria-hidden="true" /> FaceTime audio
         </a>
