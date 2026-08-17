@@ -1,6 +1,6 @@
 import { Link } from "@/lib/router-compat";
 import Seo from "@/components/Seo";
-import { trackContactClick } from "@/lib/contactTracking";
+import { onCallClick } from "@/components/CallButton";
 
 const Terms = () => (
   <main className="min-h-screen bg-background text-foreground px-6 py-16">

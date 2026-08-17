@@ -230,7 +230,7 @@ export default function SignContract() {
           <p className="font-display text-3xl text-primary">Link not found</p>
           <p className="mt-3 text-sm text-muted-foreground">
             This signing link is invalid or no longer active. Call or text us at{" "}
-            <a className="underline" href="tel:+18176637665">(817) 663-7665</a> and we’ll resend it.
+            <a className="underline" href="tel:+18176637665" onClick={onCallClick("sign_contract")}>(817) 663-7665</a> and we’ll resend it.
           </p>
         </div>
       </div>
@@ -331,7 +331,7 @@ export default function SignContract() {
           <div className="mt-8 rounded-xl border border-border bg-card p-6">
             <p className="font-semibold text-foreground">This signing link has expired.</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Call or text <a className="underline" href="tel:+18176637665">(817) 663-7665</a> and we’ll send you a fresh one.
+              Call or text <a className="underline" href="tel:+18176637665" onClick={onCallClick("sign_contract")}>(817) 663-7665</a> and we’ll send you a fresh one.
             </p>
           </div>
         )}
