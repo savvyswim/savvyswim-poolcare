@@ -3,7 +3,7 @@ import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";

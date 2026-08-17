@@ -9,7 +9,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
 import {

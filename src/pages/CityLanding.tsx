@@ -11,7 +11,7 @@ import {
   FlaskConical,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
-import { CallButton, StickyCallBar } from "@/components/CallButton";
+import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 import { buildCityFaq, SERVICE_AREAS, type ServiceArea } from "@/lib/serviceAreas";
 
