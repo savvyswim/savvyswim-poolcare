@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Phone, MessageSquare, Copy, Check, CalendarClock } from "lucide-react";
+import { Phone, MessageSquare, Copy, Check, CalendarClock, Video, Globe } from "lucide-react";
 import { PHONE_E164, PHONE_HREF, PHONE_PLAIN, PHONE_VANITY } from "@/lib/contact-info";
 import { trackContactClick } from "@/lib/contactTracking";
 
@@ -99,7 +99,7 @@ export function CallOptionsCard() {
 
   const width = 288;
   const left = Math.min(Math.max(state.x - width / 2, 12), window.innerWidth - width - 12);
-  const top = Math.min(state.y + 10, window.innerHeight - 320);
+  const top = Math.min(state.y + 10, window.innerHeight - 430);
 
   const rowClass =
     "flex items-center gap-3 border border-[#8E1F2C]/20 px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8E1F2C] transition hover:bg-[#8E1F2C] hover:text-[#F4EFE3]";
@@ -120,7 +120,19 @@ export function CallOptionsCard() {
 
       <div className="mt-4 flex flex-col gap-2">
         <a href={PHONE_HREF} onClick={() => sub("call_now")} className={rowClass}>
-          <Phone className="h-4 w-4 shrink-0" aria-hidden="true" /> Call now
+          <Phone className="h-4 w-4 shrink-0" aria-hidden="true" /> Call now (phone app)
+        </a>
+        <a href={`facetime-audio://${PHONE_E164}`} onClick={() => sub("facetime")} className={rowClass}>
+          <Video className="h-4 w-4 shrink-0" aria-hidden="true" /> FaceTime audio
+        </a>
+        <a
+          href={`https://voice.google.com/u/0/calls?a=nc,%2B${PHONE_E164.replace("+", "")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => sub("google_voice")}
+          className={rowClass}
+        >
+          <Globe className="h-4 w-4 shrink-0" aria-hidden="true" /> Call from browser
         </a>
         <a href={SMS_HREF} onClick={() => sub("sms_click")} className={rowClass}>
           <MessageSquare className="h-4 w-4 shrink-0" aria-hidden="true" /> Text us
@@ -161,7 +173,9 @@ export function CallOptionsCard() {
       </div>
 
       <p className="mt-3 text-[11px] leading-snug text-[#2a1013]/60">
-        On a Mac or iPad, “Call now” places the call through your iPhone or FaceTime.
+        A web browser can&apos;t dial on its own. On a Mac or iPad use Call now or FaceTime (it rings
+        through your iPhone); on any computer &quot;Call from browser&quot; opens Google Voice. Or just
+        dial {PHONE_PLAIN}.
       </p>
     </div>
   );
