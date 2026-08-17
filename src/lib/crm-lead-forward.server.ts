@@ -74,9 +74,21 @@ export async function forwardInspectionToCrm(
   };
 
 
+  const requestBody = JSON.stringify(payload);
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  const token = process.env["CRM_LEADS_TOKEN"];
-  if (token) headers["Authorization"] = `Bearer ${token}`;
+  // One shared secret, sent in every shape the CRM might verify: bearer token,
+  // plain header, and an HMAC-SHA256 signature over the raw body.
+  const token = process.env["CRM_LEADS_TOKEN"] || process.env["WEBSITE_WEBHOOK_SECRET"];
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+    headers["x-website-secret"] = token;
+    headers["x-webhook-secret"] = token;
+    const { createHmac } = await import("crypto");
+    const signature = createHmac("sha256", token).update(requestBody).digest("hex");
+    headers["x-webhook-signature"] = signature;
+    headers["x-signature"] = `sha256=${signature}`;
+  }
+
 
   const { logWebhookDelivery } = await import("./webhook-log.server");
   const reference = `${req.reference_number ?? req.id} · ${req.full_name ?? "lead"}`;
@@ -85,7 +97,7 @@ export async function forwardInspectionToCrm(
     const res = await fetch(endpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify(payload),
+      body: requestBody,
     });
     const body = await res.text();
     if (!res.ok) {
