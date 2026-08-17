@@ -41,7 +41,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar } from "@/components/CallButton";
-import { buildCrmLink } from "@/lib/app-links";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import { openWaterTestModal } from "@/components/QuoteModal";
 
