@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -139,9 +139,8 @@ function BucketTable({
             </thead>
             <tbody>
               {buckets.map((b) => (
-                <>
+                <Fragment key={b.key}>
                   <tr
-                    key={b.key}
                     className="cursor-pointer border-b border-foreground/10 hover:bg-foreground/[0.03]"
                     onClick={() => setOpen(open === b.key ? null : b.key)}
                   >
@@ -161,7 +160,7 @@ function BucketTable({
                     <td className="px-4 py-3 text-foreground/60">{when(b.last)}</td>
                   </tr>
                   {open === b.key ? (
-                    <tr key={`${b.key}-detail`} className="border-b border-foreground/10 bg-foreground/[0.02]">
+                    <tr className="border-b border-foreground/10 bg-foreground/[0.02]">
                       <td colSpan={7} className="px-4 py-4">
                         <ul className="space-y-2">
                           {b.leads.map((l) => (
@@ -184,7 +183,7 @@ function BucketTable({
                       </td>
                     </tr>
                   ) : null}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
