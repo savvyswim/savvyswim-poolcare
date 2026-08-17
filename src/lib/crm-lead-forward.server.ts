@@ -91,7 +91,20 @@ export async function forwardInspectionToCrm(
   };
 
 
-  const requestBody = JSON.stringify(payload);
+  // The CRM validator rejects explicit nulls, so omit empty fields entirely.
+  const prune = (obj: Record<string, unknown>): Record<string, unknown> =>
+    Object.fromEntries(
+      Object.entries(obj)
+        .filter(([, v]) => v !== null && v !== undefined)
+        .map(([k, v]) => [
+          k,
+          v && typeof v === "object" && !Array.isArray(v)
+            ? prune(v as Record<string, unknown>)
+            : v,
+        ]),
+    );
+
+  const requestBody = JSON.stringify(prune(payload));
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   // One shared secret, sent in every shape the CRM might verify: bearer token,
   // plain header, and an HMAC-SHA256 signature over the raw body.
