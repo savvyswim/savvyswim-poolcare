@@ -122,16 +122,23 @@ export const notifyInspectionRequest = createServerFn({ method: "POST" })
           sender_domain: SENDER_DOMAIN,
           reply_to: REPLY_TO_ADDRESS,
           subject: `We got your inspection request (${req.reference_number})`,
-          html: `<div style="font-family:Arial,Helvetica,sans-serif;color:#2b2b2b;">
-  <h2 style="color:#8E1F2C;margin:0 0 12px;">Thanks, ${firstName} — your free inspection is booked in.</h2>
-  <p style="line-height:1.6;">We have your pool at <strong>${req.address}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.</p>
-  <p style="line-height:1.6;">Reference <strong>${req.reference_number}</strong>${
-    req.preferred_date ? ` · you asked for <strong>${req.preferred_date}</strong>` : ""
-  }.</p>
-  <p style="line-height:1.6;">Need us sooner? Call or text (817) 663-7665, or just reply to this email.</p>
-  <p style="font-size:12px;color:#7a6f63;">Savvy Swim · Dallas–Fort Worth · savvyswim.com</p>
+          html: `<div style="background:#F4EFE3;padding:24px 0;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;background:#FFFFFF;border:1px solid #E4DCCB;padding:32px 28px;">
+    <p style="font-size:11px;letter-spacing:0.18em;color:#8E1F2C;margin:0 0 12px;">SAVVY SWIM · POOL CARE</p>
+    <h2 style="font-size:26px;line-height:1.15;color:#12232E;margin:0 0 18px;">Thanks, ${firstName} — your free inspection is booked in.</h2>
+    <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">We have your pool at <strong>${req.address}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.</p>
+    <div style="background:#F4EFE3;border-left:3px solid #1FA9BE;padding:18px 20px;margin:0 0 22px;">
+      <p style="font-size:14px;color:#12232E;line-height:1.5;margin:0;">Reference <strong>${req.reference_number}</strong>${
+        req.preferred_date ? `<br />Requested date <strong>${req.preferred_date}</strong>` : ""
+      }</p>
+    </div>
+    <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">Need us sooner? Call or text <a href="tel:+18176637665" style="color:#8E1F2C;">817-663-POOL</a>, or just reply to this email.</p>
+    <hr style="border:none;border-top:1px solid #E4DCCB;margin:24px 0 16px;" />
+    <p style="font-size:12px;color:#6C7278;line-height:1.5;margin:0;">Savvy Swim · Dallas–Fort Worth · savvyswim.com</p>
+  </div>
 </div>`,
-          text: `Thanks, ${firstName}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text (817) 663-7665.`,
+          text: `Thanks, ${firstName}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-POOL (817-663-7665).`,
+
           label: "inspection-confirmation",
           idempotency_key: `inspection-confirm-${req.id}`,
         },
