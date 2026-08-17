@@ -14,3 +14,9 @@ The header phone icon on the home page is currently icon-only on smaller screens
 - All links keep dialing `tel:+18176637665` from `src/lib/contact-info.ts`; display stays the vanity `817-663-POOL`, legal pages keep `(817) 663-7665`.
 - Files touched: `src/pages/Index.tsx`, `Services.tsx`, `WeeklyPoolService.tsx`, `CityLanding.tsx`, `PoolCleaningFrisco.tsx`, plus a small shared `CallButton` component.
 - Existing `trackContactClick("call_click", …)` analytics is preserved and extended to the new sticky mobile bar.
+
+## Dialer behavior
+
+Every call control opens the device dialer with the number pre-filled:
+- `href="tel:+18176637665"` on a real `<a>` (no `button` + JS handler, no `preventDefault`, no `target="_blank"`), so mobile opens the dial pad and desktop hands off to the default calling app.
+- Analytics tracking stays non-blocking so it never cancels the dial.
