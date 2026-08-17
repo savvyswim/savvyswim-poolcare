@@ -97,7 +97,7 @@ export async function forwardInspectionToCrm(
     const res = await fetch(endpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify(payload),
+      body,
     });
     const body = await res.text();
     if (!res.ok) {
