@@ -27,7 +27,7 @@ function isDesktop() {
   return !touch && !mobileUa && !narrow;
 }
 
-function handleCall(location: string) {
+export function handleCall(location: string) {
   return (e: React.MouseEvent<HTMLAnchorElement>) => {
     track(location);
     // Phones and tablets: let the OS open the dialer (never intercept).
@@ -43,6 +43,37 @@ function handleCall(location: string) {
     }
   };
 }
+
+/** Alias used inline on existing anchors. */
+export const onCallClick = handleCall;
+
+/**
+ * Any phone link, with your own label/classes.
+ * Same behavior everywhere: dialer on phones, copy + toast on desktop.
+ */
+export function CallLink({
+  location,
+  className = "",
+  children,
+  ...rest
+}: {
+  location: string;
+  className?: string;
+  children: React.ReactNode;
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick" | "children">) {
+  return (
+    <a
+      href={PHONE_HREF}
+      onClick={handleCall(location)}
+      title={`Call ${PHONE_VANITY} (${PHONE_PLAIN})`}
+      className={className}
+      {...rest}
+    >
+      {children}
+    </a>
+  );
+}
+
 
 export function CallButton({
   location,
