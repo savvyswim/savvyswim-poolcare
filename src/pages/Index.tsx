@@ -216,7 +216,11 @@ const Index = () => {
     setHandoffStatus("Opening Swim Club sign-up…");
     goToSwimClub(source);
   };
-  const requestPlanQuote = (planName: string) => goToApp("/quote/new", { plan: planName });
+  /** Plan quotes use the same on-site booking form as every other CTA. */
+  const requestPlanQuote = (planName: string) => {
+    setHandoffStatus("Opening the booking form…");
+    goToLead("home_plan", { service: planName });
+  };
   /** Every lead button hands off to the booking form in the Savvy Swim app. */
   const openBooking = (service?: string) => {
     setHandoffStatus("Opening the booking form…");
