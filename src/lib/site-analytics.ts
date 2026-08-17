@@ -88,18 +88,33 @@ if (typeof document !== "undefined") {
 import { swimClubCheckoutUrl } from "./app-links";
 import { openQuoteModal } from "@/components/QuoteModal";
 
+/**
+ * Stamp a CTA name with the page it was clicked on, so a lead from the
+ * homepage hero and the same button on /weekly-pool-service stay distinct
+ * all the way through to the CRM. City pages already do this; this keeps
+ * every other page consistent.
+ */
+export function taggedSource(base: string): string {
+  if (typeof window === "undefined") return base;
+  if (base.includes(":")) return base;
+  const path = window.location.pathname.replace(/\/+$/, "") || "/home";
+  return `${base}:${path.slice(0, 60)}`;
+}
+
 /** Open the on-site quote form, tagged with the button that triggered it. */
 export function goToLead(
   source: string,
   params: Record<string, string | number | undefined | null> = {},
 ) {
-  trackSiteEvent("lead_click", source);
+  const tagged = taggedSource(source);
+  trackSiteEvent("lead_click", tagged);
   const service = params['service'];
   openQuoteModal({
-    source,
+    source: tagged,
     service: service === undefined || service === null ? undefined : `${service}`,
   });
 }
+
 
 /**
  * Send the visitor to the Swim Club checkout, tagged with the button.
