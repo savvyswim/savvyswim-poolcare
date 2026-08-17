@@ -17,8 +17,8 @@ const EMAIL = "hi@savvyswim.com";
 const SMS_PHONE = "+18176637665";
 
 const NEIGHBORHOODS = [
-  "Starwood", "Newman Village", "Phillips Creek Ranch", "Panther Creek",
-  "Plano Lakes", "Stonebriar", "The Trails", "Richwoods", "Preston Vineyards",
+  "Willow Bend", "Deerfield", "Kings Ridge", "Hunters Glen",
+  "Legacy West", "Prestonwood", "Shoal Creek", "Whiffletree", "Russell Creek",
 ];
 
 const SERVICES = [
@@ -32,7 +32,7 @@ const SERVICES = [
     no: "02",
     icon: Sparkles,
     title: "Green pool recovery",
-    desc: "North Texas storms and a week of 100° heat turn pools green fast. Full chemical reset, deep vacuum, and filter clean to get it swim-ready.",
+    desc: "Plano storms off the Preston corridor plus a week of 100° heat turn pools green fast. Full chemical reset, deep vacuum, and filter clean to get it swim-ready.",
   },
   {
     no: "03",
@@ -44,7 +44,7 @@ const SERVICES = [
     no: "04",
     icon: ShieldCheck,
     title: "Hard-water & scale care",
-    desc: "Plano's hard water leaves calcium at the waterline. We treat scale, keep tile clean, and manage calcium hardness all year.",
+    desc: "Plano runs on NTMWD water that swings hard and alkaline, so calcium builds fast at the waterline. We treat scale, keep tile clean, and manage calcium hardness all year.",
   },
 ];
 
@@ -111,7 +111,7 @@ const PlanoPoolCleaning = () => {
       <Seo
         title="Pool Cleaning Plano TX — Weekly Service & Repair | Savvy Swim"
         description="Pool cleaning in Plano, TX from $129.99/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
-        path="/pool-cleaning-plano-tx"
+        path="/pool-cleaning-plano"
         jsonLd={jsonLd}
       />
 
@@ -143,7 +143,7 @@ const PlanoPoolCleaning = () => {
               <div className="lg:col-span-7">
                 <div className="border-t-2 border-accent pt-6">
                   <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-4 inline-flex items-center gap-2">
-                    <MapPin className="h-3.5 w-3.5" /> Plano, Texas · 75033 / 75034 / 75035 / 75036
+                    <MapPin className="h-3.5 w-3.5" /> Plano, Texas · 75023 / 75024 / 75025 / 75074 / 75075 / 75093
                   </div>
                   <h1 className="font-display uppercase leading-[0.94] tracking-tight" style={{ fontSize: "clamp(2.2rem, 5.4vw, 4.2rem)" }}>
                     Pool cleaning<br />
@@ -236,8 +236,8 @@ const PlanoPoolCleaning = () => {
                 Plano neighborhoods we run<span className="text-accent">.</span>
               </h2>
               <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
-                Our Plano route covers the full city — from Preston Road out to the Legacy corridor
-                and north past Panther Creek. If your street isn't listed, call and we'll tell you
+                Our Plano route covers the full city — from Legacy West and Willow Bend down to
+                Downtown Plano and east past Los Rios. If your street isn't listed, call and we'll tell you
                 straight whether we can hit it on the weekly run.
               </p>
               <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-2.5">
