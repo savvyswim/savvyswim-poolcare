@@ -17,8 +17,10 @@ import { Route as RequestInspectionRouteImport } from './routes/request-inspecti
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PoolCleaningPlanoRouteImport } from './routes/pool-cleaning-plano'
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
 import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
+import { Route as PlanoRouteImport } from './routes/plano'
 import { Route as FriscoRouteImport } from './routes/frisco'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
@@ -83,6 +85,11 @@ const PortalRoute = PortalRouteImport.update({
   path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoolCleaningPlanoRoute = PoolCleaningPlanoRouteImport.update({
+  id: '/pool-cleaning-plano',
+  path: '/pool-cleaning-plano',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
   id: '/pool-cleaning-frisco-tx',
   path: '/pool-cleaning-frisco-tx',
@@ -91,6 +98,11 @@ const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
 const PoolCleaningFriscoRoute = PoolCleaningFriscoRouteImport.update({
   id: '/pool-cleaning-frisco',
   path: '/pool-cleaning-frisco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanoRoute = PlanoRouteImport.update({
+  id: '/plano',
+  path: '/plano',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FriscoRoute = FriscoRouteImport.update({
@@ -224,8 +236,10 @@ export interface FileRoutesByFullPath {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -259,8 +273,10 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -295,8 +311,10 @@ export interface FileRoutesById {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
+  '/pool-cleaning-plano': typeof PoolCleaningPlanoRoute
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -332,8 +350,10 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -367,8 +387,10 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -402,8 +424,10 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
+    | '/pool-cleaning-plano'
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
@@ -438,8 +462,10 @@ export interface RootRouteChildren {
   BookingRoute: typeof BookingRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
   FriscoRoute: typeof FriscoRoute
+  PlanoRoute: typeof PlanoRoute
   PoolCleaningFriscoRoute: typeof PoolCleaningFriscoRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
+  PoolCleaningPlanoRoute: typeof PoolCleaningPlanoRoute
   PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -524,6 +550,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pool-cleaning-plano': {
+      id: '/pool-cleaning-plano'
+      path: '/pool-cleaning-plano'
+      fullPath: '/pool-cleaning-plano'
+      preLoaderRoute: typeof PoolCleaningPlanoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pool-cleaning-frisco-tx': {
       id: '/pool-cleaning-frisco-tx'
       path: '/pool-cleaning-frisco-tx'
@@ -536,6 +569,13 @@ declare module '@tanstack/react-router' {
       path: '/pool-cleaning-frisco'
       fullPath: '/pool-cleaning-frisco'
       preLoaderRoute: typeof PoolCleaningFriscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plano': {
+      id: '/plano'
+      path: '/plano'
+      fullPath: '/plano'
+      preLoaderRoute: typeof PlanoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/frisco': {
@@ -710,8 +750,10 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRoute: BookingRoute,
   FreeInspectionRoute: FreeInspectionRoute,
   FriscoRoute: FriscoRoute,
+  PlanoRoute: PlanoRoute,
   PoolCleaningFriscoRoute: PoolCleaningFriscoRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
+  PoolCleaningPlanoRoute: PoolCleaningPlanoRoute,
   PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
