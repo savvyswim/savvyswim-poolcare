@@ -178,7 +178,7 @@ export function CallOptionsCard() {
         </button>
       </div>
 
-      <p className="mt-3 text-[11px] leading-snug text-[#2a1013]/60">
+      <p className="mt-3 text-[11px] leading-snug text-foreground/60">
         A web browser can&apos;t dial on its own. On a Mac or iPad use Call now or FaceTime (it rings
         through your iPhone); on any computer &quot;Call from browser&quot; opens Google Voice. Or just
         dial {PHONE_PLAIN}.
