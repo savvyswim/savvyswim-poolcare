@@ -26,10 +26,13 @@ const CITY_SLUGS = [
   "prosper",
 ];
 
+// Only canonical, self-serving URLs belong here. /book and /free-inspection
+// are 301 redirects, and /pool-cleaning-plano, /frisco, /pool-cleaning-frisco,
+// /privacy-policy and /terms-and-conditions canonicalise elsewhere.
 const entries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/services", changefreq: "monthly", priority: "0.8" },
-  { path: "/book", changefreq: "monthly", priority: "0.8" },
+  { path: "/services", changefreq: "monthly", priority: "0.9" },
+  { path: "/weekly-pool-service", changefreq: "monthly", priority: "0.9" },
   { path: "/pool-cleaning-frisco-tx", changefreq: "monthly", priority: "0.8" },
   ...CITY_SLUGS.map((slug): SitemapEntry => ({
     path: `/${slug}`,
@@ -39,6 +42,8 @@ const entries: SitemapEntry[] = [
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];
+
+
 
 
 function generateSitemap(list: SitemapEntry[]) {
