@@ -207,11 +207,6 @@ const Index = () => {
   // Announced to screen readers before we navigate off-site, so a keyboard or
   // reader user knows the button worked and where they are being taken.
   const [handoffStatus, setHandoffStatus] = useState("");
-  /** Billing, checkout and memberships are handled in the Savvy Swim app. */
-  const goToApp = (path: string, params: Record<string, string> = {}) => {
-    setHandoffStatus("Opening the Savvy Swim app…");
-    window.location.href = buildCrmLink(path, params);
-  };
   const joinSwimClub = (source: string) => {
     setHandoffStatus("Opening Swim Club sign-up…");
     goToSwimClub(source);
