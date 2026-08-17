@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "savvyswim-poolcare"
+const SITE_NAME = "Savvy Swim"
 const ROOT_DOMAIN = "savvyswimservices.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).
