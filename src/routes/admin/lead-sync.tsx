@@ -4,8 +4,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getLeadSyncStatus, retryLeadSync } from "@/lib/lead-sync.functions";
-import type { LeadSyncRow } from "@/lib/lead-sync.functions";
+import {
+  LEAD_STATUSES,
+  getLeadSyncStatus,
+  retryLeadSync,
+  setLeadStatus,
+} from "@/lib/lead-sync.functions";
+import type { LeadStatus, LeadSyncRow } from "@/lib/lead-sync.functions";
 
 export const Route = createFileRoute("/admin/lead-sync")({
   component: LeadSyncPage,
@@ -50,6 +55,40 @@ function StatusPill({ status }: { status: LeadSyncRow["status"] }) {
     <span className={`px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] ${tone}`}>
       {status}
     </span>
+  );
+}
+
+const LEAD_STATUS_TONE: Record<LeadStatus, string> = {
+  new: "bg-foreground/8 text-foreground/70",
+  scheduled: "bg-[#1FA9BE]/15 text-[#0f6b7a]",
+  confirmed: "bg-[#1FA9BE]/30 text-[#0b4f5a]",
+  declined: "bg-[#8E1F2C]/12 text-[#8E1F2C]",
+  converted: "bg-[#8E1F2C] text-[#F4EFE3]",
+};
+
+function LeadStatusCell({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: LeadStatus;
+  onChange: (next: LeadStatus) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <select
+      aria-label="Lead status"
+      value={value}
+      disabled={disabled}
+      onChange={(e) => onChange(e.target.value as LeadStatus)}
+      className={`border border-foreground/20 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] disabled:opacity-50 ${LEAD_STATUS_TONE[value]}`}
+    >
+      {LEAD_STATUSES.map((s) => (
+        <option key={s} value={s} className="bg-background text-foreground">
+          {s}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -121,6 +160,16 @@ function LeadSyncPage() {
     queryFn: () => fetchRows(),
     enabled: authed === true,
     refetchInterval: 60_000,
+  });
+
+  const updateStatusFn = useServerFn(setLeadStatus);
+  const updateStatus = useMutation({
+    mutationFn: (v: { id: string; status: LeadStatus }) => updateStatusFn({ data: v }),
+    onSuccess: (res) => {
+      toast.success(`Lead marked ${res.status}`);
+      void queryClient.invalidateQueries({ queryKey: ["lead-sync"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const retry = useMutation({
@@ -223,6 +272,7 @@ function LeadSyncPage() {
               <th className="p-3 text-left">Received</th>
               <th className="p-3 text-left">ZIP</th>
               <th className="p-3 text-left">Consent</th>
+              <th className="p-3 text-left">Lead status</th>
               <th className="p-3 text-left">Source</th>
               <th className="p-3 text-left">CRM status</th>
               <th className="p-3 text-left">Last attempt</th>
@@ -233,7 +283,7 @@ function LeadSyncPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td className="p-6 text-foreground/50" colSpan={9}>
+                <td className="p-6 text-foreground/50" colSpan={10}>
                   No {filter === "all" ? "" : `${filter} `}leads in the last 30 days.
                 </td>
               </tr>
@@ -259,6 +309,13 @@ function LeadSyncPage() {
                     >
                       Calls/texts/email: {r.contact_consent ? "Yes" : "No"}
                     </span>
+                  </td>
+                  <td className="p-3">
+                    <LeadStatusCell
+                      value={r.lead_status}
+                      disabled={updateStatus.isPending}
+                      onChange={(next) => updateStatus.mutate({ id: r.id, status: next })}
+                    />
                   </td>
                   <td className="p-3 text-xs text-foreground/70">
                     {r.source ?? "—"}
