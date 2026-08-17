@@ -107,7 +107,7 @@ export default function QuoteModal() {
       const detail = (e as CustomEvent<QuoteDetail>).detail || {};
       returnFocusTo.current = (document.activeElement as HTMLElement) ?? null;
       setVariant(detail.variant ?? "booking");
-      setSource(detail.source || "site");
+      setSource(withPage(detail.source || "site"));
       setService(detail.service);
       setDone(null);
       openedAt.current = Date.now();
