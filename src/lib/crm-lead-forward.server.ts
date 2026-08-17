@@ -26,7 +26,7 @@ export async function forwardInspectionToCrm(
   const { data: req, error } = await supabaseAdmin
     .from("inspection_requests")
     .select(
-      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, landing_page, session_id, page_path, sms_opt_in, contact_consent, consent_text, source, lead_type",
+      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, landing_page, session_id, page_path, sms_opt_in, contact_consent, consent_text, source, lead_type, status",
     )
     .eq("id", requestId)
     .maybeSingle();
