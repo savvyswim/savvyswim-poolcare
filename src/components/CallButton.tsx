@@ -102,7 +102,7 @@ export function CallOptionsCard() {
   const top = Math.min(state.y + 10, window.innerHeight - 430);
 
   const rowClass =
-    "flex items-center gap-3 border border-[#8E1F2C]/20 px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8E1F2C] transition hover:bg-[#8E1F2C] hover:text-[#F4EFE3]";
+    "inline-flex w-full items-center gap-3 whitespace-nowrap border border-hairline bg-background px-4 py-3 text-[12px] font-bold uppercase tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
   return (
     <div
@@ -110,18 +110,24 @@ export function CallOptionsCard() {
       role="dialog"
       aria-label={`Call ${PHONE_VANITY}`}
       style={{ position: "fixed", left, top, width }}
-      className="z-[130] border border-[#8E1F2C]/30 bg-[#F4EFE3] p-4 shadow-2xl"
+      className="z-[130] border border-hairline bg-card p-4 shadow-card"
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#1FA9BE]">Call Savvy Swim</p>
-      <p className="mt-1 select-all font-display text-2xl uppercase leading-none text-[#8E1F2C]">
+      <p className="font-tech text-[10px] uppercase tracking-[0.3em] text-accent">Call Savvy Swim</p>
+      <p className="mt-1 select-all font-display text-2xl uppercase leading-none text-primary">
         {PHONE_VANITY}
       </p>
-      <p className="select-all text-[13px] text-[#2a1013]/70">{PHONE_PLAIN}</p>
+      <p className="select-all text-[13px] text-foreground/70">{PHONE_PLAIN}</p>
+
 
       <div className="mt-4 flex flex-col gap-2">
-        <a href={PHONE_HREF} onClick={() => sub("call_now")} className={rowClass}>
+        <a
+          href={PHONE_HREF}
+          onClick={() => sub("call_now")}
+          className="btn-quote inline-flex w-full items-center gap-3 whitespace-nowrap px-4 py-3 text-[12px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
           <Phone className="h-4 w-4 shrink-0" aria-hidden="true" /> Call now (phone app)
         </a>
+
         <a href={`facetime-audio://${PHONE_E164}`} onClick={() => sub("facetime")} className={rowClass}>
           <Video className="h-4 w-4 shrink-0" aria-hidden="true" /> FaceTime audio
         </a>
@@ -172,7 +178,7 @@ export function CallOptionsCard() {
         </button>
       </div>
 
-      <p className="mt-3 text-[11px] leading-snug text-[#2a1013]/60">
+      <p className="mt-3 text-[11px] leading-snug text-foreground/60">
         A web browser can&apos;t dial on its own. On a Mac or iPad use Call now or FaceTime (it rings
         through your iPhone); on any computer &quot;Call from browser&quot; opens Google Voice. Or just
         dial {PHONE_PLAIN}.
