@@ -73,8 +73,9 @@ export const ReceiptEmail = ({
 
         <Text style={text}>
           Questions? Call or text{' '}
-          <Link href="tel:+14697440379" style={link}>
-            (469) 744-0379
+          <Link href="tel:+18176637665" style={link}>
+            817-663-POOL
+
           </Link>
           .
         </Text>
