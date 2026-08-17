@@ -91,6 +91,8 @@ export default function QuoteModal() {
     null,
   );
 
+  const navigate = useNavigate();
+
   const openedAt = useRef<number>(0);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const returnFocusTo = useRef<HTMLElement | null>(null);
