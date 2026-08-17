@@ -39,3 +39,15 @@ If the CRM side still rejects signed leads, the delivery record will contain the
 - `src/lib/crm-lead-forward.server.ts`: add bounded retry, always log to `ss_webhook_deliveries` via `webhook-log.server.ts`, and set `crm_synced_at` / a failure marker on `inspection_requests`.
 - New admin route for lead sync status reusing the existing CRM-styled admin shell and the retry server function.
 - Secret name: `WEBSITE_WEBHOOK_SECRET` (must match the CRM project exactly).
+
+## 4. Simpler, more direct mobile experience
+
+Mobile keeps only what drives a call or a quote, in this order on every page:
+
+- Hero: one short headline, one line of proof, and two buttons — "Book free inspection" and "Call 817-663-POOL". No secondary links stacked underneath.
+- Tap-to-call stays instant on phones (no card, straight to the dialer), and the sticky bottom call bar stays.
+- Long marketing sections collapse on small screens: dense spec tables, telemetry strips, and marquee tickers are hidden or reduced to a short summary line; detail lists become collapsible.
+- Tighter vertical rhythm: smaller section padding, one column everywhere, larger tap targets (minimum 48px).
+- Header on mobile shows the wordmark, the phone, and the menu only.
+
+Same treatment applies to the homepage, weekly plan page, service pages, and every city page so mobile reads the same everywhere.
