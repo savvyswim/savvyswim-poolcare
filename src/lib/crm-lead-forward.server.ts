@@ -70,6 +70,11 @@ export async function forwardInspectionToCrm(
     origin: "savvyswim.com",
     full_name: req.full_name,
     email: req.email,
+    // Aliases so the CRM stores the email whichever column name it reads.
+    email_address: req.email,
+    contact_email: req.email,
+    customer_email: req.email,
+    lead_email: req.email,
     phone: req.phone,
     address: req.address,
     postal_code: req.postal_code,
