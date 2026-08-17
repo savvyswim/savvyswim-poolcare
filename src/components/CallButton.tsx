@@ -23,16 +23,16 @@ function track(location: string) {
 
 function canDial(): boolean {
   if (typeof window === "undefined") return true;
-  // Preview / embedded iframes block tel: navigation and leave a pending tab.
-  try {
-    if (window.top !== window.self) return false;
-  } catch {
-    return false;
-  }
+  // Any touch device dials directly, even inside an embedded preview.
   const coarse = window.matchMedia?.("(pointer: coarse)")?.matches;
-  const touch = navigator.maxTouchPoints > 0;
-  return Boolean(coarse || touch);
+  const touch = (navigator.maxTouchPoints ?? 0) > 0;
+  const mobileUa = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+  if (coarse || touch || mobileUa) return true;
+  // Narrow viewports are phones too.
+  if (window.innerWidth <= 820) return true;
+  return false;
 }
+
 
 function handleCall(location: string) {
   return (e: MouseEvent<HTMLAnchorElement>) => {
