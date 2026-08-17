@@ -12,7 +12,7 @@ import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 const SITE_NAME = "Savvy Swim"
 const SENDER_DOMAIN = "notify.savvyswimservices.com"
 const FROM_DOMAIN = "notify.savvyswimservices.com"
-const SITE_URL = `https://www.savvyswim.com`
+const SITE_URL = `https://savvyswimservices.com`
 
 // The SDK handler owns verification, dispatch, and retry semantics; this file
 // owns only the email decisions: subjects, templates, and per-type props.

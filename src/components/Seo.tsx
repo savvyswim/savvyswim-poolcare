@@ -16,7 +16,7 @@ export const Seo = ({ title, description, path, jsonLd, noindex }: SeoProps) => 
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={url} />
+      {/* Canonical lives in the route's head() so pages never emit two of them. */}
       {noindex && <meta name="robots" content="noindex" />}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
