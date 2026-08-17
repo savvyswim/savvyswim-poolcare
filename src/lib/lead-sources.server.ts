@@ -74,7 +74,7 @@ const RANGE_DAYS: Record<RangeKey, number | null> = {
 
 export async function loadLeadSources(range: RangeKey): Promise<LeadSourcesReport> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const days = RANGE_DAYS[range];
+  const days: number | null = RANGE_DAYS[range] ?? null;
 
   let q = supabaseAdmin
     .from("inspection_requests")
