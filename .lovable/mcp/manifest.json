@@ -69,7 +69,7 @@
       {
         "name": "get_lead",
         "title": "Get a lead",
-        "description": "Fetch the full detail of one Savvy Swim website lead by its id, including contact info, consent and CRM sync state.",
+        "description": "Fetch the full detail of one Savvy Swim website lead by its id, including contact info, consent, attribution and its CRM handoff state (synced/failed/pending, attempts and last error).",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
