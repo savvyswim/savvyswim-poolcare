@@ -76,6 +76,12 @@ export async function forwardInspectionToCrm(
     customer_email: req.email,
     lead_email: req.email,
     phone: req.phone,
+    // Aliases so the CRM stores the phone whichever column name it reads.
+    phone_number: req.phone,
+    contact_phone: req.phone,
+    customer_phone: req.phone,
+    lead_phone: req.phone,
+    mobile: req.phone,
     address: req.address,
     postal_code: req.postal_code,
     preferred_date: req.preferred_date,
