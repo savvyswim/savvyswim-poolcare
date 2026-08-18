@@ -177,6 +177,7 @@ function BucketTable({
                               <span className="bg-foreground/8 px-2 py-0.5 text-[11px] uppercase tracking-[0.12em] text-foreground/60">
                                 {l.status || "new"}
                               </span>
+                              <CrmSyncBadge state={l.crm_sync} />
                             </li>
                           ))}
                         </ul>
