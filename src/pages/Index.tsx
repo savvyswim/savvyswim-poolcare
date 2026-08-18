@@ -183,7 +183,7 @@ const CLEANING_PLANS: CleaningPlan[] = [
     price: "$349",
     cadence: "/ month",
     blurb: "Hands-off ownership, pool always guest-ready.",
-    items: ["4 visits + on-call touch-ups", "Chemicals, salt & tabs included", "Quarterly filter deep clean", "Free minor equipment repairs", "Seasonal open/close service", "24/7 text support"],
+    items: ["Savvy Swim Club membership included ($19.99/mo value)", "4 visits + on-call touch-ups", "Chemicals, salt & tabs included", "Quarterly filter deep clean", "Free minor equipment repairs", "Seasonal open/close service", "24/7 text support"],
   },
 ];
 
