@@ -18,5 +18,9 @@ export default defineMcp({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",
   }),
-  tools: [listLeadsTool, getLeadTool, setLeadStatusTool, serviceAreasTool],
+  // Cast: tool definitions without an outputSchema trip this project's
+  // exactOptionalPropertyTypes setting against the SDK's tool type.
+  tools: [listLeadsTool, getLeadTool, setLeadStatusTool, serviceAreasTool] as unknown as Parameters<
+    typeof defineMcp
+  >[0]["tools"],
 });
