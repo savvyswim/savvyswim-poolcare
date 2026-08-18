@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getLeadSources } from "@/lib/lead-sources.functions";
-import type { LeadSourceBucket, RangeKey } from "@/lib/lead-sources.functions";
+import type { LeadSourceBucket, LeadSourceLead, RangeKey } from "@/lib/lead-sources.functions";
 
 export const Route = createFileRoute("/admin/lead-sources")({
   component: LeadSourcesPage,
