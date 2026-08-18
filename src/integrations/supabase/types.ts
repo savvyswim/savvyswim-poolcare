@@ -657,6 +657,7 @@ export type Database = {
           converted_at: string | null
           converted_customer_id: string | null
           created_at: string
+          crm_lead_id: string | null
           crm_synced_at: string | null
           email: string
           full_name: string
@@ -691,6 +692,7 @@ export type Database = {
           converted_at?: string | null
           converted_customer_id?: string | null
           created_at?: string
+          crm_lead_id?: string | null
           crm_synced_at?: string | null
           email: string
           full_name: string
@@ -725,6 +727,7 @@ export type Database = {
           converted_at?: string | null
           converted_customer_id?: string | null
           created_at?: string
+          crm_lead_id?: string | null
           crm_synced_at?: string | null
           email?: string
           full_name?: string
