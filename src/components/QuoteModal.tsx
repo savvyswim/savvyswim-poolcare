@@ -17,10 +17,12 @@ import {
   QUOTE_EVENT,
   openQuoteModal,
   openWaterTestModal,
+  takePendingQuote,
   withPage,
   type QuoteDetail,
   type QuoteVariant,
 } from "@/lib/quote-modal";
+
 
 export { QUOTE_EVENT, openQuoteModal, openWaterTestModal };
 export type { QuoteDetail, QuoteVariant };
