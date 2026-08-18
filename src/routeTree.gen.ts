@@ -42,6 +42,7 @@ import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
@@ -222,6 +223,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
   id: '/lovable/email/auth/webhook',
   path: '/lovable/email/auth/webhook',
@@ -315,6 +321,7 @@ export interface FileRoutesByFullPath {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -361,6 +368,7 @@ export interface FileRoutesByTo {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -408,6 +416,7 @@ export interface FileRoutesById {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -456,6 +465,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/events'
     | '/api/public/health'
@@ -502,6 +512,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/events'
     | '/api/public/health'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/events'
     | '/api/public/health'
@@ -595,6 +607,7 @@ export interface RootRouteChildren {
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicEventsRoute: typeof ApiPublicEventsRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
@@ -845,6 +858,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/webhook': {
       id: '/lovable/email/auth/webhook'
       path: '/lovable/email/auth/webhook'
@@ -956,6 +976,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicEventsRoute: ApiPublicEventsRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
