@@ -19,7 +19,7 @@
       {
         "name": "list_leads",
         "title": "List website leads",
-        "description": "List recent Savvy Swim website leads (booking and water-test requests), newest first. Optionally filter by status or search by name, email, phone or address.",
+        "description": "List recent Savvy Swim website leads (booking and water-test requests), newest first, each with its CRM sync state. Optionally filter by status, CRM sync state, or search by name, email, phone or address.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -46,6 +46,15 @@
               ],
               "description": "Only return leads with this status."
             },
+            "sync_status": {
+              "type": "string",
+              "enum": [
+                "synced",
+                "failed",
+                "pending"
+              ],
+              "description": "Only return leads in this CRM handoff state."
+            },
             "search": {
               "type": "string",
               "minLength": 2,
@@ -60,7 +69,7 @@
       {
         "name": "get_lead",
         "title": "Get a lead",
-        "description": "Fetch the full detail of one Savvy Swim website lead by its id, including contact info, consent and CRM sync state.",
+        "description": "Fetch the full detail of one Savvy Swim website lead by its id, including contact info, consent, attribution and its CRM handoff state (synced/failed/pending, attempts and last error).",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -86,7 +95,7 @@
       {
         "name": "set_lead_status",
         "title": "Set lead status",
-        "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted).",
+        "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted) and push the updated lead to the CRM lead pipeline.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": false,
@@ -111,6 +120,11 @@
                 "converted"
               ],
               "description": "New pipeline status for the lead."
+            },
+            "sync_to_crm": {
+              "type": "boolean",
+              "default": true,
+              "description": "Re-send the lead to the CRM after updating (default true)."
             }
           },
           "required": [
