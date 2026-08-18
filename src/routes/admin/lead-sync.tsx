@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   LEAD_STATUSES,
   getLeadSyncStatus,
+  retryFailedLeadSyncs,
   retryLeadSync,
   setLeadStatus,
 } from "@/lib/lead-sync.functions";
@@ -146,6 +147,12 @@ function LeadSyncPage() {
   const queryClient = useQueryClient();
   const fetchRows = useServerFn(getLeadSyncStatus);
   const retryFn = useServerFn(retryLeadSync);
+  const retryAllFn = useServerFn(retryFailedLeadSyncs);
+  const [autoRetry, setAutoRetry] = useState(true);
+  const [retryRuns, setRetryRuns] = useState(0);
+  const [retryTotals, setRetryTotals] = useState({ attempted: 0, recovered: 0 });
+  const [lastRun, setLastRun] = useState<string | null>(null);
+  const attemptedSignature = useRef<string>("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setAuthed(Boolean(data.session)));
@@ -181,6 +188,37 @@ function LeadSyncPage() {
     },
     onError: (err: Error) => toast.error(err.message),
   });
+
+  const bulkRetry = useMutation({
+    mutationFn: () => retryAllFn(),
+    onSuccess: (res) => {
+      if (res.attempted === 0) return;
+      setRetryRuns((n) => n + 1);
+      setRetryTotals((t) => ({
+        attempted: t.attempted + res.attempted,
+        recovered: t.recovered + res.recovered,
+      }));
+      setLastRun(res.ranAt);
+      if (res.recovered > 0) toast.success(`Auto-retry recovered ${res.recovered} of ${res.attempted} lead(s)`);
+      else toast.error(`Auto-retry ran on ${res.attempted} lead(s), none reached the CRM`);
+      void queryClient.invalidateQueries({ queryKey: ["lead-sync"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+  const failedIds = useMemo(
+    () => (query.data ?? []).filter((r) => r.status === "failed").map((r) => r.id).sort().join(","),
+    [query.data],
+  );
+
+  // Auto-retry each newly seen set of failed handoffs exactly once per load.
+  useEffect(() => {
+    if (!autoRetry || !failedIds) return;
+    if (attemptedSignature.current === failedIds) return;
+    if (bulkRetry.isPending) return;
+    attemptedSignature.current = failedIds;
+    bulkRetry.mutate();
+  }, [autoRetry, failedIds, bulkRetry]);
 
   const rows = useMemo(() => {
     const all = query.data ?? [];
@@ -227,6 +265,38 @@ function LeadSyncPage() {
           </button>
         </div>
       </header>
+
+      <section className="mt-6 flex flex-wrap items-center justify-between gap-4 border border-foreground/15 p-5">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-foreground/50">Auto-retry</p>
+          <p className="mt-1 text-sm text-foreground/70">
+            {bulkRetry.isPending
+              ? "Re-sending failed handoffs…"
+              : retryRuns === 0
+                ? "Failed handoffs are re-sent automatically as soon as they appear."
+                : `${retryRuns} retry run${retryRuns === 1 ? "" : "s"} · ${retryTotals.attempted} lead${
+                    retryTotals.attempted === 1 ? "" : "s"
+                  } retried · ${retryTotals.recovered} recovered${lastRun ? ` · last ${when(lastRun)}` : ""}`}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-foreground/70">
+            <input
+              type="checkbox"
+              checked={autoRetry}
+              onChange={(e) => setAutoRetry(e.target.checked)}
+            />
+            Automatic
+          </label>
+          <button
+            className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em] disabled:opacity-50"
+            disabled={bulkRetry.isPending || counts.failed === 0}
+            onClick={() => bulkRetry.mutate()}
+          >
+            Retry failed now
+          </button>
+        </div>
+      </section>
 
       {err ? (
         <p className="mt-8 border border-[#8E1F2C]/40 p-5 text-sm text-[#8E1F2C]">{err.message}</p>
