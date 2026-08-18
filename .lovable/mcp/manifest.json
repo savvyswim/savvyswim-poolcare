@@ -19,7 +19,7 @@
       {
         "name": "list_leads",
         "title": "List website leads",
-        "description": "List recent Savvy Swim website leads (booking and water-test requests), newest first. Optionally filter by status or search by name, email, phone or address.",
+        "description": "List recent Savvy Swim website leads (booking and water-test requests), newest first, each with its CRM sync state. Optionally filter by status, CRM sync state, or search by name, email, phone or address.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -45,6 +45,15 @@
                 "converted"
               ],
               "description": "Only return leads with this status."
+            },
+            "sync_status": {
+              "type": "string",
+              "enum": [
+                "synced",
+                "failed",
+                "pending"
+              ],
+              "description": "Only return leads in this CRM handoff state."
             },
             "search": {
               "type": "string",
