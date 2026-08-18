@@ -19,6 +19,8 @@ export type LeadSourceLead = {
   source: string | null;
   page_path: string;
   lead_type: string | null;
+  /** CRM handoff state for this lead. */
+  crm_sync: "synced" | "failed" | "pending";
 };
 
 export type LeadSourceBucket = {

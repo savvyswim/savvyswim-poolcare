@@ -79,7 +79,7 @@ export async function loadLeadSources(range: RangeKey): Promise<LeadSourcesRepor
   let q = supabaseAdmin
     .from("inspection_requests")
     .select(
-      "id, created_at, full_name, phone, email, status, source, lead_type, page_path, landing_page, referrer, utm_source, utm_campaign",
+      "id, created_at, full_name, phone, email, status, source, lead_type, page_path, landing_page, referrer, utm_source, utm_campaign, crm_synced_at",
     )
     .order("created_at", { ascending: false })
     .limit(5000);
@@ -88,6 +88,21 @@ export async function loadLeadSources(range: RangeKey): Promise<LeadSourcesRepor
   const { data, error } = await q;
   if (error) throw new Error(error.message);
   const rows = data ?? [];
+
+  // Leads with no crm_synced_at are "pending" unless the delivery log shows a failure.
+  const unsynced = rows.filter((r) => !r.crm_synced_at).map((r) => r.id);
+  const failedIds = new Set<string>();
+  if (unsynced.length) {
+    for (let i = 0; i < unsynced.length; i += 200) {
+      const { data: deliveries } = await supabaseAdmin
+        .from("ss_webhook_deliveries")
+        .select("event_key, outcome")
+        .eq("channel", "lead")
+        .eq("outcome", "failed")
+        .in("event_key", unsynced.slice(i, i + 200));
+      for (const d of deliveries ?? []) if (d.event_key) failedIds.add(d.event_key);
+    }
+  }
 
   type Bucket = {
     key: string;
