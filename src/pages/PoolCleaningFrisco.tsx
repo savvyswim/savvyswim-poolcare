@@ -285,19 +285,20 @@ const FriscoPoolCleaning = () => {
           <div className="container-tight grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-5">
               <h2 className="font-display text-[1.6rem] uppercase leading-none tracking-tight sm:text-[2.4rem]">
-                Contact a Frisco tech<span className="text-accent">.</span>
+                Get a water test &amp; a complimentary inspection for your pool<span className="text-accent">.</span>
               </h2>
               <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-muted-foreground">
-                Send your details and we&rsquo;ll call or text you back the same day with a flat monthly
-                quote for your Frisco pool. No contracts, no pressure.
+                Send your details and a Frisco tech will call or text you back the same day to schedule your
+                free water test and on-site pool inspection — plus a flat monthly quote. No contracts, no pressure.
               </p>
               <ul className="mt-6 space-y-2.5 text-[0.92rem]">
-                {["Same-day reply", "Free on-site walkthrough", "Flat monthly price, chemicals included"].map((t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-amber-brand" /> {t}
+                {["Free full water chemistry test", "Complimentary on-site pool inspection", "Same-day reply, flat monthly price with chemicals included"].map((t) => (
+                  <li key={t} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-brand" /> {t}
                   </li>
                 ))}
               </ul>
+
             </div>
             <div className="lg:col-span-7">
               <div className="rounded-sm border border-hairline bg-[#F9F8F4] p-5 sm:p-8">
