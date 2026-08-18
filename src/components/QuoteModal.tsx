@@ -85,8 +85,7 @@ export default function QuoteModal() {
 
   // Open on custom event, and on ?quote=1 (legacy /book style links).
   useEffect(() => {
-    const onOpen = (e: Event) => {
-      const detail = (e as CustomEvent<QuoteDetail>).detail || {};
+    const apply = (detail: QuoteDetail) => {
       returnFocusTo.current = (document.activeElement as HTMLElement) ?? null;
       setVariant(detail.variant ?? "booking");
       setSource(withPage(detail.source || "site"));
@@ -95,14 +94,25 @@ export default function QuoteModal() {
       openedAt.current = Date.now();
       setOpen(true);
     };
+    const onOpen = (e: Event) => {
+      takePendingQuote();
+      apply((e as CustomEvent<QuoteDetail>).detail || {});
+    };
     window.addEventListener(QUOTE_EVENT, onOpen as EventListener);
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("quote") === "1") {
-      openQuoteModal({ source: params.get("source") || "deep_link" });
+    // A click may have happened while this chunk was still downloading.
+    const pending = takePendingQuote();
+    if (pending) {
+      apply(pending);
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("quote") === "1") {
+        openQuoteModal({ source: params.get("source") || "deep_link" });
+      }
     }
     return () => window.removeEventListener(QUOTE_EVENT, onOpen as EventListener);
   }, []);
+
 
   // Escape to close, focus trap, body scroll lock.
   useEffect(() => {
