@@ -40,7 +40,7 @@ export async function sendInspectionNotifications(
   const { data: req, error } = await supabaseAdmin
     .from("inspection_requests")
     .select(
-      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_campaign, page_path, lead_type",
+      "id, reference_number, full_name, email, phone, address, postal_code, preferred_date, preferred_contact_time, pool_details, notes, created_at, utm_source, utm_campaign, page_path, lead_type, source",
     )
     .eq("id", requestId)
     .maybeSingle();
@@ -49,6 +49,13 @@ export async function sendInspectionNotifications(
 
   const isWaterTest = (req.lead_type ?? "") === "water_test";
   const kind = isWaterTest ? "water test" : "free inspection";
+  // Where the form lived, so the office can triage city pages at a glance.
+  const originLabel = (() => {
+    const hay = `${req.source ?? ""} ${req.page_path ?? ""}`.toLowerCase();
+    if (hay.includes("frisco")) return "Frisco page";
+    if (hay.includes("plano")) return "Plano page";
+    return null;
+  })();
 
   // Office recipients: configured list, else active owners/managers, else fallback.
   const emails: string[] = [];
@@ -88,12 +95,14 @@ export async function sendInspectionNotifications(
     ["Submitted", fmt(req.created_at)],
     [
       "Source",
-      [req.utm_source, req.utm_campaign, req.page_path].filter(Boolean).join(" · ") || "Direct",
+      [req.source, req.utm_source, req.utm_campaign, req.page_path]
+        .filter(Boolean)
+        .join(" · ") || "Direct",
     ],
   ];
 
   const officeHtml = `<div style="font-family:Arial,Helvetica,sans-serif;color:#2b2b2b;">
-  <h2 style="color:#8E1F2C;margin:0 0 12px;">New ${esc(kind)} request</h2>
+  <h2 style="color:#8E1F2C;margin:0 0 12px;">New ${esc(kind)} request${originLabel ? ` · ${esc(originLabel)}` : ""}</h2>
   <table style="border-collapse:collapse;font-size:14px;">
     ${rows
       .map(
@@ -117,7 +126,7 @@ export async function sendInspectionNotifications(
           from: FROM_ADDRESS,
           sender_domain: SENDER_DOMAIN,
           reply_to: req.email,
-          subject: `New ${kind} request — ${req.full_name} (${req.reference_number})`,
+          subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""} — ${req.full_name} (${req.reference_number})`,
           html: officeHtml,
           text: officeText,
           label: "inspection-office-alert",
