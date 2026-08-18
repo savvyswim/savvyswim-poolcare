@@ -42,7 +42,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
-import { openWaterTestModal } from "@/components/QuoteModal";
+import { openWaterTestModal } from "@/lib/quote-modal";
 
 import { resetConsent } from "@/lib/consent";
 
@@ -98,7 +98,7 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { Link } from "@/lib/router-compat";
-import { supabase } from "@/integrations/supabase/client";
+
 
 
 const EMAIL = "hi@savvyswim.com";
@@ -230,7 +230,10 @@ const Index = () => {
   useEffect(() => {
     let active = true;
     const load = async () => {
+      // Loaded on idle so the data client stays out of the first-paint bundle.
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data } = await supabase
+
         .from("cleaning_plans")
         .select("id,name,blurb,price,cadence,items,featured")
         .eq("is_active", true)

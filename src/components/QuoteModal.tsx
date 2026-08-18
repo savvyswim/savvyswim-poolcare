@@ -13,41 +13,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
 import LeadForm, { SERVICES, WATER_TESTS } from "@/components/LeadForm";
+import {
+  QUOTE_EVENT,
+  openQuoteModal,
+  openWaterTestModal,
+  takePendingQuote,
+  withPage,
+  type QuoteDetail,
+  type QuoteVariant,
+} from "@/lib/quote-modal";
 
-export const QUOTE_EVENT = "ss:open-quote";
 
-export type QuoteVariant = "booking" | "water_test";
+export { QUOTE_EVENT, openQuoteModal, openWaterTestModal };
+export type { QuoteDetail, QuoteVariant };
 
-export type QuoteDetail = {
-  source?: string;
-  service?: string | undefined;
-  variant?: QuoteVariant;
-};
-
-/**
- * Stamp a CTA name with the page it was clicked on ("<cta>:<path>") so every
- * lead — homepage, weekly plan hub, city page — reports and syncs with the
- * page it came from. Already-stamped sources pass through untouched.
- */
-function withPage(source: string): string {
-  if (typeof window === "undefined" || source.includes(":")) return source;
-  const path = window.location.pathname.replace(/\/+$/, "") || "/home";
-  return `${source}:${path.slice(0, 60)}`;
-}
-
-/** Open the quote modal from anywhere (client only). */
-export function openQuoteModal(detail: QuoteDetail = {}) {
-  if (typeof window === "undefined") return;
-  const stamped: QuoteDetail = detail.source
-    ? { ...detail, source: withPage(detail.source) }
-    : detail;
-  window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));
-}
-
-/** Open the free water test form (client only). */
-export function openWaterTestModal(source = "water_test_tab") {
-  openQuoteModal({ source, variant: "water_test" });
-}
 
 
 const COPY: Record<
@@ -106,8 +85,7 @@ export default function QuoteModal() {
 
   // Open on custom event, and on ?quote=1 (legacy /book style links).
   useEffect(() => {
-    const onOpen = (e: Event) => {
-      const detail = (e as CustomEvent<QuoteDetail>).detail || {};
+    const apply = (detail: QuoteDetail) => {
       returnFocusTo.current = (document.activeElement as HTMLElement) ?? null;
       setVariant(detail.variant ?? "booking");
       setSource(withPage(detail.source || "site"));
@@ -116,14 +94,25 @@ export default function QuoteModal() {
       openedAt.current = Date.now();
       setOpen(true);
     };
+    const onOpen = (e: Event) => {
+      takePendingQuote();
+      apply((e as CustomEvent<QuoteDetail>).detail || {});
+    };
     window.addEventListener(QUOTE_EVENT, onOpen as EventListener);
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("quote") === "1") {
-      openQuoteModal({ source: params.get("source") || "deep_link" });
+    // A click may have happened while this chunk was still downloading.
+    const pending = takePendingQuote();
+    if (pending) {
+      apply(pending);
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("quote") === "1") {
+        openQuoteModal({ source: params.get("source") || "deep_link" });
+      }
     }
     return () => window.removeEventListener(QUOTE_EVENT, onOpen as EventListener);
   }, []);
+
 
   // Escape to close, focus trap, body scroll lock.
   useEffect(() => {

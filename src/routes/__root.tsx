@@ -19,8 +19,9 @@ import { CallOptionsCard } from "@/components/CallButton";
 
 // Consent bar is post-hydration only — keep it out of the first payload.
 const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
-// On-site lead capture — opened by every quote / booking CTA.
-const QuoteModal = lazy(() => import("@/components/QuoteModal"));
+// On-site lead capture — the form itself only downloads on the first CTA click.
+const QuoteModal = lazy(() => import("@/components/QuoteModalHost"));
+
 // Free water test side tab.
 const WaterTestTab = lazy(() => import("@/components/WaterTestTab"));
 

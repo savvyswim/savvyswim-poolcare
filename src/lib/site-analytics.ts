@@ -86,7 +86,7 @@ if (typeof document !== "undefined") {
  * ------------------------------------------------------------------ */
 
 import { swimClubCheckoutUrl } from "./app-links";
-import { openQuoteModal } from "@/components/QuoteModal";
+import { openQuoteModal } from "@/lib/quote-modal";
 
 /**
  * Stamp a CTA name with the page it was clicked on, so a lead from the
