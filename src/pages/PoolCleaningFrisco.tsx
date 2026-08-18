@@ -138,38 +138,38 @@ const FriscoPoolCleaning = () => {
       <main>
         {/* HERO */}
         <section className="border-b border-hairline">
-          <div className="container-tight py-16 sm:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+          <div className="container-tight py-10 sm:py-16 lg:py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
               <div className="lg:col-span-7">
                 <div className="border-t-2 border-accent pt-6">
-                  <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-4 inline-flex items-center gap-2">
-                    <MapPin className="h-3.5 w-3.5" /> Frisco, Texas · 75033 / 75034 / 75035 / 75036
+                  <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 font-tech text-[10px] uppercase leading-relaxed tracking-[0.18em] text-muted-foreground sm:text-[11px] sm:tracking-[0.24em]">
+                    <MapPin className="h-3.5 w-3.5 shrink-0" /> <span>Frisco, Texas</span> <span aria-hidden="true">·</span> <span>75033 / 75034 / 75035 / 75036</span>
                   </div>
-                  <h1 className="font-display uppercase leading-[0.94] tracking-tight" style={{ fontSize: "clamp(2.2rem, 5.4vw, 4.2rem)" }}>
+                  <h1 className="font-display uppercase leading-[0.94] tracking-tight" style={{ fontSize: "clamp(2.4rem, 10vw, 4.2rem)" }}>
                     Pool cleaning<br />
                     <span className="text-accent">Frisco, TX.</span>
                   </h1>
-                  <p className="mt-6 max-w-xl text-muted-foreground text-base leading-relaxed">
+                  <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-muted-foreground sm:mt-6 sm:text-base">
                     Weekly pool cleaning for Frisco homeowners — chemistry balanced, baskets emptied,
                     equipment checked, and a photo report in your inbox before we pull out of the driveway.
                   </p>
-                  <p className="mt-4 font-serif italic text-xl text-foreground/80">
+                  <p className="mt-4 font-serif text-lg italic text-foreground/80 sm:text-xl">
                     On duty, so you don't have to be.
                   </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-7 grid grid-cols-1 gap-3 sm:mt-8 sm:flex sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => goToLead("frisco")}
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Get a Frisco quote
                     </button>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick("frisco_hero")}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition hover:text-primary"
                     >
-                      <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                      <Phone className="h-4 w-4 shrink-0" /> {PHONE_DISPLAY}
                     </a>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ const FriscoPoolCleaning = () => {
                   alt="Navy and white striped cabana umbrella beside a clean Frisco pool"
                   loading="eager"
                   fetchPriority="high"
-                  className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
+                  className="w-full rounded-sm border border-hairline object-cover aspect-[16/10] sm:aspect-[3/2] lg:aspect-[4/5]"
                 />
               </div>
             </div>
@@ -190,35 +190,35 @@ const FriscoPoolCleaning = () => {
 
         {/* TRUST STRIP */}
         <section className="border-b border-hairline bg-secondary/30">
-          <div className="container-tight grid grid-cols-2 md:grid-cols-4 divide-x divide-hairline">
+          <div className="container-tight grid grid-cols-2 divide-x divide-y divide-hairline md:grid-cols-4 md:divide-y-0">
             {[
               ["Frisco route day", "Fixed weekly"],
               ["Starting at", "$129.99 / month"],
               ["Photo report", "Every visit"],
               ["Clear water", "Guaranteed"],
             ].map(([label, value]) => (
-              <div key={label} className="py-6 px-4 text-center">
-                <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{label}</div>
-                <div className="font-display text-[1.3rem] uppercase tracking-tight mt-1.5">{value}</div>
+              <div key={label} className="px-3 py-5 text-center sm:px-4 sm:py-6">
+                <div className="font-tech text-[9px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[10px] sm:tracking-[0.2em]">{label}</div>
+                <div className="mt-1.5 font-display text-[1.05rem] uppercase leading-tight tracking-tight sm:text-[1.3rem]">{value}</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* SERVICES */}
-        <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+        <section className="perf-section border-b border-hairline py-12 sm:py-20">
           <div className="container-tight">
-            <h2 className="font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
+            <h2 className="font-display text-[1.6rem] uppercase leading-none tracking-tight sm:text-[2.6rem]">
               What Frisco pools get<span className="text-accent">.</span>
             </h2>
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+            <div className="mt-8 grid grid-cols-1 gap-x-10 gap-y-7 sm:mt-10 md:grid-cols-2">
               {SERVICES.map((s) => (
-                <div key={s.no} className="border-t border-hairline pt-5 flex gap-4">
-                  <span className="font-tech text-[11px] text-accent pt-1">{s.no}</span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <s.icon className="h-4 w-4 text-amber-brand" />
-                      <h3 className="font-display text-[1.15rem] uppercase tracking-tight">{s.title}</h3>
+                <div key={s.no} className="flex gap-3 border-t border-hairline pt-5 sm:gap-4">
+                  <span className="shrink-0 pt-1 font-tech text-[11px] text-accent">{s.no}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-start gap-2">
+                      <s.icon className="mt-0.5 h-4 w-4 shrink-0 text-amber-brand" />
+                      <h3 className="font-display text-[1.05rem] uppercase leading-tight tracking-tight sm:text-[1.15rem]">{s.title}</h3>
                     </div>
                     <p className="mt-2 text-muted-foreground text-[0.95rem] leading-relaxed">{s.desc}</p>
                   </div>
@@ -229,10 +229,10 @@ const FriscoPoolCleaning = () => {
         </section>
 
         {/* NEIGHBORHOODS + PHOTOS */}
-        <section className="perf-section py-16 sm:py-20 border-b border-hairline">
-          <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <section className="perf-section border-b border-hairline py-12 sm:py-20">
+          <div className="container-tight grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-6">
-              <h2 className="font-display text-[1.9rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
+              <h2 className="font-display text-[1.6rem] uppercase leading-none tracking-tight sm:text-[2.4rem]">
                 Frisco neighborhoods we run<span className="text-accent">.</span>
               </h2>
               <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
@@ -240,19 +240,19 @@ const FriscoPoolCleaning = () => {
                 and north past Panther Creek. If your street isn't listed, call and we'll tell you
                 straight whether we can hit it on the weekly run.
               </p>
-              <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-2.5">
+              <ul className="mt-6 grid grid-cols-1 gap-x-6 gap-y-2.5 xs:grid-cols-2">
                 {NEIGHBORHOODS.map((n) => (
-                  <li key={n} className="flex items-center gap-2 text-[0.92rem]">
+                  <li key={n} className="flex items-center gap-2 text-[0.9rem]">
                     <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0" /> {n}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="lg:col-span-6 grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:col-span-6">
               <img src={photoRivieraLoungers.url} alt="Red and white striped loungers beside a Frisco backyard pool" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <img src={photoSavvyLetters.url} alt="Savvy Swim inflatable letters floating in clear pool water" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
+              <img src={photoSavvyLetters.url} alt="Savvy Swim inflatable letters floating in clear pool water" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline sm:mt-8" />
               <img src={photoRedUmbrellas.url} alt="Red and white umbrellas above a serviced pool deck" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <div className="border border-hairline rounded-sm p-5 flex flex-col justify-center mt-8">
+              <div className="flex flex-col justify-center rounded-sm border border-hairline p-4 sm:mt-8 sm:p-5">
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Guarantee</div>
                 <p className="mt-2 text-[0.9rem] leading-relaxed">
                   Water not clear after a visit? We come back <strong>free, same day</strong>.
@@ -263,16 +263,16 @@ const FriscoPoolCleaning = () => {
         </section>
 
         {/* FAQ */}
-        <section className="perf-section py-16 sm:py-20 border-b border-hairline">
+        <section className="perf-section border-b border-hairline py-12 sm:py-20">
           <div className="container-tight max-w-3xl">
-            <h2 className="font-display text-[1.9rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
+            <h2 className="font-display text-[1.6rem] uppercase leading-none tracking-tight sm:text-[2.4rem]">
               Frisco questions<span className="text-accent">.</span>
             </h2>
             <div className="mt-8 divide-y divide-hairline border-t border-hairline">
               {FAQ.map((f) => (
                 <div key={f.q} className="py-5">
-                  <h3 className="font-display text-[1.05rem] uppercase tracking-tight">{f.q}</h3>
-                  <p className="mt-2 text-muted-foreground leading-relaxed">{f.a}</p>
+                  <h3 className="font-display text-[1rem] uppercase leading-tight tracking-tight sm:text-[1.05rem]">{f.q}</h3>
+                  <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">{f.a}</p>
                 </div>
               ))}
             </div>
@@ -280,38 +280,38 @@ const FriscoPoolCleaning = () => {
         </section>
 
         {/* CTA */}
-        <section className="perf-section py-16 sm:py-24">
+        <section className="perf-section py-12 sm:py-24">
           <div className="container-tight">
-            <div className="border border-hairline rounded-sm p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8 justify-between">
+            <div className="flex flex-col justify-between gap-7 rounded-sm border border-hairline p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-12">
               <div>
-                <h2 className="font-display text-[1.8rem] sm:text-[2.4rem] uppercase tracking-tight leading-none">
+                <h2 className="font-display text-[1.6rem] uppercase leading-none tracking-tight sm:text-[2.4rem]">
                   Book pool cleaning in Frisco
                 </h2>
                 <p className="mt-3 text-muted-foreground max-w-md">
                   Free walkthrough, flat monthly quote, and your first service on the next Frisco route day.
                 </p>
               </div>
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="grid w-full grid-cols-1 gap-3 sm:w-auto sm:flex-shrink-0 sm:grid-cols-2 lg:flex">
                 <button
                   type="button"
                   onClick={() => goToLead("frisco")}
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Request Quote
                 </button>
                 <a
                   href={PHONE_HREF}
                   onClick={onCallClick("frisco_final_cta")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition hover:text-primary"
                 >
-                  <Phone className="h-4 w-4" /> Call
+                  <Phone className="h-4 w-4 shrink-0" /> Call
                 </a>
                 <a
                   href={buildSmsHref(SMS_PHONE)}
                   onClick={() => trackContactClick("text_click", "frisco_final_cta_text")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md border border-hairline px-4 py-3.5 text-center text-[13px] font-bold uppercase tracking-wide transition hover:text-primary sm:col-span-2 lg:col-span-1"
                 >
-                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
+                  <MessageSquare className="h-4 w-4 shrink-0" /> <span className="sm:hidden">Text us</span><span className="hidden sm:inline">Text for a free pool quote</span>
                 </a>
               </div>
             </div>
@@ -319,8 +319,8 @@ const FriscoPoolCleaning = () => {
         </section>
       </main>
 
-      <footer className="border-t border-hairline py-10">
-        <div className="container-tight flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+      <footer className="border-t border-hairline py-10 pb-28 md:pb-10">
+        <div className="container-tight flex flex-col items-center justify-between gap-4 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
           <div className="flex items-center gap-2">
             <Waves className="h-4 w-4 text-amber-brand" />
             <span>© {new Date().getFullYear()} Savvy Swim · A Santana &amp; Rivera Company. All rights reserved.</span>
