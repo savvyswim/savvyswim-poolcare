@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://ftpuswkbuouvhbtbrfkl.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "savvyswim",
+      "version": "0.1.0",
+      "title": "SavvySwim"
+    },
+    "tools": [
+      {
+        "name": "list_leads",
+        "title": "List website leads",
+        "description": "List recent Savvy Swim website leads (booking and water-test requests), newest first. Optionally filter by status or search by name, email, phone or address.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "How many leads to return (1-50)."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "new",
+                "scheduled",
+                "confirmed",
+                "declined",
+                "converted"
+              ],
+              "description": "Only return leads with this status."
+            },
+            "search": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Match name, email, phone or address."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_lead",
+        "title": "Get a lead",
+        "description": "Fetch the full detail of one Savvy Swim website lead by its id, including contact info, consent and CRM sync state.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Lead id (uuid)."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "set_lead_status",
+        "title": "Set lead status",
+        "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Lead id (uuid)."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "new",
+                "scheduled",
+                "confirmed",
+                "declined",
+                "converted"
+              ],
+              "description": "New pipeline status for the lead."
+            }
+          },
+          "required": [
+            "id",
+            "status"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_service_areas",
+        "title": "List service areas",
+        "description": "List the DFW cities Savvy Swim serves, with the landing page path for each — useful for answering coverage questions.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Filter cities by name."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
