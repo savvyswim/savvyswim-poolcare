@@ -98,7 +98,7 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { Link } from "@/lib/router-compat";
-import { supabase } from "@/integrations/supabase/client";
+
 
 
 const EMAIL = "hi@savvyswim.com";
