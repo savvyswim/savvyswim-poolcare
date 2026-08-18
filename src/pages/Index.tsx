@@ -230,7 +230,10 @@ const Index = () => {
   useEffect(() => {
     let active = true;
     const load = async () => {
+      // Loaded on idle so the data client stays out of the first-paint bundle.
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data } = await supabase
+
         .from("cleaning_plans")
         .select("id,name,blurb,price,cadence,items,featured")
         .eq("is_active", true)
