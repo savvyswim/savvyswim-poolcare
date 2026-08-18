@@ -13,41 +13,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "@tanstack/react-router";
 import LeadForm, { SERVICES, WATER_TESTS } from "@/components/LeadForm";
+import {
+  QUOTE_EVENT,
+  openQuoteModal,
+  openWaterTestModal,
+  withPage,
+  type QuoteDetail,
+  type QuoteVariant,
+} from "@/lib/quote-modal";
 
-export const QUOTE_EVENT = "ss:open-quote";
+export { QUOTE_EVENT, openQuoteModal, openWaterTestModal };
+export type { QuoteDetail, QuoteVariant };
 
-export type QuoteVariant = "booking" | "water_test";
-
-export type QuoteDetail = {
-  source?: string;
-  service?: string | undefined;
-  variant?: QuoteVariant;
-};
-
-/**
- * Stamp a CTA name with the page it was clicked on ("<cta>:<path>") so every
- * lead — homepage, weekly plan hub, city page — reports and syncs with the
- * page it came from. Already-stamped sources pass through untouched.
- */
-function withPage(source: string): string {
-  if (typeof window === "undefined" || source.includes(":")) return source;
-  const path = window.location.pathname.replace(/\/+$/, "") || "/home";
-  return `${source}:${path.slice(0, 60)}`;
-}
-
-/** Open the quote modal from anywhere (client only). */
-export function openQuoteModal(detail: QuoteDetail = {}) {
-  if (typeof window === "undefined") return;
-  const stamped: QuoteDetail = detail.source
-    ? { ...detail, source: withPage(detail.source) }
-    : detail;
-  window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));
-}
-
-/** Open the free water test form (client only). */
-export function openWaterTestModal(source = "water_test_tab") {
-  openQuoteModal({ source, variant: "water_test" });
-}
 
 
 const COPY: Record<
