@@ -145,6 +145,7 @@ export async function loadLeadSources(range: RangeKey): Promise<LeadSourcesRepor
       source: r.source ?? null,
       page_path: path,
       lead_type: r.lead_type ?? null,
+      crm_sync: r.crm_synced_at ? "synced" : failedIds.has(r.id) ? "failed" : "pending",
     };
     if (new Date(r.created_at).getTime() >= weekAgo) thisWeek += 1;
 
