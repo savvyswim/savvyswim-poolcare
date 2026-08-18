@@ -95,7 +95,7 @@
       {
         "name": "set_lead_status",
         "title": "Set lead status",
-        "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted).",
+        "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted) and push the updated lead to the CRM lead pipeline.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": false,
@@ -120,6 +120,11 @@
                 "converted"
               ],
               "description": "New pipeline status for the lead."
+            },
+            "sync_to_crm": {
+              "type": "boolean",
+              "default": true,
+              "description": "Re-send the lead to the CRM after updating (default true)."
             }
           },
           "required": [
