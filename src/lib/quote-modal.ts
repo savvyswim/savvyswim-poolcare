@@ -27,12 +27,26 @@ export function withPage(source: string): string {
   return `${source}:${path.slice(0, 60)}`;
 }
 
+/**
+ * Last requested open, kept so a modal that is still loading when the button
+ * was clicked can pick the request up as soon as it mounts.
+ */
+let pending: QuoteDetail | null = null;
+
+/** Read and clear the pending open request. */
+export function takePendingQuote(): QuoteDetail | null {
+  const detail = pending;
+  pending = null;
+  return detail;
+}
+
 /** Open the quote modal from anywhere (client only). */
 export function openQuoteModal(detail: QuoteDetail = {}) {
   if (typeof window === "undefined") return;
   const stamped: QuoteDetail = detail.source
     ? { ...detail, source: withPage(detail.source) }
     : detail;
+  pending = stamped;
   window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));
 }
 
@@ -40,3 +54,4 @@ export function openQuoteModal(detail: QuoteDetail = {}) {
 export function openWaterTestModal(source = "water_test_tab") {
   openQuoteModal({ source, variant: "water_test" });
 }
+
