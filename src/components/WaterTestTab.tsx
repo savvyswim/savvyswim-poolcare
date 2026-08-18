@@ -4,7 +4,7 @@
  * floating pill on mobile.
  */
 import { Droplets } from "lucide-react";
-import { openWaterTestModal } from "@/components/QuoteModal";
+import { openWaterTestModal } from "@/lib/quote-modal";
 
 /** Tag the water-test lead with the page the tab was clicked on. */
 function tabSource(base: string): string {

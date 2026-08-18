@@ -42,7 +42,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead, goToSwimClub } from "@/lib/site-analytics";
-import { openWaterTestModal } from "@/components/QuoteModal";
+import { openWaterTestModal } from "@/lib/quote-modal";
 
 import { resetConsent } from "@/lib/consent";
 
