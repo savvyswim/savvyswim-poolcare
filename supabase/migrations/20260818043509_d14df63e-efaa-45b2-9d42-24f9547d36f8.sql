@@ -1,0 +1,1 @@
+ALTER TABLE public.inspection_requests ADD COLUMN IF NOT EXISTS crm_lead_id text;

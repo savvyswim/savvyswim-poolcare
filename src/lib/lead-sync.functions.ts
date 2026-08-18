@@ -24,6 +24,8 @@ export type LeadSyncRow = {
   source: string | null;
   lead_type: string | null;
   crm_synced_at: string | null;
+  /** The CRM's own row id for this lead, when the CRM returns one. */
+  crm_lead_id: string | null;
   lead_status: LeadStatus;
   status: "synced" | "failed" | "pending";
   last_attempt_at: string | null;

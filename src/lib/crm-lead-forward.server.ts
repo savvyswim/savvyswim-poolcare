@@ -9,6 +9,42 @@ const DEFAULT_CRM_LEADS_URL = "https://savvyswim.app/api/public/leads";
 
 export type CrmForwardResult = { forwarded: boolean; status: number };
 
+/** Pull the CRM's own row id out of its response so the office can cross-reference it. */
+export function extractCrmLeadId(body: string): string | null {
+  if (!body) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return null;
+  }
+  const seen = new Set<unknown>();
+  const keys = ["crm_lead_id", "lead_id", "record_id", "row_id", "id", "uuid"];
+  const walk = (node: unknown, depth: number): string | null => {
+    if (!node || typeof node !== "object" || depth > 4 || seen.has(node)) return null;
+    seen.add(node);
+    if (Array.isArray(node)) {
+      for (const item of node) {
+        const found = walk(item, depth + 1);
+        if (found) return found;
+      }
+      return null;
+    }
+    const obj = node as Record<string, unknown>;
+    for (const key of keys) {
+      const v = obj[key];
+      if (typeof v === "string" && v.trim()) return v.trim();
+      if (typeof v === "number") return String(v);
+    }
+    for (const v of Object.values(obj)) {
+      const found = walk(v, depth + 1);
+      if (found) return found;
+    }
+    return null;
+  };
+  return walk(parsed, 0);
+}
+
 /** Normalize a form source into a coarse lead type the CRM can route on. */
 export function leadTypeFromSource(source?: string | null): string {
   const s = (source ?? "").toLowerCase();
@@ -149,9 +185,13 @@ export async function forwardInspectionToCrm(
       lastBody = await res.text();
 
       if (res.ok) {
+        const crmLeadId = extractCrmLeadId(lastBody);
         await supabaseAdmin
           .from("inspection_requests")
-          .update({ crm_synced_at: new Date().toISOString() })
+          .update({
+            crm_synced_at: new Date().toISOString(),
+            ...(crmLeadId ? { crm_lead_id: crmLeadId } : {}),
+          })
           .eq("id", req.id);
         const { logInspectionEvents } = await import("./inspection-events.server");
         await logInspectionEvents(req.id, [
