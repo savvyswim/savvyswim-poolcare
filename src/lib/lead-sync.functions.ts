@@ -79,3 +79,19 @@ export const setLeadStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true as const, status: data.status };
   });
+
+export type BulkRetryResult = {
+  attempted: number;
+  recovered: number;
+  stillFailing: number;
+  ranAt: string;
+};
+
+/** Re-send every failed lead handoff in one bounded pass. Office only. */
+export const retryFailedLeadSyncs = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<BulkRetryResult> => {
+    await assertOffice(context.supabase as never);
+    const { retryFailedLeadSyncs: run } = await import("./lead-sync.server");
+    return run(10);
+  });

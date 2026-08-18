@@ -64,3 +64,38 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
     };
   });
 }
+
+export type BulkRetryResult = {
+  attempted: number;
+  recovered: number;
+  stillFailing: number;
+  ranAt: string;
+};
+
+/**
+ * Re-send every lead whose CRM handoff failed. Bounded per run so a bad CRM
+ * endpoint can never turn this into a retry storm.
+ */
+export async function retryFailedLeadSyncs(limit = 10): Promise<BulkRetryResult> {
+  const rows = await loadLeadSyncRows();
+  const failed = rows.filter((r) => r.status === "failed").slice(0, limit);
+  if (failed.length === 0) {
+    return { attempted: 0, recovered: 0, stillFailing: 0, ranAt: new Date().toISOString() };
+  }
+  const { forwardInspectionToCrm } = await import("./crm-lead-forward.server");
+  let recovered = 0;
+  for (const lead of failed) {
+    try {
+      const res = await forwardInspectionToCrm(lead.id);
+      if (res.forwarded) recovered += 1;
+    } catch {
+      // delivery log already records the failure; keep processing the batch
+    }
+  }
+  return {
+    attempted: failed.length,
+    recovered,
+    stillFailing: failed.length - recovered,
+    ranAt: new Date().toISOString(),
+  };
+}
