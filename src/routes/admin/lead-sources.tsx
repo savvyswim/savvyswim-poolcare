@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getLeadSources } from "@/lib/lead-sources.functions";
-import type { LeadSourceBucket, RangeKey } from "@/lib/lead-sources.functions";
+import type { LeadSourceBucket, LeadSourceLead, RangeKey } from "@/lib/lead-sources.functions";
 
 export const Route = createFileRoute("/admin/lead-sources")({
   component: LeadSourcesPage,
@@ -101,6 +101,31 @@ function Bar({ share }: { share: number }) {
   );
 }
 
+const CRM_SYNC_TONE: Record<LeadSourceLead["crm_sync"], string> = {
+  synced: "bg-[#1FA9BE]/15 text-[#0f6b7a]",
+  failed: "bg-[#8E1F2C]/12 text-[#8E1F2C]",
+  pending: "bg-foreground/8 text-foreground/55",
+};
+
+function CrmSyncBadge({ state }: { state: LeadSourceLead["crm_sync"] }) {
+  return (
+    <span
+      title={
+        state === "synced"
+          ? "Delivered to the CRM"
+          : state === "failed"
+            ? "CRM handoff failed — retry on the Lead CRM sync page"
+            : "Not yet delivered to the CRM"
+      }
+      className={`px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] ${CRM_SYNC_TONE[state]}`}
+    >
+      CRM: {state}
+    </span>
+  );
+}
+
+
+
 function BucketTable({
   title,
   note,
@@ -177,6 +202,7 @@ function BucketTable({
                               <span className="bg-foreground/8 px-2 py-0.5 text-[11px] uppercase tracking-[0.12em] text-foreground/60">
                                 {l.status || "new"}
                               </span>
+                              <CrmSyncBadge state={l.crm_sync} />
                             </li>
                           ))}
                         </ul>
