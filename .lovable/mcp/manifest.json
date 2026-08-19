@@ -93,6 +93,174 @@
         "outputSchema": null
       },
       {
+        "name": "update_lead",
+        "title": "Update a lead",
+        "description": "Fill in or correct a Savvy Swim website lead — contact details (name, phone, email, address, ZIP), service details (lead type, preferred date, contact time, pool details, notes) and pipeline fields (status, source) — then push the refreshed lead to the CRM. Only the fields you pass are changed.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Lead id (uuid)."
+            },
+            "full_name": {
+              "type": "string",
+              "description": "Contact name."
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email."
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact phone number."
+            },
+            "address": {
+              "type": "string",
+              "description": "Service street address."
+            },
+            "postal_code": {
+              "type": "string",
+              "description": "Service ZIP code."
+            },
+            "preferred_date": {
+              "type": "string",
+              "description": "Preferred visit date (YYYY-MM-DD)."
+            },
+            "preferred_contact_time": {
+              "type": "string",
+              "description": "Best time to reach the customer."
+            },
+            "pool_details": {
+              "type": "string",
+              "description": "Pool size, type, equipment and condition notes."
+            },
+            "notes": {
+              "type": "string",
+              "description": "Free-form notes about the request."
+            },
+            "lead_type": {
+              "type": "string",
+              "enum": [
+                "free_inspection",
+                "water_test"
+              ],
+              "description": "What the customer asked for."
+            },
+            "source": {
+              "type": "string",
+              "description": "Attribution label, e.g. phone_call, referral, website."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "new",
+                "scheduled",
+                "confirmed",
+                "declined",
+                "converted"
+              ],
+              "description": "Pipeline status."
+            },
+            "sync_to_crm": {
+              "type": "boolean",
+              "default": true,
+              "description": "Push the updated lead to the CRM afterwards (default true)."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_lead",
+        "title": "Create a lead",
+        "description": "Create a new Savvy Swim lead taken by phone, referral or walk-in, and hand it straight to the CRM sales pipeline. Use `update_lead` afterwards to fill in anything the customer adds later.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "full_name": {
+              "type": "string",
+              "description": "Homeowner or business name."
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact phone number."
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email."
+            },
+            "address": {
+              "type": "string",
+              "description": "Service street address (or city)."
+            },
+            "postal_code": {
+              "type": "string",
+              "description": "Service ZIP code."
+            },
+            "preferred_date": {
+              "type": "string",
+              "description": "Preferred visit date (YYYY-MM-DD)."
+            },
+            "preferred_contact_time": {
+              "type": "string",
+              "description": "Best time to reach the customer."
+            },
+            "pool_details": {
+              "type": "string",
+              "description": "Pool size, type, equipment and condition notes."
+            },
+            "notes": {
+              "type": "string",
+              "description": "What the customer asked for."
+            },
+            "lead_type": {
+              "type": "string",
+              "enum": [
+                "free_inspection",
+                "water_test"
+              ],
+              "default": "free_inspection",
+              "description": "What the customer asked for."
+            },
+            "source": {
+              "type": "string",
+              "default": "agent",
+              "description": "Where the lead came from, e.g. phone_call, referral, agent."
+            },
+            "sms_opt_in": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only true when the customer explicitly agreed to texts."
+            }
+          },
+          "required": [
+            "full_name"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
         "name": "set_lead_status",
         "title": "Set lead status",
         "description": "Update the pipeline status of one Savvy Swim website lead (new, scheduled, confirmed, declined, converted) and push the updated lead to the CRM lead pipeline.",
@@ -130,6 +298,33 @@
           "required": [
             "id",
             "status"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "push_lead_to_crm",
+        "title": "Push a lead to the CRM",
+        "description": "Re-send one Savvy Swim website lead to the CRM sales pipeline and report the result (CRM row id, HTTP status, last error). Use this when a lead shows a failed or pending CRM sync.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Lead id (uuid)."
+            }
+          },
+          "required": [
+            "id"
           ],
           "additionalProperties": false,
           "$schema": "http://json-schema.org/draft-07/schema#"
