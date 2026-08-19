@@ -135,7 +135,8 @@ export async function forwardInspectionToCrm(
     lead_phone: req.phone,
     mobile: req.phone,
     address: req.address,
-    city,
+    // `city` also arrives via the flat attribution spread below.
+
     state,
     channel: "website",
     postal_code: req.postal_code,
