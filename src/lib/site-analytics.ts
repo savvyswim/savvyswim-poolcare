@@ -15,7 +15,9 @@ export type SiteEventName =
   | "banner_reopened"
   | "lead_click"
   | "swim_club_click"
-  | "call_click";
+  | "call_click"
+  | "maps_auth_blocked"
+  | "maps_fallback_shown";
 
 type Payload = {
   event: SiteEventName;
