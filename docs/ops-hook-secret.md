@@ -88,3 +88,25 @@ SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 20;
 2. Re-schedule every cron job with the new `?k=` value in the same sitting —
    jobs still carrying the old value start returning `401`.
 3. Confirm with `cron.job_run_details` that the next runs come back `200`.
+
+## Webhook failure & spike alerts
+
+`/api/public/hooks/webhook-watch` runs every 5 minutes (pg_cron job
+`savvyswim-webhook-watch`) and pages on-call when webhook traffic goes wrong:
+
+- **Failures** — 401 / 400-class / 5xx attempts in the last 15 minutes, alerting
+  once at least 3 failures (`?minFailures=`) or a 25% failure rate
+  (`?threshold=`) is reached.
+- **Spikes** — attempts in the window at 4x (`?spike=`) the 6-hour baseline and
+  above 20 calls (`?minSpike=`), which catches retry storms and hammering of the
+  public hook endpoints.
+
+Rejected calls (bad signature, missing secret, malformed body) are recorded in
+the delivery log under channel `ops`, so blocked traffic is alertable too.
+
+Alerts dedupe per channel with a 30-minute cooldown (`?cooldown=`), are recorded
+in `ss_webhook_alerts`, and are visible at `/admin/webhook-health`. Add
+`?dryRun=1` to test detection without sending anything.
+
+Alert recipients: `OPS_ALERT_EMAIL` (email) and `OPS_ALERT_PHONE` (SMS, needs the
+Twilio connector).
