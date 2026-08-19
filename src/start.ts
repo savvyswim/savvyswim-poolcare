@@ -1,7 +1,17 @@
 import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+// Project-specific replacement for the generated `attachSupabaseAuth`: same
+// bearer-token behaviour, but the auth client is imported lazily so it stays
+// out of the first page download.
+const attachSupabaseAuth = createMiddleware({ type: "function" }).client(
+  async ({ next }) => {
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    return next({ headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  },
+);
 
 const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   // Platform routes (email webhooks/previews, MCP) authenticate themselves.
