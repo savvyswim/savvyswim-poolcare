@@ -42,10 +42,29 @@ export function isOpsAuthorized(request: Request): boolean {
 export function guardOpsHook(request: Request, tag: string): Response | null {
   if (!opsSecret()) {
     console.error(`[${tag}] OPS_HOOK_SECRET is not configured — refusing to run`);
+    recordRejection(tag, 503, "ops secret not configured");
     return Response.json({ error: "not configured" }, { status: 503 });
   }
   if (!isOpsAuthorized(request)) {
+    recordRejection(tag, 401, "missing or invalid ops secret");
     return Response.json({ error: "unauthorized" }, { status: 401 });
   }
   return null;
+}
+
+/** Fire-and-forget: rejections feed the webhook failure watchdog. */
+function recordRejection(tag: string, status: number, reason: string): void {
+  void (async () => {
+    try {
+      const { logWebhookRejection } = await import("@/lib/webhook-log.server");
+      await logWebhookRejection({
+        channel: "ops",
+        endpoint: `/api/public/hooks/${tag}`,
+        status,
+        reason,
+      });
+    } catch {
+      /* logging is best effort */
+    }
+  })();
 }

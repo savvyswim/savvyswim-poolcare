@@ -47,6 +47,7 @@ import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/em
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
+import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/public/hooks/webhook-watch'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
@@ -250,6 +251,12 @@ const ApiPublicTwilioContractSmsStatusRoute =
     path: '/api/public/twilio/contract-sms-status',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksWebhookWatchRoute =
+  ApiPublicHooksWebhookWatchRouteImport.update({
+    id: '/api/public/hooks/webhook-watch',
+    path: '/api/public/hooks/webhook-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksVisitRemindersRoute =
   ApiPublicHooksVisitRemindersRouteImport.update({
     id: '/api/public/hooks/visit-reminders',
@@ -341,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
+  '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -389,6 +397,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
+  '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -438,6 +447,7 @@ export interface FileRoutesById {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
+  '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
   '/api/public/twilio/inbound': typeof ApiPublicTwilioInboundRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -488,6 +498,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/visit-reminders'
+    | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/api/public/twilio/inbound'
     | '/lovable/email/auth/preview'
@@ -536,6 +547,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/visit-reminders'
+    | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/api/public/twilio/inbound'
     | '/lovable/email/auth/preview'
@@ -584,6 +596,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/visit-reminders'
+    | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
     | '/api/public/twilio/inbound'
     | '/lovable/email/auth/preview'
@@ -633,6 +646,7 @@ export interface RootRouteChildren {
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
+  ApiPublicHooksWebhookWatchRoute: typeof ApiPublicHooksWebhookWatchRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
   ApiPublicTwilioInboundRoute: typeof ApiPublicTwilioInboundRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -907,6 +921,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTwilioContractSmsStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/webhook-watch': {
+      id: '/api/public/hooks/webhook-watch'
+      path: '/api/public/hooks/webhook-watch'
+      fullPath: '/api/public/hooks/webhook-watch'
+      preLoaderRoute: typeof ApiPublicHooksWebhookWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/visit-reminders': {
       id: '/api/public/hooks/visit-reminders'
       path: '/api/public/hooks/visit-reminders'
@@ -1011,6 +1032,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
+  ApiPublicHooksWebhookWatchRoute: ApiPublicHooksWebhookWatchRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
   ApiPublicTwilioInboundRoute: ApiPublicTwilioInboundRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,

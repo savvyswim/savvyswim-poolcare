@@ -72,6 +72,20 @@ function str(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
+async function recordRejection(status: number, reason: string) {
+  try {
+    const { logWebhookRejection } = await import("@/lib/webhook-log.server");
+    await logWebhookRejection({
+      channel: "appointment",
+      endpoint: "/api/public/hooks/crm-appointment-status",
+      status,
+      reason,
+    });
+  } catch {
+    /* best effort */
+  }
+}
+
 async function handle(request: Request): Promise<Response> {
   const secret = process.env["CRM_WEBHOOK_SECRET"];
   if (!secret) {
@@ -80,12 +94,16 @@ async function handle(request: Request): Promise<Response> {
   }
 
   const raw = await request.text();
-  if (!authorized(request, raw, secret)) return json({ error: "invalid signature" }, 401);
+  if (!authorized(request, raw, secret)) {
+    await recordRejection(401, "invalid signature");
+    return json({ error: "invalid signature" }, 401);
+  }
 
   let payload: Record<string, unknown>;
   try {
     payload = JSON.parse(raw) as Record<string, unknown>;
   } catch {
+    await recordRejection(400, "invalid json");
     return json({ error: "invalid json" }, 400);
   }
 

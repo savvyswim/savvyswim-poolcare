@@ -76,6 +76,20 @@ const payloadSchema = z
   })
   .refine((v) => v.status || v.note, { message: "status or note is required" });
 
+async function recordRejection(status: number, reason: string) {
+  try {
+    const { logWebhookRejection } = await import("@/lib/webhook-log.server");
+    await logWebhookRejection({
+      channel: "lead",
+      endpoint: "/api/public/hooks/crm-lead-update",
+      status,
+      reason,
+    });
+  } catch {
+    /* best effort */
+  }
+}
+
 export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
   server: {
     handlers: {
@@ -95,6 +109,7 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
 
         const raw = await request.text();
         if (!secrets.some((s) => authorized(request, raw, s))) {
+          await recordRejection(401, "invalid signature");
           return json({ error: "unauthorized" }, 401);
         }
 
@@ -102,6 +117,7 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
         try {
           parsed = payloadSchema.parse(JSON.parse(raw));
         } catch (err) {
+          await recordRejection(400, err instanceof Error ? err.message : "bad json");
           return json(
             { error: "invalid payload", detail: err instanceof Error ? err.message : "bad json" },
             400,

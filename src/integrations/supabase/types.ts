@@ -5150,6 +5150,60 @@ export type Database = {
           },
         ]
       }
+      ss_webhook_alerts: {
+        Row: {
+          alert_count: number
+          alert_key: string
+          alert_result: string | null
+          alert_type: string
+          baseline: number | null
+          channel: string | null
+          created_at: string
+          failed_events: number
+          failure_rate: number
+          id: string
+          last_alerted_at: string
+          summary: string
+          total_events: number
+          updated_at: string
+          window_minutes: number
+        }
+        Insert: {
+          alert_count?: number
+          alert_key: string
+          alert_result?: string | null
+          alert_type: string
+          baseline?: number | null
+          channel?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          summary: string
+          total_events?: number
+          updated_at?: string
+          window_minutes: number
+        }
+        Update: {
+          alert_count?: number
+          alert_key?: string
+          alert_result?: string | null
+          alert_type?: string
+          baseline?: number | null
+          channel?: string | null
+          created_at?: string
+          failed_events?: number
+          failure_rate?: number
+          id?: string
+          last_alerted_at?: string
+          summary?: string
+          total_events?: number
+          updated_at?: string
+          window_minutes?: number
+        }
+        Relationships: []
+      }
       ss_webhook_deliveries: {
         Row: {
           attempts: number
