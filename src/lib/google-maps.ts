@@ -6,12 +6,44 @@ const CHANNEL = import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
   | undefined;
 
 let mapsPromise: Promise<void> | null = null;
+let authBlocked = false;
+const authListeners = new Set<() => void>();
+
+/**
+ * True once Google has rejected the browser key on this domain
+ * (RefererNotAllowedMapError / ApiNotActivatedMapError). Google reports this
+ * asynchronously through window.gm_authFailure, never as a thrown error.
+ */
+export function isMapsAuthBlocked() {
+  return authBlocked;
+}
+
+export function onMapsAuthBlocked(cb: () => void) {
+  if (authBlocked) cb();
+  authListeners.add(cb);
+  return () => authListeners.delete(cb);
+}
+
+function markAuthBlocked() {
+  authBlocked = true;
+  authListeners.forEach((cb) => {
+    try {
+      cb();
+    } catch {
+      /* ignore listener errors */
+    }
+  });
+}
 
 export function loadMaps(): Promise<void> {
   if (typeof window === "undefined") return Promise.reject(new Error("no window"));
+  if (authBlocked) return Promise.reject(new Error("Google Maps browser key blocked on this domain"));
   if ((window as any).google?.maps?.importLibrary) return Promise.resolve();
   if (mapsPromise) return mapsPromise;
   if (!BROWSER_KEY) return Promise.reject(new Error("Missing Google Maps browser key"));
+
+  (window as any).gm_authFailure = markAuthBlocked;
+
 
   mapsPromise = new Promise<void>((resolve, reject) => {
     (window as any).__ssMapsReady = () => resolve();
