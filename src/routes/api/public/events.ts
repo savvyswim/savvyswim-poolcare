@@ -19,6 +19,8 @@ const eventSchema = z
       "lead_click",
       "swim_club_click",
       "call_click",
+      "maps_auth_blocked",
+      "maps_fallback_shown",
     ]),
     page: z.string().trim().max(200),
     button: z.string().trim().max(80).optional().nullable(),
