@@ -1,5 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
-
 type MetricName = "LCP" | "CLS" | "INP" | "FCP" | "TTFB" | "LOAD" | "TTI";
 
 export type VitalSample = {
@@ -65,9 +63,10 @@ function send(sample: VitalSample) {
   const key = `${sample.path}:${sample.metric}`;
   if (sent.has(key)) return;
   sent.add(key);
-  void supabase
-    .from("web_vitals")
-    .insert(sample)
+  // The database client is only needed to record a sample, so it stays out of
+  // the initial page download and loads lazily on the first metric.
+  void import("@/integrations/supabase/client")
+    .then(({ supabase }) => supabase.from("web_vitals").insert(sample))
     .then(undefined, () => undefined);
 }
 
