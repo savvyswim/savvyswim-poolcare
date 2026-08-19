@@ -79,12 +79,27 @@ export async function forwardInspectionToCrm(
   const cta = (ctaRaw || rawSource || "site").slice(0, 80);
   const pagePath = (sourcePageRaw || req.page_path || req.landing_page || "/").split("?")[0]!;
   const { cityFromPath } = await import("./lead-sources.server");
-  const city = cityFromPath(pagePath, rawSource);
+  // Page bucket ("Frisco", but also "Home", "Services", "Booking link") — a
+  // reporting label, not a service city.
+  const pageCity = cityFromPath(pagePath, rawSource);
+  const { cityFromAddress, stateFromAddress } = await import("./postal");
+  // The CRM's `city` column is the service city, so it must come from the
+  // property address; the page bucket is only a fallback when it names a real
+  // service area.
+  const addressCity = cityFromAddress(req.address);
+  const { SERVICE_AREAS } = await import("./serviceAreas");
+  const isServiceArea = SERVICE_AREAS.some(
+    (a) => a.name.toLowerCase() === pageCity.toLowerCase(),
+  );
+  const city = addressCity || (isServiceArea ? pageCity : "") || null;
+  const state = stateFromAddress(req.address) || null;
 
   const attribution = {
-    source: req.source,
+    source: cta,
+    source_raw: req.source,
     cta,
     source_page: pagePath,
+    page_city: pageCity,
     city,
     utm_source: req.utm_source,
     utm_medium: req.utm_medium,
@@ -96,6 +111,7 @@ export async function forwardInspectionToCrm(
     session_id: req.session_id,
     page_path: req.page_path || pagePath,
   };
+
 
 
   const payload = {
