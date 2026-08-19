@@ -27,7 +27,13 @@ export default function AddressMapPreview({ placeId, address, className }: Props
   const [label, setLabel] = useState<string>(address ?? "");
   const [blocked, setBlocked] = useState(false);
 
-  useEffect(() => onMapsAuthBlocked(() => setBlocked(true)), []);
+  useEffect(() => {
+    const off = onMapsAuthBlocked(() => setBlocked(true));
+    return () => {
+      off();
+    };
+  }, []);
+
 
   useEffect(() => {
     setLabel(address ?? "");
