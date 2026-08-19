@@ -27,6 +27,9 @@ export default function AddressMapPreview({ placeId, address, className }: Props
   const [interactive, setInteractive] = useState(false);
   const [label, setLabel] = useState<string>(address ?? "");
   const [blocked, setBlocked] = useState(false);
+  // True once the map attempts have finished, so we don't count the brief
+  // pre-load render as a fallback.
+  const [settled, setSettled] = useState(false);
 
   useEffect(() => {
     const off = onMapsAuthBlocked(() => setBlocked(true));
@@ -49,6 +52,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
     let cancelled = false;
     setImage(null);
     setInteractive(false);
+    setSettled(false);
 
     (async () => {
       // 1 — server-rendered static map (domain-independent)
@@ -66,6 +70,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
         if (res?.image) {
           setImage(res.image);
           if (res.address) setLabel(res.address);
+          setSettled(true);
           return;
         }
       } catch {
@@ -74,7 +79,10 @@ export default function AddressMapPreview({ placeId, address, className }: Props
 
       // 2 — interactive map, only possible where the browser key is allowed
       if (!placeId || isMapsAuthBlocked()) {
-        if (!cancelled && isMapsAuthBlocked()) setBlocked(true);
+        if (!cancelled) {
+          if (isMapsAuthBlocked()) setBlocked(true);
+          setSettled(true);
+        }
         return;
       }
       try {
@@ -83,7 +91,12 @@ export default function AddressMapPreview({ placeId, address, className }: Props
         const { Place } = await g.maps.importLibrary("places");
         const place = new Place({ id: placeId });
         await place.fetchFields({ fields: ["location", "formattedAddress"] });
-        if (cancelled || !place.location) return;
+        if (cancelled) return;
+        if (!place.location) {
+          setSettled(true);
+          return;
+        }
+        setSettled(true);
         setInteractive(true);
         // Wait a tick so the map container is in the DOM before Google draws.
         requestAnimationFrame(() => {
@@ -107,6 +120,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
         if (!cancelled) {
           setInteractive(false);
           if (isMapsAuthBlocked()) setBlocked(true);
+          setSettled(true);
         }
       }
     })();
@@ -148,22 +162,25 @@ export default function AddressMapPreview({ placeId, address, className }: Props
 
   if (!label) return null;
 
-  return <FallbackCard label={label} blocked={blocked} className={className} />;
+  return <FallbackCard label={label} blocked={blocked} settled={settled} className={className} />;
 }
 
 /** Text-only confirmation shown when no map can render on this domain. */
 function FallbackCard({
   label,
   blocked,
+  settled,
   className,
 }: {
   label: string;
   blocked: boolean;
+  settled: boolean;
   className?: string | undefined;
 }) {
   useEffect(() => {
+    if (!settled) return;
     trackSiteEvent("maps_fallback_shown", blocked ? "referrer_blocked" : "no_map");
-  }, [blocked]);
+  }, [settled, blocked]);
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(label)}`;
 
