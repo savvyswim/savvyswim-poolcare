@@ -10,8 +10,6 @@ import {
 } from "@tanstack/react-router";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
@@ -21,6 +19,10 @@ import { CallOptionsCard } from "@/components/CallButton";
 const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
 // On-site lead capture — the form itself only downloads on the first CTA click.
 const QuoteModal = lazy(() => import("@/components/QuoteModalHost"));
+
+// Toast portals render nothing until something is toasted — load them after paint.
+const Sonner = lazy(() => import("@/components/ui/sonner").then((m) => ({ default: m.Toaster })));
+const Toaster = lazy(() => import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })));
 
 // Free water test side tab.
 const WaterTestTab = lazy(() => import("@/components/WaterTestTab"));
@@ -132,8 +134,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
-          <Toaster />
-          <Sonner />
           <ScrollToTop />
           <PerfMonitor />
 
@@ -142,6 +142,8 @@ function RootComponent() {
           <CallOptionsCard />
 
           <Suspense fallback={null}>
+            <Toaster />
+            <Sonner />
             <QuoteModal />
             <WaterTestTab />
             <ConsentBanner />
