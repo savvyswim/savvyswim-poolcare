@@ -29,7 +29,13 @@ portal, billing, checkout, and the staff CRM — lives in the Savvy Swim app at
 Riviera pool-club look: burgundy `#8E1F2C`, cream `#F4EFE3`, aqua `#1FA9BE`,
 Anton/Oswald display type, square corners.
 
+## Ops automation
+
+Scheduled/internal endpoints under `/api/public/hooks/*` require a shared
+secret. See [docs/ops-hook-secret.md](docs/ops-hook-secret.md).
+
 ## Privacy
 
 The CRM lead-capture embed only loads after a visitor accepts the cookie banner.
 Visitors can change that choice from "Cookie settings" in the footer.
+
