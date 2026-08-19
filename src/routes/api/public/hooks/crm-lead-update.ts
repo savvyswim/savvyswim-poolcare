@@ -94,7 +94,7 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
         }
 
         const raw = await request.text();
-        if (!authorized(request, raw, secret)) {
+        if (!secrets.some((s) => authorized(request, raw, s))) {
           return json({ error: "unauthorized" }, 401);
         }
 
