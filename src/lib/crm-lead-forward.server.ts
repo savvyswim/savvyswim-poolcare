@@ -135,7 +135,12 @@ export async function forwardInspectionToCrm(
     lead_phone: req.phone,
     mobile: req.phone,
     address: req.address,
+    city,
+    state,
+    channel: "website",
     postal_code: req.postal_code,
+    zip: req.postal_code,
+
     preferred_date: req.preferred_date,
     preferred_contact_time: req.preferred_contact_time,
     pool_details: req.pool_details,
