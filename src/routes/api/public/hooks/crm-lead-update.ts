@@ -81,15 +81,20 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       POST: async ({ request }) => {
-        const secret =
-          process.env["CRM_WEBHOOK_SECRET"] ?? process.env["OPS_HOOK_SECRET"] ?? null;
-        if (!secret) {
-          console.error("[crm-lead-update] CRM_WEBHOOK_SECRET is not configured");
+        // WEBSITE_WEBHOOK_SECRET is the shared website <-> CRM secret already
+        // configured for outbound lead pushes, so the CRM can reuse it here.
+        const secrets = [
+          process.env["CRM_WEBHOOK_SECRET"],
+          process.env["WEBSITE_WEBHOOK_SECRET"],
+          process.env["OPS_HOOK_SECRET"],
+        ].filter((v): v is string => typeof v === "string" && v.length > 0);
+        if (secrets.length === 0) {
+          console.error("[crm-lead-update] no webhook secret configured");
           return json({ error: "not configured" }, 503);
         }
 
         const raw = await request.text();
-        if (!authorized(request, raw, secret)) {
+        if (!secrets.some((s) => authorized(request, raw, s))) {
           return json({ error: "unauthorized" }, 401);
         }
 
