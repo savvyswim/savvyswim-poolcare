@@ -9,7 +9,7 @@ interface Props {
   placeId?: string;
   /** Fallback label shown under the map. */
   address?: string;
-  className?: string;
+  className?: string | undefined;
 }
 
 /**
@@ -159,7 +159,7 @@ function FallbackCard({
 }: {
   label: string;
   blocked: boolean;
-  className?: string;
+  className?: string | undefined;
 }) {
   useEffect(() => {
     trackSiteEvent("maps_fallback_shown", blocked ? "referrer_blocked" : "no_map");
