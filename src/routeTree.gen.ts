@@ -52,6 +52,7 @@ import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/pu
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
 import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api/public/hooks/crm-payment-status'
+import { Route as ApiPublicHooksCrmLeadUpdateRouteImport } from './routes/api/public/hooks/crm-lead-update'
 import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
 
@@ -279,6 +280,12 @@ const ApiPublicHooksCrmPaymentStatusRoute =
     path: '/api/public/hooks/crm-payment-status',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksCrmLeadUpdateRoute =
+  ApiPublicHooksCrmLeadUpdateRouteImport.update({
+    id: '/api/public/hooks/crm-lead-update',
+    path: '/api/public/hooks/crm-lead-update',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksCrmAppointmentStatusRoute =
   ApiPublicHooksCrmAppointmentStatusRouteImport.update({
     id: '/api/public/hooks/crm-appointment-status',
@@ -328,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
@@ -375,6 +383,7 @@ export interface FileRoutesByTo {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
@@ -423,6 +432,7 @@ export interface FileRoutesById {
   '/api/public/leads': typeof ApiPublicLeadsRoute
   '/api/public/hooks/canary': typeof ApiPublicHooksCanaryRoute
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
+  '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
@@ -472,6 +482,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
@@ -519,6 +530,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
@@ -566,6 +578,7 @@ export interface FileRouteTypes {
     | '/api/public/leads'
     | '/api/public/hooks/canary'
     | '/api/public/hooks/crm-appointment-status'
+    | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
@@ -614,6 +627,7 @@ export interface RootRouteChildren {
   ApiPublicLeadsRoute: typeof ApiPublicLeadsRoute
   ApiPublicHooksCanaryRoute: typeof ApiPublicHooksCanaryRoute
   ApiPublicHooksCrmAppointmentStatusRoute: typeof ApiPublicHooksCrmAppointmentStatusRoute
+  ApiPublicHooksCrmLeadUpdateRoute: typeof ApiPublicHooksCrmLeadUpdateRoute
   ApiPublicHooksCrmPaymentStatusRoute: typeof ApiPublicHooksCrmPaymentStatusRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
@@ -928,6 +942,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksCrmPaymentStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/crm-lead-update': {
+      id: '/api/public/hooks/crm-lead-update'
+      path: '/api/public/hooks/crm-lead-update'
+      fullPath: '/api/public/hooks/crm-lead-update'
+      preLoaderRoute: typeof ApiPublicHooksCrmLeadUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/crm-appointment-status': {
       id: '/api/public/hooks/crm-appointment-status'
       path: '/api/public/hooks/crm-appointment-status'
@@ -984,6 +1005,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksCanaryRoute: ApiPublicHooksCanaryRoute,
   ApiPublicHooksCrmAppointmentStatusRoute:
     ApiPublicHooksCrmAppointmentStatusRoute,
+  ApiPublicHooksCrmLeadUpdateRoute: ApiPublicHooksCrmLeadUpdateRoute,
   ApiPublicHooksCrmPaymentStatusRoute: ApiPublicHooksCrmPaymentStatusRoute,
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
