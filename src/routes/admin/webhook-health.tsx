@@ -215,6 +215,51 @@ function WebhookHealthPage() {
             ))}
           </section>
 
+          <section className="mt-10 border border-foreground/15">
+            <h2 className="border-b border-foreground/15 bg-foreground/5 p-3 text-[11px] uppercase tracking-[0.14em] text-foreground/60">
+              Automated alerts (failures &amp; traffic spikes)
+            </h2>
+            {query.data.alerts.length === 0 ? (
+              <p className="p-5 text-sm text-foreground/50">
+                No alerts raised. On-call is paged by email and SMS when a channel fails
+                repeatedly (401 / 400 / 5xx) or traffic spikes above normal.
+              </p>
+            ) : (
+              <ul className="divide-y divide-foreground/10">
+                {query.data.alerts.map((a) => (
+                  <li key={a.id} className="p-4">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span
+                        className={`px-2 py-1 text-[10px] uppercase tracking-[0.14em] ${
+                          a.alert_type === "spike"
+                            ? "bg-[#1FA9BE]/15 text-[#1FA9BE]"
+                            : "bg-[#8E1F2C]/15 text-[#8E1F2C]"
+                        }`}
+                      >
+                        {a.alert_type}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {CHANNEL_LABEL[a.channel ?? ""] ?? a.channel ?? "all"}
+                      </span>
+                      <span className="text-xs text-foreground/60">
+                        {a.failed_events}/{a.total_events} failed · {a.failure_rate}%
+                        {a.baseline !== null ? ` · baseline ${a.baseline}` : ""} · fired{" "}
+                        {a.alert_count}x
+                      </span>
+                      <span className="ml-auto text-xs text-foreground/50">
+                        {new Date(a.last_alerted_at).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="mt-2 whitespace-pre-wrap text-xs text-foreground/70">{a.summary}</p>
+                    {a.alert_result ? (
+                      <p className="mt-1 text-[11px] text-foreground/45">Sent: {a.alert_result}</p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
           <nav className="mt-10 flex gap-2">
             {(["failures", "recent", "retries"] as const).map((t) => (
               <button

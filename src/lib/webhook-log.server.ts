@@ -8,7 +8,7 @@
  * Server-only: never import from a client-reachable module.
  */
 
-export type WebhookChannel = "lead" | "appointment" | "payment";
+export type WebhookChannel = "lead" | "appointment" | "payment" | "ops";
 export type WebhookOutcome = "success" | "failed" | "skipped";
 
 export type WebhookDeliveryEntry = {
@@ -78,4 +78,26 @@ export async function logWebhookDelivery(entry: WebhookDeliveryEntry): Promise<v
   } catch (err) {
     console.error("[webhook-log] failed to record delivery", err instanceof Error ? err.message : err);
   }
+}
+
+/**
+ * Records a request that was refused before any work happened (bad signature,
+ * missing secret, malformed payload). These rows feed the webhook watchdog so
+ * a burst of 401/400s pages on-call instead of sitting silently in the logs.
+ */
+export async function logWebhookRejection(input: {
+  channel: WebhookChannel;
+  endpoint: string;
+  status: number;
+  reason: string;
+}): Promise<void> {
+  await logWebhookDelivery({
+    channel: input.channel,
+    direction: "inbound",
+    endpoint: input.endpoint,
+    reference: `rejected ${input.status}`,
+    outcome: "failed",
+    httpStatus: input.status,
+    error: input.reason,
+  });
 }
