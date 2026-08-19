@@ -155,7 +155,6 @@ export function trackContactClick(eventType: ContactEventType, placement: string
         utm_term: a.utmTerm,
         utm_content: a.utmContent,
         landing_page: a.landingPage,
-      })
       }))
       .then((res) => {
         if (res?.error) console.warn("contact event not logged", res.error.message);
