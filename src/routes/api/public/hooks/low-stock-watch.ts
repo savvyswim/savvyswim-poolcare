@@ -9,16 +9,20 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 
+import { guardOpsHook } from "@/lib/ops-hook-auth.server";
+
 export const Route = createFileRoute("/api/public/hooks/low-stock-watch")({
   server: {
     handlers: {
-      POST: async () => run(),
-      GET: async () => run(),
+      POST: async ({ request }) => run(request),
+      GET: async ({ request }) => run(request),
     },
   },
 });
 
-async function run() {
+async function run(request: Request) {
+  const denied = guardOpsHook(request, "low-stock-watch");
+  if (denied) return denied;
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { dispatchLowStock } = await import("@/lib/inventory-alerts.server");
