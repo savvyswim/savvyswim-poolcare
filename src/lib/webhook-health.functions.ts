@@ -39,6 +39,21 @@ export type ChannelHealth = {
   lastFailureAt: string | null;
 };
 
+export type WebhookAlertRow = {
+  id: string;
+  alert_key: string;
+  alert_type: string;
+  channel: string | null;
+  summary: string;
+  total_events: number;
+  failed_events: number;
+  failure_rate: number;
+  baseline: number | null;
+  alert_result: string | null;
+  alert_count: number;
+  last_alerted_at: string;
+};
+
 const CHANNELS = ["lead", "appointment", "payment"] as const;
 
 async function assertOffice(supabase: {
@@ -88,7 +103,14 @@ export const getWebhookHealth = createServerFn({ method: "GET" })
       };
     });
 
+    const { data: alertRows } = await supabaseAdmin
+      .from("ss_webhook_alerts")
+      .select("id, alert_key, alert_type, channel, summary, total_events, failed_events, failure_rate, baseline, alert_result, alert_count, last_alerted_at")
+      .order("last_alerted_at", { ascending: false })
+      .limit(20);
+
     return {
+      alerts: (alertRows ?? []) as WebhookAlertRow[],
       health,
       failures: rows.filter((r) => r.outcome === "failed").slice(0, 60),
       recent: rows.slice(0, 60),
