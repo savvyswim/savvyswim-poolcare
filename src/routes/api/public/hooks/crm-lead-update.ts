@@ -121,17 +121,18 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
         const lead = rows?.[0];
         if (!lead) return json({ error: "lead not found" }, 404);
 
-        const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
-        if (parsed.status && parsed.status !== lead.status) patch["status"] = parsed.status;
+        type LeadPatch = Partial<{ status: string; crm_lead_id: string; crm_synced_at: string; notes: string; updated_at: string }>;
+        const patch: LeadPatch = { updated_at: new Date().toISOString() };
+        if (parsed.status && parsed.status !== lead.status) patch.status = parsed.status;
         if (parsed.crm_lead_id && parsed.crm_lead_id !== lead.crm_lead_id) {
-          patch["crm_lead_id"] = parsed.crm_lead_id;
-          patch["crm_synced_at"] = new Date().toISOString();
+          patch.crm_lead_id = parsed.crm_lead_id;
+          patch.crm_synced_at = new Date().toISOString();
         }
         if (parsed.note) {
           const stamp = new Date().toISOString().slice(0, 16).replace("T", " ");
           const author = parsed.note_author?.trim() || "CRM";
           const line = `[${stamp} UTC · ${author}] ${parsed.note.trim()}`;
-          patch["notes"] = lead.notes ? `${lead.notes}\n${line}` : line;
+          patch.notes = lead.notes ? `${lead.notes}\n${line}` : line;
         }
 
         const { error: updateError } = await supabaseAdmin
@@ -144,7 +145,7 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
         }
 
         const events = [] as Parameters<typeof logInspectionEvents>[1];
-        if (patch["status"]) {
+        if (patch.status) {
           events.push({
             eventType: "status_change",
             channel: "crm_webhook",
@@ -168,7 +169,7 @@ export const Route = createFileRoute("/api/public/hooks/crm-lead-update")({
           ok: true,
           lead_id: lead.id,
           reference_number: lead.reference_number,
-          status: (patch["status"] as string) ?? lead.status,
+          status: patch.status ?? lead.status,
           note_added: Boolean(parsed.note),
         });
       },
