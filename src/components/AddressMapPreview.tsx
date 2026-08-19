@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { isMapsAuthBlocked, loadMaps, onMapsAuthBlocked } from "@/lib/google-maps";
+import { trackSiteEvent } from "@/lib/site-analytics";
 import { addressMapPreview } from "@/lib/geo.functions";
 
 interface Props {
@@ -146,6 +147,23 @@ export default function AddressMapPreview({ placeId, address, className }: Props
   }
 
   if (!label) return null;
+
+  return <FallbackCard label={label} blocked={blocked} className={className} />;
+}
+
+/** Text-only confirmation shown when no map can render on this domain. */
+function FallbackCard({
+  label,
+  blocked,
+  className,
+}: {
+  label: string;
+  blocked: boolean;
+  className?: string;
+}) {
+  useEffect(() => {
+    trackSiteEvent("maps_fallback_shown", blocked ? "referrer_blocked" : "no_map");
+  }, [blocked]);
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(label)}`;
 

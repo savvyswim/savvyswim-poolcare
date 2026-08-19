@@ -25,7 +25,12 @@ export function onMapsAuthBlocked(cb: () => void) {
 }
 
 function markAuthBlocked() {
+  if (authBlocked) return;
   authBlocked = true;
+  // Measure how often Google rejects the browser key on this domain.
+  void import("./site-analytics")
+    .then((m) => m.trackSiteEvent("maps_auth_blocked"))
+    .catch(() => undefined);
   authListeners.forEach((cb) => {
     try {
       cb();
