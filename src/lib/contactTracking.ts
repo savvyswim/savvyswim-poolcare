@@ -1,5 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
-
 export type ContactEventType = "call_click" | "text_click";
 
 const SESSION_KEY = "savvy_session_id";
@@ -140,7 +138,8 @@ export function buildSmsHref(phoneE164: string, message = POOL_SMS_TEMPLATE): st
 export function trackContactClick(eventType: ContactEventType, placement: string) {
   try {
     const a = getAttribution();
-    void supabase
+    void import("@/integrations/supabase/client")
+      .then(({ supabase }) => supabase
       .from("contact_events")
       .insert({
         event_type: eventType,
@@ -156,9 +155,9 @@ export function trackContactClick(eventType: ContactEventType, placement: string
         utm_term: a.utmTerm,
         utm_content: a.utmContent,
         landing_page: a.landingPage,
-      })
-      .then(({ error }) => {
-        if (error) console.warn("contact event not logged", error.message);
+      }))
+      .then((res) => {
+        if (res?.error) console.warn("contact event not logged", res.error.message);
       });
   } catch (e) {
     console.warn("contact event not logged", e);
