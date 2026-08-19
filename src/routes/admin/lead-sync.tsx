@@ -340,6 +340,7 @@ function LeadSyncPage() {
             <tr>
               <th className="p-3 text-left">Lead</th>
               <th className="p-3 text-left">Received</th>
+              <th className="p-3 text-left">City</th>
               <th className="p-3 text-left">ZIP</th>
               <th className="p-3 text-left">Consent</th>
               <th className="p-3 text-left">Lead status</th>
@@ -354,7 +355,7 @@ function LeadSyncPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td className="p-6 text-foreground/50" colSpan={11}>
+                <td className="p-6 text-foreground/50" colSpan={12}>
                   No {filter === "all" ? "" : `${filter} `}leads in the last 30 days.
                 </td>
               </tr>
@@ -368,6 +369,9 @@ function LeadSyncPage() {
                     </span>
                   </td>
                   <td className="p-3 whitespace-nowrap">{when(r.created_at)}</td>
+                  <td className="p-3 whitespace-nowrap text-xs text-foreground/70">
+                    {r.city ?? "—"}
+                  </td>
                   <td className="p-3 whitespace-nowrap text-xs text-foreground/70">
                     {r.postal_code ?? "—"}
                   </td>
