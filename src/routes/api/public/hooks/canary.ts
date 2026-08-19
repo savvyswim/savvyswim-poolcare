@@ -11,6 +11,8 @@
  * Public route: it takes no untrusted writes and returns no PII.
  */
 import { createFileRoute } from "@tanstack/react-router";
+
+import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
 import { runCanary, summarizeCanary, DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
@@ -73,6 +75,8 @@ async function sendAlertSms(body: string) {
 }
 
 async function handle(request: Request) {
+  const denied = guardOpsHook(request, "canary");
+  if (denied) return denied;
   const params = new URL(request.url).searchParams;
   const mode = params.get("mode") ?? "canary";
   const target = DEFAULT_TARGET;
@@ -177,16 +181,15 @@ async function handle(request: Request) {
       failures: run.failures,
       slowestMs: run.slowestMs,
       revisionId: run.revisionId,
-      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, message, stack, requestId, bodySnippet }) => ({
+      // Stack traces and crash-body snippets stay in ss_canary_incidents for
+      // staff to read in /admin/crm/deploy-health; never echo them over HTTP.
+      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, requestId }) => ({
         route,
         round,
         kind,
         httpStatus,
         durationMs,
-        message,
-        stack,
         requestId,
-        bodySnippet,
       })),
       alert,
     },

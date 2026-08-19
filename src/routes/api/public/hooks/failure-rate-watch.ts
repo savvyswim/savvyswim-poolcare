@@ -13,6 +13,8 @@
  * Public route: no caller input drives writes and no PII is returned.
  */
 import { createFileRoute } from "@tanstack/react-router";
+
+import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
@@ -93,6 +95,8 @@ async function sendAlertSms(body: string) {
 }
 
 async function runWatch(request: Request) {
+  const denied = guardOpsHook(request, "failure-rate-watch");
+  if (denied) return denied;
   const params = new URL(request.url).searchParams;
   const thresholdPct = Math.min(100, Math.max(1, num(params.get("threshold"), DEFAULT_THRESHOLD_PCT)));
   const minEvents = Math.max(1, num(params.get("minEvents"), MIN_EVENTS));

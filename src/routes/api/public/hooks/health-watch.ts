@@ -11,6 +11,8 @@
  * Public route: it performs no writes based on caller input and returns no PII.
  */
 import { createFileRoute } from "@tanstack/react-router";
+
+import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const DEFAULT_TARGET = "https://savvyswimservices.com";
@@ -76,6 +78,8 @@ async function sendAlertSms(body: string) {
 }
 
 async function runWatch(request: Request) {
+  const denied = guardOpsHook(request, "health-watch");
+  if (denied) return denied;
   const target = (process.env["HEALTH_WATCH_TARGET"] ?? DEFAULT_TARGET).replace(/\/$/, "");
   const url = `${target}/api/public/health`;
 

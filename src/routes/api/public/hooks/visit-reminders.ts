@@ -25,6 +25,8 @@
  * Public route: takes no caller input that drives writes and returns no PII.
  */
 import { createFileRoute } from "@tanstack/react-router";
+
+import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -185,6 +187,8 @@ async function emailReminder(
 }
 
 async function run(request: Request) {
+  const denied = guardOpsHook(request, "visit-reminders");
+  if (denied) return denied;
   const params = new URL(request.url).searchParams;
   const dateFilter = params.get("date");
   if (dateFilter && !/^\d{4}-\d{2}-\d{2}$/.test(dateFilter)) {
