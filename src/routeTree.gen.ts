@@ -14,6 +14,7 @@ import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
@@ -81,6 +82,11 @@ const TermsRoute = TermsRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleQrRoute = ScheduleQrRouteImport.update({
+  id: '/schedule-qr',
+  path: '/schedule-qr',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScheduleRoute = ScheduleRouteImport.update({
@@ -329,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
+  '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -379,6 +386,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
+  '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -430,6 +438,7 @@ export interface FileRoutesById {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
+  '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -482,6 +491,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/request-inspection'
     | '/schedule'
+    | '/schedule-qr'
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
@@ -532,6 +542,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/request-inspection'
     | '/schedule'
+    | '/schedule-qr'
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
@@ -582,6 +593,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/request-inspection'
     | '/schedule'
+    | '/schedule-qr'
     | '/services'
     | '/terms'
     | '/terms-and-conditions'
@@ -633,6 +645,7 @@ export interface RootRouteChildren {
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RequestInspectionRoute: typeof RequestInspectionRoute
   ScheduleRoute: typeof ScheduleRoute
+  ScheduleQrRoute: typeof ScheduleQrRoute
   ServicesRoute: typeof ServicesRoute
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
@@ -701,6 +714,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule-qr': {
+      id: '/schedule-qr'
+      path: '/schedule-qr'
+      fullPath: '/schedule-qr'
+      preLoaderRoute: typeof ScheduleQrRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schedule': {
@@ -1025,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RequestInspectionRoute: RequestInspectionRoute,
   ScheduleRoute: ScheduleRoute,
+  ScheduleQrRoute: ScheduleQrRoute,
   ServicesRoute: ServicesRoute,
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
