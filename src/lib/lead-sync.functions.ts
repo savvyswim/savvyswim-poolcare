@@ -18,6 +18,7 @@ export type LeadSyncRow = {
   full_name: string | null;
   email: string | null;
   phone: string | null;
+  city: string | null;
   postal_code: string | null;
   contact_consent: boolean;
   consent_text: string | null;
