@@ -2,6 +2,9 @@ import { auth, defineMcp } from "@lovable.dev/mcp-js";
 import listLeadsTool from "./tools/list-leads";
 import getLeadTool from "./tools/get-lead";
 import setLeadStatusTool from "./tools/set-lead-status";
+import updateLeadTool from "./tools/update-lead";
+import createLeadTool from "./tools/create-lead";
+import pushLeadToCrmTool from "./tools/push-lead-to-crm";
 import serviceAreasTool from "./tools/service-areas";
 
 // The OAuth issuer must be the direct Supabase host; the project ref is the one
@@ -13,14 +16,20 @@ export default defineMcp({
   title: "SavvySwim",
   version: "0.1.0",
   instructions:
-    "Tools for Savvy Swim, a DFW pool service company. Use `list_leads` and `get_lead` to review website leads, `set_lead_status` to move a lead through the pipeline, and `list_service_areas` for coverage questions. All lead access runs as the signed-in Savvy Swim user.",
+    "Tools for Savvy Swim, a DFW pool service company. Website leads and the CRM sales pipeline stay in sync: use `list_leads` and `get_lead` to find a lead, `update_lead` to fill in or correct contact, service and pipeline fields, `create_lead` for calls/referrals/walk-ins, `set_lead_status` to move a lead through the pipeline, and `push_lead_to_crm` to retry a failed handoff. Every write pushes the lead to the CRM, so always confirm the reported CRM sync result. `list_service_areas` answers coverage questions. All lead access runs as the signed-in Savvy Swim user.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",
   }),
   // Cast: tool definitions without an outputSchema trip this project's
   // exactOptionalPropertyTypes setting against the SDK's tool type.
-  tools: [listLeadsTool, getLeadTool, setLeadStatusTool, serviceAreasTool] as unknown as Parameters<
-    typeof defineMcp
-  >[0]["tools"],
+  tools: [
+    listLeadsTool,
+    getLeadTool,
+    updateLeadTool,
+    createLeadTool,
+    setLeadStatusTool,
+    pushLeadToCrmTool,
+    serviceAreasTool,
+  ] as unknown as Parameters<typeof defineMcp>[0]["tools"],
 });
