@@ -41,7 +41,7 @@ afterEach(cleanup);
 describe("AddressMapPreview fallback", () => {
   it("renders nothing without an address or place", () => {
     const { container } = render(<AddressMapPreview />);
-    expect(container).toBeEmptyDOMElement();
+    expect(container.innerHTML).toBe("");
   });
 
   it("shows the static map when the server preview succeeds", async () => {
