@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { loadMaps } from "@/lib/google-maps";
+import { isMapsAuthBlocked, loadMaps, onMapsAuthBlocked } from "@/lib/google-maps";
 import { addressMapPreview } from "@/lib/geo.functions";
 
 interface Props {
@@ -25,6 +25,15 @@ export default function AddressMapPreview({ placeId, address, className }: Props
   const [image, setImage] = useState<string | null>(null);
   const [interactive, setInteractive] = useState(false);
   const [label, setLabel] = useState<string>(address ?? "");
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    const off = onMapsAuthBlocked(() => setBlocked(true));
+    return () => {
+      off();
+    };
+  }, []);
+
 
   useEffect(() => {
     setLabel(address ?? "");
@@ -63,7 +72,10 @@ export default function AddressMapPreview({ placeId, address, className }: Props
       }
 
       // 2 — interactive map, only possible where the browser key is allowed
-      if (!placeId) return;
+      if (!placeId || isMapsAuthBlocked()) {
+        if (!cancelled && isMapsAuthBlocked()) setBlocked(true);
+        return;
+      }
       try {
         await loadMaps();
         const g = (window as any).google;
@@ -91,7 +103,10 @@ export default function AddressMapPreview({ placeId, address, className }: Props
           }
         });
       } catch {
-        if (!cancelled) setInteractive(false);
+        if (!cancelled) {
+          setInteractive(false);
+          if (isMapsAuthBlocked()) setBlocked(true);
+        }
       }
     })();
 
@@ -109,6 +124,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
           src={image}
           alt={label ? `Map of ${label}` : "Map of the selected address"}
           loading="lazy"
+          onError={() => setImage(null)}
           className={cn("h-48 w-full border border-hairline object-cover", className)}
         />
         {label ? <p className="mt-1.5 text-xs text-muted-foreground">{label}</p> : null}
@@ -131,20 +147,40 @@ export default function AddressMapPreview({ placeId, address, className }: Props
 
   if (!label) return null;
 
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(label)}`;
+
   return (
-    <div className="mt-3 border border-hairline bg-background/60 px-3 py-2.5">
-      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[#1FA9BE]">
-        Address confirmed
-      </p>
-      <p className="mt-1 text-sm text-foreground">{label}</p>
-      <a
-        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(label)}`}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-1 inline-block text-xs font-semibold uppercase tracking-[0.12em] text-[#8E1F2C] underline underline-offset-4"
-      >
-        Open in Google Maps
-      </a>
+    <div className={cn("mt-3 border border-hairline bg-background/60", className)}>
+      <div className="flex items-start gap-3 px-3 py-2.5">
+        <span
+          aria-hidden="true"
+          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center border border-hairline bg-[#1FA9BE]/10 text-[#1FA9BE]"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
+            <path d="M12 21s7-5.686 7-11a7 7 0 1 0-14 0c0 5.314 7 11 7 11Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+        </span>
+        <div className="min-w-0">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[#1FA9BE]">
+            Address confirmed
+          </p>
+          <p className="mt-1 break-words text-sm text-foreground">{label}</p>
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1.5 inline-block text-xs font-semibold uppercase tracking-[0.12em] text-[#8E1F2C] underline underline-offset-4"
+          >
+            Open in Google Maps
+          </a>
+          {blocked ? (
+            <p className="mt-1.5 text-[0.68rem] leading-snug text-muted-foreground">
+              Map preview is unavailable on this domain — your address is saved exactly as shown.
+            </p>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }
