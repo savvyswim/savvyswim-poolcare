@@ -181,16 +181,15 @@ async function handle(request: Request) {
       failures: run.failures,
       slowestMs: run.slowestMs,
       revisionId: run.revisionId,
-      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, message, stack, requestId, bodySnippet }) => ({
+      // Stack traces and crash-body snippets stay in ss_canary_incidents for
+      // staff to read in /admin/crm/deploy-health; never echo them over HTTP.
+      incidents: run.incidents.map(({ route, round, kind, httpStatus, durationMs, requestId }) => ({
         route,
         round,
         kind,
         httpStatus,
         durationMs,
-        message,
-        stack,
         requestId,
-        bodySnippet,
       })),
       alert,
     },
