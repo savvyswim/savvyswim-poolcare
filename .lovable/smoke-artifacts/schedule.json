@@ -1,0 +1,8 @@
+{
+  "route": "/schedule",
+  "url": "http://localhost:9999/schedule",
+  "status": null,
+  "note": "fetch failed",
+  "error": "fetch failed",
+  "capturedAt": "2026-08-20T13:20:54.677Z"
+}

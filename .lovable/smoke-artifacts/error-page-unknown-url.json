@@ -1,0 +1,8 @@
+{
+  "route": "error page (unknown URL)",
+  "url": "http://localhost:9999/__smoke__/this-route-does-not-exist",
+  "status": null,
+  "note": "fetch failed",
+  "error": "fetch failed",
+  "capturedAt": "2026-08-20T13:20:54.681Z"
+}
