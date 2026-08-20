@@ -41,17 +41,19 @@ export type CanaryRun = {
   revisionId: string | null;
 };
 
+// Only routes this deployment actually serves. The CRM / customer app lives in
+// a separate project (see src/lib/app-links.ts), so /app and /admin/crm* are
+// not monitored here — they 404 on the marketing site by design.
 export const DEFAULT_CANARY_ROUTES = [
   "/",
   "/services",
   "/weekly-pool-service",
   "/pool-cleaning-frisco-tx",
-  "/app",
+  "/schedule",
   "/portal",
-  "/admin/crm",
-  "/admin/crm/deploy-health",
   "/api/public/health",
 ];
+
 
 export const SMOKE_ROUTES = ["/", "/services", "/weekly-pool-service"];
 
