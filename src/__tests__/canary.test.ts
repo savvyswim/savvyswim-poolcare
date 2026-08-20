@@ -4,7 +4,7 @@ import { resolve } from "path";
 import { describe, expect, it } from "vitest";
 
 import { buildManifest } from "../../scripts/generate-route-manifest";
-import { DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
+import { DEFAULT_CANARY_ROUTES, GUARDED_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
 import { isRedirectRoute, ROUTE_MANIFEST, selectCanaryRoutes } from "@/lib/canary-routes";
 
 import { classify, extractStack, looksLikeCrashBody, summarizeCanary, type CanaryRun } from "@/lib/canary";
@@ -129,5 +129,33 @@ describe("canary redirect awareness", () => {
     expect(
       classify({ route: "/book", httpStatus: 301, body: "", aborted: false, networkError: null }).ok,
     ).toBe(true);
+  });
+});
+
+describe("guarded route monitoring", () => {
+  it("monitors the staff and customer areas we actually serve", () => {
+    expect(DEFAULT_CANARY_ROUTES).toContain("/admin/webhook-health");
+    expect(DEFAULT_CANARY_ROUTES).toContain("/portal");
+    expect(GUARDED_CANARY_ROUTES).toContain("/admin/not-found");
+    expect(GUARDED_CANARY_ROUTES).not.toContain("/schedule");
+  });
+
+  it("treats a sign-in challenge or redirect as healthy on guarded routes", () => {
+    const guarded = { route: "/admin/webhook-health", body: "", aborted: false, networkError: null };
+    expect(classify({ ...guarded, httpStatus: 302 }).ok).toBe(true);
+    expect(classify({ ...guarded, httpStatus: 401 }).ok).toBe(true);
+    expect(classify({ ...guarded, httpStatus: 403 }).ok).toBe(true);
+  });
+
+  it("still fails guarded routes on 404 and 5xx", () => {
+    const guarded = { route: "/admin/webhook-health", body: "", aborted: false, networkError: null };
+    expect(classify({ ...guarded, httpStatus: 404 })).toMatchObject({ kind: "http_4xx", ok: false });
+    expect(classify({ ...guarded, httpStatus: 500 })).toMatchObject({ kind: "http_5xx", ok: false });
+  });
+
+  it("does not soften auth statuses on public pages", () => {
+    expect(
+      classify({ route: "/schedule", httpStatus: 401, body: "", aborted: false, networkError: null }).ok,
+    ).toBe(false);
   });
 });
