@@ -30,20 +30,24 @@ import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as BRouteImport } from './routes/b'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as CityRouteImport } from './routes/$city'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
+import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
+import { Route as AdminCrmRouteImport } from './routes/admin/crm'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
+import { Route as AdminCrmSplatRouteImport } from './routes/admin/crm.$'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -165,6 +169,11 @@ const BRoute = BRouteImport.update({
   path: '/b',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CityRoute = CityRouteImport.update({
   id: '/$city',
   path: '/$city',
@@ -190,6 +199,11 @@ const QuoteTokenRoute = QuoteTokenRouteImport.update({
   path: '/quote/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSplatRoute = AppSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AppRoute,
+} as any)
 const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   id: '/admin/webhook-health',
   path: '/admin/webhook-health',
@@ -208,6 +222,11 @@ const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
 const AdminLeadSourcesRoute = AdminLeadSourcesRouteImport.update({
   id: '/admin/lead-sources',
   path: '/admin/lead-sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCrmRoute = AdminCrmRouteImport.update({
+  id: '/admin/crm',
+  path: '/admin/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
@@ -236,6 +255,11 @@ const ApiPublicEventsRoute = ApiPublicEventsRouteImport.update({
   id: '/api/public/events',
   path: '/api/public/events',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCrmSplatRoute = AdminCrmSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AdminCrmRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -326,6 +350,7 @@ const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$city': typeof CityRoute
+  '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
@@ -349,15 +374,18 @@ export interface FileRoutesByFullPath {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
@@ -378,6 +406,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$city': typeof CityRoute
+  '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
@@ -401,15 +430,18 @@ export interface FileRoutesByTo {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
@@ -431,6 +463,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$city': typeof CityRoute
+  '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
   '/booking': typeof BookingRoute
@@ -454,15 +487,18 @@ export interface FileRoutesById {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/leads': typeof ApiPublicLeadsRoute
@@ -485,6 +521,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$city'
+    | '/app'
     | '/b'
     | '/book'
     | '/booking'
@@ -508,15 +545,18 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/not-found'
     | '/admin/webhook-health'
+    | '/app/$'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
@@ -537,6 +577,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$city'
+    | '/app'
     | '/b'
     | '/book'
     | '/booking'
@@ -560,15 +601,18 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/not-found'
     | '/admin/webhook-health'
+    | '/app/$'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
@@ -589,6 +633,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$city'
+    | '/app'
     | '/b'
     | '/book'
     | '/booking'
@@ -612,15 +657,18 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/not-found'
     | '/admin/webhook-health'
+    | '/app/$'
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
     | '/api/public/leads'
@@ -642,6 +690,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CityRoute: typeof CityRoute
+  AppRoute: typeof AppRouteWithChildren
   BRoute: typeof BRoute
   BookRoute: typeof BookRoute
   BookingRoute: typeof BookingRoute
@@ -665,6 +714,7 @@ export interface RootRouteChildren {
   WeeklyPoolServiceRoute: typeof WeeklyPoolServiceRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
@@ -841,6 +891,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$city': {
       id: '/$city'
       path: '/$city'
@@ -876,6 +933,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuoteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/$': {
+      id: '/app/$'
+      path: '/$'
+      fullPath: '/app/$'
+      preLoaderRoute: typeof AppSplatRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/admin/webhook-health': {
       id: '/admin/webhook-health'
       path: '/admin/webhook-health'
@@ -902,6 +966,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/lead-sources'
       fullPath: '/admin/lead-sources'
       preLoaderRoute: typeof AdminLeadSourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/crm': {
+      id: '/admin/crm'
+      path: '/admin/crm'
+      fullPath: '/admin/crm'
+      preLoaderRoute: typeof AdminCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
@@ -938,6 +1009,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/events'
       preLoaderRoute: typeof ApiPublicEventsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/crm/$': {
+      id: '/admin/crm/$'
+      path: '/$'
+      fullPath: '/admin/crm/$'
+      preLoaderRoute: typeof AdminCrmSplatRouteImport
+      parentRoute: typeof AdminCrmRoute
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -1047,9 +1125,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppRouteChildren {
+  AppSplatRoute: typeof AppSplatRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppSplatRoute: AppSplatRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface AdminCrmRouteChildren {
+  AdminCrmSplatRoute: typeof AdminCrmSplatRoute
+}
+
+const AdminCrmRouteChildren: AdminCrmRouteChildren = {
+  AdminCrmSplatRoute: AdminCrmSplatRoute,
+}
+
+const AdminCrmRouteWithChildren = AdminCrmRoute._addFileChildren(
+  AdminCrmRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CityRoute: CityRoute,
+  AppRoute: AppRouteWithChildren,
   BRoute: BRoute,
   BookRoute: BookRoute,
   BookingRoute: BookingRoute,
@@ -1074,6 +1175,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
