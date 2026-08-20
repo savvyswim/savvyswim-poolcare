@@ -34,21 +34,21 @@ FOR EACH ROW EXECUTE FUNCTION public.tg_set_updated_at();
 
 CREATE INDEX ss_damage_reports_customer_idx ON public.ss_damage_reports (customer_id, created_at DESC);
 
-CREATE POLICY "Customers upload own damage photos"
+CREATE POLICY "Customers upload own archived service photos"
 ON storage.objects FOR INSERT TO authenticated
 WITH CHECK (
-  bucket_id = 'damage-photos'
+  bucket_id = 'service-photos-archive'
   AND (storage.foldername(name))[1] = public.ss_my_customer_id()::text
 );
 
-CREATE POLICY "Customers read own damage photos"
+CREATE POLICY "Customers read own archived service photos"
 ON storage.objects FOR SELECT TO authenticated
 USING (
-  bucket_id = 'damage-photos'
+  bucket_id = 'service-photos-archive'
   AND ((storage.foldername(name))[1] = public.ss_my_customer_id()::text OR public.ss_is_staff())
 );
 
-CREATE POLICY "Staff manage damage photos"
+CREATE POLICY "Staff manage archived service photos"
 ON storage.objects FOR ALL TO authenticated
-USING (bucket_id = 'damage-photos' AND public.ss_is_staff())
-WITH CHECK (bucket_id = 'damage-photos' AND public.ss_is_staff());
+USING (bucket_id = 'service-photos-archive' AND public.ss_is_staff())
+WITH CHECK (bucket_id = 'service-photos-archive' AND public.ss_is_staff());
