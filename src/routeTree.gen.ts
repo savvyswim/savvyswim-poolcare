@@ -57,6 +57,7 @@ import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/public/hooks/webhook-watch'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
+import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/public/hooks/smoke-alert'
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
@@ -311,6 +312,12 @@ const ApiPublicHooksVisitRemindersRoute =
     path: '/api/public/hooks/visit-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSmokeAlertRoute =
+  ApiPublicHooksSmokeAlertRouteImport.update({
+    id: '/api/public/hooks/smoke-alert',
+    path: '/api/public/hooks/smoke-alert',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksLowStockWatchRoute =
   ApiPublicHooksLowStockWatchRouteImport.update({
     id: '/api/public/hooks/low-stock-watch',
@@ -403,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -460,6 +468,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -518,6 +527,7 @@ export interface FileRoutesById {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -577,6 +587,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -691,6 +703,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -747,6 +760,7 @@ export interface RootRouteChildren {
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
+  ApiPublicHooksSmokeAlertRoute: typeof ApiPublicHooksSmokeAlertRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
   ApiPublicHooksWebhookWatchRoute: typeof ApiPublicHooksWebhookWatchRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
@@ -1093,6 +1107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksVisitRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/smoke-alert': {
+      id: '/api/public/hooks/smoke-alert'
+      path: '/api/public/hooks/smoke-alert'
+      fullPath: '/api/public/hooks/smoke-alert'
+      preLoaderRoute: typeof ApiPublicHooksSmokeAlertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/low-stock-watch': {
       id: '/api/public/hooks/low-stock-watch'
       path: '/api/public/hooks/low-stock-watch'
@@ -1217,6 +1238,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
+  ApiPublicHooksSmokeAlertRoute: ApiPublicHooksSmokeAlertRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
   ApiPublicHooksWebhookWatchRoute: ApiPublicHooksWebhookWatchRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
