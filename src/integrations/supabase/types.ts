@@ -1512,6 +1512,68 @@ export type Database = {
           },
         ]
       }
+      ss_canary_route_checks: {
+        Row: {
+          checks_total: number
+          consecutive_failures: number
+          created_at: string
+          id: string
+          last_checked_at: string
+          last_duration_ms: number | null
+          last_http_status: number | null
+          last_kind: string | null
+          last_message: string | null
+          last_ok_at: string | null
+          last_run_id: string | null
+          last_status: string
+          route: string
+          target: string
+          updated_at: string
+        }
+        Insert: {
+          checks_total?: number
+          consecutive_failures?: number
+          created_at?: string
+          id?: string
+          last_checked_at?: string
+          last_duration_ms?: number | null
+          last_http_status?: number | null
+          last_kind?: string | null
+          last_message?: string | null
+          last_ok_at?: string | null
+          last_run_id?: string | null
+          last_status?: string
+          route: string
+          target: string
+          updated_at?: string
+        }
+        Update: {
+          checks_total?: number
+          consecutive_failures?: number
+          created_at?: string
+          id?: string
+          last_checked_at?: string
+          last_duration_ms?: number | null
+          last_http_status?: number | null
+          last_kind?: string | null
+          last_message?: string | null
+          last_ok_at?: string | null
+          last_run_id?: string | null
+          last_status?: string
+          route?: string
+          target?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_canary_route_checks_last_run_id_fkey"
+            columns: ["last_run_id"]
+            isOneToOne: false
+            referencedRelation: "ss_canary_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_canary_runs: {
         Row: {
           alert_result: string | null
