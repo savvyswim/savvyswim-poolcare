@@ -10,6 +10,8 @@
  * unit test.
  */
 
+import { selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
+
 export type CanaryKind = "ok" | "http_5xx" | "http_4xx" | "timeout" | "network" | "crash_body" | "blank";
 
 export type CanaryProbe = {
@@ -41,21 +43,13 @@ export type CanaryRun = {
   revisionId: string | null;
 };
 
-// Only routes this deployment actually serves. The CRM / customer app lives in
-// a separate project (see src/lib/app-links.ts), so /app and /admin/crm* are
-// not monitored here — they 404 on the marketing site by design.
-export const DEFAULT_CANARY_ROUTES = [
-  "/",
-  "/services",
-  "/weekly-pool-service",
-  "/pool-cleaning-frisco-tx",
-  "/schedule",
-  "/portal",
-  "/api/public/health",
-];
+// Derived from the router's own route tree (src/lib/route-manifest.gen.ts) via
+// src/lib/canary-routes.ts, so the monitored list can never drift from what the
+// deployment actually serves. The CRM / customer app lives in a separate project
+// (see src/lib/app-links.ts) and therefore never appears here.
+export const DEFAULT_CANARY_ROUTES = selectCanaryRoutes();
 
-
-export const SMOKE_ROUTES = ["/", "/services", "/weekly-pool-service"];
+export const SMOKE_ROUTES = selectSmokeRoutes();
 
 const BODY_SNIPPET_LIMIT = 1200;
 const MIN_HTML_BYTES = 500;

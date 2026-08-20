@@ -4,9 +4,9 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "predev": "bunx tsx scripts/generate-sitemap.ts",
+    "predev": "bunx tsx scripts/generate-route-manifest.ts && bunx tsx scripts/generate-sitemap.ts",
     "dev": "vite dev",
-    "prebuild": "bunx tsx scripts/generate-sitemap.ts",
+    "prebuild": "bunx tsx scripts/generate-route-manifest.ts && bunx tsx scripts/generate-sitemap.ts",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:dev": "NODE_OPTIONS=--max-old-space-size=8192 vite build --mode development",
     "lint": "eslint .",
