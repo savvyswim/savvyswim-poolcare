@@ -10,6 +10,7 @@ export const ROUTE_MANIFEST = [
   "/.mcp/invoke-tool/$tool",
   "/.mcp/list-tools",
   "/.well-known/oauth-protected-resource",
+  "/admin/canary",
   "/admin/crm",
   "/admin/crm/$",
   "/admin/lead-sources",
