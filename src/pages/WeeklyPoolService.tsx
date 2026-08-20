@@ -155,7 +155,7 @@ export default function WeeklyPoolService() {
                       data-savvy-cta="request_quote"
                       className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
-                      Request a quote
+                      Free inspection
                     </button>
                     <a
                       href={PHONE_HREF}

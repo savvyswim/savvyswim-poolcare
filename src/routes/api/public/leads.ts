@@ -28,6 +28,8 @@ const leadSchema = z
     pool_details: z.string().trim().max(1000).optional().nullable(),
     message: z.string().trim().max(2000).optional().nullable(),
     notes: z.string().trim().max(2000).optional().nullable(),
+    // Optional discount / referral code typed by the visitor (kept in the notes).
+    promo_code: z.string().trim().max(40).optional().nullable(),
     sms_opt_in: z.boolean().optional().nullable(),
     contact_consent: z.boolean().optional().nullable(),
     // Exact authorization wording the visitor saw, stored with the consent record.

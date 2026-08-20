@@ -43,12 +43,12 @@ const COPY: Record<
 > = {
   booking: {
     eyebrow: "Free · No obligation",
-    title: "Book your inspection or 3D quote",
+    title: "Book your free inspection",
     desc: "Pick a time — we'll confirm by phone or email within one business day.",
     optionsLabel: "Which service?",
     options: SERVICES,
     cta: "free_pool_visit",
-    submit: "Book it",
+    submit: "Book my free inspection",
   },
   water_test: {
     eyebrow: "Free · Lab-grade accuracy",

@@ -104,6 +104,7 @@ export default function LeadForm({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
+  const [promoCode, setPromoCode] = useState("");
   const [contactConsent, setContactConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
@@ -164,7 +165,11 @@ export default function LeadForm({
       pool_details: choice,
       preferred_date: date ? format(date, "yyyy-MM-dd") : null,
       preferred_contact_time: time,
-      message: notes.trim() || null,
+      message:
+        [notes.trim(), promoCode.trim() ? `Discount code: ${promoCode.trim().toUpperCase()}` : ""]
+          .filter(Boolean)
+          .join("\n\n") || null,
+      promo_code: promoCode.trim().toUpperCase() || null,
       sms_opt_in: contactConsent,
       contact_consent: contactConsent,
       consent_text: CONSENT_TEXT,
@@ -367,6 +372,22 @@ export default function LeadForm({
           placeholder="Anything we should know? (green pool, equipment, gate code…)"
           className={FIELD}
         />
+      </label>
+
+      <label className="block">
+        <span className="sr-only">Discount code (optional)</span>
+        <input
+          name="promo_code"
+          autoComplete="off"
+          autoCapitalize="characters"
+          value={promoCode}
+          onChange={(e) => setPromoCode(e.target.value)}
+          placeholder="Discount code (optional)"
+          className={FIELD}
+        />
+        <span className="mt-1 block text-[11px] text-[#2a1013]/55">
+          Have a discount or referral code? Enter it here and we&apos;ll apply it to your quote.
+        </span>
       </label>
 
       <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
