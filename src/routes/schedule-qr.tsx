@@ -26,7 +26,10 @@ function ScheduleQrPage() {
   const [png, setPng] = useState<string | null>(null);
 
   const slug = useMemo(() => tag.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_").slice(0, 40), [tag]);
-  const url = `${SITE_URL}/schedule${slug ? `?src=${slug}` : ""}`;
+  // Full UTM set so print scans show up beside digital campaigns in reporting.
+  const url = slug
+    ? `${SITE_URL}/schedule?src=${slug}&utm_source=print&utm_medium=qr&utm_campaign=${slug}`
+    : `${SITE_URL}/schedule`;
 
   useEffect(() => {
     let alive = true;
