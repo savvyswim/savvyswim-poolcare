@@ -1,0 +1,62 @@
+name: Production smoke tests
+
+# Runs the manifest-driven smoke suite against production.
+#  - after every push to the default branch (Lovable publishes from it)
+#  - every 30 minutes as a safety net
+#  - on demand, optionally against another base URL
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL to smoke test"
+        required: false
+        default: "https://savvyswimservices.com"
+      mode:
+        description: "full or fast"
+        required: false
+        default: "full"
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_URL: ${{ github.event.inputs.base_url || 'https://savvyswimservices.com' }}
+      SMOKE_MODE: ${{ github.event.inputs.mode || 'full' }}
+      # Enables the /api/public/hooks/smoke-alert page-out on failure.
+      OPS_HOOK_SECRET: ${{ secrets.OPS_HOOK_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate route manifest
+        run: bunx tsx scripts/generate-route-manifest.ts
+
+      - name: Wait for the new deploy to go live
+        if: github.event_name == 'push'
+        run: sleep 120
+
+      - name: Run smoke tests
+        run: bun run test:smoke
+
+      - name: Upload rollback checklist
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rollback-checklist
+          path: .lovable/rollback-checklist.md
+          if-no-files-found: ignore
