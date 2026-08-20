@@ -6,6 +6,8 @@ import {
   Outlet,
   Scripts,
   useRouter,
+  useRouterState,
+
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
