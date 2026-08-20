@@ -53,6 +53,15 @@ jobs:
       - name: Run smoke tests
         run: bun run test:smoke
 
+      - name: Upload failed-route response artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-failures-${{ github.run_id }}
+          path: .lovable/smoke-artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Upload rollback checklist
         if: failure()
         uses: actions/upload-artifact@v4
@@ -60,3 +69,4 @@ jobs:
           name: rollback-checklist
           path: .lovable/rollback-checklist.md
           if-no-files-found: ignore
+
