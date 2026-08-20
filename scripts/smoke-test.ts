@@ -43,9 +43,63 @@ export function collectRoutes(routeTreeSource: string): string[] {
 
 type Result = { route: string; status: number | null; ok: boolean; note: string };
 
+/** Captured evidence for a failed route, written to .lovable/smoke-artifacts/. */
+type Artifact = {
+  route: string;
+  url: string;
+  status: number | null;
+  statusText?: string;
+  note: string;
+  headers?: Record<string, string>;
+  bodySnippet?: string;
+  bodyBytes?: number;
+  error?: string;
+  capturedAt: string;
+};
+
+const artifacts: Artifact[] = [];
+
+/** Redact anything that could carry a session or secret out of CI logs. */
+const SENSITIVE_HEADER = /^(set-cookie|cookie|authorization|x-api-key|apikey|x-ops-secret)$/i;
+
+function collectHeaders(res: Response): Record<string, string> {
+  const out: Record<string, string> = {};
+  res.headers.forEach((value, key) => {
+    out[key] = SENSITIVE_HEADER.test(key) ? "[redacted]" : value;
+  });
+  return out;
+}
+
+function recordArtifact(a: Artifact) {
+  artifacts.push(a);
+}
+
+function slugify(route: string): string {
+  return route.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "root";
+}
+
+/** Write one file per failed route plus a combined index. */
+function writeArtifacts(): string | null {
+  if (artifacts.length === 0) return null;
+  const dir = path.resolve(here, "../.lovable/smoke-artifacts");
+  try {
+    mkdirSync(dir, { recursive: true });
+    for (const a of artifacts) {
+      writeFileSync(path.join(dir, `${slugify(a.route)}.json`), JSON.stringify(a, null, 2));
+      if (a.bodySnippet) writeFileSync(path.join(dir, `${slugify(a.route)}.body.html`), a.bodySnippet);
+    }
+    writeFileSync(path.join(dir, "index.json"), JSON.stringify({ baseUrl: BASE_URL, failures: artifacts }, null, 2));
+    return dir;
+  } catch (error) {
+    console.error("Could not write smoke artifacts:", error instanceof Error ? error.message : String(error));
+    return null;
+  }
+}
+
 function looksLikeCrash(body: string): boolean {
   return body.includes('"unhandled":true') || body.includes("HTTPError");
 }
+
 
 
 /** Unknown URLs must render the branded not-found/error page, not a blank 500. */
