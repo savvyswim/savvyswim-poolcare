@@ -21,15 +21,76 @@ export const Route = createFileRoute("/schedule-qr")({
 
 const PRESETS = ["flyer", "yard_sign", "truck", "door_hanger", "postcard", "event"];
 
+const QR_OPTS = {
+  width: 1024,
+  margin: 2,
+  errorCorrectionLevel: "H" as const,
+  color: { dark: "#8E1F2C", light: "#F4EFE3" },
+};
+
+const toSlug = (v: string) => v.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_").slice(0, 40);
+
+/** Full UTM set so print scans show up beside digital campaigns in reporting. */
+const campaignUrl = (slug: string) =>
+  slug
+    ? `${SITE_URL}/schedule?src=${slug}&utm_source=print&utm_medium=qr&utm_campaign=${slug}`
+    : `${SITE_URL}/schedule`;
+
 function ScheduleQrPage() {
   const [tag, setTag] = useState("flyer");
   const [png, setPng] = useState<string | null>(null);
+  const [batchText, setBatchText] = useState(PRESETS.join("\n"));
+  const [zipping, setZipping] = useState(false);
+  const [zipNote, setZipNote] = useState<string | null>(null);
 
-  const slug = useMemo(() => tag.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_").slice(0, 40), [tag]);
-  // Full UTM set so print scans show up beside digital campaigns in reporting.
-  const url = slug
-    ? `${SITE_URL}/schedule?src=${slug}&utm_source=print&utm_medium=qr&utm_campaign=${slug}`
-    : `${SITE_URL}/schedule`;
+  const slug = useMemo(() => toSlug(tag), [tag]);
+  const url = campaignUrl(slug);
+
+  const batchSlugs = useMemo(
+    () => Array.from(new Set(batchText.split(/[\n,]+/).map(toSlug).filter(Boolean))),
+    [batchText],
+  );
+
+  const downloadZip = async () => {
+    if (!batchSlugs.length || zipping) return;
+    setZipping(true);
+    setZipNote(null);
+    try {
+      const [{ default: QRCode }, { zipSync, strToU8 }] = await Promise.all([
+        import("qrcode"),
+        import("fflate"),
+      ]);
+      const files: Record<string, Uint8Array> = {};
+      const rows = ["campaign_code,url,file"];
+      for (const s of batchSlugs) {
+        const link = campaignUrl(s);
+        const dataUrl: string = await QRCode.toDataURL(link, QR_OPTS);
+        const bin = atob(dataUrl.split(",")[1] ?? "");
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        const name = `savvy-swim-inspection-${s}.png`;
+        files[name] = bytes;
+        rows.push(`${s},"${link}",${name}`);
+      }
+      files["campaign-links.csv"] = strToU8(rows.join("\n"));
+      const zipped = zipSync(files, { level: 6 });
+      const blob = new Blob([zipped.slice().buffer as ArrayBuffer], { type: "application/zip" });
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = href;
+      a.download = `savvy-swim-qr-codes-${new Date().toISOString().slice(0, 10)}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(href);
+      setZipNote(`Downloaded ${batchSlugs.length} QR codes + campaign-links.csv`);
+    } catch {
+      setZipNote("Could not build the zip. Try again.");
+    } finally {
+      setZipping(false);
+    }
+  };
+
 
   useEffect(() => {
     let alive = true;
