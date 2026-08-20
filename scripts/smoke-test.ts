@@ -176,6 +176,10 @@ async function main() {
     console.error(`\n${failures.length} endpoint(s) failed:`);
     for (const f of failures) console.error(`  ${f.route} -> ${f.status ?? "no response"} ${f.note}`);
 
+    await alertOnFailure(failures, summarizeSmoke(results, BASE_URL));
+
+
+
     // Failing smoke test -> emit the rollback checklist so you know exactly
     // which version to restore from the deployment history.
     const checklist = buildRollbackChecklist(
