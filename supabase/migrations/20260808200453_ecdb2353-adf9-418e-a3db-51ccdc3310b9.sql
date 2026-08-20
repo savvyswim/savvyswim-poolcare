@@ -54,7 +54,7 @@ BEGIN
 
   v_vin := nullif(upper(btrim(coalesce(p_patch->>'vehicle_vin',''))), '');
   IF v_vin IS NOT NULL AND v_vin !~ '^[A-HJ-NPR-Z0-9]{11,17}$' THEN
-    RAISE EXCEPTION 'Enter a valid VIN (11-17 letters/numbers, no I, O or Q)';
+    RAISE EXCEPTION 'Enter a valid identifier';
   END IF;
 
   v_year := nullif(btrim(coalesce(p_patch->>'vehicle_year','')), '')::int;

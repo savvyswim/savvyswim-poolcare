@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.inspection_requests (
   phone text NOT NULL,
   address text NOT NULL,
   postal_code text NOT NULL,
-  hail_date date,
+  preferred_date date,
   vehicle_details text,
   preferred_contact_time text,
   notes text,

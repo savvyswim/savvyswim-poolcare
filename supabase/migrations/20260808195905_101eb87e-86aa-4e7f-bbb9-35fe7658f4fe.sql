@@ -1,7 +1,7 @@
 CREATE TABLE public.ss_damage_reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   customer_id uuid NOT NULL REFERENCES public.ss_customers(id) ON DELETE CASCADE,
-  kind text NOT NULL DEFAULT 'hail',
+  kind text NOT NULL DEFAULT 'standard',
   occurred_on date,
   notes text NOT NULL DEFAULT '',
   photos jsonb NOT NULL DEFAULT '[]'::jsonb,
