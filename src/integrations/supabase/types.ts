@@ -1574,6 +1574,68 @@ export type Database = {
           },
         ]
       }
+      ss_canary_route_metrics: {
+        Row: {
+          avg_ms: number
+          checked_at: string
+          created_at: string
+          error_rate: number
+          failures: number
+          id: string
+          last_http_status: number | null
+          max_ms: number
+          min_ms: number
+          p95_ms: number
+          requests: number
+          route: string
+          run_id: string | null
+          source: string
+          target: string
+        }
+        Insert: {
+          avg_ms?: number
+          checked_at?: string
+          created_at?: string
+          error_rate?: number
+          failures?: number
+          id?: string
+          last_http_status?: number | null
+          max_ms?: number
+          min_ms?: number
+          p95_ms?: number
+          requests?: number
+          route: string
+          run_id?: string | null
+          source?: string
+          target: string
+        }
+        Update: {
+          avg_ms?: number
+          checked_at?: string
+          created_at?: string
+          error_rate?: number
+          failures?: number
+          id?: string
+          last_http_status?: number | null
+          max_ms?: number
+          min_ms?: number
+          p95_ms?: number
+          requests?: number
+          route?: string
+          run_id?: string | null
+          source?: string
+          target?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ss_canary_route_metrics_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "ss_canary_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ss_canary_runs: {
         Row: {
           alert_result: string | null
