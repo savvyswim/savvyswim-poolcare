@@ -139,20 +139,17 @@ export default function LeadForm({
     setError(null);
     if (!validate()) return;
 
-    const params = new URLSearchParams(window.location.search);
-    // Session + first-touch landing page, kept for the whole browsing session.
+    // First-touch campaign data (utm_*, ?src= code, gclid/fbclid), captured on
+    // the session's landing page so it survives page-to-page navigation.
+    const { getLeadAttribution } = await import("@/lib/lead-attribution");
+    const attr = getLeadAttribution();
+    // Session id, kept for the whole browsing session.
     let sessionId: string | null = null;
-    let landingPage: string | null = null;
     try {
       sessionId = sessionStorage.getItem("ss_sid");
       if (!sessionId) {
         sessionId = crypto.randomUUID();
         sessionStorage.setItem("ss_sid", sessionId);
-      }
-      landingPage = sessionStorage.getItem("ss_landing");
-      if (!landingPage) {
-        landingPage = `${window.location.pathname}${window.location.search}`.slice(0, 255);
-        sessionStorage.setItem("ss_landing", landingPage);
       }
     } catch {
       /* private mode — attribution is best effort */
@@ -171,19 +168,24 @@ export default function LeadForm({
       sms_opt_in: contactConsent,
       contact_consent: contactConsent,
       consent_text: CONSENT_TEXT,
-      source,
+      source: attr.campaign_code ? `${source}_${attr.campaign_code}` : source,
       page: window.location.pathname.slice(0, 200),
-      utm_source: params.get("utm_source") || "savvyswim.com",
-      utm_medium: params.get("utm_medium") || null,
-      utm_campaign: params.get("utm_campaign") || null,
-      utm_term: params.get("utm_term") || null,
-      utm_content: params.get("utm_content") || null,
-      referrer: document.referrer ? document.referrer.slice(0, 255) : null,
-      landing_page: landingPage,
+      campaign_id: attr.campaign_id,
+      campaign_code: attr.campaign_code,
+      utm_source: attr.utm_source || "savvyswim.com",
+      utm_medium: attr.utm_medium,
+      utm_campaign: attr.utm_campaign,
+      utm_term: attr.utm_term,
+      utm_content: attr.utm_content,
+      gclid: attr.gclid,
+      fbclid: attr.fbclid,
+      referrer: attr.referrer ?? (document.referrer ? document.referrer.slice(0, 255) : null),
+      landing_page: attr.landing_page,
       session_id: sessionId,
       elapsed_ms: Math.max(0, Date.now() - openedAt),
       company,
     };
+
 
 
     setSending(true);
