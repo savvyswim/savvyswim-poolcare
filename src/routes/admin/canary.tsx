@@ -195,6 +195,21 @@ function CanaryAdminPage() {
         <Stat label="Never checked" value={report?.neverCheckedCount ?? "—"} />
       </section>
 
+      <section className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat label="Probes (24h)" value={report?.overall24h.requests ?? "—"} />
+        <Stat
+          label="Error rate (24h)"
+          value={report ? `${(report.overall24h.errorRate * 100).toFixed(2)}%` : "—"}
+          alarm={(report?.overall24h.errorRate ?? 0) > 0.01}
+        />
+        <Stat label="Avg latency (24h)" value={report ? `${report.overall24h.avgMs}ms` : "—"} />
+        <Stat
+          label="p95 latency (24h)"
+          value={report ? `${report.overall24h.p95Ms}ms` : "—"}
+          alarm={(report?.overall24h.p95Ms ?? 0) > 3000}
+        />
+      </section>
+
       {report?.lastRun ? (
         <p className="mt-4 text-xs uppercase tracking-[0.14em] text-foreground/55">
           Last run · {when(report.lastRun.startedAt)} ({ago(report.lastRun.startedAt)}) ·{" "}
@@ -206,6 +221,7 @@ function CanaryAdminPage() {
           No canary run recorded yet.
         </p>
       )}
+
 
       <nav className="mt-8 flex gap-2 border-b border-foreground/15">
         {(
