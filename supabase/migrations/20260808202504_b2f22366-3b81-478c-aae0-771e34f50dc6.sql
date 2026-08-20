@@ -50,7 +50,7 @@ END;
 $$;
 
 ALTER TABLE public.ss_customers
-  DROP COLUMN IF EXISTS vehicle_make,
-  DROP COLUMN IF EXISTS vehicle_model,
-  DROP COLUMN IF EXISTS vehicle_year,
-  DROP COLUMN IF EXISTS vehicle_vin;
+  DROP COLUMN IF EXISTS pool_detail_make,
+  DROP COLUMN IF EXISTS pool_detail_model,
+  DROP COLUMN IF EXISTS pool_detail_year,
+  DROP COLUMN IF EXISTS pool_detail_code;

@@ -1,13 +1,13 @@
 ALTER TABLE public.ss_customers
-  ADD COLUMN IF NOT EXISTS vehicle_make text,
-  ADD COLUMN IF NOT EXISTS vehicle_model text,
-  ADD COLUMN IF NOT EXISTS vehicle_year integer,
-  ADD COLUMN IF NOT EXISTS vehicle_vin text;
+  ADD COLUMN IF NOT EXISTS pool_detail_make text,
+  ADD COLUMN IF NOT EXISTS pool_detail_model text,
+  ADD COLUMN IF NOT EXISTS pool_detail_year integer,
+  ADD COLUMN IF NOT EXISTS pool_detail_code text;
 
 DROP FUNCTION IF EXISTS public.ss_my_profile();
 
 CREATE FUNCTION public.ss_my_profile()
- RETURNS TABLE(id uuid, full_name text, address text, city text, state text, postal_code text, phone text, email text, gate_code text, dog_name text, location_notes text, preferred_contact text, notify_visits boolean, notify_invoices boolean, notify_reports boolean, notify_marketing boolean, vehicle_make text, vehicle_model text, vehicle_year integer, vehicle_vin text)
+ RETURNS TABLE(id uuid, full_name text, address text, city text, state text, postal_code text, phone text, email text, gate_code text, dog_name text, location_notes text, preferred_contact text, notify_visits boolean, notify_invoices boolean, notify_reports boolean, notify_marketing boolean, pool_detail_make text, pool_detail_model text, pool_detail_year integer, pool_detail_code text)
  LANGUAGE sql
  STABLE SECURITY DEFINER
  SET search_path TO 'public'
@@ -16,7 +16,7 @@ AS $function$
          c.phone, c.email, c.gate_code, c.dog_name, c.location_notes,
          c.preferred_contact, c.notify_visits, c.notify_invoices,
          c.notify_reports, c.notify_marketing,
-         c.vehicle_make, c.vehicle_model, c.vehicle_year, c.vehicle_vin
+         c.pool_detail_make, c.pool_detail_model, c.pool_detail_year, c.pool_detail_code
   FROM public.ss_customers c WHERE c.user_id = auth.uid()
 $function$;
 
@@ -32,7 +32,7 @@ AS $function$
 DECLARE
   c public.ss_customers%ROWTYPE;
   v_contact text;
-  v_vin text;
+  v_detail_code text;
   v_year int;
 BEGIN
   SELECT * INTO c FROM public.ss_customers WHERE user_id = auth.uid() LIMIT 1;
@@ -52,14 +52,14 @@ BEGIN
     RAISE EXCEPTION 'Enter the full service address';
   END IF;
 
-  v_vin := nullif(upper(btrim(coalesce(p_patch->>'vehicle_vin',''))), '');
-  IF v_vin IS NOT NULL AND v_vin !~ '^[A-HJ-NPR-Z0-9]{11,17}$' THEN
+  v_detail_code := nullif(upper(btrim(coalesce(p_patch->>'pool_detail_code',''))), '');
+  IF v_detail_code IS NOT NULL AND v_detail_code !~ '^[A-HJ-NPR-Z0-9]{11,17}$' THEN
     RAISE EXCEPTION 'Enter a valid identifier';
   END IF;
 
-  v_year := nullif(btrim(coalesce(p_patch->>'vehicle_year','')), '')::int;
+  v_year := nullif(btrim(coalesce(p_patch->>'pool_detail_year','')), '')::int;
   IF v_year IS NOT NULL AND (v_year < 1900 OR v_year > extract(year from now())::int + 2) THEN
-    RAISE EXCEPTION 'Enter a valid vehicle year';
+    RAISE EXCEPTION 'Enter a valid pool detail year';
   END IF;
 
   UPDATE public.ss_customers SET
@@ -72,10 +72,10 @@ BEGIN
     gate_code = CASE WHEN p_patch ? 'gate_code' THEN nullif(btrim(left(p_patch->>'gate_code', 60)), '') ELSE gate_code END,
     dog_name = CASE WHEN p_patch ? 'dog_name' THEN nullif(btrim(left(p_patch->>'dog_name', 80)), '') ELSE dog_name END,
     location_notes = CASE WHEN p_patch ? 'location_notes' THEN nullif(btrim(left(p_patch->>'location_notes', 1000)), '') ELSE location_notes END,
-    vehicle_make = CASE WHEN p_patch ? 'vehicle_make' THEN nullif(btrim(left(p_patch->>'vehicle_make', 60)), '') ELSE vehicle_make END,
-    vehicle_model = CASE WHEN p_patch ? 'vehicle_model' THEN nullif(btrim(left(p_patch->>'vehicle_model', 60)), '') ELSE vehicle_model END,
-    vehicle_year = CASE WHEN p_patch ? 'vehicle_year' THEN v_year ELSE vehicle_year END,
-    vehicle_vin = CASE WHEN p_patch ? 'vehicle_vin' THEN v_vin ELSE vehicle_vin END,
+    pool_detail_make = CASE WHEN p_patch ? 'pool_detail_make' THEN nullif(btrim(left(p_patch->>'pool_detail_make', 60)), '') ELSE pool_detail_make END,
+    pool_detail_model = CASE WHEN p_patch ? 'pool_detail_model' THEN nullif(btrim(left(p_patch->>'pool_detail_model', 60)), '') ELSE pool_detail_model END,
+    pool_detail_year = CASE WHEN p_patch ? 'pool_detail_year' THEN v_year ELSE pool_detail_year END,
+    pool_detail_code = CASE WHEN p_patch ? 'pool_detail_code' THEN v_detail_code ELSE pool_detail_code END,
     preferred_contact = v_contact,
     notify_visits = coalesce((p_patch->>'notify_visits')::boolean, notify_visits),
     notify_invoices = coalesce((p_patch->>'notify_invoices')::boolean, notify_invoices),
