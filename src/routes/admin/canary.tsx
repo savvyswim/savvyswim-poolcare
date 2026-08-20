@@ -257,8 +257,10 @@ function CanaryAdminPage() {
                 <th className="py-2 pr-4">Last passed</th>
                 <th className="py-2 pr-4">HTTP</th>
                 <th className="py-2 pr-4">Time</th>
+                <th className="py-2 pr-4">Avg / p95 (24h)</th>
+                <th className="py-2 pr-4">Errors (24h)</th>
                 <th className="py-2 pr-4">Detail</th>
-              </tr>
+
             </thead>
             <tbody>
               {rows.map((r) => (
