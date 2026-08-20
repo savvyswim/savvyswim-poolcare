@@ -1,4 +1,11 @@
+import { readFileSync } from "fs";
+import { resolve } from "path";
+
 import { describe, expect, it } from "vitest";
+
+import { buildManifest } from "../../scripts/generate-route-manifest";
+import { DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
+import { isRedirectRoute, ROUTE_MANIFEST, selectCanaryRoutes } from "@/lib/canary-routes";
 
 import { classify, extractStack, looksLikeCrashBody, summarizeCanary, type CanaryRun } from "@/lib/canary";
 
@@ -86,5 +93,41 @@ describe("canary trace capture", () => {
     expect(summary).toContain("FAILED");
     expect(summary).toContain("http_5xx");
     expect(summary).toContain("deploy-health");
+  });
+});
+
+describe("canary route manifest", () => {
+  it("stays in sync with the router's generated route tree", () => {
+    const expected = buildManifest();
+    const actual = readFileSync(resolve(process.cwd(), "src/lib/route-manifest.gen.ts"), "utf8");
+    expect(actual).toBe(expected);
+  });
+
+  it("only monitors routes that exist in the manifest", () => {
+    for (const route of DEFAULT_CANARY_ROUTES) expect(ROUTE_MANIFEST).toContain(route);
+    for (const route of SMOKE_ROUTES) expect(DEFAULT_CANARY_ROUTES).toContain(route);
+  });
+
+  it("skips auth-gated, parameterised and internal routes", () => {
+    expect(DEFAULT_CANARY_ROUTES).toContain("/schedule");
+    expect(DEFAULT_CANARY_ROUTES).toContain("/api/public/health");
+    expect(DEFAULT_CANARY_ROUTES).not.toContain("/$city");
+    expect(DEFAULT_CANARY_ROUTES).not.toContain("/admin/lead-sync");
+    expect(DEFAULT_CANARY_ROUTES).not.toContain("/schedule-qr");
+    expect(DEFAULT_CANARY_ROUTES).not.toContain("/api/public/leads");
+  });
+
+  it("drops a route as soon as it leaves the manifest", () => {
+    const shrunk = ROUTE_MANIFEST.filter((path) => path !== "/services");
+    expect(selectCanaryRoutes(shrunk)).not.toContain("/services");
+  });
+});
+
+describe("canary redirect awareness", () => {
+  it("accepts a 301 on manifest-declared redirect routes", () => {
+    expect(isRedirectRoute("/book")).toBe(true);
+    expect(
+      classify({ route: "/book", httpStatus: 301, body: "", aborted: false, networkError: null }).ok,
+    ).toBe(true);
   });
 });

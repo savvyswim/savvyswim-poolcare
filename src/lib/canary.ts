@@ -10,6 +10,8 @@
  * unit test.
  */
 
+import { isRedirectRoute, selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
+
 export type CanaryKind = "ok" | "http_5xx" | "http_4xx" | "timeout" | "network" | "crash_body" | "blank";
 
 export type CanaryProbe = {
@@ -41,27 +43,22 @@ export type CanaryRun = {
   revisionId: string | null;
 };
 
-// Only routes this deployment actually serves. The CRM / customer app lives in
-// a separate project (see src/lib/app-links.ts), so /app and /admin/crm* are
-// not monitored here — they 404 on the marketing site by design.
-export const DEFAULT_CANARY_ROUTES = [
-  "/",
-  "/services",
-  "/weekly-pool-service",
-  "/pool-cleaning-frisco-tx",
-  "/schedule",
-  "/portal",
-  "/api/public/health",
-];
+// Derived from the router's own route tree (src/lib/route-manifest.gen.ts) via
+// src/lib/canary-routes.ts, so the monitored list can never drift from what the
+// deployment actually serves. The CRM / customer app lives in a separate project
+// (see src/lib/app-links.ts) and therefore never appears here.
+export const DEFAULT_CANARY_ROUTES = selectCanaryRoutes();
 
-
-export const SMOKE_ROUTES = ["/", "/services", "/weekly-pool-service"];
+export const SMOKE_ROUTES = selectSmokeRoutes();
 
 const BODY_SNIPPET_LIMIT = 1200;
 const MIN_HTML_BYTES = 500;
 
 /** Auth-guarded areas may legitimately redirect to a login screen. */
 const ALLOW_REDIRECT = /^\/(admin|crm|portal|app)/;
+
+/** A 3xx is expected on guarded areas and on routes the manifest marks as redirects. */
+const redirectAllowed = (route: string) => ALLOW_REDIRECT.test(route) || isRedirectRoute(route);
 
 export function looksLikeCrashBody(body: string): boolean {
   return body.includes('"unhandled":true') || body.includes('"message":"HTTPError"');
@@ -97,7 +94,7 @@ export function classify(input: {
   if (httpStatus !== null && httpStatus >= 400)
     return { kind: "http_4xx", ok: false, message: `client error ${httpStatus}` };
   const isRedirect = httpStatus !== null && httpStatus >= 300 && httpStatus < 400;
-  if (isRedirect && !ALLOW_REDIRECT.test(route))
+  if (isRedirect && !redirectAllowed(route))
     return { kind: "http_4xx", ok: false, message: `unexpected redirect ${httpStatus}` };
   if (!isRedirect && !route.startsWith("/api/") && body.length < MIN_HTML_BYTES)
     return { kind: "blank", ok: false, message: `blank response (${body.length} bytes)` };
