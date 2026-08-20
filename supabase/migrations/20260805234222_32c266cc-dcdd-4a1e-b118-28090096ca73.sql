@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.inspection_requests (
   address text NOT NULL,
   postal_code text NOT NULL,
   preferred_date date,
-  vehicle_details text,
+  pool_details text,
   preferred_contact_time text,
   notes text,
   sms_opt_in boolean NOT NULL DEFAULT true,
