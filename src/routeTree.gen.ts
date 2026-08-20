@@ -42,6 +42,7 @@ import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as AdminCrmRouteImport } from './routes/admin/crm'
+import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
@@ -229,6 +230,11 @@ const AdminCrmRoute = AdminCrmRouteImport.update({
   path: '/admin/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCanaryRoute = AdminCanaryRouteImport.update({
+  id: '/admin/canary',
+  path: '/admin/canary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -374,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
@@ -430,6 +437,7 @@ export interface FileRoutesByTo {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
@@ -487,6 +495,7 @@ export interface FileRoutesById {
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
@@ -545,6 +554,7 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
@@ -601,6 +611,7 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
@@ -657,6 +668,7 @@ export interface FileRouteTypes {
     | '/weekly-pool-service'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
@@ -714,6 +726,7 @@ export interface RootRouteChildren {
   WeeklyPoolServiceRoute: typeof WeeklyPoolServiceRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AdminCanaryRoute: typeof AdminCanaryRoute
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
@@ -975,6 +988,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/canary': {
+      id: '/admin/canary'
+      path: '/admin/canary'
+      fullPath: '/admin/canary'
+      preLoaderRoute: typeof AdminCanaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -1175,6 +1195,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AdminCanaryRoute: AdminCanaryRoute,
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
