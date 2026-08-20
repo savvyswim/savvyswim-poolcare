@@ -36,6 +36,7 @@ import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -194,6 +195,11 @@ const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   path: '/admin/webhook-health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
+  id: '/admin/not-found',
+  path: '/admin/not-found',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
   id: '/admin/lead-sync',
   path: '/admin/lead-sync',
@@ -345,6 +351,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -396,6 +403,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -448,6 +456,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -501,6 +510,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/not-found'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -552,6 +562,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/not-found'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -603,6 +614,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/not-found'
     | '/admin/webhook-health'
     | '/quote/$token'
     | '/review/$token'
@@ -655,6 +667,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
+  AdminNotFoundRoute: typeof AdminNotFoundRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -870,6 +883,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWebhookHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/not-found': {
+      id: '/admin/not-found'
+      path: '/admin/not-found'
+      fullPath: '/admin/not-found'
+      preLoaderRoute: typeof AdminNotFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/lead-sync': {
       id: '/admin/lead-sync'
       path: '/admin/lead-sync'
@@ -1056,6 +1076,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
+  AdminNotFoundRoute: AdminNotFoundRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,

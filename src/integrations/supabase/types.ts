@@ -3131,6 +3131,48 @@ export type Database = {
           },
         ]
       }
+      ss_not_found_events: {
+        Row: {
+          alert_result: string | null
+          alerted: boolean
+          created_at: string
+          full_url: string | null
+          id: string
+          internal_referrer: boolean
+          ip_address: string | null
+          path: string
+          referrer: string | null
+          source: string
+          user_agent: string | null
+        }
+        Insert: {
+          alert_result?: string | null
+          alerted?: boolean
+          created_at?: string
+          full_url?: string | null
+          id?: string
+          internal_referrer?: boolean
+          ip_address?: string | null
+          path: string
+          referrer?: string | null
+          source?: string
+          user_agent?: string | null
+        }
+        Update: {
+          alert_result?: string | null
+          alerted?: boolean
+          created_at?: string
+          full_url?: string | null
+          id?: string
+          internal_referrer?: boolean
+          ip_address?: string | null
+          path?: string
+          referrer?: string | null
+          source?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       ss_payments: {
         Row: {
           amount: number
