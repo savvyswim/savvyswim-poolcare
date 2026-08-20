@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { buildManifest } from "../../scripts/generate-route-manifest";
 import { DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
-import { ROUTE_MANIFEST, selectCanaryRoutes } from "@/lib/canary-routes";
+import { isRedirectRoute, ROUTE_MANIFEST, selectCanaryRoutes } from "@/lib/canary-routes";
 
 import { classify, extractStack, looksLikeCrashBody, summarizeCanary, type CanaryRun } from "@/lib/canary";
 
@@ -120,5 +120,14 @@ describe("canary route manifest", () => {
   it("drops a route as soon as it leaves the manifest", () => {
     const shrunk = ROUTE_MANIFEST.filter((path) => path !== "/services");
     expect(selectCanaryRoutes(shrunk)).not.toContain("/services");
+  });
+});
+
+describe("canary redirect awareness", () => {
+  it("accepts a 301 on manifest-declared redirect routes", () => {
+    expect(isRedirectRoute("/book")).toBe(true);
+    expect(
+      classify({ route: "/book", httpStatus: 301, body: "", aborted: false, networkError: null }).ok,
+    ).toBe(true);
   });
 });
