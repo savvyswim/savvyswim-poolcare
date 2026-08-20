@@ -26,6 +26,7 @@ export const ROUTE_MANIFEST = [
   "/api/public/hooks/failure-rate-watch",
   "/api/public/hooks/health-watch",
   "/api/public/hooks/low-stock-watch",
+  "/api/public/hooks/smoke-alert",
   "/api/public/hooks/visit-reminders",
   "/api/public/hooks/webhook-watch",
   "/api/public/leads",
