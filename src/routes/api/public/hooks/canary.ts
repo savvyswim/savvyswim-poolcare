@@ -169,6 +169,10 @@ async function handle(request: Request) {
         })),
       );
     }
+
+    // Per-route "last checked / last passed" board shown in /admin/canary.
+    const { recordRouteChecks } = await import("@/lib/canary-status.server");
+    await recordRouteChecks(run, inserted?.id ?? null);
   } catch (e) {
     console.error("[canary] could not record run", e);
   }
