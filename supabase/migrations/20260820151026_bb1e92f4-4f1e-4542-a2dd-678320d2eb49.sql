@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS public.ss_damage_reports CASCADE;
+DROP TABLE IF EXISTS public.ss_condition_reports CASCADE;
