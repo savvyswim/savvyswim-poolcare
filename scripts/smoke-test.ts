@@ -1,28 +1,30 @@
 /**
- * End-to-end SSR smoke test.
+ * Automated smoke test over the GENERATED canary routes.
  *
- * Hits every static route (public site + CRM/admin) plus the startup health
- * endpoint and asserts each responds successfully. Run after every deploy:
+ * Route list comes from src/lib/route-manifest.gen.ts (via canary-routes), so
+ * it always matches what the router serves. Adds the branded error page and the
+ * startup health endpoint. Fails the process and pages on-call on any failure:
  *
  *   bun run test:smoke                       # defaults to http://localhost:8080
- *   BASE_URL=https://savvyswim.com bun run test:smoke
+ *   BASE_URL=https://savvyswimservices.com bun run test:smoke
+ *   bun run test:smoke -- --fast             # highest-value routes only
  *
- * Exits non-zero when any route fails, so CI/deploy hooks can gate on it.
+ * Alerting: with OPS_HOOK_SECRET set, failures POST to
+ * /api/public/hooks/smoke-alert which emails + texts on-call.
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "../src/lib/rollback-checklist";
+import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "../src/lib/smoke";
 
 const BASE_URL = (process.env["BASE_URL"] ?? "http://localhost:8080").replace(/\/$/, "");
 const TIMEOUT_MS = Number(process.env["SMOKE_TIMEOUT_MS"] ?? 20000);
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const routeTreePath = path.resolve(here, "../src/routeTree.gen.ts");
 
-/** Auth-guarded routes may legitimately redirect to a login screen. */
-const ALLOW_REDIRECT = /^\/(admin|crm|portal)/;
+
 
 export function collectRoutes(routeTreeSource: string): string[] {
   const found = new Set<string>();
@@ -41,92 +43,10 @@ export function collectRoutes(routeTreeSource: string): string[] {
 
 type Result = { route: string; status: number | null; ok: boolean; note: string };
 
-/** Admin/CRM screens that must SSR a real page (200, non-blank, no crash body). */
-const CRITICAL_ADMIN_ROUTES = [
-  "/admin/crm",
-  "/admin/crm/customers",
-  "/admin/crm/jobs",
-  "/admin/crm/finance",
-  "/admin/crm/pipeline",
-  "/admin/crm/projects",
-  "/admin/crm/reports",
-  "/admin/crm/settings",
-  "/admin/crm/deploy-health",
-  "/portal",
-];
-
-const MIN_HTML_BYTES = 500;
-
 function looksLikeCrash(body: string): boolean {
   return body.includes('"unhandled":true') || body.includes("HTTPError");
 }
 
-async function probe(route: string): Promise<Result> {
-  const url = `${BASE_URL}${route}`;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(url, { redirect: "manual", signal: controller.signal });
-    const isRedirect = res.status >= 300 && res.status < 400;
-    const ok = res.status === 200 || (isRedirect && ALLOW_REDIRECT.test(route));
-    return {
-      route,
-      status: res.status,
-      ok,
-      note: ok && isRedirect ? `redirect -> ${res.headers.get("location") ?? "?"}` : "",
-    };
-  } catch (error) {
-    return {
-      route,
-      status: null,
-      ok: false,
-      note: error instanceof Error ? error.message : String(error),
-    };
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-/**
- * Critical admin/CRM screens: must be 200 (no redirect away), must return real
- * HTML, and must not be the SSR crash payload or a blank shell.
- */
-async function probeCritical(route: string): Promise<Result> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(`${BASE_URL}${route}`, { redirect: "manual", signal: controller.signal });
-    const body = await res.text();
-    if (res.status !== 200) {
-      const dest = res.headers.get("location");
-      return {
-        route: `${route} [critical]`,
-        status: res.status,
-        ok: false,
-        note: dest ? `redirected to ${dest} instead of rendering` : "did not return 200",
-      };
-    }
-    if (looksLikeCrash(body)) {
-      return { route: `${route} [critical]`, status: 200, ok: false, note: "SSR crash payload" };
-    }
-    if (body.length < MIN_HTML_BYTES) {
-      return { route: `${route} [critical]`, status: 200, ok: false, note: `blank response (${body.length} bytes)` };
-    }
-    if (!/<body[\s>]/i.test(body)) {
-      return { route: `${route} [critical]`, status: 200, ok: false, note: "no HTML document returned" };
-    }
-    return { route: `${route} [critical]`, status: 200, ok: true, note: `${body.length} bytes` };
-  } catch (error) {
-    return {
-      route: `${route} [critical]`,
-      status: null,
-      ok: false,
-      note: error instanceof Error ? error.message : String(error),
-    };
-  } finally {
-    clearTimeout(timer);
-  }
-}
 
 /** Unknown URLs must render the branded not-found/error page, not a blank 500. */
 async function probeErrorPage(): Promise<Result> {
@@ -172,25 +92,78 @@ async function probeHealth(): Promise<Result> {
   }
 }
 
+/** Probe one generated canary route and grade it with the shared rules. */
+async function probeTarget(target: { route: string; guarded: boolean }): Promise<Result> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${BASE_URL}${target.route}`, { redirect: "manual", signal: controller.signal });
+    const json = target.route.startsWith("/api/");
+    const body = json ? "" : await res.text();
+    return evaluateSmokeProbe({
+      route: target.route,
+      guarded: target.guarded,
+      status: res.status,
+      body,
+      location: res.headers.get("location"),
+      json,
+    });
+  } catch (error) {
+    return evaluateSmokeProbe({
+      route: target.route,
+      guarded: target.guarded,
+      status: null,
+      body: "",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Page on-call when the smoke run fails (no-op unless the hook secret is set). */
+async function alertOnFailure(failures: Result[], summary: string) {
+  const secret = process.env["OPS_HOOK_SECRET"] ?? process.env["CRM_WEBHOOK_SECRET"];
+  if (!secret) {
+    console.error("Alert skipped: OPS_HOOK_SECRET not set in this environment.");
+    return;
+  }
+  const alertBase = (process.env["SMOKE_ALERT_URL"] ?? "https://savvyswimservices.com").replace(/\/$/, "");
+  try {
+    const res = await fetch(`${alertBase}/api/public/hooks/smoke-alert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-ops-secret": secret },
+      body: JSON.stringify({
+        target: BASE_URL,
+        summary,
+        failures: failures.map((f) => ({ route: f.route, status: f.status, note: f.note })),
+      }),
+    });
+    console.error(`Alert dispatch: ${res.status} ${await res.text()}`);
+  } catch (error) {
+    console.error("Alert dispatch failed:", error instanceof Error ? error.message : String(error));
+  }
+}
+
 async function main() {
-  const routes = collectRoutes(readFileSync(routeTreePath, "utf8"));
-  const total = routes.length + CRITICAL_ADMIN_ROUTES.length + 2;
-  console.log(`Smoke testing ${total} endpoints against ${BASE_URL}\n`);
+  const mode = process.argv.includes("--fast") || process.env["SMOKE_MODE"] === "fast" ? "fast" : "full";
+  const targets = buildSmokeTargets(mode);
+  console.log(`Smoke testing ${targets.length + 2} endpoints (${mode}, generated canary routes) against ${BASE_URL}\n`);
 
   const results: Result[] = [];
-  const queue = [...routes];
+  const queue = [...targets];
   const CONCURRENCY = 6;
   await Promise.all(
     Array.from({ length: CONCURRENCY }, async () => {
       for (let next = queue.shift(); next; next = queue.shift()) {
-        results.push(await probe(next));
+        results.push(await probeTarget(next));
       }
     }),
   );
-  for (const route of CRITICAL_ADMIN_ROUTES) results.push(await probeCritical(route));
   results.push(await probeErrorPage());
   results.push(await probeHealth());
   results.sort((a, b) => a.route.localeCompare(b.route));
+
 
   for (const r of results) {
     const mark = r.ok ? "PASS" : "FAIL";
@@ -202,6 +175,10 @@ async function main() {
   if (failures.length) {
     console.error(`\n${failures.length} endpoint(s) failed:`);
     for (const f of failures) console.error(`  ${f.route} -> ${f.status ?? "no response"} ${f.note}`);
+
+    await alertOnFailure(failures, summarizeSmoke(results, BASE_URL));
+
+
 
     // Failing smoke test -> emit the rollback checklist so you know exactly
     // which version to restore from the deployment history.
