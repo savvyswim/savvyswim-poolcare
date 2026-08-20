@@ -27,7 +27,11 @@ function esc(value: unknown): string {
 
 export type InspectionNotifyResult =
   | { sent: false; reason: string }
-  | { sent: true; recipients: Record<string, string> };
+  | {
+      sent: true;
+      recipients: Record<string, string>;
+      sms?: { to: string | null; outcome: "sent" | "failed" | "skipped" };
+    };
 
 export async function sendInspectionNotifications(
   requestId: string,
