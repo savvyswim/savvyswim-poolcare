@@ -1,13 +1,30 @@
 import { useLocation } from "@/lib/router-compat";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Seo from "@/components/Seo";
 
 const NotFound = () => {
   const location = useLocation();
+  const reported = useRef<string | null>(null);
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    const path = location.pathname;
+    console.error("404 Error: User attempted to access non-existent route:", path);
+    // Log every miss so the office sees broken links on /admin/not-found.
+    if (reported.current === path) return;
+    reported.current = path;
+    void import("@/lib/not-found-log.functions")
+      .then(({ logNotFound }) =>
+        logNotFound({
+          data: {
+            path: path.slice(0, 300),
+            fullUrl: window.location.href.slice(0, 600),
+            referrer: document.referrer ? document.referrer.slice(0, 600) : null,
+          },
+        }),
+      )
+      .catch(() => undefined);
   }, [location.pathname]);
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
