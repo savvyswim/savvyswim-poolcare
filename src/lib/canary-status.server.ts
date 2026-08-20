@@ -175,7 +175,9 @@ export async function recordRouteChecks(run: CanaryRun, runId: string | null): P
 export async function buildCanaryRouteReport(target = DEFAULT_TARGET): Promise<CanaryRouteReport> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const [{ data: checks }, { data: runs }] = await Promise.all([
+  const since = new Date(Date.now() - TREND_WINDOW_MS).toISOString();
+
+  const [{ data: checks }, { data: runs }, { data: metrics }] = await Promise.all([
     supabaseAdmin
       .from("ss_canary_route_checks")
       .select(
@@ -188,7 +190,33 @@ export async function buildCanaryRouteReport(target = DEFAULT_TARGET): Promise<C
       .eq("target", target)
       .order("started_at", { ascending: false })
       .limit(1),
+    supabaseAdmin
+      .from("ss_canary_route_metrics")
+      .select("route, checked_at, requests, failures, avg_ms, max_ms, p95_ms")
+      .eq("target", target)
+      .gte("checked_at", since)
+      .order("checked_at", { ascending: false })
+      .limit(5000),
   ]);
+
+  const trends = new Map<string, CanaryRouteTrend>();
+  const p95s = new Map<string, number[]>();
+  for (const row of metrics ?? []) {
+    const t = trends.get(row.route) ?? emptyTrend();
+    t.requests += row.requests;
+    t.failures += row.failures;
+    t.samples += 1;
+    t.avgMs += row.avg_ms * row.requests;
+    t.maxMs = Math.max(t.maxMs, row.max_ms);
+    if (!t.lastSampleAt || row.checked_at > t.lastSampleAt) t.lastSampleAt = row.checked_at;
+    trends.set(row.route, t);
+    p95s.set(row.route, [...(p95s.get(row.route) ?? []), row.p95_ms]);
+  }
+  for (const [route, t] of trends) {
+    t.avgMs = t.requests ? Math.round(t.avgMs / t.requests) : 0;
+    t.errorRate = t.requests ? Number((t.failures / t.requests).toFixed(4)) : 0;
+    t.p95Ms = percentile([...(p95s.get(route) ?? [])].sort((a, b) => a - b), 95);
+  }
 
   const stored = new Map((checks ?? []).map((row) => [row.route, row as CanaryRouteRow]));
   const monitored = selectCanaryRoutes();
@@ -214,8 +242,26 @@ export async function buildCanaryRouteReport(target = DEFAULT_TARGET): Promise<C
       guarded: isGuardedRoute(route),
       redirect: isRedirectRoute(route),
       stale: lastOk === null ? true : now - lastOk > STALE_AFTER_MS,
+      trend24h: trends.get(route) ?? emptyTrend(),
     };
   });
+
+  const overall24h = emptyTrend();
+  const allP95: number[] = [];
+  for (const r of routes) {
+    overall24h.requests += r.trend24h.requests;
+    overall24h.failures += r.trend24h.failures;
+    overall24h.samples += r.trend24h.samples;
+    overall24h.avgMs += r.trend24h.avgMs * r.trend24h.requests;
+    overall24h.maxMs = Math.max(overall24h.maxMs, r.trend24h.maxMs);
+    if (r.trend24h.p95Ms) allP95.push(r.trend24h.p95Ms);
+    if (r.trend24h.lastSampleAt && (!overall24h.lastSampleAt || r.trend24h.lastSampleAt > overall24h.lastSampleAt)) {
+      overall24h.lastSampleAt = r.trend24h.lastSampleAt;
+    }
+  }
+  overall24h.avgMs = overall24h.requests ? Math.round(overall24h.avgMs / overall24h.requests) : 0;
+  overall24h.errorRate = overall24h.requests ? Number((overall24h.failures / overall24h.requests).toFixed(4)) : 0;
+  overall24h.p95Ms = percentile(allP95.sort((a, b) => a - b), 95);
 
   const run = runs?.[0] ?? null;
 
@@ -227,6 +273,8 @@ export async function buildCanaryRouteReport(target = DEFAULT_TARGET): Promise<C
     failingCount: routes.filter((r) => r.last_status === "failed").length,
     neverCheckedCount: routes.filter((r) => r.last_status === "unknown").length,
     staleCount: routes.filter((r) => r.stale && r.last_status !== "unknown").length,
+    overall24h,
+
     lastRun: run
       ? {
           startedAt: run.started_at,
