@@ -172,25 +172,78 @@ async function probeHealth(): Promise<Result> {
   }
 }
 
+/** Probe one generated canary route and grade it with the shared rules. */
+async function probeTarget(target: { route: string; guarded: boolean }): Promise<Result> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${BASE_URL}${target.route}`, { redirect: "manual", signal: controller.signal });
+    const json = target.route.startsWith("/api/");
+    const body = json ? "" : await res.text();
+    return evaluateSmokeProbe({
+      route: target.route,
+      guarded: target.guarded,
+      status: res.status,
+      body,
+      location: res.headers.get("location"),
+      json,
+    });
+  } catch (error) {
+    return evaluateSmokeProbe({
+      route: target.route,
+      guarded: target.guarded,
+      status: null,
+      body: "",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Page on-call when the smoke run fails (no-op unless the hook secret is set). */
+async function alertOnFailure(failures: Result[], summary: string) {
+  const secret = process.env["OPS_HOOK_SECRET"] ?? process.env["CRM_WEBHOOK_SECRET"];
+  if (!secret) {
+    console.error("Alert skipped: OPS_HOOK_SECRET not set in this environment.");
+    return;
+  }
+  const alertBase = (process.env["SMOKE_ALERT_URL"] ?? "https://savvyswimservices.com").replace(/\/$/, "");
+  try {
+    const res = await fetch(`${alertBase}/api/public/hooks/smoke-alert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-ops-secret": secret },
+      body: JSON.stringify({
+        target: BASE_URL,
+        summary,
+        failures: failures.map((f) => ({ route: f.route, status: f.status, note: f.note })),
+      }),
+    });
+    console.error(`Alert dispatch: ${res.status} ${await res.text()}`);
+  } catch (error) {
+    console.error("Alert dispatch failed:", error instanceof Error ? error.message : String(error));
+  }
+}
+
 async function main() {
-  const routes = collectRoutes(readFileSync(routeTreePath, "utf8"));
-  const total = routes.length + CRITICAL_ADMIN_ROUTES.length + 2;
-  console.log(`Smoke testing ${total} endpoints against ${BASE_URL}\n`);
+  const mode = process.argv.includes("--fast") || process.env["SMOKE_MODE"] === "fast" ? "fast" : "full";
+  const targets = buildSmokeTargets(mode);
+  console.log(`Smoke testing ${targets.length + 2} endpoints (${mode}, generated canary routes) against ${BASE_URL}\n`);
 
   const results: Result[] = [];
-  const queue = [...routes];
+  const queue = [...targets];
   const CONCURRENCY = 6;
   await Promise.all(
     Array.from({ length: CONCURRENCY }, async () => {
       for (let next = queue.shift(); next; next = queue.shift()) {
-        results.push(await probe(next));
+        results.push(await probeTarget(next));
       }
     }),
   );
-  for (const route of CRITICAL_ADMIN_ROUTES) results.push(await probeCritical(route));
   results.push(await probeErrorPage());
   results.push(await probeHealth());
   results.sort((a, b) => a.route.localeCompare(b.route));
+
 
   for (const r of results) {
     const mark = r.ok ? "PASS" : "FAIL";
