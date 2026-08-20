@@ -27,7 +27,11 @@ function esc(value: unknown): string {
 
 export type InspectionNotifyResult =
   | { sent: false; reason: string }
-  | { sent: true; recipients: Record<string, string> };
+  | {
+      sent: true;
+      recipients: Record<string, string>;
+      sms?: { to: string | null; outcome: "sent" | "failed" | "skipped" };
+    };
 
 export async function sendInspectionNotifications(
   requestId: string,
@@ -195,6 +199,28 @@ export async function sendInspectionNotifications(
     results[req.email] = "failed";
   }
 
+  // Homeowner text confirmation — only when the number gave an explicit
+  // SMS opt-in (sendStatusSms enforces consent and appends STOP/HELP).
+  let smsOutcome: "sent" | "failed" | "skipped" = "skipped";
+  let smsTo: string | null = null;
+  try {
+    const { normalizePhone } = await import("./phone");
+    smsTo = normalizePhone(req.phone ?? "");
+    if (smsTo) {
+      const { hasSmsOptIn } = await import("./sms-compliance.server");
+      if (await hasSmsOptIn(smsTo)) {
+        const { sendStatusSms } = await import("./appointment-status-notify.server");
+        const smsText = isWaterTest
+          ? `Savvy Swim: thanks ${req.full_name.split(" ")[0]} — your free water test request (${req.reference_number}) is in. We'll text your readings and next available windows. Questions? 817-663-7665`
+          : `Savvy Swim: thanks ${req.full_name.split(" ")[0]} — your free inspection request (${req.reference_number}) is in. A tech reviews it within 1 business day and we'll text two visit windows. Questions? 817-663-7665`;
+        smsOutcome = (await sendStatusSms(smsTo, smsText)) ? "sent" : "failed";
+      }
+    }
+  } catch (e) {
+    console.error("inspection sms confirmation failed", e);
+    smsOutcome = "failed";
+  }
+
   const { logInspectionEvents } = await import("./inspection-events.server");
   await logInspectionEvents(req.id, [
     { eventType: "status_change", statusTo: "new", detail: "Request submitted" },
@@ -207,7 +233,21 @@ export async function sendInspectionNotifications(
       outcome,
       detail: to === req.email ? "Homeowner confirmation" : "Office new-request alert",
     })),
+    ...(smsOutcome === "skipped"
+      ? []
+      : [
+          {
+            eventType: (smsOutcome === "sent" ? "sms_sent" : "sms_failed") as
+              | "sms_sent"
+              | "sms_failed",
+            channel: "sms",
+            recipient: smsTo,
+            outcome: smsOutcome,
+            detail: "Homeowner text confirmation",
+          },
+        ]),
   ]);
 
-  return { sent: true, recipients: results };
+  return { sent: true, recipients: results, sms: { to: smsTo, outcome: smsOutcome } };
 }
+
