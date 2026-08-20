@@ -165,7 +165,38 @@ function ScheduleQrPage() {
               Copy link
             </button>
           </div>
+
+          <div className="mt-8 border-t border-hairline pt-5">
+            <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+              Batch · multiple campaign codes
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              One code per line (or comma separated). Downloads a zip with a print-ready PNG for
+              each code plus a CSV of the tagged links.
+            </p>
+            <textarea
+              value={batchText}
+              onChange={(e) => setBatchText(e.target.value)}
+              rows={6}
+              className="mt-3 w-full border border-hairline bg-background px-3 py-2 font-tech text-sm"
+              placeholder={"flyer\nyard_sign\ntruck"}
+            />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => void downloadZip()}
+                disabled={zipping || batchSlugs.length === 0}
+                className="border border-accent px-5 py-2 font-tech text-[11px] uppercase tracking-[0.14em] text-accent disabled:opacity-40"
+              >
+                {zipping ? "Building zip…" : `Download ${batchSlugs.length} QR codes (.zip)`}
+              </button>
+              {zipNote ? (
+                <span className="font-tech text-[11px] text-muted-foreground">{zipNote}</span>
+              ) : null}
+            </div>
+          </div>
         </div>
+
 
         <div className="flex flex-col items-center justify-start">
           <div className="border border-hairline bg-secondary/20 p-6">
