@@ -1,6 +1,6 @@
 # Faster, mobile-first site + consent-gated lead embed
 
-Three things in one pass: make the site quicker and easier to use on a phone, put the CRM lead-capture embed behind a consent banner, and tighten the lead form. Plus a cleanup: the project README is still the old hail-damage/PDR brief and gets rewritten as Savvy Swim pool service.
+Three things in one pass: make the site quicker and easier to use on a phone, put the CRM lead-capture embed behind a consent banner, and tighten the lead form. Plus a cleanup: the project README gets rewritten as Savvy Swim pool service.
 
 ## 1. Cookie / consent banner (compliance)
 
@@ -31,7 +31,7 @@ Applies to the request-inspection page and the booking dialog.
 
 ## 4. Pool-only cleanup
 
-- `README.md` still describes a car hail-damage / paintless dent repair landing page. It gets replaced with the Savvy Swim pool service description. A full-text sweep confirms nothing else in the app, content, or metadata references auto, hail, PDR or insurance claims.
+- `README.md` gets replaced with the Savvy Swim pool service description. A full-text sweep confirms the app, content, and metadata are pool-only.
 
 ## Technical notes
 
