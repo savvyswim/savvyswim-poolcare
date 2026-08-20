@@ -10,7 +10,7 @@
  * unit test.
  */
 
-import { isRedirectRoute, selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
+import { isGuardedRoute, isRedirectRoute, selectCanaryRoutes, selectGuardedRoutes, selectSmokeRoutes } from "./canary-routes";
 
 export type CanaryKind = "ok" | "http_5xx" | "http_4xx" | "timeout" | "network" | "crash_body" | "blank";
 
@@ -51,14 +51,20 @@ export const DEFAULT_CANARY_ROUTES = selectCanaryRoutes();
 
 export const SMOKE_ROUTES = selectSmokeRoutes();
 
+/** Auth-gated pages that are still monitored (a sign-in challenge counts as healthy). */
+export const GUARDED_CANARY_ROUTES = selectGuardedRoutes();
+
 const BODY_SNIPPET_LIMIT = 1200;
 const MIN_HTML_BYTES = 500;
 
-/** Auth-guarded areas may legitimately redirect to a login screen. */
-const ALLOW_REDIRECT = /^\/(admin|crm|portal|app)/;
-
 /** A 3xx is expected on guarded areas and on routes the manifest marks as redirects. */
-const redirectAllowed = (route: string) => ALLOW_REDIRECT.test(route) || isRedirectRoute(route);
+const redirectAllowed = (route: string) => isGuardedRoute(route) || isRedirectRoute(route);
+
+/**
+ * Auth-gated pages we do serve: a sign-in challenge is healthy, a missing page
+ * or a server error is not. Everything else keeps the strict rules.
+ */
+const AUTH_CHALLENGE_STATUSES = new Set([401, 403]);
 
 export function looksLikeCrashBody(body: string): boolean {
   return body.includes('"unhandled":true') || body.includes('"message":"HTTPError"');
@@ -91,6 +97,8 @@ export function classify(input: {
     return { kind: "http_5xx", ok: false, message: `server error ${httpStatus}` };
   if (looksLikeCrashBody(body))
     return { kind: "crash_body", ok: false, message: "SSR crash body returned" };
+  if (httpStatus !== null && isGuardedRoute(route) && AUTH_CHALLENGE_STATUSES.has(httpStatus))
+    return { kind: "ok", ok: true, message: "" };
   if (httpStatus !== null && httpStatus >= 400)
     return { kind: "http_4xx", ok: false, message: `client error ${httpStatus}` };
   const isRedirect = httpStatus !== null && httpStatus >= 300 && httpStatus < 400;
