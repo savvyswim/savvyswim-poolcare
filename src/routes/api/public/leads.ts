@@ -151,8 +151,7 @@ export const Route = createFileRoute("/api/public/leads")({
               page: lead.page ?? "/api/public/leads",
               button: reason,
               consent_state: "unset",
-              campaign_id: lead.campaign_id ?? lead.campaign_code ?? null,
-            utm_source: lead.utm_source ?? lead.source ?? null,
+              utm_source: lead.utm_source ?? lead.source ?? null,
             })
             .then(undefined, () => undefined);
           return json({ ok: true, deduped: true });
