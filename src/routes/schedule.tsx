@@ -61,6 +61,13 @@ export const Route = createFileRoute("/schedule")({
 });
 
 function SchedulePage() {
-  const { src } = Route.useSearch();
-  return <Schedule source={src ? `schedule_${src}` : "schedule_page"} />;
+  const { src, utm_campaign, utm_source } = Route.useSearch();
+  // Campaign code from the QR/flyer, else the paid-campaign name, else direct.
+  const code = (src || utm_campaign || utm_source || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "")
+    .slice(0, 30);
+  return <Schedule source={code ? `schedule_${code}` : "schedule_page"} />;
 }
+
