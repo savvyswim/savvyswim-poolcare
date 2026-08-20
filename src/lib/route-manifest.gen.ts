@@ -56,4 +56,14 @@ export const ROUTE_MANIFEST = [
   "/weekly-pool-service",
 ] as const;
 
+/** Routes whose loader intentionally responds with a 301/302. */
+export const REDIRECT_ROUTES = [
+  "/.lovable/oauth/consent",
+  "/b",
+  "/book",
+  "/booking",
+  "/free-inspection",
+  "/request-inspection",
+] as const;
+
 export type DeployedRoute = (typeof ROUTE_MANIFEST)[number];

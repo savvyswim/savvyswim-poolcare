@@ -10,7 +10,7 @@
  * unit test.
  */
 
-import { selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
+import { isRedirectRoute, selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
 
 export type CanaryKind = "ok" | "http_5xx" | "http_4xx" | "timeout" | "network" | "crash_body" | "blank";
 
@@ -57,6 +57,9 @@ const MIN_HTML_BYTES = 500;
 /** Auth-guarded areas may legitimately redirect to a login screen. */
 const ALLOW_REDIRECT = /^\/(admin|crm|portal|app)/;
 
+/** A 3xx is expected on guarded areas and on routes the manifest marks as redirects. */
+const redirectAllowed = (route: string) => ALLOW_REDIRECT.test(route) || isRedirectRoute(route);
+
 export function looksLikeCrashBody(body: string): boolean {
   return body.includes('"unhandled":true') || body.includes('"message":"HTTPError"');
 }
@@ -91,7 +94,7 @@ export function classify(input: {
   if (httpStatus !== null && httpStatus >= 400)
     return { kind: "http_4xx", ok: false, message: `client error ${httpStatus}` };
   const isRedirect = httpStatus !== null && httpStatus >= 300 && httpStatus < 400;
-  if (isRedirect && !ALLOW_REDIRECT.test(route))
+  if (isRedirect && !redirectAllowed(route))
     return { kind: "http_4xx", ok: false, message: `unexpected redirect ${httpStatus}` };
   if (!isRedirect && !route.startsWith("/api/") && body.length < MIN_HTML_BYTES)
     return { kind: "blank", ok: false, message: `blank response (${body.length} bytes)` };

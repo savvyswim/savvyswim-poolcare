@@ -7,7 +7,7 @@
  * public page and it is monitored automatically.
  */
 
-import { ROUTE_MANIFEST } from "./route-manifest.gen";
+import { REDIRECT_ROUTES, ROUTE_MANIFEST } from "./route-manifest.gen";
 
 /** Route families that exist but must not be probed by an unauthenticated canary. */
 const EXCLUDE_PREFIXES = [
@@ -42,4 +42,9 @@ export function selectSmokeRoutes(manifest: readonly string[] = ROUTE_MANIFEST):
   return smoke.length > 0 ? smoke : monitored.slice(0, 3);
 }
 
-export { ROUTE_MANIFEST };
+/** True when the route tree declares this path as a permanent redirect. */
+export function isRedirectRoute(path: string): boolean {
+  return (REDIRECT_ROUTES as readonly string[]).includes(path);
+}
+
+export { REDIRECT_ROUTES, ROUTE_MANIFEST };

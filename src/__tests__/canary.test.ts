@@ -3,7 +3,7 @@ import { resolve } from "path";
 
 import { describe, expect, it } from "vitest";
 
-import { parseFullPaths, renderManifest } from "../../scripts/generate-route-manifest";
+import { buildManifest } from "../../scripts/generate-route-manifest";
 import { DEFAULT_CANARY_ROUTES, SMOKE_ROUTES } from "@/lib/canary";
 import { ROUTE_MANIFEST, selectCanaryRoutes } from "@/lib/canary-routes";
 
@@ -98,8 +98,7 @@ describe("canary trace capture", () => {
 
 describe("canary route manifest", () => {
   it("stays in sync with the router's generated route tree", () => {
-    const source = readFileSync(resolve(process.cwd(), "src/routeTree.gen.ts"), "utf8");
-    const expected = renderManifest(parseFullPaths(source));
+    const expected = buildManifest();
     const actual = readFileSync(resolve(process.cwd(), "src/lib/route-manifest.gen.ts"), "utf8");
     expect(actual).toBe(expected);
   });
