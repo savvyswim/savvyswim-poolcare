@@ -301,7 +301,22 @@ function CanaryAdminPage() {
                   <td className="py-2 pr-4 font-tech text-xs">
                     {r.last_duration_ms != null ? `${r.last_duration_ms}ms` : "—"}
                   </td>
+                  <td className="py-2 pr-4 font-tech text-xs whitespace-nowrap">
+                    {r.trend24h.requests
+                      ? `${r.trend24h.avgMs}ms / ${r.trend24h.p95Ms}ms`
+                      : "—"}
+                  </td>
+                  <td
+                    className={`py-2 pr-4 font-tech text-xs whitespace-nowrap ${
+                      r.trend24h.failures > 0 ? "text-[#8E1F2C]" : "text-foreground/70"
+                    }`}
+                  >
+                    {r.trend24h.requests
+                      ? `${(r.trend24h.errorRate * 100).toFixed(1)}% (${r.trend24h.failures}/${r.trend24h.requests})`
+                      : "—"}
+                  </td>
                   <td className="py-2 pr-4 text-xs text-foreground/60">
+
                     {r.last_message ??
                       (r.consecutive_failures > 0 ? `${r.consecutive_failures} in a row` : "—")}
                   </td>
