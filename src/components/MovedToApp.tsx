@@ -47,6 +47,7 @@ export function MovedToApp({ from }: { from: string }) {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/schedule"
+              search={{ src: "legacy-crm-link" }}
               className="border border-border px-5 py-3 font-display text-sm uppercase tracking-wide transition-colors hover:bg-muted"
             >
               Schedule an inspection
