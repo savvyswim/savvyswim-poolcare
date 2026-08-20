@@ -1,8 +1,0 @@
-{
-  "route": "/api/public/health",
-  "url": "http://localhost:9999/api/public/health",
-  "status": null,
-  "note": "fetch failed",
-  "error": "fetch failed",
-  "capturedAt": "2026-08-20T13:20:54.686Z"
-}

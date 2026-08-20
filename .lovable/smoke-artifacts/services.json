@@ -1,8 +1,0 @@
-{
-  "route": "/services",
-  "url": "http://localhost:9999/services",
-  "status": null,
-  "note": "fetch failed",
-  "error": "fetch failed",
-  "capturedAt": "2026-08-20T13:20:54.676Z"
-}
