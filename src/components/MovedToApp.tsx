@@ -47,7 +47,17 @@ export function MovedToApp({ from }: { from: string }) {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/schedule"
-              search={(prev) => ({ ...prev, src: "legacy-crm-link" })}
+              search={{
+                src: "legacy-crm-link",
+                campaign_id: undefined,
+                utm_source: undefined,
+                utm_medium: undefined,
+                utm_campaign: undefined,
+                utm_term: undefined,
+                utm_content: undefined,
+                gclid: undefined,
+                fbclid: undefined,
+              }}
               className="border border-border px-5 py-3 font-display text-sm uppercase tracking-wide transition-colors hover:bg-muted"
             >
               Schedule an inspection
