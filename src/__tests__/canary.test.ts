@@ -108,11 +108,11 @@ describe("canary route manifest", () => {
     for (const route of SMOKE_ROUTES) expect(DEFAULT_CANARY_ROUTES).toContain(route);
   });
 
-  it("skips auth-gated, parameterised and internal routes", () => {
+  it("skips parameterised and internal routes", () => {
     expect(DEFAULT_CANARY_ROUTES).toContain("/schedule");
     expect(DEFAULT_CANARY_ROUTES).toContain("/api/public/health");
     expect(DEFAULT_CANARY_ROUTES).not.toContain("/$city");
-    expect(DEFAULT_CANARY_ROUTES).not.toContain("/admin/lead-sync");
+    expect(DEFAULT_CANARY_ROUTES).not.toContain("/mcp");
     expect(DEFAULT_CANARY_ROUTES).not.toContain("/schedule-qr");
     expect(DEFAULT_CANARY_ROUTES).not.toContain("/api/public/leads");
   });
