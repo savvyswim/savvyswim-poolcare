@@ -1,28 +1,30 @@
 /**
- * End-to-end SSR smoke test.
+ * Automated smoke test over the GENERATED canary routes.
  *
- * Hits every static route (public site + CRM/admin) plus the startup health
- * endpoint and asserts each responds successfully. Run after every deploy:
+ * Route list comes from src/lib/route-manifest.gen.ts (via canary-routes), so
+ * it always matches what the router serves. Adds the branded error page and the
+ * startup health endpoint. Fails the process and pages on-call on any failure:
  *
  *   bun run test:smoke                       # defaults to http://localhost:8080
- *   BASE_URL=https://savvyswim.com bun run test:smoke
+ *   BASE_URL=https://savvyswimservices.com bun run test:smoke
+ *   bun run test:smoke -- --fast             # highest-value routes only
  *
- * Exits non-zero when any route fails, so CI/deploy hooks can gate on it.
+ * Alerting: with OPS_HOOK_SECRET set, failures POST to
+ * /api/public/hooks/smoke-alert which emails + texts on-call.
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "../src/lib/rollback-checklist";
+import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "../src/lib/smoke";
 
 const BASE_URL = (process.env["BASE_URL"] ?? "http://localhost:8080").replace(/\/$/, "");
 const TIMEOUT_MS = Number(process.env["SMOKE_TIMEOUT_MS"] ?? 20000);
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const routeTreePath = path.resolve(here, "../src/routeTree.gen.ts");
 
-/** Auth-guarded routes may legitimately redirect to a login screen. */
-const ALLOW_REDIRECT = /^\/(admin|crm|portal)/;
+
 
 export function collectRoutes(routeTreeSource: string): string[] {
   const found = new Set<string>();
