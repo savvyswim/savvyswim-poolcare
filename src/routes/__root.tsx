@@ -6,6 +6,8 @@ import {
   Outlet,
   Scripts,
   useRouter,
+  useRouterState,
+
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
@@ -130,12 +132,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const href = useRouterState({ select: (s) => s.location.href });
+
+  // First-touch campaign capture (utm_*, ?src= codes, gclid/fbclid) so every
+  // lead attributes back to the campaign that produced it.
+  useEffect(() => {
+    void import("@/lib/lead-attribution").then((m) => m.captureAttribution());
+  }, [href]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
           <ScrollToTop />
           <PerfMonitor />
+
 
           <Outlet />
 
