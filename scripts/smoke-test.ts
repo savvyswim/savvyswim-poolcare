@@ -286,7 +286,13 @@ async function main() {
     console.error(`\n${failures.length} endpoint(s) failed:`);
     for (const f of failures) console.error(`  ${f.route} -> ${f.status ?? "no response"} ${f.note}`);
 
+    const artifactDir = writeArtifacts();
+    if (artifactDir) {
+      console.error(`\nCaptured response headers + body snippets for ${artifacts.length} failed route(s) in .lovable/smoke-artifacts/`);
+    }
+
     await alertOnFailure(failures, summarizeSmoke(results, BASE_URL));
+
 
 
 
