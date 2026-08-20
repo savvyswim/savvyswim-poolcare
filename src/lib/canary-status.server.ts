@@ -23,11 +23,23 @@ export type CanaryRouteRow = {
   checks_total: number;
 };
 
+export type CanaryRouteTrend = {
+  requests: number;
+  failures: number;
+  errorRate: number;
+  avgMs: number;
+  p95Ms: number;
+  maxMs: number;
+  samples: number;
+  lastSampleAt: string | null;
+};
+
 export type CanaryRouteStatus = CanaryRouteRow & {
   monitored: boolean;
   guarded: boolean;
   redirect: boolean;
   stale: boolean;
+  trend24h: CanaryRouteTrend;
 };
 
 export type CanaryRouteReport = {
@@ -38,6 +50,7 @@ export type CanaryRouteReport = {
   failingCount: number;
   neverCheckedCount: number;
   staleCount: number;
+  overall24h: CanaryRouteTrend;
   lastRun: {
     startedAt: string;
     finishedAt: string | null;
@@ -52,6 +65,60 @@ export type CanaryRouteReport = {
 const DEFAULT_TARGET = "https://savvyswimservices.com";
 /** A route with no successful probe in this window is treated as stale. */
 const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
+const TREND_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+function percentile(sorted: number[], p: number): number {
+  if (sorted.length === 0) return 0;
+  const idx = Math.min(sorted.length - 1, Math.ceil((p / 100) * sorted.length) - 1);
+  return sorted[Math.max(0, idx)] ?? 0;
+}
+
+function emptyTrend(): CanaryRouteTrend {
+  return { requests: 0, failures: 0, errorRate: 0, avgMs: 0, p95Ms: 0, maxMs: 0, samples: 0, lastSampleAt: null };
+}
+
+/**
+ * Latency + error-rate samples for one run, one row per route. This is the
+ * time series behind the trend columns in /admin/canary.
+ */
+export async function recordRouteMetrics(run: CanaryRun, runId: string | null, source: string): Promise<void> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const byRoute = new Map<string, { durations: number[]; failures: number; lastStatus: number | null }>();
+  for (const probe of run.probes) {
+    const entry = byRoute.get(probe.route) ?? { durations: [], failures: 0, lastStatus: null };
+    entry.durations.push(probe.durationMs);
+    if (!probe.ok) entry.failures += 1;
+    entry.lastStatus = probe.httpStatus;
+    byRoute.set(probe.route, entry);
+  }
+  if (byRoute.size === 0) return;
+
+  const rows = Array.from(byRoute.entries()).map(([route, entry]) => {
+    const sorted = [...entry.durations].sort((a, b) => a - b);
+    const requests = sorted.length;
+    const total = sorted.reduce((sum, ms) => sum + ms, 0);
+    return {
+      run_id: runId,
+      route,
+      target: run.target,
+      source,
+      checked_at: run.finishedAt,
+      requests,
+      failures: entry.failures,
+      error_rate: requests ? Number((entry.failures / requests).toFixed(4)) : 0,
+      avg_ms: Math.round(total / Math.max(1, requests)),
+      min_ms: sorted[0] ?? 0,
+      max_ms: sorted[sorted.length - 1] ?? 0,
+      p95_ms: percentile(sorted, 95),
+      last_http_status: entry.lastStatus,
+    };
+  });
+
+  const { error } = await supabaseAdmin.from("ss_canary_route_metrics").insert(rows);
+  if (error) throw error;
+}
+
 
 /** Fold a run's probes into one record per route and upsert them. */
 export async function recordRouteChecks(run: CanaryRun, runId: string | null): Promise<void> {
