@@ -195,6 +195,21 @@ function CanaryAdminPage() {
         <Stat label="Never checked" value={report?.neverCheckedCount ?? "—"} />
       </section>
 
+      <section className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat label="Probes (24h)" value={report?.overall24h.requests ?? "—"} />
+        <Stat
+          label="Error rate (24h)"
+          value={report ? `${(report.overall24h.errorRate * 100).toFixed(2)}%` : "—"}
+          alarm={(report?.overall24h.errorRate ?? 0) > 0.01}
+        />
+        <Stat label="Avg latency (24h)" value={report ? `${report.overall24h.avgMs}ms` : "—"} />
+        <Stat
+          label="p95 latency (24h)"
+          value={report ? `${report.overall24h.p95Ms}ms` : "—"}
+          alarm={(report?.overall24h.p95Ms ?? 0) > 3000}
+        />
+      </section>
+
       {report?.lastRun ? (
         <p className="mt-4 text-xs uppercase tracking-[0.14em] text-foreground/55">
           Last run · {when(report.lastRun.startedAt)} ({ago(report.lastRun.startedAt)}) ·{" "}
@@ -206,6 +221,7 @@ function CanaryAdminPage() {
           No canary run recorded yet.
         </p>
       )}
+
 
       <nav className="mt-8 flex gap-2 border-b border-foreground/15">
         {(
@@ -241,8 +257,12 @@ function CanaryAdminPage() {
                 <th className="py-2 pr-4">Last passed</th>
                 <th className="py-2 pr-4">HTTP</th>
                 <th className="py-2 pr-4">Time</th>
+                <th className="py-2 pr-4">Avg / p95 (24h)</th>
+                <th className="py-2 pr-4">Errors (24h)</th>
                 <th className="py-2 pr-4">Detail</th>
               </tr>
+
+
             </thead>
             <tbody>
               {rows.map((r) => (
@@ -281,7 +301,22 @@ function CanaryAdminPage() {
                   <td className="py-2 pr-4 font-tech text-xs">
                     {r.last_duration_ms != null ? `${r.last_duration_ms}ms` : "—"}
                   </td>
+                  <td className="py-2 pr-4 font-tech text-xs whitespace-nowrap">
+                    {r.trend24h.requests
+                      ? `${r.trend24h.avgMs}ms / ${r.trend24h.p95Ms}ms`
+                      : "—"}
+                  </td>
+                  <td
+                    className={`py-2 pr-4 font-tech text-xs whitespace-nowrap ${
+                      r.trend24h.failures > 0 ? "text-[#8E1F2C]" : "text-foreground/70"
+                    }`}
+                  >
+                    {r.trend24h.requests
+                      ? `${(r.trend24h.errorRate * 100).toFixed(1)}% (${r.trend24h.failures}/${r.trend24h.requests})`
+                      : "—"}
+                  </td>
                   <td className="py-2 pr-4 text-xs text-foreground/60">
+
                     {r.last_message ??
                       (r.consecutive_failures > 0 ? `${r.consecutive_failures} in a row` : "—")}
                   </td>

@@ -170,9 +170,12 @@ async function handle(request: Request) {
       );
     }
 
-    // Per-route "last checked / last passed" board shown in /admin/canary.
-    const { recordRouteChecks } = await import("@/lib/canary-status.server");
+    // Per-route "last checked / last passed" board shown in /admin/canary,
+    // plus the latency / error-rate time series behind its trend columns.
+    const { recordRouteChecks, recordRouteMetrics } = await import("@/lib/canary-status.server");
     await recordRouteChecks(run, inserted?.id ?? null);
+    await recordRouteMetrics(run, inserted?.id ?? null, source);
+
   } catch (e) {
     console.error("[canary] could not record run", e);
   }
