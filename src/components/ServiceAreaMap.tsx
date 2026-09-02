@@ -9,6 +9,7 @@ import { SERVICE_AREA_CONTACT, SERVICE_LOCATIONS } from "@/lib/service-locations
  */
 export default function ServiceAreaMap() {
   const [image, setImage] = useState<string | null>(null);
+  const [settled, setSettled] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -18,6 +19,9 @@ export default function ServiceAreaMap() {
       })
       .catch(() => {
         /* the city list below is the fallback */
+      })
+      .finally(() => {
+        if (!cancelled) setSettled(true);
       });
     return () => {
       cancelled = true;
