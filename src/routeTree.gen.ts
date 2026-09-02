@@ -38,6 +38,7 @@ import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
 import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
@@ -210,6 +211,11 @@ const AppSplatRoute = AppSplatRouteImport.update({
 const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   id: '/admin/webhook-health',
   path: '/admin/webhook-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPoolMapRoute = AdminPoolMapRouteImport.update({
+  id: '/admin/pool-map',
+  path: '/admin/pool-map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
@@ -399,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -458,6 +465,7 @@ export interface FileRoutesByTo {
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -579,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sync'
     | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -638,6 +648,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sync'
     | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -697,6 +708,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sync'
     | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -757,6 +769,7 @@ export interface RootRouteChildren {
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
+  AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -985,6 +998,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/webhook-health'
       fullPath: '/admin/webhook-health'
       preLoaderRoute: typeof AdminWebhookHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pool-map': {
+      id: '/admin/pool-map'
+      path: '/admin/pool-map'
+      fullPath: '/admin/pool-map'
+      preLoaderRoute: typeof AdminPoolMapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/not-found': {
@@ -1242,6 +1262,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
+  AdminPoolMapRoute: AdminPoolMapRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
