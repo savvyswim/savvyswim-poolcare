@@ -62,7 +62,7 @@ export type CanaryRouteReport = {
   } | null;
 };
 
-const DEFAULT_TARGET = "https://savvyswimservices.com";
+const DEFAULT_TARGET = "https://savvyswim.com";
 /** A route with no successful probe in this window is treated as stale. */
 const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
 const TREND_WINDOW_MS = 24 * 60 * 60 * 1000;
