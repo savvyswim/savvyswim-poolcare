@@ -1,3 +1,6 @@
+import { PHONE_HREF, PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
+import { REPLY_TO_ADDRESS } from "@/lib/email-config";
+
 /**
  * Real service locations + hours used by the public service-area map and the
  * LocalBusiness structured data. Coordinates are city centres for the routes
