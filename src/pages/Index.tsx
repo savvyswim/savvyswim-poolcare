@@ -98,7 +98,6 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 import { Link } from "@/lib/router-compat";
-import InstagramProfileEmbed from "@/components/InstagramProfileEmbed";
 
 
 
@@ -1259,9 +1258,6 @@ const Index = () => {
             <a href={CUSTOMER_LOGIN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition">Admin</a>
 
           </div>
-        </div>
-        <div className="container-tight mt-8 flex justify-center">
-          <InstagramProfileEmbed />
         </div>
       </footer>
 

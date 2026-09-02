@@ -29,7 +29,6 @@ import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 import { IMG_5494_JPG as photoOliveRings } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
-import InstagramProfileEmbed from "@/components/InstagramProfileEmbed";
 
 const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
@@ -513,9 +512,6 @@ const Services = () => {
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
           </div>
-        </div>
-        <div className="container-tight mt-8 flex justify-center">
-          <InstagramProfileEmbed />
         </div>
       </footer>
 
