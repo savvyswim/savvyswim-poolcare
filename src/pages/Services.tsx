@@ -490,6 +490,11 @@ const Services = () => {
           </div>
         </section>
 
+        <section className="container-tight py-16">
+          <ServiceAreaMap />
+        </section>
+
+
       </main>
 
       <footer className="border-t border-hairline py-10">
