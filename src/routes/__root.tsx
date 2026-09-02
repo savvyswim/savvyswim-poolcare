@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import { lazyWithReload } from "@/lib/lazy-retry";
 import {
   createRootRouteWithContext,
   HeadContent,
