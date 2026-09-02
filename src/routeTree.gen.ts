@@ -39,6 +39,7 @@ import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
+import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as AdminCrmRouteImport } from './routes/admin/crm'
@@ -216,6 +217,11 @@ const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
   path: '/admin/not-found',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
   id: '/admin/lead-sync',
   path: '/admin/lead-sync',
@@ -391,6 +397,7 @@ export interface FileRoutesByFullPath {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
@@ -449,6 +456,7 @@ export interface FileRoutesByTo {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
@@ -508,6 +516,7 @@ export interface FileRoutesById {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
@@ -568,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
     | '/admin/webhook-health'
     | '/app/$'
@@ -626,6 +636,7 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
     | '/admin/webhook-health'
     | '/app/$'
@@ -684,6 +695,7 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
     | '/admin/webhook-health'
     | '/app/$'
@@ -743,6 +755,7 @@ export interface RootRouteChildren {
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
+  AdminLeadsRoute: typeof AdminLeadsRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
@@ -979,6 +992,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/not-found'
       fullPath: '/admin/not-found'
       preLoaderRoute: typeof AdminNotFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/lead-sync': {
@@ -1220,6 +1240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
+  AdminLeadsRoute: AdminLeadsRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
