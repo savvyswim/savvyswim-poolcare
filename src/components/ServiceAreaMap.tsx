@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { serviceAreaMap } from "@/lib/area-map.functions";
-import { BUSINESS_HOURS, SERVICE_LOCATIONS } from "@/lib/service-locations";
+import { SERVICE_AREA_CONTACT, SERVICE_LOCATIONS } from "@/lib/service-locations";
 
 /**
  * Public map of the cities we actually run routes in. The image is rendered
