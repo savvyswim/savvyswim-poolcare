@@ -1,4 +1,5 @@
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
+import { INSTAGRAM_URL } from "@/lib/contact-info";
 
 export const SITE_URL = "https://savvyswimservices.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
