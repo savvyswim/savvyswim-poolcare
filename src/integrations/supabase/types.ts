@@ -671,6 +671,9 @@ export type Database = {
           postal_code: string
           preferred_contact_time: string | null
           preferred_date: string | null
+          promo_code: string | null
+          promo_detail: string | null
+          promo_status: string | null
           reference_number: string
           referrer: string | null
           session_id: string | null
@@ -706,6 +709,9 @@ export type Database = {
           postal_code: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
+          promo_code?: string | null
+          promo_detail?: string | null
+          promo_status?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -741,6 +747,9 @@ export type Database = {
           postal_code?: string
           preferred_contact_time?: string | null
           preferred_date?: string | null
+          promo_code?: string | null
+          promo_detail?: string | null
+          promo_status?: string | null
           reference_number?: string
           referrer?: string | null
           session_id?: string | null
@@ -6073,6 +6082,7 @@ export type Database = {
       }
       ss_unit_factor: { Args: { p_unit: string }; Returns: number }
       ss_unit_family: { Args: { p_unit: string }; Returns: string }
+      ss_validate_lead_code: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user" | "crm_manager" | "store_manager"
