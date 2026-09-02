@@ -28,6 +28,7 @@ export function localBusinessSchema(image?: string) {
     alternateName: "Savvy Swim Pool Service",
     url: `${SITE_URL}/`,
     logo: LOGO,
+    sameAs: [INSTAGRAM_URL],
     ...(image ? { image } : {}),
     description:
       "Weekly pool cleaning, water chemistry, and equipment repair across the Dallas–Fort Worth metroplex. Licensed techs and a photo report every visit.",
