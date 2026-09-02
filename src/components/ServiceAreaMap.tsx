@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { serviceAreaMap } from "@/lib/area-map.functions";
 import { BUSINESS_HOURS, SERVICE_LOCATIONS } from "@/lib/service-locations";
 
@@ -56,12 +55,12 @@ export default function ServiceAreaMap() {
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
             {SERVICE_LOCATIONS.map((l) => (
               <li key={l.name}>
-                <Link
-                  to={l.href}
+                <a
+                  href={l.href}
                   className="font-semibold text-[#8E1F2C] underline-offset-4 hover:underline"
                 >
                   {l.name}
-                </Link>
+                </a>
                 <span className="block text-[11px] text-foreground/55">{l.routeDays}</span>
               </li>
             ))}
