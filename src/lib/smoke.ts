@@ -6,10 +6,15 @@
  * drift from what the router actually serves. Pure functions only — no fetch,
  * no env — so they are unit-testable and safe to import anywhere.
  */
-import { isGuardedRoute, selectCanaryRoutes, selectSmokeRoutes } from "./canary-routes";
+import {
+  isGuardedRoute,
+  isRedirectRoute,
+  selectCanaryRoutes,
+  selectSmokeRoutes,
+} from "./canary-routes";
 import { looksLikeCrashBody } from "./canary";
 
-export type SmokeTarget = { route: string; guarded: boolean };
+export type SmokeTarget = { route: string; guarded: boolean; redirects: boolean };
 
 export type SmokeOutcome = {
   route: string;
@@ -18,10 +23,14 @@ export type SmokeOutcome = {
   note: string;
 };
 
-/** Every generated canary route, flagged for auth-gated handling. */
+/** Every generated canary route, flagged for auth-gated / redirect handling. */
 export function buildSmokeTargets(mode: "full" | "fast" = "full"): SmokeTarget[] {
   const routes = mode === "fast" ? selectSmokeRoutes() : selectCanaryRoutes();
-  return routes.map((route) => ({ route, guarded: isGuardedRoute(route) }));
+  return routes.map((route) => ({
+    route,
+    guarded: isGuardedRoute(route),
+    redirects: isRedirectRoute(route),
+  }));
 }
 
 /** Minimum bytes an SSR HTML page must return before we call it rendered. */
