@@ -78,11 +78,12 @@ export default function ServiceAreaMap() {
               ))}
             </ul>
             <a
-              href="tel:+19725550123"
+              href="tel:+18176637665"
               className="mt-4 inline-block text-sm font-semibold text-[#8E1F2C] underline-offset-4 hover:underline"
             >
-              Call the office
+              (817) 663-7665
             </a>
+
           </div>
         </div>
       </div>
