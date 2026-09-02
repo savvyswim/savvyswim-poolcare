@@ -184,7 +184,7 @@ async function probeHealth(): Promise<Result> {
 }
 
 /** Probe one generated canary route and grade it with the shared rules. */
-async function probeTarget(target: { route: string; guarded: boolean }): Promise<Result> {
+async function probeTarget(target: { route: string; guarded: boolean; redirects?: boolean }): Promise<Result> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   const url = `${BASE_URL}${target.route}`;
@@ -196,6 +196,7 @@ async function probeTarget(target: { route: string; guarded: boolean }): Promise
     const result = evaluateSmokeProbe({
       route: target.route,
       guarded: target.guarded,
+      redirects: target.redirects ?? false,
       status: res.status,
       body,
       location: res.headers.get("location"),
