@@ -170,7 +170,10 @@ export async function runCanary(options?: {
   timeoutMs?: number;
   delayMs?: number;
 }): Promise<CanaryRun> {
-  const target = (options?.target ?? "https://savvyswimservices.com").replace(/\/$/, "");
+  // Probe the origin that actually serves HTML. The other Savvy Swim domains
+  // 302 to this one, which the canary correctly reports as an unexpected
+  // redirect on every route.
+  const target = (options?.target ?? "https://savvyswim.com").replace(/\/$/, "");
   const routes = options?.routes ?? DEFAULT_CANARY_ROUTES;
   const rounds = Math.max(1, Math.min(options?.rounds ?? 3, 10));
   const timeoutMs = options?.timeoutMs ?? 15000;
