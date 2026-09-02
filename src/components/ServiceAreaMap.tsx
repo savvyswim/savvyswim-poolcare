@@ -48,6 +48,14 @@ export default function ServiceAreaMap() {
               className="w-full"
               loading="lazy"
             />
+          ) : settled ? (
+            <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-2 p-6 text-center text-sm text-foreground/60">
+              <p className="font-semibold text-[#8E1F2C]">North Dallas &amp; Collin County</p>
+              <p>
+                The map couldn&apos;t load right now — the full list of cities we run weekly
+                routes in is right here.
+              </p>
+            </div>
           ) : (
             <div className="flex h-full min-h-[220px] items-center justify-center p-6 text-sm text-foreground/55">
               Loading the service-area map…
