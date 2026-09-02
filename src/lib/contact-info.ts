@@ -15,3 +15,7 @@ export const PHONE_VANITY = "817-663-POOL";
 export const PHONE_VANITY_WITH_DIGITS = "817-663-POOL (7665)";
 /** schema.org / structured data format. */
 export const PHONE_SCHEMA = "+1-817-663-7665";
+
+/** Official Instagram business profile. */
+export const INSTAGRAM_HANDLE = "hi.savvyswim";
+export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;

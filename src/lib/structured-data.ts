@@ -1,4 +1,5 @@
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
+import { INSTAGRAM_URL } from "@/lib/contact-info";
 
 export const SITE_URL = "https://savvyswimservices.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
@@ -27,6 +28,7 @@ export function localBusinessSchema(image?: string) {
     alternateName: "Savvy Swim Pool Service",
     url: `${SITE_URL}/`,
     logo: LOGO,
+    sameAs: [INSTAGRAM_URL],
     ...(image ? { image } : {}),
     description:
       "Weekly pool cleaning, water chemistry, and equipment repair across the Dallas–Fort Worth metroplex. Licensed techs and a photo report every visit.",
