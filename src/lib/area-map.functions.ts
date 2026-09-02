@@ -69,10 +69,16 @@ export type PoolMapPin = {
 
 /** Staff only: real pool locations from the CRM, plotted on one map. */
 export const crmPoolMap = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => PoolMapSchema.parse(input ?? {}))
-  .handler(async ({ data }): Promise<{ image: string | null; pins: PoolMapPin[] }> => {
-    const { requireOfficeUser } = await import("@/lib/office-guard.server");
-    await requireOfficeUser();
+  .handler(async ({ data, context }): Promise<{ image: string | null; pins: PoolMapPin[] }> => {
+    const { data: isOffice } = await (
+      context.supabase as unknown as {
+        rpc: (fn: "ss_is_office") => Promise<{ data: unknown }>;
+      }
+    ).rpc("ss_is_office");
+    if (isOffice !== true) throw new Error("Office access required");
+
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows, error } = await supabaseAdmin
