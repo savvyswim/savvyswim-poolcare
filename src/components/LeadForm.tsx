@@ -5,7 +5,7 @@ import { onCallClick } from "@/components/CallButton";
  * Posts to our own hardened endpoint (POST /api/public/leads) — Zod validation,
  * honeypot, minimum fill time, Turnstile and rate limiting all live there.
  */
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,8 @@ import AddressAutocomplete from "@/components/AddressAutocomplete";
 import AddressMapPreview from "@/components/AddressMapPreview";
 import { trackSiteEvent } from "@/lib/site-analytics";
 import { extractZip } from "@/lib/postal";
+import { checkPromoCode } from "@/lib/promo.functions";
+import type { PromoCheck } from "@/lib/promo.functions";
 
 export const SWIM_CLUB_OPTION = "Savvy Swim Club membership — $19.99/mo";
 
@@ -105,6 +107,8 @@ export default function LeadForm({
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [promoCode, setPromoCode] = useState("");
+  const [promoCheck, setPromoCheck] = useState<PromoCheck | null>(null);
+  const [promoChecking, setPromoChecking] = useState(false);
   const [contactConsent, setContactConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
@@ -118,6 +122,34 @@ export default function LeadForm({
     d.setHours(0, 0, 0, 0);
     return d;
   }, []);
+
+  // Debounced discount / referral code check. Never blocks the submit — an
+  // unrecognised code still goes through, flagged for the office.
+  useEffect(() => {
+    const code = promoCode.trim();
+    if (code.length < 3) {
+      setPromoCheck(null);
+      setPromoChecking(false);
+      return;
+    }
+    let cancelled = false;
+    setPromoChecking(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await checkPromoCode({ data: { code } });
+        if (!cancelled) setPromoCheck(res);
+      } catch {
+        if (!cancelled) setPromoCheck(null);
+      } finally {
+        if (!cancelled) setPromoChecking(false);
+      }
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [promoCode]);
+
 
   function validate(): boolean {
     const next: Errors = {};
@@ -375,20 +407,37 @@ export default function LeadForm({
       </label>
 
       <label className="block">
-        <span className="sr-only">Discount code (optional)</span>
+        <span className="sr-only">Discount or referral code (optional)</span>
         <input
           name="promo_code"
           autoComplete="off"
           autoCapitalize="characters"
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
-          placeholder="Discount code (optional)"
+          placeholder="Discount or referral code (optional)"
+          aria-describedby="promo-code-status"
           className={FIELD}
         />
-        <span className="mt-1 block text-[11px] text-[#2a1013]/55">
-          Have a discount or referral code? Enter it here and we&apos;ll apply it to your quote.
+        <span id="promo-code-status" aria-live="polite" className="mt-1 block text-[11px]">
+          {promoChecking ? (
+            <span className="text-[#2a1013]/55">Checking code…</span>
+          ) : promoCheck && promoCheck.status === "valid" ? (
+            <span className="font-semibold text-[#1FA9BE]">
+              {promoCheck.kind === "referral" ? "Referral code applied" : "Code applied"}
+              {promoCheck.detail ? ` — ${promoCheck.detail}` : ""}
+            </span>
+          ) : promoCheck && promoCheck.status !== "empty" ? (
+            <span className="text-[#8E1F2C]">
+              {promoCheck.message} You can still send your request.
+            </span>
+          ) : (
+            <span className="text-[#2a1013]/55">
+              Have a discount or referral code? Enter it here and we&apos;ll apply it to your quote.
+            </span>
+          )}
         </span>
       </label>
+
 
       <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
         <input

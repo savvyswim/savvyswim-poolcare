@@ -19,6 +19,7 @@ import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
+import ServiceAreaMap from "@/components/ServiceAreaMap";
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -489,6 +490,11 @@ const Services = () => {
             </div>
           </div>
         </section>
+
+        <section className="container-tight py-16">
+          <ServiceAreaMap />
+        </section>
+
 
       </main>
 

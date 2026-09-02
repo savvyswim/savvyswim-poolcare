@@ -55,27 +55,33 @@ export default function AddressMapPreview({ placeId, address, className }: Props
     setSettled(false);
 
     (async () => {
-      // 1 — server-rendered static map (domain-independent)
-      try {
-        const res = await addressMapPreview({
-          data: {
-            ...(placeId ? { placeId } : {}),
-            ...(address ? { address } : {}),
-            width: 640,
-            height: 320,
-            zoom: 17,
-          },
-        });
-        if (cancelled) return;
-        if (res?.image) {
-          setImage(res.image);
-          if (res.address) setLabel(res.address);
-          setSettled(true);
-          return;
+      // 1 — server-rendered static map (domain-independent). This is the
+      // primary map on savvyswim.com / savvyswimservices.com, where Google
+      // blocks the shared browser key.
+      const staticAttempts: Array<Record<string, unknown>> = [];
+      if (placeId) staticAttempts.push({ placeId, ...(address ? { address } : {}) });
+      if (address) staticAttempts.push({ address }); // retry without the place id
+      if (!staticAttempts.length && address) staticAttempts.push({ address });
+
+      for (const attempt of staticAttempts) {
+        try {
+          const res = await addressMapPreview({
+            data: { ...attempt, width: 640, height: 320, zoom: 17 },
+          });
+          if (cancelled) return;
+          if (res?.image) {
+            setImage(res.image);
+            if (res.address) setLabel(res.address);
+            setSettled(true);
+            return;
+          }
+        } catch {
+          /* try the next attempt, then the interactive map */
         }
-      } catch {
-        /* fall through to the interactive map */
+        if (cancelled) return;
       }
+
+
 
       // 2 — interactive map, only possible where the browser key is allowed
       if (!placeId || isMapsAuthBlocked()) {

@@ -212,6 +212,12 @@ export const Route = createFileRoute("/api/public/leads")({
         // notes stay clean and hold only what the customer typed.
         const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
 
+        // Validate the optional discount / referral code. An unknown code is
+        // stored and flagged rather than rejected — never lose a lead over it.
+        const { lookupPromoCode } = await import("@/lib/promo.functions");
+        const promo = await lookupPromoCode(lead.promo_code ?? "");
+
+
 
         const { leadTypeFromSource } = await import("@/lib/crm-lead-forward.server");
         const leadType = leadTypeFromSource(lead.source);
@@ -243,6 +249,15 @@ export const Route = createFileRoute("/api/public/leads")({
             consent_text: lead.consent_text ?? null,
             source: lead.source ?? null,
             lead_type: leadType,
+            promo_code: promo.code,
+            promo_status: promo.status === "empty" ? null : promo.status,
+            promo_detail:
+              promo.status === "valid"
+                ? [promo.kind === "referral" ? "Referral" : "Promo", promo.detail]
+                    .filter(Boolean)
+                    .join(": ")
+                : (promo.message ?? null),
+
 
           })
           .select("id, reference_number")

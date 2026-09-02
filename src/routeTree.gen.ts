@@ -38,7 +38,9 @@ import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
+import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as AdminCrmRouteImport } from './routes/admin/crm'
@@ -211,9 +213,19 @@ const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   path: '/admin/webhook-health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPoolMapRoute = AdminPoolMapRouteImport.update({
+  id: '/admin/pool-map',
+  path: '/admin/pool-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
   id: '/admin/not-found',
   path: '/admin/not-found',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
@@ -391,7 +403,9 @@ export interface FileRoutesByFullPath {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -449,7 +463,9 @@ export interface FileRoutesByTo {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -508,7 +524,9 @@ export interface FileRoutesById {
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
+  '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
+  '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -568,7 +586,9 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -626,7 +646,9 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -684,7 +706,9 @@ export interface FileRouteTypes {
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
+    | '/admin/leads'
     | '/admin/not-found'
+    | '/admin/pool-map'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -743,7 +767,9 @@ export interface RootRouteChildren {
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
+  AdminLeadsRoute: typeof AdminLeadsRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
+  AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -974,11 +1000,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWebhookHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/pool-map': {
+      id: '/admin/pool-map'
+      path: '/admin/pool-map'
+      fullPath: '/admin/pool-map'
+      preLoaderRoute: typeof AdminPoolMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/not-found': {
       id: '/admin/not-found'
       path: '/admin/not-found'
       fullPath: '/admin/not-found'
       preLoaderRoute: typeof AdminNotFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/lead-sync': {
@@ -1220,7 +1260,9 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
+  AdminLeadsRoute: AdminLeadsRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
+  AdminPoolMapRoute: AdminPoolMapRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
