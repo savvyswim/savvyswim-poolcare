@@ -37,12 +37,8 @@ export function localBusinessSchema(image?: string) {
     priceRange: "$$",
     currenciesAccepted: "USD",
     paymentAccepted: "Credit Card, ACH",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Plano",
-      addressRegion: "TX",
-      addressCountry: "US",
-    },
+    // Service-area business: we come to the customer, so no public street
+    // address is published. areaServed below is the authoritative coverage.
     areaServed,
     openingHoursSpecification: [
       {
@@ -56,6 +52,12 @@ export function localBusinessSchema(image?: string) {
         dayOfWeek: "Saturday",
         opens: "09:00",
         closes: "14:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "Sunday",
+        opens: "00:00",
+        closes: "00:00",
       },
     ],
     hasOfferCatalog: {
