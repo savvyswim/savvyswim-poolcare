@@ -1,3 +1,6 @@
+import { PHONE_HREF, PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
+import { REPLY_TO_ADDRESS } from "@/lib/email-config";
+
 /**
  * Real service locations + hours used by the public service-area map and the
  * LocalBusiness structured data. Coordinates are city centres for the routes
@@ -35,3 +38,16 @@ export const BUSINESS_HOURS: { days: string; hours: string }[] = [
   { days: "Saturday", hours: "9:00 AM – 2:00 PM" },
   { days: "Sunday", hours: "Closed — emergency line only" },
 ];
+
+/**
+ * Real contact details for every city we run. Savvy Swim is a service-area
+ * business: one phone line, one inbox, no walk-in address.
+ */
+export const SERVICE_AREA_CONTACT = {
+  phoneHref: PHONE_HREF,
+  phoneDisplay: PHONE_VANITY_WITH_DIGITS,
+  email: REPLY_TO_ADDRESS,
+  emailHref: `mailto:${REPLY_TO_ADDRESS}`,
+  note: "We come to your pool — mobile service only, no walk-in location.",
+  hours: BUSINESS_HOURS,
+} as const;

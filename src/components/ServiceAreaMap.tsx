@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { serviceAreaMap } from "@/lib/area-map.functions";
-import { BUSINESS_HOURS, SERVICE_LOCATIONS } from "@/lib/service-locations";
+import { SERVICE_AREA_CONTACT, SERVICE_LOCATIONS } from "@/lib/service-locations";
 
 /**
  * Public map of the cities we actually run routes in. The image is rendered
@@ -69,20 +69,32 @@ export default function ServiceAreaMap() {
           <div className="mt-6 border-t border-[#8E1F2C]/15 pt-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/50">Hours</p>
             <ul className="mt-2 space-y-1 text-sm text-foreground/75">
-              {BUSINESS_HOURS.map((h) => (
+              {SERVICE_AREA_CONTACT.hours.map((h) => (
                 <li key={h.days} className="flex justify-between gap-4">
                   <span>{h.days}</span>
                   <span className="text-foreground/60">{h.hours}</span>
                 </li>
               ))}
             </ul>
-            <a
-              href="tel:+18176637665"
-              className="mt-4 inline-block text-sm font-semibold text-[#8E1F2C] underline-offset-4 hover:underline"
-            >
-              (817) 663-7665
-            </a>
 
+            <div className="mt-4 space-y-1">
+              <a
+                href={SERVICE_AREA_CONTACT.phoneHref}
+                className="block text-sm font-semibold text-[#8E1F2C] underline-offset-4 hover:underline"
+              >
+                {SERVICE_AREA_CONTACT.phoneDisplay}
+              </a>
+              <a
+                href={SERVICE_AREA_CONTACT.emailHref}
+                className="block text-sm font-semibold text-[#8E1F2C] underline-offset-4 hover:underline"
+              >
+                {SERVICE_AREA_CONTACT.email}
+              </a>
+            </div>
+
+            <p className="mt-3 text-[11px] leading-relaxed text-foreground/55">
+              {SERVICE_AREA_CONTACT.note}
+            </p>
           </div>
         </div>
       </div>
