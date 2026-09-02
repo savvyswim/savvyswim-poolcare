@@ -18,16 +18,20 @@ import { PerfMonitor } from "@/components/PerfMonitor";
 import { CallOptionsCard } from "@/components/CallButton";
 
 // Consent bar is post-hydration only — keep it out of the first payload.
-const ConsentBanner = lazy(() => import("@/components/ConsentBanner"));
+const ConsentBanner = lazyWithReload(() => import("@/components/ConsentBanner"));
 // On-site lead capture — the form itself only downloads on the first CTA click.
-const QuoteModal = lazy(() => import("@/components/QuoteModalHost"));
+const QuoteModal = lazyWithReload(() => import("@/components/QuoteModalHost"));
 
 // Toast portals render nothing until something is toasted — load them after paint.
-const Sonner = lazy(() => import("@/components/ui/sonner").then((m) => ({ default: m.Toaster })));
-const Toaster = lazy(() => import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })));
+const Sonner = lazyWithReload(() =>
+  import("@/components/ui/sonner").then((m) => ({ default: m.Toaster })),
+);
+const Toaster = lazyWithReload(() =>
+  import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })),
+);
 
 // Free water test side tab.
-const WaterTestTab = lazy(() => import("@/components/WaterTestTab"));
+const WaterTestTab = lazyWithReload(() => import("@/components/WaterTestTab"));
 
 
 
