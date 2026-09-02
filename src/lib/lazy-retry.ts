@@ -7,7 +7,8 @@ import { lazy, type ComponentType } from "react";
  */
 const RELOAD_FLAG = "ss_chunk_reloaded";
 
-export function lazyWithReload<T extends ComponentType<never>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function lazyWithReload<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>,
 ) {
   return lazy(async () => {
