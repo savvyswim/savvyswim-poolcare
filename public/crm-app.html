@@ -793,7 +793,7 @@ function vEmail(){
     </select>
     <span class="lbl">Presets</span>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
-      <button class="tiny" onclick="document.getElementById('bMsg').value='SAVVY SWIM FREEZE ALERT, Hard freeze tonight. Keep your pump RUNNING all night; moving water does not freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We are on duty.'">❄ Freeze alert</button>
+      <button class="tiny" onclick="document.getElementById('bMsg').value='SAVVY SWIM FREEZE ALERT: Hard freeze tonight. Keep your pump RUNNING all night; moving water does not freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We are on duty.'">❄ Freeze alert</button>
       <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim here, filter cleans keep your water crystal and your equipment healthy. Yours is coming due; reply YES and we will add it to this week\\'s visit.'">Filter clean promo</button>
       <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim, refer a neighbor and get a FREE month of service. They get 20% off their first month. Just have them mention your name.'">Referral push</button>
     </div>
@@ -1046,7 +1046,7 @@ function drawVisit(){
     <button class="pri" style="margin-top:14px;" onclick="stepTo(2)">Continue to workflow</button>`;}
   if(step===2){
     body=`<span class="lbl">Step 2 · ${esc(c.serviceLevel)} workflow</span>
-    <div class="muted" style="margin-bottom:2px;">Required tasks can't be skipped or cheated, Complete stays locked.</div>
+    <div class="muted" style="margin-bottom:2px;">Required tasks can't be skipped or cheated. Complete stays locked.</div>
     <div class="tasklist">${WF.map(([t,req,cam],i)=>`<label><input type="checkbox" id="tk${i}" ${vr.tasks.includes(i)?'checked':''} onchange="syncTasks()">${t}<span class="flags">${cam?'<span class="f cam">PHOTO</span>':''}${req?'<span class="f">REQ</span>':''}</span></label>`).join('')}</div>
     <button class="pri" id="toStep3" style="margin-top:10px;" onclick="stepTo(3)">Continue to wrap-up</button>`;}
   if(step===3){
@@ -1659,7 +1659,7 @@ function vInsights(){
     ${isPaid?'<span class="chip ok">Paid</span>':`<button class="tiny" onclick="markPaid('${x.id}')">Mark paid</button>`}</div>`;}).join('')}</div>
   <div class="sechead"><h4>Freeze watch broadcast</h4></div>
   <div class="card">
-    <textarea id="fz" rows="3">SAVVY SWIM FREEZE ALERT, Hard freeze tonight. Keep your pump RUNNING all night; moving water doesn't freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We've got you covered.</textarea>
+    <textarea id="fz" rows="3">SAVVY SWIM FREEZE ALERT: Hard freeze tonight. Keep your pump RUNNING all night; moving water doesn't freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We've got you covered.</textarea>
     <button class="pri" onclick="sendFreeze()">Send to all customers</button>
   </div>
   <button class="sec" onclick="resetDemo()">Reset demo data</button>`;
@@ -1809,7 +1809,7 @@ function vCBilling(){
     <div class="kv"><span class="k">Billed</span><span class="v">${esc(c.sched.billMethod)} · day ${c.sched.invoiceDay}</span></div>
     <div class="kv"><span class="k">${new Date().toLocaleString('en-US',{month:'long'})}</span><span class="chip ${paid?'ok':'warn'}">${paid?'Paid':'Due'}</span></div>
   </div>
-  <button class="pri" onclick="toast('Autopay enabled, Stripe live in v2')">Enable autopay</button>`;
+  <button class="pri" onclick="toast('Autopay enabled. Stripe live in v2')">Enable autopay</button>`;
 }
 function vRefer(){
   const c=pc();
