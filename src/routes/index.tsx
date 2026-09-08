@@ -31,8 +31,8 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         as: "image",
         href: photoLifeguardChair.url,
-        imagesrcset: photoLifeguardChair.srcSet,
-        imagesizes: "(min-width: 1024px) 11rem, 128px",
+        imageSrcSet: photoLifeguardChair.srcSet,
+        imageSizes: "(min-width: 1024px) 11rem, 128px",
         fetchPriority: "high",
       },
 

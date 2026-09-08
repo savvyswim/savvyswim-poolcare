@@ -31,6 +31,9 @@ const Toaster = lazyWithReload(() =>
   import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })),
 );
 
+// New-customer offer card, shown once per visit on public pages.
+const SwimClubPromptHost = lazyWithReload(() => import("@/components/SwimClubPromptHost"));
+
 // Free water test side tab.
 const WaterTestTab = lazyWithReload(() => import("@/components/WaterTestTab"));
 
@@ -138,6 +141,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const href = useRouterState({ select: (s) => s.location.href });
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Keep the marketing offer off staff/customer tooling.
+  const showOffer = !/^\/(admin|portal|app|auth)(\/|$)/.test(pathname);
 
   // First-touch campaign capture (utm_*, ?src= codes, gclid/fbclid) so every
   // lead attributes back to the campaign that produced it.
@@ -163,6 +169,7 @@ function RootComponent() {
             <QuoteModal />
             <WaterTestTab />
             <ConsentBanner />
+            {showOffer && <SwimClubPromptHost />}
           </Suspense>
 
 
