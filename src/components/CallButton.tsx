@@ -228,9 +228,12 @@ export function CallLink({
 export function CallButton({
   location,
   className = "",
+  hidePhoneTextOnNarrowDesktop = false,
 }: {
   location: string;
   className?: string;
+  /** Hide the number between 1024px and 1280px so the menu has room. */
+  hidePhoneTextOnNarrowDesktop?: boolean;
 }) {
   return (
     <a

@@ -54,7 +54,7 @@ export function SiteHeader() {
 
 
         <div className="flex shrink-0 items-center gap-2">
-          <CallButton location="header" className="px-2 py-2 sm:px-3" />
+          <CallButton location="header" hidePhoneTextOnNarrowDesktop className="px-2 py-2 sm:px-3" />
           <button
             type="button"
             onClick={() => goToLead("header")}
