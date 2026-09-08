@@ -17,6 +17,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
+import { Route as ReferRouteImport } from './routes/refer'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
@@ -24,6 +25,7 @@ import { Route as PoolCleaningPlanoRouteImport } from './routes/pool-cleaning-pl
 import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
 import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
 import { Route as PlanoRouteImport } from './routes/plano'
+import { Route as OurWorkRouteImport } from './routes/our-work'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as FriscoRouteImport } from './routes/frisco'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
@@ -108,6 +110,11 @@ const RequestInspectionRoute = RequestInspectionRouteImport.update({
   path: '/request-inspection',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReferRoute = ReferRouteImport.update({
+  id: '/refer',
+  path: '/refer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
@@ -141,6 +148,11 @@ const PoolCleaningFriscoRoute = PoolCleaningFriscoRouteImport.update({
 const PlanoRoute = PlanoRouteImport.update({
   id: '/plano',
   path: '/plano',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OurWorkRoute = OurWorkRouteImport.update({
+  id: '/our-work',
+  path: '/our-work',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McpRoute = McpRouteImport.update({
@@ -382,6 +394,7 @@ export interface FileRoutesByFullPath {
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
   '/mcp': typeof McpRoute
+  '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
@@ -389,6 +402,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
@@ -442,6 +456,7 @@ export interface FileRoutesByTo {
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
   '/mcp': typeof McpRoute
+  '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
@@ -449,6 +464,7 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
@@ -503,6 +519,7 @@ export interface FileRoutesById {
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
   '/mcp': typeof McpRoute
+  '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
   '/pool-cleaning-frisco-tx': typeof PoolCleaningFriscoTxRoute
@@ -510,6 +527,7 @@ export interface FileRoutesById {
   '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
@@ -565,6 +583,7 @@ export interface FileRouteTypes {
     | '/free-inspection'
     | '/frisco'
     | '/mcp'
+    | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
@@ -572,6 +591,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
+    | '/refer'
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
@@ -625,6 +645,7 @@ export interface FileRouteTypes {
     | '/free-inspection'
     | '/frisco'
     | '/mcp'
+    | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
@@ -632,6 +653,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
+    | '/refer'
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
@@ -685,6 +707,7 @@ export interface FileRouteTypes {
     | '/free-inspection'
     | '/frisco'
     | '/mcp'
+    | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
     | '/pool-cleaning-frisco-tx'
@@ -692,6 +715,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/privacy'
     | '/privacy-policy'
+    | '/refer'
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
@@ -746,6 +770,7 @@ export interface RootRouteChildren {
   FreeInspectionRoute: typeof FreeInspectionRoute
   FriscoRoute: typeof FriscoRoute
   McpRoute: typeof McpRoute
+  OurWorkRoute: typeof OurWorkRoute
   PlanoRoute: typeof PlanoRoute
   PoolCleaningFriscoRoute: typeof PoolCleaningFriscoRoute
   PoolCleaningFriscoTxRoute: typeof PoolCleaningFriscoTxRoute
@@ -753,6 +778,7 @@ export interface RootRouteChildren {
   PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  ReferRoute: typeof ReferRoute
   RequestInspectionRoute: typeof RequestInspectionRoute
   ScheduleRoute: typeof ScheduleRoute
   ScheduleQrRoute: typeof ScheduleQrRoute
@@ -853,6 +879,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestInspectionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/refer': {
+      id: '/refer'
+      path: '/refer'
+      fullPath: '/refer'
+      preLoaderRoute: typeof ReferRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy-policy': {
       id: '/privacy-policy'
       path: '/privacy-policy'
@@ -900,6 +933,13 @@ declare module '@tanstack/react-router' {
       path: '/plano'
       fullPath: '/plano'
       preLoaderRoute: typeof PlanoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/our-work': {
+      id: '/our-work'
+      path: '/our-work'
+      fullPath: '/our-work'
+      preLoaderRoute: typeof OurWorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcp': {
@@ -1238,6 +1278,7 @@ const rootRouteChildren: RootRouteChildren = {
   FreeInspectionRoute: FreeInspectionRoute,
   FriscoRoute: FriscoRoute,
   McpRoute: McpRoute,
+  OurWorkRoute: OurWorkRoute,
   PlanoRoute: PlanoRoute,
   PoolCleaningFriscoRoute: PoolCleaningFriscoRoute,
   PoolCleaningFriscoTxRoute: PoolCleaningFriscoTxRoute,
@@ -1245,6 +1286,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  ReferRoute: ReferRoute,
   RequestInspectionRoute: RequestInspectionRoute,
   ScheduleRoute: ScheduleRoute,
   ScheduleQrRoute: ScheduleQrRoute,
