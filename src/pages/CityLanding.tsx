@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   MapPin,
-  CalendarDays,
   FlaskConical,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
