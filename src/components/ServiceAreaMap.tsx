@@ -1,3 +1,4 @@
+import ServiceAreaSvgMap from "@/components/ServiceAreaSvgMap";
 import {
   ADDITIONAL_SERVICE_CITIES,
   SERVICE_AREA_CONTACT,
@@ -15,9 +16,13 @@ export default function ServiceAreaMap() {
         Pools we look after
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-foreground/70">
-        Weekly routes across the Dallas–Fort Worth metroplex. Pick your city for pricing, route
-        days and a free inspection.
+        Weekly routes across the Dallas–Fort Worth metroplex. Pick your city for pricing and a
+        free inspection.
       </p>
+
+      <div className="mt-6 border border-[#8E1F2C]/15 bg-white/40 p-2">
+        <ServiceAreaSvgMap />
+      </div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <div>
