@@ -28,6 +28,13 @@ const OFFERS: {
   hash?: string;
 }[] = [
   {
+    title: "Savvy Swim Club",
+    blurb: "Member discounts on cleans, services and parts, plus 24/7 text support.",
+    price: "$19.99 / month",
+    to: "/services",
+    hash: "membership",
+  },
+  {
     title: "Weekly pool service",
     blurb: "Cleaning, chemicals and equipment checks, with a photo report every visit.",
     price: "From $129.99 / month",
@@ -44,13 +51,6 @@ const OFFERS: {
     blurb: "Algae or a pool left too long, brought back to swim-ready water.",
     price: "Quoted after a free inspection",
     to: "/services",
-  },
-  {
-    title: "Savvy Swim Club",
-    blurb: "Member discounts on cleans, services and parts, plus 24/7 text support.",
-    price: "$19.99 / month",
-    to: "/services",
-    hash: "membership",
   },
 ];
 
