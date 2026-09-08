@@ -1,4 +1,4 @@
-import ServiceAreaSvgMap from "@/components/ServiceAreaSvgMap";
+
 import {
   ADDITIONAL_SERVICE_CITIES,
   SERVICE_AREA_CONTACT,
