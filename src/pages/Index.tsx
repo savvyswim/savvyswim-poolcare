@@ -123,9 +123,9 @@ const Index = () => {
 
 
             <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-primary-foreground sm:text-[1.3rem]">
-              Weekly pool cleaning, service and repair across Dallas–Fort Worth. Same technician
-              every week, a photo report every visit.
+              Weekly pool cleaning, service and repair across Dallas–Fort Worth.
             </p>
+
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button
