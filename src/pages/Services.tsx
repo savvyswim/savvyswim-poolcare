@@ -219,7 +219,7 @@ const Services = () => {
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-hidden whitespace-nowrap font-tech text-primary/70 md:flex lg:gap-7">
             <Link to="/" className="shrink-0 hover:text-accent transition">Home</Link>
             <Link to="/services" className="shrink-0 text-accent">Services</Link>
-            <Link to="/" hash="membership" className="shrink-0 hover:text-accent transition">Swim Club</Link>
+            <Link to="/services" hash="membership" className="shrink-0 hover:text-accent transition">Swim Club</Link>
             <Link to="/" hash="contact" className="shrink-0 hover:text-accent transition">Contact</Link>
           </nav>
           <CallButton location="header" />
