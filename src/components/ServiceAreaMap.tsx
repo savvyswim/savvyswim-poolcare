@@ -43,9 +43,8 @@ export default function ServiceAreaMap() {
         </div>
 
         <div>
+          <div className="border-t border-[#8E1F2C]/15 pt-4 lg:border-t-0 lg:pt-0">
 
-
-          <div className="mt-6 border-t border-[#8E1F2C]/15 pt-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/50">Hours</p>
             <ul className="mt-2 space-y-1 text-sm text-foreground/75">
               {SERVICE_AREA_CONTACT.hours.map((h) => (
