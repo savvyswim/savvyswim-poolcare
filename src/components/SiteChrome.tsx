@@ -36,7 +36,7 @@ export function SiteHeader() {
         </Link>
 
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-5 overflow-hidden whitespace-nowrap font-tech text-[13px] text-primary/70 lg:flex">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 whitespace-nowrap font-tech text-[11px] text-primary/70 lg:flex xl:gap-5 xl:text-[13px]">
           {NAV.map((item) => (
             <Link
               key={item.label}
@@ -51,6 +51,7 @@ export function SiteHeader() {
             Services
           </Link>
         </nav>
+
 
         <div className="flex shrink-0 items-center gap-2">
           <CallButton location="header" className="px-2 py-2 sm:px-3" />
