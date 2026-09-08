@@ -67,7 +67,7 @@ export default function ServiceAreaSvgMap() {
       {points.map((p, i) => {
         // Flip a label below its pin when a nearby city already owns the space above.
         const crowded = points.filter(
-          (o, j) => j < i && Math.abs(o.x - p.x) < 70 && Math.abs(o.y - p.y) < 30,
+          (o, j) => j < i && Math.abs(o.x - p.x) < 70 && Math.abs(o.y - p.y) < 55,
         ).length;
         const nameY = crowded ? p.y + 20 + crowded * 22 : p.y - 12;
         const dayY = crowded ? p.y + 32 + crowded * 22 : p.y + 20;
