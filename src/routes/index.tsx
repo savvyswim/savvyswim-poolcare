@@ -3,6 +3,7 @@ import Index from "@/pages/Index";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-data";
+import { listApprovedReviews } from "@/lib/reviews.functions";
 
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
