@@ -38,7 +38,7 @@ export default function ServiceAreaSvgMap() {
   // already placed so tightly-packed cities stay readable.
   const placed: { x: number; y: number }[] = [];
   const labels = points.map((p) => {
-    let y = p.y - 14;
+    let y = p.y - 28;
     let guard = 0;
     while (
       guard++ < 12 &&
@@ -47,7 +47,7 @@ export default function ServiceAreaSvgMap() {
       y += 26;
     }
     placed.push({ x: p.x, y });
-    return { ...p, nameY: y, dayY: y + 13 };
+    return { ...p, nameY: y, dayY: y + 12 };
   });
 
 
