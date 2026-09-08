@@ -40,7 +40,7 @@ const WaterTestTab = lazyWithReload(() => import("@/components/WaterTestTab"));
 
 import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
-import appCss from "./styles.css?url";
+import appCss from "../styles.css?url";
 
 const SITE_TITLE = "Savvy Swim | Pool Cleaning, Service & Repair in Texas";
 const SITE_DESCRIPTION =

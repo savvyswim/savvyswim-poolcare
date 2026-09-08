@@ -13,7 +13,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { runCanary, summarizeCanary } from "./src/lib/canary";
+import { runCanary, summarizeCanary } from "../src/lib/canary";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
