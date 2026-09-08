@@ -22,16 +22,18 @@ import CityTicker from "@/components/CityTicker";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
-import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
+import { IMG_5503_jpg as photoRescueTube } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
+import type { Photo } from "@/assets/photos";
 
 /** The three photos beside the wordmark at the top of the page. */
-const HERO_PHOTOS: { src: string; alt: string }[] = [
+const HERO_PHOTOS: { photo: Photo; alt: string }[] = [
   {
-    src: photoLifeguardChair.url,
+    photo: photoLifeguardChair,
     alt: "Savvy Swim umbrella and lifeguard chair beside a clean backyard pool",
   },
-  { src: photoSavvyRings.url, alt: "Red and white Savvy Swim ring floats on the water" },
-  { src: photoRescueTube.url, alt: "Red Savvy Swim rescue tube on the pool deck" },
+  { photo: photoSavvyRings, alt: "Red and white Savvy Swim ring floats on the water" },
+  { photo: photoRescueTube, alt: "Red Savvy Swim rescue tube on the pool deck" },
 ];
 
 /** Short promises listed under the wordmark. */
@@ -176,12 +178,9 @@ const Index = () => {
                 <div className="mt-7 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 lg:hidden">
                   {HERO_PHOTOS.map((p, i) => (
                     <img
-                      key={p.src}
-                      src={p.src}
+                      key={p.alt}
+                      {...imgProps(p.photo, { sizes: "128px", priority: i === 0 })}
                       alt={p.alt}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      fetchPriority={i === 0 ? "high" : undefined}
-                      decoding="async"
                       className="h-40 w-32 shrink-0 rounded-sm object-cover"
                     />
                   ))}
@@ -220,12 +219,9 @@ const Index = () => {
               <div className="hidden grid-cols-3 gap-3 lg:grid lg:w-[27rem] xl:w-[32rem]">
                 {HERO_PHOTOS.map((p, i) => (
                   <img
-                    key={p.src}
-                    src={p.src}
+                    key={p.alt}
+                    {...imgProps(p.photo, { sizes: "11rem", priority: i === 0 })}
                     alt={p.alt}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    fetchPriority={i === 0 ? "high" : undefined}
-                    decoding="async"
                     className="aspect-3/4 w-full rounded-sm object-cover"
                   />
                 ))}

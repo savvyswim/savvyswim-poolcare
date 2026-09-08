@@ -20,6 +20,7 @@ import {
   IMG_5512_PNG as photoSavvyRings,
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
 
 const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
@@ -62,9 +63,9 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
     .map((a) => ({ name: a.name, to: `/${a.slug}` }));
 
   const gallery = [
-    { src: photoWater.url, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
-    { src: photoRivieraLoungers.url, alt: `Striped loungers beside a serviced ${city}, Texas backyard pool` },
-    { src: photoSavvyRings.url, alt: `Savvy Swim rings floating in a clean ${city}, Texas pool` },
+    { photo: photoWater, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
+    { photo: photoRivieraLoungers, alt: `Striped loungers beside a serviced ${city}, Texas backyard pool` },
+    { photo: photoSavvyRings, alt: `Savvy Swim rings floating in a clean ${city}, Texas pool` },
   ];
 
 
@@ -127,10 +128,11 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
 
               <div className="lg:col-span-5">
                 <img
-                  src={photoNavyCabana.url}
+                  {...imgProps(photoNavyCabana, {
+                    priority: true,
+                    sizes: "(min-width: 1024px) 40vw, 100vw",
+                  })}
                   alt={`Striped cabana umbrella beside a clean ${city}, Texas pool`}
-                  loading="eager"
-                  fetchPriority="high"
                   className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -235,11 +237,9 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {gallery.map((g) => (
                     <img
-                      key={g.src}
-                      src={g.src}
+                      key={g.alt}
+                      {...imgProps(g.photo, { sizes: "(min-width: 640px) 33vw, 100vw" })}
                       alt={g.alt}
-                      loading="lazy"
-                      decoding="async"
                       className="w-full aspect-[4/3] object-cover rounded-sm border border-hairline"
                     />
                   ))}
