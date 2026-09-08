@@ -18,8 +18,30 @@ import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { goToLead } from "@/lib/site-analytics";
 import type { PublicReview } from "@/lib/reviews.functions";
 
+import CityTicker from "@/components/CityTicker";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
-import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
+import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
+import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
+import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
+
+/** The three photos beside the wordmark at the top of the page. */
+const HERO_PHOTOS: { src: string; alt: string }[] = [
+  {
+    src: photoLifeguardChair.url,
+    alt: "Savvy Swim umbrella and lifeguard chair beside a clean backyard pool",
+  },
+  { src: photoSavvyRings.url, alt: "Red and white Savvy Swim ring floats on the water" },
+  { src: photoRescueTube.url, alt: "Red Savvy Swim rescue tube on the pool deck" },
+];
+
+/** Short promises listed under the wordmark. */
+const PROMISES = [
+  "On duty — 24/7",
+  "No contracts, cancel any time",
+  "Free consultation and water test",
+  "Licensed, insured, and background-checked techs",
+];
+
 
 /** The four things we sell. Each card opens the page that breaks down the cost. */
 const OFFERS: {
