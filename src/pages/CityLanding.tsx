@@ -13,6 +13,7 @@ import { trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 import { buildCityFaq, SERVICE_AREAS, type ServiceArea } from "@/lib/serviceAreas";
+import LocalSeoBlurb from "@/components/LocalSeoBlurb";
 
 import {
   IMG_5507_2_JPG as photoNavyCabana,
@@ -293,6 +294,8 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
           </div>
         </section>
 
+
+        <LocalSeoBlurb city={city} />
 
         {/* FAQ */}
         <section className="perf-section py-16 sm:py-20 border-b border-hairline">

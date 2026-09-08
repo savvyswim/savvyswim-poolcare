@@ -1,5 +1,6 @@
 import { Link } from "@/lib/router-compat";
 import {
+import LocalSeoBlurb from "@/components/LocalSeoBlurb";
   Phone,
   MapPin,
   CheckCircle2,
@@ -303,6 +304,8 @@ export default function WeeklyPoolService() {
             </div>
           </div>
         </section>
+
+        <LocalSeoBlurb />
 
         {/* CTA */}
         <section className="perf-section py-16 sm:py-24">
