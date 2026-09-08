@@ -36,7 +36,7 @@ export function SiteHeader() {
         </Link>
 
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 whitespace-nowrap font-tech text-[11px] text-primary/70 lg:flex xl:gap-5 xl:text-[13px]">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 whitespace-nowrap font-tech text-[10px] text-primary/70 lg:flex xl:gap-5 xl:text-[13px]">
           {NAV.map((item) => (
             <Link
               key={item.label}
