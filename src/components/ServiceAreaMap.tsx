@@ -1,33 +1,11 @@
-import { useEffect, useState } from "react";
-import { serviceAreaMap } from "@/lib/area-map.functions";
+import ServiceAreaSvgMap from "@/components/ServiceAreaSvgMap";
 import { SERVICE_AREA_CONTACT, SERVICE_LOCATIONS } from "@/lib/service-locations";
 
 /**
- * Public map of the cities we actually run routes in. The image is rendered
- * server-side so it works on every domain, and each city links to its own
- * pool service page.
+ * Public map of the cities we actually run routes in. Drawn in-page from the
+ * real city coordinates, so it works on every domain with no map key.
  */
 export default function ServiceAreaMap() {
-  const [image, setImage] = useState<string | null>(null);
-  const [settled, setSettled] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    serviceAreaMap()
-      .then((res) => {
-        if (!cancelled) setImage(res?.image ?? null);
-      })
-      .catch(() => {
-        /* the city list below is the fallback */
-      })
-      .finally(() => {
-        if (!cancelled) setSettled(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   return (
     <section className="border border-[#8E1F2C]/20 bg-[#F4EFE3]/60 p-6 sm:p-8">
       <p className="text-[11px] uppercase tracking-[0.2em] text-[#8E1F2C]">Where we service</p>
@@ -41,27 +19,9 @@ export default function ServiceAreaMap() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
         <div className="border border-[#8E1F2C]/15 bg-white/70">
-          {image ? (
-            <img
-              src={image}
-              alt="Map of Savvy Swim pool service areas across the Dallas metroplex"
-              className="w-full"
-              loading="lazy"
-            />
-          ) : settled ? (
-            <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-2 p-6 text-center text-sm text-foreground/60">
-              <p className="font-semibold text-[#8E1F2C]">North Dallas &amp; Collin County</p>
-              <p>
-                The map couldn&apos;t load right now — the full list of cities we run weekly
-                routes in is right here.
-              </p>
-            </div>
-          ) : (
-            <div className="flex h-full min-h-[220px] items-center justify-center p-6 text-sm text-foreground/55">
-              Loading the service-area map…
-            </div>
-          )}
+          <ServiceAreaSvgMap />
         </div>
+
 
         <div>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
