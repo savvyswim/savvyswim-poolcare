@@ -190,6 +190,19 @@ function LeadSyncPage() {
     onError: (err: Error) => toast.error(err.message),
   });
 
+  const resendEmailFn = useServerFn(resendLeadEmails);
+  const resendEmail = useMutation({
+    mutationFn: (id: string) => resendEmailFn({ data: { id } }),
+    onSuccess: (res) => {
+      if (res.ok) toast.success(res.detail);
+      else toast.error(res.detail);
+      void queryClient.invalidateQueries({ queryKey: ["lead-sync"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+
+
   const bulkRetry = useMutation({
     mutationFn: () => retryAllFn(),
     onSuccess: (res) => {
