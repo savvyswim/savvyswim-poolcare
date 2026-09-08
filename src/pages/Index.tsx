@@ -399,6 +399,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <LocalSeoBlurb />
       </main>
 
       <SiteFooter />
