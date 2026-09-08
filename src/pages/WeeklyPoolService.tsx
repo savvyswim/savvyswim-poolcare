@@ -133,12 +133,12 @@ export default function WeeklyPoolService() {
                   <p className="mt-4 font-serif italic text-xl text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => goToLead("weekly_hub_hero")}
                       data-savvy-cta="request_quote"
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Book a free consultation
                     </button>
@@ -146,14 +146,14 @@ export default function WeeklyPoolService() {
                       type="button"
                       onClick={() => goToLead("weekly_hub_hero_alt")}
                       data-savvy-cta="request_quote"
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       Consultation
                     </button>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick("weekly_hub_hero")}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                     </a>
@@ -317,19 +317,19 @@ export default function WeeklyPoolService() {
                   in your city.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <button
                   type="button"
                   onClick={() => goToLead("weekly_hub_final")}
                       data-savvy-cta="request_quote"
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book a free consultation
                 </button>
                 <a
                   href={PHONE_HREF}
                   onClick={onCallClick("weekly_hub_cta")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
