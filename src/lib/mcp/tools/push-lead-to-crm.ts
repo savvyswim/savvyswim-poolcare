@@ -1,7 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "./supabase";
-import { loadDeliveries, syncState } from "./lead-sync";
+import { supabaseForUser } from "../supabase";
+import { loadDeliveries, syncState } from "../lead-sync";
 
 export default defineTool({
   name: "push_lead_to_crm",

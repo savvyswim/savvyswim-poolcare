@@ -16,8 +16,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "./src/lib/rollback-checklist";
-import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "./src/lib/smoke";
+import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "../src/lib/rollback-checklist";
+import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "../src/lib/smoke";
 
 const BASE_URL = (process.env["BASE_URL"] ?? "http://localhost:8080").replace(/\/$/, "");
 const TIMEOUT_MS = Number(process.env["SMOKE_TIMEOUT_MS"] ?? 20000);

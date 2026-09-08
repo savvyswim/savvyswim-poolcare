@@ -1,7 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "./supabase";
-import { loadDeliveries, syncState } from "./lead-sync";
+import { supabaseForUser } from "../supabase";
+import { loadDeliveries, syncState } from "../lead-sync";
 
 /** Drop keys the caller left out so we never null a field by accident. */
 function patchFrom(input: Record<string, unknown>, keys: readonly string[]) {
