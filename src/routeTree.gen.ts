@@ -27,6 +27,7 @@ import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-f
 import { Route as PlanoRouteImport } from './routes/plano'
 import { Route as OurWorkRouteImport } from './routes/our-work'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LeaveAReviewRouteImport } from './routes/leave-a-review'
 import { Route as FriscoRouteImport } from './routes/frisco'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
@@ -158,6 +159,11 @@ const OurWorkRoute = OurWorkRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaveAReviewRoute = LeaveAReviewRouteImport.update({
+  id: '/leave-a-review',
+  path: '/leave-a-review',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FriscoRoute = FriscoRouteImport.update({
@@ -393,6 +399,7 @@ export interface FileRoutesByFullPath {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -455,6 +462,7 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -582,6 +591,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -644,6 +654,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -706,6 +717,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -769,6 +781,7 @@ export interface RootRouteChildren {
   BookingRoute: typeof BookingRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
   FriscoRoute: typeof FriscoRoute
+  LeaveAReviewRoute: typeof LeaveAReviewRoute
   McpRoute: typeof McpRoute
   OurWorkRoute: typeof OurWorkRoute
   PlanoRoute: typeof PlanoRoute
@@ -947,6 +960,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leave-a-review': {
+      id: '/leave-a-review'
+      path: '/leave-a-review'
+      fullPath: '/leave-a-review'
+      preLoaderRoute: typeof LeaveAReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/frisco': {
@@ -1277,6 +1297,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRoute: BookingRoute,
   FreeInspectionRoute: FreeInspectionRoute,
   FriscoRoute: FriscoRoute,
+  LeaveAReviewRoute: LeaveAReviewRoute,
   McpRoute: McpRoute,
   OurWorkRoute: OurWorkRoute,
   PlanoRoute: PlanoRoute,
