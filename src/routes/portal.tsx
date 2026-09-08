@@ -5,13 +5,13 @@ import { portalUrl } from "@/lib/app-links";
 export const Route = createFileRoute("/portal")({
   head: () => ({
     meta: [
-      { title: "Customer Portal — Savvy Swim" },
+      { title: "Customer Portal | Savvy Swim" },
       {
         name: "description",
         content:
-          "The Savvy Swim customer portal — invoices, visits, water reports and support — now lives in the Savvy Swim app.",
+          "The Savvy Swim customer portal, invoices, visits, water reports and support. Now lives in the Savvy Swim app.",
       },
-      { property: "og:title", content: "Customer Portal — Savvy Swim" },
+      { property: "og:title", content: "Customer Portal | Savvy Swim" },
       {
         property: "og:description",
         content: "Invoices, visits, water reports and support for Savvy Swim customers.",

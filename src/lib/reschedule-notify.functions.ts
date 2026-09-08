@@ -82,7 +82,7 @@ export const sendRescheduleNotice = createServerFn({ method: "POST" })
         customer_id: customer.id,
         visit_id: visit.id,
         kind: "notification",
-        title: `Updated confirmation sent — ${notice.when}`,
+        title: `Updated confirmation sent, ${notice.when}`,
         body: `Arrival window ${notice.slot}.${notice.note ? ` Note: ${notice.note}` : ""} Sent by ${channels[0] === "sms" ? "text message" : "email"}.`,
         sent_by_sms: channels[0] === "sms",
       });

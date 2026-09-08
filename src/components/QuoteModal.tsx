@@ -44,7 +44,7 @@ const COPY: Record<
   booking: {
     eyebrow: "Free · No obligation",
     title: "Book your free consultation",
-    desc: "Pick a time — we'll confirm by phone or email within one business day.",
+    desc: "Pick a time. We'll confirm by phone or email within one business day.",
     optionsLabel: "Which service?",
     options: SERVICES,
     cta: "free_pool_visit",
@@ -53,7 +53,7 @@ const COPY: Record<
   water_test: {
     eyebrow: "Free · Lab-grade accuracy",
     title: "Book your free water test",
-    desc: "Drop a sample or we'll test on site — full chemistry report within one business day.",
+    desc: "Drop a sample or we'll test on site. Full chemistry report within one business day.",
     optionsLabel: "Which test?",
     options: WATER_TESTS,
     cta: "water_test",

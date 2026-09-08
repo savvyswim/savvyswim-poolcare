@@ -18,7 +18,7 @@ import { extractZip } from "@/lib/postal";
 import { checkPromoCode } from "@/lib/promo.functions";
 import type { PromoCheck } from "@/lib/promo.functions";
 
-export const SWIM_CLUB_OPTION = "Savvy Swim Club membership — $19.99/mo";
+export const SWIM_CLUB_OPTION = "Savvy Swim Club membership, $19.99/mo";
 
 export const SERVICES = [
   "Weekly Service & Maintenance",
@@ -29,7 +29,7 @@ export const SERVICES = [
   "Surface & Tile Care",
   "On-site Inspection",
   SWIM_CLUB_OPTION,
-  "Not sure — help me decide",
+  "Not sure, help me decide",
 ] as const;
 
 export const WATER_TESTS = [
@@ -37,7 +37,7 @@ export const WATER_TESTS = [
   "Green pool diagnosis",
   "Salt cell / chlorinator check",
   "Scale & hardness (NTMWD water)",
-  "Not sure — help me decide",
+  "Not sure, help me decide",
 ] as const;
 
 export const TIMES = [
@@ -424,7 +424,7 @@ export default function LeadForm({
           ) : promoCheck && promoCheck.status === "valid" ? (
             <span className="font-semibold text-[#1FA9BE]">
               {promoCheck.kind === "referral" ? "Referral code applied" : "Code applied"}
-              {promoCheck.detail ? ` — ${promoCheck.detail}` : ""}
+              {promoCheck.detail ? `: ${promoCheck.detail}` : ""}
             </span>
           ) : promoCheck && promoCheck.status !== "empty" ? (
             <span className="text-[#8E1F2C]">
@@ -470,7 +470,7 @@ export default function LeadForm({
       </p>
 
 
-      {/* Honeypot — real people never fill this in. */}
+      {/* Honeypot, real people never fill this in. */}
       <input
         name="company"
         tabIndex={-1}

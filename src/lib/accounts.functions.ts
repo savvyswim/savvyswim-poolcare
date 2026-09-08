@@ -84,7 +84,7 @@ export const createCustomerLogin = createServerFn({ method: "POST" })
       if (error) {
         throw new Error(
           /registered|exists/i.test(error.message)
-            ? "That email already has a login — link it from the customer record instead."
+            ? "That email already has a login, link it from the customer record instead."
             : error.message,
         );
       }
@@ -159,7 +159,7 @@ export const createStaffLogin = createServerFn({ method: "POST" })
       if (error) {
         throw new Error(
           /registered|exists/i.test(error.message)
-            ? "That email already has a login — link it from the team member record instead."
+            ? "That email already has a login, link it from the team member record instead."
             : error.message,
         );
       }

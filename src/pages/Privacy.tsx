@@ -56,7 +56,7 @@ const Privacy = () => (
         <li>Respond to your inquiries and requests for estimates</li>
         <li>Schedule, confirm, and remind you of appointments</li>
         <li>Provide repair, maintenance, contracting, and pool services</li>
-        <li>Send you transactional communications (email, phone, and — if you opted in — SMS)</li>
+        <li>Send you transactional communications (email, phone, and, if you opted in, SMS)</li>
         <li>Provide customer support</li>
         <li>Maintain records of consent, transactions, and communications</li>
         <li>Comply with our legal obligations and enforce our Terms</li>

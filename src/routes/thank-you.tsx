@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import ThankYou from "@/pages/ThankYou";
 import { SITE_URL } from "@/lib/structured-data";
 
-const TITLE = "Thank You — Your Savvy Swim Request Is In | Savvy Swim";
+const TITLE = "Thank You. Your Savvy Swim Request Is In | Savvy Swim";
 const DESCRIPTION =
   "Your pool service request is confirmed. Save our contact, call 817-663-POOL, and see what happens next with Savvy Swim across DFW.";
 const URL = `${SITE_URL}/thank-you`;

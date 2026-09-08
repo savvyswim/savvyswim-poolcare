@@ -99,7 +99,7 @@ export default function AddressAutocomplete({
 
   const useMyLocation = () => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
-      setLocError("Location isn't available on this device — type your address instead.");
+      setLocError("Location isn't available on this device. Type your address instead.");
       return;
     }
     setLocError(null);
@@ -117,17 +117,17 @@ export default function AddressAutocomplete({
             tokenRef.current = null;
             onSelect?.(res.formattedAddress, res.placeId);
           } else {
-            setLocError("Couldn't read an address there — type it in instead.");
+            setLocError("Couldn't read an address there. Type it in instead.");
           }
         } catch {
-          setLocError("Couldn't read an address there — type it in instead.");
+          setLocError("Couldn't read an address there. Type it in instead.");
         } finally {
           setLocating(false);
         }
       },
       () => {
         setLocating(false);
-        setLocError("Location off — type your address instead.");
+        setLocError("Location off. Type your address instead.");
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     );

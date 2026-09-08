@@ -27,7 +27,7 @@ const SERVICES = [
     no: "01",
     icon: Droplets,
     title: "Weekly pool cleaning in Plano",
-    desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week — with a photo report before we leave the driveway.",
+    desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week, with a photo report before we leave the driveway.",
   },
   {
     no: "02",
@@ -39,7 +39,7 @@ const SERVICES = [
     no: "03",
     icon: Wrench,
     title: "Equipment repair",
-    desc: "Pumps, filters, heaters, salt cells, and automation — most parts stocked on the truck, so Plano repairs usually finish in one trip.",
+    desc: "Pumps, filters, heaters, salt cells, and automation. Most parts stocked on the truck, so Plano repairs usually finish in one trip.",
   },
   {
     no: "04",
@@ -52,7 +52,7 @@ const SERVICES = [
 const FAQ = [
   {
     q: "How much does pool cleaning in Plano, TX cost?",
-    a: "Plano weekly service starts at $129.99 a month, including chemicals. Size, spa, and pool condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.",
+    a: "Plano weekly service starts at $129.99 a month, including chemicals. Size, spa, and pool condition set the final number. We quote flat after a walkthrough, and the price does not change week to week.",
   },
   {
     q: "What day do you service Plano pools?",
@@ -60,7 +60,7 @@ const FAQ = [
   },
   {
     q: "Do I have to be home?",
-    a: "No. We work around gate codes, dogs, and locked side yards — that's the whole point of on duty, so you don't have to be. Everything you need to see shows up in the visit report.",
+    a: "No. We work around gate codes, dogs, and locked side yards. That's the whole point of on duty, so you don't have to be. Everything you need to see shows up in the visit report.",
   },
   {
     q: "What if the water isn't clear after a visit?",
@@ -110,7 +110,7 @@ const PlanoPoolCleaning = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Pool Cleaning Plano TX — Weekly Service & Repair | Savvy Swim"
+        title="Pool Cleaning Plano TX, Weekly Service & Repair | Savvy Swim"
         description="Pool cleaning in Plano, TX from $129.99/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
         path="/pool-cleaning-plano"
         jsonLd={jsonLd}
@@ -118,7 +118,7 @@ const PlanoPoolCleaning = () => {
 
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
               Savvy Swim
             </span>
@@ -151,7 +151,7 @@ const PlanoPoolCleaning = () => {
                     <span className="text-accent">Plano, TX.</span>
                   </h1>
                   <p className="mt-6 max-w-xl text-muted-foreground text-base leading-relaxed">
-                    Weekly pool cleaning for Plano homeowners — chemistry balanced, baskets emptied,
+                    Weekly pool cleaning for Plano homeowners, chemistry balanced, baskets emptied,
                     equipment checked, and a photo report in your inbox before we pull out of the driveway.
                   </p>
                   <p className="mt-4 font-serif italic text-xl text-foreground/80">
@@ -237,7 +237,7 @@ const PlanoPoolCleaning = () => {
                 Plano neighborhoods we run<span className="text-accent">.</span>
               </h2>
               <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
-                Our Plano route covers the full city — from Legacy West and Willow Bend down to
+                Our Plano route covers the full city, from Legacy West and Willow Bend down to
                 Downtown Plano and east past Los Rios. If your street isn't listed, call and we'll tell you
                 straight whether we can hit it on the weekly run.
               </p>

@@ -16,7 +16,7 @@ export default function ReviewLink() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "Leave a review — Savvy Swim";
+    document.title = "Leave a review | Savvy Swim";
     (async () => {
       const { data: rows } = await supabase.rpc("ss_get_review_request", { _token: token });
       setData((rows as Payload[] | null)?.[0] ?? null);
@@ -75,7 +75,7 @@ export default function ReviewLink() {
           <Star size={16} /> Leave a Google review
         </button>
         <p className="mt-3 text-center text-[0.75rem] text-muted-foreground">
-          Takes about 20 seconds — it opens Google directly.
+          Takes about 20 seconds. It opens Google directly.
         </p>
         <p className="mt-4 text-center text-[0.8rem]">
           <a href="/leave-a-review" className="underline underline-offset-4">

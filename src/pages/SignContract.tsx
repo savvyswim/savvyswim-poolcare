@@ -188,9 +188,9 @@ export default function SignContract() {
       setRetryNote(null);
       setError(
         kind === "network"
-          ? "We couldn't reach the server — check your connection and tap Sign again. Your signature is still on the pad."
+          ? "We couldn't reach the server, check your connection and tap Sign again. Your signature is still on the pad."
           : kind === "timeout"
-            ? "The connection is slow right now. Tap Sign again — nothing was lost."
+            ? "The connection is slow right now. Tap Sign again, nothing was lost."
             : kind === "rate_limit" || kind === "server"
               ? "Our server is busy for a moment. Tap Sign again in a few seconds."
               : raw || "We couldn't save your signature. Call or text (817) 663-7665 and we'll help.",
@@ -206,7 +206,7 @@ export default function SignContract() {
         res.sent && res.to
           ? `A signed copy was emailed to ${res.to}.`
           : res.reason === "failed"
-            ? "Your agreement is signed and saved — the email copy didn't go through, so our office will resend it."
+            ? "Your agreement is signed and saved. The email copy didn't go through, so our office will resend it."
             : "A signed copy is on file with your account.",
       );
     } catch {
@@ -269,7 +269,7 @@ export default function SignContract() {
             <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary shrink-0" />
             <div>
               <p className="font-semibold text-foreground">
-                {justSigned ? "Thank you — your agreement is signed." : "This agreement has been signed."}
+                {justSigned ? "Thank you. Your agreement is signed." : "This agreement has been signed."}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Signed by {contract.signer_name}
@@ -291,16 +291,16 @@ export default function SignContract() {
             </div>
             <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
               {[
-                ["Envelope ID", certificate.contractId ?? "—"],
+                ["Envelope ID", certificate.contractId ?? ""],
                 ["Document", certificate.title ?? contract.title],
                 ["Signer", certificate.signerName],
-                ["Email on file", certificate.email ?? "—"],
-                ["Sent", certificate.sentAt ? new Date(certificate.sentAt).toLocaleString() : "—"],
-                ["Viewed", certificate.viewedAt ? new Date(certificate.viewedAt).toLocaleString() : "—"],
-                ["Signature started", certificate.startedAt ? new Date(certificate.startedAt).toLocaleString() : "—"],
+                ["Email on file", certificate.email ?? ""],
+                ["Sent", certificate.sentAt ? new Date(certificate.sentAt).toLocaleString() : ""],
+                ["Viewed", certificate.viewedAt ? new Date(certificate.viewedAt).toLocaleString() : ""],
+                ["Signature started", certificate.startedAt ? new Date(certificate.startedAt).toLocaleString() : ""],
                 ["Signed", new Date(certificate.signedAt).toLocaleString()],
                 ["Signer IP address", certificate.ip ?? "Not recorded"],
-                ["Device", certificate.userAgent || "—"],
+                ["Device", certificate.userAgent || ""],
               ].map(([label, value]) => (
                 <div key={label as string} className="min-w-0">
                   <dt className="font-tech text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground">

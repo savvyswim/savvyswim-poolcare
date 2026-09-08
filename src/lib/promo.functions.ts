@@ -41,7 +41,7 @@ export async function lookupPromoCode(code: string): Promise<PromoCheck> {
       status: "unknown",
       code: trimmed.toUpperCase(),
       kind: null,
-      message: "We could not check that code right now — send it and we'll apply it manually.",
+      message: "We could not check that code right now, send it and we'll apply it manually.",
     };
   }
 

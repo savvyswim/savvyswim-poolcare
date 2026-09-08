@@ -33,7 +33,7 @@ const mask = (channel: "email" | "sms", value: string) => {
 async function sendSms(to: string, body: string) {
   const apiKey = process.env["LOVABLE_API_KEY"];
   const twilioKey = process.env["TWILIO_API_KEY"];
-  if (!apiKey || !twilioKey) throw new Error("Texting is not configured — use email verification instead");
+  if (!apiKey || !twilioKey) throw new Error("Texting is not configured, use email verification instead");
   const headers = { Authorization: `Bearer ${apiKey}`, "X-Connection-Api-Key": twilioKey };
 
   const numbersRes = await fetch(`${GATEWAY_URL}/IncomingPhoneNumbers.json?PageSize=1`, { headers });
@@ -153,7 +153,7 @@ export const requestContactChange = createServerFn({ method: "POST" })
     if (recent?.created_at) {
       const elapsed = (Date.now() - new Date(recent.created_at).getTime()) / 1000;
       if (elapsed < RESEND_COOLDOWN_SECONDS) {
-        throw new Error(`Hang tight — you can request another code in ${Math.ceil(RESEND_COOLDOWN_SECONDS - elapsed)}s`);
+        throw new Error(`Hang tight. You can request another code in ${Math.ceil(RESEND_COOLDOWN_SECONDS - elapsed)}s`);
       }
     }
 
@@ -219,14 +219,14 @@ export const confirmContactChange = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    if (!pending) throw new Error("Request a new code — this one is no longer active");
+    if (!pending) throw new Error("Request a new code, this one is no longer active");
 
     if (new Date(pending.expires_at).getTime() < Date.now()) {
       await supabaseAdmin
         .from("ss_contact_verifications")
         .update({ consumed_at: new Date().toISOString() })
         .eq("id", pending.id);
-      throw new Error("That code expired — request a new one");
+      throw new Error("That code expired, request a new one");
     }
 
     if ((pending.attempts ?? 0) >= MAX_ATTEMPTS) {
@@ -234,7 +234,7 @@ export const confirmContactChange = createServerFn({ method: "POST" })
         .from("ss_contact_verifications")
         .update({ consumed_at: new Date().toISOString() })
         .eq("id", pending.id);
-      throw new Error("Too many tries — request a new code");
+      throw new Error("Too many tries, request a new code");
     }
 
     const candidate = await hashCode(data.channel, pending.new_value, data.code);
@@ -243,7 +243,7 @@ export const confirmContactChange = createServerFn({ method: "POST" })
         .from("ss_contact_verifications")
         .update({ attempts: (pending.attempts ?? 0) + 1 })
         .eq("id", pending.id);
-      throw new Error("That code does not match — check it and try again");
+      throw new Error("That code does not match, check it and try again");
     }
 
     const patch = data.channel === "email" ? { email: pending.new_value } : { phone: pending.new_value };

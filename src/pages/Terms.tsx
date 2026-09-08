@@ -118,15 +118,15 @@ const Terms = () => (
 
       <h3 className="text-lg font-semibold mt-6 mb-2">4.1 Clear Water Guarantee</h3>
       <p className="mb-4">
-        If your water is not clear after a service visit and the cause is our workmanship — missed
-        steps, incorrect chemistry, or an error by our technician — we return the same day, at no
+        If your water is not clear after a service visit and the cause is our workmanship, missed
+        steps, incorrect chemistry, or an error by our technician, we return the same day, at no
         charge, to correct it. Same-day return is subject to notifying us on the day of the visit;
         reports made afterward are scheduled for the next available service window.
       </p>
       <p className="mb-4">
-        If the water condition is caused by factors outside our control — landscaping or yard work,
+        If the water condition is caused by factors outside our control, landscaping or yard work,
         heavy debris, storms, construction, pets or heavy bather load, algae blooms following missed
-        or skipped visits, equipment failure, refills, or third-party chemical additions — the
+        or skipped visits, equipment failure, refills, or third-party chemical additions, the
         return visit is not covered by the guarantee. In those cases we provide one (1)
         complimentary corrective visit per customer; any additional work is quoted and billed
         separately at standard rates.
@@ -143,7 +143,7 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">6. Intellectual Property</h2>
       <p className="mb-4">
-        All content on the website — including text, graphics, logos, images, and software — is the
+        All content on the website, including text, graphics, logos, images, and software, is the
         property of Santana &amp; Rivera or its licensors and is protected by U.S. and international
         intellectual-property laws. You may not reproduce, distribute, or create derivative works
         without our prior written consent.
@@ -161,7 +161,7 @@ const Terms = () => (
       <p className="mb-4">
         In no event shall Santana &amp; Rivera, its directors, employees, contractors, or agents be liable
         to you or any third party for any direct, indirect, consequential, exemplary, incidental,
-        special, or punitive damages — including lost profits, lost data, or business interruption —
+        special, or punitive damages, including lost profits, lost data, or business interruption,
         arising from your use of the site, the SMS program, or our services, even if we have been
         advised of the possibility of such damages. To the maximum extent permitted by law, our
         total liability for any claim shall not exceed the amount you paid Santana &amp; Rivera for the

@@ -29,7 +29,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Dallas",
     zips: "75201 / 75204 / 75214 / 75225 / 75230",
     intro:
-      "Weekly pool cleaning across Dallas — from Lakewood and Lower Greenville out to Preston Hollow. Chemistry balanced, baskets emptied, equipment checked, photo report every visit.",
+      "Weekly pool cleaning across Dallas, from Lakewood and Lower Greenville out to Preston Hollow. Chemistry balanced, baskets emptied, equipment checked, photo report every visit.",
     neighborhoods: [
       "Lakewood",
       "Preston Hollow",
@@ -45,7 +45,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Plano",
     zips: "75023 / 75024 / 75025 / 75074 / 75093",
     intro:
-      "Plano pools run on a fixed weekly route day with the same technician. We handle chemistry, cleaning, filters, and equipment so you never think about it — from the older shaded pools off Custer to the new builds around Legacy West.",
+      "Plano pools run on a fixed weekly route day with the same technician. We handle chemistry, cleaning, filters, and equipment so you never think about it, from the older shaded pools off Custer to the new builds around Legacy West.",
     neighborhoods: [
       "Willow Bend",
       "Deerfield",
@@ -57,7 +57,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     startingPrice: "$129.99 / month",
     local: {
       waterHeadline:
-        "Plano fills from North Texas Municipal Water District surface water — that changes how a pool behaves here.",
+        "Plano fills from North Texas Municipal Water District surface water, that changes how a pool behaves here.",
       waterNotes: [
         {
           title: "Chloramine tap water",
@@ -72,7 +72,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
         {
           title: "Evaporation + calcium creep",
           body:
-            "A Plano pool can lose a quarter inch a day in July. Water leaves, minerals stay — calcium hardness and salinity climb, and you get that white crust on the waterline tile. We log calcium hardness every visit and treat scale before it etches tile or plaster.",
+            "A Plano pool can lose a quarter inch a day in July. Water leaves, minerals stay. Calcium hardness and salinity climb, and you get that white crust on the waterline tile. We log calcium hardness every visit and treat scale before it etches tile or plaster.",
         },
         {
           title: "Post-cell salt scale",
@@ -112,15 +112,15 @@ export const SERVICE_AREAS: ServiceArea[] = [
       extraFaq: [
         {
           q: "Why does my Plano pool smell like chlorine but test fine?",
-          a: "Because Plano's tap water is chloramine-treated, top-off water pushes combined chlorine up. Total chlorine looks normal while free chlorine is low — that's the smell. We test both every visit and correct it instead of adding more tabs.",
+          a: "Because Plano's tap water is chloramine-treated, top-off water pushes combined chlorine up. Total chlorine looks normal while free chlorine is low. That's the smell. We test both every visit and correct it instead of adding more tabs.",
         },
         {
           q: "Do you handle salt pools and automation in west Plano?",
-          a: "Yes. Pentair, Jandy and Hayward salt systems and controllers are standard on our Plano route — cell cleaning, salinity correction, variable-speed pump scheduling and app setup are all part of service.",
+          a: "Yes. Pentair, Jandy and Hayward salt systems and controllers are standard on our Plano route. Cell cleaning, salinity correction, variable-speed pump scheduling and app setup are all part of service.",
         },
         {
           q: "Do you service both east and west Plano?",
-          a: "We run the whole city — 75023, 75024, 75025, 75074, 75075 and 75093 — on fixed weekly days. Your zip decides which day you land on.",
+          a: "We run the whole city, 75023, 75024, 75025, 75074, 75075 and 75093, on fixed weekly days. Your zip decides which day you land on.",
         },
       ],
     },
@@ -130,7 +130,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "McKinney",
     zips: "75069 / 75070 / 75071 / 75072",
     intro:
-      "Weekly pool service for McKinney homeowners — hard-water scale control, salt cell care, and clear water backed by our same-day return guarantee.",
+      "Weekly pool service for McKinney homeowners, hard-water scale control, salt cell care, and clear water backed by our same-day return guarantee.",
     neighborhoods: [
       "Stonebridge Ranch",
       "Adriatica",
@@ -162,7 +162,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Richardson",
     zips: "75080 / 75081 / 75082",
     intro:
-      "Richardson pool care built around older equipment and mature tree cover — heavier skimming, filter attention, and steady chemistry all season.",
+      "Richardson pool care built around older equipment and mature tree cover, heavier skimming, filter attention, and steady chemistry all season.",
     neighborhoods: [
       "Canyon Creek",
       "Prairie Creek",
@@ -178,7 +178,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Highland Park",
     zips: "75205 / 75219",
     intro:
-      "Discreet, on-schedule pool service for Highland Park estates — tile and waterline care, automation checks, and immaculate presentation every week.",
+      "Discreet, on-schedule pool service for Highland Park estates, tile and waterline care, automation checks, and immaculate presentation every week.",
     neighborhoods: [
       "Beverly Drive",
       "Lakeside Drive",
@@ -210,7 +210,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Garland",
     zips: "75040 / 75041 / 75042 / 75043 / 75044",
     intro:
-      "Straightforward weekly pool cleaning in Garland — honest flat pricing, chemicals included, and repairs handled by the same crew that services you.",
+      "Straightforward weekly pool cleaning in Garland, honest flat pricing, chemicals included, and repairs handled by the same crew that services you.",
     neighborhoods: [
       "Firewheel",
       "Duck Creek",
@@ -226,7 +226,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Irving",
     zips: "75038 / 75039 / 75060 / 75062 / 75063",
     intro:
-      "Irving and Las Colinas pool service — weekly cleaning, salt system care, and automation setup so heater, lights, and spa live on your phone.",
+      "Irving and Las Colinas pool service, weekly cleaning, salt system care, and automation setup so heater, lights, and spa live on your phone.",
     neighborhoods: [
       "Las Colinas",
       "Valley Ranch",
@@ -258,7 +258,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     name: "Prosper",
     zips: "75078",
     intro:
-      "Large-lot Prosper pools with spas, water features, and automation — one flat monthly rate, one assigned technician, zero surprises.",
+      "Large-lot Prosper pools with spas, water features, and automation, one flat monthly rate, one assigned technician, zero surprises.",
     neighborhoods: [
       "Windsong Ranch",
       "Star Trail",
@@ -277,7 +277,7 @@ export const getServiceArea = (slug: string) =>
 export const buildCityFaq = (area: ServiceArea): CityFaqItem[] => [
   {
     q: `How much does pool cleaning in ${area.name}, TX cost?`,
-    a: `${area.name} weekly service starts at ${area.startingPrice}, chemicals included. Pool size, spa, and condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.`,
+    a: `${area.name} weekly service starts at ${area.startingPrice}, chemicals included. Pool size, spa, and condition set the final number. We quote flat after a walkthrough, and the price does not change week to week.`,
   },
   {
     q: `What day do you service ${area.name} pools?`,
@@ -286,7 +286,7 @@ export const buildCityFaq = (area: ServiceArea): CityFaqItem[] => [
   ...(area.local?.extraFaq ?? []),
   {
     q: "Do I have to be home?",
-    a: "No. We work around gate codes, dogs, and locked side yards — that's the whole point of on duty, so you don't have to be.",
+    a: "No. We work around gate codes, dogs, and locked side yards. That's the whole point of on duty, so you don't have to be.",
   },
   {
     q: "What if the water isn't clear after a visit?",
@@ -306,7 +306,7 @@ export const buildCityMeta = (area: ServiceArea) => {
 
   const lead = `Weekly pool cleaning in ${area.name}, TX from ${price}. Chemistry, cleaning and equipment checks with a photo report every visit`;
   const hoods = area.neighborhoods.slice(0, 2).join(", ");
-  const withHoods = `${lead} — ${hoods} and citywide.`;
+  const withHoods = `${lead}, ${hoods} and citywide.`;
   const description = withHoods.length <= 158 ? withHoods : `${lead}. Book a free inspection.`;
 
   return { title, description };

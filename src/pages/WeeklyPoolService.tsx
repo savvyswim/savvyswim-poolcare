@@ -31,7 +31,7 @@ export const WEEKLY_VISIT_STEPS = [
     no: "02",
     title: "Chemistry balanced",
     body:
-      "Chlorine, acid, alkalinity, stabilizer, and salt dosed to target. All standard chemicals are included in the monthly price — no per-visit chemical bill.",
+      "Chlorine, acid, alkalinity, stabilizer, and salt dosed to target. All standard chemicals are included in the monthly price. No per-visit chemical bill.",
   },
   {
     no: "03",
@@ -55,7 +55,7 @@ export const WEEKLY_VISIT_STEPS = [
     no: "06",
     title: "Photo report before we leave",
     body:
-      "Photos of the finished pool and equipment pad, every chemical reading, what was added, and any issue we spotted — sent to your phone from the driveway.",
+      "Photos of the finished pool and equipment pad, every chemical reading, what was added, and any issue we spotted. Sent to your phone from the driveway.",
   },
 ];
 
@@ -94,7 +94,7 @@ export default function WeeklyPoolService() {
     <div className="min-h-screen overflow-x-hidden">
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
               Savvy Swim
             </span>
@@ -238,7 +238,7 @@ export default function WeeklyPoolService() {
               </h2>
               <p className="mt-4 text-muted-foreground leading-relaxed">
                 Your pool is assigned to a single technician on a fixed weekly day, not a rotating
-                crew. They learn your plaster, your salt cell, your gate code, and your dog — so
+                crew. They learn your plaster, your salt cell, your gate code, and your dog. So
                 small problems get caught before they become a repair.
               </p>
               <ul className="mt-6 space-y-3">
@@ -277,7 +277,7 @@ export default function WeeklyPoolService() {
               </div>
               <p className="mt-4 text-muted-foreground leading-relaxed">
                 Weekly service, chemicals included, no contract. Pool size, spa, water features and
-                current condition set the final number — you get a flat monthly quote after a free
+                current condition set the final number. You get a flat monthly quote after a free
                 walkthrough, and it does not change week to week.
               </p>
               <p className="mt-4 text-sm text-muted-foreground">

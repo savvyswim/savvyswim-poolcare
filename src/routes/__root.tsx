@@ -42,7 +42,7 @@ import NotFound from "@/pages/NotFound";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import appCss from "../styles.css?url";
 
-const SITE_TITLE = "Savvy Swim — Pool Cleaning, Service & Repair in Texas";
+const SITE_TITLE = "Savvy Swim | Pool Cleaning, Service & Repair in Texas";
 const SITE_DESCRIPTION =
   "Weekly pool cleaning, equipment repair, and service across Texas. Certified techs, photo reports every visit. Free quote.";
 const OG_IMAGE =

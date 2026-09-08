@@ -45,8 +45,8 @@ export function smsBody(n: RescheduleNotice): string {
 
 export function emailParts(n: RescheduleNotice): { subject: string; html: string; text: string } {
   const subject = n.created
-    ? `Visit confirmed — ${n.when}`
-    : `Visit updated — now ${n.when}`;
+    ? `Visit confirmed, ${n.when}`
+    : `Visit updated. Now ${n.when}`;
   const changed = n.previousWhen ? `<p style="margin:0 0 8px;font-size:14px;color:#7a6f63;text-decoration:line-through;">${esc(n.previousWhen)}</p>` : "";
   const html = `
 <div style="background:#F4EFE3;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;color:#2b2320;">
@@ -77,7 +77,7 @@ export function emailParts(n: RescheduleNotice): { subject: string; html: string
 </div>`;
   const text =
     `Hi ${n.firstName},\n\n` +
-    `${n.created ? "Your pool service visit is confirmed" : `Your pool service visit moved${n.previousWhen ? ` from ${n.previousWhen}` : ""}`} — ${n.when}, arriving between ${n.slot}.` +
+    `${n.created ? "Your pool service visit is confirmed" : `Your pool service visit moved${n.previousWhen ? ` from ${n.previousWhen}` : ""}`}, ${n.when}, arriving between ${n.slot}.` +
     `${n.address ? `\n${n.address}` : ""}${n.note ? `\n\nNote: ${n.note}` : ""}\n\n` +
     `Need another change? https://savvyswimservices.com/portal or call ${OFFICE_PHONE}.\nSavvy Swim`;
   return { subject, html, text };

@@ -28,7 +28,7 @@ const SERVICES = [
     no: "01",
     icon: Droplets,
     title: "Weekly pool cleaning in Frisco",
-    desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week — with a photo report before we leave the driveway.",
+    desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week, with a photo report before we leave the driveway.",
   },
   {
     no: "02",
@@ -40,7 +40,7 @@ const SERVICES = [
     no: "03",
     icon: Wrench,
     title: "Equipment repair",
-    desc: "Pumps, filters, heaters, salt cells, and automation — most parts stocked on the truck, so Frisco repairs usually finish in one trip.",
+    desc: "Pumps, filters, heaters, salt cells, and automation. Most parts stocked on the truck, so Frisco repairs usually finish in one trip.",
   },
   {
     no: "04",
@@ -53,7 +53,7 @@ const SERVICES = [
 const FAQ = [
   {
     q: "How much does pool cleaning in Frisco, TX cost?",
-    a: "Frisco weekly service starts at $129.99 a month, including chemicals. Size, spa, and pool condition set the final number — we quote flat after a walkthrough, and the price does not change week to week.",
+    a: "Frisco weekly service starts at $129.99 a month, including chemicals. Size, spa, and pool condition set the final number. We quote flat after a walkthrough, and the price does not change week to week.",
   },
   {
     q: "What day do you service Frisco pools?",
@@ -61,7 +61,7 @@ const FAQ = [
   },
   {
     q: "Do I have to be home?",
-    a: "No. We work around gate codes, dogs, and locked side yards — that's the whole point of on duty, so you don't have to be. Everything you need to see shows up in the visit report.",
+    a: "No. We work around gate codes, dogs, and locked side yards. That's the whole point of on duty, so you don't have to be. Everything you need to see shows up in the visit report.",
   },
   {
     q: "What if the water isn't clear after a visit?",
@@ -111,7 +111,7 @@ const FriscoPoolCleaning = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Pool Cleaning Frisco TX — Weekly Service & Repair | Savvy Swim"
+        title="Pool Cleaning Frisco TX, Weekly Service & Repair | Savvy Swim"
         description="Pool cleaning in Frisco, TX from $129.99/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
         path="/pool-cleaning-frisco-tx"
         jsonLd={jsonLd}
@@ -119,7 +119,7 @@ const FriscoPoolCleaning = () => {
 
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
               Savvy Swim
             </span>
@@ -152,7 +152,7 @@ const FriscoPoolCleaning = () => {
                     <span className="text-accent">Frisco, TX.</span>
                   </h1>
                   <p className="mt-5 max-w-xl text-[0.98rem] leading-relaxed text-muted-foreground sm:mt-6 sm:text-base">
-                    Weekly pool cleaning for Frisco homeowners — chemistry balanced, baskets emptied,
+                    Weekly pool cleaning for Frisco homeowners, chemistry balanced, baskets emptied,
                     equipment checked, and a photo report in your inbox before we pull out of the driveway.
                   </p>
                   <p className="mt-4 font-serif text-lg italic text-foreground/80 sm:text-xl">
@@ -238,7 +238,7 @@ const FriscoPoolCleaning = () => {
                 Frisco neighborhoods we run<span className="text-accent">.</span>
               </h2>
               <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
-                Our Frisco route covers the full city — from Preston Road out to the Legacy corridor
+                Our Frisco route covers the full city, from Preston Road out to the Legacy corridor
                 and north past Panther Creek. If your street isn't listed, call and we'll tell you
                 straight whether we can hit it on the weekly run.
               </p>
@@ -290,7 +290,7 @@ const FriscoPoolCleaning = () => {
               </h2>
               <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-muted-foreground">
                 Send your details and a Frisco tech will call or text you back the same day to schedule your
-                free water test and on-site pool inspection — plus a flat monthly quote. No contracts, no pressure.
+                free water test and on-site pool inspection. Plus a flat monthly quote. No contracts, no pressure.
               </p>
               <ul className="mt-6 space-y-2.5 text-[0.92rem]">
                 {["Free full water chemistry test", "Complimentary on-site pool inspection", "Same-day reply, flat monthly price with chemicals included"].map((t) => (
