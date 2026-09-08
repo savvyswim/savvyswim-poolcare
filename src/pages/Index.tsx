@@ -254,11 +254,21 @@ const Index = () => {
             </h2>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {REVIEWS.map((t) => (
-                <figure key={t.a} className="card-3d flex flex-col rounded-sm p-6">
-                  <div className="mb-4 flex items-center gap-1" aria-label="Five out of five stars">
-                    {[0, 1, 2, 3, 4].map((s) => (
-                      <Star key={s} className="h-4 w-4 fill-amber-brand text-amber-brand" />
+              {shown.map((t, i) => (
+                <figure key={`${t.a}-${i}`} className="card-3d flex flex-col rounded-sm p-6">
+                  <div
+                    className="mb-4 flex items-center gap-1"
+                    aria-label={`${t.rating} out of five stars`}
+                  >
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        className={`h-4 w-4 ${
+                          s <= t.rating
+                            ? "fill-amber-brand text-amber-brand"
+                            : "text-muted-foreground/35"
+                        }`}
+                      />
                     ))}
                   </div>
                   <blockquote className="text-sm leading-relaxed text-foreground/90">
@@ -270,21 +280,31 @@ const Index = () => {
                     </span>
                     <span>
                       <span className="block text-sm font-semibold">{t.a}</span>
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3" /> {t.c}
-                      </span>
+                      {t.c && (
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3" /> {t.c}
+                        </span>
+                      )}
                     </span>
                   </figcaption>
                 </figure>
               ))}
             </div>
 
-            <Link
-              to="/our-work"
-              className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
-            >
-              See our work <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-6">
+              <Link
+                to="/our-work"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
+              >
+                See our work <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/leave-a-review"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
+              >
+                Leave a review <Star className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </section>
 
