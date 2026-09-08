@@ -1,9 +1,11 @@
-import ServiceAreaSvgMap from "@/components/ServiceAreaSvgMap";
-import { SERVICE_AREA_CONTACT, SERVICE_LOCATIONS } from "@/lib/service-locations";
+import {
+  ADDITIONAL_SERVICE_CITIES,
+  SERVICE_AREA_CONTACT,
+  SERVICE_LOCATIONS,
+} from "@/lib/service-locations";
 
 /**
- * Public map of the cities we actually run routes in. Drawn in-page from the
- * real city coordinates, so it works on every domain with no map key.
+ * Public list of the cities we run routes in across DFW.
  */
 export default function ServiceAreaMap() {
   return (
@@ -13,18 +15,13 @@ export default function ServiceAreaMap() {
         Pools we look after
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-foreground/70">
-        Weekly routes across North Dallas and the Collin County suburbs. Pick your city for
-        pricing, route days and a free inspection.
+        Weekly routes across the Dallas–Fort Worth metroplex. Pick your city for pricing, route
+        days and a free inspection.
       </p>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <div className="border border-[#8E1F2C]/15 bg-white/70">
-          <ServiceAreaSvgMap />
-        </div>
-
-
+      <div className="mt-6 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <div>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
             {SERVICE_LOCATIONS.map((l) => (
               <li key={l.name}>
                 <a
@@ -33,10 +30,20 @@ export default function ServiceAreaMap() {
                 >
                   {l.name}
                 </a>
-                
               </li>
             ))}
           </ul>
+
+          <p className="mt-5 text-[11px] uppercase tracking-[0.18em] text-foreground/50">
+            Also serving
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/70">
+            {ADDITIONAL_SERVICE_CITIES.join(" · ")}
+          </p>
+        </div>
+
+        <div>
+
 
           <div className="mt-6 border-t border-[#8E1F2C]/15 pt-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/50">Hours</p>
