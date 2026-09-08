@@ -194,18 +194,12 @@ const Index = () => {
                 </div>
 
                 <div className="mt-8 border-t border-hairline pt-7">
-                  <ul className="space-y-2.5">
-                    {PROMISES.map((p) => (
-                      <li key={p} className="flex items-start gap-3 text-[1rem] sm:text-[1.05rem]">
-                        <span
-                          aria-hidden
-                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                        />
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="max-w-xl text-[1.05rem] leading-relaxed sm:text-[1.15rem]">
+                    Weekly pool cleaning, equipment service, and repair across
+                    Dallas and Fort Worth.
+                  </p>
                 </div>
+
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <button
