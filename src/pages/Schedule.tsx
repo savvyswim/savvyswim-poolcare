@@ -91,7 +91,7 @@ export default function Schedule({ source }: { source: string }) {
                   Book your visit
                 </div>
                 <InlineLeadForm
-                  cta="Schedule my free inspection"
+                  cta="Book my free consultation"
                   source={source}
                   submitLabel="Schedule my inspection"
                 />

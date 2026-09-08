@@ -59,11 +59,11 @@ export function SiteHeader() {
             type="button"
             onClick={() => goToLead("header")}
             data-savvy-cta="request_quote"
-            aria-label="Free inspection — opens the Savvy Swim booking form"
+            aria-label="Free consultation — opens the Savvy Swim booking form"
             className="btn-quote inline-flex items-center whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
           >
-            <span className="sm:hidden">Inspection</span>
-            <span className="hidden sm:inline">Free Inspection</span>
+            <span className="sm:hidden">Consult</span>
+            <span className="hidden sm:inline">Consultation</span>
           </button>
         </div>
       </div>
