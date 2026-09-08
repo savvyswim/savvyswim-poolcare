@@ -26,11 +26,15 @@ export function SiteHeader() {
   return (
     <header className="border-b border-hairline bg-background">
       <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-        <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center">
+        <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink flex-col justify-center">
           <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
             Savvy Swim
           </span>
+          <span className="mt-1 hidden whitespace-nowrap font-tech text-[9px] leading-tight text-primary/60 sm:block sm:text-[10px]">
+            On duty, so you don&rsquo;t have to be.
+          </span>
         </Link>
+
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-5 overflow-hidden whitespace-nowrap font-tech text-[13px] text-primary/70 lg:flex">
           {NAV.map((item) => (
