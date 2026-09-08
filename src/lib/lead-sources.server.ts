@@ -53,7 +53,7 @@ export function cityFromPath(pathRaw: string | null, source: string | null): str
 function channelOf(referrer: string | null, utmSource: string | null): string {
   const u = (utmSource || "").toLowerCase();
   if (u === "google_business" || u === "google-business" || u === "gbp") return "Google Business";
-  if (u && u !== "savvyswim.com" && u !== "savvyswim.com") return u;
+  if (u && u !== "savvyswim.com" && u !== "savvyswimservices.com") return u;
   const ref = (referrer || "").toLowerCase();
   if (!ref) return "Direct / none";
   if (/google\./.test(ref)) return "Google";

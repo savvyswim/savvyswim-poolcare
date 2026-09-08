@@ -85,8 +85,8 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
   await sendLovableEmail(
     {
       to,
-      from: "Savvy Swim <noreply@notify.savvyswim.com>",
-      sender_domain: "notify.savvyswim.com",
+      from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
+      sender_domain: "notify.savvyswimservices.com",
       reply_to: "hi@savvyswim.com",
       subject: `${code} is your Savvy Swim confirmation code`,
       html,

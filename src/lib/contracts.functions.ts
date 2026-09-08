@@ -78,8 +78,8 @@ Savvy Swim · savvyswim.com`;
     await sendLovableEmail(
       {
         to: contract.recipient_email,
-        from: "Savvy Swim <noreply@notify.savvyswim.com>",
-        sender_domain: "notify.savvyswim.com",
+        from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
+        sender_domain: "notify.savvyswimservices.com",
         reply_to: "hi@savvyswim.com",
         subject: "Your Savvy Swim service agreement is ready to sign",
         html,
@@ -322,8 +322,8 @@ Savvy Swim · savvyswim.com`;
       await sendLovableEmail(
         {
           to: contract.recipient_email,
-          from: "Savvy Swim <noreply@notify.savvyswim.com>",
-          sender_domain: "notify.savvyswim.com",
+          from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
+          sender_domain: "notify.savvyswimservices.com",
           reply_to: "hi@savvyswim.com",
           subject: `Your signed Savvy Swim agreement, ${contract.title}`,
           html,

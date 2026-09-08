@@ -7,8 +7,8 @@
  */
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
-const SENDER_DOMAIN = "notify.savvyswim.com";
-const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswim.com>";
+const SENDER_DOMAIN = "notify.savvyswimservices.com";
+const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswimservices.com>";
 const OFFICE_PHONE = "(817) 663-7665";
 const PORTAL_URL = "https://savvyswim.app/portal";
 

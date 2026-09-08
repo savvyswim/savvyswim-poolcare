@@ -85,8 +85,8 @@ export async function emailOps(items: LowItem[]): Promise<string> {
     await sendLovableEmail(
       {
         to,
-        from: "Savvy Swim Ops <noreply@notify.savvyswim.com>",
-        sender_domain: "notify.savvyswim.com",
+        from: "Savvy Swim Ops <noreply@notify.savvyswimservices.com>",
+        sender_domain: "notify.savvyswimservices.com",
         subject,
         html,
         text,

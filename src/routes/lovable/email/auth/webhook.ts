@@ -10,8 +10,8 @@ import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
 const SITE_NAME = "Savvy Swim"
-const SENDER_DOMAIN = "notify.savvyswim.com"
-const FROM_DOMAIN = "notify.savvyswim.com"
+const SENDER_DOMAIN = "notify.savvyswimservices.com"
+const FROM_DOMAIN = "notify.savvyswimservices.com"
 const SITE_URL = `https://savvyswim.com`
 
 // The SDK handler owns verification, dispatch, and retry semantics; this file
