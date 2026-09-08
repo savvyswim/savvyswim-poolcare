@@ -19,3 +19,6 @@ export const PHONE_SCHEMA = "+1-817-663-7665";
 /** Official Instagram business profile. */
 export const INSTAGRAM_HANDLE = "hi.savvyswim";
 export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
+
+/** Google Business review link — used after a customer reviews us on-site. */
+export const GOOGLE_REVIEW_URL = "https://g.page/r/savvyswim/review";

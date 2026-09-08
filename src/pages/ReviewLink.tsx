@@ -77,6 +77,11 @@ export default function ReviewLink() {
         <p className="mt-3 text-center text-[0.75rem] text-muted-foreground">
           Takes about 20 seconds — it opens Google directly.
         </p>
+        <p className="mt-4 text-center text-[0.8rem]">
+          <a href="/leave-a-review" className="underline underline-offset-4">
+            Or leave your review right here
+          </a>
+        </p>
       </div>
     </main>
   );

@@ -27,6 +27,7 @@ import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-f
 import { Route as PlanoRouteImport } from './routes/plano'
 import { Route as OurWorkRouteImport } from './routes/our-work'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LeaveAReviewRouteImport } from './routes/leave-a-review'
 import { Route as FriscoRouteImport } from './routes/frisco'
 import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
 import { Route as BookingRouteImport } from './routes/booking'
@@ -40,6 +41,7 @@ import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
 import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
 import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
@@ -160,6 +162,11 @@ const McpRoute = McpRouteImport.update({
   path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeaveAReviewRoute = LeaveAReviewRouteImport.update({
+  id: '/leave-a-review',
+  path: '/leave-a-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FriscoRoute = FriscoRouteImport.update({
   id: '/frisco',
   path: '/frisco',
@@ -223,6 +230,11 @@ const AppSplatRoute = AppSplatRouteImport.update({
 const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   id: '/admin/webhook-health',
   path: '/admin/webhook-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReviewsRoute = AdminReviewsRouteImport.update({
+  id: '/admin/reviews',
+  path: '/admin/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPoolMapRoute = AdminPoolMapRouteImport.update({
@@ -393,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -420,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -455,6 +469,7 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -482,6 +497,7 @@ export interface FileRoutesByTo {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -518,6 +534,7 @@ export interface FileRoutesById {
   '/booking': typeof BookingRoute
   '/free-inspection': typeof FreeInspectionRoute
   '/frisco': typeof FriscoRoute
+  '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
@@ -545,6 +562,7 @@ export interface FileRoutesById {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
@@ -582,6 +600,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -609,6 +628,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/not-found'
     | '/admin/pool-map'
+    | '/admin/reviews'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -644,6 +664,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -671,6 +692,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/not-found'
     | '/admin/pool-map'
+    | '/admin/reviews'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -706,6 +728,7 @@ export interface FileRouteTypes {
     | '/booking'
     | '/free-inspection'
     | '/frisco'
+    | '/leave-a-review'
     | '/mcp'
     | '/our-work'
     | '/plano'
@@ -733,6 +756,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/not-found'
     | '/admin/pool-map'
+    | '/admin/reviews'
     | '/admin/webhook-health'
     | '/app/$'
     | '/quote/$token'
@@ -769,6 +793,7 @@ export interface RootRouteChildren {
   BookingRoute: typeof BookingRoute
   FreeInspectionRoute: typeof FreeInspectionRoute
   FriscoRoute: typeof FriscoRoute
+  LeaveAReviewRoute: typeof LeaveAReviewRoute
   McpRoute: typeof McpRoute
   OurWorkRoute: typeof OurWorkRoute
   PlanoRoute: typeof PlanoRoute
@@ -796,6 +821,7 @@ export interface RootRouteChildren {
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
   AdminPoolMapRoute: typeof AdminPoolMapRoute
+  AdminReviewsRoute: typeof AdminReviewsRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
@@ -949,6 +975,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leave-a-review': {
+      id: '/leave-a-review'
+      path: '/leave-a-review'
+      fullPath: '/leave-a-review'
+      preLoaderRoute: typeof LeaveAReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/frisco': {
       id: '/frisco'
       path: '/frisco'
@@ -1038,6 +1071,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/webhook-health'
       fullPath: '/admin/webhook-health'
       preLoaderRoute: typeof AdminWebhookHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/reviews': {
+      id: '/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AdminReviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/pool-map': {
@@ -1277,6 +1317,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRoute: BookingRoute,
   FreeInspectionRoute: FreeInspectionRoute,
   FriscoRoute: FriscoRoute,
+  LeaveAReviewRoute: LeaveAReviewRoute,
   McpRoute: McpRoute,
   OurWorkRoute: OurWorkRoute,
   PlanoRoute: PlanoRoute,
@@ -1305,6 +1346,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadsRoute: AdminLeadsRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
   AdminPoolMapRoute: AdminPoolMapRoute,
+  AdminReviewsRoute: AdminReviewsRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,

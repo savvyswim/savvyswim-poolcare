@@ -40,6 +40,7 @@ const entries: SitemapEntry[] = [
     changefreq: "monthly",
     priority: "0.8",
   })),
+  { path: "/leave-a-review", changefreq: "monthly", priority: "0.6" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];

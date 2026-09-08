@@ -1,4 +1,5 @@
 import { ArrowRight, CalendarCheck, Mail, MapPin, MessageSquare, Phone, Star } from "lucide-react";
+import { useLoaderData } from "@tanstack/react-router";
 
 import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -15,6 +16,7 @@ import {
 import { StickyCallBar, onCallClick } from "@/components/CallButton";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { goToLead } from "@/lib/site-analytics";
+import type { PublicReview } from "@/lib/reviews.functions";
 
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
@@ -70,20 +72,60 @@ const REVIEWS = [
   { q: "Heater stopped working mid-winter, they had it running again in one visit.", a: "Jenna W.", c: "McKinney, TX" },
 ];
 
+type ShownReview = { q: string; a: string; c: string; rating: number };
+
 const Index = () => {
+  const loaderData = useLoaderData({ from: "/", structuralSharing: false }) as
+    | { reviews?: PublicReview[] }
+    | undefined;
+  const live: PublicReview[] = loaderData?.reviews ?? [];
+
+  const shown: ShownReview[] = live.length
+    ? live.map((r) => ({
+        q: r.body,
+        a: r.author_name,
+        c: r.author_city ?? "",
+        rating: r.rating,
+      }))
+    : REVIEWS.map((r) => ({ ...r, rating: 5 }));
+
+  const reviewSchema = live.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        name: "Savvy Swim",
+        url: "https://savvyswimservices.com",
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: (
+            live.reduce((sum, r) => sum + r.rating, 0) / live.length
+          ).toFixed(1),
+          reviewCount: live.length,
+        },
+        review: live.map((r) => ({
+          "@type": "Review",
+          reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+          author: { "@type": "Person", name: r.author_name },
+          reviewBody: r.body,
+          datePublished: r.created_at.slice(0, 10),
+        })),
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Savvy Swim",
+        url: "https://savvyswimservices.com",
+      };
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
         title="Savvy Swim — Pool Cleaning, Service & Repair in Texas"
         description="Weekly pool cleaning, maintenance, equipment service and repair across DFW. Free inspection from Savvy Swim, a Santana & Rivera company."
         path="/"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "Savvy Swim",
-          url: "https://savvyswimservices.com",
-        }}
+        jsonLd={reviewSchema}
       />
+
 
       <SiteHeader />
       <ScrollReveal />
@@ -212,11 +254,21 @@ const Index = () => {
             </h2>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {REVIEWS.map((t) => (
-                <figure key={t.a} className="card-3d flex flex-col rounded-sm p-6">
-                  <div className="mb-4 flex items-center gap-1" aria-label="Five out of five stars">
-                    {[0, 1, 2, 3, 4].map((s) => (
-                      <Star key={s} className="h-4 w-4 fill-amber-brand text-amber-brand" />
+              {shown.map((t, i) => (
+                <figure key={`${t.a}-${i}`} className="card-3d flex flex-col rounded-sm p-6">
+                  <div
+                    className="mb-4 flex items-center gap-1"
+                    aria-label={`${t.rating} out of five stars`}
+                  >
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        className={`h-4 w-4 ${
+                          s <= t.rating
+                            ? "fill-amber-brand text-amber-brand"
+                            : "text-muted-foreground/35"
+                        }`}
+                      />
                     ))}
                   </div>
                   <blockquote className="text-sm leading-relaxed text-foreground/90">
@@ -228,21 +280,31 @@ const Index = () => {
                     </span>
                     <span>
                       <span className="block text-sm font-semibold">{t.a}</span>
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3" /> {t.c}
-                      </span>
+                      {t.c && (
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3" /> {t.c}
+                        </span>
+                      )}
                     </span>
                   </figcaption>
                 </figure>
               ))}
             </div>
 
-            <Link
-              to="/our-work"
-              className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
-            >
-              See our work <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-6">
+              <Link
+                to="/our-work"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
+              >
+                See our work <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/leave-a-review"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-brand underline underline-offset-4"
+              >
+                Leave a review <Star className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </section>
 

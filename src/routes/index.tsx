@@ -3,12 +3,14 @@ import Index from "@/pages/Index";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-data";
+import { listApprovedReviews } from "@/lib/reviews.functions";
 
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
   "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({ reviews: await listApprovedReviews() }),
   head: () => ({
     meta: [
       { title: TITLE },
