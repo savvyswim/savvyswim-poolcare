@@ -19,11 +19,11 @@ export default function BusinessInfoCard() {
   return (
     <section
       aria-labelledby="business-info-heading"
-      className="border border-hairline bg-cream/60 p-6 sm:p-8"
+      className="border border-hairline bg-card p-6 sm:p-8"
     >
       <h3
         id="business-info-heading"
-        className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted"
+        className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
       >
         Business details
       </h3>
@@ -34,7 +34,7 @@ export default function BusinessInfoCard() {
             <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <span>
               <span className="block font-semibold">Mobile service — we come to you</span>
-              <span className="text-ink-muted">
+              <span className="text-muted-foreground">
                 No walk-in shop. Weekly routes across{" "}
                 {SERVICE_LOCATIONS.slice(0, 6)
                   .map((l) => l.name)
@@ -89,7 +89,7 @@ export default function BusinessInfoCard() {
                 key={row.label}
                 className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-hairline/60 pb-2 last:border-0"
               >
-                <dt className="min-w-0 text-ink-muted">{row.label}</dt>
+                <dt className="min-w-0 text-muted-foreground">{row.label}</dt>
                 <dd className="shrink-0 font-semibold tabular-nums">{row.display}</dd>
               </div>
             ))}
