@@ -1,4 +1,5 @@
 import { ArrowRight, CalendarCheck, Mail, MapPin, MessageSquare, Phone, Star } from "lucide-react";
+import { useLoaderData } from "@tanstack/react-router";
 
 import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -15,6 +16,7 @@ import {
 import { StickyCallBar, onCallClick } from "@/components/CallButton";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { goToLead } from "@/lib/site-analytics";
+import type { PublicReview } from "@/lib/reviews.functions";
 
 import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
 import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";

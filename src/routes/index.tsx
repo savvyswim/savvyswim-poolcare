@@ -10,6 +10,7 @@ const DESCRIPTION =
   "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({ reviews: await listApprovedReviews() }),
   head: () => ({
     meta: [
       { title: TITLE },
