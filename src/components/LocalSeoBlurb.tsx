@@ -33,7 +33,7 @@ export default function LocalSeoBlurb({ city }: { city?: string }) {
         </h2>
 
         <p className="mt-6 leading-relaxed text-muted-foreground">
-          Savvy Swim is a mobile pool service company — there is no walk-in shop, our
+          Savvy Swim is a mobile pool service company. There is no walk-in shop, our
           techs come to your pool. {city ? `We run a weekly ${city} route and also serve ` : "We run weekly routes in "}
           {others.slice(0, 8).map((l, i) => (
             <span key={l.name}>
