@@ -41,7 +41,7 @@ const BENEFITS = [
 const OurWork = () => (
   <div className="min-h-screen overflow-x-hidden">
     <Seo
-      title="Our Work, Pools We Service Across DFW | Savvy Swim"
+      title="Our Work | Pools We Service Across DFW | Savvy Swim"
       description="Photos from pools Savvy Swim services every week across Dallas–Fort Worth, plus what you get with a weekly plan."
       path="/our-work"
     />

@@ -82,7 +82,7 @@ const Services = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Pool Services, Cleaning, Service & Repair | Savvy Swim"
+        title="Pool Cleaning, Service & Repair | Savvy Swim"
         description="Weekly pool cleaning, equipment repair, green pool recovery, salt and automation service across DFW. One team, one phone call, no contracts."
         path="/services"
       />

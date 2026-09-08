@@ -110,7 +110,7 @@ const PlanoPoolCleaning = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Pool Cleaning Plano TX, Weekly Service & Repair | Savvy Swim"
+        title="Pool Cleaning Plano TX | Weekly Service | Savvy Swim"
         description="Pool cleaning in Plano, TX from $129.99/mo. Weekly chemistry, cleaning, and equipment checks with a photo report every visit. Same tech, same day, no contracts."
         path="/pool-cleaning-plano"
         jsonLd={jsonLd}

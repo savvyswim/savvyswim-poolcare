@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import OurWork from "@/pages/OurWork";
 import { SITE_URL } from "@/lib/structured-data";
 
-const TITLE = "Our Work, Pools We Service Across DFW | Savvy Swim";
+const TITLE = "Our Work | Pools We Service Across DFW | Savvy Swim";
 const DESCRIPTION =
   "Photos from pools Savvy Swim services every week across Dallas–Fort Worth, plus what a weekly plan includes.";
 const URL = `${SITE_URL}/our-work`;

@@ -84,7 +84,7 @@ export const ADDITIONAL_SERVICE_CITIES: string[] = [
 export const BUSINESS_HOURS: { days: string; hours: string }[] = [
   { days: "Monday – Friday", hours: "8:00 AM – 6:00 PM" },
   { days: "Saturday", hours: "9:00 AM – 2:00 PM" },
-  { days: "Sunday", hours: "Closed, emergency line only" },
+  { days: "Sunday", hours: "Closed (emergency line only)" },
 ];
 
 /**

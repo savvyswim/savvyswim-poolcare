@@ -155,7 +155,7 @@ const Index = () => {
       <CityTicker />
 
       <main>
-        {/* 1, WHO WE ARE */}
+        {/* 1 · WHO WE ARE */}
         <section id="who" className="border-b border-hairline bg-background">
           <div className="container-tight py-14 sm:py-20 lg:py-24">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
@@ -247,7 +247,7 @@ const Index = () => {
         </section>
 
 
-        {/* 2, WHAT WE OFFER */}
+        {/* 2 · WHAT WE OFFER */}
         <section id="offer" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -277,7 +277,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 3, HOW IT HAPPENS */}
+        {/* 3 · HOW IT HAPPENS */}
         <section id="how" data-reveal className="border-b border-hairline bg-ink/40 py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -299,7 +299,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 4, WHY PEOPLE GO SAVVY */}
+        {/* 4 · WHY PEOPLE GO SAVVY */}
         <section id="why" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -364,7 +364,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 5, CONTACT */}
+        {/* 5 · CONTACT */}
         <section id="contact" data-reveal className="py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
