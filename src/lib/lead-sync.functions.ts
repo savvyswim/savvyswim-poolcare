@@ -29,6 +29,10 @@ export type LeadSyncRow = {
   crm_lead_id: string | null;
   lead_status: LeadStatus;
   status: "synced" | "failed" | "pending";
+  /** Whether the office alert + homeowner confirmation emails went out. */
+  email_status: "sent" | "failed" | "pending";
+  email_at: string | null;
+  email_recipients: string[];
   last_attempt_at: string | null;
   attempts: number;
   http_status: number | null;
