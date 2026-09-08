@@ -89,14 +89,7 @@ export const WEEKLY_FAQ = [
 
 export default function WeeklyPoolService() {
 
-  const cities = [
-    ...SERVICE_AREAS.map((a) => ({ name: a.name, to: `/${a.slug}`, zips: a.zips })),
-    {
-      name: "Frisco",
-      to: "/pool-cleaning-frisco-tx",
-      zips: "75033 / 75034 / 75035 / 75036",
-    },
-  ];
+
 
   return (
     <div className="min-h-screen overflow-x-hidden">
