@@ -133,10 +133,10 @@ export const getLeadsReport = createServerFn({ method: "GET" })
       week: within(7 * 86_400_000),
       month: within(30 * 86_400_000),
       withCode: leads.filter((l) => !!l.promo_code).length,
-      bySource: [..sourceMap.entries()]
+      bySource: [...sourceMap.entries()]
         .map(([key, count]) => ({ key, count }))
         .sort((a, b) => b.count - a.count),
-      daily: [..dayMap.entries()]
+      daily: [...dayMap.entries()]
         .map(([day, count]) => ({ day, count }))
         .sort((a, b) => (a.day < b.day ? -1 : 1)),
       leads,

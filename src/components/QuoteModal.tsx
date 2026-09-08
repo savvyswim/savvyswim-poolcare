@@ -253,10 +253,10 @@ export default function QuoteModal() {
                 void navigate({
                   to: "/thank-you",
                   search: {
-                    ..(summary.reference ? { ref: summary.reference } : {}),
-                    ..(summary.date ? { date: format(summary.date, "yyyy-MM-dd") } : {}),
-                    ..(summary.time ? { time: summary.time } : {}),
-                    ..(summary.email ? { email: summary.email } : {}),
+                    ...(summary.reference ? { ref: summary.reference } : {}),
+                    ...(summary.date ? { date: format(summary.date, "yyyy-MM-dd") } : {}),
+                    ...(summary.time ? { time: summary.time } : {}),
+                    ...(summary.email ? { email: summary.email } : {}),
                     kind: variant,
                   },
                 });

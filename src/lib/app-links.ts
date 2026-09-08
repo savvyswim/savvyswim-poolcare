@@ -89,7 +89,7 @@ export function leadUrl(
   source: string,
   params: Record<string, string | number | undefined | null> = {},
 ): string {
-  return buildCrmLink(LEAD_PATH, { source, ..params });
+  return buildCrmLink(LEAD_PATH, { source, ...params });
 }
 
 /* ------------------------------------------------------------------ *

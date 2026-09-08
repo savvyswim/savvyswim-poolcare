@@ -95,7 +95,7 @@ export default defineTool({
           text: `Created lead ${data.reference_number ?? data.id} for ${data.full_name}. ${crmNote}`,
         },
       ],
-      structuredContent: { lead: { ..data, ..fresh }, crm },
+      structuredContent: { lead: { ...data, ...fresh }, crm },
     };
   },
 });

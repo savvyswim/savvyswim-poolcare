@@ -44,7 +44,7 @@ export function takePendingQuote(): QuoteDetail | null {
 export function openQuoteModal(detail: QuoteDetail = {}) {
   if (typeof window === "undefined") return;
   const stamped: QuoteDetail = detail.source
-    ? { ..detail, source: withPage(detail.source) }
+    ? { ...detail, source: withPage(detail.source) }
     : detail;
   pending = stamped;
   window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));

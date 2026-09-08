@@ -59,14 +59,14 @@ export default function AddressMapPreview({ placeId, address, className }: Props
       // primary map on savvyswim.com / savvyswimservices.com, where Google
       // blocks the shared browser key.
       const staticAttempts: Array<Record<string, unknown>> = [];
-      if (placeId) staticAttempts.push({ placeId, ..(address ? { address } : {}) });
+      if (placeId) staticAttempts.push({ placeId, ...(address ? { address } : {}) });
       if (address) staticAttempts.push({ address }); // retry without the place id
       if (!staticAttempts.length && address) staticAttempts.push({ address });
 
       for (const attempt of staticAttempts) {
         try {
           const res = await addressMapPreview({
-            data: { ..attempt, width: 640, height: 320, zoom: 17 },
+            data: { ...attempt, width: 640, height: 320, zoom: 17 },
           });
           if (cancelled) return;
           if (res?.image) {

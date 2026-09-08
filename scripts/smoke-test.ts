@@ -38,7 +38,7 @@ export function collectRoutes(routeTreeSource: string): string[] {
     found.add(route.length > 1 ? route.replace(/\/$/, "") : "/");
   }
 
-  return [..found].sort();
+  return [...found].sort();
 }
 
 type Result = { route: string; status: number | null; ok: boolean; note: string };
@@ -262,7 +262,7 @@ async function main() {
   console.log(`Smoke testing ${targets.length + 2} endpoints (${mode}, generated canary routes) against ${BASE_URL}\n`);
 
   const results: Result[] = [];
-  const queue = [..targets];
+  const queue = [...targets];
   const CONCURRENCY = 6;
   await Promise.all(
     Array.from({ length: CONCURRENCY }, async () => {

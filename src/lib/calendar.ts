@@ -70,8 +70,8 @@ export function googleCalendarUrl(event: CalendarEvent) {
     action: "TEMPLATE",
     text: event.title,
     dates: `${stamp(event.date, event.startHour)}/${stamp(event.date, event.endHour)}`,
-    ..(event.description ? { details: event.description } : {}),
-    ..(event.location ? { location: event.location } : {}),
+    ...(event.description ? { details: event.description } : {}),
+    ...(event.location ? { location: event.location } : {}),
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

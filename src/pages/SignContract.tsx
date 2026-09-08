@@ -180,7 +180,7 @@ export default function SignContract() {
       setJustSigned(true);
       setCertificate(res.certificate);
       setContract((c) =>
-        c ? { ..c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
+        c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
       );
     } catch (err) {
       const kind = classifyError(err);

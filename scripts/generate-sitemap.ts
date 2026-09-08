@@ -35,7 +35,7 @@ const entries: SitemapEntry[] = [
   { path: "/weekly-pool-service", changefreq: "monthly", priority: "0.9" },
   { path: "/schedule", changefreq: "monthly", priority: "0.9" },
   { path: "/pool-cleaning-frisco-tx", changefreq: "monthly", priority: "0.8" },
-  ..CITY_SLUGS.map((slug): SitemapEntry => ({
+  ...CITY_SLUGS.map((slug): SitemapEntry => ({
     path: `/${slug}`,
     changefreq: "monthly",
     priority: "0.8",
@@ -64,7 +64,7 @@ function generateSitemap(list: SitemapEntry[]) {
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-    ..urls,
+    ...urls,
     `</urlset>`,
   ].join("\n");
 }

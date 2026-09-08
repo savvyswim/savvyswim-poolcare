@@ -62,7 +62,7 @@ export async function logInspectionEvents(
         detail: e.detail ?? null,
         status_from: e.statusFrom ?? null,
         status_to: e.statusTo ?? null,
-        ..attribution,
+        ...attribution,
       })),
     );
   } catch (e) {

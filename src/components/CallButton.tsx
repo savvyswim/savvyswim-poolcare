@@ -206,7 +206,7 @@ export function CallLink({
   location,
   className = "",
   children,
-  ..rest
+  ...rest
 }: {
   location: string;
   className?: string;
@@ -218,7 +218,7 @@ export function CallLink({
       onClick={handleCall(location)}
       title={`Call ${PHONE_VANITY} (${PHONE_PLAIN})`}
       className={className}
-      {..rest}
+      {...rest}
     >
       {children}
     </a>

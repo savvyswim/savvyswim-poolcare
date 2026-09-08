@@ -84,7 +84,7 @@ async function sendAlertSms(body: string) {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;
@@ -128,8 +128,8 @@ async function runWatch(request: Request) {
     buckets.set(key, bucket);
   }
 
-  const breaching = [..buckets.values()]
-    .map((b) => ({ ..b, rate: b.total ? (b.failed / b.total) * 100 : 0 }))
+  const breaching = [...buckets.values()]
+    .map((b) => ({ ...b, rate: b.total ? (b.failed / b.total) * 100 : 0 }))
     .filter((b) => b.total >= minEvents && b.rate >= thresholdPct)
     .sort((a, b) => b.rate - a.rate);
 

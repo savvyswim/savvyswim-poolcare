@@ -79,7 +79,7 @@ export async function sendInspectionNotifications(
     for (const s of staff ?? []) if (s.email) emails.push(s.email);
   }
   const recipients = [
-    ..new Set(
+    ...new Set(
       emails.map((e) => e.trim().toLowerCase()).filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)),
     ),
   ];
@@ -224,7 +224,7 @@ export async function sendInspectionNotifications(
   const { logInspectionEvents } = await import("./inspection-events.server");
   await logInspectionEvents(req.id, [
     { eventType: "status_change", statusTo: "new", detail: "Request submitted" },
-    ..Object.entries(results).map(([to, outcome]) => ({
+    ...Object.entries(results).map(([to, outcome]) => ({
       eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
         | "email_sent"
         | "email_failed",
@@ -233,7 +233,7 @@ export async function sendInspectionNotifications(
       outcome,
       detail: to === req.email ? "Homeowner confirmation" : "Office new-request alert",
     })),
-    ..(smsOutcome === "skipped"
+    ...(smsOutcome === "skipped"
       ? []
       : [
           {

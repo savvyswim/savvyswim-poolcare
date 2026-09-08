@@ -57,7 +57,7 @@ export default defineTool({
         },
       ],
       structuredContent: { forwarded, crm_lead_id: fresh?.crm_lead_id ?? null, crm },
-      ..(forwarded ? {} : { isError: true as const }),
+      ...(forwarded ? {} : { isError: true as const }),
     };
   },
 });

@@ -118,9 +118,9 @@ export default defineTool({
           type: "text",
           text: `Updated ${Object.keys(patch).join(", ")} on lead ${data.reference_number ?? id}. ${crmNote}`,
         },
-        { type: "text", text: JSON.stringify({ ..data, ..fresh }, null, 2) },
+        { type: "text", text: JSON.stringify({ ...data, ...fresh }, null, 2) },
       ],
-      structuredContent: { lead: { ..data, ..fresh }, crm },
+      structuredContent: { lead: { ...data, ...fresh }, crm },
     };
   },
 });

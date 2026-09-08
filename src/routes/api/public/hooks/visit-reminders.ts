@@ -123,7 +123,7 @@ async function twilioSend(to: string, rawBody: string): Promise<boolean> {
     if (!from) return false;
     const res = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 320) }),
     });
     return res.ok;
@@ -211,7 +211,7 @@ async function run(request: Request) {
     schedules.set(row.appointment_type, offsets);
   }
   const fallback = schedules.get("default") ?? DEFAULT_OFFSETS;
-  const maxOffset = Math.max(fallback[0] ?? 24, ..[..schedules.values()].map((o) => o[0] ?? 0));
+  const maxOffset = Math.max(fallback[0] ?? 24, ...[...schedules.values()].map((o) => o[0] ?? 0));
 
   const from = dateFilter ?? isoDate(ct);
   const horizon = new Date(ct.getTime() + (maxOffset + 24) * 3600_000);

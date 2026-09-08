@@ -211,7 +211,7 @@ export async function forwardInspectionToCrm(
           .from("inspection_requests")
           .update({
             crm_synced_at: new Date().toISOString(),
-            ..(crmLeadId ? { crm_lead_id: crmLeadId } : {}),
+            ...(crmLeadId ? { crm_lead_id: crmLeadId } : {}),
           })
           .eq("id", req.id);
         const { logInspectionEvents } = await import("./inspection-events.server");

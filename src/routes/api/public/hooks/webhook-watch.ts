@@ -98,7 +98,7 @@ async function runWatch(request: Request): Promise<Response> {
   const rows = (data ?? []) as Row[];
   const recent = rows.filter((r) => r.last_attempt_at >= windowStart);
 
-  const channels = [..new Set(rows.map((r) => r.channel))];
+  const channels = [...new Set(rows.map((r) => r.channel))];
   const alerts: Alert[] = [];
 
   for (const channel of channels) {
@@ -112,12 +112,12 @@ async function runWatch(request: Request): Promise<Response> {
         const k = f.http_status ? String(f.http_status) : "no status";
         byStatus.set(k, (byStatus.get(k) ?? 0) + 1);
       }
-      const statusLine = [..byStatus.entries()]
+      const statusLine = [...byStatus.entries()]
         .sort((a, b) => b[1] - a[1])
         .map(([s, n]) => `${s}×${n}`)
         .join(", ");
       const sampleError = failures.find((f) => f.last_error)?.last_error ?? "no error text";
-      const endpoints = [..new Set(failures.map((f) => f.endpoint).filter(Boolean))].slice(0, 3);
+      const endpoints = [...new Set(failures.map((f) => f.endpoint).filter(Boolean))].slice(0, 3);
 
       alerts.push({
         key: `failure:${channel}`,

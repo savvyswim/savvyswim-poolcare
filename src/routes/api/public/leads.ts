@@ -95,7 +95,7 @@ const json = (body: unknown, status = 200, extra?: Record<string, string>) =>
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "content-type",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      ..extra,
+      ...extra,
     },
   });
 

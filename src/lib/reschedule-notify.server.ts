@@ -102,7 +102,7 @@ export async function sendSms(to: string, rawBody: string): Promise<boolean> {
     if (!from) return false;
     const res = await fetch(`${GATEWAY_URL}/Messages.json`, {
       method: "POST",
-      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 320) }),
     });
     if (!res.ok) {

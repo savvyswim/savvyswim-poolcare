@@ -48,7 +48,7 @@ function read(): LeadAttribution | null {
     const raw = sessionStorage.getItem(KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<LeadAttribution>;
-    return { ..EMPTY, ..parsed };
+    return { ...EMPTY, ...parsed };
   } catch {
     return null;
   }
@@ -104,7 +104,7 @@ export function captureAttribution(): LeadAttribution {
     }
     if (stored) return stored;
     const baseline: LeadAttribution = {
-      ..EMPTY,
+      ...EMPTY,
       landing_page: `${window.location.pathname}${window.location.search}`.slice(0, 255),
       referrer: clip(document.referrer, 255),
     };

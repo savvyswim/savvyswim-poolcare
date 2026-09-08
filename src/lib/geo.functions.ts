@@ -127,13 +127,13 @@ export const suggestAddresses = createServerFn({ method: "POST" })
       "https://connector-gateway.lovable.dev/google_maps/places/v1/places:autocomplete",
       {
         method: "POST",
-        headers: { ..gatewayHeaders(), "Content-Type": "application/json" },
+        headers: { ...gatewayHeaders(), "Content-Type": "application/json" },
         body: JSON.stringify({
           input: data.input,
           includedRegionCodes: ["us"],
           locationBias: { circle: { center, radius: SERVICE_AREA_RADIUS_M } },
           origin: center,
-          ..(data.sessionToken ? { sessionToken: data.sessionToken } : {}),
+          ...(data.sessionToken ? { sessionToken: data.sessionToken } : {}),
         }),
       },
     );
@@ -183,7 +183,7 @@ export const addressMapPreview = createServerFn({ method: "POST" })
     if (data.placeId) {
       const detail = await fetch(
         `https://connector-gateway.lovable.dev/google_maps/places/v1/places/${encodeURIComponent(data.placeId)}`,
-        { headers: { ..headers, "X-Goog-FieldMask": "location,formattedAddress" } },
+        { headers: { ...headers, "X-Goog-FieldMask": "location,formattedAddress" } },
       );
       if (detail.ok) {
         const place = (await detail.json()) as {

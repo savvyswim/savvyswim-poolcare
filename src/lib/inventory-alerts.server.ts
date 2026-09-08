@@ -116,7 +116,7 @@ export async function smsOps(items: LowItem[]): Promise<string> {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: smsBody(items) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;

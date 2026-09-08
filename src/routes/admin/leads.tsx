@@ -85,7 +85,7 @@ function downloadCsv(leads: LeadRow[]) {
       .map((v) => csvEscape(v as string | null))
       .join(","),
   );
-  const blob = new Blob([[header.join(","), ..body].join("\n")], {
+  const blob = new Blob([[header.join(","), ...body].join("\n")], {
     type: "text/csv;charset=utf-8",
   });
   const url = URL.createObjectURL(blob);

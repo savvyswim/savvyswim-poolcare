@@ -654,7 +654,7 @@ function vFinance(){
   const qOpen=S.quotes.filter(x=>!x.converted&&!x.denied),qAppr=S.quotes.filter(x=>x.converted),qDen=S.quotes.filter(x=>x.denied);
   const sum=l=>l.reduce((a,x)=>a+(x.full||x.rate||0),0);
   const catTotals=EXP_CATS.map(c=>({c,t:expList.filter(e=>e.cat===c).reduce((a,e)=>a+e.amount,0)})).filter(x=>x.t>0);
-  const maxCat=Math.max(1,..catTotals.map(x=>x.t));
+  const maxCat=Math.max(1,...catTotals.map(x=>x.t));
   const bucket=(label,ct,amt,color)=>`<div style="flex:1;min-width:105px;border:1.5px solid ${color};border-radius:9px;overflow:hidden;background:var(--card);">
     <div style="background:${color};color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.08em;text-align:center;padding:4px;">${label}</div>
     <div style="display:flex;justify-content:center;gap:7px;align-items:baseline;padding:8px 6px;"><b class="mono" style="font-size:15px;color:${color};">${ct}</b><span class="mono muted" style="font-size:11px;">$${amt.toLocaleString(undefined,{maximumFractionDigits:0})}</span></div></div>`;
@@ -789,7 +789,7 @@ function vEmail(){
         <option value="eq_Sand">Sand filter</option>
         <option value="eq_Heater">Heater owners</option>
       </optgroup>
-      <optgroup label="By city">${[..new Set(S.customers.map(c=>c.city))].sort().map(ct=>`<option value="city_${ct}">${ct}</option>`).join('')}</optgroup>
+      <optgroup label="By city">${[...new Set(S.customers.map(c=>c.city))].sort().map(ct=>`<option value="city_${ct}">${ct}</option>`).join('')}</optgroup>
     </select>
     <span class="lbl">Presets</span>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
@@ -842,10 +842,10 @@ const CITY_GEO={"Dallas":[32.78,-96.80],"Highland Park":[32.833,-96.792],"Univer
 function projectStops(stops){
   const pts=stops.map((c,i)=>{const g=CITY_GEO[c.city]||CITY_GEO["Dallas"];
     // deterministic jitter per id so same-city stops don't overlap
-    const h=[..c.id].reduce((a,ch)=>a+ch.charCodeAt(0),0);
+    const h=[...c.id].reduce((a,ch)=>a+ch.charCodeAt(0),0);
     return {c,lat:g[0]+((h%7)-3)*0.008,lng:g[1]+((h%5)-2)*0.010,i};});
   const lats=pts.map(p=>p.lat),lngs=pts.map(p=>p.lng);
-  let minLa=Math.min(..lats,32.72),maxLa=Math.max(..lats,33.34),minLo=Math.min(..lngs,-96.88),maxLo=Math.max(..lngs,-96.40);
+  let minLa=Math.min(...lats,32.72),maxLa=Math.max(...lats,33.34),minLo=Math.min(...lngs,-96.88),maxLo=Math.max(...lngs,-96.40);
   const W=340,H=300,P=30;
   pts.forEach(p=>{p.x=P+(p.lng-minLo)/(maxLo-minLo)*(W-2*P);p.y=P+(maxLa-p.lat)/(maxLa-minLa)*(H-2*P);});
   const bg=Object.entries(CITY_GEO).map(([n,g])=>({n,x:P+(g[1]-minLo)/(maxLo-minLo)*(W-2*P),y:P+(maxLa-g[0])/(maxLa-minLa)*(H-2*P)}));
@@ -853,7 +853,7 @@ function projectStops(stops){
   return {pts,bg,lake,W,H};
 }
 function stopGeo(c){const g=CITY_GEO[c.city]||CITY_GEO["Dallas"];
-  const h=[..c.id].reduce((a,ch)=>a+ch.charCodeAt(0),0);
+  const h=[...c.id].reduce((a,ch)=>a+ch.charCodeAt(0),0);
   return [g[0]+((h%7)-3)*0.008,g[1]+((h%5)-2)*0.010];}
 let geo={watchId:null,dwellStop:null,dwellStart:null,arrivedFor:{}};
 function startGeo(){
@@ -1364,7 +1364,7 @@ function openPoolConfig(id){
 function pickEq(gid,el,toggle){
   const g=$(gid);
   if(toggle&&el.classList.contains('sel')){el.classList.remove('sel');return;}
-  [..g.children].forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+  [...g.children].forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
 }
 function drawWf(){
   $('wfList').innerHTML=wfDraft.map(([t,req,cam],i)=>`<div class="wfrow">
@@ -1767,8 +1767,8 @@ async function feedback(v){const c=pc();c.feedback=v;await save();render();toast
 function vHistory(){
   const c=pc();
   const items=[
-    ..S.visits.filter(v=>v.custId===c.id).map(v=>({d:v.date,kind:'visit',v})),
-    ..S.jobs.filter(j=>j.custId===c.id&&j.status==='done').map(j=>({d:j.date,kind:'job',j}))
+    ...S.visits.filter(v=>v.custId===c.id).map(v=>({d:v.date,kind:'visit',v})),
+    ...S.jobs.filter(j=>j.custId===c.id&&j.status==='done').map(j=>({d:j.date,kind:'job',j}))
   ].sort((a,b)=>b.d.localeCompare(a.d));
   const WF=wfOf(c);
   const list=items.map(it=>{

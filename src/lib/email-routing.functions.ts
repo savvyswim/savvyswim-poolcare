@@ -57,8 +57,8 @@ export const checkReplyToRouting = createServerFn({ method: "POST" })
       .maybeSingle();
 
     const settings: ReplyToRoutingSettings = {
-      ..DEFAULT_REPLY_TO_SETTINGS,
-      ..((row?.value as Partial<ReplyToRoutingSettings> | null) ?? {}),
+      ...DEFAULT_REPLY_TO_SETTINGS,
+      ...((row?.value as Partial<ReplyToRoutingSettings> | null) ?? {}),
     };
     const address = (settings.address || REPLY_TO_ADDRESS).trim().toLowerCase();
     const domain = address.split("@")[1] ?? "";
@@ -125,7 +125,7 @@ export const checkReplyToRouting = createServerFn({ method: "POST" })
             bounces.push({
               timestamp: e.timestamp,
               event_type: e.event_type,
-              ..(e.status ? { status: e.status } : {}),
+              ...(e.status ? { status: e.status } : {}),
             });
           }
         }
@@ -225,7 +225,7 @@ export const checkReplyToRouting = createServerFn({ method: "POST" })
       .upsert(
         {
           key: REPLY_TO_SETTINGS_KEY,
-          value: { ..settings, address, last_checked_at: checkedAt, last_status: status } as never,
+          value: { ...settings, address, last_checked_at: checkedAt, last_status: status } as never,
         },
         { onConflict: "key" },
       );

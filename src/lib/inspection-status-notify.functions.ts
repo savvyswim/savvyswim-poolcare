@@ -76,7 +76,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     }
 
     const toEmails = [
-      ..new Set(
+      ...new Set(
         emails
           .map((e) => e.trim().toLowerCase())
           .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)),
@@ -85,7 +85,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     if (toEmails.length === 0) toEmails.push(FALLBACK_OFFICE);
 
     const toPhones = [
-      ..new Set(
+      ...new Set(
         phones
           .map((p) => p.replace(/[^\d+]/g, ""))
           .map((p) => (p.length === 10 ? `+1${p}` : p))
@@ -155,7 +155,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
         for (const to of toPhones) {
           const res = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
             method: "POST",
-            headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+            headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({ To: to, From: from, Body: line }),
           });
           if (!res.ok) {
@@ -178,7 +178,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
         statusTo: data.status,
         detail: `Marked ${data.status}, ${req.reference_number}`,
       },
-      ..Object.entries(result.email).map(([to, outcome]) => ({
+      ...Object.entries(result.email).map(([to, outcome]) => ({
         eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
           | "email_sent"
           | "email_failed",
@@ -187,7 +187,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
         outcome,
         detail: headline,
       })),
-      ..Object.entries(result.sms).map(([to, outcome]) => ({
+      ...Object.entries(result.sms).map(([to, outcome]) => ({
         eventType: (outcome === "sent" ? "sms_sent" : "sms_failed") as "sms_sent" | "sms_failed",
         channel: "sms",
         recipient: to,
@@ -196,7 +196,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
       })),
     ]);
 
-    return { ok: true as const, ..result };
+    return { ok: true as const, ...result };
   });
 
 /**

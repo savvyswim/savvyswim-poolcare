@@ -52,13 +52,13 @@ function isErrorLike(value: unknown): value is Error {
 // unhandled-error logging, which this file cannot hook directly, are both
 // recorded for consumeLastCapturedError and expanded before serialization.
 const originalConsoleError = console.error.bind(console);
-console.error = (..args: unknown[]) => {
+console.error = (...args: unknown[]) => {
   const expanded = args.map((arg) => {
     if (!isErrorLike(arg)) return arg;
     record(arg);
     return describeError(arg);
   });
-  originalConsoleError(..expanded);
+  originalConsoleError(...expanded);
 };
 
 if (typeof globalThis.addEventListener === "function") {

@@ -48,7 +48,7 @@ async function sendSms(to: string, body: string) {
 
   const sendRes = await fetch(`${GATEWAY_URL}/Messages.json`, {
     method: "POST",
-    headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
+    headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ To: to, From: from, Body: body }),
   });
   if (!sendRes.ok) {
