@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/structured-data";
 
 const TITLE = "Schedule a Free Pool Inspection in DFW | Savvy Swim";
 const DESC =
-  "Book a free pool inspection in Dallas–Fort Worth. Full water test, equipment check and a flat monthly price — pick your day in under a minute.";
+  "Book a free pool inspection in Dallas–Fort Worth. Full water test, equipment check and a flat monthly price, pick your day in under a minute.";
 const URL = `${SITE_URL}/schedule`;
 
 /** Keeps campaign params on the URL so first-touch attribution can read them. */

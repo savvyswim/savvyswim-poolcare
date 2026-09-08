@@ -45,7 +45,7 @@ export const sendContractEmail = createServerFn({ method: "POST" })
       <p style="margin:0 0 12px;font-size:15px;">Hi ${firstName},</p>
       <p style="margin:0 0 16px;font-size:14px;line-height:1.6;">
         Your service agreement <strong>“${contract.title}”</strong> is ready for your signature.
-        It takes less than a minute — review the terms and sign right from your phone.
+        It takes less than a minute. Review the terms and sign right from your phone.
       </p>
       <div style="text-align:center;margin:24px 0;">
         <a href="${signUrl}" style="background:#8E1F2C;color:#F4EFE3;text-decoration:none;padding:14px 32px;border-radius:999px;font-size:14px;font-weight:700;display:inline-block;">
@@ -325,7 +325,7 @@ Savvy Swim · savvyswim.com`;
           from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
           sender_domain: "notify.savvyswimservices.com",
           reply_to: "hi@savvyswim.com",
-          subject: `Your signed Savvy Swim agreement — ${contract.title}`,
+          subject: `Your signed Savvy Swim agreement, ${contract.title}`,
           html,
           text,
           label: "contract-signed-copy",

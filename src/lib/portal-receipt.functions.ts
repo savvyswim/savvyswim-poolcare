@@ -67,7 +67,7 @@ export const sendPortalReceipt = createServerFn({ method: "POST" })
     <div style="padding:28px;">
       <p style="margin:0 0 12px;font-size:15px;">Hi ${firstName},</p>
       <p style="margin:0 0 18px;font-size:14px;line-height:1.6;">
-        Thanks — we received your payment. Here's your receipt for invoice
+        Thanks. We received your payment. Here's your receipt for invoice
         <strong>${invoice.invoice_number}</strong>.
       </p>
       <table style="width:100%;border-collapse:collapse;font-size:14px;">
@@ -103,7 +103,7 @@ Savvy Swim · savvyswim.com`;
             from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
             sender_domain: "notify.savvyswimservices.com",
             reply_to: "hi@savvyswim.com",
-            subject: `Receipt for ${invoice.invoice_number} — ${amount}`,
+            subject: `Receipt for ${invoice.invoice_number}, ${amount}`,
             html,
             text,
             label: "portal-payment-receipt",

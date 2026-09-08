@@ -36,7 +36,7 @@ const HERO_PHOTOS: { src: string; alt: string }[] = [
 
 /** Short promises listed under the wordmark. */
 const PROMISES = [
-  "On duty — 24/7",
+  "On duty: 24/7",
   "No contracts, cancel any time",
   "Free consultation and water test",
   "Licensed, insured, and background-checked techs",
@@ -66,7 +66,7 @@ const OFFERS: {
   },
   {
     title: "Service & repair",
-    blurb: "Pumps, filters, heaters, salt cells and automation — fixed by our own techs.",
+    blurb: "Pumps, filters, heaters, salt cells and automation, fixed by our own techs.",
     price: "Quoted after a free inspection",
     to: "/services",
   },
@@ -142,7 +142,7 @@ const Index = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Savvy Swim — Pool Cleaning, Service & Repair in Texas"
+        title="Savvy Swim | Pool Cleaning, Service & Repair in Texas"
         description="Weekly pool cleaning, maintenance, equipment service and repair across DFW. Free inspection from Savvy Swim, a Santana & Rivera company."
         path="/"
         jsonLd={reviewSchema}
@@ -155,14 +155,14 @@ const Index = () => {
       <CityTicker />
 
       <main>
-        {/* 1 — WHO WE ARE */}
+        {/* 1 · WHO WE ARE */}
         <section id="who" className="border-b border-hairline bg-background">
           <div className="container-tight py-14 sm:py-20 lg:py-24">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
               <div className="min-w-0">
                 <h1 className="font-display uppercase leading-[0.82] tracking-[-0.02em] text-accent">
                   <span className="sr-only">
-                    Savvy Swim — pool cleaning and service in DFW
+                    Savvy Swim, pool cleaning and service in DFW
                   </span>
                   <span
                     aria-hidden
@@ -212,7 +212,7 @@ const Index = () => {
                     type="button"
                     onClick={() => goToLead("home_hero")}
                     data-savvy-cta="request_quote"
-                    aria-label="Book a free consultation — opens the Savvy Swim booking form"
+                    aria-label="Book a free consultation, opens the Savvy Swim booking form"
                     className="btn-quote font-tech inline-flex min-h-12 items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free
@@ -247,7 +247,7 @@ const Index = () => {
         </section>
 
 
-        {/* 2 — WHAT WE OFFER */}
+        {/* 2 · WHAT WE OFFER */}
         <section id="offer" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -277,7 +277,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 3 — HOW IT HAPPENS */}
+        {/* 3 · HOW IT HAPPENS */}
         <section id="how" data-reveal className="border-b border-hairline bg-ink/40 py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -299,7 +299,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 4 — WHY PEOPLE GO SAVVY */}
+        {/* 4 · WHY PEOPLE GO SAVVY */}
         <section id="why" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
@@ -364,7 +364,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 5 — CONTACT */}
+        {/* 5 · CONTACT */}
         <section id="contact" data-reveal className="py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">

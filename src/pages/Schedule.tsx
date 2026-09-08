@@ -7,7 +7,7 @@ export const SCHEDULE_POINTS = [
   {
     icon: FlaskConical,
     title: "Full water test",
-    body: "Chlorine, pH, alkalinity, calcium hardness, cyanuric acid and salt — read on site, no charge.",
+    body: "Chlorine, pH, alkalinity, calcium hardness, cyanuric acid and salt, read on site, no charge.",
   },
   {
     icon: UserCheck,
@@ -26,7 +26,7 @@ export default function Schedule({ source }: { source: string }) {
     <div className="min-h-screen overflow-x-hidden">
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px]">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent sm:text-[1.6rem]">
               Savvy Swim
             </span>
@@ -53,7 +53,7 @@ export default function Schedule({ source }: { source: string }) {
                 </h1>
                 <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
                   Pick a day that works. A technician tests your water, checks the equipment pad and
-                  hands you a flat monthly price — no charge, no obligation.
+                  hands you a flat monthly price. No charge, no obligation.
                 </p>
                 <p className="mt-4 font-serif text-xl italic text-foreground/80">
                   On duty, so you don’t have to be.
@@ -106,7 +106,7 @@ export default function Schedule({ source }: { source: string }) {
             <a href="tel:+18176637665" className="font-tech uppercase tracking-[0.14em] text-accent">
               817-663-POOL
             </a>{" "}
-            — or see{" "}
+            or see{" "}
             <Link to="/weekly-pool-service" className="underline underline-offset-4 hover:text-accent">
               what weekly service includes
             </Link>

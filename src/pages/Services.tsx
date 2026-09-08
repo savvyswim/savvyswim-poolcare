@@ -22,11 +22,11 @@ import {
 const MEMBERSHIP_FAQ = [
   {
     q: "What is the Savvy Swim Club?",
-    a: "It's our $19.99/month membership for pool owners in DFW. Members get 25% off filter cleans, 10% off services and 10% off parts, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
+    a: "It's our $19.99/month membership for pool owners in DFW. Members get 25% off filter cleans, 10% off services and 10% off parts, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan, or on its own if you maintain the pool yourself.",
   },
   {
     q: "How does billing work?",
-    a: "Membership is $19.99 per month, charged automatically to the card on file on the same day each month. The first charge happens the day you join, and your perks are active immediately. Service visits, repairs, and parts are invoiced separately — the membership fee never covers the work itself.",
+    a: "Membership is $19.99 per month, charged automatically to the card on file on the same day each month. The first charge happens the day you join, and your perks are active immediately. Service visits, repairs, and parts are invoiced separately. The membership fee never covers the work itself.",
   },
   {
     q: "How long is the commitment?",
@@ -34,7 +34,7 @@ const MEMBERSHIP_FAQ = [
   },
   {
     q: "How do I cancel?",
-    a: "Text or email us and we'll cancel your renewal — no phone maze, no cancellation fee after the initial 12-month term. During the term, cancellation ends your monthly perks and any remaining months of the agreement are due; if your situation changes, like selling the home, let us know and we'll work with you.",
+    a: "Text or email us and we'll cancel your renewal. No phone maze, no cancellation fee after the initial 12-month term. During the term, cancellation ends your monthly perks and any remaining months of the agreement are due; if your situation changes, like selling the home, let us know and we'll work with you.",
   },
   {
     q: "What isn't included?",
@@ -69,7 +69,7 @@ const SERVICE_MENU = [
 
 
 const PROCESS = [
-  { no: "I", title: "Walkthrough", desc: "We inspect the pool, equipment pad, and water chemistry — then quote flat." },
+  { no: "I", title: "Walkthrough", desc: "We inspect the pool, equipment pad, and water chemistry. Then quote flat." },
   { no: "II", title: "Same tech, same day", desc: "One assigned technician on a fixed weekly cadence. No rotating crews." },
   { no: "III", title: "Photo report", desc: "Readouts and photos land in your inbox after every single visit." },
 ];
@@ -82,7 +82,7 @@ const Services = () => {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Pool Services — Cleaning, Service & Repair | Savvy Swim"
+        title="Pool Cleaning, Service & Repair | Savvy Swim"
         description="Weekly pool cleaning, equipment repair, green pool recovery, salt and automation service across DFW. One team, one phone call, no contracts."
         path="/services"
       />
@@ -90,7 +90,7 @@ const Services = () => {
       {/* NAV */}
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
               Savvy Swim
             </span>
@@ -124,7 +124,7 @@ const Services = () => {
                     &amp; <span className="text-accent">repair.</span>
                   </h1>
                   <p className="mt-5 max-w-xl text-muted-foreground text-[0.95rem] sm:text-base leading-[1.7]">
-                    Weekly maintenance, equipment repair, and everything in between —
+                    Weekly maintenance, equipment repair, and everything in between,
                     one team, one phone call, no contracts.
                   </p>
                   <p className="mt-4 font-serif italic text-lg sm:text-xl leading-snug text-foreground/80">
@@ -135,7 +135,7 @@ const Services = () => {
                     <Link to="/weekly-pool-service" className="text-accent underline underline-offset-4">
                       what weekly pool service includes
                     </Link>{" "}
-                    — visit checklist, photo report, and the same-tech promise.
+                    visit checklist, photo report, and the same-tech promise.
                   </p>
 
                   <div className="mt-8 flex flex-wrap gap-3">
@@ -168,7 +168,7 @@ const Services = () => {
                     fetchPriority="high"
                   />
                   <figcaption className="mt-3 flex items-center justify-between font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    <span>Plate I — On duty</span>
+                    <span>Plate I: On duty</span>
                     <span>DFW / TX</span>
                   </figcaption>
                 </figure>

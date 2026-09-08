@@ -19,7 +19,7 @@ export function MovedToApp({ from }: { from: string }) {
           </h1>
           <p className="text-base text-muted-foreground">
             This address used to open the staff CRM on the marketing site. Everything
-            transactional — routes, visits, invoices, the customer portal — moved to{" "}
+            transactional, routes, visits, invoices, the customer portal, moved to{" "}
             <span className="font-mono">{CRM_BASE_URL.replace(/^https?:\/\//, "")}</span>. Your
             login is the same.
           </p>

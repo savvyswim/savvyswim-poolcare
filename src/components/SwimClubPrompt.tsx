@@ -118,7 +118,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
         <div className="flex items-center gap-2 border-b border-primary/10 px-4 py-2.5">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
           <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary/50">
-            Summer offer — new customers
+            Summer offer, new customers
           </span>
         </div>
 
@@ -134,7 +134,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
               "10% off services · 10% off parts · 24/7 text support",
             ].map((item) => (
               <li key={item} className="flex gap-2 text-[13px] leading-snug text-primary/80">
-                <span className="text-accent">—</span>
+                <span className="text-accent">·</span>
                 {item}
               </li>
             ))}
@@ -148,7 +148,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
                 dismiss();
                 onJoin();
               }}
-              aria-label="Join Swim Club — opens the Savvy Swim checkout"
+              aria-label="Join Swim Club, opens the Savvy Swim checkout"
               className="font-tech inline-flex min-h-11 flex-1 items-center justify-center gap-2 bg-primary px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent"
             >
               Join in 60 seconds <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

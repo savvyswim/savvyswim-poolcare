@@ -217,7 +217,7 @@ function FallbackCard({
           </a>
           {blocked ? (
             <p className="mt-1.5 text-[0.68rem] leading-snug text-muted-foreground">
-              Map preview is unavailable on this domain — your address is saved exactly as shown.
+              Map preview is unavailable on this domain. Your address is saved exactly as shown.
             </p>
           ) : null}
         </div>

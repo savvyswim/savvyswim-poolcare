@@ -42,12 +42,12 @@ export const Route = createFileRoute("/quote/$token")({
       {
         name: "description",
         content:
-          "Review your Savvy Swim pool care proposal — photos, pricing, optional add-ons and approval in one place.",
+          "Review your Savvy Swim pool care proposal. Photos, pricing, optional add-ons and approval in one place.",
       },
       { property: "og:title", content: "Your Savvy Swim proposal" },
       {
         property: "og:description",
-        content: "Photos, pricing and optional add-ons for your pool — approve online in seconds.",
+        content: "Photos, pricing and optional add-ons for your pool, approve online in seconds.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -106,11 +106,11 @@ function QuotePage() {
     const res = data as { ok?: boolean; error?: string; contract_token?: string } | null;
     if (error || !res?.ok) { toast.error(error?.message ?? res?.error ?? "Could not approve"); return; }
     if (res.contract_token) {
-      toast.success("Approved — your service agreement is ready to sign.");
+      toast.success("Approved. Your service agreement is ready to sign.");
       void navigate({ to: "/sign/$token", params: { token: res.contract_token } });
       return;
     }
-    toast.success("Approved — we'll be in touch shortly.");
+    toast.success("Approved. We'll be in touch shortly.");
     void load();
   }
 
@@ -215,7 +215,7 @@ function QuotePage() {
                   ))}
                 </div>
                 <p className="mt-2">{r.text}</p>
-                <footer className="mt-1 text-xs text-muted-foreground">— {r.name}</footer>
+                <footer className="mt-1 text-xs text-muted-foreground">{r.name}</footer>
               </blockquote>
             ))}
           </div>

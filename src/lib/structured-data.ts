@@ -93,7 +93,7 @@ export const SERVICE_CATALOG: {
   {
     name: "Pool equipment repair",
     description:
-      "Pumps, filters, heaters, salt cells, and automation — common parts stocked on the truck for one-trip repairs.",
+      "Pumps, filters, heaters, salt cells, and automation, common parts stocked on the truck for one-trip repairs.",
   },
   {
     name: "Filter cleans and hard-water scale care",

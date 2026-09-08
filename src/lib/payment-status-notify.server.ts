@@ -58,19 +58,19 @@ export function paymentCopy(e: PaymentEvent): { subject: string; headline: strin
   switch (e.status) {
     case "succeeded":
       return {
-        subject: `Payment received${e.invoiceNumber ? ` — ${e.invoiceNumber}` : ""}`,
+        subject: `Payment received${e.invoiceNumber ? `, ${e.invoiceNumber}` : ""}`,
         headline: `Thanks ${who}, your payment went through.`,
         body: `We received ${amt ? `${amt} ` : "your payment "}${inv}${e.method ? ` via ${e.method}` : ""}. A receipt is in your portal.`,
       };
     case "failed":
       return {
-        subject: `Payment didn't go through${e.invoiceNumber ? ` — ${e.invoiceNumber}` : ""}`,
+        subject: `Payment didn't go through${e.invoiceNumber ? `, ${e.invoiceNumber}` : ""}`,
         headline: `Hi ${who}, your payment didn't go through.`,
-        body: `The ${amt ? `${amt} ` : ""}payment${inv} was declined${e.method ? ` (${e.method})` : ""}. You can update your card and retry in the portal — no service interruption if it's handled this week.`,
+        body: `The ${amt ? `${amt} ` : ""}payment${inv} was declined${e.method ? ` (${e.method})` : ""}. You can update your card and retry in the portal. No service interruption if it's handled this week.`,
       };
     case "refunded":
       return {
-        subject: `Refund issued${e.invoiceNumber ? ` — ${e.invoiceNumber}` : ""}`,
+        subject: `Refund issued${e.invoiceNumber ? `, ${e.invoiceNumber}` : ""}`,
         headline: `Hi ${who}, your refund is on the way.`,
         body: `We refunded ${amt || "your payment"}${inv}. It typically lands in 3–5 business days.`,
       };

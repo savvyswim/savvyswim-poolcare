@@ -81,7 +81,7 @@ export default function LeaveReview() {
                 <Star className="h-4 w-4" /> Also review us on Google
               </a>
               <p className="mt-3 text-[0.8rem] text-muted-foreground">
-                Takes about 20 seconds — it opens Google directly.
+                Takes about 20 seconds. It opens Google directly.
               </p>
             </div>
           ) : (

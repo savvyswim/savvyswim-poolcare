@@ -132,7 +132,7 @@ export function goToSwimClub(source: string) {
   }
   openQuoteModal({
     source: taggedSource(`swim_club_${source}`),
-    service: "Savvy Swim Club membership — $19.99/mo",
+    service: "Savvy Swim Club membership, $19.99/mo",
   });
 
 }

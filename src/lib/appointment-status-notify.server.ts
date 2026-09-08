@@ -115,13 +115,13 @@ export function copyFor(e: AppointmentEvent): { subject: string; headline: strin
   switch (e.status) {
     case "scheduled":
       return {
-        subject: when ? `Visit confirmed — ${when}` : "Your pool visit is confirmed",
+        subject: when ? `Visit confirmed, ${when}` : "Your pool visit is confirmed",
         headline: `Hi ${who}, you're on the schedule.`,
         body: `Your Savvy Swim visit is set${when ? ` for ${when}` : ""}${slot}. Please leave the gate unlocked and pets inside.`,
       };
     case "rescheduled":
       return {
-        subject: when ? `Visit moved — now ${when}` : "Your pool visit moved",
+        subject: when ? `Visit moved. Now ${when}` : "Your pool visit moved",
         headline: `Hi ${who}, your visit moved.`,
         body: `Your Savvy Swim visit is now${when ? ` ${when}` : " rescheduled"}${slot}.`,
       };
@@ -147,11 +147,11 @@ export function copyFor(e: AppointmentEvent): { subject: string; headline: strin
       return {
         subject: "We couldn't get to your pool",
         headline: `Hi ${who}, we couldn't access the pool.`,
-        body: `${e.technician ?? "Your tech"} came out${when ? ` on ${when}` : ""} but couldn't get in — usually a locked gate or a dog in the yard. Reply or call us and we'll get you back on the route.`,
+        body: `${e.technician ?? "Your tech"} came out${when ? ` on ${when}` : ""} but couldn't get in. Usually a locked gate or a dog in the yard. Reply or call us and we'll get you back on the route.`,
       };
     case "canceled":
       return {
-        subject: when ? `Visit canceled — ${when}` : "Your pool visit was canceled",
+        subject: when ? `Visit canceled, ${when}` : "Your pool visit was canceled",
         headline: `Hi ${who}, your visit was canceled.`,
         body: `Your Savvy Swim visit${when ? ` on ${when}` : ""} has been canceled. Rebook anytime in your portal.`,
       };

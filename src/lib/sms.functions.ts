@@ -37,7 +37,7 @@ export const sendThreadSms = createServerFn({ method: "POST" })
 
     const { isSmsAllowed } = await import("./sms-compliance.server");
     if (!(await isSmsAllowed(thread.phone)))
-      throw new Error("This number replied STOP — texting them is blocked until they reply START");
+      throw new Error("This number replied STOP, texting them is blocked until they reply START");
 
     const { data: logRow, error: logError } = await supabase
       .from("ss_sms_messages")
@@ -188,9 +188,9 @@ export const sendQuoteSms = createServerFn({ method: "POST" })
     const firstName = (quote.recipient_name ?? "there").split(" ")[0];
     const { isSmsAllowed, withSmsFooter } = await import("./sms-compliance.server");
     if (!(await isSmsAllowed(to)))
-      throw new Error("This number replied STOP — texting them is blocked until they reply START");
+      throw new Error("This number replied STOP, texting them is blocked until they reply START");
     const body = withSmsFooter(
-      `Hi ${firstName}, your Savvy Swim proposal is ready — photos, pricing and optional add-ons: ${link}`,
+      `Hi ${firstName}, your Savvy Swim proposal is ready. Photos, pricing and optional add-ons: ${link}`,
     );
 
     const headers = { Authorization: `Bearer ${apiKey}`, "X-Connection-Api-Key": twilioKey };

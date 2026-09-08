@@ -148,10 +148,10 @@ async function emailReminder(
   const soon = offset < 12;
   const lead = leadLabel(offset, when);
   const subject = soon
-    ? `Your pool service is about ${offset} hours out — ${slot}`
+    ? `Your pool service is about ${offset} hours out, ${slot}`
     : `Your pool service is ${lead}`;
   const text =
-    `Hi ${first} — a quick reminder that your Savvy Swim visit is ${lead}, ` +
+    `Hi ${first}, a quick reminder that your Savvy Swim visit is ${lead}, ` +
     `arriving between ${slot}.${where ? ` We'll be at ${where}.` : ""}\n\n` +
     `Please leave the gate unlocked and pets inside. Need to move it? Reschedule anytime in your portal ` +
     `at https://savvyswimservices.com/portal or call ${OFFICE_PHONE}.`;
@@ -283,7 +283,7 @@ async function run(request: Request) {
     if (wantsText && c.phone) {
       const body =
         due < 12
-          ? `Savvy Swim: your pool service is about ${due} hours out — arriving between ${slot} today. ` +
+          ? `Savvy Swim: your pool service is about ${due} hours out, arriving between ${slot} today. ` +
             `Please unlock the gate and keep pets inside. Questions? ${OFFICE_PHONE}.`
           : `Savvy Swim: your pool service is ${lead}, between ${slot}. ` +
             `Please unlock the gate and keep pets inside. Reschedule at savvyswim.com/portal or call ${OFFICE_PHONE}.`;

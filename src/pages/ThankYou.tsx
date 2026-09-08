@@ -26,7 +26,7 @@ const STEPS = [
   {
     n: "02",
     title: "We call to confirm",
-    body: "A Savvy Swim tech confirms your window by phone or text within one business day — no phone tag, no call center.",
+    body: "A Savvy Swim tech confirms your window by phone or text within one business day. No phone tag, no call center.",
   },
   {
     n: "03",
@@ -60,7 +60,7 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
           You&apos;re on the board
         </h1>
         <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-[#2a1013]/80">
-          Thank you — your request is in front of our dispatch team.{" "}
+          Thank you. Your request is in front of our dispatch team.{" "}
           {when ? (
             <>
               We have you down for{" "}

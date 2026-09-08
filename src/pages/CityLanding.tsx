@@ -33,7 +33,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
       no: "01",
       icon: Droplets,
       title: `Weekly pool cleaning in ${city}`,
-      desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week — with a photo report before we leave the driveway.",
+      desc: "Skim, brush, vacuum, empty baskets, and balance chemistry every week, with a photo report before we leave the driveway.",
     },
     {
       no: "02",
@@ -45,7 +45,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
       no: "03",
       icon: Wrench,
       title: "Equipment repair",
-      desc: "Pumps, filters, heaters, salt cells, and automation — most parts are stocked on the truck, so repairs usually finish in one trip.",
+      desc: "Pumps, filters, heaters, salt cells, and automation. Most parts are stocked on the truck, so repairs usually finish in one trip.",
     },
     {
       no: "04",
@@ -72,7 +72,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
     <div className="min-h-screen overflow-x-hidden">
       <header className="border-b border-hairline bg-background">
         <div className="container-tight flex h-[64px] items-center justify-between gap-3 sm:h-[76px] sm:gap-4">
-          <Link to="/" aria-label="Savvy Swim — home" className="flex min-w-0 shrink items-center gap-3">
+          <Link to="/" aria-label="Savvy Swim home" className="flex min-w-0 shrink items-center gap-3">
             <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.9rem]">
               Savvy Swim
             </span>
@@ -321,7 +321,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </h2>
                 <p className="mt-3 text-muted-foreground max-w-md">
                   A tech walks the pool and equipment pad, tests the water, and gives you a flat
-                  monthly quote — no charge, no contract, first service on the next {city} route day.
+                  monthly quote. No charge, no contract, first service on the next {city} route day.
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">

@@ -109,7 +109,7 @@ export function withCampaignParams(path: string): string {
 }
 
 export const POOL_SMS_TEMPLATE = [
-  "Hi Savvy Swim — I'd like a free pool service quote / visit.",
+  "Hi Savvy Swim. I'd like a free pool service quote / visit.",
   "",
   "Name:",
   "Address:",
