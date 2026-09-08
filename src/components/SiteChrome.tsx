@@ -14,11 +14,11 @@ export const CUSTOMER_LOGIN_URL = "https://savvyswim.app";
 type NavItem = { label: string; hash: string };
 
 const NAV: NavItem[] = [
-  { label: "Who we are", hash: "who" },
-  { label: "What we offer", hash: "offer" },
-  { label: "How it happens", hash: "how" },
-  { label: "Why people go Savvy", hash: "why" },
-  { label: "Contact", hash: "contact" },
+  { label: "WHO WE ARE", hash: "who" },
+  { label: "WHAT WE OFFER", hash: "offer" },
+  { label: "HOW IT HAPPENS", hash: "how" },
+  { label: "WHY PEOPLE GO SAVVY", hash: "why" },
+  { label: "CONNECT WITH US", hash: "contact" },
 ];
 
 /** Shared top bar: wordmark, the five home-page sections, call + inspection. */

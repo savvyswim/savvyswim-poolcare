@@ -149,7 +149,7 @@ const Index = () => {
         <section id="offer" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              What we offer
+              WHAT WE OFFER
             </div>
             <h2 className="mt-3 text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.5rem]">
               Pick a service to see what it costs.
@@ -179,7 +179,7 @@ const Index = () => {
         <section id="how" data-reveal className="border-b border-hairline bg-ink/40 py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              How it happens
+              HOW IT HAPPENS
             </div>
             <h2 className="mt-3 text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.5rem]">
               Four steps, then you stop thinking about it.
@@ -201,7 +201,7 @@ const Index = () => {
         <section id="why" data-reveal className="border-b border-hairline py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              Why people go Savvy
+              WHY PEOPLE GO SAVVY
             </div>
             <h2 className="mt-3 text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.5rem]">
               Neighbors across DFW.
@@ -246,7 +246,7 @@ const Index = () => {
         <section id="contact" data-reveal className="py-20 sm:py-24">
           <div className="container-tight">
             <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              Contact
+              CONNECT WITH US
             </div>
             <h2 className="mt-3 text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.5rem]">
               Ready when you are.
