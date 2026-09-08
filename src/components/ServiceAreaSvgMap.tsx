@@ -56,7 +56,7 @@ export default function ServiceAreaSvgMap() {
 
       {/* coverage blob */}
       <polygon
-        points={points.map((p) => `${p.x},${p.y}`).join(" ")}
+        points={outline.map((p) => `${p.x},${p.y}`).join(" ")}
         fill="#1FA9BE"
         fillOpacity="0.1"
         stroke="#1FA9BE"
@@ -64,34 +64,43 @@ export default function ServiceAreaSvgMap() {
         strokeWidth="1.5"
       />
 
-      {points.map((p) => (
-        <a key={p.name} href={p.href} aria-label={`${p.name} pool service — ${p.routeDays}`}>
-          <circle cx={p.x} cy={p.y} r="12" fill="#8E1F2C" fillOpacity="0.12" />
-          <circle cx={p.x} cy={p.y} r="5" fill="#8E1F2C" />
-          <text
-            x={p.x}
-            y={p.y - 12}
-            textAnchor="middle"
-            fill="#4a2027"
-            fontSize="13"
-            fontWeight="700"
-            fontFamily="system-ui, sans-serif"
-          >
-            {p.name}
-          </text>
-          <text
-            x={p.x}
-            y={p.y + 20}
-            textAnchor="middle"
-            fill="#4a2027"
-            fillOpacity="0.6"
-            fontSize="10"
-            fontFamily="system-ui, sans-serif"
-          >
-            {p.routeDays}
-          </text>
-        </a>
-      ))}
+      {points.map((p, i) => {
+        // Flip a label below its pin when a nearby city already owns the space above.
+        const crowded = points.some(
+          (o, j) => j < i && Math.abs(o.x - p.x) < 70 && Math.abs(o.y - p.y) < 26,
+        );
+        const nameY = crowded ? p.y + 32 : p.y - 12;
+        const dayY = crowded ? p.y + 44 : p.y + 20;
+        return (
+          <a key={p.name} href={p.href} aria-label={`${p.name} pool service — ${p.routeDays}`}>
+            <circle cx={p.x} cy={p.y} r="12" fill="#8E1F2C" fillOpacity="0.12" />
+            <circle cx={p.x} cy={p.y} r="5" fill="#8E1F2C" />
+            <text
+              x={p.x}
+              y={nameY}
+              textAnchor="middle"
+              fill="#4a2027"
+              fontSize="13"
+              fontWeight="700"
+              fontFamily="system-ui, sans-serif"
+            >
+              {p.name}
+            </text>
+            <text
+              x={p.x}
+              y={dayY}
+              textAnchor="middle"
+              fill="#4a2027"
+              fillOpacity="0.6"
+              fontSize="10"
+              fontFamily="system-ui, sans-serif"
+            >
+              {p.routeDays}
+            </text>
+          </a>
+        );
+      })}
+
     </svg>
   );
 }
