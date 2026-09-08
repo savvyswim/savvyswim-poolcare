@@ -30,9 +30,9 @@ export const Route = createFileRoute("/admin/canary")({
 });
 
 function when(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   const t = Date.parse(iso);
-  if (Number.isNaN(t)) return "—";
+  if (Number.isNaN(t)) return ", ";
   return new Date(t).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
@@ -181,31 +181,31 @@ function CanaryAdminPage() {
       ) : null}
 
       <section className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Monitored routes" value={report?.monitoredCount ?? "—"} />
+        <Stat label="Monitored routes" value={report?.monitoredCount ?? ", "} />
         <Stat
           label="Failing now"
-          value={report?.failingCount ?? "—"}
+          value={report?.failingCount ?? ", "}
           alarm={(report?.failingCount ?? 0) > 0}
         />
         <Stat
           label="Stale (>6h no pass)"
-          value={report?.staleCount ?? "—"}
+          value={report?.staleCount ?? ", "}
           alarm={(report?.staleCount ?? 0) > 0}
         />
-        <Stat label="Never checked" value={report?.neverCheckedCount ?? "—"} />
+        <Stat label="Never checked" value={report?.neverCheckedCount ?? ", "} />
       </section>
 
       <section className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Probes (24h)" value={report?.overall24h.requests ?? "—"} />
+        <Stat label="Probes (24h)" value={report?.overall24h.requests ?? ", "} />
         <Stat
           label="Error rate (24h)"
-          value={report ? `${(report.overall24h.errorRate * 100).toFixed(2)}%` : "—"}
+          value={report ? `${(report.overall24h.errorRate * 100).toFixed(2)}%` : ", "}
           alarm={(report?.overall24h.errorRate ?? 0) > 0.01}
         />
-        <Stat label="Avg latency (24h)" value={report ? `${report.overall24h.avgMs}ms` : "—"} />
+        <Stat label="Avg latency (24h)" value={report ? `${report.overall24h.avgMs}ms` : ", "} />
         <Stat
           label="p95 latency (24h)"
-          value={report ? `${report.overall24h.p95Ms}ms` : "—"}
+          value={report ? `${report.overall24h.p95Ms}ms` : ", "}
           alarm={(report?.overall24h.p95Ms ?? 0) > 3000}
         />
       </section>
@@ -297,14 +297,14 @@ function CanaryAdminPage() {
                     {when(r.last_ok_at)}
                     <span className="ml-2 text-xs text-foreground/50">({ago(r.last_ok_at)})</span>
                   </td>
-                  <td className="py-2 pr-4 font-tech text-xs">{r.last_http_status ?? "—"}</td>
+                  <td className="py-2 pr-4 font-tech text-xs">{r.last_http_status ?? ", "}</td>
                   <td className="py-2 pr-4 font-tech text-xs">
-                    {r.last_duration_ms != null ? `${r.last_duration_ms}ms` : "—"}
+                    {r.last_duration_ms != null ? `${r.last_duration_ms}ms` : ", "}
                   </td>
                   <td className="py-2 pr-4 font-tech text-xs whitespace-nowrap">
                     {r.trend24h.requests
                       ? `${r.trend24h.avgMs}ms / ${r.trend24h.p95Ms}ms`
-                      : "—"}
+                      : ", "}
                   </td>
                   <td
                     className={`py-2 pr-4 font-tech text-xs whitespace-nowrap ${
@@ -313,12 +313,12 @@ function CanaryAdminPage() {
                   >
                     {r.trend24h.requests
                       ? `${(r.trend24h.errorRate * 100).toFixed(1)}% (${r.trend24h.failures}/${r.trend24h.requests})`
-                      : "—"}
+                      : ", "}
                   </td>
                   <td className="py-2 pr-4 text-xs text-foreground/60">
 
                     {r.last_message ??
-                      (r.consecutive_failures > 0 ? `${r.consecutive_failures} in a row` : "—")}
+                      (r.consecutive_failures > 0 ? `${r.consecutive_failures} in a row` : ", ")}
                   </td>
                 </tr>
               ))}

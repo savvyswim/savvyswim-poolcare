@@ -113,7 +113,7 @@ async function runWatch(request: Request) {
   if (!healthy) {
     console.error(JSON.stringify({ tag: "health-watch", status, httpStatus, failedChecks, error }));
     const [emailResult, smsResult] = await Promise.all([
-      sendAlertEmail("Savvy Swim is DOWN — health check failed", summary),
+      sendAlertEmail("Savvy Swim is DOWN, health check failed", summary),
       sendAlertSms(`Savvy Swim health check FAILED (HTTP ${httpStatus ?? "none"}). Check /admin/crm/deploy-health.`),
     ]);
     alert = `${emailResult}; ${smsResult}`;

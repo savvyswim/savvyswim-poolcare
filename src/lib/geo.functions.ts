@@ -87,8 +87,7 @@ export const reverseGeocode = createServerFn({ method: "POST" })
  *
  * The browser Maps key is referrer-locked to the preview domains, so on
  * savvyswim.com / savvyswimservices.com it is rejected. Everything below runs
- * server-side with the connector's server key, which has no referrer rules —
- * so autocomplete and the map work identically on every domain.
+ * server-side with the connector's server key, which has no referrer rules, * so autocomplete and the map work identically on every domain.
  * ------------------------------------------------------------------ */
 
 function gatewayHeaders() {
@@ -112,7 +111,7 @@ const AutocompleteSchema = z.object({
 
 export type AddressSuggestion = { text: string; placeId: string };
 
-/** Plano/Frisco centre — biases suggestions to the routes we actually run. */
+/** Plano/Frisco centre, biases suggestions to the routes we actually run. */
 const SERVICE_AREA_CENTER = { latitude: 33.035, longitude: -96.75 };
 const SERVICE_AREA_RADIUS_M = 50000;
 

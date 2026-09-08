@@ -2,7 +2,7 @@
  * First-party consent + conversion analytics.
  *
  * Anonymous by design: we record what happened, on which page, and what the
- * visitor's consent state was at that moment. No identifiers, no cookies — so
+ * visitor's consent state was at that moment. No identifiers, no cookies. So
  * visitors who decline are still counted (just as anonymously as everyone else).
  */
 

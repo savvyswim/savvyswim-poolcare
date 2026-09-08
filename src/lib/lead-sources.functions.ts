@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Lead source reporting — where each booking / water test came from
+ * Lead source reporting, where each booking / water test came from
  * (home, Frisco, Plano, every generic city page). Office/owner only.
  */
 

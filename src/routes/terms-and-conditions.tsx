@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Terms from "@/pages/Terms";
 
-/** Alias of /terms — canonical points at the primary URL. */
+/** Alias of /terms, canonical points at the primary URL. */
 const CANONICAL = "https://savvyswimservices.com/terms";
 const TITLE = "Terms of Service | Savvy Swim Pool Service";
 const DESCRIPTION =

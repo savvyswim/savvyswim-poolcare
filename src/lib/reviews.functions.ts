@@ -31,7 +31,7 @@ export interface AdminReview extends PublicReview {
 
 const TABLE = "ss_site_reviews";
 
-/** Strip links and control characters — review text is plain prose only. */
+/** Strip links and control characters, review text is plain prose only. */
 function clean(text: string): string {
   return text
     .replace(/https?:\/\/\S+/gi, "")

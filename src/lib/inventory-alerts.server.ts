@@ -19,7 +19,7 @@ export type LowItem = {
   low_threshold: number;
 };
 
-export const alertTitle = (name: string) => `Low stock — ${name}`;
+export const alertTitle = (name: string) => `Low stock, ${name}`;
 
 export function lineFor(i: LowItem): string {
   const unit = i.unit ?? "units";
@@ -39,8 +39,8 @@ export function smsBody(items: LowItem[]): string {
 export function emailParts(items: LowItem[]): { subject: string; html: string; text: string } {
   const subject =
     items.length === 1
-      ? `Reorder needed — ${items[0]!.name}`
-      : `Reorder needed — ${items.length} inventory items`;
+      ? `Reorder needed, ${items[0]!.name}`
+      : `Reorder needed, ${items.length} inventory items`;
   const rowsHtml = items
     .map(
       (i) => `<tr>
@@ -55,7 +55,7 @@ export function emailParts(items: LowItem[]): { subject: string; html: string; t
   <div style="max-width:560px;margin:0 auto;background:#fffdf8;border:1px solid #e5dcc9;">
     <div style="background:#8E1F2C;color:#F4EFE3;padding:20px 28px;">
       <div style="font-size:20px;font-weight:800;letter-spacing:.08em;">SAVVY SWIM</div>
-      <div style="font-size:11px;letter-spacing:.14em;opacity:.85;margin-top:2px;">INVENTORY — REORDER POINT</div>
+      <div style="font-size:11px;letter-spacing:.14em;opacity:.85;margin-top:2px;">INVENTORY, REORDER POINT</div>
     </div>
     <div style="padding:24px 28px;">
       <p style="margin:0 0 16px;font-size:14px;line-height:1.6;">

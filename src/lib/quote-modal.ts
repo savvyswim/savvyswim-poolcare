@@ -18,7 +18,7 @@ export type QuoteDetail = {
 
 /**
  * Stamp a CTA name with the page it was clicked on ("<cta>:<path>") so every
- * lead — homepage, weekly plan hub, city page — reports and syncs with the
+ * lead, homepage, weekly plan hub, city page, reports and syncs with the
  * page it came from. Already-stamped sources pass through untouched.
  */
 export function withPage(source: string): string {

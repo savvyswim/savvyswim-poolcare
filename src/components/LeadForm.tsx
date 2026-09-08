@@ -2,7 +2,7 @@ import { onCallClick } from "@/components/CallButton";
 /**
  * Shared lead form used by both modals (booking / free water test).
  *
- * Posts to our own hardened endpoint (POST /api/public/leads) — Zod validation,
+ * Posts to our own hardened endpoint (POST /api/public/leads), Zod validation,
  * honeypot, minimum fill time, Turnstile and rate limiting all live there.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -59,7 +59,7 @@ const FIELD =
 const PHONE = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
 
-/** Single combined authorization shown on the form — stored verbatim as the consent record. */
+/** Single combined authorization shown on the form, stored verbatim as the consent record. */
 export const CONSENT_TEXT =
   "I authorize Savvy Swim to contact me by phone call, text message and email about this request, including automated or prerecorded messages and appointment updates at the number I provided. Message and data rates may apply; message frequency varies. Reply STOP to opt out or HELP for help. I have read and agree to the Privacy Policy and Terms.";
 
@@ -123,7 +123,7 @@ export default function LeadForm({
     return d;
   }, []);
 
-  // Debounced discount / referral code check. Never blocks the submit — an
+  // Debounced discount / referral code check. Never blocks the submit. An
   // unrecognised code still goes through, flagged for the office.
   useEffect(() => {
     const code = promoCode.trim();
@@ -185,7 +185,7 @@ export default function LeadForm({
         sessionStorage.setItem("ss_sid", sessionId);
       }
     } catch {
-      /* private mode — attribution is best effort */
+      /* private mode, attribution is best effort */
     }
 
     const body = {

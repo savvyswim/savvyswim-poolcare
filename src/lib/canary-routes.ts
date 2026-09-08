@@ -20,7 +20,7 @@ const EXCLUDE_PREFIXES = [
 
 /**
  * Staff / customer areas we DO serve. They must return a real page shell (their
- * auth gate runs client-side) or a redirect to sign-in — anything else, such as
+ * auth gate runs client-side) or a redirect to sign-in. Anything else, such as
  * a 404 or a 5xx, is a genuine outage worth paging on.
  */
 const GUARDED_PREFIXES = ["/admin", "/portal"];

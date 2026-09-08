@@ -15,8 +15,7 @@ export function extractZip(address: string | null | undefined): string {
 /**
  * Pull the service city out of a one-line address.
  *
- * Formatted addresses look like "6801 Warren Pkwy, Frisco, TX 75034, USA" —
- * the city is the part immediately before the state. Hand-typed addresses that
+ * Formatted addresses look like "6801 Warren Pkwy, Frisco, TX 75034, USA", * the city is the part immediately before the state. Hand-typed addresses that
  * omit the state fall back to the second comma-separated part.
  */
 export function cityFromAddress(address: string | null | undefined): string {

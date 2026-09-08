@@ -17,7 +17,7 @@ const BURST_WINDOW_MS = 60 * 60 * 1000;
 /** One page per path per this long, however many hits arrive. */
 const ALERT_COOLDOWN_MS = 6 * 60 * 60 * 1000;
 
-/** Paths that 404 constantly from bots/scanners — logged, never alerted. */
+/** Paths that 404 constantly from bots/scanners, logged, never alerted. */
 const NOISE = [
   /^\/wp-/i,
   /^\/wordpress/i,
@@ -101,7 +101,7 @@ export async function recordNotFound(hit: NotFoundHit): Promise<void> {
       ].join("\n");
       const [email, sms] = await Promise.all([
         sendOpsAlertEmail(`Savvy Swim 404: ${path}`, summary, "not-found-alert"),
-        sendOpsAlertSms(`Savvy Swim 404 on ${path} — ${reason}. See /admin/not-found`),
+        sendOpsAlertSms(`Savvy Swim 404 on ${path}, ${reason}. See /admin/not-found`),
       ]);
       alertResult = `${email}; ${sms}`;
     }

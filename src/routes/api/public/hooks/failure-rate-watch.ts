@@ -22,7 +22,7 @@ const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 
 const WINDOW_MINUTES = 15;
-// Below this many events a single failure looks like 100% — ignore the noise.
+// Below this many events a single failure looks like 100%, ignore the noise.
 const MIN_EVENTS = 5;
 const DEFAULT_THRESHOLD_PCT = 25;
 const COOLDOWN_MINUTES = 60;
@@ -172,7 +172,7 @@ async function runWatch(request: Request) {
     );
 
     const [emailResult, smsResult] = await Promise.all([
-      sendAlertEmail(`Savvy Swim: ${b.rate.toFixed(0)}% failure rate — ${b.name}`, summary),
+      sendAlertEmail(`Savvy Swim: ${b.rate.toFixed(0)}% failure rate, ${b.name}`, summary),
       sendAlertSms(
         `Savvy Swim: ${b.name} at ${b.rate.toFixed(0)}% failures (${b.failed}/${b.total}) in ${WINDOW_MINUTES}m.`,
       ),

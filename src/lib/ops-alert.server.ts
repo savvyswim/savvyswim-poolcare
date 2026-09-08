@@ -2,7 +2,7 @@
  * Shared on-call alert transport (email + SMS) for ops watchdogs.
  *
  * Server-only: reads LOVABLE_API_KEY / TWILIO_API_KEY at call time and never
- * throws — a failed alert must not take down the watchdog that raised it.
+ * throws. A failed alert must not take down the watchdog that raised it.
  */
 import { sendLovableEmail } from "@lovable.dev/email-js";
 

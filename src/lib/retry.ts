@@ -4,7 +4,7 @@
  * The CRM talks to one API, so the two failures that actually happen are
  * rate limits (429) and slow/hung requests (timeouts, 5xx, dropped network).
  * Those are worth retrying with exponential backoff + jitter; a 400 or a
- * permission error is not — retrying it just makes the screen slower.
+ * permission error is not, retrying it just makes the screen slower.
  */
 
 export type RetryKind = "rate_limit" | "timeout" | "server" | "network" | "fatal";

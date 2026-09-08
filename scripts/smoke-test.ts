@@ -33,7 +33,7 @@ export function collectRoutes(routeTreeSource: string): string[] {
   while ((match = re.exec(routeTreeSource)) !== null) {
     const route = match[1];
     if (!route || !route.startsWith("/")) continue;
-    if (route.includes("$")) continue; // dynamic params — no safe fixture
+    if (route.includes("$")) continue; // dynamic params. No safe fixture
     if (route.startsWith("/api/")) continue; // exercised separately
     found.add(route.length > 1 ? route.replace(/\/$/, "") : "/");
   }
@@ -81,7 +81,7 @@ function slugify(route: string): string {
 /** Write one file per failed route plus a combined index. */
 function writeArtifacts(): string | null {
   if (artifacts.length === 0) return null;
-  const dir = path.resolve(here, "../.lovable/smoke-artifacts");
+  const dir = path.resolve(here, "./.lovable/smoke-artifacts");
   try {
     mkdirSync(dir, { recursive: true });
     for (const a of artifacts) {
@@ -306,8 +306,8 @@ async function main() {
     const markdown = renderRollbackChecklistMarkdown(checklist);
     console.error(`\n${markdown}\n`);
     try {
-      mkdirSync(path.resolve(here, "../.lovable"), { recursive: true });
-      writeFileSync(path.resolve(here, "../.lovable/rollback-checklist.md"), markdown);
+      mkdirSync(path.resolve(here, "./.lovable"), { recursive: true });
+      writeFileSync(path.resolve(here, "./.lovable/rollback-checklist.md"), markdown);
       console.error("Checklist written to .lovable/rollback-checklist.md (also shown in CRM > Deploy Health).");
     } catch {
       /* non-fatal */

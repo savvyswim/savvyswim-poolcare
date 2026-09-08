@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import PoolCleaningPlano from "@/pages/PoolCleaningPlano";
 
 const URL = "https://savvyswimservices.com/pool-cleaning-plano";
-/** Both Plano URLs serve the same page — /plano is the canonical one. */
+/** Both Plano URLs serve the same page, /plano is the canonical one. */
 const CANONICAL = "https://savvyswimservices.com/plano";
 const TITLE = "Pool Cleaning Plano, TX | Weekly Service";
 const DESCRIPTION =

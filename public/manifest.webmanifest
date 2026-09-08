@@ -1,7 +1,7 @@
 {
   "name": "Savvy Swim",
   "short_name": "Savvy Swim",
-  "description": "Savvy Swim app for customers, technicians and the office — pool service, routes and reports.",
+  "description": "Savvy Swim app for customers, technicians and the office, pool service, routes and reports.",
   "id": "/app",
   "start_url": "/app",
   "scope": "/",

@@ -3,7 +3,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
-/** Primary domain — every other domain 301s here, so only this one is listed. */
+/** Primary domain. Every other domain 301s here, so only this one is listed. */
 const BASE_URL = "https://savvyswimservices.com";
 
 interface SitemapEntry {

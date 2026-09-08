@@ -123,7 +123,7 @@ export const POOL_SMS_TEMPLATE = [
 /**
  * Builds an sms: link with the prefilled inspection message. The body is kept
  * deterministic (no per-visitor campaign id) so the server-rendered href
- * matches the client's and hydration stays clean — campaign attribution is
+ * matches the client's and hydration stays clean, campaign attribution is
  * recorded by trackContactClick() instead.
  */
 export function buildSmsHref(phoneE164: string, message = POOL_SMS_TEMPLATE): string {

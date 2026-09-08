@@ -15,7 +15,7 @@ export default defineTool({
       return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
     }
     const supabase = supabaseForUser(ctx);
-    // Read first so RLS — not the admin forwarder — decides who may push this lead.
+    // Read first so RLS. Not the admin forwarder, decides who may push this lead.
     const { data: lead, error } = await supabase
       .from("inspection_requests")
       .select("id, reference_number, full_name")
@@ -51,7 +51,7 @@ export default defineTool({
       content: [
         {
           type: "text",
-          text: `${lead.reference_number ?? id} — ${note}${
+          text: `${lead.reference_number ?? id}, ${note}${
             fresh?.crm_lead_id ? ` CRM record ${fresh.crm_lead_id}.` : ""
           }`,
         },

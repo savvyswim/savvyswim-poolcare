@@ -27,7 +27,7 @@ export function setConsent(value: ConsentValue) {
   try {
     window.localStorage.setItem(STORAGE_KEY, value);
   } catch {
-    /* private mode — consent just won't persist */
+    /* private mode, consent just won't persist */
   }
   window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: value }));
 }

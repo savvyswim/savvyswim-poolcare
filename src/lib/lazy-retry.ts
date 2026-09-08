@@ -27,7 +27,7 @@ export function lazyWithReload<T extends ComponentType<any>>(
         alreadyReloaded = window.sessionStorage.getItem(RELOAD_FLAG) === "1";
         window.sessionStorage.setItem(RELOAD_FLAG, "1");
       } catch {
-        /* private mode — fall through to a single reload attempt */
+        /* private mode, fall through to a single reload attempt */
       }
       if (alreadyReloaded) throw error;
       window.location.reload();

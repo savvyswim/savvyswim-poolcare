@@ -23,7 +23,7 @@ export type InspectionEventInput = {
   statusTo?: string | null;
 };
 
-/** Never throws — logging must not break the notification it is recording. */
+/** Never throws, logging must not break the notification it is recording. */
 export async function logInspectionEvents(
   requestId: string,
   events: InspectionEventInput[],

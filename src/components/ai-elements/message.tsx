@@ -336,7 +336,7 @@ function useCodePlugin() {
         if (active) setCodePlugin(mod.code);
       })
       .catch(() => {
-        // Highlighting is progressive enhancement — plain code blocks are fine.
+        // Highlighting is progressive enhancement, plain code blocks are fine.
       });
     return () => {
       active = false;

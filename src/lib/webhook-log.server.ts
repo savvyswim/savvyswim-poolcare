@@ -14,7 +14,7 @@ export type WebhookOutcome = "success" | "failed" | "skipped";
 export type WebhookDeliveryEntry = {
   channel: WebhookChannel;
   direction?: "inbound" | "outbound";
-  /** Stable key per event — a repeat with the same key counts as a retry. */
+  /** Stable key per event. A repeat with the same key counts as a retry. */
   eventKey?: string | null;
   endpoint?: string | null;
   /** Human-readable subject: customer name, appointment id, invoice number. */
@@ -28,7 +28,7 @@ export type WebhookDeliveryEntry = {
   retriedBy?: string | null;
 };
 
-/** Records (or updates) a delivery attempt. Never throws — logging is best effort. */
+/** Records (or updates) a delivery attempt. Never throws, logging is best effort. */
 export async function logWebhookDelivery(entry: WebhookDeliveryEntry): Promise<void> {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

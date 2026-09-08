@@ -1,5 +1,5 @@
 /**
- * /schedule-qr — internal marketing helper. Generates a printable QR code that
+ * /schedule-qr, internal marketing helper. Generates a printable QR code that
  * points at /schedule with a campaign tag, so every flyer, yard sign, door
  * hanger or truck decal reports its own lead source.
  */

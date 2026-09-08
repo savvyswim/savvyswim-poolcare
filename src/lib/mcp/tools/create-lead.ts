@@ -61,7 +61,7 @@ export default defineTool({
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
       return {
-        content: [{ type: "text", text: "Lead was not created — not permitted." }],
+        content: [{ type: "text", text: "Lead was not created. Not permitted." }],
         isError: true,
       };
     }

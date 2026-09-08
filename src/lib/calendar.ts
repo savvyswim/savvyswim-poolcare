@@ -1,4 +1,4 @@
-// Calendar helpers — build .ics files and Google Calendar links for pool visits.
+// Calendar helpers, build .ics files and Google Calendar links for pool visits.
 
 export type CalendarEvent = {
   title: string;

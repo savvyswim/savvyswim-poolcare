@@ -38,7 +38,7 @@ export const logNotFound = createServerFn({ method: "POST" })
     return { ok: true } as const;
   });
 
-/** Office/owner only — verified server-side, never trusted from the client. */
+/** Office/owner only, verified server-side, never trusted from the client. */
 export const getNotFoundReport = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<NotFoundReport> => {

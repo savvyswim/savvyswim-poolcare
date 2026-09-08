@@ -27,7 +27,7 @@ export function prettyDate(iso: string): string {
 }
 
 export function windowFromNotes(notes: string | null): string {
-  const match = /Preferred window:\s*([^—\n]+)/.exec(notes ?? "");
+  const match = /Preferred window:\s*([^, \n]+)/.exec(notes ?? "");
   return match?.[1]?.trim() || "8:00a – 4:00p";
 }
 

@@ -18,7 +18,7 @@ const fmt = (iso: string) =>
 
 /** Escape anything visitor-supplied before it lands in an HTML email body. */
 function esc(value: unknown): string {
-  return String(value ?? "—")
+  return String(value ?? ", ")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -92,10 +92,10 @@ export async function sendInspectionNotifications(
     ["Phone", req.phone],
     ["Email", req.email],
     ["Address", `${req.address}, ${req.postal_code}`],
-    ["Preferred date", req.preferred_date ?? "—"],
-    ["Best time", req.preferred_contact_time ?? "—"],
-    ["Pool details", req.pool_details ?? "—"],
-    ["Notes", req.notes ?? "—"],
+    ["Preferred date", req.preferred_date ?? ", "],
+    ["Best time", req.preferred_contact_time ?? ", "],
+    ["Pool details", req.pool_details ?? ", "],
+    ["Notes", req.notes ?? ", "],
     ["Submitted", fmt(req.created_at)],
     [
       "Source",
@@ -130,7 +130,7 @@ export async function sendInspectionNotifications(
           from: FROM_ADDRESS,
           sender_domain: SENDER_DOMAIN,
           reply_to: req.email,
-          subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""} — ${req.full_name} (${req.reference_number})`,
+          subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
           html: officeHtml,
           text: officeText,
           label: "inspection-office-alert",
@@ -199,7 +199,7 @@ export async function sendInspectionNotifications(
     results[req.email] = "failed";
   }
 
-  // Homeowner text confirmation — only when the number gave an explicit
+  // Homeowner text confirmation. Only when the number gave an explicit
   // SMS opt-in (sendStatusSms enforces consent and appends STOP/HELP).
   let smsOutcome: "sent" | "failed" | "skipped" = "skipped";
   let smsTo: string | null = null;

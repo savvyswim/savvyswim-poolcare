@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Savvy Swim design system — ported from the Classic src/index.css (Tailwind v3)
+ * Savvy Swim design system, ported from the Classic src/index.css (Tailwind v3)
  * and tailwind.config.ts into Tailwind v4.
  *
  * Tokens are kept as HSL triplets (as in the original) and registered with
@@ -100,7 +100,7 @@
 }
 
 :root {
-  /* Savvy Swim — sun-bleached canvas + brick red, classic beach-club */
+  /* Savvy Swim, sun-bleached canvas + brick red, classic beach-club */
   --background: 44 38% 94%; /* Cream canvas */
   --foreground: 3 32% 20%; /* Warm dark red-brown ink */
 
@@ -264,7 +264,7 @@
     }
   }
 
-  /* Brand type helpers — fat rounded display + classic serif */
+  /* Brand type helpers, fat rounded display + classic serif */
   .font-display {
     font-family: "Archivo", Helvetica, Arial, sans-serif;
     text-transform: uppercase;
@@ -402,7 +402,7 @@
     background-color: hsl(var(--sand));
   }
 
-  /* Mandatory stripe motif — wide cabana awning stripes */
+  /* Mandatory stripe motif, wide cabana awning stripes */
   .stripes-red {
     background-image: repeating-linear-gradient(90deg, hsl(var(--lifeguard-red)) 0 26px, hsl(40 40% 97%) 26px 52px);
   }
@@ -781,7 +781,7 @@
     contain-intrinsic-size: 1px 900px;
   }
 
-  /* Scroll reveal — soft fade + lift as sections enter the viewport */
+  /* Scroll reveal, soft fade + lift as sections enter the viewport */
   [data-reveal] {
     opacity: 0;
     transform: translate3d(0, 26px, 0);

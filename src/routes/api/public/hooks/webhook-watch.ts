@@ -4,10 +4,10 @@
  * Runs every 5 minutes from pg_cron. Reads the unified delivery log
  * (ss_webhook_deliveries) for the last window and raises an on-call alert when:
  *
- *   1. failures — any 401 / 403 / 400-class / 5xx attempt appears, and either
+ *   1. Failures, any 401 / 403 / 400-class / 5xx attempt appears, and either
  *      the failure count crosses `minFailures` or the failure rate crosses
  *      `threshold` percent of the window's traffic;
- *   2. spike — total attempts in the window are `spike`x the recent hourly
+ *   2. Spike, total attempts in the window are `spike`x the recent hourly
  *      baseline (and above `minSpike` calls), which catches retry storms and
  *      credential-stuffing style bursts against the public hook endpoints.
  *
@@ -123,7 +123,7 @@ async function runWatch(request: Request): Promise<Response> {
         key: `failure:${channel}`,
         type: "failure",
         channel,
-        subject: `Savvy Swim: ${failures.length} webhook failures — ${channel}`,
+        subject: `Savvy Swim: ${failures.length} webhook failures, ${channel}`,
         summary: [
           "Savvy Swim WEBHOOK FAILURE ALERT",
           `Channel: ${channel}`,
@@ -152,18 +152,18 @@ async function runWatch(request: Request): Promise<Response> {
         key: `spike:${channel}`,
         type: "spike",
         channel,
-        subject: `Savvy Swim: webhook traffic spike — ${channel}`,
+        subject: `Savvy Swim: webhook traffic spike, ${channel}`,
         summary: [
           "Savvy Swim WEBHOOK SPIKE ALERT",
           `Channel: ${channel}`,
           `Window: last ${windowMin} minutes`,
           `Attempts: ${win.length} (baseline ${baseline.toFixed(1)} per ${windowMin}m over ${BASELINE_HOURS}h)`,
-          `Multiplier: ${(win.length / baseline).toFixed(1)}x — threshold ${spikeFactor}x`,
+          `Multiplier: ${(win.length / baseline).toFixed(1)}x, threshold ${spikeFactor}x`,
           `Failures in window: ${failures.length}`,
           "",
           "Review: /admin/webhook-health",
         ].join("\n"),
-        sms: `Savvy Swim: ${channel} webhook traffic spike — ${win.length} calls in ${windowMin}m (${(win.length / baseline).toFixed(1)}x normal).`,
+        sms: `Savvy Swim: ${channel} webhook traffic spike, ${win.length} calls in ${windowMin}m (${(win.length / baseline).toFixed(1)}x normal).`,
         total: win.length,
         failed: failures.length,
         rate,

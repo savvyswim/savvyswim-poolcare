@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Free inspection leads dashboard — every inspection request with counts,
+ * Free inspection leads dashboard. Every inspection request with counts,
  * source, discount code and status. Office/owner only.
  */
 

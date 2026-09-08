@@ -240,7 +240,7 @@ heat:'<svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/>
 const KEY='savvyswim-state-v3';
 let S=null,mode='co',tab='route',custView=null,custPortal=null,step=1,visitStart=null,q='',range=90,insightCust=null,adminView='',routeMode='list';
 const CITY_PRICES={"Highland Park":[250,320],"University Park":[240,300],"Dallas":[220,280],"Prosper":[200,250],"Frisco":[190,240],"Plano":[190,240],"Celina":[190,240],"McKinney":[180,230],"Allen":[180,220],"Rockwall":[180,220],"Rowlett":[165,200],"Sachse":[165,195],"Garland":[160,190],"Forney":[160,190],"Mesquite":[150,180]};
-const DEFAULT_WF=[["Empty skimmer & pump baskets",1,0],["Skim surface",1,0],["Brush walls, steps & tile line",1,0],["Vacuum / check cleaner",0,0],["PSI gauge reading",1,0],["Equipment check — pump sound, leaks",1,0],["Chemicals dosed per calc",1,0],["Service photo — after",1,1]];
+const DEFAULT_WF=[["Empty skimmer & pump baskets",1,0],["Skim surface",1,0],["Brush walls, steps & tile line",1,0],["Vacuum / check cleaner",0,0],["PSI gauge reading",1,0],["Equipment check: pump sound, leaks",1,0],["Chemicals dosed per calc",1,0],["Service photo: after",1,1]];
 const SERVICE_LEVELS=["Savvy Signature","Full Weekly","Chem-Only"];
 const POOL_TYPES=["Standard Pool","Pool + Spa","Saltwater","Above Ground"];
 const EQUIP={filter:[["Cartridge",IC.filt],["DE",IC.filt],["Sand",IC.filt]],pump:[["Single Speed",IC.pump],["Variable Speed",IC.pump]],sanitizer:[["In-Line Chlorinator",IC.chlor],["Salt Cell",IC.salt]],extra:[["Heater",IC.heat],["Pressure Gauge",IC.gauge]]};
@@ -272,12 +272,12 @@ function seed(){
     const cl=Math.round(Math.max(0,3-fc)*c0.gallons/10000*10.7), ac=ph>7.6?Math.round((ph-7.5)/0.1*5*c0.gallons/10000):0;
     visits.push({id:uid(),custId:c0.id,date:dISO(-w*7),readings:{fc,ph,ta,ch:300,cya:40,temp:tmp,psi},
       dose:{cl,ac,lsi:+(ph+0.7+(Math.log10(300)-0.4)+Math.log10(ta)-12.1).toFixed(2),cost:+(cl*CL_COST+ac*AC_COST).toFixed(2)},
-      tasks:[0,1,2,3,4,5,6,7],issue:w===6?'Pump bearing noise — monitor':'',notes:'',secs:Math.round((16+Math.random()*26)*60)});
+      tasks:[0,1,2,3,4,5,6,7],issue:w===6?'Pump bearing noise: monitor':'',notes:'',secs:Math.round((16+Math.random()*26)*60)});
   }
   c0.lastFC=visits[visits.length-1].readings.fc;c0.lastPH=visits[visits.length-1].readings.ph;
   const updates=[
-    {id:uid(),custId:c0.id,date:dISO(-7),time:'8:42 AM',type:'sms',text:'Marcus is on the way — ETA ~20 min'},
-    {id:uid(),custId:c0.id,date:dISO(-7),time:'9:15 AM',type:'report',text:'Service completed — your photo report is ready'},
+    {id:uid(),custId:c0.id,date:dISO(-7),time:'8:42 AM',type:'sms',text:'Marcus is on the way, ETA ~20 min'},
+    {id:uid(),custId:c0.id,date:dISO(-7),time:'9:15 AM',type:'report',text:'Service completed. Your photo report is ready'},
   ];
   return {customers:cs,visits,invoices:[],jobs:[],alertsAck:[],quotes:[],updates};
 }
@@ -381,7 +381,7 @@ function render(){
 /* admin menu */
 function openMenu(){
   const lvl=curLevel();
-  if(lvl==='tech'&&mode==='tech')return toast('Admin access required — Technician level');
+  if(lvl==='tech'&&mode==='tech')return toast('Admin access required: Technician level');
   const items=[
     ["ALERTS",()=>{setMode('co');setTab('insights');}],
     ["TECHNICIANS",()=>{setMode('co');adminView='techs';render();}],
@@ -409,7 +409,7 @@ function openMenu(){
     ${items.map((it,i)=>`<div class="mi" onclick="__menuGo(${i})">${it[0]}</div>`).join('')}
   </div></div>`;
 }
-const LEVELS={owner:'Owner — full access',manager:'Office Manager — CRM, no finance',tech:'Technician — route only'};
+const LEVELS={owner:'Owner | full access',manager:'Office Manager | CRM, no finance',tech:'Technician | route only'};
 function curLevel(){if(mode!=='tech')return 'owner';const t=S.techs.find(x=>x.id===curTech);return t?(t.level||'tech'):'tech';}
 function adminBack(){return `<button class="tiny" onclick="adminView='';render()">← Back</button>`;}
 
@@ -521,7 +521,7 @@ function vTrucks(){
 function vInventory(){
   const low=S.inventory.filter(i=>i.qty<=i.low);
   return `${adminBack()}<h2 style="margin-top:10px;">Inventory</h2>
-  ${low.length?`<div class="alertstrip">${IC.alert}<div><b>${low.length} item${low.length>1?'s':''} running low</b><div class="muted" style="color:#B4525A;">${low.map(i=>i.name.split(' ')[0]).join(', ')} — add to the supply run</div></div></div>`:''}
+  ${low.length?`<div class="alertstrip">${IC.alert}<div><b>${low.length} item${low.length>1?'s':''} running low</b><div class="muted" style="color:#B4525A;">${low.map(i=>i.name.split(' ')[0]).join(', ')}. Add to the supply run</div></div></div>`:''}
   <div class="card pad0">${S.inventory.map((it,i)=>`<div class="rowline">
     <div style="flex:1;"><b style="font-size:13px;">${esc(it.name)}</b>
     <div class="muted" style="font-size:10.5px;">Low at ${it.low} ${it.unit}</div></div>
@@ -581,7 +581,7 @@ function vReportsAdmin(){
     <div class="rowline"><b style="font-size:13px;">Needing closure (open 7d+)</b><span class="chip err">${stale.length}</span></div>
   </div>
   ${(()=>{const bad=S.customers.filter(c=>c.status==='active'&&(!c.address||!c.phone));
-    return bad.length?`<div class="sechead"><h4>Data hygiene — incomplete records</h4><span>${bad.length}</span></div>
+    return bad.length?`<div class="sechead"><h4>Data hygiene: incomplete records</h4><span>${bad.length}</span></div>
     <div class="card pad0">${bad.map(c=>`<div class="rowline" style="cursor:pointer;" onclick="adminView='';setTab('customers');custView='${c.id}';render()">
       <span class="dot warn"></span><div style="flex:1;"><b style="font-size:12.5px;">${esc(c.name)}</b>
       <div class="muted" style="font-size:10.5px;">${esc(c.city)} · missing ${[!c.address&&'address',!c.phone&&'phone'].filter(Boolean).join(' + ')}</div></div>
@@ -660,7 +660,7 @@ function vFinance(){
     <div style="display:flex;justify-content:center;gap:7px;align-items:baseline;padding:8px 6px;"><b class="mono" style="font-size:15px;color:${color};">${ct}</b><span class="mono muted" style="font-size:11px;">$${amt.toLocaleString(undefined,{maximumFractionDigits:0})}</span></div></div>`;
   return `${adminBack()}<h2 style="margin-top:10px;">Finance</h2>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-    <div class="sub" style="margin:0;">Savvy Ledger — your own books (${esc(S.qbSync)})</div>
+    <div class="sub" style="margin:0;">Savvy Ledger: your own books (${esc(S.qbSync)})</div>
     <div class="rangeseg" style="margin:0;">
       ${[[1,'1 MO'],[3,'3 MO'],[12,'YTD']].map(([v,l])=>`<button class="${finRange===v?'on':''}" onclick="finRange=${v};render()">${l}</button>`).join('')}
     </div></div>
@@ -793,9 +793,9 @@ function vEmail(){
     </select>
     <span class="lbl">Presets</span>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
-      <button class="tiny" onclick="document.getElementById('bMsg').value='SAVVY SWIM FREEZE ALERT — Hard freeze tonight. Keep your pump RUNNING all night; moving water does not freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions — we are on duty.'">❄ Freeze alert</button>
-      <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim here — filter cleans keep your water crystal and your equipment healthy. Yours is coming due; reply YES and we will add it to this week\\'s visit.'">Filter clean promo</button>
-      <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim — refer a neighbor and get a FREE month of service. They get 20% off their first month. Just have them mention your name.'">Referral push</button>
+      <button class="tiny" onclick="document.getElementById('bMsg').value='SAVVY SWIM FREEZE ALERT: Hard freeze tonight. Keep your pump RUNNING all night; moving water does not freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We are on duty.'">❄ Freeze alert</button>
+      <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim here, filter cleans keep your water crystal and your equipment healthy. Yours is coming due; reply YES and we will add it to this week\\'s visit.'">Filter clean promo</button>
+      <button class="tiny" onclick="document.getElementById('bMsg').value='Savvy Swim, refer a neighbor and get a FREE month of service. They get 20% off their first month. Just have them mention your name.'">Referral push</button>
     </div>
     <span class="lbl">Message</span>
     <textarea id="bMsg" rows="4" placeholder="Write your broadcast…"></textarea>
@@ -877,11 +877,11 @@ function checkGeo(lat,lng){
   if(near&&nd<=0.12){
     if(!geo.arrivedFor[near.id]){geo.arrivedFor[near.id]=1;
       pushUpdate(near.id,'sms','Your Savvy Swim technician has arrived 🛠️');save();
-      toast('Arrived at '+near.name+' — auto-start in '+S.autoStartMin+' min');}
+      toast('Arrived at '+near.name+', auto-start in '+S.autoStartMin+' min');}
     if(geo.dwellStop!==near.id){geo.dwellStop=near.id;geo.dwellStart=Date.now();}
     else if(Date.now()-geo.dwellStart>=S.autoStartMin*60000){
       geo.dwellStop=null;geo.dwellStart=null;
-      toast('Auto-starting visit — on site '+S.autoStartMin+' min');
+      toast('Auto-starting visit. On site '+S.autoStartMin+' min');
       openVisit(near.id);
     }
   } else {geo.dwellStop=null;geo.dwellStart=null;}
@@ -889,7 +889,7 @@ function checkGeo(lat,lng){
 function simulateArrival(id){
   const c=S.customers.find(x=>x.id===id);
   pushUpdate(c.id,'sms','Your Savvy Swim technician has arrived 🛠️');save();
-  toast('Arrived (demo) — auto-start in 3s…');
+  toast('Arrived (demo), auto-start in 3s…');
   setTimeout(()=>{if(mode==='tech'&&!$('modalRoot').innerHTML)openVisit(id);},3000);
 }
 function routeMapSVG(stops,doneIds){
@@ -923,7 +923,7 @@ function openNav(){
   if(!stops.length)stops=S.customers.filter(c=>c.status!=='inactive');
   const doneIds=S.visits.filter(v=>v.date===dISO()).map(v=>v.custId);
   stops=stops.filter(c=>!doneIds.includes(c.id));
-  if(!stops.length)return toast('Route complete — nothing to navigate');
+  if(!stops.length)return toast('Route complete. Nothing to navigate');
   const addr=c=>encodeURIComponent(((c.address?c.address+', ':'')+c.city+', TX'));
   const dest=addr(stops[stops.length-1]);
   const wps=stops.slice(0,-1).map(addr).join('|');
@@ -944,9 +944,9 @@ function vRoute(){
   <div class="stat dark" style="display:flex;align-items:center;gap:14px;margin-bottom:12px;padding:14px;">
     <div class="ring"><svg width="52" height="52"><circle cx="26" cy="26" r="22" stroke="rgba(255,255,255,.28)" stroke-width="5" fill="none"/><circle cx="26" cy="26" r="22" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${off}"/></svg><div class="pct">${pct}%</div></div>
     <div style="flex:1;"><i>${dateStr} · DFW 1 · Marcus S.</i><b style="font-size:16px;margin-top:1px;">${done} of ${stops.length} stops complete</b>
-    <i style="text-transform:none;letter-spacing:0;">${fallback?'No '+day+' route — showing all pools':'Route day: '+day}</i></div>
+    <i style="text-transform:none;letter-spacing:0;">${fallback?'No '+day+' route, showing all pools':'Route day: '+day}</i></div>
   </div>
-  ${al.length?`<div class="alertstrip" onclick="setTab('insights')">${IC.alert}<div style="flex:1;"><b>${al.length} pool${al.length>1?'s':''} need attention</b><div class="muted" style="color:#B4525A;">${al.map(c=>c.name.split(' ')[0]).join(', ')} — tap to review</div></div></div>`:''}
+  ${al.length?`<div class="alertstrip" onclick="setTab('insights')">${IC.alert}<div style="flex:1;"><b>${al.length} pool${al.length>1?'s':''} need attention</b><div class="muted" style="color:#B4525A;">${al.map(c=>c.name.split(' ')[0]).join(', ')}. Tap to review</div></div></div>`:''}
   <div class="rangeseg" style="margin-bottom:10px;">
     <button class="${routeMode==='list'?'on':''}" onclick="routeMode='list';render()">LIST</button>
     <button class="${routeMode==='map'?'on':''}" onclick="routeMode='map';render()">MAP</button>
@@ -963,9 +963,9 @@ function vRoute(){
 async function onMyWay(id){
   const c=S.customers.find(x=>x.id===id);
   c.enRoute=true;
-  pushUpdate(id,'sms','Marcus is on the way — ETA ~20 min');
+  pushUpdate(id,'sms','Marcus is on the way, ETA ~20 min');
   await save();render();
-  toast('SMS sent to '+esc(c.name.split(' ')[0])+' — on the way');
+  toast('SMS sent to '+esc(c.name.split(' ')[0])+'. On the way');
 }
 /* ---- TECH VIEW: own schedule only ---- */
 function vTechRoute(){
@@ -989,7 +989,7 @@ function vTechRoute(){
   <div class="stat dark" style="display:flex;align-items:center;gap:14px;margin-bottom:12px;padding:14px;">
     <div class="ring"><svg width="52" height="52"><circle cx="26" cy="26" r="22" stroke="rgba(255,255,255,.28)" stroke-width="5" fill="none"/><circle cx="26" cy="26" r="22" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${off}"/></svg><div class="pct">${pct}%</div></div>
     <div style="flex:1;"><i>${dateStr} · ${esc(t.name)}</i><b style="font-size:16px;margin-top:1px;">${done.length} of ${stops.length} stops done</b>
-    <i style="text-transform:none;letter-spacing:0;">${pending.length?'~'+m.drive+'m drive · '+m.mi+' mi left':'Route complete — great work'}</i></div>
+    <i style="text-transform:none;letter-spacing:0;">${pending.length?'~'+m.drive+'m drive · '+m.mi+' mi left':'Route complete, great work'}</i></div>
   </div>
   <div class="rangeseg" style="margin-bottom:10px;">
     <button class="${routeMode==='list'?'on':''}" onclick="routeMode='list';render()">LIST</button>
@@ -1008,7 +1008,7 @@ function vTechRoute(){
       <button class="tiny" onclick="event.stopPropagation();simulateArrival('${c.id}')" title="Demo geofence">⚡</button>
       <button class="tiny">Start</button>
     </div>`).join('')||(routeMode==='list'?'<div class="empty">'+IC.check+'<div>All stops complete</div></div>':'')}
-  ${done.length?`<div class="sechead donewrap"><h4>Done today — back on next week's route</h4><span>${done.length}</span></div>
+  ${done.length?`<div class="sechead donewrap"><h4>Done today: back on next week's route</h4><span>${done.length}</span></div>
   <div class="card pad0 donewrap">${done.map(c=>{const v=S.visits.filter(x=>x.custId===c.id&&x.date===dISO()).pop();
     return `<div class="rowline"><span class="dot ok"></span>
     <div style="flex:1;"><b style="font-size:12.5px;text-decoration:line-through;">${esc(c.name)}</b>
@@ -1016,9 +1016,9 @@ function vTechRoute(){
     <span class="chip ok">Done</span></div>`;}).join('')}</div>`:''}
   <div class="card" style="padding:9px 12px;display:flex;gap:9px;align-items:center;">
     <span style="font-size:15px;">📍</span>
-    <div class="muted" style="font-size:10.5px;flex:1;">Location automation ON — arriving at a stop texts the customer, and the visit auto-starts after ${S.autoStartMin} min on site. Finishing a stop auto-texts “On my way” to the next. (⚡ = demo arrival)</div>
+    <div class="muted" style="font-size:10.5px;flex:1;">Location automation ON, arriving at a stop texts the customer, and the visit auto-starts after ${S.autoStartMin} min on site. Finishing a stop auto-texts “On my way” to the next. (⚡ = demo arrival)</div>
   </div>
-  <div class="muted" style="font-size:10px;text-align:center;margin-top:10px;">Access level: ${LEVELS[curLevel()].split(' — ')[0]} · customer data confidential</div>`;
+  <div class="muted" style="font-size:10px;text-align:center;margin-top:10px;">Access level: ${LEVELS[curLevel()].split(' | ')[0]} · customer data confidential</div>`;
 }
 /* ---- Guided visit ---- */
 let vr={};
@@ -1046,7 +1046,7 @@ function drawVisit(){
     <button class="pri" style="margin-top:14px;" onclick="stepTo(2)">Continue to workflow</button>`;}
   if(step===2){
     body=`<span class="lbl">Step 2 · ${esc(c.serviceLevel)} workflow</span>
-    <div class="muted" style="margin-bottom:2px;">Required tasks can't be skipped or cheated — Complete stays locked.</div>
+    <div class="muted" style="margin-bottom:2px;">Required tasks can't be skipped or cheated. Complete stays locked.</div>
     <div class="tasklist">${WF.map(([t,req,cam],i)=>`<label><input type="checkbox" id="tk${i}" ${vr.tasks.includes(i)?'checked':''} onchange="syncTasks()">${t}<span class="flags">${cam?'<span class="f cam">PHOTO</span>':''}${req?'<span class="f">REQ</span>':''}</span></label>`).join('')}</div>
     <button class="pri" id="toStep3" style="margin-top:10px;" onclick="stepTo(3)">Continue to wrap-up</button>`;}
   if(step===3){
@@ -1082,14 +1082,14 @@ function drawVisit(){
 function liveDose(){
   const c=S.customers.find(x=>x.id===vr.custId);
   const fc=parseFloat($('rFC').value),ph=parseFloat($('rPH').value),ta=parseFloat($('rTA').value)||90,ch=parseFloat($('rCH').value)||300,t=parseFloat($('rT').value)||84,psi=parseFloat($('rPSI')?.value)||null;
-  if(isNaN(fc)||isNaN(ph)){$('doseLive').innerHTML='<div class="muted" style="margin-top:10px;">Enter FC and pH — dosing calculates automatically.</div>';vr.dose=null;return;}
+  if(isNaN(fc)||isNaN(ph)){$('doseLive').innerHTML='<div class="muted" style="margin-top:10px;">Enter FC and pH, dosing calculates automatically.</div>';vr.dose=null;return;}
   const cl=clOz(c.gallons,fc,3),ac=acOz(c.gallons,ph),L=lsi(ph,ta,ch,t),cost=cl*CL_COST+ac*AC_COST;
   vr.readings={fc,ph,ta,ch,cya:parseFloat($('rCYA').value)||null,temp:t,psi,salt:parseFloat($('rSalt')?.value)||null};
   vr.dose={cl,ac,lsi:L,cost};
-  const li=L<-0.3?'Corrosive — raise TA/pH':L>0.3?'Scale risk — lower pH':'Balanced';
+  const li=L<-0.3?'Corrosive: raise TA/pH':L>0.3?'Scale risk: lower pH':'Balanced';
   $('doseLive').innerHTML=`<div class="dosepanel">
     <div class="dr"><span class="dk">Liquid chlorine 12.5% → FC 3.0</span><span class="dv">${cl} oz</span></div>
-    <div class="dr"><span class="dk">Muriatic acid 31.45% → pH 7.5</span><span class="dv">${ac?ac+' oz':'—'}</span></div>
+    <div class="dr"><span class="dk">Muriatic acid 31.45% → pH 7.5</span><span class="dv">${ac?ac+' oz':'n/a'}</span></div>
     <div class="dr"><span class="dk">LSI ${L>=0?'+':''}${L} · ${li}</span><span class="dv" style="font-size:13px;">$${cost.toFixed(2)}</span></div>
   </div>`;
 }
@@ -1115,7 +1115,7 @@ async function completeVisit(){
   c.flag=vr.issue?('Issue: '+vr.issue):((vr.readings.fc<1||vr.readings.ph<7||vr.readings.ph>8)?'Chemistry out of range':null);
   if(c.flag)S.alertsAck=S.alertsAck.filter(x=>x!==c.id);
   c.enRoute=false;
-  pushUpdate(c.id,'report','Service completed — your before & after photos are ready');
+  pushUpdate(c.id,'report','Service completed. Your before & after photos are ready');
   await save();closeModal();render();
   toast('Stop complete · report sent to '+esc(c.name.split(' ')[0]));
 }
@@ -1129,7 +1129,7 @@ async function moveStage(id,dir){
   i=Math.max(0,Math.min(order.length-1,i));
   const next=order[i];
   if(next===q.stage)return;
-  if(next==='won'){q.stage='won';q.stageDate=dISO();await convertQuote(id);toast('Deal won — customer created 🎉');return;}
+  if(next==='won'){q.stage='won';q.stageDate=dISO();await convertQuote(id);toast('Deal won. Customer created 🎉');return;}
   if(next==='lost'){q.denied=true;}else{q.denied=false;q.converted=false;}
   q.stage=next;q.stageDate=dISO();
   await save();render();
@@ -1208,7 +1208,7 @@ function vCustomers(){
       <div class="muted" style="font-size:10.5px;">Quoted ${fmt$(x.full)}/mo · ${x.date}</div></div>
       <button class="tiny" onclick="convertQuote('${x.id}')">Convert</button>
       <button class="tiny" style="border-color:rgba(192,48,59,.35);background:var(--err-bg);color:var(--err);" onclick="denyQuote('${x.id}')">Deny</button></div>`).join('')
-      ||'<div class="empty">No open leads — quotes you save land here</div>';
+      ||'<div class="empty">No open leads, quotes you save land here</div>';
   }else{
     let list=S.customers.filter(c=>{
       if(custFilter==='routed')return c.status==='active'&&c.day;
@@ -1268,7 +1268,7 @@ async function importCSV(inp){
     added++;
   }
   inp.value='';
-  await save();render();toast(added+' customers imported — assign route days');
+  await save();render();toast(added+' customers imported, assign route days');
 }
 function openAddField(){
   $('modalRoot').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="sheet"><div class="grab"></div>
@@ -1310,7 +1310,7 @@ function vCustDetail(){
       ?`<div class="kv"><span class="k">${esc(f.name)}</span>
         <button class="tiny" style="${c.custom[f.id]?'border-color:var(--teal);background:rgba(31,169,190,.08);color:var(--teal);':''}" onclick="const cc=S.customers.find(x=>x.id==='${c.id}');cc.custom['${f.id}']=!cc.custom['${f.id}'];save();render()">${c.custom[f.id]?'Yes ✓':'No'}</button></div>`
       :`<span class="lbl">${esc(f.name)}</span><input value="${esc(c.custom[f.id]||'')}" onchange="S.customers.find(x=>x.id==='${c.id}').custom['${f.id}']=this.value;save();toast('Saved')">`).join('')}
-    <span class="lbl">Internal notes <span style="color:var(--warn);font-size:9px;letter-spacing:.05em;">· OFFICE & TECHS ONLY — never shown to customer</span></span>
+    <span class="lbl">Internal notes <span style="color:var(--warn);font-size:9px;letter-spacing:.05em;">· OFFICE & TECHS ONLY: never shown to customer</span></span>
     <textarea rows="2" placeholder="Access details, preferences, history…" onchange="S.customers.find(x=>x.id==='${c.id}').internalNotes=this.value;save();toast('Internal note saved')">${esc(c.internalNotes)}</textarea>
     <div class="kv"><span class="k">Pool</span><span class="v">${esc(c.poolType)} · ${c.gallons.toLocaleString()} gal</span></div>
     <div class="kv"><span class="k">Equipment</span><span class="v" style="text-align:right;font-size:12px;">${esc(c.equip.filter)} filter · ${esc(c.equip.pump)}<br>${esc(c.equip.sanitizer)}${c.equip.extra?' · '+esc(c.equip.extra):''}</span></div>
@@ -1330,7 +1330,7 @@ function vCustDetail(){
   </div>`).join(''):'<div class="empty">No visits logged yet</div>'}
   ${(()=>{const ph=vs.filter(v=>v.photoBefore||v.photoAfter);
     return ph.length?`<div class="sechead"><h4>Property photo timeline</h4><span>${ph.reduce((a,v)=>a+(v.photoBefore?1:0)+(v.photoAfter?1:0),0)} photos</span></div>
-    <div class="card"><div class="muted" style="font-size:10.5px;margin-bottom:8px;">Time-stamped record of this property — CompanyCam-style proof for disputes, insurance & reviews.</div>
+    <div class="card"><div class="muted" style="font-size:10.5px;margin-bottom:8px;">Time-stamped record of this property, CompanyCam-style proof for disputes, insurance & reviews.</div>
     ${ph.map(v=>`<div style="margin-bottom:10px;"><div class="mono muted" style="font-size:10px;margin-bottom:2px;">${v.date}</div>${photoPair(v,false)}</div>`).join('')}</div>`:''})()}`;
 }
 
@@ -1460,22 +1460,22 @@ function vJobs(){
   const due=filterDue();
   const open=S.jobs.filter(j=>j.status!=='done');
   const doneJ=S.jobs.filter(j=>j.status==='done').slice(-5).reverse();
-  return `<h2>Jobs</h2><div class="sub">One-time work orders — kept separate from route stops.</div>
+  return `<h2>Jobs</h2><div class="sub">One-time work orders. Kept separate from route stops.</div>
   ${due.length?`<div class="sechead"><h4>Filter cleans due · auto-detected (90d)</h4></div>
   <div class="card pad0">${due.map(c=>`<div class="rowline">
     <div style="flex:1;"><div style="font-weight:700;font-size:13.5px;">${esc(c.name)}</div><div class="muted">${daysSince(c.filterDate)}d since last · ${esc(c.equip.filter)} filter</div></div>
     <button class="tiny" onclick="schedJob('${c.id}','Filter clean',${FILTER_PRICE})">Schedule ${fmt$(FILTER_PRICE)}</button></div>`).join('')}</div>`:''}
   <div class="sechead"><h4>Open jobs</h4><span>${open.length}</span></div>
   ${open.length?`<div class="card pad0">${open.map(j=>{const c=S.customers.find(x=>x.id===j.custId);
-    return `<div class="rowline"><div style="flex:1;"><div style="font-weight:700;font-size:13.5px;">${esc(j.type)} — ${esc(c?c.name:'')}</div><div class="muted">${fmt$(j.price)} · created ${j.date}</div></div>
+    return `<div class="rowline"><div style="flex:1;"><div style="font-weight:700;font-size:13.5px;">${esc(j.type)} | ${esc(c?c.name:'')}</div><div class="muted">${fmt$(j.price)} · created ${j.date}</div></div>
     <button class="tiny" onclick="doneJob('${j.id}')">Complete + invoice</button></div>`;}).join('')}</div>`
   :'<div class="empty">'+IC.brief+'<div>No open jobs</div></div>'}
   <button class="sec" onclick="openNewJob()">Create one-time job</button>
   ${doneJ.length?`<div class="sechead"><h4>Recently completed</h4></div><div class="card pad0">${doneJ.map(j=>{const c=S.customers.find(x=>x.id===j.custId);
-    return `<div class="rowline"><div style="flex:1;font-weight:600;font-size:13px;">${esc(j.type)} — ${esc(c?c.name:'')}</div><span class="chip ok">Invoiced ${fmt$(j.price)}</span></div>`;}).join('')}</div>`:''}`;
+    return `<div class="rowline"><div style="flex:1;font-weight:600;font-size:13px;">${esc(j.type)} | ${esc(c?c.name:'')}</div><span class="chip ok">Invoiced ${fmt$(j.price)}</span></div>`;}).join('')}</div>`:''}`;
 }
 async function schedJob(custId,type,price){S.jobs.push({id:uid(),custId,type,price,date:dISO(),status:'open'});await save();render();toast('Job scheduled');}
-async function doneJob(id){const j=S.jobs.find(x=>x.id===id);j.status='done';pushUpdate(j.custId,'job',j.type+' completed — invoice sent');
+async function doneJob(id){const j=S.jobs.find(x=>x.id===id);j.status='done';pushUpdate(j.custId,'job',j.type+' completed, invoice sent');
   S.payments.push({id:uid(),date:dISO(),custId:j.custId,amount:j.price,type:'job'});
   if(j.type==='Filter clean'){const c=S.customers.find(x=>x.id===j.custId);if(c)c.filterDate=dISO();}
   await save();render();toast('Job completed · invoice created');}
@@ -1494,7 +1494,7 @@ async function createJob(){S.jobs.push({id:uid(),custId:$('jCust').value,type:$(
 /* ============ COMPANY · QUOTES ============ */
 let qPhoto=null,qSpa='none';
 function vQuotes(){
-  return `<h2>Instant quote</h2><div class="sub">Photo-verified quotes in 30 seconds — same engine embeds on savvyswim.com.</div>
+  return `<h2>Instant quote</h2><div class="sub">Photo-verified quotes in 30 seconds, same engine embeds on savvyswim.com.</div>
   <div class="card">
     <div class="g2">
       <div><span class="lbl">Customer name</span><input id="qName" placeholder="Full name" oninput="runQuote()"></div>
@@ -1578,7 +1578,7 @@ function runQuote(){
     ${spaAdd?`<div class="dr"><span class="dk">Includes ${qSpa} spa care</span><span class="dv" style="font-size:13px;">+${fmt$(spaAdd)}</span></div>`:''}
     <div class="dr"><span class="dk">Chem-only option</span><span class="dv" style="color:#fff;">${fmt$(chem)}/mo</span></div>
     ${one?`<div class="dr"><span class="dk">${one[0]} (one-time, first)</span><span class="dv" style="font-size:13px;">${one[1]}</span></div>`:''}
-    <div class="dr"><span class="dk">${qPhoto?'📷 Photo attached — verified quote':'No photo — estimate only'}</span><span></span></div>
+    <div class="dr"><span class="dk">${qPhoto?'📷 Photo attached: verified quote':'No photo: estimate only'}</span><span></span></div>
   </div>
   <button class="pri" onclick="saveQuote()">Save quote</button>`;
 }
@@ -1646,20 +1646,20 @@ function vInsights(){
     <div class="muted">${esc(x.flag)}</div>
     <div class="muted" style="font-size:10px;">${esc(x.poolType)} · ${x.gallons.toLocaleString()} gal · serviced by MS · ${esc(x.city)}</div></div>
     <button class="tiny" onclick="ackAlert('${x.id}')">Resolve</button></div>`;}).join('')}</div>`
-  :'<div class="card muted">No open alerts — all pools in range.</div>'}
-  <div class="sechead"><h4>Tech scorecard — Marcus S.</h4></div>
+  :'<div class="card muted">No open alerts. All pools in range.</div>'}
+  <div class="sechead"><h4>Tech scorecard: Marcus S.</h4></div>
   <div class="card">
     <div class="kv"><span class="k">Stops completed</span><span class="v mono">${S.visits.length}</span></div>
     <div class="kv"><span class="k">Avg time on site</span><span class="v mono">${avgT}m</span></div>
     <div class="kv"><span class="k">Customer feedback</span><span class="v">${fbU} positive · ${fbD} flagged</span></div>
   </div>
-  <div class="sechead"><h4>Billing — ${new Date().toLocaleString('en-US',{month:'long'})}</h4><span>${paid.length}/${S.customers.length} paid</span></div>
+  <div class="sechead"><h4>Billing: ${new Date().toLocaleString('en-US',{month:'long'})}</h4><span>${paid.length}/${S.customers.length} paid</span></div>
   <div class="card pad0">${S.customers.map(x=>{const isPaid=paid.includes(x.id);
     return `<div class="rowline"><div style="flex:1;"><div style="font-weight:600;font-size:13px;">${esc(x.name)}</div><div class="muted">${fmt$(x.rate)}</div></div>
     ${isPaid?'<span class="chip ok">Paid</span>':`<button class="tiny" onclick="markPaid('${x.id}')">Mark paid</button>`}</div>`;}).join('')}</div>
   <div class="sechead"><h4>Freeze watch broadcast</h4></div>
   <div class="card">
-    <textarea id="fz" rows="3">SAVVY SWIM FREEZE ALERT — Hard freeze tonight. Keep your pump RUNNING all night; moving water doesn't freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions — we've got you covered.</textarea>
+    <textarea id="fz" rows="3">SAVVY SWIM FREEZE ALERT: Hard freeze tonight. Keep your pump RUNNING all night; moving water doesn't freeze. If power goes out, open the drain plugs on pump & filter. Reply with questions. We've got you covered.</textarea>
     <button class="pri" onclick="sendFreeze()">Send to all customers</button>
   </div>
   <button class="sec" onclick="resetDemo()">Reset demo data</button>`;
@@ -1758,12 +1758,12 @@ function vHome(){
   ${c.feedback==='up'?`<div class="card" style="background:linear-gradient(150deg,#8E1F2C,#6E1620);border-color:#6E1620;color:#fff;text-align:center;">
     <div style="font-size:17px;letter-spacing:2px;">★★★★★</div>
     <b style="display:block;font-size:14.5px;margin-top:4px;">Love your Savvy Swim service?</b>
-    <div style="font-size:11.5px;color:#F6C6C9;margin-top:3px;">A 30-second Google review is the biggest thank-you there is — and your before/after photos above are saved and ready to attach.</div>
+    <div style="font-size:11.5px;color:#F6C6C9;margin-top:3px;">A 30-second Google review is the biggest thank-you there is. And your before/after photos above are saved and ready to attach.</div>
     <button class="pri" style="margin-top:11px;background:#fff;color:#8E1F2C;" onclick="window.open(REVIEW_URL,'_blank')">Leave a Google review ★</button>
   </div>`:''}`:'<div class="empty">'+IC.drop+'<div>Your first service report will appear here</div></div>'}
-  <button class="pri" onclick="toast('Request sent — we’ll text you today')">Request extra service</button>`;
+  <button class="pri" onclick="toast('Request sent, we’ll text you today')">Request extra service</button>`;
 }
-async function feedback(v){const c=pc();c.feedback=v;await save();render();toast(v==='up'?'Thanks for the feedback':'We’ll make it right — expect a text');}
+async function feedback(v){const c=pc();c.feedback=v;await save();render();toast(v==='up'?'Thanks for the feedback':'We’ll make it right, expect a text');}
 function vHistory(){
   const c=pc();
   const items=[
@@ -1782,7 +1782,7 @@ function vHistory(){
       ${v.notes?`<div class="muted" style="margin-top:3px;">"${esc(v.notes)}"</div>`:''}
       ${photoPair(v,true)}</div>`;
   }).join('');
-  return `${picker()}<h2>Service record</h2><div class="sub">Every visit, every reading, every job — your pool's full history.</div>
+  return `${picker()}<h2>Service record</h2><div class="sub">Every visit, every reading, every job. Your pool's full history.</div>
   ${list||'<div class="empty">No services yet</div>'}
   <div class="sechead"><h4>Water trends</h4></div>
   <div class="chartgrid">
@@ -1809,7 +1809,7 @@ function vCBilling(){
     <div class="kv"><span class="k">Billed</span><span class="v">${esc(c.sched.billMethod)} · day ${c.sched.invoiceDay}</span></div>
     <div class="kv"><span class="k">${new Date().toLocaleString('en-US',{month:'long'})}</span><span class="chip ${paid?'ok':'warn'}">${paid?'Paid':'Due'}</span></div>
   </div>
-  <button class="pri" onclick="toast('Autopay enabled — Stripe live in v2')">Enable autopay</button>`;
+  <button class="pri" onclick="toast('Autopay enabled. Stripe live in v2')">Enable autopay</button>`;
 }
 function vRefer(){
   const c=pc();

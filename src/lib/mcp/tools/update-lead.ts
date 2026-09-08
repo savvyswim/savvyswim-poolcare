@@ -33,7 +33,7 @@ export default defineTool({
   name: "update_lead",
   title: "Update a lead",
   description:
-    "Fill in or correct a Savvy Swim website lead — contact details (name, phone, email, address, ZIP), service details (lead type, preferred date, contact time, pool details, notes) and pipeline fields (status, source) — then push the refreshed lead to the CRM. Only the fields you pass are changed.",
+    "Fill in or correct a Savvy Swim website lead, contact details (name, phone, email, address, ZIP), service details (lead type, preferred date, contact time, pool details, notes) and pipeline fields (status, source). Then push the refreshed lead to the CRM. Only the fields you pass are changed.",
   inputSchema: {
     id: z.string().uuid().describe("Lead id (uuid)."),
     full_name: z.string().optional().describe("Contact name."),
@@ -68,7 +68,7 @@ export default defineTool({
     const patch = patchFrom(input as Record<string, unknown>, FIELDS);
     if (Object.keys(patch).length === 0) {
       return {
-        content: [{ type: "text", text: "Nothing to update — pass at least one field." }],
+        content: [{ type: "text", text: "Nothing to update, pass at least one field." }],
         isError: true,
       };
     }
@@ -86,7 +86,7 @@ export default defineTool({
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
       return {
-        content: [{ type: "text", text: `Lead ${id} was not updated — not found or not permitted.` }],
+        content: [{ type: "text", text: `Lead ${id} was not updated. Not found or not permitted.` }],
         isError: true,
       };
     }

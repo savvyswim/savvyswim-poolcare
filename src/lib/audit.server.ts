@@ -14,7 +14,7 @@ export type AuditEntry = {
 
 /**
  * Append-only security audit trail for server routes (webhooks, public APIs).
- * Never throws — auditing must not break the operation it records.
+ * Never throws, auditing must not break the operation it records.
  */
 export async function recordAudit(entry: AuditEntry): Promise<void> {
   try {

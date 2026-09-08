@@ -9,7 +9,7 @@ const FALLBACK_OFFICE = "marcus@santanariveragroup.com";
 /**
  * High-intent alert: fires when staff move an inspection request to
  * "scheduled" or "completed". Only the id + the new status come from the
- * client — every detail in the message is read back from the database.
+ * client. Every detail in the message is read back from the database.
  */
 export const notifyInspectionStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -38,7 +38,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!req) throw new Error("Request not found");
 
-    const slot = req.preferred_contact_time ?? "—";
+    const slot = req.preferred_contact_time ?? ", ";
     const headline =
       data.status === "scheduled"
         ? `Inspection SCHEDULED: ${req.full_name}`
@@ -176,7 +176,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
       {
         eventType: "status_change",
         statusTo: data.status,
-        detail: `Marked ${data.status} — ${req.reference_number}`,
+        detail: `Marked ${data.status}, ${req.reference_number}`,
       },
       ...Object.entries(result.email).map(([to, outcome]) => ({
         eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
