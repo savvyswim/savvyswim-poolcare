@@ -1,20 +1,11 @@
-import { useState } from "react";
 import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { Link } from "@/lib/router-compat";
 import {
   Instagram,
   Waves,
   Phone,
-  Droplets,
-  Wrench,
-  Sparkles,
-  Cpu,
-  Sun,
-  ShieldCheck,
-  CheckCircle2,
   ArrowRight,
   MessageSquare,
-  ChevronDown,
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
@@ -52,12 +43,6 @@ const MEMBERSHIP_FAQ = [
 ];
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
-import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
-import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
-import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
-import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
-import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
-import { IMG_5494_JPG as photoOliveRings } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
 const PHONE_DISPLAY = "817-663-POOL";
@@ -90,7 +75,6 @@ const PROCESS = [
 ];
 
 const Services = () => {
-  const [openCard, setOpenCard] = useState<string | null>(null);
 
   const openBooking = (service?: string) =>
     goToLead("services", service ? { service } : {});
