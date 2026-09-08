@@ -4474,6 +4474,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_site_reviews: {
+        Row: {
+          approved_at: string | null
+          author_city: string | null
+          author_name: string
+          body: string
+          contact_email: string | null
+          created_at: string
+          featured: boolean
+          id: string
+          page_path: string | null
+          rating: number
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          author_city?: string | null
+          author_name?: string
+          body?: string
+          contact_email?: string | null
+          created_at?: string
+          featured?: boolean
+          id?: string
+          page_path?: string | null
+          rating?: number
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          author_city?: string | null
+          author_name?: string
+          body?: string
+          contact_email?: string | null
+          created_at?: string
+          featured?: boolean
+          id?: string
+          page_path?: string | null
+          rating?: number
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_sms_consent: {
         Row: {
           consent_source: string | null
