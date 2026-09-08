@@ -103,7 +103,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
       aria-labelledby={titleId}
       aria-describedby={descId}
       onKeyDown={onKeyDown}
-      className="fixed inset-x-3 bottom-3 z-[60] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[360px] animate-slide-in-right"
+      className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-[55] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[360px] animate-slide-in-right"
     >
       <div className="relative border border-primary/20 bg-background shadow-card">
         <button
@@ -118,7 +118,7 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
         <div className="flex items-center gap-2 border-b border-primary/10 px-4 py-2.5">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-blip" />
           <span className="font-tech text-[10px] uppercase tracking-[0.22em] text-primary/50">
-            Summer offer, new customers
+            New customer offer
           </span>
         </div>
 
