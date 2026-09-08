@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   LEAD_STATUSES,
   getLeadSyncStatus,
+  resendLeadEmails,
   retryFailedLeadSyncs,
   retryLeadSync,
   setLeadStatus,
