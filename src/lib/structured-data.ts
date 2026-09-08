@@ -1,5 +1,6 @@
 import { SERVICE_AREAS } from "@/lib/serviceAreas";
-import { INSTAGRAM_URL } from "@/lib/contact-info";
+import { GOOGLE_PROFILE_URL, INSTAGRAM_URL } from "@/lib/contact-info";
+import { openingHoursSpecification } from "@/lib/business-hours";
 
 export const SITE_URL = "https://savvyswimservices.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
@@ -28,7 +29,7 @@ export function localBusinessSchema(image?: string) {
     alternateName: "Savvy Swim Pool Service",
     url: `${SITE_URL}/`,
     logo: LOGO,
-    sameAs: [INSTAGRAM_URL],
+    sameAs: [INSTAGRAM_URL, ...(GOOGLE_PROFILE_URL ? [GOOGLE_PROFILE_URL] : [])],
     ...(image ? { image } : {}),
     description:
       "Weekly pool cleaning, water chemistry, and equipment repair across the Dallas–Fort Worth metroplex. Licensed techs and a photo report every visit.",
@@ -40,26 +41,7 @@ export function localBusinessSchema(image?: string) {
     // Service-area business: we come to the customer, so no public street
     // address is published. AreaServed below is the authoritative coverage.
     areaServed,
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "18:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Saturday",
-        opens: "09:00",
-        closes: "14:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Sunday",
-        opens: "00:00",
-        closes: "00:00",
-      },
-    ],
+    openingHoursSpecification,
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Pool services",

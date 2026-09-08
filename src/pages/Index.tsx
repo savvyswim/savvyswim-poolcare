@@ -4,6 +4,7 @@ import { useLoaderData } from "@tanstack/react-router";
 import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
 import ServiceAreaMap from "@/components/ServiceAreaMap";
+import BusinessInfoCard from "@/components/BusinessInfoCard";
 import { Link } from "@/lib/router-compat";
 import {
   EMAIL,
@@ -391,6 +392,10 @@ const Index = () => {
 
             <div className="mt-12">
               <ServiceAreaMap />
+            </div>
+
+            <div className="mt-8">
+              <BusinessInfoCard />
             </div>
           </div>
         </section>
