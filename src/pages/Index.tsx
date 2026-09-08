@@ -132,10 +132,10 @@ const Index = () => {
                 type="button"
                 onClick={() => goToLead("home_hero")}
                 data-savvy-cta="request_quote"
-                aria-label="Book a free inspection — opens the Savvy Swim booking form"
+                aria-label="Book a free consultation — opens the Savvy Swim booking form"
                 className="btn-quote font-tech inline-flex min-h-12 items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free inspection
+                <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free consultation
               </button>
               <a
                 href={PHONE_HREF}
@@ -263,7 +263,7 @@ const Index = () => {
                 data-savvy-cta="request_quote"
                 className="btn-quote inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-7 py-3.5 text-sm font-bold uppercase tracking-wide"
               >
-                <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free inspection
+                <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free consultation
               </button>
               <a
                 href={PHONE_HREF}

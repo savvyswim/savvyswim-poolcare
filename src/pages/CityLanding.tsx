@@ -331,7 +331,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   data-savvy-cta="request_quote"
                   className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
                 >
-                  Book free inspection
+                  Book a free consultation
                 </button>
                 <button
                   type="button"

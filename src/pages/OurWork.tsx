@@ -95,7 +95,7 @@ const OurWork = () => (
           data-savvy-cta="request_quote"
           className="btn-quote mt-12 inline-flex items-center rounded-md px-7 py-4 text-sm font-bold uppercase tracking-wide"
         >
-          Book a free inspection
+          Book a free consultation
         </button>
       </section>
     </main>
