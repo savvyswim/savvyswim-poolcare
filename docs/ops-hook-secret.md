@@ -1,4 +1,4 @@
-# Ops hook secret — setup guide
+# Ops hook secret, setup guide
 
 The internal automation endpoints under `/api/public/hooks/*` trigger real email
 and SMS, so they refuse anonymous callers. Each request must prove it holds a
@@ -16,7 +16,7 @@ Protected endpoints:
 
 Add a backend secret named `OPS_HOOK_SECRET` with a long random value (32+
 chars). Ask Lovable to "add a secret called OPS_HOOK_SECRET" and paste the value
-into the secure prompt — never commit it to the repo or a `.env` file.
+into the secure prompt, never commit it to the repo or a `.env` file.
 
 Generate one locally if you need a value:
 
@@ -85,8 +85,7 @@ SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 20;
 ## 4. Rotating the secret
 
 1. Set the new value on `OPS_HOOK_SECRET`.
-2. Re-schedule every cron job with the new `?k=` value in the same sitting —
-   jobs still carrying the old value start returning `401`.
+2. Re-schedule every cron job with the new `?k=` value in the same sitting. Jobs still carrying the old value start returning `401`.
 3. Confirm with `cron.job_run_details` that the next runs come back `200`.
 
 ## Webhook failure & spike alerts
@@ -94,10 +93,10 @@ SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 20;
 `/api/public/hooks/webhook-watch` runs every 5 minutes (pg_cron job
 `savvyswim-webhook-watch`) and pages on-call when webhook traffic goes wrong:
 
-- **Failures** — 401 / 400-class / 5xx attempts in the last 15 minutes, alerting
+- **Failures**: 401 / 400-class / 5xx attempts in the last 15 minutes, alerting
   once at least 3 failures (`?minFailures=`) or a 25% failure rate
   (`?threshold=`) is reached.
-- **Spikes** — attempts in the window at 4x (`?spike=`) the 6-hour baseline and
+- **Spikes**: attempts in the window at 4x (`?spike=`) the 6-hour baseline and
   above 20 calls (`?minSpike=`), which catches retry storms and hammering of the
   public hook endpoints.
 
