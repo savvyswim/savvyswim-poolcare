@@ -19,8 +19,37 @@ import {
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
-import { goToLead } from "@/lib/site-analytics";
+import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import ServiceAreaMap from "@/components/ServiceAreaMap";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+const MEMBERSHIP_FAQ = [
+  {
+    q: "What is the Savvy Swim Club?",
+    a: "It's our $19.99/month membership for pool owners in DFW. Members get 25% off filter cleans, 10% off services and 10% off parts, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
+  },
+  {
+    q: "How does billing work?",
+    a: "Membership is $19.99 per month, charged automatically to the card on file on the same day each month. The first charge happens the day you join, and your perks are active immediately. Service visits, repairs, and parts are invoiced separately — the membership fee never covers the work itself.",
+  },
+  {
+    q: "How long is the commitment?",
+    a: "The Swim Club runs on a 12-month agreement billed monthly. After the first 12 months it continues month to month, so you can stay on at the same rate or stop any time with no further obligation.",
+  },
+  {
+    q: "How do I cancel?",
+    a: "Text or email us and we'll cancel your renewal — no phone maze, no cancellation fee after the initial 12-month term. During the term, cancellation ends your monthly perks and any remaining months of the agreement are due; if your situation changes, like selling the home, let us know and we'll work with you.",
+  },
+  {
+    q: "What isn't included?",
+    a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
+  },
+];
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
@@ -190,7 +219,7 @@ const Services = () => {
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-hidden whitespace-nowrap font-tech text-primary/70 md:flex lg:gap-7">
             <Link to="/" className="shrink-0 hover:text-accent transition">Home</Link>
             <Link to="/services" className="shrink-0 text-accent">Services</Link>
-            <Link to="/" hash="membership" className="shrink-0 hover:text-accent transition">Swim Club</Link>
+            <Link to="/services" hash="membership" className="shrink-0 hover:text-accent transition">Swim Club</Link>
             <Link to="/" hash="contact" className="shrink-0 hover:text-accent transition">Contact</Link>
           </nav>
           <CallButton location="header" />
@@ -492,9 +521,86 @@ const Services = () => {
           </div>
         </section>
 
+        {/* SAVVY SWIM CLUB */}
+        <section id="membership" className="container-tight py-16">
+          <div className="overflow-hidden rounded-sm border border-primary/10 shadow-3d">
+            <div className="flex flex-col lg:flex-row">
+              <div className="flex w-full flex-col bg-card lg:w-1/2">
+                <div className="stripes-navy h-6 w-full" />
+                <div className="flex flex-1 flex-col p-8 sm:p-10">
+                  <span className="font-badge block text-lg leading-none tracking-[0.2em] text-red-brand">
+                    Exclusivity
+                  </span>
+                  <h2 className="font-display mt-1 text-4xl leading-none text-navy-brand sm:text-5xl">
+                    Swim Club
+                  </h2>
+
+                  <div className="mb-8 mt-6">
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-display text-5xl text-navy-brand sm:text-6xl">$19.99</span>
+                      <span className="font-editorial text-xl italic text-primary/60">per month</span>
+                    </div>
+                    <p className="mt-2 text-sm font-semibold uppercase tracking-tight text-primary/80">
+                      Member perks on every service call · 12-month agreement, billed monthly
+                    </p>
+                  </div>
+
+                  <ul className="mb-10 space-y-4 text-sm text-primary">
+                    {[
+                      "First service visit free (new customers)",
+                      "25% off filter cleans",
+                      "10% off services · 10% off parts",
+                      "Priority scheduling",
+                      "24/7 text support",
+                    ].map((perk) => (
+                      <li key={perk} className="flex items-center gap-3">
+                        <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-lifeguard" />
+                        <span>{perk}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    type="button"
+                    onClick={() => goToSwimClub("services_membership")}
+                    className="font-display mt-auto w-full bg-lifeguard py-5 text-xl uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-navy"
+                  >
+                    Join the Swim Club
+                  </button>
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    12-month agreement · Billed monthly at $19.99
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex w-full flex-col bg-navy-brand p-8 sm:p-10 lg:w-1/2">
+                <h3 className="font-editorial text-3xl normal-case italic text-canvas">
+                  Membership details
+                </h3>
+                <p className="mt-2 text-xs text-canvas/60">
+                  Everything included with your $19.99/month Savvy Swim Club.
+                </p>
+                <Accordion type="single" collapsible className="mt-6">
+                  {MEMBERSHIP_FAQ.map((item) => (
+                    <AccordionItem key={item.q} value={item.q} className="border-b border-canvas/20">
+                      <AccordionTrigger className="text-left text-sm font-semibold uppercase tracking-wide text-canvas hover:no-underline [&>svg]:text-lifeguard">
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-xs leading-relaxed text-canvas/70">
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="container-tight py-16">
           <ServiceAreaMap />
         </section>
+
 
 
       </main>
