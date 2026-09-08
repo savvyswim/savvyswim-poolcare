@@ -35,12 +35,6 @@ const HERO_PHOTOS: { src: string; alt: string }[] = [
 ];
 
 /** Short promises listed under the wordmark. */
-const PROMISES = [
-  "On duty: 24/7",
-  "No contracts, cancel any time",
-  "Free consultation and water test",
-  "Licensed, insured, and background-checked techs",
-];
 
 
 /** The four things we sell. Each card opens the page that breaks down the cost. */
