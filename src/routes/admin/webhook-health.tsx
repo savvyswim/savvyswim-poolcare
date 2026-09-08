@@ -36,7 +36,7 @@ const CHANNEL_LABEL: Record<string, string> = {
 };
 
 function when(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   return new Date(iso).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
@@ -115,7 +115,7 @@ function HealthCard({ h }: { h: ChannelHealth }) {
         {CHANNEL_LABEL[h.channel] ?? h.channel}
       </p>
       <p className="mt-2 font-display text-4xl">
-        {h.successRate24h === null ? "—" : `${h.successRate24h}%`}
+        {h.successRate24h === null ? ", " : `${h.successRate24h}%`}
       </p>
       <p className="text-xs text-foreground/60">success · last 24h ({h.total24h} events)</p>
       <dl className="mt-4 space-y-1 text-xs text-foreground/70">
@@ -192,7 +192,7 @@ function WebhookHealthPage() {
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#8E1F2C]">Savvy Swim · Admin</p>
           <h1 className="font-display text-4xl uppercase tracking-[0.04em]">Webhook health</h1>
           <p className="mt-1 text-sm text-foreground/60">
-            Lead handoffs, appointment status pushes and payment receipts — last 7 days.
+            Lead handoffs, appointment status pushes and payment receipts, last 7 days.
           </p>
         </div>
         <button
@@ -293,14 +293,14 @@ function WebhookHealthPage() {
                 {rows.length === 0 ? (
                   <tr>
                     <td className="p-6 text-foreground/50" colSpan={7}>
-                      Nothing here — no {tab} in the last 7 days.
+                      Nothing here. no {tab} in the last 7 days.
                     </td>
                   </tr>
                 ) : (
                   rows.map((r) => (
                     <tr key={r.id} className="border-t border-foreground/10 align-top">
                       <td className="p-3 whitespace-nowrap">{CHANNEL_LABEL[r.channel] ?? r.channel}</td>
-                      <td className="p-3">{r.reference ?? r.event_key ?? "—"}</td>
+                      <td className="p-3">{r.reference ?? r.event_key ?? ", "}</td>
                       <td className="p-3">
                         <OutcomePill outcome={r.outcome} />
                       </td>
@@ -314,7 +314,7 @@ function WebhookHealthPage() {
                       </td>
                       <td className="p-3 whitespace-nowrap">{when(r.last_attempt_at)}</td>
                       <td className="p-3 text-xs text-foreground/70">
-                        {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : "—")}
+                        {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : ", ")}
                       </td>
                       <td className="p-3 text-right">
                         <button

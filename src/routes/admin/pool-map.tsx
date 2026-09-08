@@ -104,7 +104,7 @@ function PoolMapPage() {
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#8E1F2C]">Savvy Swim · Admin</p>
           <h1 className="font-display text-4xl uppercase tracking-[0.04em]">Pool map</h1>
           <p className="mt-1 text-sm text-foreground/60">
-            Active pools on route. Staff only — never shown on the public site.
+            Active pools on route. Staff only. never shown on the public site.
           </p>
         </div>
         <Link
@@ -132,7 +132,7 @@ function PoolMapPage() {
             />
           ) : (
             <p className="mt-8 border border-foreground/15 p-5 text-sm text-foreground/55">
-              Map image unavailable right now — the pool list below is still current.
+              Map image unavailable right now. the pool list below is still current.
             </p>
           )}
 
@@ -158,8 +158,8 @@ function PoolMapPage() {
                     <tr key={p.id} className="border-b border-foreground/10">
                       <td className="px-4 py-3">{p.label}</td>
                       <td className="px-4 py-3 text-foreground/70">{p.address}</td>
-                      <td className="px-4 py-3">{p.city ?? "—"}</td>
-                      <td className="px-4 py-3 text-foreground/70">{p.routeDay ?? "—"}</td>
+                      <td className="px-4 py-3">{p.city ?? ", "}</td>
+                      <td className="px-4 py-3 text-foreground/70">{p.routeDay ?? ", "}</td>
                     </tr>
                   ))
                 )}

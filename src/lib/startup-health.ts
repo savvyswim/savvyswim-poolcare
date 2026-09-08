@@ -18,7 +18,7 @@ export type HealthCheck = {
 export type StartupHealth = {
   status: "ok" | "degraded" | "failed";
   checkedAt: string;
-  /** Unique per server isolate — lets you tell one boot's logs from another. */
+  /** Unique per server isolate, lets you tell one boot's logs from another. */
   bootId: string;
   checks: HealthCheck[];
 };
@@ -94,7 +94,7 @@ export function verifyStartupHealth(candidates: {
     {
       name: "attachSupabaseAuth",
       required: true,
-      // Middleware objects are not functions — just require a defined value.
+      // Middleware objects are not functions. just require a defined value.
       probe: () =>
         candidates.attachSupabaseAuth != null &&
         ["function", "object"].includes(typeof candidates.attachSupabaseAuth),

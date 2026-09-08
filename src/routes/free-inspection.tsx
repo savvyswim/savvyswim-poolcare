@@ -1,5 +1,5 @@
 /**
- * /free-inspection — legacy lead form URL. Lead capture now lives on the home
+ * /free-inspection, legacy lead form URL. Lead capture now lives on the home
  * page, so this permanently redirects there with the quote form auto-opened.
  */
 import { createFileRoute, redirect } from "@tanstack/react-router";

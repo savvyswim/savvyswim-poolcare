@@ -5,7 +5,7 @@ import { z } from "zod";
  * Discount / referral code validation for the free inspection form.
  *
  * The lookup function is service-role only, so validation always runs on the
- * server. An unknown code never blocks a lead — it is flagged so the office
+ * server. An unknown code never blocks a lead. it is flagged so the office
  * can follow up.
  */
 

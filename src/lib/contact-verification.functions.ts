@@ -48,7 +48,7 @@ async function sendSms(to: string, body: string) {
 
   const sendRes = await fetch(`${GATEWAY_URL}/Messages.json`, {
     method: "POST",
-    headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+    headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ To: to, From: from, Body: body }),
   });
   if (!sendRes.ok) {
@@ -100,7 +100,7 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
 }
 
 /**
- * Step 1 — customer asks to change the email or phone on file. We send a
+ * Step 1. customer asks to change the email or phone on file. We send a
  * one-time code to the NEW address/number so a typo can never lock them out.
  */
 export const requestContactChange = createServerFn({ method: "POST" })
@@ -188,7 +188,7 @@ export const requestContactChange = createServerFn({ method: "POST" })
   });
 
 /**
- * Step 2 — confirm the code and write the verified value onto the customer record.
+ * Step 2, confirm the code and write the verified value onto the customer record.
  */
 export const confirmContactChange = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

@@ -3,8 +3,8 @@ import { onCallClick } from "@/components/CallButton";
  * On-site lead capture.
  *
  * Two variants share one form:
- *  - "booking"    — Book your inspection or 3D quote (every quote CTA)
- *  - "water_test" — Free water test (side tab)
+ *  - "booking", Book your inspection or 3D quote (every quote CTA)
+ *  - "water_test", Free water test (side tab)
  *
  * Opening is event driven so any page can trigger it without prop drilling:
  *   window.dispatchEvent(new CustomEvent("ss:open-quote", { detail: { source } }))
@@ -246,17 +246,17 @@ export default function QuoteModal() {
               openedAt={openedAt.current}
               onCancel={close}
               onDone={(summary) => {
-                // Branded confirmation page — reference number, call link and
+                // Branded confirmation page, reference number, call link and
                 // "save our contact" vCard live there.
                 setDone(summary);
                 setOpen(false);
                 void navigate({
                   to: "/thank-you",
                   search: {
-                    ...(summary.reference ? { ref: summary.reference } : {}),
-                    ...(summary.date ? { date: format(summary.date, "yyyy-MM-dd") } : {}),
-                    ...(summary.time ? { time: summary.time } : {}),
-                    ...(summary.email ? { email: summary.email } : {}),
+                    ..(summary.reference ? { ref: summary.reference } : {}),
+                    ..(summary.date ? { date: format(summary.date, "yyyy-MM-dd") } : {}),
+                    ..(summary.time ? { time: summary.time } : {}),
+                    ..(summary.email ? { email: summary.email } : {}),
                     kind: variant,
                   },
                 });

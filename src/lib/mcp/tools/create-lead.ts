@@ -1,7 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "../supabase";
-import { loadDeliveries, syncState } from "../lead-sync";
+import { supabaseForUser } from "./supabase";
+import { loadDeliveries, syncState } from "./lead-sync";
 
 export default defineTool({
   name: "create_lead",
@@ -61,7 +61,7 @@ export default defineTool({
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
       return {
-        content: [{ type: "text", text: "Lead was not created — not permitted." }],
+        content: [{ type: "text", text: "Lead was not created. not permitted." }],
         isError: true,
       };
     }
@@ -95,7 +95,7 @@ export default defineTool({
           text: `Created lead ${data.reference_number ?? data.id} for ${data.full_name}. ${crmNote}`,
         },
       ],
-      structuredContent: { lead: { ...data, ...fresh }, crm },
+      structuredContent: { lead: { ..data, ..fresh }, crm },
     };
   },
 });

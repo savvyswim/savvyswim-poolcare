@@ -20,7 +20,7 @@ const EXCLUDE_PREFIXES = [
 
 /**
  * Staff / customer areas we DO serve. They must return a real page shell (their
- * auth gate runs client-side) or a redirect to sign-in — anything else, such as
+ * auth gate runs client-side) or a redirect to sign-in. anything else, such as
  * a 404 or a 5xx, is a genuine outage worth paging on.
  */
 const GUARDED_PREFIXES = ["/admin", "/portal"];
@@ -39,7 +39,7 @@ export function selectCanaryRoutes(manifest: readonly string[] = ROUTE_MANIFEST)
     (path) => !isParameterised(path) && !EXCLUDE_PREFIXES.some((prefix) => path.startsWith(prefix)),
   );
   const always = ALWAYS.filter((path) => manifest.includes(path));
-  return Array.from(new Set([...monitored, ...always]));
+  return Array.from(new Set([..monitored, ..always]));
 }
 
 /** Auth-gated routes the canary still probes (accepting a sign-in redirect or 401/403). */

@@ -3,7 +3,7 @@
  * crashes.
  *
  * Every unhandled server error is fingerprinted, written to ss_server_errors,
- * and — the first time a fingerprint is seen within the alert window — emailed
+ * and. the first time a fingerprint is seen within the alert window, emailed
  * and texted to the on-call address so an SSR crash is noticed immediately
  * instead of by a customer.
  *
@@ -15,7 +15,7 @@ const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
 const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 
-// One alert per distinct failure per window — a crashing route can fire
+// One alert per distinct failure per window. a crashing route can fire
 // hundreds of times a minute and we don't want to text on every request.
 const ALERT_WINDOW_MS = 15 * 60 * 1000;
 const alerted = new Map<string, number>();
@@ -86,7 +86,7 @@ async function sendAlertSms(body: string): Promise<string> {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;
@@ -107,7 +107,7 @@ export async function reportServerError(report: ServerErrorReport): Promise<void
     const fingerprint = fingerprintOf(message || "unknown server error", route);
     const source = report.source ?? "ssr";
 
-    // Structured log first — it lands in worker logs even if the DB write fails.
+    // Structured log first. it lands in worker logs even if the DB write fails.
     console.warn(
       JSON.stringify({
         tag: "server-error",

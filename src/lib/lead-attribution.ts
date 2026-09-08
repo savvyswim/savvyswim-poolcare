@@ -12,7 +12,7 @@ const KEY = "ss_attr_v1";
 
 export type LeadAttribution = {
   campaign_id: string | null;
-  campaign_code: string | null; // ?src= — flyer / truck decal / QR batch code
+  campaign_code: string | null; // ?src=, flyer / truck decal / QR batch code
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;
@@ -48,7 +48,7 @@ function read(): LeadAttribution | null {
     const raw = sessionStorage.getItem(KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<LeadAttribution>;
-    return { ...EMPTY, ...parsed };
+    return { ..EMPTY, ..parsed };
   } catch {
     return null;
   }
@@ -89,7 +89,7 @@ function fromUrl(): LeadAttribution | null {
 
 /**
  * Records campaign params the first time they appear in a session.
- * Safe to call on every page view — later page views never overwrite the
+ * Safe to call on every page view, later page views never overwrite the
  * first touch unless the visitor arrives with brand-new campaign params.
  */
 export function captureAttribution(): LeadAttribution {
@@ -104,7 +104,7 @@ export function captureAttribution(): LeadAttribution {
     }
     if (stored) return stored;
     const baseline: LeadAttribution = {
-      ...EMPTY,
+      ..EMPTY,
       landing_page: `${window.location.pathname}${window.location.search}`.slice(0, 255),
       referrer: clip(document.referrer, 255),
     };

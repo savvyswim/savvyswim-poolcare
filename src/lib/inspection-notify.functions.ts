@@ -3,7 +3,7 @@ import { z } from "zod";
 
 /**
  * Emails the office (and the homeowner) when a free-inspection or water-test
- * request comes in. Public on purpose — it accepts only a request id and reads
+ * request comes in. Public on purpose. it accepts only a request id and reads
  * every detail from the database, so nothing a visitor types can be pushed
  * into staff inboxes.
  */

@@ -6,7 +6,7 @@ export default defineTool({
   name: "list_service_areas",
   title: "List service areas",
   description:
-    "List the DFW cities Savvy Swim serves, with the landing page path for each — useful for answering coverage questions.",
+    "List the DFW cities Savvy Swim serves, with the landing page path for each, useful for answering coverage questions.",
   inputSchema: {
     search: z.string().trim().min(2).optional().describe("Filter cities by name."),
   },

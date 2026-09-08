@@ -22,7 +22,7 @@ const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 
 const WINDOW_MINUTES = 15;
-// Below this many events a single failure looks like 100% — ignore the noise.
+// Below this many events a single failure looks like 100%, ignore the noise.
 const MIN_EVENTS = 5;
 const DEFAULT_THRESHOLD_PCT = 25;
 const COOLDOWN_MINUTES = 60;
@@ -84,7 +84,7 @@ async function sendAlertSms(body: string) {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;
@@ -128,8 +128,8 @@ async function runWatch(request: Request) {
     buckets.set(key, bucket);
   }
 
-  const breaching = [...buckets.values()]
-    .map((b) => ({ ...b, rate: b.total ? (b.failed / b.total) * 100 : 0 }))
+  const breaching = [..buckets.values()]
+    .map((b) => ({ ..b, rate: b.total ? (b.failed / b.total) * 100 : 0 }))
     .filter((b) => b.total >= minEvents && b.rate >= thresholdPct)
     .sort((a, b) => b.rate - a.rate);
 
@@ -172,7 +172,7 @@ async function runWatch(request: Request) {
     );
 
     const [emailResult, smsResult] = await Promise.all([
-      sendAlertEmail(`Savvy Swim: ${b.rate.toFixed(0)}% failure rate — ${b.name}`, summary),
+      sendAlertEmail(`Savvy Swim: ${b.rate.toFixed(0)}% failure rate, ${b.name}`, summary),
       sendAlertSms(
         `Savvy Swim: ${b.name} at ${b.rate.toFixed(0)}% failures (${b.failed}/${b.total}) in ${WINDOW_MINUTES}m.`,
       ),

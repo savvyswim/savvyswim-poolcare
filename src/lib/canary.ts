@@ -210,12 +210,12 @@ export function summarizeCanary(run: CanaryRun): string {
   const lines = [
     `Savvy Swim canary: ${run.status.toUpperCase()}`,
     `Target: ${run.target}`,
-    `${run.requests} requests over ${run.rounds} round(s) — ${run.failures} failing, slowest ${run.slowestMs}ms`,
+    `${run.requests} requests over ${run.rounds} round(s), ${run.failures} failing, slowest ${run.slowestMs}ms`,
   ];
   for (const incident of run.incidents.slice(0, 10)) {
     lines.push(
       "",
-      `✗ ${incident.route} (round ${incident.round}) — ${incident.kind}: ${incident.message} [${incident.durationMs}ms]`,
+      `✗ ${incident.route} (round ${incident.round}), ${incident.kind}: ${incident.message} [${incident.durationMs}ms]`,
     );
     if (incident.stack) lines.push(incident.stack);
     else if (incident.bodySnippet) lines.push(incident.bodySnippet.slice(0, 300));

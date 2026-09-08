@@ -13,7 +13,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { runCanary, summarizeCanary } from "../src/lib/canary";
+import { runCanary, summarizeCanary } from "./src/lib/canary";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,13 +29,13 @@ async function main() {
   for (const probe of run.probes) {
     const mark = probe.ok ? "✓" : "✗";
     console.log(
-      `${mark} r${probe.round} ${probe.route.padEnd(32)} ${String(probe.httpStatus ?? "—").padStart(3)}  ${probe.durationMs}ms ${probe.ok ? "" : `— ${probe.kind}: ${probe.message}`}`,
+      `${mark} r${probe.round} ${probe.route.padEnd(32)} ${String(probe.httpStatus ?? ", ").padStart(3)}  ${probe.durationMs}ms ${probe.ok ? "" : `, ${probe.kind}: ${probe.message}`}`,
     );
   }
 
   console.log("\n" + summarizeCanary(run) + "\n");
 
-  const outDir = path.resolve(here, "../.lovable");
+  const outDir = path.resolve(here, "./.lovable");
   mkdirSync(outDir, { recursive: true });
   writeFileSync(path.join(outDir, "canary-report.json"), JSON.stringify(run, null, 2));
   console.log(`Report: .lovable/canary-report.json`);

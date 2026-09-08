@@ -18,7 +18,7 @@ export type QuoteDetail = {
 
 /**
  * Stamp a CTA name with the page it was clicked on ("<cta>:<path>") so every
- * lead — homepage, weekly plan hub, city page — reports and syncs with the
+ * lead, homepage, weekly plan hub, city page, reports and syncs with the
  * page it came from. Already-stamped sources pass through untouched.
  */
 export function withPage(source: string): string {
@@ -44,7 +44,7 @@ export function takePendingQuote(): QuoteDetail | null {
 export function openQuoteModal(detail: QuoteDetail = {}) {
   if (typeof window === "undefined") return;
   const stamped: QuoteDetail = detail.source
-    ? { ...detail, source: withPage(detail.source) }
+    ? { ..detail, source: withPage(detail.source) }
     : detail;
   pending = stamped;
   window.dispatchEvent(new CustomEvent<QuoteDetail>(QUOTE_EVENT, { detail: stamped }));

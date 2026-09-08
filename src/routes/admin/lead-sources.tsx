@@ -15,7 +15,7 @@ export const Route = createFileRoute("/admin/lead-sources")({
       {
         name: "description",
         content:
-          "Internal Savvy Swim console showing which page every booking and water test came from — home, Frisco, Plano and each city landing page.",
+          "Internal Savvy Swim console showing which page every booking and water test came from, home, Frisco, Plano and each city landing page.",
       },
       { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Lead Sources by City · Savvy Swim Admin" },
@@ -37,7 +37,7 @@ const RANGES: { key: RangeKey; label: string }[] = [
 ];
 
 function when(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return ", ";
   return new Date(iso).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
@@ -114,7 +114,7 @@ function CrmSyncBadge({ state }: { state: LeadSourceLead["crm_sync"] }) {
         state === "synced"
           ? "Delivered to the CRM"
           : state === "failed"
-            ? "CRM handoff failed — retry on the Lead CRM sync page"
+            ? "CRM handoff failed, retry on the Lead CRM sync page"
             : "Not yet delivered to the CRM"
       }
       className={`px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] ${CRM_SYNC_TONE[state]}`}
@@ -193,11 +193,11 @@ function BucketTable({
                               key={l.id}
                               className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]"
                             >
-                              <span className="font-semibold">{l.full_name || "—"}</span>
+                              <span className="font-semibold">{l.full_name || ", "}</span>
                               <span className="text-foreground/70">{l.phone || "no phone"}</span>
                               <span className="text-foreground/50">{l.email || ""}</span>
                               <span className="text-foreground/50">{l.page_path}</span>
-                              <span className="text-foreground/50">{l.source || "—"}</span>
+                              <span className="text-foreground/50">{l.source || ", "}</span>
                               <span className="text-foreground/50">{when(l.created_at)}</span>
                               <span className="bg-foreground/8 px-2 py-0.5 text-[11px] uppercase tracking-[0.12em] text-foreground/60">
                                 {l.status || "new"}
@@ -251,7 +251,7 @@ function LeadSourcesPage() {
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#8E1F2C]">Savvy Swim · Admin</p>
           <h1 className="font-display text-4xl uppercase tracking-[0.04em]">Lead sources</h1>
           <p className="mt-1 text-sm text-foreground/60">
-            Where every booking and water test came from — home, Frisco, Plano and each city page.
+            Where every booking and water test came from, home, Frisco, Plano and each city page.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -299,7 +299,7 @@ function LeadSourcesPage() {
               [
                 ["Leads in range", String(report.total)],
                 ["Last 7 days", String(report.thisWeek)],
-                ["Top city", report.topCity ?? "—"],
+                ["Top city", report.topCity ?? ", "],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="border border-foreground/15 p-5">
@@ -317,7 +317,7 @@ function LeadSourcesPage() {
           />
           <BucketTable
             title="By page"
-            note="Exact URL — useful when a city has more than one live landing page."
+            note="Exact URL, useful when a city has more than one live landing page."
             buckets={report.byPage}
             label="Page"
           />
@@ -329,7 +329,7 @@ function LeadSourcesPage() {
           />
           <BucketTable
             title="By channel"
-            note="Search, social, referral or direct — plus any UTM campaign tag."
+            note="Search, social, referral or direct, plus any UTM campaign tag."
             buckets={report.byChannel}
             label="Channel"
           />

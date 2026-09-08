@@ -14,7 +14,7 @@ export type WebhookOutcome = "success" | "failed" | "skipped";
 export type WebhookDeliveryEntry = {
   channel: WebhookChannel;
   direction?: "inbound" | "outbound";
-  /** Stable key per event — a repeat with the same key counts as a retry. */
+  /** Stable key per event. a repeat with the same key counts as a retry. */
   eventKey?: string | null;
   endpoint?: string | null;
   /** Human-readable subject: customer name, appointment id, invoice number. */
@@ -28,7 +28,7 @@ export type WebhookDeliveryEntry = {
   retriedBy?: string | null;
 };
 
-/** Records (or updates) a delivery attempt. Never throws — logging is best effort. */
+/** Records (or updates) a delivery attempt. Never throws, logging is best effort. */
 export async function logWebhookDelivery(entry: WebhookDeliveryEntry): Promise<void> {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -58,9 +58,9 @@ export async function logWebhookDelivery(entry: WebhookDeliveryEntry): Promise<v
         await supabaseAdmin
           .from("ss_webhook_deliveries")
           .update({
-            ...base,
+            ..base,
             attempts: (existing.attempts ?? 1) + 1,
-            ...(entry.isRetry
+            ..(entry.isRetry
               ? { retried_at: now, retried_by: entry.retriedBy ?? null }
               : {}),
           })
@@ -70,10 +70,10 @@ export async function logWebhookDelivery(entry: WebhookDeliveryEntry): Promise<v
     }
 
     await supabaseAdmin.from("ss_webhook_deliveries").insert({
-      ...base,
+      ..base,
       event_key: entry.eventKey ?? null,
       attempts: 1,
-      ...(entry.isRetry ? { retried_at: now, retried_by: entry.retriedBy ?? null } : {}),
+      ..(entry.isRetry ? { retried_at: now, retried_by: entry.retriedBy ?? null } : {}),
     });
   } catch (err) {
     console.error("[webhook-log] failed to record delivery", err instanceof Error ? err.message : err);

@@ -6,7 +6,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * Admin webhook health.
  *
  * Reads the unified delivery log (leads, appointments, payments) and lets the
- * office retry a failed delivery. Office/owner only — verified server-side
+ * office retry a failed delivery. Office/owner only, verified server-side
  * against ss_is_office(), never from the client.
  */
 

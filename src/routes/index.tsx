@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      // LCP hero photo — start the fetch during HTML parse.
+      // LCP hero photo, start the fetch during HTML parse.
       {
         rel: "preload",
         as: "image",

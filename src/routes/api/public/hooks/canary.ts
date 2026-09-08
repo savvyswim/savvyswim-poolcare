@@ -2,7 +2,7 @@
  * Post-deploy canary endpoint.
  *
  * Repeatedly hits the deployed site and records every 5xx, timeout, blank page
- * or SSR crash body — with the captured stack trace and response snippet — in
+ * or SSR crash body. with the captured stack trace and response snippet. in
  * ss_canary_runs / ss_canary_incidents, then emails + texts on-call when the
  * run fails. Call after every deploy and on a schedule:
  *
@@ -63,7 +63,7 @@ async function sendAlertSms(body: string) {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;
@@ -125,7 +125,7 @@ async function handle(request: Request) {
       }),
     );
     const [emailResult, smsResult] = await Promise.all([
-      sendAlertEmail(`Savvy Swim canary FAILED — ${run.failures}/${run.requests} requests`, summary),
+      sendAlertEmail(`Savvy Swim canary FAILED, ${run.failures}/${run.requests} requests`, summary),
       sendAlertSms(`Savvy Swim canary FAILED: ${run.incidents[0]?.route} ${run.incidents[0]?.message}. See /admin/crm/deploy-health.`),
     ]);
     alert = `${emailResult}; ${smsResult}`;

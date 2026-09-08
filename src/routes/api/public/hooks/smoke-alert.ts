@@ -6,7 +6,7 @@
  * an anonymous caller can never trigger outbound messages.
  *
  *   POST /api/public/hooks/smoke-alert
- *   { "target": "https://savvyswimservices.com", "failures": [...], "summary": "..." }
+ *   { "target": "https://savvyswimservices.com", "failures": [..], "summary": ".." }
  */
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/api/public/hooks/smoke-alert")({
 
         const failures = Array.isArray(payload.failures) ? payload.failures.slice(0, 25) : [];
         if (failures.length === 0) {
-          return Response.json({ ok: true, alert: "no failures — nothing sent" });
+          return Response.json({ ok: true, alert: "no failures. nothing sent" });
         }
 
         const target = typeof payload.target === "string" ? payload.target.slice(0, 200) : "unknown target";
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/api/public/hooks/smoke-alert")({
         const first = failures[0];
         const [email, sms] = await Promise.all([
           sendOpsAlertEmail(
-            `Savvy Swim smoke test FAILED — ${failures.length} route(s)`,
+            `Savvy Swim smoke test FAILED, ${failures.length} route(s)`,
             `${summary}\n\nTarget: ${target}`,
             "smoke-alert",
           ),

@@ -8,7 +8,7 @@ import { trackContactClick } from "@/lib/contactTracking";
  *
  * Phones and tablets: plain `tel:` anchors, so the device opens its dialer.
  * Desktop browsers: we open a small call card instead of leaving the visitor
- * on a blank tab — it still offers a real `tel:` "Call now" (Macs/iPads hand
+ * on a blank tab. it still offers a real `tel:` "Call now" (Macs/iPads hand
  * off to FaceTime/iPhone), a text link, a callback request, and the number
  * itself in plain sight.
  */
@@ -26,7 +26,7 @@ function track(location: string) {
 
 /**
  * True only on a real desktop browser, which may have no dialer for `tel:`.
- * Decided by device capability — never by window width, so a narrow desktop
+ * Decided by device capability. never by window width, so a narrow desktop
  * window or preview panel still gets the call card.
  */
 function isDesktop() {
@@ -54,7 +54,7 @@ export function handleCall(location: string) {
       );
       e.preventDefault();
     } catch {
-      /* card unavailable — let the plain tel: link run so it's never a dead click */
+      /* card unavailable, let the plain tel: link run so it's never a dead click */
     }
   };
 }
@@ -174,7 +174,7 @@ export function CallOptionsCard() {
             try {
               void navigator.clipboard?.writeText(PHONE_PLAIN);
             } catch {
-              /* clipboard blocked — number is visible above */
+              /* clipboard blocked, number is visible above */
             }
             setCopied(true);
           }}
@@ -206,7 +206,7 @@ export function CallLink({
   location,
   className = "",
   children,
-  ...rest
+  ..rest
 }: {
   location: string;
   className?: string;
@@ -218,7 +218,7 @@ export function CallLink({
       onClick={handleCall(location)}
       title={`Call ${PHONE_VANITY} (${PHONE_PLAIN})`}
       className={className}
-      {...rest}
+      {..rest}
     >
       {children}
     </a>

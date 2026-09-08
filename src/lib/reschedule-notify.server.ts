@@ -27,7 +27,7 @@ export function prettyDate(iso: string): string {
 }
 
 export function windowFromNotes(notes: string | null): string {
-  const match = /Preferred window:\s*([^—\n]+)/.exec(notes ?? "");
+  const match = /Preferred window:\s*([^, \n]+)/.exec(notes ?? "");
   return match?.[1]?.trim() || "8:00a – 4:00p";
 }
 
@@ -102,7 +102,7 @@ export async function sendSms(to: string, rawBody: string): Promise<boolean> {
     if (!from) return false;
     const res = await fetch(`${GATEWAY_URL}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 320) }),
     });
     if (!res.ok) {

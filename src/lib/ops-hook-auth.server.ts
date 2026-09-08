@@ -41,7 +41,7 @@ export function isOpsAuthorized(request: Request): boolean {
  */
 export function guardOpsHook(request: Request, tag: string): Response | null {
   if (!opsSecret()) {
-    console.error(`[${tag}] OPS_HOOK_SECRET is not configured — refusing to run`);
+    console.error(`[${tag}] OPS_HOOK_SECRET is not configured, refusing to run`);
     recordRejection(tag, 503, "ops secret not configured");
     return Response.json({ error: "not configured" }, { status: 503 });
   }

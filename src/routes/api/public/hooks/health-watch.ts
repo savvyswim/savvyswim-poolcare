@@ -66,7 +66,7 @@ async function sendAlertSms(body: string) {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}: ${await sendRes.text()}`;
@@ -113,7 +113,7 @@ async function runWatch(request: Request) {
   if (!healthy) {
     console.error(JSON.stringify({ tag: "health-watch", status, httpStatus, failedChecks, error }));
     const [emailResult, smsResult] = await Promise.all([
-      sendAlertEmail("Savvy Swim is DOWN — health check failed", summary),
+      sendAlertEmail("Savvy Swim is DOWN, health check failed", summary),
       sendAlertSms(`Savvy Swim health check FAILED (HTTP ${httpStatus ?? "none"}). Check /admin/crm/deploy-health.`),
     ]);
     alert = `${emailResult}; ${smsResult}`;

@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { CanaryRouteReport } from "./canary-status.server";
 
-/** Office/owner only — verified server-side, never trusted from the client. */
+/** Office/owner only, verified server-side, never trusted from the client. */
 export const getCanaryRouteReport = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<CanaryRouteReport> => {

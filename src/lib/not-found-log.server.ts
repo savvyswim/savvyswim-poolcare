@@ -17,7 +17,7 @@ const BURST_WINDOW_MS = 60 * 60 * 1000;
 /** One page per path per this long, however many hits arrive. */
 const ALERT_COOLDOWN_MS = 6 * 60 * 60 * 1000;
 
-/** Paths that 404 constantly from bots/scanners — logged, never alerted. */
+/** Paths that 404 constantly from bots/scanners, logged, never alerted. */
 const NOISE = [
   /^\/wp-/i,
   /^\/wordpress/i,
@@ -101,7 +101,7 @@ export async function recordNotFound(hit: NotFoundHit): Promise<void> {
       ].join("\n");
       const [email, sms] = await Promise.all([
         sendOpsAlertEmail(`Savvy Swim 404: ${path}`, summary, "not-found-alert"),
-        sendOpsAlertSms(`Savvy Swim 404 on ${path} — ${reason}. See /admin/not-found`),
+        sendOpsAlertSms(`Savvy Swim 404 on ${path}, ${reason}. See /admin/not-found`),
       ]);
       alertResult = `${email}; ${sms}`;
     }
@@ -195,7 +195,7 @@ export async function buildNotFoundReport(): Promise<NotFoundReport> {
     total24h: rows.filter((r) => new Date(r.created_at).getTime() >= since24h).length,
     internal7d: rows.filter((r) => r.internal_referrer).length,
     distinctPaths7d: byPath.size,
-    paths: [...byPath.values()].sort((a, b) => b.hits7d - a.hits7d).slice(0, 50),
+    paths: [..byPath.values()].sort((a, b) => b.hits7d - a.hits7d).slice(0, 50),
     recent: rows.slice(0, 100),
     alerts: rows.filter((r) => r.alerted).slice(0, 40),
   };

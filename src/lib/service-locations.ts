@@ -4,7 +4,7 @@ import { REPLY_TO_ADDRESS } from "@/lib/email-config";
 /**
  * Real service locations + hours used by the public service-area map and the
  * LocalBusiness structured data. Coordinates are city centres for the routes
- * we actually run — each pin links to that city's pool service page.
+ * we actually run. each pin links to that city's pool service page.
  */
 
 export interface ServiceLocation {

@@ -2,7 +2,7 @@
  * Shared on-call alert transport (email + SMS) for ops watchdogs.
  *
  * Server-only: reads LOVABLE_API_KEY / TWILIO_API_KEY at call time and never
- * throws — a failed alert must not take down the watchdog that raised it.
+ * throws. a failed alert must not take down the watchdog that raised it.
  */
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
@@ -53,7 +53,7 @@ export async function sendOpsAlertSms(body: string): Promise<string> {
     if (!from) return "no twilio number";
     const sendRes = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 300) }),
     });
     if (!sendRes.ok) return `twilio send ${sendRes.status}`;

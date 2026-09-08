@@ -1,8 +1,8 @@
 /**
  * App handoff links.
  *
- * savvyswim.com is the marketing website. Everything transactional — customer
- * portal, billing, checkout, staff CRM — lives in the Savvy Swim app at
+ * savvyswim.com is the marketing website. Everything transactional. customer
+ * portal, billing, checkout, staff CRM, lives in the Savvy Swim app at
  * savvyswim.app. Both share one backend, so a handoff is just a link.
  */
 
@@ -75,7 +75,7 @@ export function buildCrmLink(
 }
 
 /* ------------------------------------------------------------------ *
- * Lead capture + membership checkout — both live in the CRM app.
+ * Lead capture + membership checkout, both live in the CRM app.
  * ------------------------------------------------------------------ */
 
 /** Booking / free-inspection form inside the Savvy Swim app. */
@@ -89,21 +89,21 @@ export function leadUrl(
   source: string,
   params: Record<string, string | number | undefined | null> = {},
 ): string {
-  return buildCrmLink(LEAD_PATH, { source, ...params });
+  return buildCrmLink(LEAD_PATH, { source, ..params });
 }
 
 /* ------------------------------------------------------------------ *
  * Swim Club ($19.99/mo) checkout.
  *
- * The marketing site must NEVER hardcode a Stripe payment link — test links
+ * The marketing site must NEVER hardcode a Stripe payment link, test links
  * expire and dump customers on "The link is no longer active". The CRM owns
  * the charge: it creates the Stripe checkout session against the live price
  * and ties the membership to the customer record.
  *
  * Resolution order:
- *   1. VITE_SWIM_CLUB_STRIPE_URL — explicit override (a live payment link).
+ *   1. VITE_SWIM_CLUB_STRIPE_URL, explicit override (a live payment link).
  *   2. The CRM join route, once VITE_SWIM_CLUB_JOIN_READY is turned on.
- *   3. null — no checkout is live yet, so callers fall back to the on-site
+ *   3. null. no checkout is live yet, so callers fall back to the on-site
  *      form instead of sending anyone to a dead URL.
  * ------------------------------------------------------------------ */
 
@@ -129,7 +129,7 @@ export function swimClubCheckoutUrl(source: string): string | null {
       url.searchParams.set("client_reference_id", `web_${source}`);
       return url.toString();
     } catch {
-      /* malformed override — fall through to the CRM route */
+      /* malformed override, fall through to the CRM route */
     }
   }
 

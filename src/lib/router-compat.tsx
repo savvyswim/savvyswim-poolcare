@@ -1,5 +1,5 @@
 /**
- * Router-compat shim — bridges @/lib/router-compat v6 call sites to
+ * Router-compat shim, bridges @/lib/router-compat v6 call sites to
  * @tanstack/react-router without hand-rewriting every component.
  * This is the same load-bearing pattern used in Klar's dev-copy migration.
  */
@@ -50,9 +50,9 @@ export function useNavigate(): NavigateFn {
     tsNav({
       to: pathname,
       search: search as never,
-      ...(hash !== undefined ? { hash } : {}),
-      ...(options?.state !== undefined ? { state: options.state as never } : {}),
-      ...(options?.replace !== undefined ? { replace: options.replace } : {}),
+      ..(hash !== undefined ? { hash } : {}),
+      ..(options?.state !== undefined ? { state: options.state as never } : {}),
+      ..(options?.replace !== undefined ? { replace: options.replace } : {}),
     });
   }, [tsNav, router]) as NavigateFn;
 }
@@ -93,7 +93,7 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
       opts?: { replace?: boolean },
     ) => {
       // Functional updaters read the router's live location, not the render
-      // snapshot — react-router passes call-time params, and chained updates
+      // snapshot, react-router passes call-time params, and chained updates
       // within one tick must see each other's writes.
       const live = router.state.location;
       const current = new URLSearchParams(live.searchStr ?? "");
@@ -105,7 +105,7 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
             : new URLSearchParams(init);
       const searchObj: Record<string, string> = {};
       next.forEach((v, k) => { searchObj[k] = v; });
-      nav({ to: live.pathname, search: searchObj as never, ...(opts?.replace !== undefined ? { replace: opts.replace } : {}) });
+      nav({ to: live.pathname, search: searchObj as never, ..(opts?.replace !== undefined ? { replace: opts.replace } : {}) });
     },
     [nav, router],
   );
@@ -122,7 +122,7 @@ type LinkProps = Omit<ComponentProps<typeof TSLink>, "to"> & {
 };
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
-  { to, replace, state, children, ...rest },
+  { to, replace, state, children, ..rest },
   ref,
 ) {
   const { pathname, search, hash } = parseTo(to);
@@ -131,10 +131,10 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
       ref={ref as never}
       to={pathname as never}
       search={search as never}
-      {...(hash !== undefined ? { hash } : {})}
-      {...(replace !== undefined ? { replace } : {})}
-      {...(state !== undefined ? { state: state as never } : {})}
-      {...((rest ?? {}) as Record<string, unknown>)}
+      {..(hash !== undefined ? { hash } : {})}
+      {..(replace !== undefined ? { replace } : {})}
+      {..(state !== undefined ? { state: state as never } : {})}
+      {..((rest ?? {}) as Record<string, unknown>)}
     >
       {children}
     </TSLink>
@@ -150,9 +150,9 @@ export function Navigate({ to, replace, state }: { to: string; replace?: boolean
     <TSNavigate
       to={pathname as never}
       search={search as never}
-      {...(hash !== undefined ? { hash } : {})}
-      {...(state !== undefined ? { state: state as never } : {})}
-      {...(replace !== undefined ? { replace } : {})}
+      {..(hash !== undefined ? { hash } : {})}
+      {..(state !== undefined ? { state: state as never } : {})}
+      {..(replace !== undefined ? { replace } : {})}
     />
   );
 }

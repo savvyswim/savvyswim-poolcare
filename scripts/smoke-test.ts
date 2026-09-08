@@ -16,8 +16,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "../src/lib/rollback-checklist";
-import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "../src/lib/smoke";
+import { buildRollbackChecklist, renderRollbackChecklistMarkdown } from "./src/lib/rollback-checklist";
+import { buildSmokeTargets, evaluateSmokeProbe, summarizeSmoke } from "./src/lib/smoke";
 
 const BASE_URL = (process.env["BASE_URL"] ?? "http://localhost:8080").replace(/\/$/, "");
 const TIMEOUT_MS = Number(process.env["SMOKE_TIMEOUT_MS"] ?? 20000);
@@ -33,12 +33,12 @@ export function collectRoutes(routeTreeSource: string): string[] {
   while ((match = re.exec(routeTreeSource)) !== null) {
     const route = match[1];
     if (!route || !route.startsWith("/")) continue;
-    if (route.includes("$")) continue; // dynamic params — no safe fixture
+    if (route.includes("$")) continue; // dynamic params. no safe fixture
     if (route.startsWith("/api/")) continue; // exercised separately
     found.add(route.length > 1 ? route.replace(/\/$/, "") : "/");
   }
 
-  return [...found].sort();
+  return [..found].sort();
 }
 
 type Result = { route: string; status: number | null; ok: boolean; note: string };
@@ -81,7 +81,7 @@ function slugify(route: string): string {
 /** Write one file per failed route plus a combined index. */
 function writeArtifacts(): string | null {
   if (artifacts.length === 0) return null;
-  const dir = path.resolve(here, "../.lovable/smoke-artifacts");
+  const dir = path.resolve(here, "./.lovable/smoke-artifacts");
   try {
     mkdirSync(dir, { recursive: true });
     for (const a of artifacts) {
@@ -262,7 +262,7 @@ async function main() {
   console.log(`Smoke testing ${targets.length + 2} endpoints (${mode}, generated canary routes) against ${BASE_URL}\n`);
 
   const results: Result[] = [];
-  const queue = [...targets];
+  const queue = [..targets];
   const CONCURRENCY = 6;
   await Promise.all(
     Array.from({ length: CONCURRENCY }, async () => {
@@ -306,8 +306,8 @@ async function main() {
     const markdown = renderRollbackChecklistMarkdown(checklist);
     console.error(`\n${markdown}\n`);
     try {
-      mkdirSync(path.resolve(here, "../.lovable"), { recursive: true });
-      writeFileSync(path.resolve(here, "../.lovable/rollback-checklist.md"), markdown);
+      mkdirSync(path.resolve(here, "./.lovable"), { recursive: true });
+      writeFileSync(path.resolve(here, "./.lovable/rollback-checklist.md"), markdown);
       console.error("Checklist written to .lovable/rollback-checklist.md (also shown in CRM > Deploy Health).");
     } catch {
       /* non-fatal */

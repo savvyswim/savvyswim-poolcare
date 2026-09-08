@@ -1,4 +1,4 @@
-// GENERATED FILE — do not edit.
+// GENERATED FILE. do not edit.
 // Produced by scripts/generate-route-manifest.ts from src/routeTree.gen.ts.
 // Every URL this deployment serves, used as the single source of truth for
 // canary / smoke monitoring (see src/lib/canary-routes.ts).

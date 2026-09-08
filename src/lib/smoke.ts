@@ -3,8 +3,8 @@
  *
  * The routes probed here come from the SAME generated manifest the canary uses
  * (src/lib/route-manifest.gen.ts via canary-routes), so smoke coverage can never
- * drift from what the router actually serves. Pure functions only — no fetch,
- * no env — so they are unit-testable and safe to import anywhere.
+ * drift from what the router actually serves. Pure functions only. no fetch,
+ * no env. so they are unit-testable and safe to import anywhere.
  */
 import {
   isGuardedRoute,
@@ -81,7 +81,7 @@ export function evaluateSmokeProbe(input: {
 export function summarizeSmoke(results: SmokeOutcome[], baseUrl: string): string {
   const failures = results.filter((r) => !r.ok);
   const lines = [
-    `Smoke test ${failures.length === 0 ? "PASSED" : "FAILED"} — ${results.length - failures.length}/${results.length} routes ok`,
+    `Smoke test ${failures.length === 0 ? "PASSED" : "FAILED"}, ${results.length - failures.length}/${results.length} routes ok`,
     `Target: ${baseUrl}`,
     `Checked: ${new Date().toISOString()}`,
   ];

@@ -50,7 +50,7 @@ const leadSchema = z
     landing_page: z.string().trim().max(255).optional().nullable(),
     session_id: z.string().trim().max(64).optional().nullable(),
 
-    // Milliseconds between the form rendering and submit — bots fill instantly.
+    // Milliseconds between the form rendering and submit, bots fill instantly.
     elapsed_ms: z.number().int().min(0).max(86_400_000).optional().nullable(),
     // Cloudflare Turnstile token, when the embed is configured with a site key.
     turnstile_token: z.string().max(4000).optional().nullable(),
@@ -65,7 +65,7 @@ const MIN_FILL_MS = 2500;
 /** Verify a Turnstile token. Returns true when Turnstile isn't configured. */
 async function turnstileOk(token: string | null | undefined, ip: string): Promise<boolean> {
   const secret = process.env['TURNSTILE_SECRET_KEY'];
-  if (!secret) return true; // not configured — other checks still apply
+  if (!secret) return true; // not configured, other checks still apply
   if (!token) return false;
   try {
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
@@ -95,7 +95,7 @@ const json = (body: unknown, status = 200, extra?: Record<string, string>) =>
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "content-type",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      ...extra,
+      ..extra,
     },
   });
 
@@ -208,12 +208,11 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ ok: true, deduped: true, id: dupe.id, reference: dupe.reference_number });
         }
 
-        // Consent lives in its own columns (contact_consent / consent_text) —
-        // notes stay clean and hold only what the customer typed.
+        // Consent lives in its own columns (contact_consent / consent_text), // notes stay clean and hold only what the customer typed.
         const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
 
         // Validate the optional discount / referral code. An unknown code is
-        // stored and flagged rather than rejected — never lose a lead over it.
+        // stored and flagged rather than rejected. never lose a lead over it.
         const { lookupPromoCode } = await import("@/lib/promo.functions");
         const promo = await lookupPromoCode(lead.promo_code ?? "");
 
@@ -283,8 +282,7 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ error: "Could not save lead" }, 500);
         }
 
-        // Hand every lead off to the CRM. Never block the visitor on it —
-        // failures are logged to ss_webhook_deliveries and retryable there.
+        // Hand every lead off to the CRM. Never block the visitor on it, // failures are logged to ss_webhook_deliveries and retryable there.
         try {
           const { forwardInspectionToCrm } = await import("@/lib/crm-lead-forward.server");
           await forwardInspectionToCrm(data.id, {

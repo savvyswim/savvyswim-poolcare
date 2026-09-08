@@ -1,5 +1,5 @@
 /**
- * Appointment reminders for customers — configurable lead times.
+ * Appointment reminders for customers, configurable lead times.
  *
  * Runs hourly from pg_cron. For every upcoming visit we work out how many hours
  * away the arrival window starts, then compare that against the reminder offsets
@@ -19,7 +19,7 @@
  *
  * Deduping: every reminder writes an ss_feed row tied to the visit
  * (kind = 'reminder' for the 24h notice, 'reminder_<n>h' for the others), and we
- * skip any visit that already has one for that offset — so a re-run never
+ * skip any visit that already has one for that offset. so a re-run never
  * double-texts. Rescheduling clears those rows so the new date re-arms them.
  *
  * Public route: takes no caller input that drives writes and returns no PII.
@@ -78,7 +78,7 @@ function prettyDate(iso: string): string {
 }
 
 function windowFromNotes(notes: string | null): string {
-  const match = /Preferred window:\s*([^—\n]+)/.exec(notes ?? "");
+  const match = /Preferred window:\s*([^, \n]+)/.exec(notes ?? "");
   return match?.[1]?.trim() || "8:00a – 4:00p";
 }
 
@@ -91,7 +91,7 @@ function windowStartHour(slot: string): number {
   return hour;
 }
 
-/** ss_feed kind for a given offset — 24h keeps the legacy 'reminder' kind. */
+/** ss_feed kind for a given offset, 24h keeps the legacy 'reminder' kind. */
 function feedKindFor(offset: number): string {
   return offset === 24 ? "reminder" : `reminder_${offset}h`;
 }
@@ -123,7 +123,7 @@ async function twilioSend(to: string, rawBody: string): Promise<boolean> {
     if (!from) return false;
     const res = await fetch(`${TWILIO_GATEWAY}/Messages.json`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { ..headers, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ To: to, From: from, Body: body.slice(0, 320) }),
     });
     return res.ok;
@@ -211,7 +211,7 @@ async function run(request: Request) {
     schedules.set(row.appointment_type, offsets);
   }
   const fallback = schedules.get("default") ?? DEFAULT_OFFSETS;
-  const maxOffset = Math.max(fallback[0] ?? 24, ...[...schedules.values()].map((o) => o[0] ?? 0));
+  const maxOffset = Math.max(fallback[0] ?? 24, ..[..schedules.values()].map((o) => o[0] ?? 0));
 
   const from = dateFilter ?? isoDate(ct);
   const horizon = new Date(ct.getTime() + (maxOffset + 24) * 3600_000);
@@ -309,7 +309,7 @@ async function run(request: Request) {
       customer_id: c.id,
       visit_id: visit.id,
       kind: feedKindFor(due),
-      title: `Reminder sent — visit ${lead}`,
+      title: `Reminder sent, visit ${lead}`,
       body: `Arrival window ${slot}. Sent by ${via === "sms" ? "text message" : "email"} based on your notification preferences.`,
       sent_by_sms: via === "sms",
     });

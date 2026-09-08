@@ -19,7 +19,7 @@
  *                                       // arrived | in_progress | completed |
  *                                       // no_access | canceled
  *   "previous_status": "scheduled",
- *   "customer": { "name": "...", "email": "...", "phone": "...", "id": "uuid" },
+ *   "customer": { "name": "..", "email": "..", "phone": "..", "id": "uuid" },
  *   "scheduled_date": "2026-08-12",
  *   "arrival_window": "10:00a – 12:00p",
  *   "technician": "Marcus",
@@ -48,7 +48,7 @@ const CORS = {
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS },
+    headers: { "Content-Type": "application/json", ..CORS },
   });
 }
 
@@ -130,7 +130,7 @@ async function handle(request: Request): Promise<Response> {
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  // Replay guard — the unique event id makes redelivery a no-op.
+  // Replay guard. the unique event id makes redelivery a no-op.
   const { data: existing } = await supabaseAdmin
     .from("ss_appointment_webhook_events")
     .select("id, notified_email, notified_sms")

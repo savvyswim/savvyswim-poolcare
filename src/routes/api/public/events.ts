@@ -2,7 +2,7 @@
  * First-party site analytics intake: POST /api/public/events
  *
  * Accepts small anonymous batches (consent banner interactions and CTA clicks).
- * No identifiers are stored — page, event, button, consent state and UTM only.
+ * No identifiers are stored, page, event, button, consent state and UTM only.
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
@@ -42,7 +42,7 @@ const CORS = {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...CORS },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ..CORS },
   });
 
 export const Route = createFileRoute("/api/public/events")({

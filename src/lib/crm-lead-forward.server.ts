@@ -1,7 +1,7 @@
 /**
  * Website → CRM lead handoff (server-only helper).
  *
- * Every lead captured on the marketing site — whatever CTA produced it — is
+ * Every lead captured on the marketing site, whatever CTA produced it, is
  * POSTed to the CRM app's public lead endpoint so sales works one inbox.
  * The URL can be overridden with CRM_LEADS_URL without a code change.
  */
@@ -79,7 +79,7 @@ export async function forwardInspectionToCrm(
   const cta = (ctaRaw || rawSource || "site").slice(0, 80);
   const pagePath = (sourcePageRaw || req.page_path || req.landing_page || "/").split("?")[0]!;
   const { cityFromPath } = await import("./lead-sources.server");
-  // Page bucket ("Frisco", but also "Home", "Services", "Booking link") — a
+  // Page bucket ("Frisco", but also "Home", "Services", "Booking link"). a
   // reporting label, not a service city.
   const pageCity = cityFromPath(pagePath, rawSource);
   const { cityFromAddress, stateFromAddress } = await import("./postal");
@@ -154,8 +154,7 @@ export async function forwardInspectionToCrm(
     status: req.status ?? "new",
     submitted_at: req.created_at,
     created_at: req.created_at,
-    // Flat copies so the CRM matches whichever shape it reads.
-    ...attribution,
+    // Flat copies so the CRM matches whichever shape it reads..attribution,
     attribution,
   };
 
@@ -212,7 +211,7 @@ export async function forwardInspectionToCrm(
           .from("inspection_requests")
           .update({
             crm_synced_at: new Date().toISOString(),
-            ...(crmLeadId ? { crm_lead_id: crmLeadId } : {}),
+            ..(crmLeadId ? { crm_lead_id: crmLeadId } : {}),
           })
           .eq("id", req.id);
         const { logInspectionEvents } = await import("./inspection-events.server");

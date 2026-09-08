@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Privacy from "@/pages/Privacy";
 
-/** Alias of /privacy — canonical points at the primary URL. */
+/** Alias of /privacy, canonical points at the primary URL. */
 const CANONICAL = "https://savvyswimservices.com/privacy";
 const TITLE = "Privacy Policy | Savvy Swim Pool Service";
 const DESCRIPTION =

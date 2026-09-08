@@ -158,7 +158,7 @@ export default function SignContract() {
     const dataUrl = canvasRef.current.toDataURL("image/png");
     try {
       // Network blips on a phone in a backyard are the norm, not the
-      // exception — transient failures retry automatically with backoff.
+      // exception, transient failures retry automatically with backoff.
       const res = await withRetry(
         () =>
           signNow({
@@ -180,7 +180,7 @@ export default function SignContract() {
       setJustSigned(true);
       setCertificate(res.certificate);
       setContract((c) =>
-        c ? { ...c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
+        c ? { ..c, status: "signed", signer_name: signerName.trim(), signed_at: res.certificate.signedAt } : c,
       );
     } catch (err) {
       const kind = classifyError(err);

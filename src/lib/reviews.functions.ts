@@ -31,7 +31,7 @@ export interface AdminReview extends PublicReview {
 
 const TABLE = "ss_site_reviews";
 
-/** Strip links and control characters — review text is plain prose only. */
+/** Strip links and control characters, review text is plain prose only. */
 function clean(text: string): string {
   return text
     .replace(/https?:\/\/\S+/gi, "")
@@ -127,7 +127,7 @@ export const listApprovedReviews = createServerFn({ method: "GET" }).handler(
               h.delete("Authorization");
             }
             h.set("apikey", key);
-            return fetch(input, { ...init, headers: h });
+            return fetch(input, { ..init, headers: h });
           },
         },
       });
@@ -242,7 +242,7 @@ export const saveReview = createServerFn({ method: "POST" })
     }).from(TABLE);
 
     if (data.id) await table.update(row).eq("id", data.id);
-    else await table.insert({ ...row, source: "staff" });
+    else await table.insert({ ..row, source: "staff" });
 
     return { ok: true };
   });

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import PoolCleaningFrisco from "@/pages/PoolCleaningFrisco";
 
 const URL = "https://savvyswimservices.com/pool-cleaning-frisco";
-/** All Frisco URLs serve the same page — one canonical keeps them from competing. */
+/** All Frisco URLs serve the same page. one canonical keeps them from competing. */
 const CANONICAL = "https://savvyswimservices.com/pool-cleaning-frisco-tx";
 const TITLE = "Pool Cleaning Frisco, TX | Weekly Service";
 const DESCRIPTION =
