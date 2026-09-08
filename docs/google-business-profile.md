@@ -59,7 +59,7 @@ Highland Park, University Park, Irving, Rockwall, all TX.
 5. Choose **I deliver goods and services to my customers**, then enter the
    twelve service-area cities listed above.
 6. Enter your real mailing address only when Google asks for it for
-   verification. Confirm the address is **hidden** from the public profile    the toggle appears under Info › Business location after verification.
+   verification. Confirm the address is **hidden** from the public profile. The toggle appears under Info › Business location after verification.
 7. Enter the phone number and website from the table above.
 8. Verify. Google offers postcard, phone, email or video verification depending
    on the category and location. Video verification is common for service-area
