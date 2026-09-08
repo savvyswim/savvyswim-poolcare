@@ -8,7 +8,7 @@ import { SERVICE_LOCATIONS } from "@/lib/service-locations";
  */
 
 const W = 640;
-const H = 420;
+const H = 470;
 const PAD = 46;
 
 const lats = SERVICE_LOCATIONS.map((l) => l.lat);
