@@ -22,3 +22,11 @@ export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
 /** Google Business review link. Used after a customer reviews us on-site. */
 export const GOOGLE_REVIEW_URL = "https://g.page/r/savvyswim/review";
+
+/**
+ * Public Google Business Profile (Maps) link. Set this to the long
+ * google.com/maps/place/... URL from the live listing — short share.google
+ * links do not resolve to the profile. Empty until the real URL is confirmed;
+ * the site hides the "View us on Google" link while it is empty.
+ */
+export const GOOGLE_PROFILE_URL = "";
