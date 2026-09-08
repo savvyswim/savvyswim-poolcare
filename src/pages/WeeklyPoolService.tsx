@@ -6,12 +6,11 @@ import {
   Camera,
   UserCheck,
   FlaskConical,
-  CalendarDays,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
-import { SERVICE_AREAS } from "@/lib/serviceAreas";
+
 import {
   IMG_5504_2_JPG as photoRivieraLoungers,
   IMG_5512_PNG as photoSavvyRings,
@@ -89,14 +88,7 @@ export const WEEKLY_FAQ = [
 
 export default function WeeklyPoolService() {
 
-  const cities = [
-    ...SERVICE_AREAS.map((a) => ({ name: a.name, to: `/${a.slug}`, zips: a.zips })),
-    {
-      name: "Frisco",
-      to: "/pool-cleaning-frisco-tx",
-      zips: "75033 / 75034 / 75035 / 75036",
-    },
-  ];
+
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -296,36 +288,6 @@ export default function WeeklyPoolService() {
           </div>
         </section>
 
-        {/* AREAS */}
-        <section className="perf-section border-b border-hairline py-16 sm:py-24">
-          <div className="container-tight">
-            <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-3 inline-flex items-center gap-2">
-              <CalendarDays className="h-3.5 w-3.5" /> Weekly routes
-            </div>
-            <h2 className="font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
-              Where we run weekly routes
-            </h2>
-            <p className="mt-4 max-w-2xl text-muted-foreground">
-              Pick your city for local water notes, route days, and pricing.
-            </p>
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-hairline border border-hairline">
-              {cities.map((c) => (
-                <Link
-                  key={c.to}
-                  to={c.to}
-                  className="bg-background p-5 sm:p-6 hover:bg-muted/40 transition group"
-                >
-                  <div className="font-display text-[1.2rem] uppercase tracking-tight group-hover:text-accent transition">
-                    Pool service in {c.name}
-                  </div>
-                  <div className="mt-2 font-tech text-[11px] tracking-[0.16em] text-muted-foreground">
-                    {c.zips}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* FAQ */}
         <section className="perf-section border-b border-hairline py-16 sm:py-24">
