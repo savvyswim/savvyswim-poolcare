@@ -23,15 +23,14 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      // LCP hero backdrop — start the mobile-sized fetch during HTML parse.
+      // LCP hero photo — start the fetch during HTML parse.
       {
         rel: "preload",
         as: "image",
-        href: photoPoolWaterMobile.url,
-        imageSrcSet: `${photoPoolWaterMobile.url} 960w, ${photoPoolWater.url} 1600w`,
-        imageSizes: "100vw",
+        href: photoLifeguardChair.url,
         fetchPriority: "high",
       },
+
       { rel: "canonical", href: `${SITE_URL}/` },
     ],
     scripts: [
