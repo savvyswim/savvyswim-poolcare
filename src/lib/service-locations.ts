@@ -30,6 +30,56 @@ export const SERVICE_LOCATIONS: ServiceLocation[] = [
   { name: "Rockwall", href: "/rockwall", lat: 32.9312, lng: -96.4597 },
 ];
 
+/**
+ * Wider DFW cities we run into that do not have their own page yet. Shown as
+ * plain text in the service-area list so the full coverage is visible.
+ */
+export const ADDITIONAL_SERVICE_CITIES: string[] = [
+  "Addison",
+  "Argyle",
+  "Arlington",
+  "Bedford",
+  "Carrollton",
+  "Cedar Hill",
+  "Celina",
+  "Colleyville",
+  "Coppell",
+  "DeSoto",
+  "Duncanville",
+  "Euless",
+  "Fairview",
+  "Farmers Branch",
+  "Flower Mound",
+  "Fort Worth",
+  "Grand Prairie",
+  "Grapevine",
+  "Haltom City",
+  "Heath",
+  "Hurst",
+  "Keller",
+  "Lake Highlands",
+  "Lantana",
+  "Lewisville",
+  "Little Elm",
+  "Lucas",
+  "Mansfield",
+  "Melissa",
+  "Mesquite",
+  "Murphy",
+  "North Richland Hills",
+  "Parker",
+  "Preston Hollow",
+  "Princeton",
+  "Rowlett",
+  "Sachse",
+  "Southlake",
+  "Sunnyvale",
+  "The Colony",
+  "Trophy Club",
+  "Wylie",
+];
+
+
 /** Office hours shown next to the map and mirrored in structured data. */
 export const BUSINESS_HOURS: { days: string; hours: string }[] = [
   { days: "Monday – Friday", hours: "8:00 AM – 6:00 PM" },
