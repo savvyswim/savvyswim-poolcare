@@ -33,7 +33,7 @@ export default function BusinessInfoCard() {
           <p className="flex items-start gap-3 text-sm">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <span>
-              <span className="block font-semibold">Mobile service — we come to you</span>
+              <span className="block font-semibold">Mobile service, we come to you</span>
               <span className="text-muted-foreground">
                 No walk-in shop. Weekly routes across{" "}
                 {SERVICE_LOCATIONS.slice(0, 6)
