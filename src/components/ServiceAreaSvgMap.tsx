@@ -34,6 +34,24 @@ export default function ServiceAreaSvgMap() {
     (a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx),
   );
 
+  // Place each label above its pin, nudging down until it clears the ones
+  // already placed so tightly-packed cities stay readable.
+  const placed: { x: number; y: number }[] = [];
+  const labels = points.map((p) => {
+    let y = p.y - 14;
+    let guard = 0;
+    while (
+      guard++ < 12 &&
+      placed.some((o) => Math.abs(o.x - p.x) < 78 && Math.abs(o.y - y) < 26)
+    ) {
+      y += 26;
+    }
+    placed.push({ x: p.x, y });
+    return { ...p, nameY: y, dayY: y + 13 };
+  });
+
+
+
 
   return (
     <svg
