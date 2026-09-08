@@ -29,6 +29,10 @@ export type LeadSyncRow = {
   crm_lead_id: string | null;
   lead_status: LeadStatus;
   status: "synced" | "failed" | "pending";
+  /** Whether the office alert + homeowner confirmation emails went out. */
+  email_status: "sent" | "failed" | "pending";
+  email_at: string | null;
+  email_recipients: string[];
   last_attempt_at: string | null;
   attempts: number;
   http_status: number | null;
@@ -64,6 +68,28 @@ export const retryLeadSync = createServerFn({ method: "POST" })
         : `CRM handoff failed${res.status ? ` (HTTP ${res.status})` : ""}`,
     };
   });
+
+/** Re-send the office alert and homeowner confirmation for one lead. */
+export const resendLeadEmails = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertOffice(context.supabase as never);
+    const { sendInspectionNotifications } = await import("./inspection-notify.server");
+    const res = await sendInspectionNotifications(data.id);
+    if (!res.sent) return { ok: false, detail: `Email not sent (${res.reason})` };
+    const outcomes = Object.entries(res.recipients);
+    const failed = outcomes.filter(([, o]) => o !== "sent").map(([to]) => to);
+    return {
+      ok: failed.length === 0,
+      detail:
+        failed.length === 0
+          ? `Emailed ${outcomes.length} recipient${outcomes.length === 1 ? "" : "s"}`
+          : `Failed for ${failed.join(", ")}`,
+    };
+  });
+
+
 
 export const setLeadStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   LEAD_STATUSES,
   getLeadSyncStatus,
+  resendLeadEmails,
   retryFailedLeadSyncs,
   retryLeadSync,
   setLeadStatus,
@@ -189,6 +190,19 @@ function LeadSyncPage() {
     onError: (err: Error) => toast.error(err.message),
   });
 
+  const resendEmailFn = useServerFn(resendLeadEmails);
+  const resendEmail = useMutation({
+    mutationFn: (id: string) => resendEmailFn({ data: { id } }),
+    onSuccess: (res) => {
+      if (res.ok) toast.success(res.detail);
+      else toast.error(res.detail);
+      void queryClient.invalidateQueries({ queryKey: ["lead-sync"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+
+
   const bulkRetry = useMutation({
     mutationFn: () => retryAllFn(),
     onSuccess: (res) => {
@@ -346,6 +360,7 @@ function LeadSyncPage() {
               <th className="p-3 text-left">Lead status</th>
               <th className="p-3 text-left">Source</th>
               <th className="p-3 text-left">CRM status</th>
+              <th className="p-3 text-left">Email alert</th>
               <th className="p-3 text-left">CRM row</th>
               <th className="p-3 text-left">Last attempt</th>
               <th className="p-3 text-left">Error</th>
@@ -355,7 +370,7 @@ function LeadSyncPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td className="p-6 text-foreground/50" colSpan={12}>
+                <td className="p-6 text-foreground/50" colSpan={13}>
                   No {filter === "all" ? "" : `${filter} `}leads in the last 30 days.
                 </td>
               </tr>
@@ -405,6 +420,27 @@ function LeadSyncPage() {
                     ) : null}
                   </td>
                   <td className="p-3 text-xs">
+                    <span
+                      className={
+                        r.email_status === "sent"
+                          ? "text-[#1FA9BE]"
+                          : r.email_status === "failed"
+                            ? "text-[#8E1F2C]"
+                            : "text-foreground/50"
+                      }
+                      title={r.email_recipients.join(", ") || undefined}
+                    >
+                      {r.email_status === "sent"
+                        ? "Sent"
+                        : r.email_status === "failed"
+                          ? "Failed"
+                          : "Pending"}
+                    </span>
+                    {r.email_at ? (
+                      <span className="block text-[11px] text-foreground/50">{when(r.email_at)}</span>
+                    ) : null}
+                  </td>
+                  <td className="p-3 text-xs">
                     {r.crm_lead_id ? (
                       <button
                         type="button"
@@ -430,13 +466,22 @@ function LeadSyncPage() {
                     {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : ", ")}
                   </td>
                   <td className="p-3 text-right">
-                    <button
-                      className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
-                      disabled={retry.isPending || r.status === "synced"}
-                      onClick={() => retry.mutate(r.id)}
-                    >
-                      Retry
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
+                        disabled={retry.isPending || r.status === "synced"}
+                        onClick={() => retry.mutate(r.id)}
+                      >
+                        Retry
+                      </button>
+                      <button
+                        className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
+                        disabled={resendEmail.isPending}
+                        onClick={() => resendEmail.mutate(r.id)}
+                      >
+                        Resend email
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
