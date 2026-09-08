@@ -58,10 +58,12 @@ export const submitReview = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => SubmitSchema.parse(input))
   .handler(async ({ data }): Promise<{ ok: true } | { ok: false; error: string }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getRequest } = await import("@tanstack/react-start/server");
 
+    const headers = getRequest().headers;
     const ip =
-      getRequestHeader("cf-connecting-ip") ||
-      getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ||
+      headers.get("cf-connecting-ip") ||
+      headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       "unknown";
 
     const { data: allowed } = await (
