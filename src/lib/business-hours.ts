@@ -1,7 +1,7 @@
 /**
  * Single source of truth for published business hours.
  *
- * These must match the hours on the Google Business Profile exactly — Google
+ * These must match the hours on the Google Business Profile exactly, Google
  * penalises listings whose website says something different. Change them here
  * and both the visible business-info card and the LocalBusiness structured
  * data update together.

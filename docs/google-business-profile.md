@@ -1,9 +1,9 @@
-# Google Business Profile — Savvy Swim setup guide
+# Google Business Profile, Savvy Swim setup guide
 
 Savvy Swim is a **service-area business**: we drive to the customer's pool and
 have no walk-in location. Google supports this, but only if the profile is set
 up as a service-area business with the address hidden. Everything below matches
-the live site exactly — copy the values verbatim, character for character.
+the live site exactly, copy the values verbatim, character for character.
 Mismatched name/phone/hours between the site and the profile is the single
 biggest reason listings fail to rank or get suspended.
 
@@ -20,7 +20,7 @@ verification from your own Google account. Work through these steps once.
 | Email | `hi@savvyswim.com` |
 | Primary category | Swimming pool cleaning service |
 | Secondary categories | Swimming pool repair service; Pool cleaning service |
-| Address | Hidden — service-area business |
+| Address | Hidden, service-area business |
 
 ### Hours
 
@@ -33,7 +33,7 @@ verification from your own Google account. Work through these steps once.
 ### Service areas (the twelve cities on the site map)
 
 Plano, Frisco, McKinney, Allen, Prosper, Richardson, Garland, Dallas,
-Highland Park, University Park, Irving, Rockwall — all TX.
+Highland Park, University Park, Irving, Rockwall, all TX.
 
 ### Description (750 char limit, this fits)
 
@@ -48,10 +48,10 @@ Highland Park, University Park, Irving, Rockwall — all TX.
 ## Steps
 
 1. Go to <https://business.google.com> and sign in with the Google account that
-   should own the listing (use a company account, not a personal one — you
+   should own the listing (use a company account, not a personal one, you
    cannot easily change owners later).
 2. Click **Add your business** and enter the name exactly as `Savvy Swim`.
-   Do **not** append keywords such as "Pool Cleaning Plano" — keyword stuffing
+   Do **not** append keywords such as "Pool Cleaning Plano", keyword stuffing
    the name is the most common cause of suspension.
 3. Choose the primary category **Swimming pool cleaning service**.
 4. When asked "Do you want to add a location customers can visit?" answer
@@ -59,8 +59,7 @@ Highland Park, University Park, Irving, Rockwall — all TX.
 5. Choose **I deliver goods and services to my customers**, then enter the
    twelve service-area cities listed above.
 6. Enter your real mailing address only when Google asks for it for
-   verification. Confirm the address is **hidden** from the public profile —
-   the toggle appears under Info › Business location after verification.
+   verification. Confirm the address is **hidden** from the public profile    the toggle appears under Info › Business location after verification.
 7. Enter the phone number and website from the table above.
 8. Verify. Google offers postcard, phone, email or video verification depending
    on the category and location. Video verification is common for service-area
@@ -73,7 +72,7 @@ Highland Park, University Park, Irving, Rockwall — all TX.
    - Upload at least 10 photos: logo, van, techs working, before/after pools.
      Real photos, no stock.
 10. Start requesting reviews from existing customers. Ask them to mention the
-    city — it is a genuine local ranking signal.
+    city, it is a genuine local ranking signal.
 
 ## After it is live
 
@@ -83,7 +82,7 @@ website's `LocalBusiness` markup to the verified listing.
 
 ## Do not do this
 
-Creating a separate profile per city — "Savvy Swim Frisco", "Savvy Swim Plano"
-— without a real, staffed address in that city violates Google's guidelines and
+Creating a separate profile per city, "Savvy Swim Frisco", "Savvy Swim Plano"
+without a real, staffed address in that city violates Google's guidelines and
 typically gets every profile in the group suspended. One profile with twelve
 service areas is the correct and safe setup.
