@@ -1,20 +1,11 @@
-import { useState } from "react";
 import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { Link } from "@/lib/router-compat";
 import {
   Instagram,
   Waves,
   Phone,
-  Droplets,
-  Wrench,
-  Sparkles,
-  Cpu,
-  Sun,
-  ShieldCheck,
-  CheckCircle2,
   ArrowRight,
   MessageSquare,
-  ChevronDown,
 } from "lucide-react";
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
@@ -52,12 +43,6 @@ const MEMBERSHIP_FAQ = [
 ];
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
-import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
-import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
-import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
-import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
-import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
-import { IMG_5494_JPG as photoOliveRings } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
 const PHONE_DISPLAY = "817-663-POOL";
@@ -66,121 +51,20 @@ const EMAIL = "hi@savvyswim.com";
 const SMS_PHONE = "+18176637665";
 
 
-const SERVICES = [
-  {
-    no: "01",
-    icon: Droplets,
-    title: "Weekly Pool Cleaning",
-    photo: photoNavyCabana.url,
-    alt: "Navy and white striped cabana umbrella beside a clear pool",
-    desc: "Crystal-clear water, year-round. Certified techs handle chemistry, cleaning, and equipment checks.",
-    includes: [
-      "Weekly chemistry balance",
-      "Skim, brush, vacuum & filter",
-      "Equipment inspection",
-      "Photo report after every visit",
-    ],
-  },
-  {
-    no: "02",
-    icon: Wrench,
-    title: "Equipment Repair",
-    photo: photoRescueTube.url,
-    alt: "Savvy Swim rescue tube floating in a pool",
-    desc: "Pumps, filters, heaters, and automation diagnosed and repaired — most parts stocked on the truck.",
-    includes: [
-      "Pump & motor repair",
-      "Filter cleans & cartridge swaps",
-      "Heater diagnostics & repair",
-      "Valve & plumbing leaks",
-    ],
-  },
-  {
-    no: "03",
-    icon: Sparkles,
-    title: "Green Pool Recovery",
-    photo: photoSavvyLetters.url,
-    alt: "White inflatable SAVVY letters floating in clear blue water",
-    desc: "Algae, storm debris, or a pool left too long — we get it swim-ready fast with a full chemical reset.",
-    includes: [
-      "Shock & algaecide treatment",
-      "Deep vacuum & brush-out",
-      "Filter deep clean",
-      "Follow-up balance visits",
-    ],
-  },
-  {
-    no: "04",
-    icon: Cpu,
-    title: "Salt & Automation Service",
-    photo: photoSavvyRings.url,
-    alt: "Red and white striped Savvy inflatable rings",
-    desc: "Salt cell cleaning, chlorinator replacement, and smart controls tuned so your system runs hands-free.",
-    includes: [
-      "Salt cell clean & replace",
-      "Pentair / Jandy / Hayward systems",
-      "Variable-speed pump programming",
-      "App control setup",
-    ],
-  },
-  {
-    no: "05",
-    icon: Sun,
-    title: "Seasonal Openings & Closings",
-    photo: photoRivieraLoungers.url,
-    alt: "Red and white striped loungers and fringed umbrellas by a pool",
-    desc: "Get the pool ready for summer or buttoned up for winter — covers, freeze protection, and a full check.",
-    includes: [
-      "Open & balance for the season",
-      "Winterize & freeze protection",
-      "Cover install & removal",
-      "Full equipment inspection",
-    ],
-  },
-  {
-    no: "06",
-    icon: ShieldCheck,
-    title: "Tile, Deck & Surface Care",
-    photo: photoOliveRings.url,
-    alt: "Olive and white striped inflatable rings on clear water",
-    desc: "Waterline tile scale removal, deck wash-downs, and surface spot care to keep everything looking new.",
-    includes: [
-      "Waterline tile cleaning",
-      "Calcium & scale removal",
-      "Deck & coping wash",
-      "Stain treatment",
-    ],
-  },
-  {
-    no: "07",
-    icon: Waves,
-    title: "Savvy Swim Society",
-    photo: photoRedUmbrellas.url,
-    alt: "Red and white striped umbrellas lined up beside a pool",
-    desc: "Our all-inclusive membership plan: standard weekly cleaning plus a full filter deep-clean every quarter and salt cell service. Monthly rate is set by your pool size.",
-    includes: [
-      "Standard cleaning — skim, brush, vacuum, chemistry",
-      "Filter deep-clean every 3 months (4x/year)",
-      "Salt cell monitoring, tuning & quarterly clean",
-      "Priced by pool size after the walkthrough",
-    ],
-  },
-  {
-    no: "08",
-    icon: ShieldCheck,
-    title: "The Savvy Concierge",
-    photo: photoNavyCabana.url,
-    alt: "Navy and white cabana stripes beside a pool",
-    desc: "Hands-off ownership. Always guest-ready. Our top tier bundles the Swim Club membership ($19.99/mo) into your pool's monthly rate.",
-    includes: [
-      "4 visits/month + 5 on-call touch-ups",
-      "All chemicals, salt & tabs included",
-      "Quarterly filter deep clean",
-      "Free minor equipment repairs",
-      "Seasonal open & close service",
-      "24/7 text support + Swim Club access",
-    ],
-  },
+const SERVICE_MENU = [
+  "Weekly Maintenance Plans",
+  "Filter Clean",
+  "Green Pool Recovery",
+  "Algae Removal",
+  "Tile & Coping Descaling",
+  "Acid Washing",
+  "Diagnostic Service Call",
+  "Equipment Repair & Replacement",
+  "Leak Detection",
+  "Inspections",
+  "Salt Systems",
+  "Automation Service",
+  "Pool Resurfacing & Remodeling",
 ];
 
 
@@ -191,7 +75,6 @@ const PROCESS = [
 ];
 
 const Services = () => {
-  const [openCard, setOpenCard] = useState<string | null>(null);
 
   const openBooking = (service?: string) =>
     goToLead("services", service ? { service } : {});
@@ -316,103 +199,43 @@ const Services = () => {
         {/* SERVICES */}
         <section className="perf-section py-12 sm:py-24">
           <div className="container-tight">
-            <div className="flex items-end justify-between gap-6 mb-10 border-b border-hairline pb-5">
-              <h2 className="font-display text-[1.45rem] sm:text-[2.2rem] uppercase tracking-tight leading-[1.05]">
-                The service list
+            <div className="border-b border-hairline pb-5 mb-8">
+              <h2 className="font-display text-[1.8rem] sm:text-[2.8rem] uppercase tracking-tight leading-[1.05]">
+                What do we offer?
               </h2>
-              <span className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Six / Six
-              </span>
+              <p className="mt-2 font-serif italic text-[1.15rem] sm:text-[1.4rem] text-muted-foreground">
+                I thought you'd never ask!
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {SERVICES.map((s) => {
-                const isOpen = openCard === s.title;
-                const panelId = `svc-panel-${s.no}`;
-                return (
-                <div
-                  key={s.title}
-                  className="card-3d rounded-sm overflow-hidden group flex flex-col"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={s.photo}
-                      alt={s.alt}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                    />
-                    <span className="absolute top-3 left-3 font-tech text-[10px] tracking-[0.2em] bg-background/85 px-2 py-1 rounded-sm">
-                      {s.no}
+            <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-2">
+              Pool Care
+            </div>
+
+            <ul className="border-t border-hairline">
+              {SERVICE_MENU.map((name, i) => (
+                <li key={name} className="border-b border-hairline">
+                  <button
+                    type="button"
+                    onClick={() => openBooking(name)}
+                    data-savvy-cta="request_quote"
+                    aria-label={`Book a free quote for ${name}`}
+                    className="group flex w-full items-center gap-4 py-4 text-left transition hover:bg-primary/[0.04]"
+                  >
+                    <span className="font-tech text-[11px] tracking-[0.2em] text-muted-foreground w-8 shrink-0">
+                      {String(i + 1).padStart(2, "0")}
                     </span>
-                  </div>
-
-                  <div className="p-5 sm:p-7 flex flex-col flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <s.icon className="h-[18px] w-[18px] text-amber-brand" strokeWidth={1.75} />
-                      <span className="h-px flex-1 bg-hairline" />
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setOpenCard(isOpen ? null : s.title)}
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      className="text-left w-full"
-                    >
-                      <span className="flex items-start justify-between gap-3">
-                        <span className="text-[1.08rem] sm:text-[1.15rem] font-semibold leading-snug">{s.title}</span>
-                        <ChevronDown
-                          className={`h-5 w-5 mt-0.5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180 text-primary" : ""}`}
-                          strokeWidth={1.75}
-                        />
-                      </span>
-                      <span className="mt-2 block text-[0.95rem] sm:text-sm text-muted-foreground leading-[1.65]">{s.desc}</span>
-                      {!isOpen && (
-                        <span className="mt-3 block font-tech text-[10px] uppercase tracking-[0.2em] text-primary">
-                          Tap to see what's included
-                        </span>
-                      )}
-                    </button>
-
-                    <div
-                      id={panelId}
-                      hidden={!isOpen}
-                      className="flex flex-col flex-1"
-                    >
-                      <div className="my-5 h-px bg-hairline" />
-
-                      <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                        What's included
-                      </div>
-                      <ul className="space-y-2 mb-6">
-                        {s.includes.map((item) => (
-                          <li key={item} className="flex items-start gap-2 text-[0.95rem] sm:text-sm leading-[1.55]">
-                            <CheckCircle2 className="h-4 w-4 text-amber-brand flex-shrink-0 mt-0.5" strokeWidth={1.75} />
-                            <span className="text-foreground/90">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <button
-                        type="button"
-                        onClick={() => openBooking(s.title)}
-                        data-savvy-cta="request_quote"
-                        aria-label={`Book a free quote for ${s.title}`}
-                        className="mt-auto inline-flex w-full items-center justify-between gap-2 border-t border-hairline pt-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-foreground hover:text-primary transition"
-                      >
-                        <span>Book Free Quote</span>
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                );
-              })}
-
-            </div>
+                    <span className="font-display text-[1.05rem] sm:text-[1.35rem] uppercase tracking-tight leading-tight flex-1 group-hover:text-primary transition-colors">
+                      {name}
+                    </span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
+
 
         {/* PROCESS */}
         <section className="perf-section border-y border-hairline bg-primary/[0.03] py-12 sm:py-20">
