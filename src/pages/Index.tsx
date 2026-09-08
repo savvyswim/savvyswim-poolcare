@@ -130,66 +130,100 @@ const Index = () => {
       <SiteHeader />
       <ScrollReveal />
 
+      <CityTicker />
+
       <main>
         {/* 1 — WHO WE ARE */}
-        <section id="who" className="relative border-b border-hairline">
-          <div className="absolute inset-0 overflow-hidden" aria-hidden>
-            <img
-              src={photoPoolWater.url}
-              srcSet={`${photoPoolWaterMobile.url} 960w, ${photoPoolWater.url} 1600w`}
-              sizes="100vw"
-              alt=""
-              width={1920}
-              height={1280}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="h-full w-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-foreground/45" />
-          </div>
+        <section id="who" className="border-b border-hairline bg-background">
+          <div className="container-tight py-14 sm:py-20 lg:py-24">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
+              <div className="min-w-0">
+                <h1 className="font-display uppercase leading-[0.82] tracking-[-0.02em] text-accent">
+                  <span className="sr-only">
+                    Savvy Swim — pool cleaning and service in DFW
+                  </span>
+                  <span
+                    aria-hidden
+                    className="block"
+                    style={{ fontSize: "clamp(3.2rem, 12vw, 9rem)" }}
+                  >
+                    <span className="block">Savvy</span>
+                    <span className="block">Swim</span>
+                  </span>
+                </h1>
 
-          <div className="container-tight relative py-20 sm:py-28 lg:py-32">
-            <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-primary-foreground/80">
-              WHO WE ARE
-            </div>
-            <h1
-              className="mt-3 type-mega text-on-media"
-              style={{ fontSize: "clamp(3rem, 10vw, 7rem)" }}
-            >
-              Savvy Swim
-            </h1>
-            <p className="mt-3 font-serif text-[1.15rem] italic leading-snug text-primary-foreground/90 sm:text-[1.4rem]">
-              On duty, so you don&rsquo;t have to be.
-            </p>
+                <p className="mt-4 font-display text-[1.05rem] uppercase tracking-tight text-accent/70 sm:text-[1.45rem]">
+                  Pool cleaning &amp; service in DFW
+                </p>
 
+                {/* Photos ride under the wordmark on phones, beside it on desktop. */}
+                <div className="mt-7 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 lg:hidden">
+                  {HERO_PHOTOS.map((p, i) => (
+                    <img
+                      key={p.src}
+                      src={p.src}
+                      alt={p.alt}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      fetchPriority={i === 0 ? "high" : undefined}
+                      decoding="async"
+                      className="h-40 w-32 shrink-0 rounded-sm object-cover"
+                    />
+                  ))}
+                </div>
 
-            <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-primary-foreground sm:text-[1.3rem]">
-              Weekly pool cleaning, service and repair across Dallas–Fort Worth.
-            </p>
+                <div className="mt-8 border-t border-hairline pt-7">
+                  <ul className="space-y-2.5">
+                    {PROMISES.map((p) => (
+                      <li key={p} className="flex items-start gap-3 text-[1rem] sm:text-[1.05rem]">
+                        <span
+                          aria-hidden
+                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                        />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <button
+                    type="button"
+                    onClick={() => goToLead("home_hero")}
+                    data-savvy-cta="request_quote"
+                    aria-label="Book a free consultation — opens the Savvy Swim booking form"
+                    className="btn-quote font-tech inline-flex min-h-12 items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free
+                    consultation
+                  </button>
+                  <a
+                    href={PHONE_HREF}
+                    onClick={onCallClick("hero")}
+                    aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
+                    className="font-tech inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-hairline px-7 py-3.5 transition-colors hover:bg-ink-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    <Phone className="h-4 w-4" aria-hidden="true" /> {PHONE_DISPLAY}
+                  </a>
+                </div>
+              </div>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button
-                type="button"
-                onClick={() => goToLead("home_hero")}
-                data-savvy-cta="request_quote"
-                aria-label="Book a free consultation — opens the Savvy Swim booking form"
-                className="btn-quote font-tech inline-flex min-h-12 items-center justify-center gap-2 px-7 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Book a free consultation
-              </button>
-              <a
-                href={PHONE_HREF}
-                onClick={onCallClick("hero")}
-                aria-label={`Call Savvy Swim at ${PHONE_DISPLAY}`}
-                className="font-tech inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary-foreground/40 px-7 py-3.5 text-primary-foreground transition-colors hover:border-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <Phone className="h-4 w-4" aria-hidden="true" /> {PHONE_DISPLAY}
-              </a>
+              <div className="hidden grid-cols-3 gap-3 lg:grid lg:w-[27rem] xl:w-[32rem]">
+                {HERO_PHOTOS.map((p, i) => (
+                  <img
+                    key={p.src}
+                    src={p.src}
+                    alt={p.alt}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    fetchPriority={i === 0 ? "high" : undefined}
+                    decoding="async"
+                    className="aspect-3/4 w-full rounded-sm object-cover"
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </section>
+
 
         {/* 2 — WHAT WE OFFER */}
         <section id="offer" data-reveal className="border-b border-hairline py-20 sm:py-24">
