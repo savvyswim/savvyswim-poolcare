@@ -117,6 +117,10 @@ const Index = () => {
             >
               Savvy Swim
             </h1>
+            <p className="mt-3 font-serif text-[1.15rem] italic leading-snug text-primary-foreground/90 sm:text-[1.4rem]">
+              On duty, so you don&rsquo;t have to be.
+            </p>
+
 
             <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-primary-foreground sm:text-[1.3rem]">
               Weekly pool cleaning, service and repair across Dallas–Fort Worth. Same technician
