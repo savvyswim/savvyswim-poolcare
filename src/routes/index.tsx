@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Index from "@/pages/Index";
-import photoPoolWaterMobile from "@/assets/pool-water-mobile.webp.asset.json";
-import { pool_water_hd_jpg as photoPoolWater } from "@/assets/photos";
+import {
+  pool_water_hd_jpg as photoPoolWater,
+  IMG_5512_PNG as photoLifeguardChair,
+} from "@/assets/photos";
+
 import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-data";
 import { listApprovedReviews } from "@/lib/reviews.functions";
 
