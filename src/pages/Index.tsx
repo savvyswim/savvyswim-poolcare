@@ -72,20 +72,60 @@ const REVIEWS = [
   { q: "Heater stopped working mid-winter, they had it running again in one visit.", a: "Jenna W.", c: "McKinney, TX" },
 ];
 
+type ShownReview = { q: string; a: string; c: string; rating: number };
+
 const Index = () => {
+  const loaderData = useLoaderData({ from: "/", structuralSharing: false }) as
+    | { reviews?: PublicReview[] }
+    | undefined;
+  const live: PublicReview[] = loaderData?.reviews ?? [];
+
+  const shown: ShownReview[] = live.length
+    ? live.map((r) => ({
+        q: r.body,
+        a: r.author_name,
+        c: r.author_city ?? "",
+        rating: r.rating,
+      }))
+    : REVIEWS.map((r) => ({ ...r, rating: 5 }));
+
+  const reviewSchema = live.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        name: "Savvy Swim",
+        url: "https://savvyswimservices.com",
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: (
+            live.reduce((sum, r) => sum + r.rating, 0) / live.length
+          ).toFixed(1),
+          reviewCount: live.length,
+        },
+        review: live.map((r) => ({
+          "@type": "Review",
+          reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+          author: { "@type": "Person", name: r.author_name },
+          reviewBody: r.body,
+          datePublished: r.created_at.slice(0, 10),
+        })),
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Savvy Swim",
+        url: "https://savvyswimservices.com",
+      };
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
         title="Savvy Swim — Pool Cleaning, Service & Repair in Texas"
         description="Weekly pool cleaning, maintenance, equipment service and repair across DFW. Free inspection from Savvy Swim, a Santana & Rivera company."
         path="/"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "Savvy Swim",
-          url: "https://savvyswimservices.com",
-        }}
+        jsonLd={reviewSchema}
       />
+
 
       <SiteHeader />
       <ScrollReveal />
