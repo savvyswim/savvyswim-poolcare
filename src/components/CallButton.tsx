@@ -228,9 +228,12 @@ export function CallLink({
 export function CallButton({
   location,
   className = "",
+  hidePhoneTextOnNarrowDesktop = false,
 }: {
   location: string;
   className?: string;
+  /** Hide the number between 1024px and 1280px so the menu has room. */
+  hidePhoneTextOnNarrowDesktop?: boolean;
 }) {
   return (
     <a
@@ -241,7 +244,7 @@ export function CallButton({
       className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground transition hover:text-primary ${className}`}
     >
       <Phone className="h-4 w-4 shrink-0 text-amber-brand" aria-hidden="true" />
-      <span>{PHONE_VANITY}</span>
+      <span className={hidePhoneTextOnNarrowDesktop ? "lg:hidden 2xl:inline" : ""}>{PHONE_VANITY}</span>
     </a>
   );
 }
