@@ -521,9 +521,86 @@ const Services = () => {
           </div>
         </section>
 
+        {/* SAVVY SWIM CLUB */}
+        <section id="membership" className="container-tight py-16">
+          <div className="overflow-hidden rounded-sm border border-primary/10 shadow-3d">
+            <div className="flex flex-col lg:flex-row">
+              <div className="flex w-full flex-col bg-card lg:w-1/2">
+                <div className="stripes-navy h-6 w-full" />
+                <div className="flex flex-1 flex-col p-8 sm:p-10">
+                  <span className="font-badge block text-lg leading-none tracking-[0.2em] text-red-brand">
+                    Exclusivity
+                  </span>
+                  <h2 className="font-display mt-1 text-4xl leading-none text-navy-brand sm:text-5xl">
+                    Swim Club
+                  </h2>
+
+                  <div className="mb-8 mt-6">
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-display text-5xl text-navy-brand sm:text-6xl">$19.99</span>
+                      <span className="font-editorial text-xl italic text-primary/60">per month</span>
+                    </div>
+                    <p className="mt-2 text-sm font-semibold uppercase tracking-tight text-primary/80">
+                      Member perks on every service call · 12-month agreement, billed monthly
+                    </p>
+                  </div>
+
+                  <ul className="mb-10 space-y-4 text-sm text-primary">
+                    {[
+                      "First service visit free (new customers)",
+                      "25% off filter cleans",
+                      "10% off services · 10% off parts",
+                      "Priority scheduling",
+                      "24/7 text support",
+                    ].map((perk) => (
+                      <li key={perk} className="flex items-center gap-3">
+                        <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-lifeguard" />
+                        <span>{perk}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    type="button"
+                    onClick={() => goToSwimClub("services_membership")}
+                    className="font-display mt-auto w-full bg-lifeguard py-5 text-xl uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-navy"
+                  >
+                    Join the Swim Club
+                  </button>
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    12-month agreement · Billed monthly at $19.99
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex w-full flex-col bg-navy-brand p-8 sm:p-10 lg:w-1/2">
+                <h3 className="font-editorial text-3xl normal-case italic text-canvas">
+                  Membership details
+                </h3>
+                <p className="mt-2 text-xs text-canvas/60">
+                  Everything included with your $19.99/month Savvy Swim Club.
+                </p>
+                <Accordion type="single" collapsible className="mt-6">
+                  {MEMBERSHIP_FAQ.map((item) => (
+                    <AccordionItem key={item.q} value={item.q} className="border-b border-canvas/20">
+                      <AccordionTrigger className="text-left text-sm font-semibold uppercase tracking-wide text-canvas hover:no-underline [&>svg]:text-lifeguard">
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-xs leading-relaxed text-canvas/70">
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="container-tight py-16">
           <ServiceAreaMap />
         </section>
+
 
 
       </main>
