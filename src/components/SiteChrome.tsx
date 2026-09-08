@@ -11,14 +11,14 @@ export const PHONE_HREF = "tel:+18176637665";
 export const SMS_PHONE = "+18176637665";
 export const CUSTOMER_LOGIN_URL = "https://savvyswim.app";
 
-type NavItem = { label: string; to?: string; hash?: string };
+type NavItem = { label: string; hash: string };
 
 const NAV: NavItem[] = [
-  { label: "Who we are", to: "/", hash: "who" },
-  { label: "What we offer", to: "/", hash: "offer" },
-  { label: "How it happens", to: "/", hash: "how" },
-  { label: "Why people go Savvy", to: "/", hash: "why" },
-  { label: "Contact", to: "/", hash: "contact" },
+  { label: "Who we are", hash: "who" },
+  { label: "What we offer", hash: "offer" },
+  { label: "How it happens", hash: "how" },
+  { label: "Why people go Savvy", hash: "why" },
+  { label: "Contact", hash: "contact" },
 ];
 
 /** Shared top bar: wordmark, the five home-page sections, call + inspection. */
