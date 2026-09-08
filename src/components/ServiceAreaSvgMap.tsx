@@ -27,6 +27,14 @@ function project(lat: number, lng: number) {
 export default function ServiceAreaSvgMap() {
   const points = SERVICE_LOCATIONS.map((l) => ({ ...l, ...project(l.lat, l.lng) }));
 
+  // Order the coverage outline around the centroid so it reads as one region.
+  const cx = points.reduce((s, p) => s + p.x, 0) / points.length;
+  const cy = points.reduce((s, p) => s + p.y, 0) / points.length;
+  const outline = [...points].sort(
+    (a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx),
+  );
+
+
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
