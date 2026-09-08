@@ -420,6 +420,27 @@ function LeadSyncPage() {
                     ) : null}
                   </td>
                   <td className="p-3 text-xs">
+                    <span
+                      className={
+                        r.email_status === "sent"
+                          ? "text-[#1FA9BE]"
+                          : r.email_status === "failed"
+                            ? "text-[#8E1F2C]"
+                            : "text-foreground/50"
+                      }
+                      title={r.email_recipients.join(", ") || undefined}
+                    >
+                      {r.email_status === "sent"
+                        ? "Sent"
+                        : r.email_status === "failed"
+                          ? "Failed"
+                          : "Pending"}
+                    </span>
+                    {r.email_at ? (
+                      <span className="block text-[11px] text-foreground/50">{when(r.email_at)}</span>
+                    ) : null}
+                  </td>
+                  <td className="p-3 text-xs">
                     {r.crm_lead_id ? (
                       <button
                         type="button"
