@@ -107,7 +107,7 @@ export default function LeaveReview() {
                         onClick={() => setRating(n)}
                         onMouseEnter={() => setHover(n)}
                         onMouseLeave={() => setHover(0)}
-                        className="p-1 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="grid min-h-11 min-w-11 place-items-center p-1 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                       >
                         <Star
                           className={`h-8 w-8 ${
@@ -132,7 +132,7 @@ export default function LeaveReview() {
                   rows={5}
                   required
                   placeholder="What did our tech do, and how does the water look now?"
-                  className="mt-2 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-sm leading-relaxed"
+                  className="mt-2 w-full rounded-sm border border-hairline bg-transparent px-3 py-3 text-base leading-relaxed sm:text-sm"
                 />
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -142,11 +142,12 @@ export default function LeaveReview() {
                     </label>
                     <input
                       id="review-name"
+                      autoComplete="given-name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       maxLength={80}
                       required
-                      className="mt-2 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-sm"
+                      className="mt-2 min-h-11 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-base sm:text-sm"
                     />
                   </div>
                   <div>
@@ -155,11 +156,12 @@ export default function LeaveReview() {
                     </label>
                     <input
                       id="review-city"
+                      autoComplete="address-level2"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       maxLength={80}
                       placeholder="Frisco, TX"
-                      className="mt-2 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-sm"
+                      className="mt-2 min-h-11 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-base sm:text-sm"
                     />
                   </div>
                 </div>
@@ -170,10 +172,12 @@ export default function LeaveReview() {
                 <input
                   id="review-email"
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   maxLength={200}
-                  className="mt-2 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-sm"
+                  className="mt-2 min-h-11 w-full rounded-sm border border-hairline bg-transparent px-3 py-2 text-base sm:text-sm"
                 />
 
                 {error && (
@@ -185,7 +189,7 @@ export default function LeaveReview() {
                 <button
                   type="submit"
                   disabled={busy}
-                  className="btn-quote mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-7 py-3.5 text-sm font-bold uppercase tracking-wide disabled:opacity-60"
+                  className="btn-quote mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-7 py-3.5 sm:w-auto text-sm font-bold uppercase tracking-wide disabled:opacity-60"
                 >
                   <Send className="h-4 w-4" /> {busy ? "Sending…" : "Send review"}
                 </button>
