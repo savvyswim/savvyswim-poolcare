@@ -41,8 +41,8 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     const slot = req.preferred_contact_time ?? "—";
     const headline =
       data.status === "scheduled"
-        ? `Inspection SCHEDULED — ${req.full_name}`
-        : `Inspection COMPLETED — ${req.full_name}`;
+        ? `Inspection SCHEDULED: ${req.full_name}`
+        : `Inspection COMPLETED: ${req.full_name}`;
     const line = `${headline}\n${req.reference_number}\n${req.address}, ${req.postal_code}\n${
       req.preferred_date ?? "date TBD"
     } · ${slot}\n${req.phone}`;

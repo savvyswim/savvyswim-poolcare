@@ -149,10 +149,10 @@ export async function sendInspectionNotifications(
   // Homeowner confirmation.
   const firstName = esc(req.full_name.split(" ")[0]);
   const headline = isWaterTest
-    ? `Thanks, ${firstName} — your free water test is booked in.`
-    : `Thanks, ${firstName} — your free inspection is booked in.`;
+    ? `Thanks, ${firstName}, your free water test is booked in.`
+    : `Thanks, ${firstName}, your free inspection is booked in.`;
   const body = isWaterTest
-    ? `We have your pool at <strong>${esc(req.address)}</strong>. We'll run a full chemistry panel and send you the readings with exactly what your water needs — no obligation.`
+    ? `We have your pool at <strong>${esc(req.address)}</strong>. We'll run a full chemistry panel and send you the readings with exactly what your water needs. No obligation.`
     : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
 
   try {
@@ -211,8 +211,8 @@ export async function sendInspectionNotifications(
       if (await hasSmsOptIn(smsTo)) {
         const { sendStatusSms } = await import("./appointment-status-notify.server");
         const smsText = isWaterTest
-          ? `Savvy Swim: thanks ${req.full_name.split(" ")[0]} — your free water test request (${req.reference_number}) is in. We'll text your readings and next available windows. Questions? 817-663-7665`
-          : `Savvy Swim: thanks ${req.full_name.split(" ")[0]} — your free inspection request (${req.reference_number}) is in. A tech reviews it within 1 business day and we'll text two visit windows. Questions? 817-663-7665`;
+          ? `Savvy Swim: thanks ${req.full_name.split(" ")[0]}, your free water test request (${req.reference_number}) is in. We'll text your readings and next available windows. Questions? 817-663-7665`
+          : `Savvy Swim: thanks ${req.full_name.split(" ")[0]}, your free inspection request (${req.reference_number}) is in. A tech reviews it within 1 business day and we'll text two visit windows. Questions? 817-663-7665`;
         smsOutcome = (await sendStatusSms(smsTo, smsText)) ? "sent" : "failed";
       }
     }
