@@ -7,6 +7,7 @@ import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
+import { imgProps } from "@/lib/img";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
@@ -178,10 +179,8 @@ const PlanoPoolCleaning = () => {
 
               <div className="lg:col-span-5">
                 <img
-                  src={photoNavyCabana.url}
+                  {...imgProps(photoNavyCabana, { priority: true, sizes: "(min-width: 1024px) 40vw, 100vw" })}
                   alt="Navy and white striped cabana umbrella beside a clean Plano pool"
-                  loading="eager"
-                  fetchPriority="high"
                   className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -250,9 +249,9 @@ const PlanoPoolCleaning = () => {
               </ul>
             </div>
             <div className="lg:col-span-6 grid grid-cols-2 gap-3">
-              <img src={photoRivieraLoungers.url} alt="Red and white striped loungers beside a Plano backyard pool" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <img src={photoSavvyLetters.url} alt="Savvy Swim inflatable letters floating in clear pool water" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
-              <img src={photoRedUmbrellas.url} alt="Red and white umbrellas above a serviced pool deck" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Plano backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
+              <img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
               <div className="border border-hairline rounded-sm p-5 flex flex-col justify-center mt-8">
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Guarantee</div>
                 <p className="mt-2 text-[0.9rem] leading-relaxed">

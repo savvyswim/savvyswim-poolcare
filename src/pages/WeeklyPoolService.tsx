@@ -16,6 +16,7 @@ import {
   IMG_5512_PNG as photoSavvyRings,
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
 
 const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
@@ -161,9 +162,8 @@ export default function WeeklyPoolService() {
               </div>
               <div className="lg:col-span-5">
                 <img
-                  src={photoWater.url}
+                  {...imgProps(photoWater, { priority: true, sizes: "(min-width: 1024px) 50vw, 100vw" })}
                   alt="Clear, balanced pool water after a weekly Savvy Swim service visit in Dallas–Fort Worth"
-                  loading="eager"
                   className="w-full h-[240px] sm:h-[320px] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -223,9 +223,8 @@ export default function WeeklyPoolService() {
                 ))}
               </ul>
               <img
-                src={photoSavvyRings.url}
+                {...imgProps(photoSavvyRings, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Savvy Swim rings floating in a clean, freshly serviced backyard pool"
-                loading="lazy"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"
               />
             </div>
@@ -256,9 +255,8 @@ export default function WeeklyPoolService() {
                 ))}
               </ul>
               <img
-                src={photoRivieraLoungers.url}
+                {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Striped loungers beside a weekly-serviced pool in Dallas–Fort Worth"
-                loading="lazy"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"
               />
             </div>

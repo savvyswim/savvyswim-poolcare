@@ -42,6 +42,7 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 
+import { imgProps } from "@/lib/img";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
@@ -160,12 +161,12 @@ const Services = () => {
               <div className="lg:col-span-5">
                 <figure className="relative">
                   <img
-                    src={photoLifeguardChair.url}
+                    {...imgProps(photoLifeguardChair, {
+                      priority: true,
+                      sizes: "(min-width: 1024px) 33vw, 100vw",
+                    })}
                     alt="Savvy Swim lifeguard chair with a red striped umbrella beside a pool"
                     className="w-full aspect-[4/5] object-cover rounded-sm"
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
                   />
                   <figcaption className="mt-3 flex items-center justify-between font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     <span>Plate I: On duty</span>
@@ -242,10 +243,8 @@ const Services = () => {
           <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-5">
               <img
-                src={photoRedUmbrellas.url}
+                {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 1024px) 40vw, 100vw" })}
                 alt="Red and white striped fringed umbrellas against a blue sky"
-                loading="lazy"
-                  decoding="async"
                 className="w-full aspect-[5/4] object-cover rounded-sm"
               />
             </div>
