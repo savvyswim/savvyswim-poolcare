@@ -392,6 +392,10 @@ const Index = () => {
             <div className="mt-12">
               <ServiceAreaMap />
             </div>
+
+            <div className="mt-8">
+              <BusinessInfoCard />
+            </div>
           </div>
         </section>
       </main>
