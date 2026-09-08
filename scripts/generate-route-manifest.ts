@@ -27,7 +27,7 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Route files whose loader throws a redirect. the canary must expect a 3xx there. */
+/** Route files whose loader throws a redirect. The canary must expect a 3xx there. */
 export function findRedirectRoutes(dir: string = ROUTES_DIR): string[] {
   const found = walk(dir)
     .filter((file) => /\.tsx?$/.test(file))
@@ -42,7 +42,7 @@ export function findRedirectRoutes(dir: string = ROUTES_DIR): string[] {
 
 export function renderManifest(paths: string[], redirects: string[]): string {
   return [
-    "// GENERATED FILE. do not edit.",
+    "// GENERATED FILE. Do not edit.",
     "// Produced by scripts/generate-route-manifest.ts from src/routeTree.gen.ts.",
     "// Every URL this deployment serves, used as the single source of truth for",
     "// canary / smoke monitoring (see src/lib/canary-routes.ts).",

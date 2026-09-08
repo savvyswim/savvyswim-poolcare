@@ -212,7 +212,7 @@ export const Route = createFileRoute("/api/public/leads")({
         const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
 
         // Validate the optional discount / referral code. An unknown code is
-        // stored and flagged rather than rejected. never lose a lead over it.
+        // stored and flagged rather than rejected. Never lose a lead over it.
         const { lookupPromoCode } = await import("@/lib/promo.functions");
         const promo = await lookupPromoCode(lead.promo_code ?? "");
 

@@ -1,7 +1,7 @@
 /**
  * App handoff links.
  *
- * savvyswim.com is the marketing website. Everything transactional. customer
+ * savvyswim.com is the marketing website. Everything transactional. Customer
  * portal, billing, checkout, staff CRM, lives in the Savvy Swim app at
  * savvyswim.app. Both share one backend, so a handoff is just a link.
  */
@@ -103,7 +103,7 @@ export function leadUrl(
  * Resolution order:
  *   1. VITE_SWIM_CLUB_STRIPE_URL, explicit override (a live payment link).
  *   2. The CRM join route, once VITE_SWIM_CLUB_JOIN_READY is turned on.
- *   3. null. no checkout is live yet, so callers fall back to the on-site
+ *   3. Null. No checkout is live yet, so callers fall back to the on-site
  *      form instead of sending anyone to a dead URL.
  * ------------------------------------------------------------------ */
 

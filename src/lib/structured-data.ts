@@ -38,7 +38,7 @@ export function localBusinessSchema(image?: string) {
     currenciesAccepted: "USD",
     paymentAccepted: "Credit Card, ACH",
     // Service-area business: we come to the customer, so no public street
-    // address is published. areaServed below is the authoritative coverage.
+    // address is published. AreaServed below is the authoritative coverage.
     areaServed,
     openingHoursSpecification: [
       {

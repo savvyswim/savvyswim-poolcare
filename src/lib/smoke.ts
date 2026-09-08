@@ -3,8 +3,8 @@
  *
  * The routes probed here come from the SAME generated manifest the canary uses
  * (src/lib/route-manifest.gen.ts via canary-routes), so smoke coverage can never
- * drift from what the router actually serves. Pure functions only. no fetch,
- * no env. so they are unit-testable and safe to import anywhere.
+ * drift from what the router actually serves. Pure functions only. No fetch,
+ * no env. So they are unit-testable and safe to import anywhere.
  */
 import {
   isGuardedRoute,

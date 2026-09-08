@@ -8,7 +8,7 @@ import { trackContactClick } from "@/lib/contactTracking";
  *
  * Phones and tablets: plain `tel:` anchors, so the device opens its dialer.
  * Desktop browsers: we open a small call card instead of leaving the visitor
- * on a blank tab. it still offers a real `tel:` "Call now" (Macs/iPads hand
+ * on a blank tab. It still offers a real `tel:` "Call now" (Macs/iPads hand
  * off to FaceTime/iPhone), a text link, a callback request, and the number
  * itself in plain sight.
  */
@@ -26,7 +26,7 @@ function track(location: string) {
 
 /**
  * True only on a real desktop browser, which may have no dialer for `tel:`.
- * Decided by device capability. never by window width, so a narrow desktop
+ * Decided by device capability. Never by window width, so a narrow desktop
  * window or preview panel still gets the call card.
  */
 function isDesktop() {

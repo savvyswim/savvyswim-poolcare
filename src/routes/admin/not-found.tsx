@@ -98,7 +98,7 @@ function Stat({ label, value, alarm }: { label: string; value: string | number; 
 
 function EventTable({ rows }: { rows: NotFoundEventRow[] }) {
   if (!rows.length) {
-    return <p className="py-10 text-sm text-foreground/55">Nothing here. no 404s logged.</p>;
+    return <p className="py-10 text-sm text-foreground/55">Nothing here. No 404s logged.</p>;
   }
   return (
     <div className="overflow-x-auto">
@@ -259,7 +259,7 @@ function NotFoundAdminPage() {
             </div>
           ) : (
             <p className="py-10 text-sm text-foreground/55">
-              No 404s in the last 7 days. every link is landing.
+              No 404s in the last 7 days. Every link is landing.
             </p>
           )
         ) : (

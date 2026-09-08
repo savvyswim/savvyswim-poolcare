@@ -34,7 +34,7 @@ export default defineTool({
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
       return {
-        content: [{ type: "text", text: `Lead ${id} was not updated. not found or not permitted.` }],
+        content: [{ type: "text", text: `Lead ${id} was not updated. Not found or not permitted.` }],
         isError: true,
       };
     }

@@ -79,7 +79,7 @@ export async function forwardInspectionToCrm(
   const cta = (ctaRaw || rawSource || "site").slice(0, 80);
   const pagePath = (sourcePageRaw || req.page_path || req.landing_page || "/").split("?")[0]!;
   const { cityFromPath } = await import("./lead-sources.server");
-  // Page bucket ("Frisco", but also "Home", "Services", "Booking link"). a
+  // Page bucket ("Frisco", but also "Home", "Services", "Booking link"). A
   // reporting label, not a service city.
   const pageCity = cityFromPath(pagePath, rawSource);
   const { cityFromAddress, stateFromAddress } = await import("./postal");

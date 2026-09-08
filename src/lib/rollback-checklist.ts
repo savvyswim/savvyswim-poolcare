@@ -51,7 +51,7 @@ export function buildRollbackChecklist(pings: DeployPing[], failures: string[]):
   if (!failing) {
     return {
       triggered: false,
-      headline: "All checks passing. no rollback needed.",
+      headline: "All checks passing. No rollback needed.",
       lastGood,
       firstBad: null,
       steps: [],
@@ -68,7 +68,7 @@ export function buildRollbackChecklist(pings: DeployPing[], failures: string[]):
 
   if (lastGood) {
     steps.push(
-      `Open the Lovable History tab and find the version published just before ${when(lastGood.checkedAt)}. that build (boot id ${lastGood.bootId ?? "unknown"}) was the last one to pass every check.`,
+      `Open the Lovable History tab and find the version published just before ${when(lastGood.checkedAt)}. That build (boot id ${lastGood.bootId ?? "unknown"}) was the last one to pass every check.`,
     );
     steps.push(`Restore that version. Anything published after ${when(lastGood.checkedAt)} is suspect.`);
   } else {

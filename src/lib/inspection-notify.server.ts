@@ -199,7 +199,7 @@ export async function sendInspectionNotifications(
     results[req.email] = "failed";
   }
 
-  // Homeowner text confirmation. only when the number gave an explicit
+  // Homeowner text confirmation. Only when the number gave an explicit
   // SMS opt-in (sendStatusSms enforces consent and appends STOP/HELP).
   let smsOutcome: "sent" | "failed" | "skipped" = "skipped";
   let smsTo: string | null = null;

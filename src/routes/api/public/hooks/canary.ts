@@ -2,7 +2,7 @@
  * Post-deploy canary endpoint.
  *
  * Repeatedly hits the deployed site and records every 5xx, timeout, blank page
- * or SSR crash body. with the captured stack trace and response snippet. in
+ * or SSR crash body. With the captured stack trace and response snippet. In
  * ss_canary_runs / ss_canary_incidents, then emails + texts on-call when the
  * run fails. Call after every deploy and on a schedule:
  *

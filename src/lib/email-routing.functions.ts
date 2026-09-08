@@ -98,7 +98,7 @@ export const checkReplyToRouting = createServerFn({ method: "POST" })
               id: "mx",
               label: "Mailbox can receive mail",
               status: "fail",
-              detail: `${domain} has no MX records. every reply customers send will bounce. Add Google Workspace MX records on ${domain}.`,
+              detail: `${domain} has no MX records. Every reply customers send will bounce. Add Google Workspace MX records on ${domain}.`,
             },
       );
     } catch (e) {

@@ -18,9 +18,9 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { PerfMonitor } from "@/components/PerfMonitor";
 import { CallOptionsCard } from "@/components/CallButton";
 
-// Consent bar is post-hydration only. keep it out of the first payload.
+// Consent bar is post-hydration only. Keep it out of the first payload.
 const ConsentBanner = lazyWithReload(() => import("@/components/ConsentBanner"));
-// On-site lead capture. the form itself only downloads on the first CTA click.
+// On-site lead capture. The form itself only downloads on the first CTA click.
 const QuoteModal = lazyWithReload(() => import("@/components/QuoteModalHost"));
 
 // Toast portals render nothing until something is toasted, load them after paint.

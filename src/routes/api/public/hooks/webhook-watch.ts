@@ -4,10 +4,10 @@
  * Runs every 5 minutes from pg_cron. Reads the unified delivery log
  * (ss_webhook_deliveries) for the last window and raises an on-call alert when:
  *
- *   1. failures, any 401 / 403 / 400-class / 5xx attempt appears, and either
+ *   1. Failures, any 401 / 403 / 400-class / 5xx attempt appears, and either
  *      the failure count crosses `minFailures` or the failure rate crosses
  *      `threshold` percent of the window's traffic;
- *   2. spike, total attempts in the window are `spike`x the recent hourly
+ *   2. Spike, total attempts in the window are `spike`x the recent hourly
  *      baseline (and above `minSpike` calls), which catches retry storms and
  *      credential-stuffing style bursts against the public hook endpoints.
  *

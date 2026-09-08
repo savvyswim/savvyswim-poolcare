@@ -100,7 +100,7 @@ async function sendEmailCode(to: string, firstName: string, code: string) {
 }
 
 /**
- * Step 1. customer asks to change the email or phone on file. We send a
+ * Step 1. Customer asks to change the email or phone on file. We send a
  * one-time code to the NEW address/number so a typo can never lock them out.
  */
 export const requestContactChange = createServerFn({ method: "POST" })

@@ -9,7 +9,7 @@ const FALLBACK_OFFICE = "marcus@santanariveragroup.com";
 /**
  * High-intent alert: fires when staff move an inspection request to
  * "scheduled" or "completed". Only the id + the new status come from the
- * client. every detail in the message is read back from the database.
+ * client. Every detail in the message is read back from the database.
  */
 export const notifyInspectionStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

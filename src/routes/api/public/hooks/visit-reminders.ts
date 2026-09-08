@@ -19,7 +19,7 @@
  *
  * Deduping: every reminder writes an ss_feed row tied to the visit
  * (kind = 'reminder' for the 24h notice, 'reminder_<n>h' for the others), and we
- * skip any visit that already has one for that offset. so a re-run never
+ * skip any visit that already has one for that offset. So a re-run never
  * double-texts. Rescheduling clears those rows so the new date re-arms them.
  *
  * Public route: takes no caller input that drives writes and returns no PII.

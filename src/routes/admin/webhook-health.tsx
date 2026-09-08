@@ -293,7 +293,7 @@ function WebhookHealthPage() {
                 {rows.length === 0 ? (
                   <tr>
                     <td className="p-6 text-foreground/50" colSpan={7}>
-                      Nothing here. no {tab} in the last 7 days.
+                      Nothing here. No {tab} in the last 7 days.
                     </td>
                   </tr>
                 ) : (

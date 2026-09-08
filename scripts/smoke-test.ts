@@ -33,7 +33,7 @@ export function collectRoutes(routeTreeSource: string): string[] {
   while ((match = re.exec(routeTreeSource)) !== null) {
     const route = match[1];
     if (!route || !route.startsWith("/")) continue;
-    if (route.includes("$")) continue; // dynamic params. no safe fixture
+    if (route.includes("$")) continue; // dynamic params. No safe fixture
     if (route.startsWith("/api/")) continue; // exercised separately
     found.add(route.length > 1 ? route.replace(/\/$/, "") : "/");
   }

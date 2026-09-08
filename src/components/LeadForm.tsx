@@ -123,7 +123,7 @@ export default function LeadForm({
     return d;
   }, []);
 
-  // Debounced discount / referral code check. Never blocks the submit. an
+  // Debounced discount / referral code check. Never blocks the submit. An
   // unrecognised code still goes through, flagged for the office.
   useEffect(() => {
     const code = promoCode.trim();
