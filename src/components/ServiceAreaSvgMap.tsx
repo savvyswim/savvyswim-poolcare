@@ -38,16 +38,16 @@ export default function ServiceAreaSvgMap() {
   // already placed so tightly-packed cities stay readable.
   const placed: { x: number; y: number }[] = [];
   const labels = points.map((p) => {
-    let y = p.y - 28;
+    let y = p.y - 20;
     let guard = 0;
     while (
       guard++ < 12 &&
-      placed.some((o) => Math.abs(o.x - p.x) < 78 && Math.abs(o.y - y) < 26)
+      placed.some((o) => Math.abs(o.x - p.x) < 78 && Math.abs(o.y - y) < 18)
     ) {
-      y += 26;
+      y += 18;
     }
     placed.push({ x: p.x, y });
-    return { ...p, nameY: y, dayY: y + 12 };
+    return { ...p, nameY: y };
   });
 
 
@@ -82,40 +82,23 @@ export default function ServiceAreaSvgMap() {
         strokeWidth="1.5"
       />
 
-      {labels.map((p) => {
-        const nameY = p.nameY;
-        const dayY = p.dayY;
-
-
-        return (
-          <a key={p.name} href={p.href} aria-label={`${p.name} pool service — ${p.routeDays}`}>
-            <circle cx={p.x} cy={p.y} r="12" fill="#8E1F2C" fillOpacity="0.12" />
-            <circle cx={p.x} cy={p.y} r="5" fill="#8E1F2C" />
-            <text
-              x={p.x}
-              y={nameY}
-              textAnchor="middle"
-              fill="#4a2027"
-              fontSize="13"
-              fontWeight="700"
-              fontFamily="system-ui, sans-serif"
-            >
-              {p.name}
-            </text>
-            <text
-              x={p.x}
-              y={dayY}
-              textAnchor="middle"
-              fill="#4a2027"
-              fillOpacity="0.6"
-              fontSize="10"
-              fontFamily="system-ui, sans-serif"
-            >
-              {p.routeDays}
-            </text>
-          </a>
-        );
-      })}
+      {labels.map((p) => (
+        <a key={p.name} href={p.href} aria-label={`${p.name} pool service`}>
+          <circle cx={p.x} cy={p.y} r="12" fill="#8E1F2C" fillOpacity="0.12" />
+          <circle cx={p.x} cy={p.y} r="5" fill="#8E1F2C" />
+          <text
+            x={p.x}
+            y={p.nameY}
+            textAnchor="middle"
+            fill="#4a2027"
+            fontSize="13"
+            fontWeight="700"
+            fontFamily="system-ui, sans-serif"
+          >
+            {p.name}
+          </text>
+        </a>
+      ))}
 
     </svg>
   );

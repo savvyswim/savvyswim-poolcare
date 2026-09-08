@@ -33,7 +33,7 @@ export default function ServiceAreaMap() {
                 >
                   {l.name}
                 </a>
-                <span className="block text-[11px] text-foreground/55">{l.routeDays}</span>
+                
               </li>
             ))}
           </ul>

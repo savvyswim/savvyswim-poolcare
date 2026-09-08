@@ -7,9 +7,6 @@ export interface CityLocalDetail {
   /** Short lede shown above the local water section. */
   waterHeadline: string;
   waterNotes: { title: string; body: string }[];
-  /** Weekly route coverage, grouped by area of the city. */
-  routeDays: { area: string; zips: string; window: string }[];
-  routeNote: string;
   /** Exactly what a weekly visit includes in this city. */
   inclusions: { group: string; items: string[] }[];
   /** City-specific FAQ appended to the shared set. */
@@ -83,13 +80,6 @@ export const SERVICE_AREAS: ServiceArea[] = [
             "Salt systems are everywhere in west Plano. High calcium plus a salt cell means scale on the plates and a cell that quietly under-produces. We inspect and acid-clean cells on schedule so you're not buying a new one every other season.",
         },
       ],
-      routeDays: [
-        { area: "West Plano", zips: "75024 / 75093", window: "Monday – Tuesday" },
-        { area: "North & Central Plano", zips: "75023 / 75025", window: "Tuesday – Wednesday" },
-        { area: "East Plano", zips: "75074 / 75075", window: "Wednesday – Thursday" },
-      ],
-      routeNote:
-        "Your exact day is locked in at the walkthrough and does not float week to week. Friday is held for repairs, green-pool recovery, and same-day return visits across all of Plano.",
       inclusions: [
         {
           group: "Every weekly visit",

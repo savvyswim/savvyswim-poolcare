@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   MapPin,
-  CalendarDays,
   FlaskConical,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
@@ -202,38 +201,6 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
               </div>
             </section>
 
-            {/* ROUTE DAYS */}
-            <section className="perf-section py-16 sm:py-20 border-b border-hairline">
-              <div className="container-tight">
-                <div className="flex items-center gap-2 font-tech text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                  <CalendarDays className="h-3.5 w-3.5" /> Weekly route
-                </div>
-                <h2 className="mt-4 font-display text-[1.9rem] sm:text-[2.6rem] uppercase tracking-tight leading-none">
-                  {city} route days<span className="text-accent">.</span>
-                </h2>
-                <div className="mt-8 overflow-x-auto">
-                  <table className="w-full min-w-[520px] border-collapse text-left">
-                    <thead>
-                      <tr className="border-y border-hairline font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        <th className="py-3 pr-4 font-normal">Area</th>
-                        <th className="py-3 pr-4 font-normal">Zip codes</th>
-                        <th className="py-3 font-normal">Service window</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-hairline">
-                      {local.routeDays.map((r) => (
-                        <tr key={r.area}>
-                          <td className="py-4 pr-4 font-display text-[1.05rem] uppercase tracking-tight">{r.area}</td>
-                          <td className="py-4 pr-4 font-tech text-[0.9rem] text-muted-foreground">{r.zips}</td>
-                          <td className="py-4 text-[0.95rem]">{r.window}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="mt-5 max-w-2xl text-muted-foreground text-[0.95rem] leading-relaxed">{local.routeNote}</p>
-              </div>
-            </section>
 
             {/* INCLUSIONS */}
             <section className="perf-section py-16 sm:py-20 border-b border-hairline">
