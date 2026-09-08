@@ -19,8 +19,37 @@ import {
 import Seo from "@/components/Seo";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
-import { goToLead } from "@/lib/site-analytics";
+import { goToLead, goToSwimClub } from "@/lib/site-analytics";
 import ServiceAreaMap from "@/components/ServiceAreaMap";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+const MEMBERSHIP_FAQ = [
+  {
+    q: "What is the Savvy Swim Club?",
+    a: "It's our $19.99/month membership for pool owners in DFW. Members get 25% off filter cleans, 10% off services and 10% off parts, priority scheduling, and 24/7 text support with our techs. It works alongside any cleaning plan — or on its own if you maintain the pool yourself.",
+  },
+  {
+    q: "How does billing work?",
+    a: "Membership is $19.99 per month, charged automatically to the card on file on the same day each month. The first charge happens the day you join, and your perks are active immediately. Service visits, repairs, and parts are invoiced separately — the membership fee never covers the work itself.",
+  },
+  {
+    q: "How long is the commitment?",
+    a: "The Swim Club runs on a 12-month agreement billed monthly. After the first 12 months it continues month to month, so you can stay on at the same rate or stop any time with no further obligation.",
+  },
+  {
+    q: "How do I cancel?",
+    a: "Text or email us and we'll cancel your renewal — no phone maze, no cancellation fee after the initial 12-month term. During the term, cancellation ends your monthly perks and any remaining months of the agreement are due; if your situation changes, like selling the home, let us know and we'll work with you.",
+  },
+  {
+    q: "What isn't included?",
+    a: "The Swim Club is a discount and support program, not a service plan. Weekly cleaning, chemicals, and maintenance visits are billed under a Savvy cleaning plan. Member discounts don't stack with promo codes or other active offers.",
+  },
+];
 
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
