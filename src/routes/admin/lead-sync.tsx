@@ -466,13 +466,22 @@ function LeadSyncPage() {
                     {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : ", ")}
                   </td>
                   <td className="p-3 text-right">
-                    <button
-                      className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
-                      disabled={retry.isPending || r.status === "synced"}
-                      onClick={() => retry.mutate(r.id)}
-                    >
-                      Retry
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
+                        disabled={retry.isPending || r.status === "synced"}
+                        onClick={() => retry.mutate(r.id)}
+                      >
+                        Retry
+                      </button>
+                      <button
+                        className="border border-foreground/25 px-3 py-1 text-[11px] uppercase tracking-[0.12em] disabled:opacity-50"
+                        disabled={resendEmail.isPending}
+                        onClick={() => resendEmail.mutate(r.id)}
+                      >
+                        Resend email
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
