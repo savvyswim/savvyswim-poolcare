@@ -360,6 +360,7 @@ function LeadSyncPage() {
               <th className="p-3 text-left">Lead status</th>
               <th className="p-3 text-left">Source</th>
               <th className="p-3 text-left">CRM status</th>
+              <th className="p-3 text-left">Email alert</th>
               <th className="p-3 text-left">CRM row</th>
               <th className="p-3 text-left">Last attempt</th>
               <th className="p-3 text-left">Error</th>
@@ -369,7 +370,7 @@ function LeadSyncPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td className="p-6 text-foreground/50" colSpan={12}>
+                <td className="p-6 text-foreground/50" colSpan={13}>
                   No {filter === "all" ? "" : `${filter} `}leads in the last 30 days.
                 </td>
               </tr>
