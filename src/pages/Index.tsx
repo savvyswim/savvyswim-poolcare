@@ -108,9 +108,16 @@ const Index = () => {
           </div>
 
           <div className="container-tight relative py-20 sm:py-28 lg:py-32">
-            <h1 className="type-mega text-on-media" style={{ fontSize: "clamp(3rem, 10vw, 7rem)" }}>
+            <div className="font-tech text-[11px] uppercase tracking-[0.24em] text-primary-foreground/80">
+              WHO WE ARE
+            </div>
+            <h1
+              className="mt-3 type-mega text-on-media"
+              style={{ fontSize: "clamp(3rem, 10vw, 7rem)" }}
+            >
               Savvy Swim
             </h1>
+
             <p className="mt-5 max-w-2xl text-[1.1rem] leading-relaxed text-primary-foreground sm:text-[1.3rem]">
               Weekly pool cleaning, service and repair across Dallas–Fort Worth. Same technician
               every week, a photo report every visit.
