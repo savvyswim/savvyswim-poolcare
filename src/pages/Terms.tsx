@@ -17,7 +17,7 @@ const Terms = () => (
       <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Santana &amp; Rivera, doing business as Savvy Swim</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
-        <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a>
+        <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
@@ -27,7 +27,7 @@ const Terms = () => (
 
       <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
       <p className="mb-4">
-        By accessing our website (https://savvyswimservices.com) or utilizing the services provided by
+        By accessing our website (https://savvyswim.com) or utilizing the services provided by
         Santana &amp; Rivera ("we," "our," or "us"), you ("you" or "Customer") agree to be bound by these
         Terms and Conditions ("Terms") and our{" "}
         <Link to="/privacy-policy" className="text-amber-brand">Privacy Policy</Link>. If you do not
@@ -201,7 +201,7 @@ const Terms = () => (
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a></p>
       <p className="mb-1">Phone: <a href="tel:+18176637665" onClick={onCallClick("terms_body")} className="text-amber-brand">(817) 663-7665</a></p>
-      <p className="mb-1">Website: <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a></p>
+      <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
   </main>
 );

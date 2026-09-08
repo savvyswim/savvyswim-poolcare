@@ -11,7 +11,7 @@ const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
 const SENDER_DOMAIN = "notify.savvyswimservices.com";
 const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswimservices.com>";
 const OFFICE_PHONE = "(817) 663-7665";
-const PORTAL_URL = "https://savvyswimservices.com/portal";
+const PORTAL_URL = "https://savvyswim.com/portal";
 
 export type AppointmentStatus =
   | "scheduled"

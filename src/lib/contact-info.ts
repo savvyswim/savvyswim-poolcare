@@ -24,9 +24,8 @@ export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 export const GOOGLE_REVIEW_URL = "https://g.page/r/savvyswim/review";
 
 /**
- * Public Google Business Profile (Maps) link. Set this to the long
- * google.com/maps/place/... URL from the live listing — short share.google
- * links do not resolve to the profile. Empty until the real URL is confirmed;
- * the site hides the "View us on Google" link while it is empty.
+ * Public Google Business Profile link. Resolved from the owner's share link,
+ * which redirects to this knowledge-graph id for the Savvy Swim listing.
+ * The site hides the "View us on Google" link if this is ever emptied.
  */
-export const GOOGLE_PROFILE_URL = "";
+export const GOOGLE_PROFILE_URL = "https://www.google.com/search?kgmid=/g/11zh9g57x4";

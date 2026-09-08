@@ -56,19 +56,19 @@ const SITE_JSONLD = JSON.stringify({
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://savvyswimservices.com/#organization",
+      "@id": "https://savvyswim.com/#organization",
       name: "Savvy Swim",
-      url: "https://savvyswimservices.com/",
-      logo: "https://savvyswimservices.com/apple-touch-icon.png",
+      url: "https://savvyswim.com/",
+      logo: "https://savvyswim.com/apple-touch-icon.png",
       email: "hi@savvyswim.com",
       telephone: "+1-817-663-7665",
     },
     {
       "@type": "WebSite",
-      "@id": "https://savvyswimservices.com/#website",
-      url: "https://savvyswimservices.com/",
+      "@id": "https://savvyswim.com/#website",
+      url: "https://savvyswim.com/",
       name: "Savvy Swim",
-      publisher: { "@id": "https://savvyswimservices.com/#organization" },
+      publisher: { "@id": "https://savvyswim.com/#organization" },
     },
   ],
 });

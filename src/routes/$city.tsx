@@ -15,7 +15,7 @@ export const Route = createFileRoute("/$city")({
       return { meta: [{ title: "Page not found | Savvy Swim" }, { name: "robots", content: "noindex" }] };
     }
     const { title, description } = buildCityMeta(area);
-    const url = `https://savvyswimservices.com/${area.slug}`;
+    const url = `https://savvyswim.com/${area.slug}`;
     return {
       meta: [
         { title },
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/$city")({
               "@type": "LocalBusiness",
               name: "Savvy Swim",
               telephone: "+1-817-663-7665",
-              url: "https://savvyswimservices.com",
+              url: "https://savvyswim.com",
             },
             areaServed: { "@type": "City", name: area.name, addressRegion: "TX" },
           }),

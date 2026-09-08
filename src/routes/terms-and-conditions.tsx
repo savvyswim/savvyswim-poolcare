@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Terms from "@/pages/Terms";
 
 /** Alias of /terms, canonical points at the primary URL. */
-const CANONICAL = "https://savvyswimservices.com/terms";
+const CANONICAL = "https://savvyswim.com/terms";
 const TITLE = "Terms of Service | Savvy Swim Pool Service";
 const DESCRIPTION =
   "The terms that cover Savvy Swim pool cleaning, repairs and Swim Club membership: scheduling, access, cancellations, billing and service guarantees.";

@@ -5,7 +5,7 @@ import { serviceSchema } from "@/lib/structured-data";
 const TITLE = "Weekly Pool Service Near Me in DFW | Savvy Swim";
 const DESC =
   "See exactly what weekly pool service includes: water test, chemicals, cleaning, filter check and a photo report. Same tech, fixed day, from $129.99/mo in DFW.";
-const URL = "https://savvyswimservices.com/weekly-pool-service";
+const URL = "https://savvyswim.com/weekly-pool-service";
 
 export const Route = createFileRoute("/weekly-pool-service")({
   head: () => ({

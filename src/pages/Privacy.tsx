@@ -17,7 +17,7 @@ const Privacy = () => (
       <p className="text-sm text-muted-foreground mb-1"><strong>Company:</strong> Santana &amp; Rivera, doing business as Savvy Swim ("we," "our," or "us")</p>
       <p className="text-sm text-muted-foreground mb-1">
         <strong>Website:</strong>{" "}
-        <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a>
+        <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a>
       </p>
       <p className="text-sm text-muted-foreground mb-8">
         <strong>Contact:</strong>{" "}
@@ -29,7 +29,7 @@ const Privacy = () => (
       <p className="mb-4">
         Santana &amp; Rivera is committed to protecting your privacy. This Privacy Policy explains how we
         collect, use, disclose, and safeguard your information when you visit our website
-        (https://savvyswimservices.com), submit a form, call or text us, or otherwise engage with our
+        (https://savvyswim.com), submit a form, call or text us, or otherwise engage with our
         services. By using our website or services, you consent to the practices described in this
         Privacy Policy.
       </p>
@@ -155,7 +155,7 @@ const Privacy = () => (
       <p className="mb-1"><strong>Santana &amp; Rivera (dba Savvy Swim)</strong></p>
       <p className="mb-1">Email: <a href="mailto:hi@savvyswim.com" className="text-amber-brand">hi@savvyswim.com</a></p>
       <p className="mb-1">Phone: <a href="tel:+18176637665" onClick={onCallClick("privacy_body")} className="text-amber-brand">(817) 663-7665</a></p>
-      <p className="mb-1">Website: <a href="https://savvyswimservices.com" className="text-amber-brand">https://savvyswimservices.com</a></p>
+      <p className="mb-1">Website: <a href="https://savvyswim.com" className="text-amber-brand">https://savvyswim.com</a></p>
     </article>
   </main>
 );

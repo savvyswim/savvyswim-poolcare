@@ -63,7 +63,7 @@ export function emailParts(items: LowItem[]): { subject: string; html: string; t
       </p>
       <table style="width:100%;border-collapse:collapse;">${rowsHtml}</table>
       <p style="margin:20px 0 0;font-size:12px;color:#7a6f63;">
-        Update counts in the <a href="https://savvyswimservices.com/crm/inventory" style="color:#1FA9BE;">CRM inventory board</a>.
+        Update counts in the <a href="https://savvyswim.com/crm/inventory" style="color:#1FA9BE;">CRM inventory board</a>.
       </p>
     </div>
   </div>

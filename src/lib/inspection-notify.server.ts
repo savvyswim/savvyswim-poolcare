@@ -181,7 +181,7 @@ export async function sendInspectionNotifications(
     </div>
     <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">Need us sooner? Call or text <a href="tel:+18176637665" style="color:#8E1F2C;">817-663-POOL</a>, or just reply to this email.</p>
     <hr style="border:none;border-top:1px solid #E4DCCB;margin:24px 0 16px;" />
-    <p style="font-size:12px;color:#6C7278;line-height:1.5;margin:0;">Savvy Swim · Dallas–Fort Worth · savvyswimservices.com</p>
+    <p style="font-size:12px;color:#6C7278;line-height:1.5;margin:0;">Savvy Swim · Dallas–Fort Worth · savvyswim.com</p>
   </div>
 </div>`,
         text: isWaterTest

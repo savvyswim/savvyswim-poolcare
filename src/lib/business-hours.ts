@@ -39,7 +39,7 @@ export const BUSINESS_HOURS: BusinessHoursRow[] = [
     days: ["Sunday"],
     opens: null,
     closes: null,
-    display: "Closed",
+    display: "Closed · Swim Club emergency line",
   },
 ];
 

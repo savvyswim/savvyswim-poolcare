@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PoolCleaningFrisco from "@/pages/PoolCleaningFrisco";
 
-const URL = "https://savvyswimservices.com/frisco";
+const URL = "https://savvyswim.com/frisco";
 /** All Frisco URLs serve the same page. One canonical keeps them from competing. */
-const CANONICAL = "https://savvyswimservices.com/pool-cleaning-frisco-tx";
+const CANONICAL = "https://savvyswim.com/pool-cleaning-frisco-tx";
 const TITLE = "Frisco Pool Service & Cleaning | Savvy Swim";
 const DESCRIPTION =
   "Weekly Frisco pool service from $129.99/mo with chemicals, equipment checks, and a photo report after every visit.";

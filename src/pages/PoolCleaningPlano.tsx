@@ -3,6 +3,7 @@ import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
+import LocalSeoBlurb from "@/components/LocalSeoBlurb";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
@@ -82,7 +83,7 @@ const PlanoPoolCleaning = () => {
         name: "Savvy Swim",
         telephone: "+1-817-663-7665",
         email: EMAIL,
-        url: "https://savvyswimservices.com",
+        url: "https://savvyswim.com",
         areaServed: { "@type": "City", name: "Plano", addressRegion: "TX" },
       },
       areaServed: { "@type": "City", name: "Plano", addressRegion: "TX" },
@@ -278,6 +279,8 @@ const PlanoPoolCleaning = () => {
             </div>
           </div>
         </section>
+
+        <LocalSeoBlurb city="Plano" />
 
         {/* CTA */}
         <section className="perf-section py-16 sm:py-24">

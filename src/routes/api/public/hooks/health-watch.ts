@@ -15,7 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
-const DEFAULT_TARGET = "https://savvyswimservices.com";
+const DEFAULT_TARGET = "https://savvyswim.com";
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
 const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";

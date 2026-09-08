@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://savvyswimservices.com/sitemap.xml
+Sitemap: https://savvyswim.com/sitemap.xml

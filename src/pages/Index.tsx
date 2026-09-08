@@ -5,6 +5,7 @@ import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
 import ServiceAreaMap from "@/components/ServiceAreaMap";
 import BusinessInfoCard from "@/components/BusinessInfoCard";
+import LocalSeoBlurb from "@/components/LocalSeoBlurb";
 import { Link } from "@/lib/router-compat";
 import {
   EMAIL,
@@ -113,7 +114,7 @@ const Index = () => {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         name: "Savvy Swim",
-        url: "https://savvyswimservices.com",
+        url: "https://savvyswim.com",
         aggregateRating: {
           "@type": "AggregateRating",
           ratingValue: (
@@ -133,7 +134,7 @@ const Index = () => {
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: "Savvy Swim",
-        url: "https://savvyswimservices.com",
+        url: "https://savvyswim.com",
       };
 
   return (
@@ -399,6 +400,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <LocalSeoBlurb />
       </main>
 
       <SiteFooter />
