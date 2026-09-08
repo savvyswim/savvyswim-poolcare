@@ -130,3 +130,14 @@ export const savvy_swim_logo_png: Photo = {
   width: 1024,
   height: 1024,
 };
+
+import r0 from "./img-5503-opt-w480.webp.asset.json";
+import r1 from "./img-5503-opt-w800.webp.asset.json";
+import r2 from "./img-5503-opt.webp.asset.json";
+
+export const IMG_5503_jpg: Photo = {
+  url: r2.url,
+  srcSet: `${r0.url} 480w, ${r1.url} 800w, ${r2.url} 1120w`,
+  width: 1120,
+  height: 641,
+};
