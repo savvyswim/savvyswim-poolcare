@@ -36,7 +36,7 @@ export function SiteHeader() {
           {NAV.map((item) => (
             <Link
               key={item.label}
-              to={item.to ?? "/"}
+              to="/"
               hash={item.hash}
               className="shrink-0 transition hover:text-accent"
             >
