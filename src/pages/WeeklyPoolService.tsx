@@ -6,12 +6,11 @@ import {
   Camera,
   UserCheck,
   FlaskConical,
-  CalendarDays,
 } from "lucide-react";
 import { trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
-import { SERVICE_AREAS } from "@/lib/serviceAreas";
+
 import {
   IMG_5504_2_JPG as photoRivieraLoungers,
   IMG_5512_PNG as photoSavvyRings,
