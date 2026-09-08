@@ -36,7 +36,7 @@ export function SiteHeader() {
         </Link>
 
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 whitespace-nowrap font-tech text-[10px]! text-primary/70 lg:flex xl:gap-4 xl:text-[12px]!">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 whitespace-nowrap font-tech text-[10px]! text-primary/70 lg:flex xl:gap-4 xl:text-[12px]! 2xl:gap-5 2xl:text-[13px]!">
           {NAV.map((item) => (
             <Link
               key={item.label}
@@ -47,7 +47,7 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link to="/services" className="hidden shrink-0 transition hover:text-accent xl:inline">
+          <Link to="/services" className="hidden shrink-0 transition hover:text-accent 2xl:inline">
             Services
           </Link>
         </nav>

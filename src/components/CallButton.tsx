@@ -244,7 +244,7 @@ export function CallButton({
       className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground transition hover:text-primary ${className}`}
     >
       <Phone className="h-4 w-4 shrink-0 text-amber-brand" aria-hidden="true" />
-      <span className={hidePhoneTextOnNarrowDesktop ? "lg:hidden xl:inline" : ""}>{PHONE_VANITY}</span>
+      <span className={hidePhoneTextOnNarrowDesktop ? "lg:hidden 2xl:inline" : ""}>{PHONE_VANITY}</span>
     </a>
   );
 }
