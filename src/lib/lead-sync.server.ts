@@ -27,6 +27,34 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
       ).data ?? []
     : [];
 
+  // Office alert / homeowner confirmation outcomes for the same leads.
+  const emailEvents = ids.length
+    ? (
+        await supabaseAdmin
+          .from("inspection_events")
+          .select("request_id, event_type, recipient, created_at")
+          .eq("channel", "email")
+          .in("request_id", ids)
+          .order("created_at", { ascending: true })
+      ).data ?? []
+    : [];
+
+  type EmailState = { status: "sent" | "failed"; at: string; recipients: string[] };
+  const emailByLead = new Map<string, EmailState>();
+  for (const e of emailEvents) {
+    if (!e.request_id) continue;
+    const prev = emailByLead.get(e.request_id);
+    const failed = e.event_type === "email_failed";
+    const recipients = prev ? [...prev.recipients] : [];
+    if (e.recipient && !recipients.includes(e.recipient)) recipients.push(e.recipient);
+    emailByLead.set(e.request_id, {
+      // One failure is enough to flag the lead for a resend.
+      status: failed || prev?.status === "failed" ? "failed" : "sent",
+      at: e.created_at,
+      recipients,
+    });
+  }
+
   const byLead = new Map<string, (typeof deliveries)[number]>();
   for (const d of deliveries) {
     if (!d.event_key) continue;
@@ -38,6 +66,7 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
 
   return rows.map((r) => {
     const d = byLead.get(r.id);
+    const mail = emailByLead.get(r.id);
     const leadStatus = (r.status ?? "new") as LeadSyncRow["lead_status"];
     const status: LeadSyncRow["status"] = r.crm_synced_at
       ? "synced"
@@ -60,6 +89,9 @@ export async function loadLeadSyncRows(): Promise<LeadSyncRow[]> {
       crm_lead_id: r.crm_lead_id ?? null,
       lead_status: leadStatus,
       status,
+      email_status: mail?.status ?? "pending",
+      email_at: mail?.at ?? null,
+      email_recipients: mail?.recipients ?? [],
       last_attempt_at: d?.last_attempt_at ?? null,
       attempts: d?.attempts ?? 0,
       http_status: d?.http_status ?? null,
