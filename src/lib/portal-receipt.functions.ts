@@ -100,8 +100,8 @@ Savvy Swim · savvyswim.com`;
         await sendLovableEmail(
           {
             to: customer.email,
-            from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
-            sender_domain: "notify.savvyswimservices.com",
+            from: "Savvy Swim <noreply@notify.savvyswim.com>",
+            sender_domain: "notify.savvyswim.com",
             reply_to: "hi@savvyswim.com",
             subject: `Receipt for ${invoice.invoice_number}, ${amount}`,
             html,

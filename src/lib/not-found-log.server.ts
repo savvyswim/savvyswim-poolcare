@@ -46,7 +46,7 @@ function isInternalReferrer(referrer: string | null | undefined): boolean {
   if (!referrer) return false;
   try {
     const host = new URL(referrer).hostname.replace(/^www\./, "");
-    return host.endsWith("savvyswim.com") || host.endsWith("savvyswimservices.com") || host === "localhost";
+    return host.endsWith("savvyswim.com") || host.endsWith("savvyswim.com") || host === "localhost";
   } catch {
     return false;
   }

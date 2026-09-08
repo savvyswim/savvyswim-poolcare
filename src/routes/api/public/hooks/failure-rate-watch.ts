@@ -53,8 +53,8 @@ async function sendAlertEmail(subject: string, body: string) {
     await sendLovableEmail(
       {
         to,
-        from: "Savvy Swim Ops <noreply@notify.savvyswimservices.com>",
-        sender_domain: "notify.savvyswimservices.com",
+        from: "Savvy Swim Ops <noreply@notify.savvyswim.com>",
+        sender_domain: "notify.savvyswim.com",
         subject,
         html: `<pre style="font:13px/1.5 monospace;white-space:pre-wrap">${body.replace(/</g, "&lt;")}</pre>`,
         text: body,

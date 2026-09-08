@@ -6,7 +6,7 @@
  * startup health endpoint. Fails the process and pages on-call on any failure:
  *
  *   bun run test:smoke                       # defaults to http://localhost:8080
- *   BASE_URL=https://savvyswimservices.com bun run test:smoke
+ *   BASE_URL=https://savvyswim.com bun run test:smoke
  *   bun run test:smoke -- --fast             # highest-value routes only
  *
  * Alerting: with OPS_HOOK_SECRET set, failures POST to
@@ -239,7 +239,7 @@ async function alertOnFailure(failures: Result[], summary: string) {
     console.error("Alert skipped: OPS_HOOK_SECRET not set in this environment.");
     return;
   }
-  const alertBase = (process.env["SMOKE_ALERT_URL"] ?? "https://savvyswimservices.com").replace(/\/$/, "");
+  const alertBase = (process.env["SMOKE_ALERT_URL"] ?? "https://savvyswim.com").replace(/\/$/, "");
   try {
     const res = await fetch(`${alertBase}/api/public/hooks/smoke-alert`, {
       method: "POST",

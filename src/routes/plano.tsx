@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PoolCleaningPlano from "@/pages/PoolCleaningPlano";
 
-const URL = "https://savvyswimservices.com/plano";
+const URL = "https://savvyswim.com/plano";
 const TITLE = "Plano Pool Service & Cleaning | Savvy Swim";
 const DESCRIPTION =
   "Weekly Plano pool service from $129.99/mo with chemicals, equipment checks, and a photo report after every visit.";

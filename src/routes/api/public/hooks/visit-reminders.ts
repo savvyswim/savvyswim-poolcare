@@ -30,8 +30,8 @@ import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
-const SENDER_DOMAIN = "notify.savvyswimservices.com";
-const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswimservices.com>";
+const SENDER_DOMAIN = "notify.savvyswim.com";
+const FROM_EMAIL = "Savvy Swim <noreply@notify.savvyswim.com>";
 const OFFICE_PHONE = "(817) 663-7665";
 const DEFAULT_OFFSETS = [24, 2];
 
@@ -154,7 +154,7 @@ async function emailReminder(
     `Hi ${first}, a quick reminder that your Savvy Swim visit is ${lead}, ` +
     `arriving between ${slot}.${where ? ` We'll be at ${where}.` : ""}\n\n` +
     `Please leave the gate unlocked and pets inside. Need to move it? Reschedule anytime in your portal ` +
-    `at https://savvyswimservices.com/portal or call ${OFFICE_PHONE}.`;
+    `at https://savvyswim.com/portal or call ${OFFICE_PHONE}.`;
 
   try {
     await sendLovableEmail(
@@ -170,7 +170,7 @@ async function emailReminder(
   <p style="font-size:15px;line-height:1.6;margin:0 0 8px"><strong>${esc(when)}</strong> · arriving between <strong>${esc(slot)}</strong></p>
   ${where ? `<p style="font-size:15px;line-height:1.6;margin:0 0 8px">${esc(where)}</p>` : ""}
   <p style="font-size:15px;line-height:1.6;margin:16px 0">Please leave the gate unlocked and pets inside so your tech can get straight to work.</p>
-  <p style="font-size:15px;line-height:1.6;margin:16px 0">Need to move it? Reschedule anytime in your <a href="https://savvyswimservices.com/portal" style="color:#1FA9BE">customer portal</a> or call ${OFFICE_PHONE}.</p>
+  <p style="font-size:15px;line-height:1.6;margin:16px 0">Need to move it? Reschedule anytime in your <a href="https://savvyswim.com/portal" style="color:#1FA9BE">customer portal</a> or call ${OFFICE_PHONE}.</p>
 </div>`,
         text,
         purpose: "transactional",

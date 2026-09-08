@@ -47,8 +47,8 @@ Use a header when the caller supports it. Use `?k=<secret>` for schedulers that
 can only send a URL.
 
 ```bash
-curl "https://savvyswimservices.com/api/public/hooks/canary?rounds=3&source=manual&k=YOUR_SECRET"
-curl -H "x-ops-secret: YOUR_SECRET" "https://savvyswimservices.com/api/public/hooks/health-watch"
+curl "https://savvyswim.com/api/public/hooks/canary?rounds=3&source=manual&k=YOUR_SECRET"
+curl -H "x-ops-secret: YOUR_SECRET" "https://savvyswim.com/api/public/hooks/health-watch"
 ```
 
 ## 3. Update the scheduled jobs
@@ -64,7 +64,7 @@ SELECT cron.schedule(
   '*/15 * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://savvyswimservices.com/api/public/hooks/canary?rounds=3&source=cron&k=YOUR_SECRET',
+    url := 'https://savvyswim.com/api/public/hooks/canary?rounds=3&source=cron&k=YOUR_SECRET',
     headers := '{"Content-Type": "application/json"}'::jsonb,
     body := '{}'::jsonb
   );

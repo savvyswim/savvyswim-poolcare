@@ -67,7 +67,7 @@ export function emailParts(n: RescheduleNotice): { subject: string; html: string
       ${n.note ? `<p style="margin:0 0 16px;font-size:14px;line-height:1.6;border-left:3px solid #1FA9BE;padding-left:12px;">${esc(n.note)}</p>` : ""}
       <p style="margin:20px 0 0;font-size:12px;color:#7a6f63;line-height:1.6;">
         Please leave the gate unlocked and pets inside. Need another change? Use your
-        <a href="https://savvyswimservices.com/portal" style="color:#1FA9BE;">customer portal</a> or call ${OFFICE_PHONE}.
+        <a href="https://savvyswim.com/portal" style="color:#1FA9BE;">customer portal</a> or call ${OFFICE_PHONE}.
       </p>
     </div>
     <div style="border-top:1px solid #e5dcc9;padding:14px 28px;font-size:11px;color:#9a8f82;">
@@ -79,7 +79,7 @@ export function emailParts(n: RescheduleNotice): { subject: string; html: string
     `Hi ${n.firstName},\n\n` +
     `${n.created ? "Your pool service visit is confirmed" : `Your pool service visit moved${n.previousWhen ? ` from ${n.previousWhen}` : ""}`}, ${n.when}, arriving between ${n.slot}.` +
     `${n.address ? `\n${n.address}` : ""}${n.note ? `\n\nNote: ${n.note}` : ""}\n\n` +
-    `Need another change? https://savvyswimservices.com/portal or call ${OFFICE_PHONE}.\nSavvy Swim`;
+    `Need another change? https://savvyswim.com/portal or call ${OFFICE_PHONE}.\nSavvy Swim`;
   return { subject, html, text };
 }
 
@@ -125,8 +125,8 @@ export async function sendEmail(to: string, n: RescheduleNotice, key: string): P
     await sendLovableEmail(
       {
         to,
-        from: "Savvy Swim <noreply@notify.savvyswimservices.com>",
-        sender_domain: "notify.savvyswimservices.com",
+        from: "Savvy Swim <noreply@notify.savvyswim.com>",
+        sender_domain: "notify.savvyswim.com",
         reply_to: "hi@savvyswim.com",
         subject,
         html,

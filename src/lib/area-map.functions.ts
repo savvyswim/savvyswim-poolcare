@@ -7,7 +7,7 @@ import { SERVICE_LOCATIONS } from "@/lib/service-locations";
  * Multi-marker static maps rendered through the Maps connector gateway.
  *
  * Runs server-side, so the map works identically on savvyswim.com and
- * savvyswimservices.com where the shared browser key is referrer-blocked.
+ * savvyswim.com where the shared browser key is referrer-blocked.
  */
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_maps";

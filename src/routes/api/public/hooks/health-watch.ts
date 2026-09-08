@@ -15,7 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { guardOpsHook } from "@/lib/ops-hook-auth.server";
 import { sendLovableEmail } from "@lovable.dev/email-js";
 
-const DEFAULT_TARGET = "https://savvyswimservices.com";
+const DEFAULT_TARGET = "https://savvyswim.com";
 const DEFAULT_EMAIL = "marcus@santanariveragroup.com";
 const DEFAULT_PHONE = "+18176637665";
 const TWILIO_GATEWAY = "https://connector-gateway.lovable.dev/twilio";
@@ -34,8 +34,8 @@ async function sendAlertEmail(subject: string, body: string) {
     await sendLovableEmail(
       {
         to,
-        from: "Savvy Swim Ops <noreply@notify.savvyswimservices.com>",
-        sender_domain: "notify.savvyswimservices.com",
+        from: "Savvy Swim Ops <noreply@notify.savvyswim.com>",
+        sender_domain: "notify.savvyswim.com",
         subject,
         html: `<pre style="font:14px/1.5 monospace">${body.replace(/</g, "&lt;")}</pre>`,
         text: body,

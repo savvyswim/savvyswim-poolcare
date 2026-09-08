@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin/canary")({
       { property: "og:title", content: "Canary Routes · Savvy Swim Admin" },
       {
         property: "og:description",
-        content: "Monitored routes and their last successful check for savvyswimservices.com.",
+        content: "Monitored routes and their last successful check for savvyswim.com.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -164,7 +164,7 @@ function CanaryAdminPage() {
           <h1 className="font-display text-4xl uppercase tracking-[0.04em]">Canary routes</h1>
           <p className="mt-1 text-sm text-foreground/60">
             Every page the uptime canary watches on{" "}
-            <span className="font-tech">{report?.target ?? "savvyswimservices.com"}</span>, with the
+            <span className="font-tech">{report?.target ?? "savvyswim.com"}</span>, with the
             last time each one was checked and last passed.
           </p>
         </div>

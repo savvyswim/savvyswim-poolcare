@@ -2,7 +2,7 @@ import { SERVICE_AREAS } from "@/lib/serviceAreas";
 import { GOOGLE_PROFILE_URL, INSTAGRAM_URL } from "@/lib/contact-info";
 import { openingHoursSpecification } from "@/lib/business-hours";
 
-export const SITE_URL = "https://savvyswimservices.com";
+export const SITE_URL = "https://savvyswim.com";
 export const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 
 const PHONE = "+1-817-663-7665";

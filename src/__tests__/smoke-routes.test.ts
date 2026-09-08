@@ -58,7 +58,7 @@ describe("smoke summary", () => {
         { route: "/", status: 200, ok: true, note: "ok" },
         { route: "/services", status: 500, ok: false, note: "status 500" },
       ],
-      "https://savvyswimservices.com",
+      "https://savvyswim.com",
     );
     expect(summary).toContain("FAILED");
     expect(summary).toContain("/services -> 500");

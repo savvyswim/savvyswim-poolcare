@@ -83,7 +83,7 @@ const FriscoPoolCleaning = () => {
         name: "Savvy Swim",
         telephone: "+1-817-663-7665",
         email: EMAIL,
-        url: "https://savvyswimservices.com",
+        url: "https://savvyswim.com",
         areaServed: { "@type": "City", name: "Frisco", addressRegion: "TX" },
       },
       areaServed: { "@type": "City", name: "Frisco", addressRegion: "TX" },

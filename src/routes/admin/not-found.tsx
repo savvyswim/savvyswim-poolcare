@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin/not-found")({
       { property: "og:title", content: "404 Monitor · Savvy Swim Admin" },
       {
         property: "og:description",
-        content: "Missing pages, broken internal links and 404 alerts for savvyswimservices.com.",
+        content: "Missing pages, broken internal links and 404 alerts for savvyswim.com.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

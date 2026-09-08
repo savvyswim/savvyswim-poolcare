@@ -62,7 +62,7 @@ describe("canary trace capture", () => {
 
   it("summarizes a failing run with next steps", () => {
     const run: CanaryRun = {
-      target: "https://savvyswimservices.com",
+      target: "https://savvyswim.com",
       startedAt: new Date().toISOString(),
       finishedAt: new Date().toISOString(),
       rounds: 2,
@@ -76,7 +76,7 @@ describe("canary trace capture", () => {
         {
           route: "/",
           round: 1,
-          url: "https://savvyswimservices.com/",
+          url: "https://savvyswim.com/",
           kind: "http_5xx",
           ok: false,
           httpStatus: 500,

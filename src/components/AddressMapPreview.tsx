@@ -15,7 +15,7 @@ interface Props {
 /**
  * Map preview with three layers, so something useful shows on every domain:
  *  1. Static map rendered server-side through the connector gateway (works on
- *     savvyswim.com and savvyswimservices.com. no browser key involved).
+ *     savvyswim.com and savvyswim.com. no browser key involved).
  *  2. Interactive Google map, when the browser key is allowed on this domain.
  *  3. A plain confirmation card with an "Open in Google Maps" link.
  */
@@ -56,7 +56,7 @@ export default function AddressMapPreview({ placeId, address, className }: Props
 
     (async () => {
       // 1, server-rendered static map (domain-independent). This is the
-      // primary map on savvyswim.com / savvyswimservices.com, where Google
+      // primary map on savvyswim.com / savvyswim.com, where Google
       // blocks the shared browser key.
       const staticAttempts: Array<Record<string, unknown>> = [];
       if (placeId) staticAttempts.push({ placeId, ...(address ? { address } : {}) });

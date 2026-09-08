@@ -86,7 +86,7 @@ export const reverseGeocode = createServerFn({ method: "POST" })
  * Address suggestions + map preview, served through the gateway.
  *
  * The browser Maps key is referrer-locked to the preview domains, so on
- * savvyswim.com / savvyswimservices.com it is rejected. Everything below runs
+ * savvyswim.com / savvyswim.com it is rejected. Everything below runs
  * server-side with the connector's server key, which has no referrer rules, * so autocomplete and the map work identically on every domain.
  * ------------------------------------------------------------------ */
 

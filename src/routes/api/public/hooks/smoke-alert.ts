@@ -6,7 +6,7 @@
  * an anonymous caller can never trigger outbound messages.
  *
  *   POST /api/public/hooks/smoke-alert
- *   { "target": "https://savvyswimservices.com", "failures": [...], "summary": "..." }
+ *   { "target": "https://savvyswim.com", "failures": [...], "summary": "..." }
  */
 import { createFileRoute } from "@tanstack/react-router";
 
