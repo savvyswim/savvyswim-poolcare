@@ -200,10 +200,10 @@ const Services = () => {
         <section className="perf-section py-12 sm:py-24">
           <div className="container-tight">
             <div className="border-b border-hairline pb-5 mb-8">
-              <h2 className="font-display text-[1.8rem] sm:text-[2.8rem] uppercase tracking-tight leading-[1.05]">
+              <h2 className="font-display text-[2.6rem] sm:text-[4.2rem] uppercase tracking-tight leading-[0.95]">
                 What do we offer?
               </h2>
-              <p className="mt-2 font-serif italic text-[1.15rem] sm:text-[1.4rem] text-muted-foreground">
+              <p className="mt-3 font-serif italic text-[1.25rem] sm:text-[1.6rem] text-muted-foreground">
                 I thought you'd never ask!
               </p>
             </div>
