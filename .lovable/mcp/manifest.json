@@ -95,7 +95,7 @@
       {
         "name": "update_lead",
         "title": "Update a lead",
-        "description": "Fill in or correct a Savvy Swim website lead — contact details (name, phone, email, address, ZIP), service details (lead type, preferred date, contact time, pool details, notes) and pipeline fields (status, source) — then push the refreshed lead to the CRM. Only the fields you pass are changed.",
+        "description": "Fill in or correct a Savvy Swim website lead, contact details (name, phone, email, address, ZIP), service details (lead type, preferred date, contact time, pool details, notes) and pipeline fields (status, source). Then push the refreshed lead to the CRM. Only the fields you pass are changed.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": false,
@@ -334,7 +334,7 @@
       {
         "name": "list_service_areas",
         "title": "List service areas",
-        "description": "List the DFW cities Savvy Swim serves, with the landing page path for each — useful for answering coverage questions.",
+        "description": "List the DFW cities Savvy Swim serves, with the landing page path for each, useful for answering coverage questions.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
