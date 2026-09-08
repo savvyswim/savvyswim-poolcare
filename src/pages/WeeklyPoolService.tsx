@@ -16,6 +16,7 @@ import {
   IMG_5512_PNG as photoSavvyRings,
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
 
 const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
@@ -132,12 +133,12 @@ export default function WeeklyPoolService() {
                   <p className="mt-4 font-serif italic text-xl text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => goToLead("weekly_hub_hero")}
                       data-savvy-cta="request_quote"
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Book a free consultation
                     </button>
@@ -145,14 +146,14 @@ export default function WeeklyPoolService() {
                       type="button"
                       onClick={() => goToLead("weekly_hub_hero_alt")}
                       data-savvy-cta="request_quote"
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       Consultation
                     </button>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick("weekly_hub_hero")}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                     </a>
@@ -161,9 +162,8 @@ export default function WeeklyPoolService() {
               </div>
               <div className="lg:col-span-5">
                 <img
-                  src={photoWater.url}
+                  {...imgProps(photoWater, { priority: true, sizes: "(min-width: 1024px) 50vw, 100vw" })}
                   alt="Clear, balanced pool water after a weekly Savvy Swim service visit in Dallas–Fort Worth"
-                  loading="eager"
                   className="w-full h-[240px] sm:h-[320px] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -223,9 +223,8 @@ export default function WeeklyPoolService() {
                 ))}
               </ul>
               <img
-                src={photoSavvyRings.url}
+                {...imgProps(photoSavvyRings, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Savvy Swim rings floating in a clean, freshly serviced backyard pool"
-                loading="lazy"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"
               />
             </div>
@@ -256,9 +255,8 @@ export default function WeeklyPoolService() {
                 ))}
               </ul>
               <img
-                src={photoRivieraLoungers.url}
+                {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Striped loungers beside a weekly-serviced pool in Dallas–Fort Worth"
-                loading="lazy"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"
               />
             </div>
@@ -319,19 +317,19 @@ export default function WeeklyPoolService() {
                   in your city.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <button
                   type="button"
                   onClick={() => goToLead("weekly_hub_final")}
                       data-savvy-cta="request_quote"
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book a free consultation
                 </button>
                 <a
                   href={PHONE_HREF}
                   onClick={onCallClick("weekly_hub_cta")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>

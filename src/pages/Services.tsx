@@ -42,6 +42,7 @@ const MEMBERSHIP_FAQ = [
   },
 ];
 
+import { imgProps } from "@/lib/img";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
@@ -138,18 +139,18 @@ const Services = () => {
                     visit checklist, photo report, and the same-tech promise.
                   </p>
 
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => openBooking()}
                   data-savvy-cta="request_quote"
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Start Service <ArrowRight className="h-4 w-4" />
                     </button>
                     <a
                       href={PHONE_HREF} onClick={onCallClick("service_row")}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                     </a>
@@ -160,12 +161,12 @@ const Services = () => {
               <div className="lg:col-span-5">
                 <figure className="relative">
                   <img
-                    src={photoLifeguardChair.url}
+                    {...imgProps(photoLifeguardChair, {
+                      priority: true,
+                      sizes: "(min-width: 1024px) 33vw, 100vw",
+                    })}
                     alt="Savvy Swim lifeguard chair with a red striped umbrella beside a pool"
                     className="w-full aspect-[4/5] object-cover rounded-sm"
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
                   />
                   <figcaption className="mt-3 flex items-center justify-between font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     <span>Plate I: On duty</span>
@@ -242,10 +243,8 @@ const Services = () => {
           <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-5">
               <img
-                src={photoRedUmbrellas.url}
+                {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 1024px) 40vw, 100vw" })}
                 alt="Red and white striped fringed umbrellas against a blue sky"
-                loading="lazy"
-                  decoding="async"
                 className="w-full aspect-[5/4] object-cover rounded-sm"
               />
             </div>

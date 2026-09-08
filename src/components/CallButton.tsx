@@ -254,13 +254,13 @@ export function StickyCallBar({ location = "sticky_mobile" }: { location?: strin
     <>
       {/* spacer so the bar never covers page content */}
       <div className="h-16 md:hidden" aria-hidden="true" />
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-background/95 p-2 backdrop-blur md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-background/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
         <a
           href={PHONE_HREF}
           onClick={handleCall(location)}
           title={`Call ${PHONE_VANITY} (${PHONE_PLAIN})`}
           aria-label={`Call ${PHONE_VANITY}`}
-          className="flex w-full items-center justify-center gap-2 bg-primary px-4 py-3 text-[13px] font-bold uppercase tracking-wide text-primary-foreground"
+          className="flex min-h-12 w-full items-center justify-center gap-2 bg-primary px-4 py-3 text-[13px] font-bold uppercase tracking-wide text-primary-foreground"
         >
           <Phone className="h-4 w-4" aria-hidden="true" /> Call {PHONE_VANITY}
         </a>

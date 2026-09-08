@@ -9,15 +9,16 @@ import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
-import photoRescueTube from "@/assets/IMG_5503.jpg.asset.json";
+import { IMG_5503_jpg as photoRescueTube } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
 
 const PHOTOS = [
-  { src: photoNavyCabana.url, alt: "Navy and white striped cabana beside a clear serviced pool" },
-  { src: photoRescueTube.url, alt: "Savvy Swim rescue tube floating in a sparkling clean pool" },
-  { src: photoSavvyRings.url, alt: "Red and white Savvy pool rings floating in clear water" },
-  { src: photoSavvyLetters.url, alt: "Inflatable SAVVY letters floating in a bright blue pool" },
-  { src: photoLifeguardChair.url, alt: "Savvy Swim lifeguard chair beside a serviced pool" },
-  { src: photoRivieraLoungers.url, alt: "Poolside loungers at a Savvy Swim serviced pool" },
+  { photo: photoNavyCabana, alt: "Navy and white striped cabana beside a clear serviced pool" },
+  { photo: photoRescueTube, alt: "Savvy Swim rescue tube floating in a sparkling clean pool" },
+  { photo: photoSavvyRings, alt: "Red and white Savvy pool rings floating in clear water" },
+  { photo: photoSavvyLetters, alt: "Inflatable SAVVY letters floating in a bright blue pool" },
+  { photo: photoLifeguardChair, alt: "Savvy Swim lifeguard chair beside a serviced pool" },
+  { photo: photoRivieraLoungers, alt: "Poolside loungers at a Savvy Swim serviced pool" },
 ];
 
 const BENEFITS = [
@@ -64,15 +65,12 @@ const OurWork = () => (
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PHOTOS.map((p) => (
-            <div key={p.src} className="overflow-hidden rounded-sm border border-hairline shadow-card">
+            <div key={p.alt} className="overflow-hidden rounded-sm border border-hairline shadow-card">
               <img
-                src={p.src}
+                {...imgProps(p.photo, {
+                  sizes: "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+                })}
                 alt={p.alt}
-                loading="lazy"
-                decoding="async"
-                width={720}
-                height={540}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-105"
               />
             </div>

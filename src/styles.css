@@ -581,6 +581,7 @@
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
   @media (prefers-reduced-motion: reduce) {
+    .animate-marquee,
     .animate-marquee-slow,
     .animate-marquee-slow-reverse {
       animation: none;

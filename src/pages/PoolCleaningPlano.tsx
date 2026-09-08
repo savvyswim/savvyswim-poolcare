@@ -7,6 +7,7 @@ import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
 import { CallButton, StickyCallBar, onCallClick } from "@/components/CallButton";
 import { goToLead } from "@/lib/site-analytics";
 
+import { imgProps } from "@/lib/img";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
@@ -157,18 +158,18 @@ const PlanoPoolCleaning = () => {
                   <p className="mt-4 font-serif italic text-xl text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => goToLead("plano")}
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Get a Plano quote
                     </button>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick("plano_hero")}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                     </a>
@@ -178,10 +179,8 @@ const PlanoPoolCleaning = () => {
 
               <div className="lg:col-span-5">
                 <img
-                  src={photoNavyCabana.url}
+                  {...imgProps(photoNavyCabana, { priority: true, sizes: "(min-width: 1024px) 40vw, 100vw" })}
                   alt="Navy and white striped cabana umbrella beside a clean Plano pool"
-                  loading="eager"
-                  fetchPriority="high"
                   className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -250,9 +249,9 @@ const PlanoPoolCleaning = () => {
               </ul>
             </div>
             <div className="lg:col-span-6 grid grid-cols-2 gap-3">
-              <img src={photoRivieraLoungers.url} alt="Red and white striped loungers beside a Plano backyard pool" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <img src={photoSavvyLetters.url} alt="Savvy Swim inflatable letters floating in clear pool water" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
-              <img src={photoRedUmbrellas.url} alt="Red and white umbrellas above a serviced pool deck" loading="lazy" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Plano backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
+              <img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
               <div className="border border-hairline rounded-sm p-5 flex flex-col justify-center mt-8">
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Guarantee</div>
                 <p className="mt-2 text-[0.9rem] leading-relaxed">
@@ -296,21 +295,21 @@ const PlanoPoolCleaning = () => {
                 <button
                   type="button"
                   onClick={() => goToLead("plano")}
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Request Quote
                 </button>
                 <a
                   href={PHONE_HREF}
                   onClick={onCallClick("plano_final_cta")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> Call
                 </a>
                 <a
                   href={buildSmsHref(SMS_PHONE)}
                   onClick={() => trackContactClick("text_click", "plano_final_cta_text")}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <MessageSquare className="h-4 w-4" /> Text for a free pool quote
                 </a>

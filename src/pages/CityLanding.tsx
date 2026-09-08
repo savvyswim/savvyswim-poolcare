@@ -20,6 +20,7 @@ import {
   IMG_5512_PNG as photoSavvyRings,
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
+import { imgProps } from "@/lib/img";
 
 const PHONE_DISPLAY = "817-663-POOL";
 const PHONE_HREF = "tel:+18176637665";
@@ -62,9 +63,9 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
     .map((a) => ({ name: a.name, to: `/${a.slug}` }));
 
   const gallery = [
-    { src: photoWater.url, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
-    { src: photoRivieraLoungers.url, alt: `Striped loungers beside a serviced ${city}, Texas backyard pool` },
-    { src: photoSavvyRings.url, alt: `Savvy Swim rings floating in a clean ${city}, Texas pool` },
+    { photo: photoWater, alt: `Balanced, clear pool water on a ${city}, Texas weekly service route` },
+    { photo: photoRivieraLoungers, alt: `Striped loungers beside a serviced ${city}, Texas backyard pool` },
+    { photo: photoSavvyRings, alt: `Savvy Swim rings floating in a clean ${city}, Texas pool` },
   ];
 
 
@@ -105,19 +106,19 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   <p className="mt-4 font-serif italic text-xl text-foreground/80">
                     On duty, so you don't have to be.
                   </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <button
                       type="button"
                       onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
-                      className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                      className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                     >
                       Get a {city} quote
                     </button>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick(`${area.slug}_hero`)}
-                      className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                     >
                       <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                     </a>
@@ -127,10 +128,11 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
 
               <div className="lg:col-span-5">
                 <img
-                  src={photoNavyCabana.url}
+                  {...imgProps(photoNavyCabana, {
+                    priority: true,
+                    sizes: "(min-width: 1024px) 40vw, 100vw",
+                  })}
                   alt={`Striped cabana umbrella beside a clean ${city}, Texas pool`}
-                  loading="eager"
-                  fetchPriority="high"
                   className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
                 />
               </div>
@@ -235,11 +237,9 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {gallery.map((g) => (
                     <img
-                      key={g.src}
-                      src={g.src}
+                      key={g.alt}
+                      {...imgProps(g.photo, { sizes: "(min-width: 640px) 33vw, 100vw" })}
                       alt={g.alt}
-                      loading="lazy"
-                      decoding="async"
                       className="w-full aspect-[4/3] object-cover rounded-sm border border-hairline"
                     />
                   ))}
@@ -324,12 +324,12 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   monthly quote. No charge, no contract, first service on the next {city} route day.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <button
                   type="button"
                   onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
-                  className="btn-quote inline-flex items-center gap-2 rounded-md px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide transition"
+                  className="btn-quote inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide transition"
                 >
                   Book a free consultation
                 </button>
@@ -337,14 +337,14 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                   type="button"
                   onClick={() => goToLead(`city_${area.slug}`)}
                   data-savvy-cta="request_quote"
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   Request a quote
                 </button>
                 <a
                   href={PHONE_HREF}
                   onClick={onCallClick(`${area.slug}_cta`)}
-                  className="inline-flex items-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
                   <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
                 </a>
