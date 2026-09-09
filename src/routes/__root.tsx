@@ -174,6 +174,7 @@ function RootComponent() {
             {pathname !== "/" && <WaterTestTab />}
             <ConsentBanner />
             <MetaPixel />
+            <PageViewTracker />
             {showOffer && <SwimClubPromptHost />}
           </Suspense>
 
