@@ -19,7 +19,7 @@ import {
 } from "@/assets/photos";
 import { imgProps } from "@/lib/img";
 
-const PHONE_DISPLAY = "817-663-POOL";
+const PHONE_DISPLAY = "817-663-7665";
 const PHONE_HREF = "tel:+18176637665";
 
 export const WEEKLY_VISIT_STEPS = [

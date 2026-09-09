@@ -6,7 +6,7 @@ import { resetConsent } from "@/lib/consent";
 import { goToLead } from "@/lib/site-analytics";
 
 export const EMAIL = "hi@savvyswim.com";
-export const PHONE_DISPLAY = "817-663-POOL";
+export const PHONE_DISPLAY = "817-663-7665";
 export const PHONE_HREF = "tel:+18176637665";
 export const SMS_PHONE = "+18176637665";
 export const CUSTOMER_LOGIN_URL = "https://savvyswim.app";

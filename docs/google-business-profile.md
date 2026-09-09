@@ -16,7 +16,7 @@ verification from your own Google account. Work through these steps once.
 | --- | --- |
 | Business name | `Savvy Swim` |
 | Website | `https://savvyswim.com` |
-| Phone | `(817) 663-7665` (same line as 817-663-POOL) |
+| Phone | `(817) 663-7665` (same line as 817-663-7665) |
 | Email | `hi@savvyswim.com` |
 | Primary category | Swimming pool cleaning service |
 | Secondary categories | Swimming pool repair service; Pool cleaning service |

@@ -56,7 +56,7 @@ export const TIMES = [
 const FIELD =
   "w-full min-h-[48px] border border-[#8E1F2C]/25 bg-white px-4 py-3 text-[15px] text-[#2a1013] placeholder:text-[#2a1013]/45 outline-none focus-visible:border-[#8E1F2C] focus-visible:ring-2 focus-visible:ring-[#8E1F2C]/30";
 
-const PHONE = "817-663-POOL";
+const PHONE = "817-663-7665";
 const PHONE_HREF = "tel:+18176637665";
 
 /** Single combined authorization shown on the form, stored verbatim as the consent record. */

@@ -197,14 +197,14 @@ export async function sendInspectionNotifications(
           : ""
       }</p>
     </div>
-    <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">Need us sooner? Call or text <a href="tel:+18176637665" style="color:#8E1F2C;">817-663-POOL</a>, or just reply to this email.</p>
+    <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">Need us sooner? Call or text <a href="tel:+18176637665" style="color:#8E1F2C;">817-663-7665</a>, or just reply to this email.</p>
     <hr style="border:none;border-top:1px solid #E4DCCB;margin:24px 0 16px;" />
     <p style="font-size:12px;color:#6C7278;line-height:1.5;margin:0;">Savvy Swim · Dallas–Fort Worth · savvyswim.com</p>
   </div>
 </div>`,
         text: isWaterTest
-          ? `Thanks, ${req.full_name.split(" ")[0]}. Your free water test request (${req.reference_number}) for ${req.address} is in. We'll send your full chemistry readings and what the water needs. Call or text 817-663-POOL (817-663-7665).`
-          : `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-POOL (817-663-7665).`,
+          ? `Thanks, ${req.full_name.split(" ")[0]}. Your free water test request (${req.reference_number}) for ${req.address} is in. We'll send your full chemistry readings and what the water needs. Call or text 817-663-7665 (817-663-7665).`
+          : `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-7665 (817-663-7665).`,
         label: "inspection-confirmation",
         purpose: "transactional",
         idempotency_key: `inspection-confirm-${req.id}`,

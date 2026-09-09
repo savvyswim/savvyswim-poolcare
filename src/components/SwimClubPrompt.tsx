@@ -30,28 +30,16 @@ export function SwimClubPrompt({ onJoin }: SwimClubPromptProps) {
     return () => window.removeEventListener(CONSENT_EVENT, sync);
   }, []);
 
+  // The offer waits four minutes after the cookie choice, so it never
+  // interrupts someone who just landed on the page.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!consentSettled) return;
     if (sessionStorage.getItem(DISMISS_KEY)) return;
 
-    let shown = false;
-    const show = () => {
-      if (shown) return;
-      shown = true;
-      setVisible(true);
-      window.removeEventListener("scroll", onScroll);
-    };
-    const onScroll = () => {
-      if (window.scrollY > window.innerHeight * 0.6) show();
-    };
-
-    const timer = window.setTimeout(show, 9000);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+    const timer = window.setTimeout(() => setVisible(true), 4 * 60 * 1000);
+    return () => window.clearTimeout(timer);
+  }, [consentSettled]);
 
 
 
