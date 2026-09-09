@@ -1,7 +1,7 @@
 import InstagramLink from "@/components/InstagramLink";
 import { useState } from "react";
 import { Link } from "@/lib/router-compat";
-import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
+import { Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";
 import LocalSeoBlurb from "@/components/LocalSeoBlurb";
 import { buildSmsHref, trackContactClick } from "@/lib/contactTracking";
