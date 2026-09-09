@@ -172,6 +172,7 @@ function RootComponent() {
             <QuoteModal />
             {pathname !== "/" && <WaterTestTab />}
             <ConsentBanner />
+            <MetaPixel />
             {showOffer && <SwimClubPromptHost />}
           </Suspense>
 
