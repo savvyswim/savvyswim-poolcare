@@ -146,6 +146,24 @@ export async function sendInspectionNotifications(
     }
   }
 
+  // Second, independent delivery path: drop the lead straight into the
+  // connected Gmail mailbox so a transactional-email outage cannot lose it.
+  try {
+    const { sendLeadToGmailInbox, GMAIL_LEAD_INBOX } = await import("./gmail-lead-inbox.server");
+    const gmail = await sendLeadToGmailInbox({
+      subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
+      text: officeText,
+      replyTo: req.email,
+    });
+    if (!results[GMAIL_LEAD_INBOX] || gmail.ok) {
+      results[GMAIL_LEAD_INBOX] = gmail.ok ? "sent" : "failed";
+    }
+  } catch (e) {
+    console.error("gmail lead inbox delivery failed", e);
+  }
+
+
+
   // Homeowner confirmation.
   const firstName = esc(req.full_name.split(" ")[0]);
   const headline = isWaterTest
