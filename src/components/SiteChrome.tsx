@@ -92,16 +92,7 @@ export function SiteFooter() {
           <a href={PHONE_HREF} onClick={onCallClick("footer")} className="transition hover:text-foreground">
             {PHONE_DISPLAY}
           </a>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Savvy Swim on Instagram"
-            className="inline-flex items-center gap-1.5 transition hover:text-foreground"
-          >
-            <Instagram className="h-4 w-4" />
-            Instagram
-          </a>
+          <InstagramLink className="inline-flex items-center gap-1.5 transition hover:text-foreground" />
           <Link to="/refer" className="transition hover:text-foreground">
             Refer &amp; Save
           </Link>
