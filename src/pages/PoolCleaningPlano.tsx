@@ -1,6 +1,5 @@
 import InstagramLink from "@/components/InstagramLink";
 import { useState } from "react";
-import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { Link } from "@/lib/router-compat";
 import { Instagram, Waves, Phone, Droplets, Wrench, Sparkles, ShieldCheck, CheckCircle2, MapPin, MessageSquare } from "lucide-react";
 import Seo from "@/components/Seo";

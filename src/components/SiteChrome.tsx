@@ -1,7 +1,6 @@
 import InstagramLink from "@/components/InstagramLink";
-import { Instagram, Waves } from "lucide-react";
+import { Waves } from "lucide-react";
 import { Link } from "@/lib/router-compat";
-import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { CallButton, onCallClick } from "@/components/CallButton";
 import { resetConsent } from "@/lib/consent";
 import { goToLead } from "@/lib/site-analytics";

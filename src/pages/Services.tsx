@@ -1,8 +1,6 @@
 import InstagramLink from "@/components/InstagramLink";
-import { INSTAGRAM_URL } from "@/lib/contact-info";
 import { Link } from "@/lib/router-compat";
 import {
-  Instagram,
   Waves,
   Phone,
   ArrowRight,
