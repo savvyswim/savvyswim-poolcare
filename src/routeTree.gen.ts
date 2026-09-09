@@ -36,6 +36,7 @@ import { Route as BRouteImport } from './routes/b'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as CityRouteImport } from './routes/$city'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CityIndexRouteImport } from './routes/$city.index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
@@ -207,6 +208,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CityIndexRoute = CityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CityRoute,
 } as any)
 const SignTokenRoute = SignTokenRouteImport.update({
   id: '/sign/$token',
@@ -446,6 +452,7 @@ export interface FileRoutesByFullPath {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -469,7 +476,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$city': typeof CityRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
@@ -511,6 +517,7 @@ export interface FileRoutesByTo {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -577,6 +584,7 @@ export interface FileRoutesById {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -644,6 +652,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -667,7 +676,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/$city'
     | '/app'
     | '/b'
     | '/book'
@@ -709,6 +717,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -774,6 +783,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -1050,6 +1060,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$city/': {
+      id: '/$city/'
+      path: '/'
+      fullPath: '/$city/'
+      preLoaderRoute: typeof CityIndexRouteImport
+      parentRoute: typeof CityRoute
+    }
     '/sign/$token': {
       id: '/sign/$token'
       path: '/sign/$token'
@@ -1307,10 +1324,12 @@ declare module '@tanstack/react-router' {
 
 interface CityRouteChildren {
   CityPricingRoute: typeof CityPricingRoute
+  CityIndexRoute: typeof CityIndexRoute
 }
 
 const CityRouteChildren: CityRouteChildren = {
   CityPricingRoute: CityPricingRoute,
+  CityIndexRoute: CityIndexRoute,
 }
 
 const CityRouteWithChildren = CityRoute._addFileChildren(CityRouteChildren)
