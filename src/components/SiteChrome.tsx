@@ -1,3 +1,4 @@
+import InstagramLink from "@/components/InstagramLink";
 import { Instagram, Waves } from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import { INSTAGRAM_URL } from "@/lib/contact-info";
