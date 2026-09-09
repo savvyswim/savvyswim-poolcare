@@ -300,7 +300,7 @@ function WebhookHealthPage() {
                   rows.map((r) => (
                     <tr key={r.id} className="border-t border-foreground/10 align-top">
                       <td className="p-3 whitespace-nowrap">{CHANNEL_LABEL[r.channel] ?? r.channel}</td>
-                      <td className="p-3">{r.reference ?? r.event_key ?? ", "}</td>
+                      <td className="p-3">{r.reference ?? r.event_key ?? "-"}</td>
                       <td className="p-3">
                         <OutcomePill outcome={r.outcome} />
                       </td>
@@ -314,7 +314,7 @@ function WebhookHealthPage() {
                       </td>
                       <td className="p-3 whitespace-nowrap">{when(r.last_attempt_at)}</td>
                       <td className="p-3 text-xs text-foreground/70">
-                        {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : ", ")}
+                        {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : "-")}
                       </td>
                       <td className="p-3 text-right">
                         <button

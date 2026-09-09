@@ -126,10 +126,10 @@ function EventTable({ rows }: { rows: NotFoundEventRow[] }) {
                 ) : null}
               </td>
               <td className="py-2 pr-4 break-all text-xs text-foreground/60">
-                {r.referrer ?? ", "}
+                {r.referrer ?? "-"}
               </td>
               <td className="py-2 pr-4 text-xs text-foreground/60">
-                {r.alerted ? (r.alert_result ?? "sent") : ", "}
+                {r.alerted ? (r.alert_result ?? "sent") : "-"}
               </td>
             </tr>
           ))}
@@ -191,14 +191,14 @@ function NotFoundAdminPage() {
       ) : null}
 
       <section className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="404s · 24h" value={report?.total24h ?? ", "} alarm={(report?.total24h ?? 0) > 0} />
-        <Stat label="404s · 7d" value={report?.total7d ?? ", "} />
+        <Stat label="404s · 24h" value={report?.total24h ?? "-"} alarm={(report?.total24h ?? 0) > 0} />
+        <Stat label="404s · 7d" value={report?.total7d ?? "-"} />
         <Stat
           label="Broken internal links · 7d"
-          value={report?.internal7d ?? ", "}
+          value={report?.internal7d ?? "-"}
           alarm={(report?.internal7d ?? 0) > 0}
         />
-        <Stat label="Distinct paths · 7d" value={report?.distinctPaths7d ?? ", "} />
+        <Stat label="Distinct paths · 7d" value={report?.distinctPaths7d ?? "-"} />
       </section>
 
       <nav className="mt-10 flex gap-2 border-b border-foreground/15">

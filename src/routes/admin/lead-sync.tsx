@@ -378,17 +378,17 @@ function LeadSyncPage() {
               rows.map((r) => (
                 <tr key={r.id} className="border-t border-foreground/10 align-top">
                   <td className="p-3">
-                    <span className="font-semibold">{r.full_name ?? ", "}</span>
+                    <span className="font-semibold">{r.full_name ?? "-"}</span>
                     <span className="block text-xs text-foreground/60">
-                      {r.email ?? ", "} · {r.phone ?? ", "}
+                      {r.email ?? "-"} · {r.phone ?? "-"}
                     </span>
                   </td>
                   <td className="p-3 whitespace-nowrap">{when(r.created_at)}</td>
                   <td className="p-3 whitespace-nowrap text-xs text-foreground/70">
-                    {r.city ?? ", "}
+                    {r.city ?? "-"}
                   </td>
                   <td className="p-3 whitespace-nowrap text-xs text-foreground/70">
-                    {r.postal_code ?? ", "}
+                    {r.postal_code ?? "-"}
                   </td>
                   <td className="p-3 text-xs">
                     <span
@@ -408,7 +408,7 @@ function LeadSyncPage() {
                     />
                   </td>
                   <td className="p-3 text-xs text-foreground/70">
-                    {r.source ?? ", "}
+                    {r.source ?? "-"}
                     {r.lead_type ? ` · ${r.lead_type}` : ""}
                   </td>
                   <td className="p-3">
@@ -463,7 +463,7 @@ function LeadSyncPage() {
                     {when(r.crm_synced_at ?? r.last_attempt_at)}
                   </td>
                   <td className="p-3 text-xs text-foreground/70">
-                    {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : ", ")}
+                    {r.last_error ?? (r.http_status ? `HTTP ${r.http_status}` : "-")}
                   </td>
                   <td className="p-3 text-right">
                     <div className="flex justify-end gap-2">

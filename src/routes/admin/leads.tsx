@@ -285,12 +285,12 @@ function LeadsPage() {
                       <td className="px-4 py-3 whitespace-nowrap text-foreground/70">
                         {when(l.created_at)}
                       </td>
-                      <td className="px-4 py-3">{l.full_name ?? ", "}</td>
+                      <td className="px-4 py-3">{l.full_name ?? "-"}</td>
                       <td className="px-4 py-3 text-foreground/70">
-                        <div>{l.email ?? ", "}</div>
+                        <div>{l.email ?? "-"}</div>
                         <div>{l.phone ?? ""}</div>
                       </td>
-                      <td className="px-4 py-3">{l.city ?? ", "}</td>
+                      <td className="px-4 py-3">{l.city ?? "-"}</td>
                       <td className="px-4 py-3 text-foreground/70">
                         <div>{l.source ?? l.utm_source ?? "direct"}</div>
                         {l.utm_campaign ? (
