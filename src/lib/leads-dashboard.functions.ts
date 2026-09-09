@@ -36,6 +36,7 @@ export interface LeadsReport {
   week: number;
   month: number;
   withCode: number;
+  fromGoogle: number;
   bySource: { key: string; count: number }[];
   daily: { day: string; count: number }[];
   leads: LeadRow[];
