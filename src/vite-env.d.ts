@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_PAYMENTS_CLIENT_TOKEN?: string;
   readonly VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY?: string;
   readonly VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID?: string;
+  readonly VITE_META_PIXEL_ID?: string;
 }
 
 interface ImportMeta {

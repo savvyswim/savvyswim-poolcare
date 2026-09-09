@@ -37,6 +37,9 @@ const SwimClubPromptHost = lazyWithReload(() => import("@/components/SwimClubPro
 // Free water test side tab.
 const WaterTestTab = lazyWithReload(() => import("@/components/WaterTestTab"));
 
+// Meta (Facebook / Instagram) pixel, only after the visitor accepts cookies.
+const MetaPixel = lazyWithReload(() => import("@/components/MetaPixel"));
+
 
 
 
@@ -169,6 +172,7 @@ function RootComponent() {
             <QuoteModal />
             {pathname !== "/" && <WaterTestTab />}
             <ConsentBanner />
+            <MetaPixel />
             {showOffer && <SwimClubPromptHost />}
           </Suspense>
 
