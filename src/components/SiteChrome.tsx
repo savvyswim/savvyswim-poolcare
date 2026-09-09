@@ -36,24 +36,24 @@ export function SiteHeader() {
         </Link>
 
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 overflow-hidden whitespace-nowrap font-tech text-[11px]! text-primary/70 2xl:flex 2xl:gap-4 2xl:text-[12px]!">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 overflow-hidden whitespace-nowrap font-tech text-[11px]! text-primary/70 min-[1500px]:flex min-[1700px]:gap-5 min-[1700px]:text-[12px]!">
           {NAV.map((item) => (
             <Link
               key={item.label}
               to="/"
               hash={item.hash}
-              className="min-w-0 transition hover:text-accent"
+              className="shrink-0 transition hover:text-accent"
             >
               {item.label}
             </Link>
           ))}
-          <Link to="/services" className="hidden min-w-0 transition hover:text-accent min-[1700px]:inline">
+          <Link to="/services" className="hidden shrink-0 transition hover:text-accent min-[1800px]:inline">
             Services
           </Link>
         </nav>
 
 
-        <div className="flex shrink-0 items-center gap-2 2xl:ml-4">
+        <div className="flex shrink-0 items-center gap-2 min-[1500px]:ml-4">
 
 
           <CallButton location="header" hidePhoneTextOnNarrowDesktop className="px-2 py-2 sm:px-3" />
