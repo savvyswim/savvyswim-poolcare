@@ -1,7 +1,6 @@
-import { INSTAGRAM_URL } from "@/lib/contact-info";
+import InstagramLink from "@/components/InstagramLink";
 import { Link } from "@/lib/router-compat";
 import {
-  Instagram,
   Waves,
   Phone,
   ArrowRight,
@@ -436,7 +435,7 @@ const Services = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-foreground transition">{EMAIL}</a>
             <a href={PHONE_HREF} onClick={onCallClick("footer")} className="hover:text-foreground transition">{PHONE_DISPLAY}</a>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Savvy Swim on Instagram" className="inline-flex items-center gap-1.5 hover:text-foreground transition"><Instagram className="h-4 w-4" />Instagram</a>
+            <InstagramLink className="inline-flex items-center gap-1.5 hover:text-foreground transition" />
             <Link to="/pool-cleaning-frisco-tx" className="hover:text-foreground transition">Pool Cleaning Frisco TX</Link>
             <Link to="/privacy-policy" className="hover:text-foreground transition">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-foreground transition">Terms &amp; Conditions</Link>
