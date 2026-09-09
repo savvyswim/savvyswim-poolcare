@@ -25,7 +25,7 @@ const NAV: NavItem[] = [
 export function SiteHeader() {
   return (
     <header className="border-b border-hairline bg-background">
-      <div className="container-tight flex h-[64px] min-w-0 items-center justify-between gap-4 sm:h-[76px] sm:gap-6">
+      <div className="container-tight flex h-[64px] min-w-0 items-center justify-between gap-4 sm:h-[76px] sm:gap-8">
         <Link to="/" aria-label="Savvy Swim home" className="flex shrink-0 flex-col justify-center">
           <span className="whitespace-nowrap font-display text-[1.15rem] uppercase leading-none tracking-tight text-accent xs:text-[1.3rem] sm:text-[1.6rem] lg:text-[1.45rem] xl:text-[1.9rem]">
             Savvy Swim
@@ -36,24 +36,25 @@ export function SiteHeader() {
         </Link>
 
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 whitespace-nowrap font-tech text-[11px]! text-primary/70 xl:flex xl:gap-4 xl:text-[12px]! 2xl:gap-5 2xl:text-[13px]!">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-3 overflow-hidden whitespace-nowrap font-tech text-[11px]! text-primary/70 2xl:flex 2xl:gap-4 2xl:text-[12px]!">
           {NAV.map((item) => (
             <Link
               key={item.label}
               to="/"
               hash={item.hash}
-              className="shrink-0 transition hover:text-accent"
+              className="min-w-0 transition hover:text-accent"
             >
               {item.label}
             </Link>
           ))}
-          <Link to="/services" className="hidden shrink-0 transition hover:text-accent 2xl:inline">
+          <Link to="/services" className="hidden min-w-0 transition hover:text-accent min-[1700px]:inline">
             Services
           </Link>
         </nav>
 
 
-        <div className="flex shrink-0 items-center gap-2 xl:ml-4">
+        <div className="flex shrink-0 items-center gap-2 2xl:ml-4">
+
 
           <CallButton location="header" hidePhoneTextOnNarrowDesktop className="px-2 py-2 sm:px-3" />
           <button
