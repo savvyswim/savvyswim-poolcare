@@ -250,6 +250,7 @@ function LeadsPage() {
                 ["This week", String(report.week)],
                 ["This month", String(report.month)],
                 ["With a code", String(report.withCode)],
+                ["From Google", String(report.fromGoogle)],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="border border-foreground/15 p-5">
