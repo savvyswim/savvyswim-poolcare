@@ -199,8 +199,7 @@ export default function CityPricing({ area }: { area: ServiceArea }) {
                   {nearby.map((a) => (
                     <Link
                       key={a.slug}
-                      to="/$city/pricing"
-                      params={{ city: a.slug }}
+                      to={`/${a.slug}/pricing`}
                       className="text-muted-foreground hover:text-accent transition"
                     >
                       {a.name} pricing
