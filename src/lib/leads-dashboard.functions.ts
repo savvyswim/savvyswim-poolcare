@@ -135,7 +135,7 @@ export const getLeadsReport = createServerFn({ method: "GET" })
       month: within(30 * 86_400_000),
       withCode: leads.filter((l) => !!l.promo_code).length,
       fromGoogle: leads.filter((l) =>
-        /google|gbp/i.test(`${l.source ?? ""} ${l.utm_source ?? ""} ${l.referrer ?? ""}`),
+        /google|gbp/i.test(`${l.source ?? ""} ${l.utm_source ?? ""}`),
       ).length,
       bySource: [...sourceMap.entries()]
         .map(([key, count]) => ({ key, count }))
