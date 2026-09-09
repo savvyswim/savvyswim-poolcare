@@ -239,6 +239,9 @@ export default function LeadForm({
       };
       if (res.ok && data.ok) {
         trackSiteEvent("lead_click", `${source}_submitted`);
+        void import("@/lib/meta-pixel").then((m) =>
+          m.metaTrackLead({ content_name: source }),
+        );
         onDone({ date, time, reference: data.reference, email: email.trim() });
         return;
       }
