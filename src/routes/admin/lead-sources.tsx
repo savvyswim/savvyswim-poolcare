@@ -193,11 +193,11 @@ function BucketTable({
                               key={l.id}
                               className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]"
                             >
-                              <span className="font-semibold">{l.full_name || ", "}</span>
+                              <span className="font-semibold">{l.full_name || "-"}</span>
                               <span className="text-foreground/70">{l.phone || "no phone"}</span>
                               <span className="text-foreground/50">{l.email || ""}</span>
                               <span className="text-foreground/50">{l.page_path}</span>
-                              <span className="text-foreground/50">{l.source || ", "}</span>
+                              <span className="text-foreground/50">{l.source || "-"}</span>
                               <span className="text-foreground/50">{when(l.created_at)}</span>
                               <span className="bg-foreground/8 px-2 py-0.5 text-[11px] uppercase tracking-[0.12em] text-foreground/60">
                                 {l.status || "new"}
@@ -299,7 +299,7 @@ function LeadSourcesPage() {
               [
                 ["Leads in range", String(report.total)],
                 ["Last 7 days", String(report.thisWeek)],
-                ["Top city", report.topCity ?? ", "],
+                ["Top city", report.topCity ?? "-"],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="border border-foreground/15 p-5">

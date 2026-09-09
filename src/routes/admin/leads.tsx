@@ -243,13 +243,14 @@ function LeadsPage() {
         <p className="mt-8 text-sm text-foreground/55">Loading leads…</p>
       ) : report ? (
         <>
-          <section className="mt-8 grid gap-4 sm:grid-cols-4">
+          <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {(
               [
                 ["Today", String(report.today)],
                 ["This week", String(report.week)],
                 ["This month", String(report.month)],
                 ["With a code", String(report.withCode)],
+                ["From Google", String(report.fromGoogle)],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="border border-foreground/15 p-5">
@@ -285,12 +286,12 @@ function LeadsPage() {
                       <td className="px-4 py-3 whitespace-nowrap text-foreground/70">
                         {when(l.created_at)}
                       </td>
-                      <td className="px-4 py-3">{l.full_name ?? ", "}</td>
+                      <td className="px-4 py-3">{l.full_name ?? "-"}</td>
                       <td className="px-4 py-3 text-foreground/70">
-                        <div>{l.email ?? ", "}</div>
+                        <div>{l.email ?? "-"}</div>
                         <div>{l.phone ?? ""}</div>
                       </td>
-                      <td className="px-4 py-3">{l.city ?? ", "}</td>
+                      <td className="px-4 py-3">{l.city ?? "-"}</td>
                       <td className="px-4 py-3 text-foreground/70">
                         <div>{l.source ?? l.utm_source ?? "direct"}</div>
                         {l.utm_campaign ? (

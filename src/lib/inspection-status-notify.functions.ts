@@ -38,7 +38,7 @@ export const notifyInspectionStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!req) throw new Error("Request not found");
 
-    const slot = req.preferred_contact_time ?? ", ";
+    const slot = req.preferred_contact_time ?? "-";
     const headline =
       data.status === "scheduled"
         ? `Inspection SCHEDULED: ${req.full_name}`

@@ -36,6 +36,7 @@ export interface LeadsReport {
   week: number;
   month: number;
   withCode: number;
+  fromGoogle: number;
   bySource: { key: string; count: number }[];
   daily: { day: string; count: number }[];
   leads: LeadRow[];
@@ -133,6 +134,9 @@ export const getLeadsReport = createServerFn({ method: "GET" })
       week: within(7 * 86_400_000),
       month: within(30 * 86_400_000),
       withCode: leads.filter((l) => !!l.promo_code).length,
+      fromGoogle: leads.filter((l) =>
+        /google|gbp/i.test(`${l.source ?? ""} ${l.utm_source ?? ""}`),
+      ).length,
       bySource: [...sourceMap.entries()]
         .map(([key, count]) => ({ key, count }))
         .sort((a, b) => b.count - a.count),

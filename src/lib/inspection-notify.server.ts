@@ -18,7 +18,7 @@ const fmt = (iso: string) =>
 
 /** Escape anything visitor-supplied before it lands in an HTML email body. */
 function esc(value: unknown): string {
-  return String(value ?? ", ")
+  return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -92,10 +92,10 @@ export async function sendInspectionNotifications(
     ["Phone", req.phone],
     ["Email", req.email],
     ["Address", `${req.address}, ${req.postal_code}`],
-    ["Preferred date", req.preferred_date ?? ", "],
-    ["Best time", req.preferred_contact_time ?? ", "],
-    ["Pool details", req.pool_details ?? ", "],
-    ["Notes", req.notes ?? ", "],
+    ["Preferred date", req.preferred_date ?? "Not given"],
+    ["Best time", req.preferred_contact_time ?? "Not given"],
+    ["Pool details", req.pool_details ?? "Not given"],
+    ["Notes", req.notes ?? "Not given"],
     ["Submitted", fmt(req.created_at)],
     [
       "Source",
@@ -145,6 +145,24 @@ export async function sendInspectionNotifications(
       results[to] = "failed";
     }
   }
+
+  // Second, independent delivery path: drop the lead straight into the
+  // connected Gmail mailbox so a transactional-email outage cannot lose it.
+  try {
+    const { sendLeadToGmailInbox, GMAIL_LEAD_INBOX } = await import("./gmail-lead-inbox.server");
+    const gmail = await sendLeadToGmailInbox({
+      subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
+      text: officeText,
+      replyTo: req.email,
+    });
+    if (!results[GMAIL_LEAD_INBOX] || gmail.ok) {
+      results[GMAIL_LEAD_INBOX] = gmail.ok ? "sent" : "failed";
+    }
+  } catch (e) {
+    console.error("gmail lead inbox delivery failed", e);
+  }
+
+
 
   // Homeowner confirmation.
   const firstName = esc(req.full_name.split(" ")[0]);

@@ -158,8 +158,8 @@ function PoolMapPage() {
                     <tr key={p.id} className="border-b border-foreground/10">
                       <td className="px-4 py-3">{p.label}</td>
                       <td className="px-4 py-3 text-foreground/70">{p.address}</td>
-                      <td className="px-4 py-3">{p.city ?? ", "}</td>
-                      <td className="px-4 py-3 text-foreground/70">{p.routeDay ?? ", "}</td>
+                      <td className="px-4 py-3">{p.city ?? "-"}</td>
+                      <td className="px-4 py-3 text-foreground/70">{p.routeDay ?? "-"}</td>
                     </tr>
                   ))
                 )}
