@@ -46,7 +46,7 @@ import { imgProps } from "@/lib/img";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
-const PHONE_DISPLAY = "817-663-POOL";
+const PHONE_DISPLAY = "817-663-7665";
 const PHONE_HREF = "tel:+18176637665";
 const EMAIL = "hi@savvyswim.com";
 const SMS_PHONE = "+18176637665";

@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/structured-data";
 
 const TITLE = "Thank You | Your Savvy Swim Request Is In";
 const DESCRIPTION =
-  "Your pool service request is confirmed. Save our contact, call 817-663-POOL, and see what happens next with Savvy Swim across DFW.";
+  "Your pool service request is confirmed. Save our contact, call 817-663-7665, and see what happens next with Savvy Swim across DFW.";
 const URL = `${SITE_URL}/thank-you`;
 
 type ThankYouSearch = {

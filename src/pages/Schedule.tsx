@@ -104,7 +104,7 @@ export default function Schedule({ source }: { source: string }) {
           <div className="container-tight py-10 text-sm text-muted-foreground">
             Prefer to talk it through? Call{" "}
             <a href="tel:+18176637665" className="font-tech uppercase tracking-[0.14em] text-accent">
-              817-663-POOL
+              817-663-7665
             </a>{" "}
             or see{" "}
             <Link to="/weekly-pool-service" className="underline underline-offset-4 hover:text-accent">
