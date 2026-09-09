@@ -167,7 +167,7 @@ function RootComponent() {
             <Toaster />
             <Sonner />
             <QuoteModal />
-            <WaterTestTab />
+            {pathname !== "/" && <WaterTestTab />}
             <ConsentBanner />
             {showOffer && <SwimClubPromptHost />}
           </Suspense>
