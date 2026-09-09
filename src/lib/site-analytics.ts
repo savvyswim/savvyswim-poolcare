@@ -9,6 +9,7 @@
 import { getConsent } from "./consent";
 
 export type SiteEventName =
+  | "page_view"
   | "banner_shown"
   | "banner_accepted"
   | "banner_declined"

@@ -39,6 +39,7 @@ const WaterTestTab = lazyWithReload(() => import("@/components/WaterTestTab"));
 
 // Meta (Facebook / Instagram) pixel, only after the visitor accepts cookies.
 const MetaPixel = lazyWithReload(() => import("@/components/MetaPixel"));
+const PageViewTracker = lazyWithReload(() => import("@/components/PageViewTracker"));
 
 
 
@@ -173,6 +174,7 @@ function RootComponent() {
             {pathname !== "/" && <WaterTestTab />}
             <ConsentBanner />
             <MetaPixel />
+            <PageViewTracker />
             {showOffer && <SwimClubPromptHost />}
           </Suspense>
 
