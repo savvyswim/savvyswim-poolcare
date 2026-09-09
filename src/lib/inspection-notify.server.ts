@@ -18,7 +18,7 @@ const fmt = (iso: string) =>
 
 /** Escape anything visitor-supplied before it lands in an HTML email body. */
 function esc(value: unknown): string {
-  return String(value ?? ", ")
+  return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
