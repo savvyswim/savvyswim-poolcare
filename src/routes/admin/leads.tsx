@@ -243,7 +243,7 @@ function LeadsPage() {
         <p className="mt-8 text-sm text-foreground/55">Loading leads…</p>
       ) : report ? (
         <>
-          <section className="mt-8 grid gap-4 sm:grid-cols-4">
+          <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {(
               [
                 ["Today", String(report.today)],
