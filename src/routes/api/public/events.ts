@@ -12,6 +12,7 @@ const MAX_BODY_BYTES = 8 * 1024;
 const eventSchema = z
   .object({
     event: z.enum([
+      "page_view",
       "banner_shown",
       "banner_accepted",
       "banner_declined",
