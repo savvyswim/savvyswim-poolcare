@@ -36,6 +36,7 @@ import { Route as BRouteImport } from './routes/b'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as CityRouteImport } from './routes/$city'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CityIndexRouteImport } from './routes/$city.index'
 import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
@@ -51,6 +52,7 @@ import { Route as AdminCrmRouteImport } from './routes/admin/crm'
 import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as CityPricingRouteImport } from './routes/$city.pricing'
 import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
@@ -207,6 +209,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CityIndexRoute = CityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CityRoute,
+} as any)
 const SignTokenRoute = SignTokenRouteImport.update({
   id: '/sign/$token',
   path: '/sign/$token',
@@ -284,6 +291,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CityPricingRoute = CityPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => CityRoute,
+} as any)
 const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
   id: '/api/public/leads',
   path: '/api/public/leads',
@@ -398,7 +410,7 @@ const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$city': typeof CityRoute
+  '/$city': typeof CityRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
@@ -424,6 +436,7 @@ export interface FileRoutesByFullPath {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/$city/pricing': typeof CityPricingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/canary': typeof AdminCanaryRoute
@@ -439,6 +452,7 @@ export interface FileRoutesByFullPath {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -462,7 +476,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$city': typeof CityRoute
   '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
@@ -488,6 +501,7 @@ export interface FileRoutesByTo {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/$city/pricing': typeof CityPricingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/canary': typeof AdminCanaryRoute
@@ -503,6 +517,7 @@ export interface FileRoutesByTo {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -527,7 +542,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$city': typeof CityRoute
+  '/$city': typeof CityRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/b': typeof BRoute
   '/book': typeof BookRoute
@@ -553,6 +568,7 @@ export interface FileRoutesById {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
   '/weekly-pool-service': typeof WeeklyPoolServiceRoute
+  '/$city/pricing': typeof CityPricingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/canary': typeof AdminCanaryRoute
@@ -568,6 +584,7 @@ export interface FileRoutesById {
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
   '/sign/$token': typeof SignTokenRoute
+  '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
@@ -619,6 +636,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/thank-you'
     | '/weekly-pool-service'
+    | '/$city/pricing'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/canary'
@@ -634,6 +652,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -657,7 +676,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/$city'
     | '/app'
     | '/b'
     | '/book'
@@ -683,6 +701,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/thank-you'
     | '/weekly-pool-service'
+    | '/$city/pricing'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/canary'
@@ -698,6 +717,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -747,6 +767,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/thank-you'
     | '/weekly-pool-service'
+    | '/$city/pricing'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/canary'
@@ -762,6 +783,7 @@ export interface FileRouteTypes {
     | '/quote/$token'
     | '/review/$token'
     | '/sign/$token'
+    | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/crm/$'
@@ -786,7 +808,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CityRoute: typeof CityRoute
+  CityRoute: typeof CityRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   BRoute: typeof BRoute
   BookRoute: typeof BookRoute
@@ -1038,6 +1060,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$city/': {
+      id: '/$city/'
+      path: '/'
+      fullPath: '/$city/'
+      preLoaderRoute: typeof CityIndexRouteImport
+      parentRoute: typeof CityRoute
+    }
     '/sign/$token': {
       id: '/sign/$token'
       path: '/sign/$token'
@@ -1142,6 +1171,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.mcp/list-tools'
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/$city/pricing': {
+      id: '/$city/pricing'
+      path: '/pricing'
+      fullPath: '/$city/pricing'
+      preLoaderRoute: typeof CityPricingRouteImport
+      parentRoute: typeof CityRoute
     }
     '/api/public/leads': {
       id: '/api/public/leads'
@@ -1286,6 +1322,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CityRouteChildren {
+  CityPricingRoute: typeof CityPricingRoute
+  CityIndexRoute: typeof CityIndexRoute
+}
+
+const CityRouteChildren: CityRouteChildren = {
+  CityPricingRoute: CityPricingRoute,
+  CityIndexRoute: CityIndexRoute,
+}
+
+const CityRouteWithChildren = CityRoute._addFileChildren(CityRouteChildren)
+
 interface AppRouteChildren {
   AppSplatRoute: typeof AppSplatRoute
 }
@@ -1310,7 +1358,7 @@ const AdminCrmRouteWithChildren = AdminCrmRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CityRoute: CityRoute,
+  CityRoute: CityRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   BRoute: BRoute,
   BookRoute: BookRoute,

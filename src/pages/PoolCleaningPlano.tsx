@@ -280,6 +280,17 @@ const PlanoPoolCleaning = () => {
           </div>
         </section>
 
+        <section className="perf-section border-b border-hairline py-8">
+          <div className="container-tight">
+            <Link
+              to="/plano/pricing"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+            >
+              See full Plano pricing
+            </Link>
+          </div>
+        </section>
+
         <LocalSeoBlurb city="Plano" />
 
         {/* CTA */}
