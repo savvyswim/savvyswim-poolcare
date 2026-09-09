@@ -116,6 +116,12 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                     >
                       Get a {city} quote
                     </button>
+                    <Link
+                      to={`/${area.slug}/pricing`}
+                      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
+                    >
+                      See {city} pricing
+                    </Link>
                     <a
                       href={PHONE_HREF}
                       onClick={onCallClick(`${area.slug}_hero`)}

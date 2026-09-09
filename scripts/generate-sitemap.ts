@@ -40,6 +40,11 @@ const entries: SitemapEntry[] = [
     changefreq: "monthly",
     priority: "0.8",
   })),
+  ...[...CITY_SLUGS, "frisco"].map((slug): SitemapEntry => ({
+    path: `/${slug}/pricing`,
+    changefreq: "monthly",
+    priority: "0.7",
+  })),
   { path: "/leave-a-review", changefreq: "monthly", priority: "0.6" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
