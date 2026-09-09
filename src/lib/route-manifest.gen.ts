@@ -6,6 +6,8 @@
 export const ROUTE_MANIFEST = [
   "/",
   "/$city",
+  "/$city/",
+  "/$city/pricing",
   "/.lovable/oauth/consent",
   "/.mcp/invoke-tool/$tool",
   "/.mcp/list-tools",
