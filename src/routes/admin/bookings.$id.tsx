@@ -7,8 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   getBookingDetail,
   scheduleBookingVisit,
+  sendBookingConfirmation,
   sendBookingReply,
 } from "@/lib/booking-followup.functions";
+import { BOOKING_STAGES, STAGE_LABEL } from "@/lib/booking-stage";
 import { setBookingStatus } from "@/lib/bookings-dashboard.functions";
 
 export const Route = createFileRoute("/admin/bookings/$id")({
@@ -33,7 +35,13 @@ export const Route = createFileRoute("/admin/bookings/$id")({
   }),
 });
 
-const STATUSES = ["new", "contacted", "scheduled", "closed"] as const;
+const STATUSES = ["new", "scheduled", "declined", "converted"] as const;
+const STATUS_LABEL: Record<(typeof STATUSES)[number], string> = {
+  new: "Reopen",
+  scheduled: "Mark booked",
+  declined: "Mark lost",
+  converted: "Mark visit done",
+};
 
 const TEMPLATES: { label: string; body: string }[] = [
   {
@@ -128,6 +136,8 @@ function BookingFollowUpPage() {
 
   const fetchDetail = useServerFn(getBookingDetail);
   const reply = useServerFn(sendBookingReply);
+  const confirm = useServerFn(sendBookingConfirmation);
+  const [confirming, setConfirming] = useState(false);
   const schedule = useServerFn(scheduleBookingVisit);
   const updateStatus = useServerFn(setBookingStatus);
 
@@ -195,10 +205,26 @@ function BookingFollowUpPage() {
     }
   };
 
+  const onConfirm = async () => {
+    setConfirming(true);
+    try {
+      const res = await confirm({
+        data: { id, date: visitDate || undefined, window: visitWindow || undefined },
+      });
+      if (res.ok) toast.success("Confirmation email sent");
+      else toast.error("The email did not go out, try again");
+      void query.refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not send the confirmation");
+    } finally {
+      setConfirming(false);
+    }
+  };
+
   const changeStatus = async (status: (typeof STATUSES)[number]) => {
     try {
       await updateStatus({ data: { id, status } });
-      toast.success(`Marked as ${status}`);
+      toast.success(STATUS_LABEL[status].replace("Mark ", "Marked "));
       void query.refetch();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not update this booking");
@@ -219,6 +245,26 @@ function BookingFollowUpPage() {
       {err && <p className="mt-8 text-sm text-[#8E1F2C]">{err.message}</p>}
 
       {b && data && (
+        <>
+        <ol className="mt-8 grid grid-cols-5 border border-foreground/15" aria-label="Did they book?">
+          {BOOKING_STAGES.map((st, i) => {
+            const cur = data.stage === "lost" ? -1 : BOOKING_STAGES.indexOf(data.stage as (typeof BOOKING_STAGES)[number]);
+            const done = i <= cur;
+            return (
+              <li
+                key={st}
+                className={`border-r border-foreground/15 px-3 py-3 text-center text-[11px] uppercase tracking-[0.12em] last:border-r-0 ${
+                  done ? "bg-[#8E1F2C] text-[#F4EFE3]" : "text-foreground/50"
+                } ${i === cur ? "font-bold" : ""}`}
+              >
+                {STAGE_LABEL[st]}
+              </li>
+            );
+          })}
+        </ol>
+        {data.stage === "lost" ? (
+          <p className="mt-2 text-sm text-foreground/60">Marked lost. Reopen below if they come back.</p>
+        ) : null}
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_1fr]">
           <section>
             <h2 className="font-display text-xl uppercase tracking-[0.08em]">The request</h2>
@@ -260,17 +306,17 @@ function BookingFollowUpPage() {
                   key={s}
                   onClick={() => void changeStatus(s)}
                   className={`border px-3 py-1.5 text-xs uppercase tracking-[0.12em] ${
-                    (b.status ?? "new") === s
+                    (b.status ?? "new") === s && s !== "new"
                       ? "border-[#8E1F2C] bg-[#8E1F2C] text-[#F4EFE3]"
                       : "border-foreground/20 text-foreground/70"
                   }`}
                 >
-                  {s}
+                  {STATUS_LABEL[s]}
                 </button>
               ))}
             </div>
 
-            <h2 className="mt-10 font-display text-xl uppercase tracking-[0.08em]">History</h2>
+            <h2 className="mt-10 font-display text-xl uppercase tracking-[0.08em]">Conversation</h2>
             <ul className="mt-3 space-y-3">
               <li className="border-l-2 border-[#1FA9BE] pl-3 text-sm">
                 <span className="text-foreground/50">{when(b.created_at)}</span>
@@ -284,8 +330,15 @@ function BookingFollowUpPage() {
                   Received by the SavvySwim app
                 </li>
               )}
-              {data.events.map((e) => (
-                <li key={e.id} className="border-l-2 border-foreground/20 pl-3 text-sm">
+              {[...data.events].reverse().map((e) => (
+                <li
+                  key={e.id}
+                  className={`border-l-2 pl-3 text-sm ${
+                    e.event_type.startsWith("email") || e.event_type.startsWith("sms")
+                      ? "ml-6 border-[#8E1F2C] bg-[#8E1F2C]/[0.04] py-1"
+                      : "border-foreground/20"
+                  }`}
+                >
                   <span className="text-foreground/50">{when(e.created_at)}</span>
                   <br />
                   {e.event_type.replace(/_/g, " ")}
@@ -300,7 +353,27 @@ function BookingFollowUpPage() {
           </section>
 
           <section>
-            <h2 className="font-display text-xl uppercase tracking-[0.08em]">Reply</h2>
+            <h2 className="font-display text-xl uppercase tracking-[0.08em]">Confirm</h2>
+            {data.hasRealEmail ? (
+              <>
+                <p className="mt-2 text-sm text-foreground/60">
+                  Emails their day ({visitDate || "not set"}), arrival window ({visitWindow}), reference and a link to pick a different time.
+                </p>
+                <button
+                  onClick={() => void onConfirm()}
+                  disabled={confirming}
+                  className="mt-3 bg-[#1FA9BE] px-5 py-2 text-sm uppercase tracking-[0.12em] text-[#08323a] disabled:opacity-60"
+                >
+                  {confirming ? "Sending" : "Send confirmation"}
+                </button>
+              </>
+            ) : (
+              <p className="mt-2 border border-[#8E1F2C]/40 p-3 text-sm text-[#8E1F2C]">
+                No email, call instead{b.phone ? `: ${b.phone}` : ""}.
+              </p>
+            )}
+
+            <h2 className="mt-10 font-display text-xl uppercase tracking-[0.08em]">Reply</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {TEMPLATES.map((t) => (
                 <button
@@ -329,7 +402,7 @@ function BookingFollowUpPage() {
             </label>
             <button
               onClick={() => void onReply()}
-              disabled={sending}
+              disabled={sending || !data.hasRealEmail}
               className="mt-3 bg-[#8E1F2C] px-5 py-2 text-sm uppercase tracking-[0.12em] text-[#F4EFE3] disabled:opacity-60"
             >
               {sending ? "Sending" : "Send reply"}
@@ -386,6 +459,7 @@ function BookingFollowUpPage() {
             )}
           </section>
         </div>
+        </>
       )}
     </main>
   );

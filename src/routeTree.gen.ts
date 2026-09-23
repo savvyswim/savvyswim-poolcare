@@ -55,6 +55,7 @@ import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as AdminCrmRouteImport } from './routes/admin/crm'
 import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
+import { Route as AdminCalendarRouteImport } from './routes/admin/calendar'
 import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
 import { Route as AdminAdsRouteImport } from './routes/admin/ads'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -315,6 +316,11 @@ const AdminCanaryRoute = AdminCanaryRouteImport.update({
   path: '/admin/canary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCalendarRoute = AdminCalendarRouteImport.update({
+  id: '/admin/calendar',
+  path: '/admin/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBookingsRoute = AdminBookingsRouteImport.update({
   id: '/admin/bookings',
   path: '/admin/bookings',
@@ -513,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/bookings': typeof AdminBookingsRouteWithChildren
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -589,6 +596,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/bookings': typeof AdminBookingsRouteWithChildren
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -667,6 +675,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/bookings': typeof AdminBookingsRouteWithChildren
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -746,6 +755,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
     | '/admin/bookings'
+    | '/admin/calendar'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
@@ -822,6 +832,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
     | '/admin/bookings'
+    | '/admin/calendar'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
@@ -899,6 +910,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
     | '/admin/bookings'
+    | '/admin/calendar'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
@@ -976,6 +988,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAdsRoute: typeof AdminAdsRoute
   AdminBookingsRoute: typeof AdminBookingsRouteWithChildren
+  AdminCalendarRoute: typeof AdminCalendarRoute
   AdminCanaryRoute: typeof AdminCanaryRoute
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
@@ -1338,6 +1351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCanaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/calendar': {
+      id: '/admin/calendar'
+      path: '/admin/calendar'
+      fullPath: '/admin/calendar'
+      preLoaderRoute: typeof AdminCalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/bookings': {
       id: '/admin/bookings'
       path: '/admin/bookings'
@@ -1626,6 +1646,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAdsRoute: AdminAdsRoute,
   AdminBookingsRoute: AdminBookingsRouteWithChildren,
+  AdminCalendarRoute: AdminCalendarRoute,
   AdminCanaryRoute: AdminCanaryRoute,
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
