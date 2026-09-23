@@ -174,7 +174,9 @@ export type FollowupResult = {
 export async function runSurveyFollowups(): Promise<FollowupResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const now = Date.now();
-  const oldest = new Date(now - (FOLLOWUP_OFFSETS[FOLLOWUP_OFFSETS.length - 1] + 48) * 3600_000);
+  const lastOffset = FOLLOWUP_OFFSETS[FOLLOWUP_OFFSETS.length - 1] ?? 168;
+  const oldest = new Date(now - (lastOffset + 48) * 3600_000);
+
 
   const { data, error } = await supabaseAdmin
     .from("inspection_requests")
