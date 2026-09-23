@@ -86,6 +86,7 @@ export type LeadFormProps = {
         address?: string | undefined;
       }
     | undefined;
+  onCancel: () => void;
 
   onDone: (summary: {
     date?: Date | undefined;
