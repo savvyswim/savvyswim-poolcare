@@ -43,6 +43,7 @@ export default function Img({
       ) : null}
       <source type="image/webp" srcSet={photo.srcSet} sizes={sizes} />
       <img
+        ref={ref}
         src={photo.url}
         srcSet={photo.srcSet}
         sizes={sizes}
