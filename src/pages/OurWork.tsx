@@ -11,6 +11,7 @@ import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";
 import { IMG_5503_jpg as photoRescueTube } from "@/assets/photos";
 import { imgProps } from "@/lib/img";
+import Img from "@/components/Img";
 
 const PHOTOS = [
   { photo: photoNavyCabana, alt: "Navy and white striped cabana beside a clear serviced pool" },

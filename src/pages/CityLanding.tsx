@@ -22,6 +22,7 @@ import {
   pool_water_hd_jpg as photoWater,
 } from "@/assets/photos";
 import { imgProps } from "@/lib/img";
+import Img from "@/components/Img";
 
 const PHONE_DISPLAY = "817-663-7665";
 const PHONE_HREF = "tel:+18176637665";

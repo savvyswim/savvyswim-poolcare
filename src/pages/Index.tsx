@@ -26,6 +26,7 @@ import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5518_PNG as photoSavvyRings } from "@/assets/photos";
 import { IMG_5503_jpg as photoRescueTube } from "@/assets/photos";
 import { imgProps } from "@/lib/img";
+import Img from "@/components/Img";
 import type { Photo } from "@/assets/photos";
 
 /** The three photos beside the wordmark at the top of the page. */

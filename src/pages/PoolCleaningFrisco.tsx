@@ -10,6 +10,7 @@ import { goToLead } from "@/lib/site-analytics";
 import InlineLeadForm from "@/components/InlineLeadForm";
 
 import { imgProps } from "@/lib/img";
+import Img from "@/components/Img";
 import { IMG_5507_2_JPG as photoNavyCabana } from "@/assets/photos";
 import { IMG_5508_2_JPG as photoRivieraLoungers } from "@/assets/photos";
 import { IMG_5502_PNG as photoSavvyLetters } from "@/assets/photos";

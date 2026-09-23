@@ -42,6 +42,7 @@ const MEMBERSHIP_FAQ = [
 ];
 
 import { imgProps } from "@/lib/img";
+import Img from "@/components/Img";
 import { IMG_5512_PNG as photoLifeguardChair } from "@/assets/photos";
 import { IMG_5497_2_jpg as photoRedUmbrellas } from "@/assets/photos";
 
