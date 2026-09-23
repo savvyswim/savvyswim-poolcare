@@ -173,12 +173,13 @@ export async function forwardInspectionToCrm(
 
     preferred_date: req.preferred_date,
     preferred_contact_time: req.preferred_contact_time,
-    pool_details: req.pool_details,
-    notes: req.notes,
-    message: req.notes,
+    pool_details: trimForCrm(req.pool_details, req.consent_text),
+    notes: trimForCrm(req.notes, req.consent_text),
+    message: trimForCrm(req.notes, req.consent_text),
     sms_opt_in: extra?.smsOptIn ?? req.sms_opt_in ?? false,
     contact_consent: extra?.contactConsent ?? req.contact_consent ?? false,
-    consent_text: req.consent_text,
+    consent_text: trimForCrm(req.consent_text),
+
     lead_status: req.status ?? "new",
     status: req.status ?? "new",
     submitted_at: req.created_at,
