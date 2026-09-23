@@ -34,6 +34,7 @@ const entries: SitemapEntry[] = [
   { path: "/services", changefreq: "monthly", priority: "0.9" },
   { path: "/weekly-pool-service", changefreq: "monthly", priority: "0.9" },
   { path: "/schedule", changefreq: "monthly", priority: "0.9" },
+  { path: "/survey", changefreq: "monthly", priority: "0.8" },
   { path: "/pool-cleaning-frisco-tx", changefreq: "monthly", priority: "0.8" },
   ...CITY_SLUGS.map((slug): SitemapEntry => ({
     path: `/${slug}`,
