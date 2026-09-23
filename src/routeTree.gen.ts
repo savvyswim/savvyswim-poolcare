@@ -47,6 +47,7 @@ import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-h
 import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
 import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
+import { Route as AdminListingRouteImport } from './routes/admin/listing'
 import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
@@ -270,6 +271,11 @@ const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
   path: '/admin/not-found',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminListingRoute = AdminListingRouteImport.update({
+  id: '/admin/listing',
+  path: '/admin/listing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
   id: '/admin/leads',
   path: '/admin/leads',
@@ -486,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -557,6 +564,7 @@ export interface FileRoutesByTo {
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -630,6 +638,7 @@ export interface FileRoutesById {
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -704,6 +713,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -775,6 +785,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -847,6 +858,7 @@ export interface FileRouteTypes {
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -919,6 +931,7 @@ export interface RootRouteChildren {
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminListingRoute: typeof AdminListingRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
   AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
@@ -1215,6 +1228,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/not-found'
       fullPath: '/admin/not-found'
       preLoaderRoute: typeof AdminNotFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/listing': {
+      id: '/admin/listing'
+      path: '/admin/listing'
+      fullPath: '/admin/listing'
+      preLoaderRoute: typeof AdminListingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/leads': {
@@ -1518,6 +1538,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminLeadsRoute: AdminLeadsRoute,
+  AdminListingRoute: AdminListingRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
   AdminPoolMapRoute: AdminPoolMapRoute,
   AdminReviewsRoute: AdminReviewsRoute,
