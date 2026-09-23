@@ -162,6 +162,48 @@ export async function sendInspectionNotifications(
     console.error("gmail lead inbox delivery failed", e);
   }
 
+  // Owner text for finished surveys, so a new survey lead lands on the phone
+  // straight away. Never allowed to break the submission.
+  const isSurvey = (req.source ?? "").toLowerCase().startsWith("survey");
+  let ownerSmsOutcome: "sent" | "failed" | "skipped" = "skipped";
+  if (isSurvey) {
+    try {
+      // Pull the first answer lines out of the notes, minus consent wording.
+      const answerLines = String(req.notes ?? "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(
+          (line) =>
+            line.length > 0 &&
+            !/^marketing opt in/i.test(line) &&
+            !/authorize|consent|message and data rates|unsubscribe/i.test(line),
+        )
+        .slice(0, 3)
+        .join(" | ");
+      const where = [req.address, req.postal_code].filter(Boolean).join(" ");
+      const smsBody = [
+        `Savvy Swim survey: ${req.full_name}`,
+        req.phone ?? "",
+        where,
+        answerLines,
+        `Ref ${req.reference_number}`,
+      ]
+        .filter(Boolean)
+        .join("\n")
+        .slice(0, 300);
+      const { sendOpsAlertSms } = await import("./ops-alert.server");
+      const outcome = await sendOpsAlertSms(smsBody);
+      ownerSmsOutcome = outcome.startsWith("texted") ? "sent" : "failed";
+      results["owner_sms"] = outcome;
+    } catch (e) {
+      console.error("owner survey sms failed", e);
+      ownerSmsOutcome = "failed";
+      results["owner_sms"] = "failed";
+    }
+  }
+
+
+
 
 
   // Homeowner confirmation.
