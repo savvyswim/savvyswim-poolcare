@@ -29,6 +29,8 @@ const eventSchema = z
     utm_source: z.string().trim().max(120).optional().nullable(),
     utm_medium: z.string().trim().max(120).optional().nullable(),
     utm_campaign: z.string().trim().max(120).optional().nullable(),
+    utm_content: z.string().trim().max(120).optional().nullable(),
+    utm_term: z.string().trim().max(120).optional().nullable(),
   })
   .strip();
 
@@ -74,6 +76,8 @@ export const Route = createFileRoute("/api/public/events")({
             utm_source: e.utm_source ?? null,
             utm_medium: e.utm_medium ?? null,
             utm_campaign: e.utm_campaign ?? null,
+            utm_content: e.utm_content ?? null,
+            utm_term: e.utm_term ?? null,
           })),
         );
         if (error) {
