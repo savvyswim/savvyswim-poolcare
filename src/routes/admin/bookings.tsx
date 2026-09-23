@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getBookingsReport, setBookingStatus } from "@/lib/bookings-dashboard.functions";
 import type { BookingRow, BookingsRange } from "@/lib/bookings-dashboard.functions";
+import { STAGE_LABEL } from "@/lib/booking-stage";
 
 export const Route = createFileRoute("/admin/bookings")({
   component: BookingsPage,
@@ -36,7 +37,14 @@ const RANGES: { key: BookingsRange; label: string }[] = [
   { key: "all", label: "All time" },
 ];
 
-const STATUSES = ["new", "contacted", "scheduled", "closed"] as const;
+const STATUSES = ["new", "scheduled", "confirmed", "declined", "converted"] as const;
+const STATUS_LABEL: Record<(typeof STATUSES)[number], string> = {
+  new: "Open",
+  scheduled: "Booked",
+  confirmed: "Booked, confirmed",
+  declined: "Lost",
+  converted: "Visit done",
+};
 
 function when(iso: string): string {
   return new Date(iso).toLocaleString(undefined, {
@@ -147,6 +155,7 @@ function BookingsPage() {
   const [range, setRange] = useState<BookingsRange>("30d");
   const [filter, setFilter] = useState("");
   const [onlyOpen, setOnlyOpen] = useState(false);
+  const [onlyChase, setOnlyChase] = useState(false);
   const fetchReport = useServerFn(getBookingsReport);
   const updateStatus = useServerFn(setBookingStatus);
 
@@ -169,13 +178,14 @@ function BookingsPage() {
     if (!report) return [];
     const q = filter.trim().toLowerCase();
     return report.bookings.filter((b) => {
-      if (onlyOpen && b.status && b.status !== "new") return false;
+      if (onlyOpen && b.stage !== "new") return false;
+      if (onlyChase && b.stage !== "contacted" && b.stage !== "confirmation_sent") return false;
       if (!q) return true;
       return [b.full_name, b.phone, b.email, b.city, b.address, b.reference_number]
         .filter(Boolean)
         .some((v) => (v as string).toLowerCase().includes(q));
     });
-  }, [report, filter, onlyOpen]);
+  }, [report, filter, onlyOpen, onlyChase]);
 
   if (authed === null) return <div className="p-10 text-sm text-foreground/60">Loading…</div>;
   if (!authed) return <SignIn onDone={() => setAuthed(true)} />;
@@ -185,7 +195,7 @@ function BookingsPage() {
   const changeStatus = async (id: string, status: (typeof STATUSES)[number]) => {
     try {
       await updateStatus({ data: { id, status } });
-      toast.success(`Marked as ${status}`);
+      toast.success(`Marked as ${STATUS_LABEL[status]}`);
       void query.refetch();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not update this booking");
@@ -204,6 +214,12 @@ function BookingsPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            to="/admin/calendar"
+            className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em] hover:text-[#8E1F2C]"
+          >
+            Calendar
+          </Link>
           <Link
             to="/admin/leads"
             className="border border-foreground/25 px-4 py-2 text-xs uppercase tracking-[0.14em] hover:text-[#8E1F2C]"
@@ -249,6 +265,16 @@ function BookingsPage() {
         >
           Needs follow up
         </button>
+        <button
+          onClick={() => setOnlyChase((v) => !v)}
+          className={`px-4 py-2 text-xs uppercase tracking-[0.14em] ${
+            onlyChase
+              ? "bg-[#1FA9BE] text-[#08323a]"
+              : "border border-foreground/20 text-foreground/70"
+          }`}
+        >
+          Replied but not booked
+        </button>
         <input
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
@@ -270,8 +296,8 @@ function BookingsPage() {
               [
                 ["In this range", String(report.total)],
                 ["Needs follow up", String(report.needFollowUp)],
-                ["Today", String(report.today)],
-                ["This week", String(report.week)],
+                ["Booked", `${report.booked} of ${report.total}`],
+                ["Booking rate", `${report.bookingRate}%`],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="border border-foreground/15 p-5">
@@ -290,13 +316,14 @@ function BookingsPage() {
                   <th className="px-4 py-3">Phone</th>
                   <th className="px-4 py-3">Requested date</th>
                   <th className="px-4 py-3">Service area</th>
+                  <th className="px-4 py-3">Booked?</th>
                   <th className="px-4 py-3">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {visible.length === 0 ? (
                   <tr>
-                    <td className="px-4 py-6 text-foreground/55" colSpan={6}>
+                    <td className="px-4 py-6 text-foreground/55" colSpan={7}>
                       No booking requests in this range yet.
                     </td>
                   </tr>
@@ -344,6 +371,19 @@ function BookingsPage() {
                           <div className="text-[11px] text-foreground/50">{b.address}</div>
                         ) : null}
                       </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-0.5 text-[11px] uppercase tracking-[0.1em] ${
+                            b.stage === "booked" || b.stage === "visit_done"
+                              ? "bg-[#1FA9BE] text-[#08323a]"
+                              : b.stage === "lost"
+                                ? "bg-foreground/10 text-foreground/60"
+                                : "border border-[#8E1F2C]/40 text-[#8E1F2C]"
+                          }`}
+                        >
+                          {STAGE_LABEL[b.stage]}
+                        </span>
+                      </td>
                       <td className="px-4 py-3">
                         <select
                           value={b.status ?? "new"}
@@ -354,7 +394,7 @@ function BookingsPage() {
                         >
                           {STATUSES.map((s) => (
                             <option key={s} value={s}>
-                              {s}
+                              {STATUS_LABEL[s]}
                             </option>
                           ))}
                           {b.status && !STATUSES.includes(b.status as (typeof STATUSES)[number]) ? (

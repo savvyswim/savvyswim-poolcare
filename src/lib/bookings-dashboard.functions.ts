@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { deriveStage, type BookingStage } from "@/lib/booking-stage";
 
 /**
  * Booking requests dashboard: the appointment-style requests that came from
@@ -24,6 +25,7 @@ export interface BookingRow {
   source: string | null;
   status: string | null;
   notes: string | null;
+  stage: BookingStage;
 }
 
 export interface BookingsReport {
@@ -32,6 +34,9 @@ export interface BookingsReport {
   needFollowUp: number;
   today: number;
   week: number;
+  booked: number;
+  bookingRate: number;
+  repliedNotBooked: number;
   bookings: BookingRow[];
 }
 
@@ -41,7 +46,7 @@ const RangeInput = z.object({
 
 const StatusInput = z.object({
   id: z.string().uuid(),
-  status: z.enum(["new", "contacted", "scheduled", "closed"]),
+  status: z.enum(["new", "scheduled", "confirmed", "declined", "converted"]),
 });
 
 function startOf(range: BookingsRange): string | null {
@@ -80,7 +85,7 @@ export const getBookingsReport = createServerFn({ method: "GET" })
     let query = supabaseAdmin
       .from("inspection_requests")
       .select(
-        "id, created_at, reference_number, full_name, phone, email, address, preferred_date, preferred_contact_time, source, status, notes",
+        "id, created_at, reference_number, full_name, phone, email, address, preferred_date, preferred_contact_time, source, status, notes, converted_customer_id",
       )
       .order("created_at", { ascending: false })
       .limit(1000);
@@ -94,9 +99,45 @@ export const getBookingsReport = createServerFn({ method: "GET" })
       throw new Error("Could not load booking requests");
     }
 
-    const bookings: BookingRow[] = (rows ?? [])
-      .filter((r) => isBooking((r.source as string) ?? null, (r.preferred_date as string) ?? null))
+    const kept = (rows ?? []).filter((r) =>
+      isBooking((r.source as string) ?? null, (r.preferred_date as string) ?? null),
+    );
+    const ids = kept.map((r) => r.id as string);
+    const custIds = kept.map((r) => r.converted_customer_id as string | null).filter(Boolean) as string[];
+    const eventsBy = new Map<string, { event_type: string; outcome: string | null; detail: string | null }[]>();
+    for (let i = 0; i < ids.length; i += 200) {
+      const { data: evs } = await supabaseAdmin
+        .from("inspection_events")
+        .select("request_id, event_type, outcome, detail")
+        .in("request_id", ids.slice(i, i + 200));
+      for (const e of evs ?? []) {
+        const k = e.request_id as string;
+        if (!eventsBy.has(k)) eventsBy.set(k, []);
+        eventsBy.get(k)!.push(e as never);
+      }
+    }
+    const visitsBy = new Map<string, string[]>();
+    for (let i = 0; i < custIds.length; i += 200) {
+      const { data: vs } = await supabaseAdmin
+        .from("ss_visits")
+        .select("customer_id, status")
+        .in("customer_id", custIds.slice(i, i + 200));
+      for (const v of vs ?? []) {
+        const k = v.customer_id as string;
+        if (!visitsBy.has(k)) visitsBy.set(k, []);
+        visitsBy.get(k)!.push(v.status as string);
+      }
+    }
+
+    const bookings: BookingRow[] = kept
       .map((r) => ({
+        stage: deriveStage({
+          status: (r.status as string) ?? null,
+          events: eventsBy.get(r.id as string) ?? [],
+          visitStatuses: r.converted_customer_id
+            ? (visitsBy.get(r.converted_customer_id as string) ?? [])
+            : [],
+        }),
         id: r.id as string,
         created_at: r.created_at as string,
         reference_number: (r.reference_number as string) ?? null,
@@ -112,6 +153,7 @@ export const getBookingsReport = createServerFn({ method: "GET" })
         notes: (r.notes as string) ?? null,
       }));
 
+    const booked = bookings.filter((b) => b.stage === "booked" || b.stage === "visit_done").length;
     const now = Date.now();
     const within = (ms: number) =>
       bookings.filter((b) => now - new Date(b.created_at).getTime() <= ms).length;
@@ -119,7 +161,12 @@ export const getBookingsReport = createServerFn({ method: "GET" })
     return {
       range: data.range,
       total: bookings.length,
-      needFollowUp: bookings.filter((b) => !b.status || b.status === "new").length,
+      needFollowUp: bookings.filter((b) => b.stage === "new").length,
+      booked,
+      bookingRate: bookings.length ? Math.round((booked / bookings.length) * 100) : 0,
+      repliedNotBooked: bookings.filter(
+        (b) => b.stage === "contacted" || b.stage === "confirmation_sent",
+      ).length,
       today: within(86_400_000),
       week: within(7 * 86_400_000),
       bookings,
