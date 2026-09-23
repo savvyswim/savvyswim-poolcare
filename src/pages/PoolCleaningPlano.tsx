@@ -306,7 +306,7 @@ const PlanoPoolCleaning = () => {
                   Free walkthrough, flat monthly quote, and your first service on the next Plano route day.
                 </p>
               </div>
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => goToLead("plano")}
@@ -319,16 +319,19 @@ const PlanoPoolCleaning = () => {
                   onClick={onCallClick("plano_final_cta")}
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
-                  <Phone className="h-4 w-4" /> Call
+                  <Phone className="h-4 w-4 shrink-0" /> Call
                 </a>
                 <a
                   href={buildSmsHref(SMS_PHONE)}
                   onClick={() => trackContactClick("text_click", "plano_final_cta_text")}
                   className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-hairline px-6 py-3.5 sm:w-auto text-[13px] font-bold uppercase tracking-wide hover:text-primary transition"
                 >
-                  <MessageSquare className="h-4 w-4" /> Text for a free pool quote
+                  <MessageSquare className="h-4 w-4 shrink-0" />
+                  <span className="sm:hidden">Text us</span>
+                  <span className="hidden sm:inline">Text for a free pool quote</span>
                 </a>
               </div>
+
             </div>
           </div>
         </section>
