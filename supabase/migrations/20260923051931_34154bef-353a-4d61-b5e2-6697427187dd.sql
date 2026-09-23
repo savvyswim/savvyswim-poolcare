@@ -1,0 +1,2 @@
+ALTER TABLE public.ss_webhook_deliveries DROP CONSTRAINT IF EXISTS ss_webhook_deliveries_channel_check;
+ALTER TABLE public.ss_webhook_deliveries ADD CONSTRAINT ss_webhook_deliveries_channel_check CHECK (channel = ANY (ARRAY['lead'::text,'appointment'::text,'payment'::text,'ops'::text,'review'::text,'contact'::text]));
