@@ -35,7 +35,7 @@ export const setConsultationSlot = createServerFn({ method: "POST" })
     const result = await saveConsultationSlot({
       reference: data.reference,
       date: choice.day.date,
-      window: `${choice.slot.label}, ${choice.slot.detail}`,
+      window: `${choice.slot.label} arrival`,
       sameDay: choice.day.sameDay,
       prettyDate,
     });
