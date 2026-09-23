@@ -63,6 +63,10 @@ const PHONE_HREF = "tel:+18176637665";
 export const CONSENT_TEXT =
   "I authorize Savvy Swim to contact me by phone call, text message and email about this request, including automated or prerecorded messages and appointment updates at the number I provided. Message and data rates may apply; message frequency varies. Reply STOP to opt out or HELP for help. I have read and agree to the Privacy Policy and Terms.";
 
+/** Separate, optional marketing permission. Never pre-checked. */
+export const MARKETING_CONSENT_TEXT =
+  "I also agree to receive marketing from Savvy Swim by text message and email, including promotions, seasonal pool reminders, service offers and company news, sent with automated technology at the number and email I provided. Consent is not a condition of any purchase. Message and data rates may apply; message frequency varies. Reply STOP to opt out of texts, or use the unsubscribe link in any email. See the Privacy Policy and Terms.";
+
 export type LeadFormProps = {
   /** CRM connector intent tag. */
   cta: string;
