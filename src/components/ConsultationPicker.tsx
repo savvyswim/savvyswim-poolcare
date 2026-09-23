@@ -1,8 +1,8 @@
 /**
  * Day and time picker shown on the thank you page.
  *
- * We ask first, then offer the next seven days, Monday to Friday, with three
- * arrival times. Today only shows while a time is still far enough out.
+ * We ask first, then offer the next seven days, Monday to Friday, with hourly
+ * arrivals from 8 AM to 5 PM. Today only shows while a time is still far enough out.
  */
 import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -137,7 +137,7 @@ export default function ConsultationPicker({ reference, existingWindow, topPlace
     <>
       <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">Pick your consultation</h2>
       <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#2a1013]/75">
-        Weekdays, with a 7:00 AM, 8:00 AM or 9:00 AM arrival.
+        Monday to Friday, arrivals from 8:00 AM to 5:00 PM.
         {sameDayOpen ? " There is still time today, so you can even ask for today." : ""}
       </p>
 
@@ -171,7 +171,7 @@ export default function ConsultationPicker({ reference, existingWindow, topPlace
       <p className="mt-7 font-mono text-[11px] uppercase tracking-[0.25em] text-[#2a1013]/55">
         Arrival time
       </p>
-      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-5">
         {(day?.slots ?? []).map((s) => {
           const active = s.id === slotId;
           return (
