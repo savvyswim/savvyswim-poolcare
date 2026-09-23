@@ -75,7 +75,6 @@ export const ROUTE_MANIFEST = [
 export const REDIRECT_ROUTES = [
   "/.lovable/oauth/consent",
   "/b",
-  "/book",
   "/booking",
   "/free-inspection",
   "/request-inspection",
