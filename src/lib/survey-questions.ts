@@ -16,7 +16,11 @@ export type SurveyQuestion = {
   placeholder?: string;
   /** Only show this question when the named answer is one of these values. */
   showWhen?: { id: string; values: readonly string[] };
+  /** Picking this option reveals a short text box, stored under `<id>_other`. */
+  otherOption?: string;
+  otherPlaceholder?: string;
 };
+
 
 export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   {
