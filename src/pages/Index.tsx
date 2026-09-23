@@ -180,15 +180,16 @@ const Index = () => {
                 {/* Photos ride under the wordmark on phones, beside it on desktop. */}
                 <div className="mt-7 grid grid-cols-3 gap-2 lg:hidden">
                   {HERO_PHOTOS.map((p, i) => (
-                    <Img
-                      key={p.alt}
-                      {...imgProps(p.photo, {
-                        sizes: "(max-width: 1023px) 31vw, 11rem",
-                        priority: i === 0,
-                      })}
-                      alt={p.alt}
-                      className="aspect-3/4 w-full rounded-sm object-cover"
-                    />
+                    <div key={p.alt} className="min-w-0">
+                      <Img
+                        {...imgProps(p.photo, {
+                          sizes: "(max-width: 1023px) 31vw, 11rem",
+                          priority: i === 0,
+                        })}
+                        alt={p.alt}
+                        className="aspect-3/4 w-full rounded-sm object-cover"
+                      />
+                    </div>
                   ))}
                 </div>
 
