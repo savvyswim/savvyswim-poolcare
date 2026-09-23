@@ -100,7 +100,6 @@ export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   },
 
   {
-  {
     id: "switch_trigger",
     label: "What would make you switch companies, or start using one?",
     kind: "single",
