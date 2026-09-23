@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import { extractZip } from "@/lib/postal";
 import { trackSiteEvent } from "@/lib/site-analytics";
 import { CONSENT_TEXT } from "@/components/LeadForm";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+import AddressMapPreview from "@/components/AddressMapPreview";
 import {
   formatAnswers,
   visibleQuestions,
@@ -85,8 +87,9 @@ export default function Survey() {
     const next: Record<string, string> = {};
     if (name.trim().length < 2) next['name'] = "Please enter your full name";
     if (!/^[0-9+()\-.\s]{7,}$/.test(phone.trim())) next['phone'] = "Enter a valid phone number";
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) next['email'] = "Enter a valid email";
-    if (address.trim().length < 4) next['address'] = "Enter your address or zip code";
+    // Email and address are optional. Only check the format when one is typed.
+    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim()))
+      next['email'] = "Enter a valid email, or leave it blank";
     if (!consent) next['consent'] = "Please agree to be contacted so we can reply";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -111,13 +114,23 @@ export default function Survey() {
       /* private mode, attribution is best effort */
     }
 
-    const summary = formatAnswers(answers);
+    // The lead record requires an email and an address, so a blank one is
+    // stored as a clear marker and called out in the notes for the office.
+    const digits = phone.replace(/\D/g, "").slice(-10) || "unknown";
+    const typedEmail = email.trim();
+    const typedAddress = address.trim();
+    const missing = [
+      typedEmail ? "" : "No email provided, contact by phone.",
+      typedAddress ? "" : "No address provided, ask on the call.",
+    ].filter(Boolean);
+
+    const summary = [formatAnswers(answers), ...missing].filter(Boolean).join("\n\n");
     const body = {
       full_name: name.trim(),
-      email: email.trim(),
+      email: typedEmail || `no-email.${digits}@savvyswim.com`,
       phone: phone.trim(),
-      address: address.trim(),
-      postal_code: extractZip(address),
+      address: typedAddress || "Address not provided",
+      postal_code: typedAddress ? extractZip(typedAddress) : null,
       pool_details: "Free inspection from the pool care survey",
       message: summary.slice(0, 2000),
       notes: summary.slice(0, 2000),
