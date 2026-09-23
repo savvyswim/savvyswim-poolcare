@@ -11,6 +11,14 @@ const DESC =
   "Book your free pool inspection in Dallas-Fort Worth. Give us your name, phone, address and a day that works, and we confirm your appointment within one business day.";
 const URL = `${SITE_URL}/book`;
 
+type BookSearch = {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  ref?: string;
+};
+
 const str = (value: unknown, max: number): string | undefined => {
   if (typeof value !== "string") return undefined;
   const clean = value.trim().slice(0, max);
@@ -18,13 +26,21 @@ const str = (value: unknown, max: number): string | undefined => {
 };
 
 export const Route = createFileRoute("/book")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    name: str(search["name"], 120),
-    phone: str(search["phone"], 20),
-    email: str(search["email"], 160),
-    address: str(search["address"], 200),
-    ref: str(search["ref"], 40),
-  }),
+  validateSearch: (search: Record<string, unknown>): BookSearch => {
+    const out: BookSearch = {};
+    const name = str(search["name"], 120);
+    if (name) out.name = name;
+    const phone = str(search["phone"], 20);
+    if (phone) out.phone = phone;
+    const email = str(search["email"], 160);
+    if (email) out.email = email;
+    const address = str(search["address"], 200);
+    if (address) out.address = address;
+    const ref = str(search["ref"], 40);
+    if (ref) out.ref = ref;
+    return out;
+  },
+
   head: () => ({
     meta: [
       { title: TITLE },
