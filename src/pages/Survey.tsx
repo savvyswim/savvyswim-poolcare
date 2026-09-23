@@ -15,9 +15,11 @@ import AddressAutocomplete from "@/components/AddressAutocomplete";
 import AddressMapPreview from "@/components/AddressMapPreview";
 import {
   formatAnswers,
+  otherKey,
   visibleQuestions,
   type SurveyAnswers,
 } from "@/lib/survey-questions";
+
 
 const PHONE = "817-663-7665";
 
