@@ -8,6 +8,7 @@
 import { Link } from "@tanstack/react-router";
 import { CallLink } from "@/components/CallButton";
 import { PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
+import thankYouCard from "@/assets/thank-you-card.jpg";
 
 export type ThankYouProps = {
   reference?: string | undefined;
@@ -127,7 +128,15 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
 
         {/* Sign off */}
         <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">
-          <p className="font-display text-2xl uppercase leading-tight text-[#8E1F2C] sm:text-3xl">
+          <img
+            src={thankYouCard}
+            alt="Thank you from Savvy Swim, your pool is in good hands"
+            width={1024}
+            height={1024}
+            loading="lazy"
+            className="mx-auto w-full max-w-[420px]"
+          />
+          <p className="mt-8 font-display text-2xl uppercase leading-tight text-[#8E1F2C] sm:text-3xl">
             We look forward to serving you.
           </p>
           <p className="mt-3 font-mono text-[12px] uppercase tracking-[0.25em] text-[#1FA9BE]">
