@@ -153,7 +153,7 @@ export default function Survey() {
       notes: summary.slice(0, 2000),
       sms_opt_in: consent,
       contact_consent: consent,
-      consent_text: CONSENT_TEXT,
+      consent_text: SURVEY_CONSENT_TEXT,
       source: attr.campaign_code ? `survey_${attr.campaign_code}` : "survey",
       page: window.location.pathname.slice(0, 200),
       campaign_id: attr.campaign_id,
