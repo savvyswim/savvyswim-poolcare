@@ -106,15 +106,17 @@ export default function LeadForm({
   source,
   submitLabel,
   openedAt,
+  prefill,
   onCancel,
   onDone,
 }: LeadFormProps) {
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState(prefill?.name ?? "");
+  const [phone, setPhone] = useState(prefill?.phone ?? "");
+  const [email, setEmail] = useState(prefill?.email ?? "");
+  const [address, setAddress] = useState(prefill?.address ?? "");
+
   const [placeId, setPlaceId] = useState<string | undefined>(undefined);
   const [choice, setChoice] = useState(defaultOption ?? "");
   const [date, setDate] = useState<Date | undefined>(undefined);
