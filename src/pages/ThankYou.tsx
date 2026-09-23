@@ -8,7 +8,7 @@
 import { Link } from "@tanstack/react-router";
 import { CallLink } from "@/components/CallButton";
 import { PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
-import thankYouCard from "@/assets/thank-you-card.jpg";
+import ThankYouCard from "@/components/ThankYouCard";
 
 export type ThankYouProps = {
   reference?: string | undefined;
