@@ -55,7 +55,7 @@ function rate(part: number, whole: number): number {
   return whole ? Math.round((part / whole) * 1000) / 10 : 0;
 }
 
-function toRow(key: string, c: Cell): AdsCampaignRow {
+function toRow(key: string, c: Cell): AdsMetricRow {
   return {
     key,
     visits: c.visits,
@@ -66,13 +66,24 @@ function toRow(key: string, c: Cell): AdsCampaignRow {
   };
 }
 
+const byResults = (a: AdsMetricRow, b: AdsMetricRow) =>
+  b.leads - a.leads || b.visits - a.visits;
+
+/** Ad group name from the tags an ad link carries. */
+function adGroupOf(content: string | null, term: string | null): string {
+  const c = (content || "").trim();
+  const t = (term || "").trim();
+  if (c && t) return `${c} · ${t}`;
+  return c || t || "No ad group tag";
+}
+
 export async function loadAdsPerformance(range: AdsRange): Promise<AdsPerformanceReport> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const from = since(range);
 
   let visitQuery = supabaseAdmin
     .from("ss_site_events")
-    .select("utm_source, utm_medium, utm_campaign")
+    .select("utm_source, utm_medium, utm_campaign, utm_content, utm_term")
     .eq("event", "page_view")
     .order("created_at", { ascending: false })
     .limit(20000);
@@ -80,7 +91,7 @@ export async function loadAdsPerformance(range: AdsRange): Promise<AdsPerformanc
 
   let leadQuery = supabaseAdmin
     .from("inspection_requests")
-    .select("status, utm_source, utm_medium, utm_campaign, referrer")
+    .select("status, utm_source, utm_medium, utm_campaign, utm_content, utm_term, referrer")
     .order("created_at", { ascending: false })
     .limit(5000);
   if (from) leadQuery = leadQuery.gte("created_at", from);
@@ -91,41 +102,64 @@ export async function loadAdsPerformance(range: AdsRange): Promise<AdsPerformanc
 
   const channels = new Map<string, Cell>();
   const campaigns = new Map<string, Map<string, Cell>>();
+  const adGroups = new Map<string, Map<string, Cell>>();
 
-  const bump = (channel: string, campaign: string, key: keyof Cell) => {
+  const bump = (channel: string, campaign: string, adGroup: string, key: keyof Cell) => {
     const c = channels.get(channel) ?? cell();
     c[key] += 1;
     channels.set(channel, c);
+
     const inner = campaigns.get(channel) ?? new Map<string, Cell>();
     const cc = inner.get(campaign) ?? cell();
     cc[key] += 1;
     inner.set(campaign, cc);
     campaigns.set(channel, inner);
+
+    const groupKey = `${channel}\u0000${campaign}`;
+    const groups = adGroups.get(groupKey) ?? new Map<string, Cell>();
+    const gc = groups.get(adGroup) ?? cell();
+    gc[key] += 1;
+    groups.set(adGroup, gc);
+    adGroups.set(groupKey, groups);
   };
 
   for (const v of visitsRes.data ?? []) {
+    const row = v as Record<string, string | null>;
     bump(
-      channelOf(v.utm_source, v.utm_medium),
-      (v.utm_campaign || "").trim() || "No campaign tag",
+      channelOf(row["utm_source"] ?? null, row["utm_medium"] ?? null),
+      (row["utm_campaign"] || "").trim() || "No campaign tag",
+      adGroupOf(row["utm_content"] ?? null, row["utm_term"] ?? null),
       "visits",
     );
   }
 
   for (const l of leadsRes.data ?? []) {
-    const channel = channelOf(l.utm_source, l.utm_medium, l.referrer);
-    const campaign = (l.utm_campaign || "").trim() || "No campaign tag";
-    bump(channel, campaign, "leads");
-    if (BOOKED.has((l.status || "").toLowerCase())) bump(channel, campaign, "booked");
+    const row = l as Record<string, string | null>;
+    const channel = channelOf(
+      row["utm_source"] ?? null,
+      row["utm_medium"] ?? null,
+      row["referrer"] ?? null,
+    );
+    const campaign = (row["utm_campaign"] || "").trim() || "No campaign tag";
+    const adGroup = adGroupOf(row["utm_content"] ?? null, row["utm_term"] ?? null);
+    bump(channel, campaign, adGroup, "leads");
+    if (BOOKED.has((row["status"] || "").toLowerCase()))
+      bump(channel, campaign, adGroup, "booked");
   }
 
+  const campaignRows = (channel: string): AdsCampaignRow[] =>
+    [...(campaigns.get(channel) ?? new Map<string, Cell>()).entries()]
+      .map(([ck, cc]) => ({
+        ...toRow(ck, cc),
+        adGroups: [...(adGroups.get(`${channel}\u0000${ck}`) ?? new Map<string, Cell>()).entries()]
+          .map(([gk, gc]) => toRow(gk, gc))
+          .sort(byResults),
+      }))
+      .sort(byResults);
+
   const rows: AdsChannelRow[] = [...channels.entries()]
-    .map(([key, c]) => ({
-      ...toRow(key, c),
-      campaigns: [...(campaigns.get(key) ?? new Map<string, Cell>()).entries()]
-        .map(([ck, cc]) => toRow(ck, cc))
-        .sort((a, b) => b.leads - a.leads || b.visits - a.visits),
-    }))
-    .sort((a, b) => b.leads - a.leads || b.visits - a.visits);
+    .map(([key, c]) => ({ ...toRow(key, c), campaigns: campaignRows(key) }))
+    .sort(byResults);
 
   const metaRow: AdsChannelRow = rows.find((r) => r.key === "Meta ads") ?? {
     ...toRow("Meta ads", cell()),
