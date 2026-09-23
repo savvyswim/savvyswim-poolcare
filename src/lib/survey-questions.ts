@@ -129,14 +129,33 @@ export function visibleQuestions(answers: SurveyAnswers): SurveyQuestion[] {
   });
 }
 
+/** Key holding the typed text when the "Other" option is picked. */
+export function otherKey(id: string): string {
+  return `${id}_other`;
+}
+
 /** Human readable block of the answers, stored with the lead. */
 export function formatAnswers(answers: SurveyAnswers): string {
   return visibleQuestions(answers)
     .map((q) => {
       const value = answers[q.id];
-      const text = Array.isArray(value) ? value.join(", ") : (value ?? "").toString().trim();
+      const picked = Array.isArray(value) ? [...value] : [];
+      const typed = (answers[otherKey(q.id)] ?? "").toString().trim();
+      if (q.otherOption && typed) {
+        const labelled = `${q.otherOption}: ${typed}`;
+        if (Array.isArray(value)) {
+          const at = picked.indexOf(q.otherOption);
+          if (at >= 0) picked[at] = labelled;
+        } else if (value === q.otherOption) {
+          return `${q.label}\n${labelled}`;
+        }
+      }
+      const text = Array.isArray(value)
+        ? picked.join(", ")
+        : (value ?? "").toString().trim();
       return text ? `${q.label}\n${text}` : null;
     })
     .filter(Boolean)
     .join("\n\n");
+
 }
