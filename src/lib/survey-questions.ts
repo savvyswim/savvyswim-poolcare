@@ -32,11 +32,22 @@ export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   {
     id: "current_company",
     label: "Who do you currently use?",
-    kind: "text",
+    kind: "single",
     optional: true,
-    placeholder: "Company name (optional)",
+    options: [
+      "Blue Haven",
+      "ASP America's Swimming Pool Co",
+      "Pool Troopers",
+      "A local independent tech",
+      "A neighbor or handyman",
+      "I do not know the name",
+      "Other",
+    ],
+    otherOption: "Other",
+    otherPlaceholder: "Company name (optional)",
     showWhen: { id: "has_company", values: ["Have a company", "Mix of both"] },
   },
+
   {
     id: "monthly_spend",
     label: "How much do you pay now per month?",
