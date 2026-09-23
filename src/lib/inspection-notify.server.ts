@@ -292,7 +292,22 @@ export async function sendInspectionNotifications(
   const { logInspectionEvents } = await import("./inspection-events.server");
   await logInspectionEvents(req.id, [
     { eventType: "status_change", statusTo: "new", detail: "Request submitted" },
-    ...Object.entries(results).map(([to, outcome]) => ({
+    ...(ownerSmsOutcome === "skipped"
+      ? []
+      : [
+          {
+            eventType: (ownerSmsOutcome === "sent" ? "sms_sent" : "sms_failed") as
+              | "sms_sent"
+              | "sms_failed",
+            channel: "sms",
+            recipient: "owner",
+            outcome: ownerSmsOutcome,
+            detail: "owner_survey_sms",
+          },
+        ]),
+    ...Object.entries(results)
+      .filter(([to]) => to !== "owner_sms")
+      .map(([to, outcome]) => ({
       eventType: (outcome === "sent" ? "email_sent" : "email_failed") as
         | "email_sent"
         | "email_failed",
