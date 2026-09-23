@@ -52,6 +52,35 @@ export function leadTypeFromSource(source?: string | null): string {
   return "free_inspection";
 }
 
+/** The CRM rejects any text field longer than this. */
+export const CRM_TEXT_LIMIT = 2000;
+
+/**
+ * Survey write ups repeat the full consent paragraph, which blows past the
+ * CRM's 2000 character limit and gets the whole lead rejected. Drop the
+ * repeated consent block (the CRM already gets it in consent_text), collapse
+ * the blank lines, then hard trim what is left.
+ */
+export function trimForCrm(value: string | null | undefined, consent?: string | null): string | null {
+  if (typeof value !== "string") return null;
+  let text = value;
+  const block = (consent ?? "").trim();
+  if (block.length > 120) {
+    // The stored consent text ends with an "Accepted ..." audit line that is
+    // not repeated inside the notes, so match on the wording itself.
+    const core = block.split(" Accepted ")[0]!.trim();
+    if (core.length > 120) text = text.split(core).join(" ");
+  }
+  text = text
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  if (!text) return null;
+  if (text.length <= CRM_TEXT_LIMIT) return text;
+  return `${text.slice(0, CRM_TEXT_LIMIT - 3).trimEnd()}...`;
+}
+
+
 export async function forwardInspectionToCrm(
   requestId: string,
   extra?: { leadType?: string | null; smsOptIn?: boolean | null; contactConsent?: boolean | null },
