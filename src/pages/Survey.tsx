@@ -35,6 +35,7 @@ export default function Survey() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  const [placeId, setPlaceId] = useState<string | undefined>(undefined);
   const [consent, setConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
@@ -341,7 +342,7 @@ export default function Survey() {
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
+                    placeholder="Email (optional)"
                     className={FIELD}
                   />
                   {errors['email'] ? (
@@ -349,21 +350,26 @@ export default function Survey() {
                   ) : null}
                 </label>
 
-                <label className="block">
+                <div>
                   <span className="sr-only">Pool address or zip code</span>
-                  <input
-                    autoComplete="street-address"
+                  <AddressAutocomplete
+                    name="address"
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Pool address or zip code"
+                    placeholder="Pool address or zip (optional)"
                     className={FIELD}
+                    onChange={(v) => {
+                      setAddress(v);
+                      setPlaceId(undefined);
+                    }}
+                    onSelect={(v, id) => {
+                      setAddress(v);
+                      setPlaceId(id);
+                    }}
                   />
-                  {errors['address'] ? (
-                    <p className="mt-1 text-[12px] font-medium text-[#8E1F2C]">
-                      {errors['address']}
-                    </p>
+                  {placeId ? (
+                    <AddressMapPreview placeId={placeId} address={address} className="h-40" />
                   ) : null}
-                </label>
+                </div>
 
                 <label className="flex cursor-pointer items-start gap-3 border border-[#8E1F2C]/20 bg-white/60 p-3">
                   <input
