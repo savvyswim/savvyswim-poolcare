@@ -129,10 +129,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: FONT_CSS,
         media: "print",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onLoad: "this.media='all'" as any,
         "data-font-sheet": "1",
       },
+
     ],
     scripts: [
       { type: "application/ld+json", children: SITE_JSONLD },
