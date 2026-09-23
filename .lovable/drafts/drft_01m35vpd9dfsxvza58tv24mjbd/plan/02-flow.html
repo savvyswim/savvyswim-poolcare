@@ -1,0 +1,50 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: var(--font-sans); fill: var(--fg-primary); }
+    .lbl { font-size: 14px; font-weight: 480; }
+    .sm { font-size: 12px; fill: var(--fg-secondary); }
+    .box { fill: none; stroke: var(--fg-secondary); stroke-width: 1; }
+    .rail { stroke: var(--border-translucent); stroke-width: 1; }
+    .wire { stroke: var(--fg-secondary); stroke-width: 1; fill: none; }
+    .halo { paint-order: stroke; stroke: var(--bg-primary); stroke-width: 4px; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8" fill="none" stroke="var(--fg-secondary)" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <line class="rail" x1="24" y1="120" x2="616" y2="120"/>
+
+  <rect class="box" x="24" y="88" width="120" height="64" rx="8"/>
+  <text class="lbl" x="40" y="114">Survey sent</text>
+  <text class="sm" x="40" y="134">confirmation</text>
+
+  <rect class="box" x="184" y="88" width="104" height="64" rx="8"/>
+  <text class="lbl" x="200" y="114">Day 1</text>
+  <text class="sm" x="200" y="134">nudge</text>
+
+  <rect class="box" x="312" y="88" width="104" height="64" rx="8"/>
+  <text class="lbl" x="328" y="114">Day 3</text>
+  <text class="sm" x="328" y="134">nudge</text>
+
+  <rect class="box" x="440" y="88" width="104" height="64" rx="8"/>
+  <text class="lbl" x="456" y="114">Day 7</text>
+  <text class="sm" x="456" y="134">last nudge</text>
+
+  <line class="wire" x1="144" y1="120" x2="180" y2="120" marker-end="url(#a)"/>
+  <line class="wire" x1="288" y1="120" x2="308" y2="120" marker-end="url(#a)"/>
+  <line class="wire" x1="416" y1="120" x2="436" y2="120" marker-end="url(#a)"/>
+
+  <text class="sm halo" x="24" y="64">email, plus text when they allowed texts</text>
+
+  <rect x="200" y="206" width="240" height="46" rx="8" fill="var(--bg-accent-translucent)" stroke="var(--fg-accent)"/>
+  <text x="222" y="235" style="font-size:14px; font-weight:480; fill: var(--fg-accent);">Booking page, prefilled</text>
+
+  <path class="wire" d="M236 152 L236 206" marker-end="url(#a)"/>
+  <path class="wire" d="M364 152 L364 206" marker-end="url(#a)"/>
+  <path class="wire" d="M492 152 L492 190 L440 190 L440 206" marker-end="url(#a)"/>
+  <path class="wire" d="M84 152 L84 190 L200 190 L200 214" marker-end="url(#a)"/>
+
+  <text class="sm halo" x="200" y="278">once a date is picked, the remaining nudges stop</text>
+</svg>
