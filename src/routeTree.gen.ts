@@ -73,6 +73,7 @@ import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/publi
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
+import { Route as ApiPublicHooksCrmTrafficDailyRouteImport } from './routes/api/public/hooks/crm-traffic-daily'
 import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api/public/hooks/crm-payment-status'
 import { Route as ApiPublicHooksCrmLeadUpdateRouteImport } from './routes/api/public/hooks/crm-lead-update'
 import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
@@ -409,6 +410,12 @@ const ApiPublicHooksFailureRateWatchRoute =
     path: '/api/public/hooks/failure-rate-watch',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksCrmTrafficDailyRoute =
+  ApiPublicHooksCrmTrafficDailyRouteImport.update({
+    id: '/api/public/hooks/crm-traffic-daily',
+    path: '/api/public/hooks/crm-traffic-daily',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksCrmPaymentStatusRoute =
   ApiPublicHooksCrmPaymentStatusRouteImport.update({
     id: '/api/public/hooks/crm-payment-status',
@@ -491,6 +498,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
+  '/api/public/hooks/crm-traffic-daily': typeof ApiPublicHooksCrmTrafficDailyRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -560,6 +568,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
+  '/api/public/hooks/crm-traffic-daily': typeof ApiPublicHooksCrmTrafficDailyRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -631,6 +640,7 @@ export interface FileRoutesById {
   '/api/public/hooks/crm-appointment-status': typeof ApiPublicHooksCrmAppointmentStatusRoute
   '/api/public/hooks/crm-lead-update': typeof ApiPublicHooksCrmLeadUpdateRoute
   '/api/public/hooks/crm-payment-status': typeof ApiPublicHooksCrmPaymentStatusRoute
+  '/api/public/hooks/crm-traffic-daily': typeof ApiPublicHooksCrmTrafficDailyRoute
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
@@ -703,6 +713,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
+    | '/api/public/hooks/crm-traffic-daily'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -772,6 +783,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
+    | '/api/public/hooks/crm-traffic-daily'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -842,6 +854,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/crm-appointment-status'
     | '/api/public/hooks/crm-lead-update'
     | '/api/public/hooks/crm-payment-status'
+    | '/api/public/hooks/crm-traffic-daily'
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
@@ -909,6 +922,7 @@ export interface RootRouteChildren {
   ApiPublicHooksCrmAppointmentStatusRoute: typeof ApiPublicHooksCrmAppointmentStatusRoute
   ApiPublicHooksCrmLeadUpdateRoute: typeof ApiPublicHooksCrmLeadUpdateRoute
   ApiPublicHooksCrmPaymentStatusRoute: typeof ApiPublicHooksCrmPaymentStatusRoute
+  ApiPublicHooksCrmTrafficDailyRoute: typeof ApiPublicHooksCrmTrafficDailyRoute
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
@@ -1372,6 +1386,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksFailureRateWatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/crm-traffic-daily': {
+      id: '/api/public/hooks/crm-traffic-daily'
+      path: '/api/public/hooks/crm-traffic-daily'
+      fullPath: '/api/public/hooks/crm-traffic-daily'
+      preLoaderRoute: typeof ApiPublicHooksCrmTrafficDailyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/crm-payment-status': {
       id: '/api/public/hooks/crm-payment-status'
       path: '/api/public/hooks/crm-payment-status'
@@ -1493,6 +1514,7 @@ const rootRouteChildren: RootRouteChildren = {
     ApiPublicHooksCrmAppointmentStatusRoute,
   ApiPublicHooksCrmLeadUpdateRoute: ApiPublicHooksCrmLeadUpdateRoute,
   ApiPublicHooksCrmPaymentStatusRoute: ApiPublicHooksCrmPaymentStatusRoute,
+  ApiPublicHooksCrmTrafficDailyRoute: ApiPublicHooksCrmTrafficDailyRoute,
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
