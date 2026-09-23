@@ -52,8 +52,9 @@ import appCss from "../styles.css?url";
 const SITE_TITLE = "Savvy Swim | Pool Cleaning, Service & Repair in Texas";
 const SITE_DESCRIPTION =
   "Weekly pool cleaning, equipment repair, and service across Texas. Certified techs, photo reports every visit. Free quote.";
-const OG_IMAGE =
-  "https://storage.googleapis.com/gpt-engineer-file-uploads/7GbNeRz73ROCzqUdADLL8vqrNGq2/social-images/social-1785866500939-social-image.webp";
+// Share preview, served from our own domain so nothing outside Savvy Swim
+// appears when a link is posted.
+const OG_IMAGE = "https://savvyswim.com/og-image.jpg";
 
 const FONT_CSS =
   "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap";
