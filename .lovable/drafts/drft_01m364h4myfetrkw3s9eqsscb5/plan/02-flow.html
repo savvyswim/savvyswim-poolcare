@@ -1,0 +1,37 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: var(--font-sans); fill: var(--fg-primary); }
+    .lbl { font-size: 14px; font-weight: 480; }
+    .sm { font-size: 12px; fill: var(--fg-secondary); }
+    .box { fill: none; stroke: var(--fg-secondary); stroke-width: 1; rx: 8; }
+    .acc { fill: var(--bg-accent-translucent); stroke: var(--fg-accent); }
+    .wire { stroke: var(--fg-secondary); stroke-width: 1; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6" fill="none" stroke="var(--fg-secondary)" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <rect class="box" x="16" y="120" width="140" height="56"/>
+  <text class="lbl" x="86" y="144" text-anchor="middle">Request sent</text>
+  <text class="sm" x="86" y="162" text-anchor="middle">thank you page</text>
+
+  <line class="wire" x1="156" y1="148" x2="196" y2="148" marker-end="url(#a)"/>
+
+  <rect class="box acc" x="196" y="112" width="172" height="72"/>
+  <text class="lbl" x="282" y="140" text-anchor="middle">Pick your day now?</text>
+  <text class="sm" x="282" y="160" text-anchor="middle">Yes  /  No, just call me</text>
+
+  <line class="wire" x1="368" y1="132" x2="424" y2="70" marker-end="url(#a)"/>
+  <line class="wire" x1="368" y1="164" x2="424" y2="232" marker-end="url(#a)"/>
+
+  <rect class="box" x="424" y="26" width="200" height="94"/>
+  <text class="lbl" x="524" y="52" text-anchor="middle">Next 7 days, Mon to Fri</text>
+  <text class="sm" x="524" y="74" text-anchor="middle">7:00 AM  ·  8:00 AM  ·  9:00 AM</text>
+  <text class="sm" x="524" y="96" text-anchor="middle">today shown if a time is 2h+ away</text>
+
+  <rect class="box" x="424" y="204" width="200" height="60"/>
+  <text class="lbl" x="524" y="230" text-anchor="middle">No time saved</text>
+  <text class="sm" x="524" y="250" text-anchor="middle">office calls within one day</text>
+</svg>
