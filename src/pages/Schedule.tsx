@@ -21,7 +21,14 @@ export const SCHEDULE_POINTS = [
   },
 ];
 
-export default function Schedule({ source }: { source: string }) {
+export default function Schedule({
+  source,
+  prefill,
+}: {
+  source: string;
+  prefill?: LeadPrefill | undefined;
+}) {
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <header className="border-b border-hairline bg-background">
