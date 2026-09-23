@@ -33,7 +33,9 @@ const leadSchema = z
     sms_opt_in: z.boolean().optional().nullable(),
     contact_consent: z.boolean().optional().nullable(),
     // Exact authorization wording the visitor saw, stored with the consent record.
-    consent_text: z.string().trim().max(1000).optional().nullable(),
+    consent_text: z.string().trim().max(2000).optional().nullable(),
+    // Version stamp of the wording shown, part of the proof of consent record.
+    consent_version: z.string().trim().max(40).optional().nullable(),
 
     source: z.string().trim().max(80).optional().nullable(),
     page: z.string().trim().max(255).optional().nullable(),
