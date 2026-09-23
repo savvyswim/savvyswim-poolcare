@@ -150,10 +150,8 @@ function ListingSheetPage() {
         <Copy label="Instagram" value={INSTAGRAM_URL} />
         <Copy label="Hours" value={hours} />
         <Copy label="Service areas" value={areas} />
-        <Copy label="Categories" value={CATEGORIES.join("
-")} />
-        <Copy label="Services list" value={SERVICES.join("
-")} />
+        <Copy label="Categories" value={CATEGORIES.join("\n")} />
+        <Copy label="Services list" value={SERVICES.join("\n")} />
         <Copy label="Description" value={DESCRIPTION} />
       </section>
 
