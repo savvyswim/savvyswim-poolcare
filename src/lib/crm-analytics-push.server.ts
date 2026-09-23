@@ -85,7 +85,7 @@ export async function pushDailyTrafficToCrm(): Promise<CrmAnalyticsResult> {
       httpStatus: res.status,
       request: JSON.parse(body),
       response: text.slice(0, 2000),
-      error: res.ok ? undefined : `CRM responded ${res.status}`,
+      error: res.ok ? null : `CRM responded ${res.status}`,
     });
     return { sent: res.ok, status: res.status, endpoint, detail: text.slice(0, 300) };
   } catch (err) {
