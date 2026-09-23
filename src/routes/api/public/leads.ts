@@ -269,7 +269,7 @@ export const Route = createFileRoute("/api/public/leads")({
             page_path: lead.page ?? null,
             sms_opt_in: lead.sms_opt_in === true,
             contact_consent: lead.contact_consent === true,
-            consent_text: lead.consent_text ?? null,
+            consent_text: consentRecord,
             source: lead.source ?? null,
             lead_type: leadType,
             promo_code: promo.code,
