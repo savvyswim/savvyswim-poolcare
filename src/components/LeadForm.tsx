@@ -77,7 +77,16 @@ export type LeadFormProps = {
   source: string;
   submitLabel: string;
   openedAt: number;
-  onCancel: () => void;
+  /** Known contact details, used when a follow up link opens the form. */
+  prefill?:
+    | {
+        name?: string | undefined;
+        phone?: string | undefined;
+        email?: string | undefined;
+        address?: string | undefined;
+      }
+    | undefined;
+
   onDone: (summary: {
     date?: Date | undefined;
     time?: string | undefined;
