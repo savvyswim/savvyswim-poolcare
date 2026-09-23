@@ -183,7 +183,12 @@ function RootComponent() {
           <PerfMonitor />
 
 
-          <Outlet />
+          {/* Soft fade and lift on every page change, skipped when the
+              visitor prefers reduced motion. */}
+          <div key={pathname} className="page-enter">
+            <Outlet />
+          </div>
+
 
           <CallOptionsCard />
 
