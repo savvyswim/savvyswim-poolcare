@@ -15,6 +15,7 @@ import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-condi
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SurveyRouteImport } from './routes/survey'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ServiceAreasRouteImport } from './routes/service-areas'
 import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
@@ -112,6 +113,11 @@ const SurveyRoute = SurveyRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiceAreasRoute = ServiceAreasRouteImport.update({
+  id: '/service-areas',
+  path: '/service-areas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScheduleQrRoute = ScheduleQrRouteImport.update({
@@ -495,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
+  '/service-areas': typeof ServiceAreasRoute
   '/services': typeof ServicesRoute
   '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
@@ -570,6 +577,7 @@ export interface FileRoutesByTo {
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
+  '/service-areas': typeof ServiceAreasRoute
   '/services': typeof ServicesRoute
   '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
@@ -647,6 +655,7 @@ export interface FileRoutesById {
   '/request-inspection': typeof RequestInspectionRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
+  '/service-areas': typeof ServiceAreasRoute
   '/services': typeof ServicesRoute
   '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
@@ -725,6 +734,7 @@ export interface FileRouteTypes {
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
+    | '/service-areas'
     | '/services'
     | '/survey'
     | '/terms'
@@ -800,6 +810,7 @@ export interface FileRouteTypes {
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
+    | '/service-areas'
     | '/services'
     | '/survey'
     | '/terms'
@@ -876,6 +887,7 @@ export interface FileRouteTypes {
     | '/request-inspection'
     | '/schedule'
     | '/schedule-qr'
+    | '/service-areas'
     | '/services'
     | '/survey'
     | '/terms'
@@ -953,6 +965,7 @@ export interface RootRouteChildren {
   RequestInspectionRoute: typeof RequestInspectionRoute
   ScheduleRoute: typeof ScheduleRoute
   ScheduleQrRoute: typeof ScheduleQrRoute
+  ServiceAreasRoute: typeof ServiceAreasRoute
   ServicesRoute: typeof ServicesRoute
   SurveyRoute: typeof SurveyRoute
   TermsRoute: typeof TermsRoute
@@ -1043,6 +1056,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/service-areas': {
+      id: '/service-areas'
+      path: '/service-areas'
+      fullPath: '/service-areas'
+      preLoaderRoute: typeof ServiceAreasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schedule-qr': {
@@ -1594,6 +1614,7 @@ const rootRouteChildren: RootRouteChildren = {
   RequestInspectionRoute: RequestInspectionRoute,
   ScheduleRoute: ScheduleRoute,
   ScheduleQrRoute: ScheduleQrRoute,
+  ServiceAreasRoute: ServiceAreasRoute,
   ServicesRoute: ServicesRoute,
   SurveyRoute: SurveyRoute,
   TermsRoute: TermsRoute,

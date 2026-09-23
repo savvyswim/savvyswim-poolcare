@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { StickyCallBar } from "@/components/CallButton";
@@ -76,12 +75,12 @@ export default function ServiceAreas() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              to="/schedule"
+            <a
+              href="/schedule"
               className="border border-foreground bg-foreground px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-background"
             >
               Book a free inspection
-            </Link>
+            </a>
             <a
               href="/savvy-swim.vcf"
               download
@@ -205,12 +204,12 @@ export default function ServiceAreas() {
               New customers get a free pool inspection and a flat monthly quote, no contracts.
               Call {PHONE_VANITY_WITH_DIGITS}, email {EMAIL} or book a time online.
             </p>
-            <Link
-              to="/schedule"
+            <a
+              href="/schedule"
               className="mt-6 inline-block border border-foreground bg-foreground px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-background"
             >
               Book a free inspection
-            </Link>
+            </a>
           </div>
         </section>
       </main>
