@@ -222,6 +222,19 @@ export const Route = createFileRoute("/api/public/leads")({
         // Consent lives in its own columns (contact_consent / consent_text), // notes stay clean and hold only what the customer typed.
         const notes = [lead.notes, lead.message].filter(Boolean).join("\n\n") || null;
 
+        // Proof of consent: the exact wording plus when, where and from which
+        // device and address it was accepted. Kept with the consent record.
+        const consentRecord = lead.consent_text
+          ? [
+              lead.consent_version ? `[consent ${lead.consent_version}]` : "",
+              lead.consent_text,
+              `Accepted ${new Date().toISOString()} on ${lead.page ?? "/"} from IP ${ip}, device ${(request.headers.get("user-agent") ?? "unknown").slice(0, 200)}`,
+            ]
+              .filter(Boolean)
+              .join(" ")
+              .slice(0, 4000)
+          : null;
+
         // Validate the optional discount / referral code. An unknown code is
         // stored and flagged rather than rejected. Never lose a lead over it.
         const { lookupPromoCode } = await import("@/lib/promo.functions");
