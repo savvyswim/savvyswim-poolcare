@@ -128,14 +128,7 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
 
         {/* Sign off */}
         <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">
-          <img
-            src={thankYouCard}
-            alt="Thank you from Savvy Swim, your pool is in good hands"
-            width={1024}
-            height={1024}
-            loading="lazy"
-            className="mx-auto w-full max-w-[420px]"
-          />
+          <ThankYouCard />
           <p className="mt-8 font-display text-2xl uppercase leading-tight text-[#8E1F2C] sm:text-3xl">
             We look forward to serving you.
           </p>
