@@ -56,7 +56,7 @@ const OG_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/7GbNeRz73ROCzqUdADLL8vqrNGq2/social-images/social-1785866500939-social-image.webp";
 
 const FONT_CSS =
-  "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap";
+  "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap";
 
 // Fallback for browsers that ignore the link onLoad attribute, and for the
 // case where the sheet is already cached when the script runs.
