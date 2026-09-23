@@ -26,7 +26,7 @@ export default function ThankYouCard({ className = "" }: { className?: string })
         </span>
 
         <h3
-          className="mt-[3%] whitespace-nowrap text-[11.5cqw] uppercase leading-[0.95] tracking-[0.005em]"
+          className="mt-[3%] whitespace-nowrap text-[15cqw] uppercase leading-[0.95] tracking-[0.005em]"
           style={{ fontFamily: "'Anton', Impact, sans-serif", color: "#5A1418", fontWeight: 400 }}
         >
           Your pool is in
@@ -35,8 +35,8 @@ export default function ThankYouCard({ className = "" }: { className?: string })
         </h3>
 
         <p
-          className="mt-[6%] text-[6.4cqw] font-bold uppercase leading-none tracking-[0.02em]"
-          style={{ fontFamily: "'Oswald', 'Anton', sans-serif" }}
+          className="mt-[6%] text-[7.5cqw] uppercase leading-none tracking-[0.02em]"
+          style={{ fontFamily: "'Anton', sans-serif", color: "#5A1418", fontWeight: 400 }}
         >
           savvyswim.com
         </p>
