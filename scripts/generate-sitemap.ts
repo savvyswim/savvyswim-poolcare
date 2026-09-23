@@ -32,6 +32,7 @@ const CITY_SLUGS = [
 const entries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/services", changefreq: "monthly", priority: "0.9" },
+  { path: "/service-areas", changefreq: "monthly", priority: "0.9" },
   { path: "/weekly-pool-service", changefreq: "monthly", priority: "0.9" },
   { path: "/schedule", changefreq: "monthly", priority: "0.9" },
   { path: "/survey", changefreq: "monthly", priority: "0.8" },

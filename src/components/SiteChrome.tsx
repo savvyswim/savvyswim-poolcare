@@ -102,6 +102,9 @@ export function SiteFooter() {
           <Link to="/refer" className="transition hover:text-foreground">
             Refer &amp; Save
           </Link>
+          <Link to="/service-areas" className="transition hover:text-foreground">
+            Service Areas &amp; Hours
+          </Link>
           <Link to="/our-work" className="transition hover:text-foreground">
             Our Work
           </Link>

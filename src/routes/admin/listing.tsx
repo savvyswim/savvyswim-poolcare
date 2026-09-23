@@ -49,31 +49,59 @@ const SERVICES = [
   "Savvy Swim Club membership",
 ];
 
-const DIRECTORIES: { name: string; url: string; note: string }[] = [
+const DIRECTORIES: { name: string; url: string; note: string; steps: string[] }[] = [
   {
     name: "Google Business Profile",
     url: "https://business.google.com/create",
     note: "Choose 'I deliver goods and services to my customers', hide the street address, then set the service areas below. Verification is by postcard, phone or video and only the owner can complete it.",
+    steps: [
+      "Sign in with the company Google account, not a personal one.",
+      "Enter the business name and primary category exactly as listed above.",
+      "Answer No to a location customers can visit, then add the service areas.",
+      "Add the phone, website, hours, services and description from this sheet.",
+      "Pick a verification method and finish it, video is common for mobile services.",
+      "Send me the public profile link once it is verified.",
+    ],
   },
   {
     name: "Bing Places",
     url: "https://www.bingplaces.com",
     note: "Can import straight from Google once the Google listing is verified.",
+    steps: [
+      "Choose Import from Google Business Profile once Google is verified.",
+      "Otherwise add it manually as a service area business and hide the address.",
+      "Check the hours and categories match this sheet before you publish.",
+    ],
   },
   {
     name: "Apple Business Connect",
     url: "https://businessconnect.apple.com",
     note: "Puts the business in Apple Maps and iPhone search.",
+    steps: [
+      "Sign in with an Apple ID and add the business as a service area business.",
+      "Paste the name, phone, website, hours and description from this sheet.",
+      "Complete the identity verification step Apple prompts for.",
+    ],
   },
   {
     name: "Yelp for Business",
     url: "https://biz.yelp.com",
     note: "Set it as a service area business so no home address shows.",
+    steps: [
+      "Search for the business first so you do not create a duplicate.",
+      "Claim it if it exists, otherwise add it and hide the street address.",
+      "Add the service areas, hours, services and photos.",
+    ],
   },
   {
     name: "Nextdoor Business",
     url: "https://business.nextdoor.com",
     note: "Strong for neighborhood pool work, ask happy customers to recommend you.",
+    steps: [
+      "Create the free business page and set the neighborhoods we service.",
+      "Paste the same name, phone, hours and description.",
+      "Ask recent customers to recommend the page by city name.",
+    ],
   },
 ];
 
@@ -141,6 +169,11 @@ function ListingSheetPage() {
                 {d.name}
               </a>
               <p className="mt-1 text-sm text-foreground/65">{d.note}</p>
+              <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-foreground/70">
+                {d.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
             </li>
           ))}
         </ul>
