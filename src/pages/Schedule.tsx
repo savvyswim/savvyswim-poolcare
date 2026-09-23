@@ -1,7 +1,7 @@
 import { Link } from "@/lib/router-compat";
 import { CalendarDays, CheckCircle2, Camera, FlaskConical, UserCheck } from "lucide-react";
 import { CallButton, StickyCallBar } from "@/components/CallButton";
-import InlineLeadForm from "@/components/InlineLeadForm";
+import InlineLeadForm, { type LeadPrefill } from "@/components/InlineLeadForm";
 
 export const SCHEDULE_POINTS = [
   {
