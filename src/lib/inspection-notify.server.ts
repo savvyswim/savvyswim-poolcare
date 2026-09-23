@@ -175,12 +175,28 @@ export async function sendInspectionNotifications(
 
   // Homeowner confirmation.
   const firstName = esc(req.full_name.split(" ")[0]);
+  // Booking requests named a day, so the confirmation repeats it back.
+  const dayLabel = req.preferred_date
+    ? new Date(`${req.preferred_date}T12:00:00`).toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
+  const slotLabel = req.preferred_contact_time ?? null;
   const headline = isWaterTest
     ? `Thanks, ${firstName}, your free water test is booked in.`
-    : `Thanks, ${firstName}, your free inspection is booked in.`;
+    : isBooking && dayLabel
+      ? `Thanks, ${firstName}, we have you down for ${esc(dayLabel)}.`
+      : `Thanks, ${firstName}, your free inspection is booked in.`;
   const body = isWaterTest
     ? `We have your pool at <strong>${esc(req.address)}</strong>. We'll run a full chemistry panel and send you the readings with exactly what your water needs. No obligation.`
-    : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
+    : isBooking && dayLabel
+      ? `Your free inspection at <strong>${esc(req.address)}</strong> is requested for <strong>${esc(dayLabel)}</strong>${
+          slotLabel ? ` around <strong>${esc(slotLabel)}</strong>` : ""
+        }. Our dispatch team confirms the window within one business day. If that day no longer works, pick another one below.`
+      : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
+  const ctaLabel = isBooking && dayLabel ? "Pick a different time" : "Pick my inspection time";
 
   try {
     await sendLovableEmail(
@@ -191,7 +207,9 @@ export async function sendInspectionNotifications(
         reply_to: REPLY_TO_ADDRESS,
         subject: isWaterTest
           ? `We got your water test request (${req.reference_number})`
-          : `We got your inspection request (${req.reference_number})`,
+          : isBooking && dayLabel
+            ? `Your pool inspection request for ${dayLabel} (${req.reference_number})`
+            : `We got your inspection request (${req.reference_number})`,
         html: `<div style="background:#F4EFE3;padding:24px 0;font-family:'Helvetica Neue',Arial,sans-serif;">
   <div style="max-width:560px;margin:0 auto;background:#FFFFFF;border:1px solid #E4DCCB;padding:32px 28px;">
     <p style="font-size:11px;letter-spacing:0.18em;color:#8E1F2C;margin:0 0 12px;">SAVVY SWIM · POOL CARE</p>
@@ -212,7 +230,7 @@ export async function sendInspectionNotifications(
         phone: req.phone ?? "",
         ref: req.reference_number ?? "",
       },
-    ).toString()}" style="background:#8E1F2C;color:#F4EFE3;text-decoration:none;padding:14px 22px;display:inline-block;font-weight:700;font-size:14px;">Pick my inspection time</a></p>
+    ).toString()}" style="background:#8E1F2C;color:#F4EFE3;text-decoration:none;padding:14px 22px;display:inline-block;font-weight:700;font-size:14px;">${ctaLabel}</a></p>
     <p style="font-size:14px;color:#41474D;line-height:1.6;margin:0 0 18px;">Need us sooner? Call or text <a href="tel:+18176637665" style="color:#8E1F2C;">817-663-7665</a>, or just reply to this email.</p>
 
     <hr style="border:none;border-top:1px solid #E4DCCB;margin:24px 0 16px;" />
@@ -221,7 +239,9 @@ export async function sendInspectionNotifications(
 </div>`,
         text: isWaterTest
           ? `Thanks, ${req.full_name.split(" ")[0]}. Your free water test request (${req.reference_number}) for ${req.address} is in. We'll send your full chemistry readings and what the water needs. Call or text 817-663-7665 (817-663-7665).`
-          : `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-7665 (817-663-7665).`,
+          : isBooking && dayLabel
+            ? `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection at ${req.address} is requested for ${dayLabel}${slotLabel ? ` around ${slotLabel}` : ""}. Reference ${req.reference_number}. We confirm the window within one business day. Need another day? Open https://savvyswim.com/book or call or text 817-663-7665.`
+            : `Thanks, ${req.full_name.split(" ")[0]}. Your free pool inspection request (${req.reference_number}) for ${req.address} is in. A tech reviews it within one business day and sends two visit windows. Call or text 817-663-7665 (817-663-7665).`,
         label: "inspection-confirmation",
         purpose: "transactional",
         idempotency_key: `inspection-confirm-${req.id}`,
