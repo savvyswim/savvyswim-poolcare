@@ -830,3 +830,20 @@
     border-radius: 0 !important;
   }
 }
+
+/* Page change: a soft fade and lift so nothing pops onto the screen.
+   The reduced-motion block above already flattens this to nothing. */
+@keyframes savvy-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: savvy-page-enter 0.32s ease-out both;
+}
