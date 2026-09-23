@@ -11,6 +11,9 @@ import { cn } from "@/lib/utils";
 import { extractZip } from "@/lib/postal";
 import { trackSiteEvent } from "@/lib/site-analytics";
 import { CONSENT_TEXT, MARKETING_CONSENT_TEXT } from "@/components/LeadForm";
+
+/** One combined permission the visitor must accept to send the survey. */
+const SURVEY_CONSENT_TEXT = `${CONSENT_TEXT}\n\n${MARKETING_CONSENT_TEXT}`;
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import AddressMapPreview from "@/components/AddressMapPreview";
 import {
