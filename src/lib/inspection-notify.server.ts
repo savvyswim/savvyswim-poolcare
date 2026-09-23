@@ -175,12 +175,28 @@ export async function sendInspectionNotifications(
 
   // Homeowner confirmation.
   const firstName = esc(req.full_name.split(" ")[0]);
+  // Booking requests named a day, so the confirmation repeats it back.
+  const dayLabel = req.preferred_date
+    ? new Date(`${req.preferred_date}T12:00:00`).toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
+  const slotLabel = req.preferred_contact_time ?? null;
   const headline = isWaterTest
     ? `Thanks, ${firstName}, your free water test is booked in.`
-    : `Thanks, ${firstName}, your free inspection is booked in.`;
+    : isBooking && dayLabel
+      ? `Thanks, ${firstName}, we have you down for ${esc(dayLabel)}.`
+      : `Thanks, ${firstName}, your free inspection is booked in.`;
   const body = isWaterTest
     ? `We have your pool at <strong>${esc(req.address)}</strong>. We'll run a full chemistry panel and send you the readings with exactly what your water needs. No obligation.`
-    : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
+    : isBooking && dayLabel
+      ? `Your free inspection at <strong>${esc(req.address)}</strong> is requested for <strong>${esc(dayLabel)}</strong>${
+          slotLabel ? ` around <strong>${esc(slotLabel)}</strong>` : ""
+        }. Our dispatch team confirms the window within one business day. If that day no longer works, pick another one below.`
+      : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
+  const ctaLabel = isBooking && dayLabel ? "Pick a different time" : "Pick my inspection time";
 
   try {
     await sendLovableEmail(
