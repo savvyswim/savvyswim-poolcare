@@ -111,6 +111,12 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
           Tap &quot;Save our contact&quot; on your phone to add Savvy Swim to your contacts.
         </p>
 
+        {/* Pick the consultation day and window, same day while it is morning. */}
+        {reference ? (
+          <ConsultationPicker reference={reference} existingWindow={time} />
+        ) : null}
+
+
         {/* What happens next */}
         <div className="mt-14 border-t border-[#8E1F2C]/20 pt-10">
           <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">What happens next</h2>
