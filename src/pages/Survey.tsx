@@ -133,8 +133,8 @@ export default function Survey() {
     const summary = [
       formatAnswers(answers),
       ...missing,
-      `Marketing opt in: ${marketingConsent ? "yes" : "no"}`,
-      marketingConsent ? MARKETING_CONSENT_TEXT : "",
+      `Marketing opt in: ${consent ? "yes" : "no"}`,
+      consent ? SURVEY_CONSENT_TEXT : "",
     ]
       .filter(Boolean)
       .join("\n\n");
@@ -414,11 +414,13 @@ export default function Survey() {
                     <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
                       <strong className="text-[#2a1013]">Required.</strong> I authorize{" "}
                       <strong className="text-[#2a1013]">Savvy Swim</strong> to contact me by phone
-                      call, text message and email about this request, including automated or
-                      prerecorded messages and appointment updates at the number I provided. Message
-                      and data rates may apply; message frequency varies. Reply{" "}
-                      <strong>STOP</strong> to opt out or <strong>HELP</strong> for help. I have
-                      read and agree to the{" "}
+                      call, text message and email about this request and about marketing such as
+                      promotions, seasonal pool reminders, service offers and company news,
+                      including automated or prerecorded messages and appointment updates at the
+                      number and email I provided. Consent is not a condition of any purchase.
+                      Message and data rates may apply; message frequency varies. Reply{" "}
+                      <strong>STOP</strong> to opt out of texts, <strong>HELP</strong> for help, or
+                      use the unsubscribe link in any email. I have read and agree to the{" "}
                       <Link to="/privacy-policy" className={LEGAL_LINK}>
                         Privacy Policy
                       </Link>{" "}
@@ -435,32 +437,6 @@ export default function Survey() {
                     </p>
                   ) : null}
                 </div>
-
-                <label className="flex cursor-pointer items-start gap-3 border border-[#1FA9BE]/35 bg-[#1FA9BE]/5 p-3">
-                  <input
-                    type="checkbox"
-                    checked={marketingConsent}
-                    onChange={(e) => setMarketingConsent(e.target.checked)}
-                    className="mt-1 h-4 w-4 shrink-0 accent-[#1FA9BE]"
-                  />
-                  <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
-                    <strong className="text-[#2a1013]">Optional.</strong> I also agree to receive
-                    marketing from <strong className="text-[#2a1013]">Savvy Swim</strong> by text
-                    message and email, including promotions, seasonal pool reminders, service offers
-                    and company news, sent with automated technology at the number and email I
-                    provided. Consent is not a condition of any purchase. Message and data rates may
-                    apply; message frequency varies. Reply <strong>STOP</strong> to opt out of
-                    texts, or use the unsubscribe link in any email. See the{" "}
-                    <Link to="/privacy-policy" className={LEGAL_LINK}>
-                      Privacy Policy
-                    </Link>{" "}
-                    and{" "}
-                    <Link to="/terms-and-conditions" className={LEGAL_LINK}>
-                      Terms
-                    </Link>
-                    .
-                  </span>
-                </label>
               </div>
 
               {/* Honeypot, real people never fill this in. */}
