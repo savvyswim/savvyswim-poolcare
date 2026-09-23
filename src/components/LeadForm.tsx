@@ -67,6 +67,17 @@ export const CONSENT_TEXT =
 export const MARKETING_CONSENT_TEXT =
   "I also agree to receive marketing from Savvy Swim by text message and email, including promotions, seasonal pool reminders, service offers and company news, sent with automated technology at the number and email I provided. Consent is not a condition of any purchase. Message and data rates may apply; message frequency varies. Reply STOP to opt out of texts, or use the unsubscribe link in any email. See the Privacy Policy and Terms.";
 
+/** Version stamp stored with every consent record, bump when the wording changes. */
+export const CONSENT_VERSION = "2026-09-v1";
+
+/**
+ * Single combined authorization used by the survey. Covers live calls, an
+ * automatic telephone dialing system, artificial or prerecorded voice, SMS and
+ * MMS, and email, for both service and marketing messages.
+ */
+export const FULL_CONSENT_TEXT =
+  "Required. I authorize Savvy Swim, a Santana and Rivera Company, and its service technicians to contact me at the phone number and email address I provided, including by live call, automatic telephone dialing system, artificial or prerecorded voice, text message (SMS and MMS) and email, about this request, my free inspection, appointment and service updates, and about marketing such as promotions, seasonal pool reminders, service offers and company news. I understand consent is not a condition of purchasing any goods or services, and I may still request service by calling 817-663-7665. Message frequency varies, typically fewer than 10 messages per month. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help. Every email carries an unsubscribe link. Carriers are not liable for delayed or undelivered messages. Calls may be recorded or monitored for quality and training. I am at least 18 years old and I am the subscriber or customary user of the number I provided. I have read and agree to the Privacy Policy, the Terms and Conditions and the Text Message Terms.";
+
 export type LeadFormProps = {
   /** CRM connector intent tag. */
   cta: string;
