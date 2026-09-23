@@ -3,6 +3,7 @@ import type {
   AdsRange,
   AdsChannelRow,
   AdsCampaignRow,
+  AdsMetricRow,
 } from "./ads-performance.functions";
 
 /**
