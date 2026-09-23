@@ -49,6 +49,19 @@ export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   },
 
   {
+    id: "pool_size",
+    label: "What size is your pool?",
+    kind: "single",
+    options: [
+      "Small, under 10,000 gallons",
+      "Medium, 10,000 to 20,000 gallons",
+      "Large, 20,000 to 30,000 gallons",
+      "Extra large, over 30,000 gallons",
+      "Spa or hot tub only",
+      "Not sure",
+    ],
+  },
+  {
     id: "monthly_spend",
     label: "How much do you pay now per month?",
     kind: "single",
