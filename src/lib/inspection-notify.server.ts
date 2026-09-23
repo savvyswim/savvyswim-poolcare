@@ -141,7 +141,7 @@ export async function sendInspectionNotifications(
           from: FROM_ADDRESS,
           sender_domain: SENDER_DOMAIN,
           reply_to: req.email,
-          subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
+          subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
           html: officeHtml,
           text: officeText,
           label: "inspection-office-alert",
@@ -162,7 +162,7 @@ export async function sendInspectionNotifications(
   try {
     const { sendLeadToGmailInbox, GMAIL_LEAD_INBOX } = await import("./gmail-lead-inbox.server");
     const gmail = await sendLeadToGmailInbox({
-      subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
+      subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
       text: officeText,
       replyTo: req.email,
     });
