@@ -147,7 +147,7 @@ function RootComponent() {
   const href = useRouterState({ select: (s) => s.location.href });
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   // Keep the marketing offer off staff/customer tooling.
-  const showOffer = !/^\/(admin|portal|app|auth)(\/|$)/.test(pathname);
+  const showOffer = !/^\/(admin|portal|app|auth|offer)(\/|$)/.test(pathname);
 
   // First-touch campaign capture (utm_*, ?src= codes, gclid/fbclid) so every
   // lead attributes back to the campaign that produced it.
@@ -171,7 +171,7 @@ function RootComponent() {
             <Toaster />
             <Sonner />
             <QuoteModal />
-            {pathname !== "/" && pathname !== "/survey" && <WaterTestTab />}
+            {pathname !== "/" && pathname !== "/survey" && pathname !== "/offer" && <WaterTestTab />}
             <ConsentBanner />
             <MetaPixel />
             <PageViewTracker />
