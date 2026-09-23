@@ -1,46 +1,52 @@
 /**
  * Thank-you card, rendered in the browser instead of a flat JPG so it stays
- * razor sharp on every screen and loads instantly.
+ * sharp on every screen. 23 vertical bands (12 red, 11 cream) so both outer
+ * edges always end on a full red stripe.
  */
 import { PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
+
+const BAND = 100 / 23;
 
 export default function ThankYouCard({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`relative mx-auto aspect-square w-full max-w-[440px] p-[7%] shadow-[0_18px_50px_-18px_rgba(42,16,19,0.45)] ${className}`}
+      className={`relative mx-auto aspect-square w-full max-w-[440px] shrink-0 p-[6%] shadow-[0_24px_60px_-28px_rgba(42,16,19,0.55)] ${className}`}
       style={{
         containerType: "inline-size",
-        background:
-          "repeating-linear-gradient(90deg,#8E1F2C 0 4.5%,#F4EFE3 4.5% 9%)",
+        background: `repeating-linear-gradient(90deg,#B3323A 0 ${BAND}%,#F7F2EA ${BAND}% ${BAND * 2}%)`,
       }}
       aria-label="Thank you from Savvy Swim, your pool is in good hands"
     >
-      <div className="relative flex h-full w-full flex-col items-center justify-center bg-[#BEE3ED] px-[8%] text-center text-[#8E1F2C]">
-        <span className="pointer-events-none absolute inset-[4%] border border-[#8E1F2C]/20" />
-
+      <div className="relative flex h-full w-full flex-col items-center justify-center bg-[#BCD9EC] px-[6%] text-center text-[#5A1418]">
         <span
-          className="text-[clamp(28px,9.5cqw,46px)] leading-none"
-          style={{ fontFamily: "'Caveat', 'Segoe Script', cursive" }}
+          className="-rotate-3 text-[15cqw] leading-none"
+          style={{ fontFamily: "'Caveat', 'Segoe Script', cursive", fontWeight: 600 }}
         >
           thank you
         </span>
 
-        <h3 className="mt-[4%] font-display text-[clamp(26px,11cqw,50px)] font-extrabold uppercase leading-[0.88] tracking-[-0.02em]">
+        <h3
+          className="mt-[3%] text-[12.5cqw] uppercase leading-[0.95] tracking-[0.005em]"
+          style={{ fontFamily: "'Anton', 'Oswald', Impact, sans-serif" }}
+        >
           Your pool is in
           <br />
           good hands.
         </h3>
 
-        <p className="mt-[8%] font-display text-[clamp(15px,5.4cqw,25px)] font-bold uppercase tracking-[0.06em]">
+        <p
+          className="mt-[6%] text-[6.4cqw] font-bold uppercase leading-none tracking-[0.02em]"
+          style={{ fontFamily: "'Oswald', 'Anton', sans-serif" }}
+        >
           savvyswim.com
         </p>
-        <p className="mt-[1%] font-mono text-[clamp(13px,4.4cqw,20px)] tracking-[0.04em]">
+        <p className="mt-[2%] text-[5.4cqw] leading-none tracking-[0.03em]">
           {PHONE_VANITY_WITH_DIGITS}
         </p>
 
         <span
-          className="absolute bottom-[7%] right-[8%] -rotate-6 text-[clamp(14px,4.6cqw,22px)] leading-none text-[#8E1F2C]/85"
-          style={{ fontFamily: "'Caveat', 'Segoe Script', cursive" }}
+          className="absolute bottom-[6%] right-[6%] -rotate-12 text-[6.5cqw] leading-none"
+          style={{ fontFamily: "'Caveat', 'Segoe Script', cursive", fontWeight: 600 }}
         >
           see you soon
         </span>
