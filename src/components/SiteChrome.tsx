@@ -57,16 +57,20 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center gap-2 min-[1500px]:ml-4">
 
 
-          <CallButton location="header" hidePhoneTextOnNarrowDesktop className="px-2 py-2 sm:px-3" />
+          <CallButton
+            location="header"
+            hidePhoneTextOnNarrowDesktop
+            hidePhoneTextOnMobile
+            className="px-1 py-2 sm:px-3"
+          />
           <button
             type="button"
             onClick={() => goToLead("header")}
             data-savvy-cta="request_quote"
             aria-label="Free consultation, opens the Savvy Swim booking form"
-            className="btn-quote inline-flex items-center whitespace-nowrap rounded-md px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
+            className="btn-quote inline-flex items-center whitespace-nowrap rounded-md px-3 py-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-5 sm:py-3 sm:text-[13px]"
           >
-            <span className="sm:hidden">Consult</span>
-            <span className="hidden sm:inline">Consultation</span>
+            Consultation
           </button>
         </div>
       </div>
