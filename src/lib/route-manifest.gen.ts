@@ -15,6 +15,7 @@ export const ROUTE_MANIFEST = [
   "/admin/ads",
   "/admin/bookings",
   "/admin/bookings/$id",
+  "/admin/calendar",
   "/admin/canary",
   "/admin/crm",
   "/admin/crm/$",

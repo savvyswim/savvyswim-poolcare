@@ -23,11 +23,15 @@ export type ConsultSlot = {
   start: number;
 };
 
-const START_TIMES: ConsultSlot[] = [
-  { id: "7am", label: "7:00 AM", detail: "Early start", start: 7 },
-  { id: "8am", label: "8:00 AM", detail: "First route", start: 8 },
-  { id: "9am", label: "9:00 AM", detail: "Mid morning", start: 9 },
-];
+const hourLabel = (h: number) => `${h > 12 ? h - 12 : h}:00 ${h >= 12 ? "PM" : "AM"}`;
+const hourId = (h: number) => `${h > 12 ? h - 12 : h}${h >= 12 ? "pm" : "am"}`;
+const hourGroup = (h: number) => (h < 12 ? "Morning" : h < 14 ? "Midday" : "Afternoon");
+
+/** Hourly arrivals 8 AM to 5 PM, Monday to Friday, so every visit ends by 6 PM. */
+const START_TIMES: ConsultSlot[] = Array.from({ length: 10 }, (_, i) => {
+  const h = 8 + i;
+  return { id: hourId(h), label: hourLabel(h), detail: hourGroup(h), start: h };
+});
 
 export type ConsultDay = {
   /** YYYY-MM-DD */
