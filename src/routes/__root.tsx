@@ -55,6 +55,14 @@ const SITE_DESCRIPTION =
 const OG_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/7GbNeRz73ROCzqUdADLL8vqrNGq2/social-images/social-1785866500939-social-image.webp";
 
+const FONT_CSS =
+  "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap";
+
+// Fallback for browsers that ignore the link onLoad attribute, and for the
+// case where the sheet is already cached when the script runs.
+const FONT_SWAP_SCRIPT =
+  "(function(){var l=document.querySelector('link[data-font-sheet]');if(!l)return;var s=function(){l.media='all'};if(l.sheet)s();else l.addEventListener('load',s,{once:true});addEventListener('load',s,{once:true})})();";
+
 const SITE_JSONLD = JSON.stringify({
   "@context": "https://schema.org",
   "@graph": [
