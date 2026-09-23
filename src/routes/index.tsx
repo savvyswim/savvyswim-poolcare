@@ -26,23 +26,14 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      // LCP hero photo, start the fetch during HTML parse. Two entries so the
-      // browser preloads exactly the format it will actually display.
+      // LCP hero photo, start the fetch during HTML parse. Only the modern
+      // format is preloaded, so no browser downloads the same photo twice.
       {
         rel: "preload",
         as: "image",
         type: "image/avif",
         href: photoLifeguardChair.url,
         imageSrcSet: photoLifeguardChair.avifSrcSet,
-        imageSizes: "(min-width: 1024px) 11rem, 128px",
-        fetchPriority: "high",
-      },
-      {
-        rel: "preload",
-        as: "image",
-        type: "image/webp",
-        href: photoLifeguardChair.url,
-        imageSrcSet: photoLifeguardChair.srcSet,
         imageSizes: "(min-width: 1024px) 11rem, 128px",
         fetchPriority: "high",
       },
