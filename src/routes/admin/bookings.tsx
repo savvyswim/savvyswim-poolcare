@@ -307,7 +307,13 @@ function BookingsPage() {
                         {when(b.created_at)}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="font-semibold">{b.full_name ?? "-"}</div>
+                        <Link
+                          to="/admin/bookings/$id"
+                          params={{ id: b.id }}
+                          className="font-semibold text-[#8E1F2C] underline"
+                        >
+                          {b.full_name ?? "Open"}
+                        </Link>
                         {b.reference_number ? (
                           <div className="text-[11px] text-foreground/50">{b.reference_number}</div>
                         ) : null}
