@@ -130,6 +130,7 @@ export async function sendInspectionNotifications(
 </div>`;
   const officeText = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
 
+  const realEmail = req.email && !req.email.toLowerCase().startsWith("no-email.") ? req.email : null;
   const { sendLovableEmail } = await import("@lovable.dev/email-js");
   const results: Record<string, string> = {};
 
@@ -140,7 +141,7 @@ export async function sendInspectionNotifications(
           to,
           from: FROM_ADDRESS,
           sender_domain: SENDER_DOMAIN,
-          reply_to: req.email,
+          reply_to: realEmail ?? REPLY_TO_ADDRESS,
           subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
           html: officeHtml,
           text: officeText,
@@ -164,7 +165,7 @@ export async function sendInspectionNotifications(
     const gmail = await sendLeadToGmailInbox({
       subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
       text: officeText,
-      replyTo: req.email,
+      replyTo: realEmail ?? REPLY_TO_ADDRESS,
     });
     if (!results[GMAIL_LEAD_INBOX] || gmail.ok) {
       results[GMAIL_LEAD_INBOX] = gmail.ok ? "sent" : "failed";
@@ -198,10 +199,10 @@ export async function sendInspectionNotifications(
       : `We have your pool at <strong>${esc(req.address)}</strong>. A tech reviews it within one business day and sends two visit windows to choose from.`;
   const ctaLabel = isBooking && dayLabel ? "Pick a different time" : "Pick my inspection time";
 
-  try {
+  if (realEmail) try {
     await sendLovableEmail(
       {
-        to: req.email,
+        to: realEmail,
         from: FROM_ADDRESS,
         sender_domain: SENDER_DOMAIN,
         reply_to: REPLY_TO_ADDRESS,
@@ -248,10 +249,10 @@ export async function sendInspectionNotifications(
       },
       { apiKey },
     );
-    results[req.email] = "sent";
+    results[realEmail] = "sent";
   } catch (e) {
     console.error("inspection confirmation failed", e);
-    results[req.email] = "failed";
+    results[realEmail] = "failed";
   }
 
   // Homeowner text confirmation. Only when the number gave an explicit

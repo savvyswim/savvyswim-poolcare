@@ -67,6 +67,19 @@ export const Route = createFileRoute("/api/public/hooks/retry-crm-forwards")({
               if (res.forwarded) recovered++;
             }
           } catch (err) {
+            if (err instanceof Error && err.message === "Request not found") {
+              // The lead was deleted or merged, so it can never be sent.
+              // Retire the row so it stops taking batch slots.
+              await supabaseAdmin
+                .from("ss_webhook_deliveries")
+                .update({
+                  outcome: "abandoned",
+                  attempts: MAX_ATTEMPTS,
+                  last_attempt_at: new Date().toISOString(),
+                })
+                .eq("id", row.id);
+              continue;
+            }
             console.error("[retry-crm-forwards] retry threw", err);
           }
         }
