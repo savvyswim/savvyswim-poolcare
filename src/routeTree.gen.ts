@@ -13,6 +13,7 @@ import { Route as WeeklyPoolServiceRouteImport } from './routes/weekly-pool-serv
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SurveyRouteImport } from './routes/survey'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
 import { Route as ScheduleRouteImport } from './routes/schedule'
@@ -93,6 +94,11 @@ const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveyRoute = SurveyRouteImport.update({
+  id: '/survey',
+  path: '/survey',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -438,6 +444,7 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
+  '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
@@ -504,6 +511,7 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
+  '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
@@ -572,6 +580,7 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/services': typeof ServicesRoute
+  '/survey': typeof SurveyRoute
   '/terms': typeof TermsRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/thank-you': typeof ThankYouRoute
@@ -641,6 +650,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/schedule-qr'
     | '/services'
+    | '/survey'
     | '/terms'
     | '/terms-and-conditions'
     | '/thank-you'
@@ -707,6 +717,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/schedule-qr'
     | '/services'
+    | '/survey'
     | '/terms'
     | '/terms-and-conditions'
     | '/thank-you'
@@ -774,6 +785,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/schedule-qr'
     | '/services'
+    | '/survey'
     | '/terms'
     | '/terms-and-conditions'
     | '/thank-you'
@@ -842,6 +854,7 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   ScheduleQrRoute: typeof ScheduleQrRoute
   ServicesRoute: typeof ServicesRoute
+  SurveyRoute: typeof SurveyRoute
   TermsRoute: typeof TermsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   ThankYouRoute: typeof ThankYouRoute
@@ -910,6 +923,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/survey': {
+      id: '/survey'
+      path: '/survey'
+      fullPath: '/survey'
+      preLoaderRoute: typeof SurveyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -1400,6 +1420,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   ScheduleQrRoute: ScheduleQrRoute,
   ServicesRoute: ServicesRoute,
+  SurveyRoute: SurveyRoute,
   TermsRoute: TermsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   ThankYouRoute: ThankYouRoute,
