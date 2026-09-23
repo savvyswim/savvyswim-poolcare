@@ -114,12 +114,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://savvyswim.app" },
+      // Fonts must never hold up the first paint: fetch them as a low priority
+      // sheet, then a tiny inline script promotes them to screen styles.
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap",
+        href: FONT_CSS,
+        media: "print",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onLoad: "this.media='all'" as any,
+        "data-font-sheet": "1",
       },
     ],
-    scripts: [{ type: "application/ld+json", children: SITE_JSONLD }],
+    scripts: [
+      { type: "application/ld+json", children: SITE_JSONLD },
+      { children: FONT_SWAP_SCRIPT },
+    ],
 
   }),
   shellComponent: RootShell,
