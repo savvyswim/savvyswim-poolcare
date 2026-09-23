@@ -9,14 +9,23 @@ import { SERVICES } from "@/components/LeadForm";
  */
 const LeadForm = lazy(() => import("@/components/LeadForm"));
 
+export type LeadPrefill = {
+  name?: string | undefined;
+  phone?: string | undefined;
+  email?: string | undefined;
+  address?: string | undefined;
+};
+
 export default function InlineLeadForm({
   cta,
   source,
   submitLabel = "Request my quote",
+  prefill,
 }: {
   cta: string;
   source: string;
   submitLabel?: string;
+  prefill?: LeadPrefill | undefined;
 }) {
   const openedAt = useRef(Date.now());
   const navigate = useNavigate();
@@ -34,9 +43,11 @@ export default function InlineLeadForm({
         source={source}
         submitLabel={submitLabel}
         openedAt={openedAt.current}
+        prefill={prefill}
         onCancel={() => {
           openedAt.current = Date.now();
         }}
+
         onDone={(summary) => {
           void navigate({
             to: "/thank-you",
