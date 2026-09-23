@@ -229,12 +229,21 @@ export function CallButton({
   location,
   className = "",
   hidePhoneTextOnNarrowDesktop = false,
+  hidePhoneTextOnMobile = false,
 }: {
   location: string;
   className?: string;
   /** Hide the number between 1024px and 1280px so the menu has room. */
   hidePhoneTextOnNarrowDesktop?: boolean;
+  /** Hide the number on the narrowest phones so the CTA fits. */
+  hidePhoneTextOnMobile?: boolean;
 }) {
+  const textClass = [
+    hidePhoneTextOnMobile ? "hidden xs:inline" : "",
+    hidePhoneTextOnNarrowDesktop ? "lg:hidden 2xl:inline" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
     <a
       href={PHONE_HREF}
@@ -244,7 +253,7 @@ export function CallButton({
       className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground transition hover:text-primary ${className}`}
     >
       <Phone className="h-4 w-4 shrink-0 text-amber-brand" aria-hidden="true" />
-      <span className={hidePhoneTextOnNarrowDesktop ? "lg:hidden 2xl:inline" : ""}>{PHONE_VANITY}</span>
+      <span className={textClass}>{PHONE_VANITY}</span>
     </a>
   );
 }
