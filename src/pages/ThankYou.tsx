@@ -61,7 +61,13 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
         <h1 className="mt-3 font-display text-4xl uppercase leading-[0.92] text-[#8E1F2C] sm:text-6xl">
           You&apos;re on the board
         </h1>
-        <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-[#2a1013]/80">
+
+        {/* Pick the consultation day and window first, same day while it is morning. */}
+        {reference ? (
+          <ConsultationPicker reference={reference} existingWindow={time} topPlacement />
+        ) : null}
+
+        <p className="mt-8 max-w-xl text-[16px] leading-relaxed text-[#2a1013]/80">
           Thank you. Your request is in front of our dispatch team.{" "}
           {when ? (
             <>
