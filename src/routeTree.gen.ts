@@ -43,6 +43,7 @@ import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
+import { Route as AdminWebsiteToAppRouteImport } from './routes/admin/website-to-app'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
 import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
@@ -251,6 +252,11 @@ const AppSplatRoute = AppSplatRouteImport.update({
   id: '/$',
   path: '/$',
   getParentRoute: () => AppRoute,
+} as any)
+const AdminWebsiteToAppRoute = AdminWebsiteToAppRouteImport.update({
+  id: '/admin/website-to-app',
+  path: '/admin/website-to-app',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   id: '/admin/webhook-health',
@@ -504,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -577,6 +584,7 @@ export interface FileRoutesByTo {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -652,6 +660,7 @@ export interface FileRoutesById {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -728,6 +737,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -801,6 +811,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -875,6 +886,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -949,6 +961,7 @@ export interface RootRouteChildren {
   AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
+  AdminWebsiteToAppRoute: typeof AdminWebsiteToAppRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
@@ -1215,6 +1228,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/$'
       preLoaderRoute: typeof AppSplatRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/admin/website-to-app': {
+      id: '/admin/website-to-app'
+      path: '/admin/website-to-app'
+      fullPath: '/admin/website-to-app'
+      preLoaderRoute: typeof AdminWebsiteToAppRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/webhook-health': {
       id: '/admin/webhook-health'
@@ -1564,6 +1584,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPoolMapRoute: AdminPoolMapRoute,
   AdminReviewsRoute: AdminReviewsRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
+  AdminWebsiteToAppRoute: AdminWebsiteToAppRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
