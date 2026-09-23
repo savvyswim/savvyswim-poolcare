@@ -207,7 +207,9 @@ export async function sendInspectionNotifications(
         reply_to: REPLY_TO_ADDRESS,
         subject: isWaterTest
           ? `We got your water test request (${req.reference_number})`
-          : `We got your inspection request (${req.reference_number})`,
+          : isBooking && dayLabel
+            ? `Your pool inspection request for ${dayLabel} (${req.reference_number})`
+            : `We got your inspection request (${req.reference_number})`,
         html: `<div style="background:#F4EFE3;padding:24px 0;font-family:'Helvetica Neue',Arial,sans-serif;">
   <div style="max-width:560px;margin:0 auto;background:#FFFFFF;border:1px solid #E4DCCB;padding:32px 28px;">
     <p style="font-size:11px;letter-spacing:0.18em;color:#8E1F2C;margin:0 0 12px;">SAVVY SWIM · POOL CARE</p>
