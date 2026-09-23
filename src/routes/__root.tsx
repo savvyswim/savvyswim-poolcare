@@ -166,7 +166,7 @@ function RootComponent() {
   // Ad landing page and survey stay bare: no popups, no cookie bar, no tabs.
   const isBareRoute = pathname === "/offer" || pathname === "/survey";
   // Keep the marketing offer off staff/customer tooling.
-  const showOffer = !isBareRoute && !/^\/(admin|portal|app|auth)(\/|$)/.test(pathname);
+  const showOffer = !isBareRoute && !/^\/(admin|portal|app|auth|thank-you)(\/|$)/.test(pathname);
 
   // First-touch campaign capture (utm_*, ?src= codes, gclid/fbclid) so every
   // lead attributes back to the campaign that produced it.
