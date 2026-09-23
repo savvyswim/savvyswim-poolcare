@@ -138,30 +138,55 @@ export function buildSmsHref(phoneE164: string, message = POOL_SMS_TEMPLATE): st
 export function trackContactClick(eventType: ContactEventType, placement: string) {
   try {
     const a = getAttribution();
+    const row = {
+      event_type: eventType,
+      placement,
+      page_path: window.location.pathname,
+      referrer: document.referrer || null,
+      session_id: getSessionId(),
+      user_agent: navigator.userAgent,
+      campaign_id: a.campaignId,
+      utm_source: a.utmSource,
+      utm_medium: a.utmMedium,
+      utm_campaign: a.utmCampaign,
+      utm_term: a.utmTerm,
+      utm_content: a.utmContent,
+      landing_page: a.landingPage,
+    };
     void import("@/integrations/supabase/client")
-      .then(({ supabase }) => supabase
-      .from("contact_events")
-      .insert({
-        event_type: eventType,
-        placement,
-        page_path: window.location.pathname,
-        referrer: document.referrer || null,
-        session_id: getSessionId(),
-        user_agent: navigator.userAgent,
-        campaign_id: a.campaignId,
-        utm_source: a.utmSource,
-        utm_medium: a.utmMedium,
-        utm_campaign: a.utmCampaign,
-        utm_term: a.utmTerm,
-        utm_content: a.utmContent,
-        landing_page: a.landingPage,
-      }))
+      .then(({ supabase }) => supabase.from("contact_events").insert(row).select("id").single())
       .then((res) => {
-        if (res?.error) console.warn("contact event not logged", res.error.message);
+        if (res?.error) {
+          console.warn("contact event not logged", res.error.message);
+          return;
+        }
+        const id = res?.data?.id;
+        if (!id) return;
+        // Hand the same tap to the SavvySwim app so it never lives only here.
+        void import("./contact-tap.functions").then(({ reportContactTap }) =>
+          reportContactTap({
+            data: {
+              id,
+              event_type: eventType,
+              placement,
+              page_path: row.page_path,
+              session_id: row.session_id,
+              campaign_id: row.campaign_id,
+              utm_source: row.utm_source,
+              utm_medium: row.utm_medium,
+              utm_campaign: row.utm_campaign,
+              utm_term: row.utm_term,
+              utm_content: row.utm_content,
+              referrer: row.referrer,
+              landing_page: row.landing_page,
+            },
+          }).catch(() => undefined),
+        );
       });
   } catch (e) {
     console.warn("contact event not logged", e);
   }
 }
+
 
 export { getSessionId };

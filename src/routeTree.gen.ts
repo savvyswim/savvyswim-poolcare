@@ -43,6 +43,7 @@ import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as ReviewTokenRouteImport } from './routes/review/$token'
 import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
 import { Route as AppSplatRouteImport } from './routes/app.$'
+import { Route as AdminWebsiteToAppRouteImport } from './routes/admin/website-to-app'
 import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
 import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
 import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
@@ -72,6 +73,7 @@ import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
 import { Route as ApiPublicHooksSurveyFollowupsRouteImport } from './routes/api/public/hooks/survey-followups'
 import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/public/hooks/smoke-alert'
+import { Route as ApiPublicHooksRetryCrmForwardsRouteImport } from './routes/api/public/hooks/retry-crm-forwards'
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
 import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
@@ -251,6 +253,11 @@ const AppSplatRoute = AppSplatRouteImport.update({
   path: '/$',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminWebsiteToAppRoute = AdminWebsiteToAppRouteImport.update({
+  id: '/admin/website-to-app',
+  path: '/admin/website-to-app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
   id: '/admin/webhook-health',
   path: '/admin/webhook-health',
@@ -404,6 +411,12 @@ const ApiPublicHooksSmokeAlertRoute =
     path: '/api/public/hooks/smoke-alert',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRetryCrmForwardsRoute =
+  ApiPublicHooksRetryCrmForwardsRouteImport.update({
+    id: '/api/public/hooks/retry-crm-forwards',
+    path: '/api/public/hooks/retry-crm-forwards',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksLowStockWatchRoute =
   ApiPublicHooksLowStockWatchRouteImport.update({
     id: '/api/public/hooks/low-stock-watch',
@@ -497,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -516,6 +530,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/retry-crm-forwards': typeof ApiPublicHooksRetryCrmForwardsRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
@@ -569,6 +584,7 @@ export interface FileRoutesByTo {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -588,6 +604,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/retry-crm-forwards': typeof ApiPublicHooksRetryCrmForwardsRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
@@ -643,6 +660,7 @@ export interface FileRoutesById {
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/webhook-health': typeof AdminWebhookHealthRoute
+  '/admin/website-to-app': typeof AdminWebsiteToAppRoute
   '/app/$': typeof AppSplatRoute
   '/quote/$token': typeof QuoteTokenRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -662,6 +680,7 @@ export interface FileRoutesById {
   '/api/public/hooks/failure-rate-watch': typeof ApiPublicHooksFailureRateWatchRoute
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
+  '/api/public/hooks/retry-crm-forwards': typeof ApiPublicHooksRetryCrmForwardsRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
   '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
@@ -718,6 +737,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -737,6 +757,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/retry-crm-forwards'
     | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
@@ -790,6 +811,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -809,6 +831,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/retry-crm-forwards'
     | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
@@ -863,6 +886,7 @@ export interface FileRouteTypes {
     | '/admin/pool-map'
     | '/admin/reviews'
     | '/admin/webhook-health'
+    | '/admin/website-to-app'
     | '/app/$'
     | '/quote/$token'
     | '/review/$token'
@@ -882,6 +906,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/failure-rate-watch'
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
+    | '/api/public/hooks/retry-crm-forwards'
     | '/api/public/hooks/smoke-alert'
     | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
@@ -936,6 +961,7 @@ export interface RootRouteChildren {
   AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminWebhookHealthRoute: typeof AdminWebhookHealthRoute
+  AdminWebsiteToAppRoute: typeof AdminWebsiteToAppRoute
   QuoteTokenRoute: typeof QuoteTokenRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   SignTokenRoute: typeof SignTokenRoute
@@ -952,6 +978,7 @@ export interface RootRouteChildren {
   ApiPublicHooksFailureRateWatchRoute: typeof ApiPublicHooksFailureRateWatchRoute
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
+  ApiPublicHooksRetryCrmForwardsRoute: typeof ApiPublicHooksRetryCrmForwardsRoute
   ApiPublicHooksSmokeAlertRoute: typeof ApiPublicHooksSmokeAlertRoute
   ApiPublicHooksSurveyFollowupsRoute: typeof ApiPublicHooksSurveyFollowupsRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
@@ -1202,6 +1229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSplatRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin/website-to-app': {
+      id: '/admin/website-to-app'
+      path: '/admin/website-to-app'
+      fullPath: '/admin/website-to-app'
+      preLoaderRoute: typeof AdminWebsiteToAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/webhook-health': {
       id: '/admin/webhook-health'
       path: '/admin/webhook-health'
@@ -1405,6 +1439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSmokeAlertRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/retry-crm-forwards': {
+      id: '/api/public/hooks/retry-crm-forwards'
+      path: '/api/public/hooks/retry-crm-forwards'
+      fullPath: '/api/public/hooks/retry-crm-forwards'
+      preLoaderRoute: typeof ApiPublicHooksRetryCrmForwardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/low-stock-watch': {
       id: '/api/public/hooks/low-stock-watch'
       path: '/api/public/hooks/low-stock-watch'
@@ -1543,6 +1584,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPoolMapRoute: AdminPoolMapRoute,
   AdminReviewsRoute: AdminReviewsRoute,
   AdminWebhookHealthRoute: AdminWebhookHealthRoute,
+  AdminWebsiteToAppRoute: AdminWebsiteToAppRoute,
   QuoteTokenRoute: QuoteTokenRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   SignTokenRoute: SignTokenRoute,
@@ -1560,6 +1602,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksFailureRateWatchRoute: ApiPublicHooksFailureRateWatchRoute,
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
+  ApiPublicHooksRetryCrmForwardsRoute: ApiPublicHooksRetryCrmForwardsRoute,
   ApiPublicHooksSmokeAlertRoute: ApiPublicHooksSmokeAlertRoute,
   ApiPublicHooksSurveyFollowupsRoute: ApiPublicHooksSurveyFollowupsRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
