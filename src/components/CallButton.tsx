@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Phone, MessageSquare, Copy, Check, CalendarClock, Video, Globe } from "lucide-react";
 import { PHONE_E164, PHONE_HREF, PHONE_PLAIN, PHONE_VANITY } from "@/lib/contact-info";
 import { trackContactClick } from "@/lib/contactTracking";
+import { goToLead } from "@/lib/site-analytics";
 
 /**
  * Tap-to-call controls.
