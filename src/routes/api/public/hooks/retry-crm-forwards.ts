@@ -73,7 +73,7 @@ export const Route = createFileRoute("/api/public/hooks/retry-crm-forwards")({
               await supabaseAdmin
                 .from("ss_webhook_deliveries")
                 .update({
-                  outcome: "abandoned",
+                  outcome: "skipped",
                   attempts: MAX_ATTEMPTS,
                   last_attempt_at: new Date().toISOString(),
                 })
