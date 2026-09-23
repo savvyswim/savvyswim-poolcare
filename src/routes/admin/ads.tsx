@@ -125,16 +125,31 @@ function ChannelTable({ rows }: { rows: AdsChannelRow[] }) {
               {open === r.key ? (
                 <tr className="border-b border-foreground/10 bg-foreground/[0.02]">
                   <td colSpan={6} className="px-4 py-4">
-                    <ul className="space-y-2 text-[13px]">
+                    <ul className="space-y-3 text-[13px]">
                       {r.campaigns.map((c) => (
-                        <li key={c.key} className="flex flex-wrap items-center gap-x-5 gap-y-1">
-                          <span className="font-semibold">{c.key}</span>
-                          <span className="text-foreground/60">{c.visits} visits</span>
-                          <span className="text-foreground/60">{c.leads} leads</span>
-                          <span className="text-foreground/60">{c.booked} scheduled</span>
-                          <span className="text-foreground/50">
-                            {c.visits ? `${c.leadRate}% visit to lead` : ""}
-                          </span>
+                        <li key={c.key}>
+                          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+                            <span className="font-semibold">{c.key}</span>
+                            <span className="text-foreground/60">{c.visits} visits</span>
+                            <span className="text-foreground/60">{c.leads} leads</span>
+                            <span className="text-foreground/60">{c.booked} scheduled</span>
+                            <span className="text-foreground/50">
+                              {c.visits ? `${c.leadRate}% visit to lead` : ""}
+                            </span>
+                          </div>
+                          <ul className="mt-1 ml-4 space-y-1 border-l border-foreground/15 pl-4 text-[12px] text-foreground/60">
+                            {c.adGroups.map((g) => (
+                              <li key={g.key} className="flex flex-wrap items-center gap-x-4">
+                                <span className="font-medium text-foreground/80">{g.key}</span>
+                                <span>{g.visits} visits</span>
+                                <span>{g.leads} leads</span>
+                                <span>{g.booked} scheduled</span>
+                                <span className="text-foreground/45">
+                                  {g.leads ? `${g.bookRate}% lead to job` : ""}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
                         </li>
                       ))}
                     </ul>
