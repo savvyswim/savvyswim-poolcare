@@ -301,10 +301,25 @@ export default function Survey() {
                       })}
                       {current.kind === "multi" ? (
                         <p className="pt-1 text-[11px] text-[#2a1013]/55">
-                          Pick up to {current.maxPicks ?? 2}. Tap again to unselect.
+                          {current.maxPicks
+                            ? `Pick up to ${current.maxPicks}. Tap again to unselect.`
+                            : "Pick as many as you like. Tap again to unselect."}
                         </p>
                       ) : null}
+                      {current.otherOption &&
+                      (Array.isArray(answers[current.id])
+                        ? (answers[current.id] as string[]).includes(current.otherOption)
+                        : answers[current.id] === current.otherOption) ? (
+                        <input
+                          type="text"
+                          value={(answers[otherKey(current.id)] as string) ?? ""}
+                          onChange={(e) => setAnswer(otherKey(current.id), e.target.value)}
+                          placeholder={current.otherPlaceholder ?? ""}
+                          className={cn(FIELD, "mt-2")}
+                        />
+                      ) : null}
                     </div>
+
                   )}
 
                   {errors[current.id] ? (
