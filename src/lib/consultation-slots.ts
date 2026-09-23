@@ -2,18 +2,18 @@
  * Consultation day and time options offered on the thank you page.
  *
  * Everything is worked out in Dallas time so the visitor and our office always
- * see the same day. Sunday is closed, Saturday runs short hours, and a same day
- * visit is only offered while it is still morning here, with at least a two
- * hour head start for the crew.
+ * see the same day. We offer the next seven days, Monday to Friday only, with
+ * three arrival times, and a same day visit while a time is still far enough
+ * out for the crew to get there.
  */
 
 export const CONSULT_TZ = "America/Chicago";
 
-/** Latest local hour at which a same day request is still accepted. */
-export const SAME_DAY_CUTOFF_HOUR = 12;
-
 /** Head start the crew needs before the start of a slot. */
 const LEAD_HOURS = 2;
+
+/** How many calendar days ahead the picker looks. */
+const WINDOW_DAYS = 7;
 
 export type ConsultSlot = {
   id: string;
@@ -23,15 +23,10 @@ export type ConsultSlot = {
   start: number;
 };
 
-const WEEKDAY_SLOTS: ConsultSlot[] = [
-  { id: "morning", label: "Morning", detail: "8:00 AM to 11:00 AM", start: 8 },
-  { id: "midday", label: "Midday", detail: "11:00 AM to 2:00 PM", start: 11 },
-  { id: "afternoon", label: "Afternoon", detail: "2:00 PM to 6:00 PM", start: 14 },
-];
-
-const SATURDAY_SLOTS: ConsultSlot[] = [
-  { id: "morning", label: "Morning", detail: "9:00 AM to 11:00 AM", start: 9 },
-  { id: "midday", label: "Midday", detail: "11:00 AM to 2:00 PM", start: 11 },
+const START_TIMES: ConsultSlot[] = [
+  { id: "7am", label: "7:00 AM", detail: "Early start", start: 7 },
+  { id: "8am", label: "8:00 AM", detail: "First route", start: 8 },
+  { id: "9am", label: "9:00 AM", detail: "Mid morning", start: 9 },
 ];
 
 export type ConsultDay = {
@@ -70,26 +65,24 @@ export function localNow(now: Date = new Date()): LocalNow {
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 /**
- * The days and windows a visitor may choose from, starting with today when a
- * same day visit is still on the table.
+ * The weekdays and arrival times a visitor may choose from within the next
+ * seven days, starting with today when a same day visit is still on the table.
  */
-export function consultationDays(now: Date = new Date(), howMany = 6): ConsultDay[] {
+export function consultationDays(now: Date = new Date()): ConsultDay[] {
   const here = localNow(now);
   const base = Date.UTC(here.year, here.month - 1, here.day);
   const days: ConsultDay[] = [];
 
-  for (let offset = 0; days.length < howMany && offset < 21; offset += 1) {
+  for (let offset = 0; offset < WINDOW_DAYS; offset += 1) {
     const d = new Date(base + offset * 86_400_000);
     const weekdayIndex = d.getUTCDay();
-    if (weekdayIndex === 0) continue; // Sunday, closed
+    if (weekdayIndex === 0 || weekdayIndex === 6) continue; // weekend, no consultations
 
-    const all = weekdayIndex === 6 ? SATURDAY_SLOTS : WEEKDAY_SLOTS;
     const isToday = offset === 0;
-
-    // Same day only while it is still morning here, and only for windows the
-    // crew can still reach in time.
-    if (isToday && here.hour >= SAME_DAY_CUTOFF_HOUR) continue;
-    const slots = isToday ? all.filter((s) => s.start >= here.hour + LEAD_HOURS) : all;
+    // Today only counts while a start time is still far enough out for the crew.
+    const slots = isToday
+      ? START_TIMES.filter((s) => s.start >= here.hour + LEAD_HOURS)
+      : START_TIMES;
     if (slots.length === 0) continue;
 
     days.push({
@@ -104,13 +97,13 @@ export function consultationDays(now: Date = new Date(), howMany = 6): ConsultDa
   return days;
 }
 
-/** Check a picked day and window against the options we actually offered. */
+/** Check a picked day and time against the options we actually offered. */
 export function findConsultChoice(
   date: string,
   slotId: string,
   now: Date = new Date(),
 ): { day: ConsultDay; slot: ConsultSlot } | null {
-  const day = consultationDays(now, 8).find((d) => d.date === date);
+  const day = consultationDays(now).find((d) => d.date === date);
   if (!day) return null;
   const slot = day.slots.find((s) => s.id === slotId);
   if (!slot) return null;
