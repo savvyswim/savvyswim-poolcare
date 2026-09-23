@@ -7,6 +7,7 @@
  */
 import { Link } from "@tanstack/react-router";
 import { CallLink } from "@/components/CallButton";
+import ConsultationPicker from "@/components/ConsultationPicker";
 import { PHONE_VANITY_WITH_DIGITS } from "@/lib/contact-info";
 import ThankYouCard from "@/components/ThankYouCard";
 
