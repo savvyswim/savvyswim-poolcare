@@ -79,13 +79,27 @@ export async function saveConsultationSlot(
     })
     .eq("id", req.id);
 
+  // Put the free consultation on the route for that day. A failure here never
+  // blocks the customer, the office alert below reports it instead.
+  const { scheduleVisitFromRequest } = await import("@/lib/schedule-visit.server");
+  const scheduled = await scheduleVisitFromRequest({
+    requestId: req.id,
+    date: input.date,
+    window: input.window,
+    note: input.sameDay ? "Same day request, call within the hour" : null,
+  });
+  const scheduleNote = scheduled.ok
+    ? "Yes, on the schedule for that day"
+    : `No, could not be placed (${scheduled.message})`;
+
   const { logInspectionEvents } = await import("@/lib/inspection-events.server");
   await logInspectionEvents(req.id, [
     {
       eventType: "status_change",
       channel: "web",
       outcome: "ok",
-      detail: `Customer picked ${input.prettyDate}, ${input.window}${input.sameDay ? " (same day request)" : ""}`,
+      statusTo: scheduled.ok ? "scheduled" : null,
+      detail: `Customer picked ${input.prettyDate}, ${input.window}${input.sameDay ? " (same day request)" : ""}. Visit on schedule: ${scheduleNote}`,
     },
   ]);
 
@@ -108,6 +122,7 @@ export async function saveConsultationSlot(
       ["Day", input.prettyDate],
       ["Window", input.window],
       ["Same day", input.sameDay ? "Yes, asked for today" : "No"],
+      ["Visit on schedule", scheduleNote],
     ];
     const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:#2b2b2b;">
   <h2 style="color:#8E1F2C;margin:0 0 12px;">Consultation time picked${input.sameDay ? " · SAME DAY" : ""}</h2>
