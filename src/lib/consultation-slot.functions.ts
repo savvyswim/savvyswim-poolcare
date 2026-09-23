@@ -44,7 +44,7 @@ export const setConsultationSlot = createServerFn({ method: "POST" })
     return {
       ok: true as const,
       prettyDate,
-      window: `${choice.slot.label}, ${choice.slot.detail}`,
+      window: `${choice.slot.label} arrival`,
       sameDay: choice.day.sameDay,
     };
   });
