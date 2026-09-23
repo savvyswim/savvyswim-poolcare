@@ -47,11 +47,13 @@ import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-h
 import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
 import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
 import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
+import { Route as AdminListingRouteImport } from './routes/admin/listing'
 import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
 import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
 import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
 import { Route as AdminCrmRouteImport } from './routes/admin/crm'
 import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
+import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
 import { Route as AdminAdsRouteImport } from './routes/admin/ads'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -269,6 +271,11 @@ const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
   path: '/admin/not-found',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminListingRoute = AdminListingRouteImport.update({
+  id: '/admin/listing',
+  path: '/admin/listing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
   id: '/admin/leads',
   path: '/admin/leads',
@@ -292,6 +299,11 @@ const AdminCrmRoute = AdminCrmRouteImport.update({
 const AdminCanaryRoute = AdminCanaryRouteImport.update({
   id: '/admin/canary',
   path: '/admin/canary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/admin/bookings',
+  path: '/admin/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAdsRoute = AdminAdsRouteImport.update({
@@ -474,11 +486,13 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -544,11 +558,13 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -616,11 +632,13 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
   '/admin/lead-sync': typeof AdminLeadSyncRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/listing': typeof AdminListingRoute
   '/admin/not-found': typeof AdminNotFoundRoute
   '/admin/pool-map': typeof AdminPoolMapRoute
   '/admin/reviews': typeof AdminReviewsRoute
@@ -689,11 +707,13 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
+    | '/admin/bookings'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -759,11 +779,13 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
+    | '/admin/bookings'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -830,11 +852,13 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/ads'
+    | '/admin/bookings'
     | '/admin/canary'
     | '/admin/crm'
     | '/admin/lead-sources'
     | '/admin/lead-sync'
     | '/admin/leads'
+    | '/admin/listing'
     | '/admin/not-found'
     | '/admin/pool-map'
     | '/admin/reviews'
@@ -901,11 +925,13 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAdsRoute: typeof AdminAdsRoute
+  AdminBookingsRoute: typeof AdminBookingsRoute
   AdminCanaryRoute: typeof AdminCanaryRoute
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
   AdminLeadSyncRoute: typeof AdminLeadSyncRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminListingRoute: typeof AdminListingRoute
   AdminNotFoundRoute: typeof AdminNotFoundRoute
   AdminPoolMapRoute: typeof AdminPoolMapRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
@@ -1204,6 +1230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNotFoundRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/listing': {
+      id: '/admin/listing'
+      path: '/admin/listing'
+      fullPath: '/admin/listing'
+      preLoaderRoute: typeof AdminListingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/leads': {
       id: '/admin/leads'
       path: '/admin/leads'
@@ -1237,6 +1270,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/canary'
       fullPath: '/admin/canary'
       preLoaderRoute: typeof AdminCanaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/admin/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/ads': {
@@ -1492,11 +1532,13 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAdsRoute: AdminAdsRoute,
+  AdminBookingsRoute: AdminBookingsRoute,
   AdminCanaryRoute: AdminCanaryRoute,
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
   AdminLeadSyncRoute: AdminLeadSyncRoute,
   AdminLeadsRoute: AdminLeadsRoute,
+  AdminListingRoute: AdminListingRoute,
   AdminNotFoundRoute: AdminNotFoundRoute,
   AdminPoolMapRoute: AdminPoolMapRoute,
   AdminReviewsRoute: AdminReviewsRoute,

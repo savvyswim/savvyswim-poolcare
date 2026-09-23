@@ -52,7 +52,11 @@ export async function sendInspectionNotifications(
   if (!req) throw new Error("Request not found");
 
   const isWaterTest = (req.lead_type ?? "") === "water_test";
-  const kind = isWaterTest ? "water test" : "free inspection";
+  // Requests that came from the booking or schedule page are appointment
+  // requests, so the office alert says so and leads with the date.
+  const isBooking =
+    !isWaterTest && /book|schedule|appointment/i.test(`${req.source ?? ""} ${req.page_path ?? ""}`);
+  const kind = isWaterTest ? "water test" : isBooking ? "booking" : "free inspection";
   // Where the form lived, so the office can triage city pages at a glance.
   const originLabel = (() => {
     const hay = `${req.source ?? ""} ${req.page_path ?? ""}`.toLowerCase();
@@ -87,7 +91,14 @@ export async function sendInspectionNotifications(
 
   const rows: [string, string][] = [
     ["Reference", req.reference_number],
-    ["Request", isWaterTest ? "Free water test" : "Free inspection / 3D quote"],
+    [
+      "Request",
+      isWaterTest
+        ? "Free water test"
+        : isBooking
+          ? "Booking request from the booking page"
+          : "Free inspection / 3D quote",
+    ],
     ["Name", req.full_name],
     ["Phone", req.phone],
     ["Email", req.email],
@@ -130,7 +141,7 @@ export async function sendInspectionNotifications(
           from: FROM_ADDRESS,
           sender_domain: SENDER_DOMAIN,
           reply_to: req.email,
-          subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
+          subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}, ${req.full_name} (${req.reference_number})`,
           html: officeHtml,
           text: officeText,
           label: "inspection-office-alert",
@@ -151,7 +162,7 @@ export async function sendInspectionNotifications(
   try {
     const { sendLeadToGmailInbox, GMAIL_LEAD_INBOX } = await import("./gmail-lead-inbox.server");
     const gmail = await sendLeadToGmailInbox({
-      subject: `New ${kind} request${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
+      subject: `New ${kind} request${isBooking && req.preferred_date ? ` for ${req.preferred_date}` : ""}${originLabel ? ` · ${originLabel}` : ""}: ${req.full_name} (${req.reference_number})`,
       text: officeText,
       replyTo: req.email,
     });

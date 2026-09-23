@@ -28,6 +28,8 @@ type Payload = {
   utm_source?: string | undefined;
   utm_medium?: string | undefined;
   utm_campaign?: string | undefined;
+  utm_content?: string | undefined;
+  utm_term?: string | undefined;
 };
 
 const ENDPOINT = "/api/public/events";
@@ -68,6 +70,8 @@ export function trackSiteEvent(event: SiteEventName, button?: string) {
     utm_source: params.get("utm_source")?.slice(0, 120) ?? undefined,
     utm_medium: params.get("utm_medium")?.slice(0, 120) ?? undefined,
     utm_campaign: params.get("utm_campaign")?.slice(0, 120) ?? undefined,
+    utm_content: params.get("utm_content")?.slice(0, 120) ?? undefined,
+    utm_term: params.get("utm_term")?.slice(0, 120) ?? undefined,
   });
   if (queue.length >= 10) {
     flush();

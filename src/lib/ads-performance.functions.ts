@@ -10,7 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export type AdsRange = "7d" | "30d" | "90d" | "all";
 
-export type AdsCampaignRow = {
+export type AdsMetricRow = {
   key: string;
   visits: number;
   leads: number;
@@ -19,7 +19,14 @@ export type AdsCampaignRow = {
   bookRate: number;
 };
 
-export type AdsChannelRow = AdsCampaignRow & {
+/** One ad group or single ad, read from the utm_content / utm_term tag. */
+export type AdsAdGroupRow = AdsMetricRow;
+
+export type AdsCampaignRow = AdsMetricRow & {
+  adGroups: AdsAdGroupRow[];
+};
+
+export type AdsChannelRow = AdsMetricRow & {
   campaigns: AdsCampaignRow[];
 };
 

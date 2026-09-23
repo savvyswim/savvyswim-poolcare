@@ -4447,8 +4447,10 @@ export type Database = {
           id: string
           page: string
           utm_campaign: string | null
+          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
           button?: string | null
@@ -4458,8 +4460,10 @@ export type Database = {
           id?: string
           page: string
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
           button?: string | null
@@ -4469,8 +4473,10 @@ export type Database = {
           id?: string
           page?: string
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
         }
         Relationships: []
       }
