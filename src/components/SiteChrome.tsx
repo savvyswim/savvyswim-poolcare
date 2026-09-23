@@ -1,5 +1,4 @@
 import InstagramLink from "@/components/InstagramLink";
-import InstagramProfileEmbed from "@/components/InstagramProfileEmbed";
 
 import { Waves } from "lucide-react";
 import { Link } from "@/lib/router-compat";
@@ -79,9 +78,6 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="border-t border-hairline py-10">
-      <div className="container-tight mb-8 flex justify-center sm:justify-start">
-        <InstagramProfileEmbed />
-      </div>
       <div className="container-tight flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground sm:flex-row">
 
         <div className="flex items-center gap-2">
