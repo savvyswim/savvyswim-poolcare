@@ -195,7 +195,7 @@ function RootComponent() {
             <Toaster />
             <Sonner />
             {!isBareRoute && <QuoteModal />}
-            {pathname !== "/" && pathname !== "/survey" && !isBareRoute && <WaterTestTab />}
+            {pathname !== "/" && pathname !== "/survey" && pathname !== "/thank-you" && !isBareRoute && <WaterTestTab />}
             {!isBareRoute && <ConsentBanner />}
             <MetaPixel />
             <PageViewTracker />
