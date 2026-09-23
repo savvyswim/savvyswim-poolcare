@@ -89,9 +89,16 @@ export const submitReview = createServerFn({ method: "POST" })
       return { ok: false, error: "Please add a little more detail." };
     }
 
-    const { error } = await (supabaseAdmin as unknown as {
+    const { data: inserted, error } = await (supabaseAdmin as unknown as {
       from: (t: string) => {
-        insert: (row: Record<string, unknown>) => Promise<{ error: { message: string } | null }>;
+        insert: (row: Record<string, unknown>) => {
+          select: (cols: string) => {
+            single: () => Promise<{
+              data: { id: string; created_at: string } | null;
+              error: { message: string } | null;
+            }>;
+          };
+        };
       };
     })
       .from(TABLE)
@@ -104,11 +111,34 @@ export const submitReview = createServerFn({ method: "POST" })
         page_path: data.page_path || null,
         status: "pending",
         source: "web",
-      });
+      })
+      .select("id, created_at")
+      .single();
 
     if (error) return { ok: false, error: "We could not save that review. Please try again." };
+
+    // Hand the review to the SavvySwim app. Never block the visitor on it,
+    // failures land in the delivery log and the retry job picks them up.
+    if (inserted?.id) {
+      try {
+        const { forwardReviewToCrm } = await import("./site-activity-forward.server");
+        await forwardReviewToCrm({
+          id: inserted.id,
+          rating: data.rating,
+          body,
+          author_name: name,
+          author_city: data.author_city ? clean(data.author_city) : null,
+          contact_email: data.contact_email || null,
+          page_path: data.page_path || null,
+          created_at: inserted.created_at,
+        });
+      } catch (err) {
+        console.error("review forward threw", err);
+      }
+    }
     return { ok: true };
   });
+
 
 /** Public: approved reviews for the home page. Featured first, then newest. */
 export const listApprovedReviews = createServerFn({ method: "GET" }).handler(
