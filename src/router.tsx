@@ -9,11 +9,13 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
-    // Route components are split automatically by TanStack Start. Fetch the
-    // matching chunk when a visitor shows intent, rather than on first paint.
-    defaultPreload: "intent",
-    defaultPreloadDelay: 120,
+    // Route components are split automatically by TanStack Start. Phones have
+    // no hover, so fetch the chunk for any link that scrolls into view. Page
+    // changes then feel instant on a phone.
+    defaultPreload: "viewport",
+    defaultPreloadDelay: 60,
     defaultPreloadStaleTime: 30_000,
+
   });
 
   return router;
