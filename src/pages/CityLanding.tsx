@@ -244,7 +244,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
                 </h2>
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {gallery.map((g) => (
-                    <img
+                    <Img
                       key={g.alt}
                       {...imgProps(g.photo, { sizes: "(min-width: 640px) 33vw, 100vw" })}
                       alt={g.alt}

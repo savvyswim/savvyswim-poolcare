@@ -180,7 +180,7 @@ const Index = () => {
                 {/* Photos ride under the wordmark on phones, beside it on desktop. */}
                 <div className="mt-7 -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 lg:hidden">
                   {HERO_PHOTOS.map((p, i) => (
-                    <img
+                    <Img
                       key={p.alt}
                       {...imgProps(p.photo, { sizes: "128px", priority: i === 0 })}
                       alt={p.alt}
@@ -221,7 +221,7 @@ const Index = () => {
 
               <div className="hidden grid-cols-3 gap-3 lg:grid lg:w-[27rem] xl:w-[32rem]">
                 {HERO_PHOTOS.map((p, i) => (
-                  <img
+                  <Img
                     key={p.alt}
                     {...imgProps(p.photo, { sizes: "11rem", priority: i === 0 })}
                     alt={p.alt}
