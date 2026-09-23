@@ -847,3 +847,14 @@
 .page-enter {
   animation: savvy-page-enter 0.32s ease-out both;
 }
+
+/* Phones: skip rendering work for sections that are still far down the page,
+   and keep the long marquee rows off the compositor until they are in view. */
+@media (max-width: 767px) {
+  main > section:nth-of-type(n + 3),
+  main > div > section:nth-of-type(n + 3) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+}
+
