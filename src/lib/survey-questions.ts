@@ -83,10 +83,22 @@ export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   {
     id: "frustration",
     label: "What frustrates you most about pool service, past or current?",
-    kind: "text",
+    kind: "multi",
     optional: true,
-    placeholder: "Tell us in your own words (optional)",
+    options: [
+      "Missed or skipped visits",
+      "Green or cloudy water",
+      "No communication or updates",
+      "Surprise charges",
+      "Damage or careless work",
+      "Hard to reach anyone",
+      "Nothing really",
+      "Other",
+    ],
+    otherOption: "Other",
+    otherPlaceholder: "Tell us in your own words (optional)",
   },
+
   {
     id: "filter_cleaning",
     label: "How often does your filter currently get cleaned?",
