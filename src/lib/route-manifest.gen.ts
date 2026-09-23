@@ -29,6 +29,7 @@ export const ROUTE_MANIFEST = [
   "/api/public/hooks/crm-appointment-status",
   "/api/public/hooks/crm-lead-update",
   "/api/public/hooks/crm-payment-status",
+  "/api/public/hooks/crm-traffic-daily",
   "/api/public/hooks/failure-rate-watch",
   "/api/public/hooks/health-watch",
   "/api/public/hooks/low-stock-watch",
