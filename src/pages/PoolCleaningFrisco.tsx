@@ -181,7 +181,7 @@ const FriscoPoolCleaning = () => {
               </div>
 
               <div className="lg:col-span-5">
-                <img
+                <Img
                   {...imgProps(photoNavyCabana, { priority: true, sizes: "(min-width: 1024px) 40vw, 100vw" })}
                   alt="Navy and white striped cabana umbrella beside a clean Frisco pool"
                   className="w-full rounded-sm border border-hairline object-cover aspect-[16/10] sm:aspect-[3/2] lg:aspect-[4/5]"
@@ -252,9 +252,9 @@ const FriscoPoolCleaning = () => {
               </ul>
             </div>
             <div className="grid grid-cols-2 gap-3 lg:col-span-6">
-              <img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Frisco backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline sm:mt-8" />
-              <img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <Img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Frisco backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <Img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline sm:mt-8" />
+              <Img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
               <div className="flex flex-col justify-center rounded-sm border border-hairline p-4 sm:mt-8 sm:p-5">
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Guarantee</div>
                 <p className="mt-2 text-[0.9rem] leading-relaxed">

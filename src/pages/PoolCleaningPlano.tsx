@@ -180,7 +180,7 @@ const PlanoPoolCleaning = () => {
               </div>
 
               <div className="lg:col-span-5">
-                <img
+                <Img
                   {...imgProps(photoNavyCabana, { priority: true, sizes: "(min-width: 1024px) 40vw, 100vw" })}
                   alt="Navy and white striped cabana umbrella beside a clean Plano pool"
                   className="w-full aspect-[4/5] object-cover rounded-sm border border-hairline"
@@ -251,9 +251,9 @@ const PlanoPoolCleaning = () => {
               </ul>
             </div>
             <div className="lg:col-span-6 grid grid-cols-2 gap-3">
-              <img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Plano backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
-              <img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
-              <img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <Img {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white striped loungers beside a Plano backyard pool" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
+              <Img {...imgProps(photoSavvyLetters, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Savvy Swim inflatable letters floating in clear pool water" className="w-full aspect-square object-cover rounded-sm border border-hairline mt-8" />
+              <Img {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 640px) 33vw, 100vw" })} alt="Red and white umbrellas above a serviced pool deck" className="w-full aspect-square object-cover rounded-sm border border-hairline" />
               <div className="border border-hairline rounded-sm p-5 flex flex-col justify-center mt-8">
                 <div className="font-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Guarantee</div>
                 <p className="mt-2 text-[0.9rem] leading-relaxed">

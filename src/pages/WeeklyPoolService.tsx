@@ -163,7 +163,7 @@ export default function WeeklyPoolService() {
                 </div>
               </div>
               <div className="lg:col-span-5">
-                <img
+                <Img
                   {...imgProps(photoWater, { priority: true, sizes: "(min-width: 1024px) 50vw, 100vw" })}
                   alt="Clear, balanced pool water after a weekly Savvy Swim service visit in Dallas–Fort Worth"
                   className="w-full h-[240px] sm:h-[320px] object-cover rounded-sm border border-hairline"
@@ -224,7 +224,7 @@ export default function WeeklyPoolService() {
                   </li>
                 ))}
               </ul>
-              <img
+              <Img
                 {...imgProps(photoSavvyRings, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Savvy Swim rings floating in a clean, freshly serviced backyard pool"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"
@@ -256,7 +256,7 @@ export default function WeeklyPoolService() {
                   </li>
                 ))}
               </ul>
-              <img
+              <Img
                 {...imgProps(photoRivieraLoungers, { sizes: "(min-width: 1024px) 50vw, 100vw" })}
                 alt="Striped loungers beside a weekly-serviced pool in Dallas–Fort Worth"
                 className="mt-8 w-full h-[220px] object-cover rounded-sm border border-hairline"

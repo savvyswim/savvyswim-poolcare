@@ -67,7 +67,7 @@ const OurWork = () => (
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PHOTOS.map((p) => (
             <div key={p.alt} className="overflow-hidden rounded-sm border border-hairline shadow-card">
-              <img
+              <Img
                 {...imgProps(p.photo, {
                   sizes: "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
                 })}

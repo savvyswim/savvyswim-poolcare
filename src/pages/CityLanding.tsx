@@ -135,7 +135,7 @@ export default function CityLanding({ area }: { area: ServiceArea }) {
               </div>
 
               <div className="lg:col-span-5">
-                <img
+                <Img
                   {...imgProps(photoNavyCabana, {
                     priority: true,
                     sizes: "(min-width: 1024px) 40vw, 100vw",

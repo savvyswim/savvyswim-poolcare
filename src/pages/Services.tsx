@@ -160,7 +160,7 @@ const Services = () => {
 
               <div className="lg:col-span-5">
                 <figure className="relative">
-                  <img
+                  <Img
                     {...imgProps(photoLifeguardChair, {
                       priority: true,
                       sizes: "(min-width: 1024px) 33vw, 100vw",
@@ -242,7 +242,7 @@ const Services = () => {
         <section className="perf-section border-y border-hairline bg-primary/[0.03] py-12 sm:py-20">
           <div className="container-tight grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-5">
-              <img
+              <Img
                 {...imgProps(photoRedUmbrellas, { sizes: "(min-width: 1024px) 40vw, 100vw" })}
                 alt="Red and white striped fringed umbrellas against a blue sky"
                 className="w-full aspect-[5/4] object-cover rounded-sm"
