@@ -89,6 +89,14 @@ export async function saveConsultationSlot(
     },
   ]);
 
+  // Push the new day and window to the CRM so its copy of the lead matches.
+  try {
+    const { forwardInspectionToCrm } = await import("@/lib/crm-lead-forward.server");
+    await forwardInspectionToCrm(req.id);
+  } catch (err) {
+    console.error("consultation slot CRM push failed", err);
+  }
+
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (apiKey) {
     const rows: [string, string][] = [
