@@ -57,7 +57,7 @@ const SITE_DESCRIPTION =
 const OG_IMAGE = "https://savvyswim.com/og-image.jpg";
 
 const FONT_CSS =
-  "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap";
+  "https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap";
 
 // Fallback for browsers that ignore the link onLoad attribute, and for the
 // case where the sheet is already cached when the script runs.

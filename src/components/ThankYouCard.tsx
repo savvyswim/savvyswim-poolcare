@@ -26,8 +26,8 @@ export default function ThankYouCard({ className = "" }: { className?: string })
         </span>
 
         <h3
-          className="mt-[3%] text-[12.5cqw] uppercase leading-[0.95] tracking-[0.005em]"
-          style={{ fontFamily: "'Anton', 'Oswald', Impact, sans-serif" }}
+          className="mt-[3%] whitespace-nowrap text-[11.5cqw] uppercase leading-[0.95] tracking-[0.005em]"
+          style={{ fontFamily: "'Anton', Impact, sans-serif", color: "#5A1418", fontWeight: 400 }}
         >
           Your pool is in
           <br />
