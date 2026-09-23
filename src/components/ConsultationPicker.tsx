@@ -1,8 +1,8 @@
 /**
  * Day and time picker shown on the thank you page.
  *
- * The customer has already sent the request, this lets them lock in when they
- * want us. Same day shows up on its own while it is still morning in Dallas.
+ * We ask first, then offer the next seven days, Monday to Friday, with three
+ * arrival times. Today only shows while a time is still far enough out.
  */
 import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -15,8 +15,11 @@ type Props = {
   existingWindow?: string | undefined;
 };
 
+type Step = "ask" | "pick" | "declined";
+
 export default function ConsultationPicker({ reference, existingWindow }: Props) {
   const days = useMemo<ConsultDay[]>(() => consultationDays(), []);
+  const [step, setStep] = useState<Step>("ask");
   const [dayDate, setDayDate] = useState<string>(days[0]?.date ?? "");
   const [slotId, setSlotId] = useState<string>("");
   const [busy, setBusy] = useState(false);
@@ -30,9 +33,13 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
 
   if (days.length === 0) return null;
 
+  const shell = (children: React.ReactNode) => (
+    <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">{children}</div>
+  );
+
   if (done) {
-    return (
-      <div className="mt-12 border border-[#1FA9BE]/40 bg-white p-6">
+    return shell(
+      <div className="border border-[#1FA9BE]/40 bg-white p-6">
         <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">
           {done.sameDay ? "Same day request sent" : "Consultation time saved"}
         </h2>
@@ -40,13 +47,64 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
           We have you down for <strong>{done.prettyDate}</strong>, {done.window}. A tech confirms by
           phone or text, and for a same day visit we call you within the hour.
         </p>
-      </div>
+      </div>,
+    );
+  }
+
+  if (step === "declined") {
+    return shell(
+      <div className="border border-[#8E1F2C]/25 bg-white p-6">
+        <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">No problem</h2>
+        <p className="mt-3 text-[15px] leading-relaxed text-[#2a1013]/80">
+          We will call you within one business day and set the day and time with you then. Changed
+          your mind?{" "}
+          <button
+            type="button"
+            onClick={() => setStep("pick")}
+            className="underline underline-offset-4"
+          >
+            Pick a day now
+          </button>
+          .
+        </p>
+      </div>,
+    );
+  }
+
+  if (step === "ask") {
+    return shell(
+      <>
+        <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">
+          Would you like to pick your consultation day now?
+        </h2>
+        <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#2a1013]/75">
+          {existingWindow
+            ? "You can lock in a day and arrival time, or leave it to us and we will call."
+            : "Choose a weekday and an arrival time, or leave it to us and we will call."}
+        </p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => setStep("pick")}
+            className="min-h-[52px] bg-[#8E1F2C] px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#F4EFE3]"
+          >
+            Yes, pick a day
+          </button>
+          <button
+            type="button"
+            onClick={() => setStep("declined")}
+            className="min-h-[52px] border border-[#8E1F2C]/30 bg-white px-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#8E1F2C]"
+          >
+            No, just call me
+          </button>
+        </div>
+      </>,
     );
   }
 
   const submit = async () => {
     if (!day || !slotId) {
-      setError("Pick a day and a time to finish.");
+      setError("Pick a day and an arrival time to finish.");
       return;
     }
     setBusy(true);
@@ -59,7 +117,7 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
         setError(
           res.reason === "not_found"
             ? "We could not match this request. Call 817-663-7665 and we will set the time with you."
-            : "That time just filled up. Pick another day or window.",
+            : "That time just filled up. Pick another day or time.",
         );
       }
     } catch {
@@ -71,14 +129,12 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
 
   const sameDayOpen = days[0]?.sameDay === true;
 
-  return (
-    <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">
+  return shell(
+    <>
       <h2 className="font-display text-2xl uppercase text-[#8E1F2C]">Pick your consultation</h2>
       <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#2a1013]/75">
-        {existingWindow
-          ? "Want a different day or time? Choose it here and we will use this instead."
-          : "Choose the day and window that suits you and we will build the route around it."}
-        {sameDayOpen ? " It is still morning, so you can even ask for today." : ""}
+        Weekdays, with a 7:00 AM, 8:00 AM or 9:00 AM arrival.
+        {sameDayOpen ? " There is still time today, so you can even ask for today." : ""}
       </p>
 
       <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-[#2a1013]/55">Day</p>
@@ -109,7 +165,7 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
       </div>
 
       <p className="mt-7 font-mono text-[11px] uppercase tracking-[0.25em] text-[#2a1013]/55">
-        Time
+        Arrival time
       </p>
       <div className="mt-3 grid gap-2 sm:grid-cols-3">
         {(day?.slots ?? []).map((s) => {
@@ -142,6 +198,6 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
       >
         {busy ? "Saving..." : day?.sameDay && slotId ? "Request this time today" : "Confirm this time"}
       </button>
-    </div>
+    </>,
   );
 }
