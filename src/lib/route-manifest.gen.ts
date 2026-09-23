@@ -71,6 +71,7 @@ export const ROUTE_MANIFEST = [
   "/review/$token",
   "/schedule",
   "/schedule-qr",
+  "/service-areas",
   "/services",
   "/sign/$token",
   "/survey",
