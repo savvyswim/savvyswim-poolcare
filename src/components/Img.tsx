@@ -5,7 +5,7 @@
  * screen can actually use. The intrinsic size is set so the page never jumps,
  * and the photo fades in once it has arrived instead of popping onto the page.
  */
-import { useState, type ImgHTMLAttributes } from "react";
+import { useEffect, useRef, useState, type ImgHTMLAttributes } from "react";
 import type { Photo } from "@/assets/photos";
 import { cn } from "@/lib/utils";
 
