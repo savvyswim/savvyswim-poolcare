@@ -8,7 +8,7 @@
  * Server-only: never import from a client-reachable module.
  */
 
-export type WebhookChannel = "lead" | "appointment" | "payment" | "ops";
+export type WebhookChannel = "lead" | "appointment" | "payment" | "ops" | "review" | "contact";
 export type WebhookOutcome = "success" | "failed" | "skipped";
 
 export type WebhookDeliveryEntry = {
