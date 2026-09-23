@@ -146,8 +146,10 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const href = useRouterState({ select: (s) => s.location.href });
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Ad landing page and survey stay bare: no popups, no cookie bar, no tabs.
+  const isBareRoute = pathname === "/offer" || pathname === "/survey";
   // Keep the marketing offer off staff/customer tooling.
-  const showOffer = !/^\/(admin|portal|app|auth|offer)(\/|$)/.test(pathname);
+  const showOffer = !isBareRoute && !/^\/(admin|portal|app|auth)(\/|$)/.test(pathname);
 
   // First-touch campaign capture (utm_*, ?src= codes, gclid/fbclid) so every
   // lead attributes back to the campaign that produced it.
@@ -170,9 +172,9 @@ function RootComponent() {
           <Suspense fallback={null}>
             <Toaster />
             <Sonner />
-            <QuoteModal />
-            {pathname !== "/" && pathname !== "/survey" && pathname !== "/offer" && <WaterTestTab />}
-            <ConsentBanner />
+            {!isBareRoute && <QuoteModal />}
+            {pathname !== "/" && !isBareRoute && <WaterTestTab />}
+            {!isBareRoute && <ConsentBanner />}
             <MetaPixel />
             <PageViewTracker />
             {showOffer && <SwimClubPromptHost />}

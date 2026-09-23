@@ -125,6 +125,16 @@ export default function ThankYou({ reference, date, time, kind, email }: ThankYo
           </ol>
         </div>
 
+        {/* Sign off */}
+        <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">
+          <p className="font-display text-2xl uppercase leading-tight text-[#8E1F2C] sm:text-3xl">
+            We look forward to serving you.
+          </p>
+          <p className="mt-3 font-mono text-[12px] uppercase tracking-[0.25em] text-[#1FA9BE]">
+            On duty, so you don&rsquo;t have to be.
+          </p>
+        </div>
+
         <div className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-[#8E1F2C]/20 pt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-[#8E1F2C]">
           <Link to="/">Back to home</Link>
           <Link to="/services">Our services</Link>
