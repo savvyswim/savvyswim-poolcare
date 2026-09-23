@@ -63,6 +63,7 @@ import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
 import { Route as AdminCrmSplatRouteImport } from './routes/admin/crm.$'
+import { Route as AdminBookingsIdRouteImport } from './routes/admin/bookings.$id'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -355,6 +356,11 @@ const AdminCrmSplatRoute = AdminCrmSplatRouteImport.update({
   path: '/$',
   getParentRoute: () => AdminCrmRoute,
 } as any)
+const AdminBookingsIdRoute = AdminBookingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminBookingsRoute,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -499,7 +505,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
-  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/bookings': typeof AdminBookingsRouteWithChildren
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -518,6 +524,7 @@ export interface FileRoutesByFullPath {
   '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/bookings/$id': typeof AdminBookingsIdRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -573,7 +580,7 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
-  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/bookings': typeof AdminBookingsRouteWithChildren
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -592,6 +599,7 @@ export interface FileRoutesByTo {
   '/$city': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/bookings/$id': typeof AdminBookingsIdRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -649,7 +657,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/ads': typeof AdminAdsRoute
-  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/bookings': typeof AdminBookingsRouteWithChildren
   '/admin/canary': typeof AdminCanaryRoute
   '/admin/crm': typeof AdminCrmRouteWithChildren
   '/admin/lead-sources': typeof AdminLeadSourcesRoute
@@ -668,6 +676,7 @@ export interface FileRoutesById {
   '/$city/': typeof CityIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/bookings/$id': typeof AdminBookingsIdRoute
   '/admin/crm/$': typeof AdminCrmSplatRoute
   '/api/public/events': typeof ApiPublicEventsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -745,6 +754,7 @@ export interface FileRouteTypes {
     | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/bookings/$id'
     | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
@@ -819,6 +829,7 @@ export interface FileRouteTypes {
     | '/$city'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/bookings/$id'
     | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
@@ -894,6 +905,7 @@ export interface FileRouteTypes {
     | '/$city/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/bookings/$id'
     | '/admin/crm/$'
     | '/api/public/events'
     | '/api/public/health'
@@ -950,7 +962,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAdsRoute: typeof AdminAdsRoute
-  AdminBookingsRoute: typeof AdminBookingsRoute
+  AdminBookingsRoute: typeof AdminBookingsRouteWithChildren
   AdminCanaryRoute: typeof AdminCanaryRoute
   AdminCrmRoute: typeof AdminCrmRouteWithChildren
   AdminLeadSourcesRoute: typeof AdminLeadSourcesRoute
@@ -1369,6 +1381,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCrmSplatRouteImport
       parentRoute: typeof AdminCrmRoute
     }
+    '/admin/bookings/$id': {
+      id: '/admin/bookings/$id'
+      path: '/$id'
+      fullPath: '/admin/bookings/$id'
+      preLoaderRoute: typeof AdminBookingsIdRouteImport
+      parentRoute: typeof AdminBookingsRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -1527,6 +1546,18 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface AdminBookingsRouteChildren {
+  AdminBookingsIdRoute: typeof AdminBookingsIdRoute
+}
+
+const AdminBookingsRouteChildren: AdminBookingsRouteChildren = {
+  AdminBookingsIdRoute: AdminBookingsIdRoute,
+}
+
+const AdminBookingsRouteWithChildren = AdminBookingsRoute._addFileChildren(
+  AdminBookingsRouteChildren,
+)
+
 interface AdminCrmRouteChildren {
   AdminCrmSplatRoute: typeof AdminCrmSplatRoute
 }
@@ -1573,7 +1604,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAdsRoute: AdminAdsRoute,
-  AdminBookingsRoute: AdminBookingsRoute,
+  AdminBookingsRoute: AdminBookingsRouteWithChildren,
   AdminCanaryRoute: AdminCanaryRoute,
   AdminCrmRoute: AdminCrmRouteWithChildren,
   AdminLeadSourcesRoute: AdminLeadSourcesRoute,
