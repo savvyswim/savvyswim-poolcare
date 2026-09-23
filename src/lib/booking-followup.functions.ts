@@ -302,65 +302,29 @@ export const scheduleBookingVisit = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!req) throw new Error("Booking request not found");
 
-    // Find the pool owner, or create the record from what the form captured.
-    let customerId = (req.converted_customer_id as string | null) ?? null;
-    if (!customerId && req.phone) {
-      const { data: match } = await supabaseAdmin
-        .from("ss_customers")
-        .select("id")
-        .eq("phone", req.phone as string)
-        .maybeSingle();
-      customerId = (match?.id as string | undefined) ?? null;
-    }
-    if (!customerId) {
-      const { data: created, error: createError } = await supabaseAdmin
-        .from("ss_customers")
-        .insert({
-          full_name: (req.full_name as string) ?? "New pool owner",
-          phone: (req.phone as string) ?? null,
-          email: (req.email as string) ?? null,
-          address: (req.address as string) ?? null,
-          postal_code: (req.postal_code as string) ?? null,
-        })
-        .select("id")
-        .single();
-      if (createError) {
-        console.error("customer create failed", createError.message);
-        throw new Error("Could not create the customer record");
-      }
-      customerId = created.id as string;
-    }
-
-    const noteParts = [
-      `Free inspection from booking ${req.reference_number ?? ""}`.trim(),
-      data.window ? `Window ${data.window}` : null,
-      data.note || null,
-    ].filter(Boolean);
-
-    const { data: visit, error: visitError } = await supabaseAdmin
-      .from("ss_visits")
-      .insert({
-        customer_id: customerId,
-        scheduled_date: data.date,
-        status: "pending",
-        notes: noteParts.join(". "),
-      })
-      .select("id, scheduled_date, status, notes")
-      .single();
-    if (visitError) {
-      console.error("visit create failed", visitError.message);
-      throw new Error("Could not put this visit on the route");
-    }
-
     const previousStatus = (req.status as string | null) ?? "new";
-    await supabaseAdmin
-      .from("inspection_requests")
-      .update({
-        status: "scheduled",
-        converted_customer_id: customerId,
-        converted_at: new Date().toISOString(),
-      })
-      .eq("id", req.id);
+
+    // Same find or create plus booking path the thank you page picker uses.
+    const { scheduleVisitFromRequest } = await import("./schedule-visit.server");
+    const scheduled = await scheduleVisitFromRequest({
+      requestId: req.id as string,
+      date: data.date,
+      window: data.window ?? null,
+      note: data.note ?? null,
+    });
+    if (!scheduled.ok) {
+      throw new Error(
+        scheduled.reason === "customer_failed"
+          ? "Could not create the customer record"
+          : "Could not put this visit on the route",
+      );
+    }
+
+    const { data: visit } = await supabaseAdmin
+      .from("ss_visits")
+      .select("id, scheduled_date, status, notes")
+      .eq("id", scheduled.visitId)
+      .single();
 
     const { logInspectionEvents } = await import("./inspection-events.server");
     await logInspectionEvents(req.id as string, [
@@ -372,5 +336,9 @@ export const scheduleBookingVisit = createServerFn({ method: "POST" })
       },
     ]);
 
-    return { ok: true, customerId, visit: visit as unknown as BookingVisit };
+    return {
+      ok: true,
+      customerId: scheduled.customerId,
+      visit: visit as unknown as BookingVisit,
+    };
   });
