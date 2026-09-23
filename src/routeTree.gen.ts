@@ -67,6 +67,7 @@ import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/
 import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
 import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/public/hooks/webhook-watch'
 import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
+import { Route as ApiPublicHooksSurveyFollowupsRouteImport } from './routes/api/public/hooks/survey-followups'
 import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/public/hooks/smoke-alert'
 import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
 import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
@@ -372,6 +373,12 @@ const ApiPublicHooksVisitRemindersRoute =
     path: '/api/public/hooks/visit-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSurveyFollowupsRoute =
+  ApiPublicHooksSurveyFollowupsRouteImport.update({
+    id: '/api/public/hooks/survey-followups',
+    path: '/api/public/hooks/survey-followups',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksSmokeAlertRoute =
   ApiPublicHooksSmokeAlertRouteImport.update({
     id: '/api/public/hooks/smoke-alert',
@@ -481,6 +488,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
+  '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -548,6 +556,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
+  '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -617,6 +626,7 @@ export interface FileRoutesById {
   '/api/public/hooks/health-watch': typeof ApiPublicHooksHealthWatchRoute
   '/api/public/hooks/low-stock-watch': typeof ApiPublicHooksLowStockWatchRoute
   '/api/public/hooks/smoke-alert': typeof ApiPublicHooksSmokeAlertRoute
+  '/api/public/hooks/survey-followups': typeof ApiPublicHooksSurveyFollowupsRoute
   '/api/public/hooks/visit-reminders': typeof ApiPublicHooksVisitRemindersRoute
   '/api/public/hooks/webhook-watch': typeof ApiPublicHooksWebhookWatchRoute
   '/api/public/twilio/contract-sms-status': typeof ApiPublicTwilioContractSmsStatusRoute
@@ -687,6 +697,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/smoke-alert'
+    | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -754,6 +765,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/smoke-alert'
+    | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -822,6 +834,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/health-watch'
     | '/api/public/hooks/low-stock-watch'
     | '/api/public/hooks/smoke-alert'
+    | '/api/public/hooks/survey-followups'
     | '/api/public/hooks/visit-reminders'
     | '/api/public/hooks/webhook-watch'
     | '/api/public/twilio/contract-sms-status'
@@ -887,6 +900,7 @@ export interface RootRouteChildren {
   ApiPublicHooksHealthWatchRoute: typeof ApiPublicHooksHealthWatchRoute
   ApiPublicHooksLowStockWatchRoute: typeof ApiPublicHooksLowStockWatchRoute
   ApiPublicHooksSmokeAlertRoute: typeof ApiPublicHooksSmokeAlertRoute
+  ApiPublicHooksSurveyFollowupsRoute: typeof ApiPublicHooksSurveyFollowupsRoute
   ApiPublicHooksVisitRemindersRoute: typeof ApiPublicHooksVisitRemindersRoute
   ApiPublicHooksWebhookWatchRoute: typeof ApiPublicHooksWebhookWatchRoute
   ApiPublicTwilioContractSmsStatusRoute: typeof ApiPublicTwilioContractSmsStatusRoute
@@ -1303,6 +1317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksVisitRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/survey-followups': {
+      id: '/api/public/hooks/survey-followups'
+      path: '/api/public/hooks/survey-followups'
+      fullPath: '/api/public/hooks/survey-followups'
+      preLoaderRoute: typeof ApiPublicHooksSurveyFollowupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/smoke-alert': {
       id: '/api/public/hooks/smoke-alert'
       path: '/api/public/hooks/smoke-alert'
@@ -1455,6 +1476,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksHealthWatchRoute: ApiPublicHooksHealthWatchRoute,
   ApiPublicHooksLowStockWatchRoute: ApiPublicHooksLowStockWatchRoute,
   ApiPublicHooksSmokeAlertRoute: ApiPublicHooksSmokeAlertRoute,
+  ApiPublicHooksSurveyFollowupsRoute: ApiPublicHooksSurveyFollowupsRoute,
   ApiPublicHooksVisitRemindersRoute: ApiPublicHooksVisitRemindersRoute,
   ApiPublicHooksWebhookWatchRoute: ApiPublicHooksWebhookWatchRoute,
   ApiPublicTwilioContractSmsStatusRoute: ApiPublicTwilioContractSmsStatusRoute,
