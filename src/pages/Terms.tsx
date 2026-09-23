@@ -41,7 +41,7 @@ const Terms = () => (
         work determined upon on-site inspection, market pricing of materials, and site conditions.
       </p>
 
-      <h2 className="text-xl font-semibold mt-8 mb-2">3. SMS Text Messaging Terms (10DLC Program Disclosure)</h2>
+      <h2 id="sms" className="scroll-mt-28 text-xl font-semibold mt-8 mb-2">3. SMS Text Messaging Terms (10DLC Program Disclosure)</h2>
       <p className="mb-4">
         By opting into our SMS communications via our website form, in-person paper intake form, or
         by texting us first, you agree to the following terms regarding text messaging. This
