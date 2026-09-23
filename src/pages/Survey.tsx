@@ -270,7 +270,12 @@ export default function Survey() {
                                 return rest;
                               });
                               if (current.kind === "multi") {
-                                togglePick(current.id, option, current.maxPicks ?? 2);
+                                togglePick(
+                                  current.id,
+                                  option,
+                                  current.maxPicks ?? Number.POSITIVE_INFINITY,
+                                );
+
                               } else {
                                 setAnswer(current.id, option);
                               }
