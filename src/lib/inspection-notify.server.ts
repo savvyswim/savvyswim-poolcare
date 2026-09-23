@@ -91,7 +91,14 @@ export async function sendInspectionNotifications(
 
   const rows: [string, string][] = [
     ["Reference", req.reference_number],
-    ["Request", isWaterTest ? "Free water test" : "Free inspection / 3D quote"],
+    [
+      "Request",
+      isWaterTest
+        ? "Free water test"
+        : isBooking
+          ? "Booking request from the booking page"
+          : "Free inspection / 3D quote",
+    ],
     ["Name", req.full_name],
     ["Phone", req.phone],
     ["Email", req.email],
