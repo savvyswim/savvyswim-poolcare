@@ -29,7 +29,8 @@ export default function Img({
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <picture>
+    {/* `contents` keeps the <img> itself as the flex or grid item. */}
+    <picture className="contents">
       {photo.avifSrcSet ? (
         <source type="image/avif" srcSet={photo.avifSrcSet} sizes={sizes} />
       ) : null}
