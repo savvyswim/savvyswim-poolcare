@@ -26,7 +26,14 @@ export default function Img({
   className,
   ...rest
 }: ImgProps) {
+  const ref = useRef<HTMLImageElement | null>(null);
   const [loaded, setLoaded] = useState(false);
+
+  // A cached photo can already be complete before this runs, and then the load
+  // event never fires. Check once on mount so it never stays invisible.
+  useEffect(() => {
+    if (ref.current?.complete) setLoaded(true);
+  }, []);
 
   // `contents` keeps the <img> itself as the flex or grid item.
   return (
