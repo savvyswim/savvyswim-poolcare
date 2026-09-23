@@ -100,11 +100,6 @@ export const SURVEY_QUESTIONS: readonly SurveyQuestion[] = [
   },
 
   {
-    id: "filter_cleaning",
-    label: "How often does your filter currently get cleaned?",
-    kind: "single",
-    options: ["Every 1 to 2 months", "Every 3 months", "Not on a schedule", "Not sure"],
-  },
   {
     id: "switch_trigger",
     label: "What would make you switch companies, or start using one?",
