@@ -52,7 +52,11 @@ export async function sendInspectionNotifications(
   if (!req) throw new Error("Request not found");
 
   const isWaterTest = (req.lead_type ?? "") === "water_test";
-  const kind = isWaterTest ? "water test" : "free inspection";
+  // Requests that came from the booking or schedule page are appointment
+  // requests, so the office alert says so and leads with the date.
+  const isBooking =
+    !isWaterTest && /book|schedule|appointment/i.test(`${req.source ?? ""} ${req.page_path ?? ""}`);
+  const kind = isWaterTest ? "water test" : isBooking ? "booking" : "free inspection";
   // Where the form lived, so the office can triage city pages at a glance.
   const originLabel = (() => {
     const hay = `${req.source ?? ""} ${req.page_path ?? ""}`.toLowerCase();
