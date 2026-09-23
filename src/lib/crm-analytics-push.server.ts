@@ -77,13 +77,12 @@ export async function pushDailyTrafficToCrm(): Promise<CrmAnalyticsResult> {
     const res = await fetch(endpoint, { method: "POST", headers, body });
     const text = await res.text();
     await logWebhookDelivery({
-      channel: "analytics",
+      channel: "ops",
       eventKey: reference,
       endpoint,
       reference,
       outcome: res.ok ? "success" : "failed",
-      status: res.status,
-      attempts: 1,
+      httpStatus: res.status,
       request: JSON.parse(body),
       response: text.slice(0, 2000),
       error: res.ok ? undefined : `CRM responded ${res.status}`,
@@ -92,13 +91,12 @@ export async function pushDailyTrafficToCrm(): Promise<CrmAnalyticsResult> {
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
     await logWebhookDelivery({
-      channel: "analytics",
+      channel: "ops",
       eventKey: reference,
       endpoint,
       reference,
       outcome: "failed",
-      status: 0,
-      attempts: 1,
+      httpStatus: 0,
       request: JSON.parse(body),
       error: detail,
     });
