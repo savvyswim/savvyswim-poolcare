@@ -9,6 +9,7 @@ export default function ThankYouCard({ className = "" }: { className?: string })
     <div
       className={`relative mx-auto aspect-square w-full max-w-[440px] p-[7%] shadow-[0_18px_50px_-18px_rgba(42,16,19,0.45)] ${className}`}
       style={{
+        containerType: "inline-size",
         background:
           "repeating-linear-gradient(90deg,#8E1F2C 0 4.5%,#F4EFE3 4.5% 9%)",
       }}
