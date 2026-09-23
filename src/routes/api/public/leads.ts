@@ -174,9 +174,15 @@ export const Route = createFileRoute("/api/public/leads")({
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
 
+        // Forms where email is optional send a "no-email.<digits>@" marker, so
+        // flood protection and de-duplication key off the phone number instead.
+        const emailless = lead.email.toLowerCase().startsWith("no-email.");
+        const phoneDigits = (lead.phone ?? "").replace(/\D/g, "").slice(-10);
+        const limitKey = emailless && phoneDigits ? phoneDigits : lead.email.toLowerCase();
+
         const limits: Array<[string, string, number, number]> = [
           ["leads_ip", ip, 3600, 10],
-          ["leads_email", lead.email.toLowerCase(), 3600, 3],
+          [emailless ? "leads_phone" : "leads_email", limitKey, 3600, 3],
         ];
         for (const [bucket, identifier, windowSeconds, maxHits] of limits) {
           const { data: allowed, error } = await supabaseAdmin.rpc("ss_rate_limit_hit", {
@@ -198,12 +204,15 @@ export const Route = createFileRoute("/api/public/leads")({
 
         // Collapse duplicate submissions inside a 10 minute window.
         const since = new Date(Date.now() - 10 * 60 * 1000).toISOString();
-        const { data: dupe } = await supabaseAdmin
+        const dupeQuery = supabaseAdmin
           .from("inspection_requests")
           .select("id, reference_number")
-          .eq("email", lead.email)
-          .gte("created_at", since)
-          .maybeSingle();
+          .gte("created_at", since);
+        const { data: dupe } = await (
+          emailless && phoneDigits
+            ? dupeQuery.eq("phone", lead.phone as string)
+            : dupeQuery.eq("email", lead.email)
+        ).maybeSingle();
         if (dupe) {
           return json({ ok: true, deduped: true, id: dupe.id, reference: dupe.reference_number });
         }
