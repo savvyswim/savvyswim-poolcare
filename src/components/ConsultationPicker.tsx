@@ -13,11 +13,13 @@ type Props = {
   reference: string;
   /** Window already chosen on the form, when there was one. */
   existingWindow?: string | undefined;
+  /** Sits directly under the page heading, so it drops the divider rule. */
+  topPlacement?: boolean;
 };
 
 type Step = "ask" | "pick" | "declined";
 
-export default function ConsultationPicker({ reference, existingWindow }: Props) {
+export default function ConsultationPicker({ reference, existingWindow, topPlacement }: Props) {
   const days = useMemo<ConsultDay[]>(() => consultationDays(), []);
   const [step, setStep] = useState<Step>("ask");
   const [dayDate, setDayDate] = useState<string>(days[0]?.date ?? "");
@@ -34,7 +36,9 @@ export default function ConsultationPicker({ reference, existingWindow }: Props)
   if (days.length === 0) return null;
 
   const shell = (children: React.ReactNode) => (
-    <div className="mt-12 border-t border-[#8E1F2C]/20 pt-10">{children}</div>
+    <div className={topPlacement ? "mt-8" : "mt-12 border-t border-[#8E1F2C]/20 pt-10"}>
+      {children}
+    </div>
   );
 
   if (done) {
