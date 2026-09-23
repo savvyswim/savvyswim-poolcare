@@ -171,7 +171,7 @@ function RootComponent() {
             <Toaster />
             <Sonner />
             <QuoteModal />
-            {pathname !== "/" && <WaterTestTab />}
+            {pathname !== "/" && pathname !== "/survey" && <WaterTestTab />}
             <ConsentBanner />
             <MetaPixel />
             <PageViewTracker />

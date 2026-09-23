@@ -41,7 +41,6 @@ export default function Survey() {
   const [address, setAddress] = useState("");
   const [placeId, setPlaceId] = useState<string | undefined>(undefined);
   const [consent, setConsent] = useState(false);
-  const [marketingConsent, setMarketingConsent] = useState(false);
   const [company, setCompany] = useState(""); // honeypot
 
   const [errors, setErrors] = useState<Record<string, string>>({});
