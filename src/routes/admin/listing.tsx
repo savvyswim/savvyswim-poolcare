@@ -128,8 +128,7 @@ function Copy({ label, value }: { label: string; value: string }) {
 }
 
 function ListingSheetPage() {
-  const hours = BUSINESS_HOURS.map((h) => `${h.label}: ${h.display}`).join("
-");
+  const hours = BUSINESS_HOURS.map((h) => `${h.label}: ${h.display}`).join("\n");
   const areas = PRICING_AREAS.map((a) => a.name).join(", ");
 
   return (
