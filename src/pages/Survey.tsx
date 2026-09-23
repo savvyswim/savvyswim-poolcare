@@ -417,20 +417,34 @@ export default function Survey() {
                     />
                     <span className="text-[11px] leading-relaxed text-[#2a1013]/70">
                       <strong className="text-[#2a1013]">Required.</strong> I authorize{" "}
-                      <strong className="text-[#2a1013]">Savvy Swim</strong> to contact me by phone
-                      call, text message and email about this request and about marketing such as
-                      promotions, seasonal pool reminders, service offers and company news,
-                      including automated or prerecorded messages and appointment updates at the
-                      number and email I provided. Consent is not a condition of any purchase.
-                      Message and data rates may apply; message frequency varies. Reply{" "}
-                      <strong>STOP</strong> to opt out of texts, <strong>HELP</strong> for help, or
-                      use the unsubscribe link in any email. I have read and agree to the{" "}
+                      <strong className="text-[#2a1013]">Savvy Swim</strong>, a Santana and Rivera
+                      Company, and its service technicians to contact me at the phone number and
+                      email address I provided, including by live call, automatic telephone dialing
+                      system, artificial or prerecorded voice, text message (SMS and MMS) and email,
+                      about this request, my free inspection, appointment and service updates, and
+                      about marketing such as promotions, seasonal pool reminders, service offers
+                      and company news.{" "}
+                      <strong className="text-[#2a1013]">
+                        Consent is not a condition of purchasing any goods or services
+                      </strong>
+                      , and I may still request service by calling {PHONE}. Message frequency
+                      varies, typically fewer than 10 messages per month. Message and data rates may
+                      apply. Reply <strong>STOP</strong> to stop texts at any time, or{" "}
+                      <strong>HELP</strong> for help. Every email carries an unsubscribe link.
+                      Carriers are not liable for delayed or undelivered messages. Calls may be
+                      recorded or monitored for quality and training. I am at least 18 years old and
+                      I am the subscriber or customary user of the number I provided. I have read
+                      and agree to the{" "}
                       <Link to="/privacy-policy" className={LEGAL_LINK}>
                         Privacy Policy
-                      </Link>{" "}
-                      and{" "}
+                      </Link>
+                      , the{" "}
                       <Link to="/terms-and-conditions" className={LEGAL_LINK}>
-                        Terms
+                        Terms and Conditions
+                      </Link>{" "}
+                      and the{" "}
+                      <Link to="/terms-and-conditions" hash="sms" className={LEGAL_LINK}>
+                        Text Message Terms
                       </Link>
                       .
                     </span>
