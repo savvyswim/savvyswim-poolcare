@@ -18,6 +18,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ServiceAreasRouteImport } from './routes/service-areas'
 import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
@@ -130,6 +131,11 @@ const ScheduleQrRoute = ScheduleQrRouteImport.update({
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RequestInspectionRoute = RequestInspectionRouteImport.update({
@@ -512,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/service-areas': typeof ServiceAreasRoute
@@ -590,6 +597,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/service-areas': typeof ServiceAreasRoute
@@ -670,6 +678,7 @@ export interface FileRoutesById {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refer': typeof ReferRoute
   '/request-inspection': typeof RequestInspectionRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/schedule-qr': typeof ScheduleQrRoute
   '/service-areas': typeof ServiceAreasRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refer'
     | '/request-inspection'
+    | '/reset-password'
     | '/schedule'
     | '/schedule-qr'
     | '/service-areas'
@@ -829,6 +839,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refer'
     | '/request-inspection'
+    | '/reset-password'
     | '/schedule'
     | '/schedule-qr'
     | '/service-areas'
@@ -908,6 +919,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refer'
     | '/request-inspection'
+    | '/reset-password'
     | '/schedule'
     | '/schedule-qr'
     | '/service-areas'
@@ -988,6 +1000,7 @@ export interface RootRouteChildren {
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ReferRoute: typeof ReferRoute
   RequestInspectionRoute: typeof RequestInspectionRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ScheduleRoute: typeof ScheduleRoute
   ScheduleQrRoute: typeof ScheduleQrRoute
   ServiceAreasRoute: typeof ServiceAreasRoute
@@ -1103,6 +1116,13 @@ declare module '@tanstack/react-router' {
       path: '/schedule'
       fullPath: '/schedule'
       preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/request-inspection': {
@@ -1653,6 +1673,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ReferRoute: ReferRoute,
   RequestInspectionRoute: RequestInspectionRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ScheduleRoute: ScheduleRoute,
   ScheduleQrRoute: ScheduleQrRoute,
   ServiceAreasRoute: ServiceAreasRoute,
