@@ -4,7 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getLeadsReport } from "@/lib/leads-dashboard.functions";
+import { getLeadsReport, setLeadPipelineStage } from "@/lib/leads-dashboard.functions";
+import { PIPELINE, PIPELINE_LABEL, type PipelineStage } from "@/lib/pipeline-stage";
 import type { LeadRow, LeadsRange } from "@/lib/leads-dashboard.functions";
 
 export const Route = createFileRoute("/admin/leads")({
@@ -144,7 +145,49 @@ function SignIn({ onDone }: { onDone: () => void }) {
   );
 }
 
+function StageCell({ lead, onSaved }: { lead: LeadRow; onSaved: () => void }) {
+  const save = useServerFn(setLeadPipelineStage);
+  const [busy, setBusy] = useState(false);
+  const idx = PIPELINE.indexOf(lead.pipeline as (typeof PIPELINE)[number]);
+  return (
+    <div className="min-w-[150px]">
+      <div className="flex gap-0.5" aria-label={`Stage: ${PIPELINE_LABEL[lead.pipeline]}`}>
+        {PIPELINE.map((p, i) => (
+          <span
+            key={p}
+            className={`h-1.5 flex-1 ${
+              lead.pipeline === "lost" ? "bg-foreground/15" : i <= idx ? "bg-primary" : "bg-foreground/15"
+            }`}
+          />
+        ))}
+      </div>
+      <select
+        className="mt-1.5 w-full border border-foreground/20 bg-transparent px-1 py-0.5 text-xs"
+        value={lead.pipeline}
+        disabled={busy}
+        onChange={async (e) => {
+          setBusy(true);
+          try {
+            await save({ data: { id: lead.id, stage: e.target.value as PipelineStage } });
+            toast.success(`Moved to ${PIPELINE_LABEL[e.target.value as PipelineStage]}`);
+            onSaved();
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Could not save");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        {[...PIPELINE, "lost" as const].map((p) => (
+          <option key={p} value={p}>{PIPELINE_LABEL[p]}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 function LeadsPage() {
+  const [stageFilter, setStageFilter] = useState<PipelineStage | "all">("all");
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [range, setRange] = useState<LeadsRange>("30d");
   const [filter, setFilter] = useState("");
@@ -168,13 +211,14 @@ function LeadsPage() {
   const visible = useMemo(() => {
     if (!report) return [];
     const q = filter.trim().toLowerCase();
-    if (!q) return report.leads;
-    return report.leads.filter((l) =>
+    const base = stageFilter === "all" ? report.leads : report.leads.filter((l) => l.pipeline === stageFilter);
+    if (!q) return base;
+    return base.filter((l) =>
       [l.full_name, l.email, l.phone, l.city, l.source, l.utm_campaign, l.promo_code]
         .filter(Boolean)
         .some((v) => (v as string).toLowerCase().includes(q)),
     );
-  }, [report, filter]);
+  }, [report, filter, stageFilter]);
 
   if (authed === null) return <div className="p-10 text-sm text-foreground/60">Loading…</div>;
   if (!authed) return <SignIn onDone={() => setAuthed(true)} />;
@@ -260,7 +304,25 @@ function LeadsPage() {
             ))}
           </section>
 
-          <div className="mt-10 overflow-x-auto border border-foreground/15">
+          <div className="mt-10 flex flex-wrap gap-2">
+            {(["all", ...PIPELINE, "lost"] as const).map((st) => {
+              const n = st === "all" ? report.leads.length : report.leads.filter((l) => l.pipeline === st).length;
+              return (
+                <button
+                  key={st}
+                  type="button"
+                  onClick={() => setStageFilter(st)}
+                  className={`border px-3 py-1.5 text-xs uppercase tracking-[0.12em] ${
+                    stageFilter === st ? "border-primary bg-primary text-primary-foreground" : "border-foreground/20"
+                  }`}
+                >
+                  {st === "all" ? "All" : PIPELINE_LABEL[st]} {n}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 overflow-x-auto border border-foreground/15">
             <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="border-b border-foreground/15 text-left text-[11px] uppercase tracking-[0.14em] text-foreground/50">
@@ -270,7 +332,7 @@ function LeadsPage() {
                   <th className="px-4 py-3">City</th>
                   <th className="px-4 py-3">Source</th>
                   <th className="px-4 py-3">Code</th>
-                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Stage</th>
                 </tr>
               </thead>
               <tbody>
@@ -314,7 +376,9 @@ function LeadsPage() {
                           <span className="text-foreground/40">, </span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-foreground/70">{l.status ?? "new"}</td>
+                      <td className="px-4 py-3">
+                        <StageCell lead={l} onSaved={() => query.refetch()} />
+                      </td>
                     </tr>
                   ))
                 )}
