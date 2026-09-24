@@ -26,6 +26,9 @@ export interface BookingRow {
   status: string | null;
   notes: string | null;
   stage: BookingStage;
+  score: number;
+  scoreReasons: string[];
+  channel: string;
 }
 
 export interface BookingsReport {
@@ -85,7 +88,7 @@ export const getBookingsReport = createServerFn({ method: "GET" })
     let query = supabaseAdmin
       .from("inspection_requests")
       .select(
-        "id, created_at, reference_number, full_name, phone, email, address, preferred_date, preferred_contact_time, source, status, notes, converted_customer_id",
+        "id, created_at, reference_number, full_name, phone, email, address, preferred_date, preferred_contact_time, source, status, notes, converted_customer_id, sms_opt_in, lead_type, pool_details, utm_source, utm_medium, page_path",
       )
       .order("created_at", { ascending: false })
       .limit(1000);
@@ -129,15 +132,27 @@ export const getBookingsReport = createServerFn({ method: "GET" })
       }
     }
 
-    const bookings: BookingRow[] = kept
-      .map((r) => ({
-        stage: deriveStage({
-          status: (r.status as string) ?? null,
-          events: eventsBy.get(r.id as string) ?? [],
-          visitStatuses: r.converted_customer_id
-            ? (visitsBy.get(r.converted_customer_id as string) ?? [])
-            : [],
-        }),
+    const { scoreLead, leadChannel } = await import("./lead-score");
+    const bookings: BookingRow[] = kept.map((r) => {
+      const evs = eventsBy.get(r.id as string) ?? [];
+      const stage = deriveStage({
+        status: (r.status as string) ?? null,
+        events: evs,
+        visitStatuses: r.converted_customer_id
+          ? (visitsBy.get(r.converted_customer_id as string) ?? [])
+          : [],
+      });
+      const scoreIn = {
+        ...(r as Record<string, unknown>),
+        reached: evs.some((e) => e.event_type === "email_sent" || e.event_type === "sms_sent"),
+        replied: stage === "booked" || stage === "visit_done",
+      } as never;
+      const sc = scoreLead(scoreIn);
+      return {
+        stage,
+        score: sc.score,
+        scoreReasons: sc.reasons,
+        channel: leadChannel(scoreIn),
         id: r.id as string,
         created_at: r.created_at as string,
         reference_number: (r.reference_number as string) ?? null,
@@ -151,7 +166,8 @@ export const getBookingsReport = createServerFn({ method: "GET" })
         source: (r.source as string) ?? null,
         status: (r.status as string) ?? null,
         notes: (r.notes as string) ?? null,
-      }));
+      };
+    });
 
     const booked = bookings.filter((b) => b.stage === "booked" || b.stage === "visit_done").length;
     const now = Date.now();

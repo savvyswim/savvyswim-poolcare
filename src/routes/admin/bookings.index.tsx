@@ -177,7 +177,7 @@ function BookingsPage() {
   const visible = useMemo(() => {
     if (!report) return [];
     const q = filter.trim().toLowerCase();
-    return report.bookings.filter((b) => {
+    const rows = report.bookings.filter((b) => {
       if (onlyOpen && b.stage !== "new") return false;
       if (onlyChase && b.stage !== "contacted" && b.stage !== "confirmation_sent") return false;
       if (!q) return true;
@@ -185,7 +185,8 @@ function BookingsPage() {
         .filter(Boolean)
         .some((v) => (v as string).toLowerCase().includes(q));
     });
-  }, [report, filter, onlyOpen, onlyChase]);
+    return sortScore ? [...rows].sort((a, b) => b.score - a.score) : rows;
+  }, [report, filter, onlyOpen, onlyChase, sortScore]);
 
   if (authed === null) return <div className="p-10 text-sm text-foreground/60">Loading…</div>;
   if (!authed) return <SignIn onDone={() => setAuthed(true)} />;
@@ -316,6 +317,11 @@ function BookingsPage() {
                   <th className="px-4 py-3">Phone</th>
                   <th className="px-4 py-3">Requested date</th>
                   <th className="px-4 py-3">Service area</th>
+                  <th className="px-4 py-3">
+                    <button type="button" onClick={() => setSortScore((v) => !v)} className="uppercase underline">
+                      Score{sortScore ? " ▼" : ""}
+                    </button>
+                  </th>
                   <th className="px-4 py-3">Booked?</th>
                   <th className="px-4 py-3">Status</th>
                 </tr>
@@ -370,6 +376,12 @@ function BookingsPage() {
                         {b.address ? (
                           <div className="text-[11px] text-foreground/50">{b.address}</div>
                         ) : null}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap" title={b.scoreReasons.join("\n")}>
+                        <div className="font-semibold">
+                          {b.score} <span className="text-[11px] font-normal text-foreground/60">{scoreLabel(b.score)}</span>
+                        </div>
+                        <div className="text-[11px] text-foreground/50">{b.channel}</div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span
