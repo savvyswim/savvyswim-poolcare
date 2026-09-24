@@ -211,8 +211,8 @@ export const pushAppCustomersToWebsite = createServerFn({ method: "POST" })
         full_name: c.full_name,
         phone: c.phone ?? "",
         email: c.email ?? `no-email.${c.id}@savvyswim.com`,
-        address: c.address ?? "",
-        city: c.city,
+        address: [c.address, c.city].filter(Boolean).join(", "),
+
         postal_code: c.postal_code ?? "",
         source: "crm_app",
         status: "converted",
