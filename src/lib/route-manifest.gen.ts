@@ -58,6 +58,7 @@ export const ROUTE_MANIFEST = [
   "/lovable/email/auth/webhook",
   "/mcp",
   "/offer",
+  "/office",
   "/our-work",
   "/plano",
   "/pool-cleaning-frisco",
