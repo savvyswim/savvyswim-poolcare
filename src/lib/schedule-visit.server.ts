@@ -109,7 +109,7 @@ export async function scheduleVisitFromRequest(
 
     const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
     await syncRequestToCrmLead(req.id, { stage: "follow_up", customerId });
-    await inviteToPortal(customerId, req.id as string).catch((e) =>
+    await inviteToPortal(customerId, req.id as string).catch((e: unknown) =>
       console.error("portal invite skipped", e),
     );
 
@@ -123,4 +123,35 @@ export async function scheduleVisitFromRequest(
       message: err instanceof Error ? err.message : "Unknown scheduling error",
     };
   }
+}
+
+/**
+ * Gives a newly booked pool owner a portal login: an invite email to set a
+ * password, linked to their customer record. Skips placeholders and customers
+ * who already have a login.
+ */
+async function inviteToPortal(customerId: string, requestId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: c } = await supabaseAdmin
+    .from("ss_customers")
+    .select("id, full_name, email, user_id")
+    .eq("id", customerId)
+    .maybeSingle();
+  const email = (c?.email ?? "").trim().toLowerCase();
+  if (!c || c.user_id || !email || email.startsWith("no-email.")) return;
+  const { data: invited, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+    redirectTo: "https://savvyswim.com/reset-password?next=/portal",
+    data: { full_name: c.full_name, role: "customer" },
+  });
+  const userId = invited?.user?.id;
+  if (!error && userId) {
+    await supabaseAdmin.from("ss_customers").update({ user_id: userId }).eq("id", customerId);
+  }
+  await supabaseAdmin.from("inspection_events").insert({
+    request_id: requestId,
+    event_type: "portal_invite",
+    outcome: error ? "failed" : "sent",
+    recipient: email,
+    detail: error?.message ?? "Portal invite sent",
+  });
 }
