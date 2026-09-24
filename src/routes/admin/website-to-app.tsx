@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getWebsiteToAppReport, resendWebsiteItem, getSameOnBoth, fixSameOnBoth } from "@/lib/website-to-app.functions";
+import { getWebsiteToAppReport, resendWebsiteItem, getSameOnBoth, fixSameOnBoth, getAppCustomersMissing, pushAppCustomersToWebsite } from "@/lib/website-to-app.functions";
 import type { WebsiteToAppRow } from "@/lib/website-to-app.functions";
 
 export const Route = createFileRoute("/admin/website-to-app")({
@@ -309,6 +309,49 @@ function SameOnBoth() {
           </button>
         </div>
       )}
+      <AppToWebsite />
     </section>
+  );
+}
+
+function AppToWebsite() {
+  const check = useServerFn(getAppCustomersMissing);
+  const push = useServerFn(pushAppCustomersToWebsite);
+  const [busy, setBusy] = useState(false);
+  const q = useQuery({ queryKey: ["app-to-website"], queryFn: () => check() });
+  const missing = q.data?.missing ?? [];
+  return (
+    <div className="mt-3 border-t border-foreground/10 pt-3 text-sm">
+      {q.isLoading ? (
+        <p>Checking app customers...</p>
+      ) : q.isError ? (
+        <p>Could not check app customers. Try Refresh.</p>
+      ) : missing.length === 0 ? (
+        <p>All {q.data?.total ?? 0} app customers from the last 90 days are in the website lead list.</p>
+      ) : (
+        <div className="flex flex-wrap items-center gap-3">
+          <span>App customers not in the website list: {missing.length}</span>
+          <button
+            type="button"
+            disabled={busy}
+            className="border border-foreground/20 px-3 py-1.5 disabled:opacity-60"
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const r = await push({ data: { ids: missing.map((m) => m.id) } });
+                toast.success(`${r.added} added to the website list`);
+                await q.refetch();
+              } catch {
+                toast.error("Could not add them, try again");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {busy ? "Adding..." : "Add them to the website list"}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
