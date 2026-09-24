@@ -33,7 +33,7 @@ function ResetPassword() {
         setBusy(false);
         if (error) { toast.error(error.message); return; }
         toast.success("Password saved");
-        navigate({ to: "/office" });
+        const next = new URLSearchParams(window.location.search).get("next"); navigate({ to: next === "/portal" ? "/portal" : "/office" });
       }}
     >
       <h1 className="font-display text-2xl uppercase tracking-[0.08em]">New password</h1>
