@@ -8,7 +8,7 @@ import { getBookingsReport, setBookingStatus } from "@/lib/bookings-dashboard.fu
 import type { BookingRow, BookingsRange } from "@/lib/bookings-dashboard.functions";
 import { STAGE_LABEL } from "@/lib/booking-stage";
 
-export const Route = createFileRoute("/admin/bookings")({
+export const Route = createFileRoute("/admin/bookings/")({
   component: BookingsPage,
   head: () => ({
     meta: [
