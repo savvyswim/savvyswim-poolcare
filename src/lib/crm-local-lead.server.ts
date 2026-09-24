@@ -95,6 +95,14 @@ export async function syncRequestToCrmLead(
       .select("id")
       .single();
     if (error) return { ok: false, error: error.message };
+    await addLeadToInbox({
+      ref,
+      name: req.full_name ?? "Website visitor",
+      email,
+      phone: req.phone,
+      customerId,
+      body: [`New website request ${ref}`, `Phone: ${req.phone ?? "Not given"}`, `Address: ${req.address ?? "Not given"}`, ...noteParts.slice(1)].join("\n"),
+    });
     return { ok: true, leadId: created.id as string };
   } catch (err) {
     console.error("syncRequestToCrmLead failed", err);
