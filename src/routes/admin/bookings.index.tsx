@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getBookingsReport, setBookingStatus } from "@/lib/bookings-dashboard.functions";
 import type { BookingRow, BookingsRange } from "@/lib/bookings-dashboard.functions";
 import { STAGE_LABEL } from "@/lib/booking-stage";
+import { scoreLabel } from "@/lib/lead-score";
 
 export const Route = createFileRoute("/admin/bookings/")({
   component: BookingsPage,
