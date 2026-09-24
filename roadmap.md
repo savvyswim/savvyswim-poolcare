@@ -14,3 +14,8 @@
 - [x] New leads added to the app inbox as a conversation (works once the draft is accepted)
 - [ ] Switch sender to notify.savvyswim.com (blocked: must be done from the main project after accepting; DNS still pending)
 - [ ] Customer portal: move the app's portal (blocked: merge import, stage 2c)
+- [x] 90-day website requests all in the CRM lead list (12 of 12)
+- [ ] Confirm they show in the savvyswim.app lead list (blocked: CRM connection unavailable; resend works from the live site)
+- [ ] Office walkthrough (test request, confirmation, schedule, calendar)
+- [ ] Customer portal on savvyswim.com (booking, schedule, messages, invite button)
+- [ ] Turnstile (blocked: keys)
