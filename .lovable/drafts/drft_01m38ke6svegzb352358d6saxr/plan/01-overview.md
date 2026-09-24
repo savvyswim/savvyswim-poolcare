@@ -10,6 +10,8 @@ About app store apps: I can build both apps so they work like real phone apps (h
 
 **Website** (savvyswim.com): stays exactly as it is for visitors.
 
+**One login, both addresses:** customers and staff use the same email and password on savvyswim.com and savvyswim.app. Both addresses open the same system and the same accounts, so there is never a second login to remember.
+
 **Customer app** (sign-in for pool owners):
 - Next visit up top: day, arrival window and technician
 - Past visits with service notes, photos and water test results
