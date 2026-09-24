@@ -101,3 +101,41 @@ export const resendWebsiteItem = createServerFn({ method: "POST" })
     });
     return { ok: res.forwarded, status: res.status };
   });
+
+/** Website requests (last 90 days) that are missing from the CRM lead list. */
+export const getSameOnBoth = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertOffice(context.supabase as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - 90 * 864e5).toISOString();
+    const [{ data: reqs }, { data: leads }] = await Promise.all([
+      supabaseAdmin
+        .from("inspection_requests")
+        .select("id, reference_number, full_name, created_at")
+        .gte("created_at", since)
+        .order("created_at", { ascending: false })
+        .limit(500),
+      supabaseAdmin.from("ss_leads").select("message").gte("created_at", since).limit(2000),
+    ]);
+    const text = (leads ?? []).map((l) => l.message ?? "").join("\n");
+    const missing = (reqs ?? [])
+      .filter((r) => !text.includes(`[ref ${r.reference_number ?? r.id}]`))
+      .map((r) => ({ id: r.id, reference: r.reference_number ?? r.id, name: r.full_name, created_at: r.created_at }));
+    return { total: reqs?.length ?? 0, missing };
+  });
+
+/** Copies every missing website request into the CRM lead list. */
+export const fixSameOnBoth = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ ids: z.array(z.string().uuid()).max(500) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertOffice(context.supabase as never);
+    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    let fixed = 0;
+    for (const id of data.ids) {
+      const r = await syncRequestToCrmLead(id);
+      if (r.ok) fixed++;
+    }
+    return { fixed };
+  });

@@ -85,6 +85,14 @@ export async function forwardInspectionToCrm(
   requestId: string,
   extra?: { leadType?: string | null; smsOptIn?: boolean | null; contactConsent?: boolean | null },
 ): Promise<CrmForwardResult> {
+  // Save straight into the shared CRM lead list first, so the app sees it
+  // instantly even if the send below fails.
+  try {
+    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    await syncRequestToCrmLead(requestId);
+  } catch (err) {
+    console.error("CRM local lead sync threw", err);
+  }
   const endpoint = process.env["CRM_LEADS_URL"] || DEFAULT_CRM_LEADS_URL;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
