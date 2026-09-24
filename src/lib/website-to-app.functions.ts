@@ -11,6 +11,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  */
 export type WebsiteToAppKind = "lead" | "review" | "contact";
 
+/** sent = accepted, bounced = refused but still retrying, abandoned = gave up (8 tries or lead gone). */
+export type DeliveryStatus = "sent" | "bounced" | "abandoned";
+
 export type WebsiteToAppRow = {
   id: string;
   kind: WebsiteToAppKind;
@@ -19,6 +22,7 @@ export type WebsiteToAppRow = {
   last_attempt_at: string | null;
   attempts: number;
   outcome: "success" | "failed" | "skipped";
+  status: DeliveryStatus;
   http_status: number | null;
   last_error: string | null;
   event_key: string | null;
@@ -26,7 +30,7 @@ export type WebsiteToAppRow = {
 
 export type WebsiteToAppReport = {
   rows: WebsiteToAppRow[];
-  totals: { delivered: number; failed: number; total: number };
+  totals: { delivered: number; failed: number; bounced: number; abandoned: number; total: number };
 };
 
 async function assertOffice(supabase: {
@@ -52,22 +56,30 @@ export const getWebsiteToAppReport = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(300);
 
-    const rows: WebsiteToAppRow[] = (data ?? []).map((r) => ({
-      id: r.id,
-      kind: (r.channel === "review" ? "review" : r.channel === "contact" ? "contact" : "lead") as WebsiteToAppKind,
-      reference: r.reference ?? r.event_key ?? "website item",
-      created_at: r.created_at ?? new Date().toISOString(),
-      last_attempt_at: r.last_attempt_at,
-      attempts: r.attempts ?? 1,
-      outcome: (r.outcome ?? "failed") as WebsiteToAppRow["outcome"],
-      http_status: r.http_status,
-      last_error: r.last_error,
-      event_key: r.event_key,
-    }));
+    const rows: WebsiteToAppRow[] = (data ?? []).map((r) => {
+      const outcome = (r.outcome ?? "failed") as WebsiteToAppRow["outcome"];
+      const attempts = r.attempts ?? 1;
+      const status: DeliveryStatus =
+        outcome === "success" ? "sent" : outcome === "skipped" || attempts >= 8 ? "abandoned" : "bounced";
+      return {
+        id: r.id,
+        kind: (r.channel === "review" ? "review" : r.channel === "contact" ? "contact" : "lead") as WebsiteToAppKind,
+        reference: r.reference ?? r.event_key ?? "website item",
+        created_at: r.created_at ?? new Date().toISOString(),
+        last_attempt_at: r.last_attempt_at,
+        attempts,
+        outcome,
+        status,
+        http_status: r.http_status,
+        last_error: r.last_error,
+        event_key: r.event_key,
+      };
+    });
 
-    const delivered = rows.filter((r) => r.outcome === "success").length;
-    const failed = rows.filter((r) => r.outcome === "failed").length;
-    return { rows, totals: { delivered, failed, total: rows.length } };
+    const delivered = rows.filter((r) => r.status === "sent").length;
+    const bounced = rows.filter((r) => r.status === "bounced").length;
+    const abandoned = rows.filter((r) => r.status === "abandoned").length;
+    return { rows, totals: { delivered, failed: bounced + abandoned, bounced, abandoned, total: rows.length } };
   });
 
 export const resendWebsiteItem = createServerFn({ method: "POST" })
