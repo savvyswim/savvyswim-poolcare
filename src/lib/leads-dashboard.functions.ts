@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { derivePipeline, CRM_STAGE, type PipelineStage } from "./pipeline-stage";
 
 /**
  * Free inspection leads dashboard. Every inspection request with counts,
@@ -27,6 +28,8 @@ export interface LeadRow {
   promo_code: string | null;
   promo_status: string | null;
   promo_detail: string | null;
+  pipeline: PipelineStage;
+  pipeline_manual: boolean;
 }
 
 export interface LeadsReport {
@@ -76,7 +79,7 @@ export const getLeadsReport = createServerFn({ method: "GET" })
     let query = supabaseAdmin
       .from("inspection_requests")
       .select(
-        "id, created_at, reference_number, full_name, email, phone, address, source, utm_source, utm_campaign, page_path, lead_type, status, promo_code, promo_status, promo_detail",
+        "id, created_at, converted_customer_id, reference_number, full_name, email, phone, address, source, utm_source, utm_campaign, page_path, lead_type, status, promo_code, promo_status, promo_detail",
       )
       .order("created_at", { ascending: false })
       .limit(1000);
@@ -91,7 +94,29 @@ export const getLeadsReport = createServerFn({ method: "GET" })
       throw new Error("Could not load leads");
     }
 
+    const ids = (rows ?? []).map((r) => r.id as string);
+    const evMap = new Map<string, { event_type: string; status_to: string | null; created_at: string }[]>();
+    for (let i = 0; i < ids.length; i += 200) {
+      const { data: evs } = await supabaseAdmin
+        .from("inspection_events")
+        .select("request_id, event_type, status_to, created_at")
+        .in("request_id", ids.slice(i, i + 200));
+      for (const e of evs ?? []) {
+        const list = evMap.get(e.request_id) ?? [];
+        list.push(e);
+        evMap.set(e.request_id, list);
+      }
+    }
+
     const leads: LeadRow[] = (rows ?? []).map((r) => ({
+      ...(() => {
+        const p = derivePipeline({
+          status: (r.status as string) ?? null,
+          convertedCustomerId: ((r as Record<string, unknown>)["converted_customer_id"] as string) ?? null,
+          events: evMap.get(r.id as string) ?? [],
+        });
+        return { pipeline: p.stage, pipeline_manual: p.manual };
+      })(),
       id: r.id as string,
       created_at: r.created_at as string,
       reference_number: (r.reference_number as string) ?? null,
@@ -145,4 +170,33 @@ export const getLeadsReport = createServerFn({ method: "GET" })
         .sort((a, b) => (a.day < b.day ? -1 : 1)),
       leads,
     };
+  });
+
+/** Office moves a lead to a pipeline stage by hand; mirrored onto the CRM lead. */
+export const setLeadPipelineStage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        stage: z.enum(["enquiry", "quote", "booking", "won", "lost"]),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isOffice } = await (
+      context.supabase as unknown as { rpc: (fn: "ss_is_office") => Promise<{ data: unknown }> }
+    ).rpc("ss_is_office");
+    if (isOffice !== true) throw new Error("Office access required");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("inspection_events").insert({
+      request_id: data.id,
+      event_type: "pipeline_stage_set",
+      status_to: data.stage,
+      detail: "Set by the office",
+    });
+    if (error) throw new Error(error.message);
+    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    await syncRequestToCrmLead(data.id, { stage: CRM_STAGE[data.stage] });
+    return { ok: true };
   });
