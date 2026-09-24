@@ -19,3 +19,8 @@
 - [ ] Office walkthrough (test request, confirmation, schedule, calendar)
 - [ ] Customer portal on savvyswim.com (booking, schedule, messages, invite button)
 - [ ] Turnstile (blocked: keys)
+- [x] Lead score (0 to 100) and source on the bookings list, sortable; saved on CRM leads after accept
+- [x] Fresh reset email to hi@savvyswim.com
+- [ ] Match check (website / CRM / app inbox) on Website to app page
+- [ ] Portal login per booked lead + /portal page + Invite to portal
+- [ ] Office test booking end to end (after password set)
