@@ -28,6 +28,7 @@ import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning
 import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
 import { Route as PlanoRouteImport } from './routes/plano'
 import { Route as OurWorkRouteImport } from './routes/our-work'
+import { Route as OfficeRouteImport } from './routes/office'
 import { Route as OfferRouteImport } from './routes/offer'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LeaveAReviewRouteImport } from './routes/leave-a-review'
@@ -179,6 +180,11 @@ const PlanoRoute = PlanoRouteImport.update({
 const OurWorkRoute = OurWorkRouteImport.update({
   id: '/our-work',
   path: '/our-work',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficeRoute = OfficeRouteImport.update({
+  id: '/office',
+  path: '/office',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OfferRoute = OfferRouteImport.update({
@@ -495,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/offer': typeof OfferRoute
+  '/office': typeof OfficeRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
@@ -572,6 +579,7 @@ export interface FileRoutesByTo {
   '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/offer': typeof OfferRoute
+  '/office': typeof OfficeRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
@@ -651,6 +659,7 @@ export interface FileRoutesById {
   '/leave-a-review': typeof LeaveAReviewRoute
   '/mcp': typeof McpRoute
   '/offer': typeof OfferRoute
+  '/office': typeof OfficeRoute
   '/our-work': typeof OurWorkRoute
   '/plano': typeof PlanoRoute
   '/pool-cleaning-frisco': typeof PoolCleaningFriscoRoute
@@ -731,6 +740,7 @@ export interface FileRouteTypes {
     | '/leave-a-review'
     | '/mcp'
     | '/offer'
+    | '/office'
     | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
@@ -808,6 +818,7 @@ export interface FileRouteTypes {
     | '/leave-a-review'
     | '/mcp'
     | '/offer'
+    | '/office'
     | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
@@ -886,6 +897,7 @@ export interface FileRouteTypes {
     | '/leave-a-review'
     | '/mcp'
     | '/offer'
+    | '/office'
     | '/our-work'
     | '/plano'
     | '/pool-cleaning-frisco'
@@ -965,6 +977,7 @@ export interface RootRouteChildren {
   LeaveAReviewRoute: typeof LeaveAReviewRoute
   McpRoute: typeof McpRoute
   OfferRoute: typeof OfferRoute
+  OfficeRoute: typeof OfficeRoute
   OurWorkRoute: typeof OurWorkRoute
   PlanoRoute: typeof PlanoRoute
   PoolCleaningFriscoRoute: typeof PoolCleaningFriscoRoute
@@ -1160,6 +1173,13 @@ declare module '@tanstack/react-router' {
       path: '/our-work'
       fullPath: '/our-work'
       preLoaderRoute: typeof OurWorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/office': {
+      id: '/office'
+      path: '/office'
+      fullPath: '/office'
+      preLoaderRoute: typeof OfficeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/offer': {
@@ -1622,6 +1642,7 @@ const rootRouteChildren: RootRouteChildren = {
   LeaveAReviewRoute: LeaveAReviewRoute,
   McpRoute: McpRoute,
   OfferRoute: OfferRoute,
+  OfficeRoute: OfficeRoute,
   OurWorkRoute: OurWorkRoute,
   PlanoRoute: PlanoRoute,
   PoolCleaningFriscoRoute: PoolCleaningFriscoRoute,
