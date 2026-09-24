@@ -73,7 +73,7 @@ function SignIn() {
         type="button"
         className="mt-3 w-full text-xs text-foreground/60 underline"
         onClick={async () => {
-          if (!email) return toast.error("Type your email first");
+          if (!email) { toast.error("Type your email first"); return; }
           await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password?next=/portal` });
           toast.success("Check your email for a link");
         }}
