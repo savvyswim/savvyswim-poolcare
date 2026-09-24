@@ -143,13 +143,23 @@ export const fixSameOnBoth = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ ids: z.array(z.string().uuid()).max(500) }).parse(input))
   .handler(async ({ data, context }) => {
     await assertOffice(context.supabase as never);
-    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    // Saves each request in the CRM lead list and re-sends it to savvyswim.app
+    // (the app dedupes by reference, so nothing doubles).
+    const { forwardInspectionToCrm } = await import("./crm-lead-forward.server");
     let fixed = 0;
+    let sentToApp = 0;
+    const failed: { id: string; status: number }[] = [];
     for (const id of data.ids) {
-      const r = await syncRequestToCrmLead(id);
-      if (r.ok) fixed++;
+      try {
+        const r = await forwardInspectionToCrm(id);
+        fixed++;
+        if (r.forwarded) sentToApp++;
+        else failed.push({ id, status: r.status });
+      } catch {
+        failed.push({ id, status: 0 });
+      }
     }
-    return { fixed };
+    return { fixed, sentToApp, failed };
   });
 
 const digits = (s: string | null | undefined) => (s ?? "").replace(/\D/g, "").slice(-10);
