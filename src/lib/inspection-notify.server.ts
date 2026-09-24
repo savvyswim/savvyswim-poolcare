@@ -88,6 +88,8 @@ export async function sendInspectionNotifications(
     ),
   ];
   if (recipients.length === 0) recipients.push(FALLBACK_OFFICE);
+  // The office mailbox always gets every lead.
+  if (!recipients.includes("hi@savvyswim.com")) recipients.push("hi@savvyswim.com");
 
   const rows: [string, string][] = [
     ["Reference", req.reference_number],
@@ -126,7 +128,8 @@ export async function sendInspectionNotifications(
       )
       .join("")}
   </table>
-  <p style="font-size:12px;color:#7a6f63;margin-top:18px;">Savvy Swim CRM → Inspection Requests</p>
+  <p style="margin:18px 0 0;"><a href="https://savvyswim.com/admin/bookings/${esc(req.id)}" style="background:#8E1F2C;color:#F4EFE3;padding:10px 18px;text-decoration:none;font-weight:bold;">Open this booking</a></p>
+  <p style="font-size:12px;color:#7a6f63;margin-top:18px;">Savvy Swim CRM, Inspection Requests</p>
 </div>`;
   const officeText = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
 
