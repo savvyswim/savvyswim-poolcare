@@ -306,7 +306,15 @@ export const Route = createFileRoute("/api/public/leads")({
           return json({ error: "Could not save lead" }, 500);
         }
 
-        // Hand every lead off to the CRM. Never block the visitor on it, // failures are logged to ss_webhook_deliveries and retryable there.
+        // Save straight into the CRM lead list in the shared database first.
+        try {
+          const { syncRequestToCrmLead } = await import("@/lib/crm-local-lead.server");
+          await syncRequestToCrmLead(data.id);
+        } catch (err) {
+          console.error("CRM local lead sync threw", err);
+        }
+
+        // Backup: hand every lead off to the CRM app. Never block the visitor on it, // failures are logged to ss_webhook_deliveries and retryable there.
         try {
           const { forwardInspectionToCrm } = await import("@/lib/crm-lead-forward.server");
           await forwardInspectionToCrm(data.id, {

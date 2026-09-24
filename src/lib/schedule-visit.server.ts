@@ -107,6 +107,9 @@ export async function scheduleVisitFromRequest(
       })
       .eq("id", req.id);
 
+    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    await syncRequestToCrmLead(req.id, { stage: "won", customerId });
+
     return { ok: true, customerId, visitId: visit.id as string };
   } catch (err) {
     console.error("scheduleVisitFromRequest failed", err);
