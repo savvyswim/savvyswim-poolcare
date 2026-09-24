@@ -1,9 +1,9 @@
-# Roadmap: one Savvy Swim system
+# Roadmap: merge savvyswim.app into this project
 
-- [x] Stage 1: check the old app. savvyswim.app already uses the same database and accounts, so nothing needs moving.
-- [x] Stage 2: /office home with one sign-in and separate views for office, technicians and customers
-- [x] One login works on both savvyswim.com and savvyswim.app (shared accounts)
-- [ ] Stage 3: technician day view built into savvyswim.com (right now it links to the app)
-- [ ] Stage 4: customer account built into savvyswim.com (right now it links to the portal)
-- [ ] Stage 5: online card payments (needs owner approval to set up the payment provider)
-- [ ] Stage 7: App Store and Google Play (needs the owner's Apple and Google developer accounts)
+- [x] Stage 1a: database additions for the app's 52 extra tables, 187 extra columns and 72 functions (staged, apply on draft accept)
+- [ ] Stage 1b: export button in the SavvySwim CRM project (blocked: user runs the request there)
+- [ ] Stage 1c: import here, logins re-created with same ids, files copied (blocked: 1a accepted and 1b done)
+- [ ] Stage 2: bring over office CRM, then technician screens, then customer portal
+- [ ] Stage 3: connect savvyswim.app domain here (user)
+- [ ] Stage 4: switch off lead forwarding and retry job, archive old app
+- [ ] Cloudflare Turnstile on /office (blocked: user's Turnstile keys)
