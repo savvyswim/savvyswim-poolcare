@@ -109,6 +109,10 @@ export async function scheduleVisitFromRequest(
 
     const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
     await syncRequestToCrmLead(req.id, { stage: "follow_up", customerId });
+    await inviteToPortal(customerId, req.id as string).catch((e) =>
+      console.error("portal invite skipped", e),
+    );
+
 
     return { ok: true, customerId, visitId: visit.id as string };
   } catch (err) {
