@@ -1,24 +1,8 @@
 ## Goal
+Add a button that pushes new app customers into the website lead list, so both lists always match. It goes on the Website to app page on savvyswim.com. Only customers added in the last 90 days count.
 
-Put the site live, give the office a real login (hi@savvyswim.com), prove the booking follow-up works end to end, and show a clear status for every lead sent to the CRM.
-
-## 1. Office account for hi@savvyswim.com
-
-- Check if hi@savvyswim.com already has a login. If not, send an invite email so you set your own password using the password you sent in chat (already done: the login exists with that password).
-- Link that login to an office staff record with the Owner level, so bookings, calendar and confirmations open for it.
-- Add a "Forgot password" link on the /office sign-in and a page to set a new password, so the invite and future resets work.
-- I will ask before sending the invite, since it is a real email.
-
-## 2. Publish
-
-- Check the security scan first and tell you about anything serious.
-- Publish savvyswim.com with everything built so far.
-
-## 3. Live test of the booking follow-up
-
-Once you have set your password and signed in once:
-
-- Sign in as the office account in a test browser.
-- Open the test request SS-26-1041 on the bookings page and send a confirmation to a test address (not a customer).
-- Check the progress bar moves to "Confirmation sent", schedule a visit, check it moves to "Booked" and the visit appears on /admin/calendar.
-- Clean up the test visit afterward and report what passed.
+## What you will see
+- The "Same on both" box gets a second row: "App customers not in the website list: X".
+- An **Add them to the website list** button next to it. Tap it and each missing customer is added as a website lead. The box then shows "0 missing".
+- Each added lead is marked "From the app", links to its customer record and starts at the Booked stage, so it doesn't show up as a new request to chase.
+- If you tap it twice, nothing gets duplicated. A customer is treated as already on the list when their phone number or email matches a website lead.
