@@ -87,6 +87,14 @@ export async function syncRequestToCrmLead(
       if (opts.stage) patch["stage"] = opts.stage;
       if (customerId) patch["converted_customer_id"] = customerId;
       await supabaseAdmin.from("ss_leads").update(patch as never).eq("id", leadId);
+      await addLeadToInbox({
+        ref,
+        name: req.full_name ?? "Website visitor",
+        email,
+        phone: req.phone,
+        customerId,
+        body: [`New website request ${ref}`, `Phone: ${req.phone ?? "Not given"}`, `Address: ${req.address ?? "Not given"}`, ...noteParts.slice(1)].join("\n"),
+      });
       return { ok: true, leadId };
     }
 

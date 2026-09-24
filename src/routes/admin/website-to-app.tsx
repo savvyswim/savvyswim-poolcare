@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getWebsiteToAppReport, resendWebsiteItem, getSameOnBoth, fixSameOnBoth, getAppCustomersMissing, pushAppCustomersToWebsite } from "@/lib/website-to-app.functions";
+import { getWebsiteToAppReport, resendWebsiteItem, getSameOnBoth, fixSameOnBoth, getAppCustomersMissing, pushAppCustomersToWebsite, getMatchReport, fixMatch } from "@/lib/website-to-app.functions";
 import type { WebsiteToAppRow } from "@/lib/website-to-app.functions";
 
 export const Route = createFileRoute("/admin/website-to-app")({
@@ -310,6 +310,7 @@ function SameOnBoth() {
         </div>
       )}
       <AppToWebsite />
+      <MatchCheck />
     </section>
   );
 }
@@ -353,5 +354,61 @@ function AppToWebsite() {
         </div>
       )}
     </div>
+  );
+}
+
+function MatchCheck() {
+  const load = useServerFn(getMatchReport);
+  const fix = useServerFn(fixMatch);
+  const [busy, setBusy] = useState(false);
+  const q = useQuery({ queryKey: ["match-check"], queryFn: () => load() });
+  const d = q.data;
+  return (
+    <section className="mt-6 border border-foreground/15 p-5">
+      <h2 className="font-display text-xl uppercase tracking-[0.08em]">Match check</h2>
+      <p className="mt-1 text-sm text-foreground/60">
+        Website requests from the last 90 days compared with the CRM lead list and the app inbox.
+      </p>
+      {!d ? (
+        <p className="mt-3 text-sm text-foreground/55">Checking...</p>
+      ) : (
+        <>
+          <p className="mt-3 text-sm">
+            {d.total} requests, {d.missing.length} missing somewhere.
+            {!d.inboxReady ? " The app inbox switches on once this update is accepted." : ""}
+          </p>
+          {d.missing.length > 0 ? (
+            <>
+              <ul className="mt-2 max-h-48 overflow-auto text-xs text-foreground/70">
+                {d.missing.map((m) => (
+                  <li key={m.id}>
+                    {m.ref}, {m.name ?? "No name"}: {!m.inCrm ? "not in CRM list" : ""}
+                    {m.inInbox === false ? `${!m.inCrm ? ", " : ""}not in inbox` : ""}
+                  </li>
+                ))}
+              </ul>
+              <button
+                disabled={busy}
+                className="mt-3 bg-primary px-4 py-2 text-xs uppercase tracking-[0.12em] text-primary-foreground disabled:opacity-60"
+                onClick={async () => {
+                  setBusy(true);
+                  try {
+                    const r = await fix({ data: { ids: d.missing.map((m) => m.id) } });
+                    toast.success(`Fixed ${r.fixed}`);
+                    q.refetch();
+                  } catch (e) {
+                    toast.error(e instanceof Error ? e.message : "Could not fix");
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+              >
+                Fix them
+              </button>
+            </>
+          ) : null}
+        </>
+      )}
+    </section>
   );
 }

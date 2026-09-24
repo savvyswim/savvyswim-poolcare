@@ -235,3 +235,54 @@ export const pushAppCustomersToWebsite = createServerFn({ method: "POST" })
     }
     return { added };
   });
+
+/** Side by side: website requests vs CRM lead list vs app inbox, last 90 days. */
+export const getMatchReport = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertOffice(context.supabase as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - 90 * 864e5).toISOString();
+    const { data: reqs } = await supabaseAdmin
+      .from("inspection_requests")
+      .select("id, reference_number, full_name, created_at")
+      .gte("created_at", since)
+      .neq("source", "crm_app")
+      .order("created_at", { ascending: false });
+    const { data: leads } = await supabaseAdmin
+      .from("ss_leads")
+      .select("message")
+      .gte("created_at", new Date(Date.now() - 180 * 864e5).toISOString());
+    const leadText = (leads ?? []).map((l) => l.message ?? "").join("\n");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as unknown as { from: (t: string) => any };
+    const { data: threads, error: inboxErr } = await db
+      .from("ss_email_threads")
+      .select("subject")
+      .like("subject", "New website request%");
+    const inboxReady = !inboxErr;
+    const subjects = ((threads ?? []) as { subject: string }[]).map((t) => t.subject).join("\n");
+    const rows = (reqs ?? []).map((r) => {
+      const ref = r.reference_number ?? r.id;
+      return {
+        id: r.id,
+        ref,
+        name: r.full_name,
+        inCrm: leadText.includes(`[ref ${ref}]`),
+        inInbox: inboxReady ? subjects.includes(`request ${ref},`) : null,
+      };
+    });
+    const missing = rows.filter((r) => !r.inCrm || r.inInbox === false);
+    return { total: rows.length, inboxReady, missing };
+  });
+
+export const fixMatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ ids: z.array(z.string().uuid()).max(500) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertOffice(context.supabase as never);
+    const { syncRequestToCrmLead } = await import("./crm-local-lead.server");
+    let fixed = 0;
+    for (const id of data.ids) if ((await syncRequestToCrmLead(id)).ok) fixed++;
+    return { fixed };
+  });
