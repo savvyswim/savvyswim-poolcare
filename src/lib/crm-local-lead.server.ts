@@ -19,7 +19,7 @@ export async function syncRequestToCrmLead(
     const { data: req } = await supabaseAdmin
       .from("inspection_requests")
       .select(
-        "id, reference_number, full_name, phone, email, address, notes, source, lead_type, promo_code, preferred_date, converted_customer_id, utm_source, utm_campaign",
+        "id, reference_number, full_name, phone, email, address, notes, source, lead_type, promo_code, preferred_date, preferred_contact_time, pool_details, sms_opt_in, page_path, utm_medium, created_at, converted_customer_id, utm_source, utm_campaign",
       )
       .eq("id", requestId)
       .maybeSingle();
@@ -67,14 +67,26 @@ export async function syncRequestToCrmLead(
       req.notes,
     ].filter(Boolean);
     const customerId = opts.customerId ?? req.converted_customer_id ?? null;
+    const { scoreLead, leadChannel } = await import("./lead-score");
+    const { count: sentCount } = await supabaseAdmin
+      .from("inspection_events")
+      .select("id", { count: "exact", head: true })
+      .eq("request_id", req.id)
+      .in("event_type", ["email_sent", "sms_sent"]);
+    const scoreIn = { ...req, reached: (sentCount ?? 0) > 0 || !!customerId, replied: !!customerId };
+    const { score, reasons } = scoreLead(scoreIn);
+    const scoreFields = {
+      lead_score: score,
+      score_reasons: reasons,
+      lead_channel: leadChannel(scoreIn),
+      request_id: req.id,
+    };
 
     if (leadId) {
-      const patch: Record<string, unknown> = {};
+      const patch: Record<string, unknown> = { ...scoreFields };
       if (opts.stage) patch["stage"] = opts.stage;
       if (customerId) patch["converted_customer_id"] = customerId;
-      if (Object.keys(patch).length) {
-        await supabaseAdmin.from("ss_leads").update(patch as never).eq("id", leadId);
-      }
+      await supabaseAdmin.from("ss_leads").update(patch as never).eq("id", leadId);
       return { ok: true, leadId };
     }
 
@@ -91,6 +103,7 @@ export async function syncRequestToCrmLead(
         promo_code: req.promo_code,
         stage: opts.stage ?? (customerId ? "won" : "new_lead"),
         converted_customer_id: customerId,
+        ...scoreFields,
       } as never)
       .select("id")
       .single();
