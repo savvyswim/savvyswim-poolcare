@@ -109,3 +109,56 @@ export async function syncRequestToCrmLead(
     return { ok: false, error: err instanceof Error ? err.message : "unknown" };
   }
 }
+
+/**
+ * Puts a new lead into the app's email inbox as an incoming conversation.
+ * The inbox tables arrive with the app merge; until then this quietly skips.
+ */
+async function addLeadToInbox(l: {
+  ref: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  customerId: string | null;
+  body: string;
+}) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as unknown as { from: (t: string) => any };
+    const subject = `New website request ${l.ref}, ${l.name}`;
+    const { data: existing, error: lookErr } = await db
+      .from("ss_email_threads")
+      .select("id")
+      .eq("subject", subject)
+      .limit(1)
+      .maybeSingle();
+    if (lookErr || existing) return;
+    const participant = l.email ?? `no-email.${l.ref}@savvyswim.com`;
+    const { data: thread, error } = await db
+      .from("ss_email_threads")
+      .insert({
+        customer_id: l.customerId,
+        participant_email: participant,
+        participant_name: l.name,
+        subject,
+        unread_count: 1,
+        last_direction: "in",
+        last_snippet: l.body.slice(0, 140),
+      })
+      .select("id")
+      .single();
+    if (error || !thread) return;
+    await db.from("ss_email_messages").insert({
+      thread_id: thread.id,
+      direction: "in",
+      from_email: participant,
+      from_name: l.name,
+      to_email: "hi@savvyswim.com",
+      subject,
+      body_text: l.body,
+    });
+  } catch (err) {
+    console.error("addLeadToInbox skipped", err);
+  }
+}
