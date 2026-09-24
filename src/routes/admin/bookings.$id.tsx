@@ -12,6 +12,7 @@ import {
 } from "@/lib/booking-followup.functions";
 import { BOOKING_STAGES, STAGE_LABEL } from "@/lib/booking-stage";
 import { setBookingStatus } from "@/lib/bookings-dashboard.functions";
+import { getCustomerMessages, replyCustomerMessage } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/admin/bookings/$id")({
   component: BookingFollowUpPage,
@@ -316,6 +317,8 @@ function BookingFollowUpPage() {
               ))}
             </div>
 
+            {b.converted_customer_id ? <PortalMessages customerId={b.converted_customer_id} /> : null}
+
             <h2 className="mt-10 font-display text-xl uppercase tracking-[0.08em]">Conversation</h2>
             <ul className="mt-3 space-y-3">
               <li className="border-l-2 border-[#1FA9BE] pl-3 text-sm">
@@ -462,5 +465,70 @@ function BookingFollowUpPage() {
         </>
       )}
     </main>
+  );
+}
+
+function PortalMessages({ customerId }: { customerId: string }) {
+  const fetchMsgs = useServerFn(getCustomerMessages);
+  const reply = useServerFn(replyCustomerMessage);
+  const [body, setBody] = useState("");
+  const [busy, setBusy] = useState(false);
+  const q = useQuery({
+    queryKey: ["portal-msgs", customerId],
+    queryFn: () => fetchMsgs({ data: { customerId } }),
+  });
+  return (
+    <section className="mt-10">
+      <h2 className="font-display text-xl uppercase tracking-[0.08em]">Portal messages</h2>
+      <p className="mt-1 text-xs text-foreground/55">
+        {q.data?.hasLogin ? "This customer has a portal login." : "No portal login yet."}
+      </p>
+      <ul className="mt-3 space-y-2">
+        {(q.data?.messages ?? []).length === 0 ? (
+          <li className="text-sm text-foreground/55">No portal messages yet.</li>
+        ) : (
+          q.data!.messages.map((m) => (
+            <li
+              key={m.id}
+              className={`border-l-2 pl-3 text-sm ${m.author_kind === "customer" ? "border-[#1FA9BE]" : "border-primary"}`}
+            >
+              <span className="text-foreground/50">
+                {m.author_kind === "customer" ? "Customer" : m.author_label ?? "Office"}, {when(m.created_at)}
+              </span>
+              <p className="whitespace-pre-wrap">{m.body}</p>
+            </li>
+          ))
+        )}
+      </ul>
+      <form
+        className="mt-3 flex gap-2"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (!body.trim()) return;
+          setBusy(true);
+          try {
+            await reply({ data: { customerId, body } });
+            setBody("");
+            toast.success("Reply posted to their portal");
+            q.refetch();
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Could not send");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        <input
+          aria-label="Reply in portal"
+          className="flex-1 border border-foreground/20 bg-transparent px-3 py-2 text-sm"
+          placeholder="Reply in their portal"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <button disabled={busy} className="bg-primary px-4 py-2 text-xs uppercase tracking-[0.12em] text-primary-foreground disabled:opacity-60">
+          {busy ? "Sending..." : "Reply"}
+        </button>
+      </form>
+    </section>
   );
 }
