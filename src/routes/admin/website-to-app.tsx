@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getWebsiteToAppReport, resendWebsiteItem } from "@/lib/website-to-app.functions";
+import { getWebsiteToAppReport, resendWebsiteItem, getSameOnBoth, fixSameOnBoth } from "@/lib/website-to-app.functions";
 import type { WebsiteToAppRow } from "@/lib/website-to-app.functions";
 
 export const Route = createFileRoute("/admin/website-to-app")({
@@ -166,6 +166,8 @@ function WebsiteToAppPage() {
         </div>
       ) : null}
 
+      <SameOnBoth />
+
       <label className="mt-6 flex items-center gap-2 text-sm">
         <input
           type="checkbox"
@@ -254,5 +256,48 @@ function WebsiteToAppPage() {
         </table>
       </div>
     </main>
+  );
+}
+
+function SameOnBoth() {
+  const check = useServerFn(getSameOnBoth);
+  const fix = useServerFn(fixSameOnBoth);
+  const [busy, setBusy] = useState(false);
+  const q = useQuery({ queryKey: ["same-on-both"], queryFn: () => check() });
+  const missing = q.data?.missing ?? [];
+  return (
+    <section className="mt-6 border border-foreground/15 p-4">
+      <h2 className="text-xs uppercase tracking-[0.16em] text-foreground/55">Same on both</h2>
+      {q.isLoading ? (
+        <p className="mt-2 text-sm">Checking...</p>
+      ) : q.isError ? (
+        <p className="mt-2 text-sm">Could not run the check. Try Refresh.</p>
+      ) : missing.length === 0 ? (
+        <p className="mt-2 text-sm">All {q.data?.total ?? 0} website requests from the last 90 days are in the CRM lead list.</p>
+      ) : (
+        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+          <span>{missing.length} of {q.data?.total} website requests are missing from the CRM lead list.</span>
+          <button
+            type="button"
+            disabled={busy}
+            className="border border-foreground/20 px-3 py-1.5 disabled:opacity-60"
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const r = await fix({ data: { ids: missing.map((m) => m.id) } });
+                toast.success(`${r.fixed} added to the CRM`);
+                await q.refetch();
+              } catch {
+                toast.error("Could not add them, try again");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {busy ? "Adding..." : "Add them to the CRM"}
+          </button>
+        </div>
+      )}
+    </section>
   );
 }

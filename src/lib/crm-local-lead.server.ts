@@ -43,13 +43,19 @@ export async function syncRequestToCrmLead(
       const since = new Date(Date.now() - 90 * 864e5).toISOString();
       const { data: recent } = await supabaseAdmin
         .from("ss_leads")
-        .select("id, phone, email")
+        .select("id, phone, email, message")
         .gte("created_at", since)
         .limit(500);
       const hit = (recent ?? []).find(
         (l) => (phone && digits(l.phone) === phone) || (email && l.email?.toLowerCase() === email),
       );
       leadId = hit?.id ?? null;
+      if (hit) {
+        await supabaseAdmin
+          .from("ss_leads")
+          .update({ message: [hit.message, marker].filter(Boolean).join("\n") } as never)
+          .eq("id", hit.id);
+      }
     }
 
     const city = (req.address ?? "").split(",").map((s) => s.trim())[1] ?? null;
