@@ -167,6 +167,7 @@ function BookingsPage() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  const [sortScore, setSortScore] = useState(false);
   const query = useQuery({
     queryKey: ["admin-bookings", range],
     queryFn: () => fetchReport({ data: { range } }),
