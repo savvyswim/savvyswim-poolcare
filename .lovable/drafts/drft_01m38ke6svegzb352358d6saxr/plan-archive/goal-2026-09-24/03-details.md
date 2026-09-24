@@ -1,22 +1,16 @@
-## Testing
-There is no sign-up form on the website, so there's nothing to test sign-up against. Instead I'll test the real forms on /office in a browser:
-1. Signing in without passing the check is blocked.
-2. Signing in with the check passed works with the office account.
-3. Forgot password works with the check.
-4. A fake sign-in sent straight to our server with no check token is refused.
+## What I need from you
+- The go-ahead to run one short request in the SavvySwim CRM project. It adds the temporary export button there.
+- Accept each draft here as each stage finishes, because database changes only apply once a draft is accepted.
+- Near the end, connect the savvyswim.app domain to this project in Domains.
+- Card payments, emails and texts may need their keys added again here if the app has its own. I'll list exactly which ones before stage 3.
 
-Cloudflare's always-pass test keys make steps 2 and 3 possible in the test browser. Your real keys stay in use on the live site.
-
-## Limits to know
-- Turnstile on its own blocks bots that use the website forms. It can't stop bots that skip the website and talk directly to the login service, because the login service doesn't have a Turnstile setting I can switch on.
-- The right fix for fake accounts is to **turn off public sign-up** on the shared login service, since the website never uses it. But savvyswim.app shares that same login service. If the app lets customers sign themselves up, turning it off would break that. I'll leave it on unless you confirm the app only uses office-created accounts.
+## Things to know
+- It's a big move, done over several sessions, not one. Until the last stage, the old app keeps running unchanged.
+- The app project also carries some old copy about vehicles and dents. None of it will be brought over.
+- The pages this project already built (bookings, calendar, the /office hub) stay. Anything they duplicate from the app gets merged, not doubled.
 
 ## Technical details
-- Secrets: `TURNSTILE_SECRET_KEY` (server only) and `VITE_TURNSTILE_SITE_KEY` (the public site key).
-- `src/components/Turnstile.tsx`: loads `challenges.cloudflare.com/turnstile/v0/api.js` once, only on the client, and returns the token through a callback. It resets after each submit.
-- `src/lib/turnstile.server.ts`: `verifyTurnstile(token, ip)` posts to `siteverify` and checks `success` and the hostname.
-- `src/lib/auth-gate.functions.ts`:
-  - `signInWithCheck`: verifies the token, then calls the password sign-in on the server and returns the session.
-  - `resetWithCheck`: verifies the token, then sends the reset email.
-- `src/routes/office.tsx`: replace the direct sign-in and reset calls with the new functions, then call `supabase.auth.setSession` with the returned session.
-- If the site key is missing, the form shows a clear notice instead of failing without explanation.
+- The app is on TanStack Start with its own backend. It has about 189 migrations, 20 edge functions and 580 files. This project also has `ss_*` tables of its own.
+- Stage 1: compare the two schemas table by table. Stage any missing tables and columns as additive migrations here. The export is an office-gated server route in the app. The import is an office-gated server function here, idempotent and keyed on the original ids. Logins are re-created with the admin API using the same user ids, so every link survives. Stored files are copied bucket to bucket.
+- Stage 2: copy `src/crm`, `src/crew`, `src/mobile` and the `_crm`/`_crew` routes. Rewrite each edge function as a `createServerFn` or `/api/public/*` route. Skip banned terms.
+- Stage 4: remove `crm-lead-forward` and the retry cron once everything matches.
