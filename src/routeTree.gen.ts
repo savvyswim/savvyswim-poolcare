@@ -381,9 +381,9 @@ const AdminCrmSplatRoute = AdminCrmSplatRouteImport.update({
   getParentRoute: () => AdminCrmRoute,
 } as any)
 const AdminBookingsIdRoute = AdminBookingsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminBookingsRoute,
+  id: '/admin/bookings/$id',
+  path: '/admin/bookings/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -1030,6 +1030,7 @@ export interface RootRouteChildren {
   SignTokenRoute: typeof SignTokenRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  AdminBookingsIdRoute: typeof AdminBookingsIdRoute
   ApiPublicEventsRoute: typeof ApiPublicEventsRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicLeadsRoute: typeof ApiPublicLeadsRoute
@@ -1463,10 +1464,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/bookings/$id': {
       id: '/admin/bookings/$id'
-      path: '/$id'
+      path: '/admin/bookings/$id'
       fullPath: '/admin/bookings/$id'
       preLoaderRoute: typeof AdminBookingsIdRouteImport
-      parentRoute: typeof AdminBookingsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -1692,6 +1693,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignTokenRoute: SignTokenRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  AdminBookingsIdRoute: AdminBookingsIdRoute,
   ApiPublicEventsRoute: ApiPublicEventsRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicLeadsRoute: ApiPublicLeadsRoute,
