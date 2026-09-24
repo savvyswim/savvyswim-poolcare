@@ -95,7 +95,7 @@ function SignIn({ onDone }: { onDone: () => void }) {
 
 function WebsiteToAppPage() {
   const [authed, setAuthed] = useState<boolean | null>(null);
-  const [onlyFailed, setOnlyFailed] = useState(false);
+  const [onlyFailed, setOnlyFailed] = useState<"all" | "sent" | "bounced" | "abandoned">("all");
   const [busyId, setBusyId] = useState<string | null>(null);
   const fetchReport = useServerFn(getWebsiteToAppReport);
   const resend = useServerFn(resendWebsiteItem);
@@ -117,7 +117,7 @@ function WebsiteToAppPage() {
   const report = query.data;
   const visible = useMemo(() => {
     if (!report) return [];
-    return onlyFailed ? report.rows.filter((r) => r.outcome !== "success") : report.rows;
+    return onlyFailed === "all" ? report.rows : report.rows.filter((r) => r.status === onlyFailed);
   }, [report, onlyFailed]);
 
   if (authed === null) return <div className="p-10 text-sm text-foreground/60">Loading...</div>;
@@ -150,14 +150,18 @@ function WebsiteToAppPage() {
       </header>
 
       {report ? (
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="border border-foreground/15 p-4">
-            <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Sent over</p>
+            <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Sent</p>
             <p className="mt-1 text-2xl font-black">{report.totals.delivered}</p>
           </div>
           <div className="border border-foreground/15 p-4">
-            <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Needs attention</p>
-            <p className="mt-1 text-2xl font-black text-[#8E1F2C]">{report.totals.failed}</p>
+            <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Bounced, retrying</p>
+            <p className="mt-1 text-2xl font-black text-[#8E1F2C]">{report.totals.bounced}</p>
+          </div>
+          <div className="border border-foreground/15 p-4">
+            <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Abandoned</p>
+            <p className="mt-1 text-2xl font-black text-[#8E1F2C]">{report.totals.abandoned}</p>
           </div>
           <div className="border border-foreground/15 p-4">
             <p className="text-xs uppercase tracking-[0.16em] text-foreground/55">Total tracked</p>
@@ -168,14 +172,19 @@ function WebsiteToAppPage() {
 
       <SameOnBoth />
 
-      <label className="mt-6 flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={onlyFailed}
-          onChange={(e) => setOnlyFailed(e.target.checked)}
-        />
-        Show only what did not land
-      </label>
+      <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-foreground/60">Show:</span>
+        {(["all", "sent", "bounced", "abandoned"] as const).map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => setOnlyFailed(s)}
+            className={`border px-3 py-1 ${onlyFailed === s ? "border-foreground bg-foreground/10" : "border-foreground/20"}`}
+          >
+            {s === "all" ? "All" : s === "sent" ? "Sent" : s === "bounced" ? "Bounced" : "Abandoned"}
+          </button>
+        ))}
+      </div>
 
       <div className="mt-4 overflow-x-auto border border-foreground/15">
         <table className="w-full min-w-[820px] text-left text-sm">
@@ -217,16 +226,18 @@ function WebsiteToAppPage() {
                   <td className="px-3 py-2 whitespace-nowrap">{when(row.last_attempt_at)}</td>
                   <td className="px-3 py-2">{row.attempts}</td>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {row.outcome === "success" ? (
-                      <span className="text-[#1FA9BE]">Landed in the app</span>
-                    ) : (
+                    {row.status === "sent" ? (
+                      <span className="text-[#1FA9BE]">Sent</span>
+                    ) : row.status === "bounced" ? (
                       <span className="text-[#8E1F2C]">
-                        Did not land{row.http_status ? ` (${row.http_status})` : ""}
+                        Bounced, retrying{row.http_status ? ` (${row.http_status})` : ""}
                       </span>
+                    ) : (
+                      <span className="font-semibold text-[#8E1F2C]">Abandoned</span>
                     )}
                   </td>
                   <td className="px-3 py-2">
-                    {row.outcome === "success" ? null : (
+                    {row.status === "sent" ? null : (
                       <button
                         className="border border-foreground/25 px-2 py-1 text-xs disabled:opacity-50"
                         disabled={busyId === row.id}
