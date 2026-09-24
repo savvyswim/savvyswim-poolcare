@@ -1,0 +1,6 @@
+## Technical details
+- Leads: call fixSameOnBoth logic as the office, then for each request call forwardInspectionToCrm (POST savvyswim.app/api/public/leads, which dedupes by ref). Verify with the SavvySwim CRM connection (list_leads / find by ref) and record per-request result.
+- Walkthrough: resend recovery if asked; mint an office session with `lovable auth-session` for hi@savvyswim.com; Playwright under /tmp/browser/walkthrough; test rows flagged and deleted afterward.
+- Turnstile: unchanged from the earlier plan, waiting on TURNSTILE_SECRET_KEY and VITE_TURNSTILE_SITE_KEY.
+- Portal: `src/routes/portal.tsx` becomes a real page (sign-in with existing /office auth, redirect customers there after sign-in). Data via `requireSupabaseAuth` server functions: requests matched to `ss_my_customer_ids()` through converted_customer_id or email; visits from `ss_visits` for those customers; reschedule via `ss_request_visit_reschedule`; messages use existing `ss_tickets` / `ss_ticket_messages` (check their RLS lets customers read and write their own rows first; if not, stage an additive policy migration). Office side: `/admin/messages` list and reply; new-message email to hi@savvyswim.com. "Invite to portal" uses inviteUserByEmail, office-gated, linking ss_customers.user_id.
+- Roadmap updated.
