@@ -151,3 +151,77 @@ export const fixSameOnBoth = createServerFn({ method: "POST" })
     }
     return { fixed };
   });
+
+const digits = (s: string | null | undefined) => (s ?? "").replace(/\D/g, "").slice(-10);
+
+async function findMissingAppCustomers() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const since = new Date(Date.now() - 90 * 864e5).toISOString();
+  const [{ data: custs }, { data: reqs }] = await Promise.all([
+    supabaseAdmin
+      .from("ss_customers")
+      .select("id, full_name, phone, email, address, city, state, postal_code, created_at")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(500),
+    supabaseAdmin.from("inspection_requests").select("phone, email, converted_customer_id").limit(5000),
+  ]);
+  const phones = new Set<string>();
+  const emails = new Set<string>();
+  const linked = new Set<string>();
+  for (const r of reqs ?? []) {
+    const p = digits(r.phone);
+    if (p.length === 10) phones.add(p);
+    if (r.email) emails.add(r.email.toLowerCase());
+    if (r.converted_customer_id) linked.add(r.converted_customer_id);
+  }
+  const missing = (custs ?? []).filter((c) => {
+    if (linked.has(c.id)) return false;
+    const p = digits(c.phone);
+    if (p.length === 10 && phones.has(p)) return false;
+    if (c.email && emails.has(c.email.toLowerCase())) return false;
+    return true;
+  });
+  return { total: custs?.length ?? 0, missing, supabaseAdmin };
+}
+
+/** App customers (last 90 days) missing from the website lead list. */
+export const getAppCustomersMissing = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertOffice(context.supabase as never);
+    const { total, missing } = await findMissingAppCustomers();
+    return {
+      total,
+      missing: missing.map((c) => ({ id: c.id, name: c.full_name, created_at: c.created_at })),
+    };
+  });
+
+/** Adds missing app customers to the website lead list (no emails, no CRM forward). */
+export const pushAppCustomersToWebsite = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ ids: z.array(z.string().uuid()).max(500) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertOffice(context.supabase as never);
+    const { missing, supabaseAdmin } = await findMissingAppCustomers();
+    const wanted = new Set(data.ids);
+    let added = 0;
+    for (const c of missing.filter((m) => wanted.has(m.id))) {
+      const { error } = await supabaseAdmin.from("inspection_requests").insert({
+        full_name: c.full_name,
+        phone: c.phone ?? "",
+        email: c.email ?? `no-email.${c.id}@savvyswim.com`,
+        address: c.address ?? "",
+        city: c.city,
+        postal_code: c.postal_code ?? "",
+        source: "crm_app",
+        status: "converted",
+        converted_customer_id: c.id,
+        converted_at: new Date().toISOString(),
+        notes: "From the app",
+      } as never);
+      if (error) console.error("pushAppCustomersToWebsite", c.id, error.message);
+      else added++;
+    }
+    return { added };
+  });
