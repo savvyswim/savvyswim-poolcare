@@ -85,6 +85,20 @@ function SignIn() {
       >
         {busy ? "Checking..." : "Sign in"}
       </button>
+      <button
+        type="button"
+        className="mt-3 text-xs underline"
+        onClick={async () => {
+          if (!email) return toast.error("Type your email first");
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`,
+          });
+          if (error) toast.error(error.message);
+          else toast.success("Check your email for a reset link");
+        }}
+      >
+        Forgot password?
+      </button>
       <p className="mt-4 text-xs text-foreground/60">
         Pool owner? <a className="underline" href={portalUrl()}>Open your customer account</a>
       </p>
