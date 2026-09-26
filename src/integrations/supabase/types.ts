@@ -1203,7 +1203,15 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_access_codes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_access_requests: {
         Row: {
@@ -1260,7 +1268,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_access_requests_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_accounts: {
         Row: {
@@ -1769,7 +1785,15 @@ export type Database = {
           transcript?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_calls_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_canary_incidents: {
         Row: {
@@ -2078,7 +2102,15 @@ export type Database = {
           last_preview?: string | null
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_chat_channels_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_chat_messages: {
         Row: {
@@ -2108,7 +2140,15 @@ export type Database = {
           created_at?: string
           id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_chat_messages_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "ss_chat_channels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_check_payments: {
         Row: {
@@ -2159,7 +2199,29 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_check_payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_check_payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_check_payments_posted_payment_id_fkey"
+            columns: ["posted_payment_id"]
+            isOneToOne: false
+            referencedRelation: "ss_payments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_checklist_items: {
         Row: {
@@ -2881,7 +2943,15 @@ export type Database = {
           size_bytes?: number | null
           storage_path?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_attachments_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "ss_email_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_email_campaign_recipients: {
         Row: {
@@ -2926,7 +2996,22 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ss_email_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_email_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_email_campaigns: {
         Row: {
@@ -2986,7 +3071,22 @@ export type Database = {
           template_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_campaigns_sent_by_fkey"
+            columns: ["sent_by"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_email_campaigns_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "ss_email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_email_messages: {
         Row: {
@@ -3049,7 +3149,22 @@ export type Database = {
           thread_id?: string
           to_email?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_messages_sent_by_fkey"
+            columns: ["sent_by"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_email_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "ss_email_threads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_email_templates: {
         Row: {
@@ -3088,7 +3203,15 @@ export type Database = {
           subject?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_email_threads: {
         Row: {
@@ -3136,7 +3259,22 @@ export type Database = {
           unread_count?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_email_threads_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_email_threads_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_equipment: {
         Row: {
@@ -3376,7 +3514,22 @@ export type Database = {
           lead_id?: string | null
           pinned?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_internal_notes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_internal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_internal_tasks: {
         Row: {
@@ -3436,7 +3589,22 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_internal_tasks_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_internal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_inventory: {
         Row: {
@@ -3692,7 +3860,15 @@ export type Database = {
           stripe_session_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_invoice_reconciliation_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: true
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_invoices: {
         Row: {
@@ -3964,7 +4140,29 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_lead_appointments_assigned_staff_id_fkey"
+            columns: ["assigned_staff_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_lead_appointments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_lead_appointments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ss_leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_lead_events: {
         Row: {
@@ -4385,7 +4583,22 @@ export type Database = {
           stripe_session_id?: string | null
           webhook_ok?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_payment_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payment_events_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_payment_pickups: {
         Row: {
@@ -4454,7 +4667,36 @@ export type Database = {
           tech_note?: string | null
           visit_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_payment_pickups_assigned_tech_id_fkey"
+            columns: ["assigned_tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payment_pickups_collected_by_fkey"
+            columns: ["collected_by"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payment_pickups_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payment_pickups_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: true
+            referencedRelation: "ss_visits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_payment_proofs: {
         Row: {
@@ -4484,7 +4726,22 @@ export type Database = {
           method?: string
           note?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_payment_proofs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_payment_proofs_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "ss_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_payments: {
         Row: {
@@ -4598,7 +4855,15 @@ export type Database = {
           updated_at?: string
           visits_per_month?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_pool_costs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: true
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_price_book: {
         Row: {
@@ -5312,7 +5577,29 @@ export type Database = {
           user_agent?: string | null
           visit_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_qr_scans_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qr_scans_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qr_scans_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_qr_tags: {
         Row: {
@@ -5381,7 +5668,36 @@ export type Database = {
           updated_at?: string
           water_body_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_qr_tags_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "ss_qr_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qr_tags_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qr_tags_service_address_id_fkey"
+            columns: ["service_address_id"]
+            isOneToOne: false
+            referencedRelation: "ss_service_addresses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_qr_tags_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "ss_water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_quote_items: {
         Row: {
@@ -5744,7 +6060,22 @@ export type Database = {
           status?: string
           visit_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_report_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_report_events_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_review_requests: {
         Row: {
@@ -6508,7 +6839,15 @@ export type Database = {
           weekday?: number
           window_minutes?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_staff_availability_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_staff_time_off: {
         Row: {
