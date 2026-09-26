@@ -1,0 +1,86 @@
+CREATE INDEX IF NOT EXISTS ss_visit_requests_pending_idx ON public.ss_visit_requests USING btree (status, requested_date);
+DO $mig$
+DECLARE s text;
+BEGIN
+  FOREACH s IN ARRAY ARRAY[
+    'CREATE TRIGGER ss_access_codes_touch BEFORE UPDATE ON public.ss_access_codes FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_access_requests_touch BEFORE UPDATE ON public.ss_access_requests FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_bank_details_touch BEFORE UPDATE ON public.ss_bank_details FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_calls_touch BEFORE UPDATE ON public.ss_calls FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_chat_messages_touch AFTER INSERT ON public.ss_chat_messages FOR EACH ROW EXECUTE FUNCTION public.ss_tg_chat_touch()',
+    'CREATE TRIGGER ss_check_payments_touch BEFORE UPDATE ON public.ss_check_payments FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_email_threads_touch BEFORE UPDATE ON public.ss_email_threads FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_internal_tasks_touch BEFORE UPDATE ON public.ss_internal_tasks FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_lead_appointments_touch BEFORE UPDATE ON public.ss_lead_appointments FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_notification_prefs_touch BEFORE UPDATE ON public.ss_notification_prefs FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_phone_optouts_touch BEFORE UPDATE ON public.ss_phone_optouts FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_pool_costs_touch BEFORE UPDATE ON public.ss_pool_costs FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_pricing_settings_touch BEFORE UPDATE ON public.ss_pricing_settings FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_push_subscriptions_touch BEFORE UPDATE ON public.ss_push_subscriptions FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_qr_batches_updated BEFORE UPDATE ON public.ss_qr_batches FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_qr_tags_updated BEFORE UPDATE ON public.ss_qr_tags FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_quote_templates_updated_at BEFORE UPDATE ON public.ss_quote_templates FOR EACH ROW EXECUTE FUNCTION public.tg_set_updated_at()',
+    'CREATE TRIGGER ss_staff_availability_touch BEFORE UPDATE ON public.ss_staff_availability FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_staff_time_off_touch BEFORE UPDATE ON public.ss_staff_time_off FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_truck_stock_updated_at BEFORE UPDATE ON public.ss_truck_stock FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_vault_logins_touch BEFORE UPDATE ON public.ss_vault_logins FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_vendors_touch BEFORE UPDATE ON public.ss_vendors FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER ss_visit_requests_updated_at BEFORE UPDATE ON public.ss_visit_requests FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER trg_ss_invoice_recon_touch BEFORE UPDATE ON public.ss_invoice_reconciliation FOR EACH ROW EXECUTE FUNCTION public.ss_touch_updated_at()',
+    'CREATE TRIGGER update_ss_native_push_tokens_updated_at BEFORE UPDATE ON public.ss_native_push_tokens FOR EACH ROW EXECUTE FUNCTION public.update_ss_native_push_tokens_updated_at()',
+    'ALTER TABLE ONLY public.ss_access_codes ADD CONSTRAINT ss_access_codes_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_access_requests ADD CONSTRAINT ss_access_requests_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_calls ADD CONSTRAINT ss_calls_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_chat_channels ADD CONSTRAINT ss_chat_channels_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_chat_messages ADD CONSTRAINT ss_chat_messages_channel_id_fkey FOREIGN KEY (channel_id) REFERENCES public.ss_chat_channels(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_check_payments ADD CONSTRAINT ss_check_payments_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_check_payments ADD CONSTRAINT ss_check_payments_invoice_id_fkey FOREIGN KEY (invoice_id) REFERENCES public.ss_invoices(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_check_payments ADD CONSTRAINT ss_check_payments_posted_payment_id_fkey FOREIGN KEY (posted_payment_id) REFERENCES public.ss_payments(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_attachments ADD CONSTRAINT ss_email_attachments_message_id_fkey FOREIGN KEY (message_id) REFERENCES public.ss_email_messages(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_email_campaign_recipients ADD CONSTRAINT ss_email_campaign_recipients_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES public.ss_email_campaigns(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_email_campaign_recipients ADD CONSTRAINT ss_email_campaign_recipients_lead_id_fkey FOREIGN KEY (lead_id) REFERENCES public.ss_leads(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_campaigns ADD CONSTRAINT ss_email_campaigns_sent_by_fkey FOREIGN KEY (sent_by) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_campaigns ADD CONSTRAINT ss_email_campaigns_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.ss_email_templates(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_messages ADD CONSTRAINT ss_email_messages_sent_by_fkey FOREIGN KEY (sent_by) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_messages ADD CONSTRAINT ss_email_messages_thread_id_fkey FOREIGN KEY (thread_id) REFERENCES public.ss_email_threads(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_email_templates ADD CONSTRAINT ss_email_templates_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_threads ADD CONSTRAINT ss_email_threads_assigned_to_fkey FOREIGN KEY (assigned_to) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_email_threads ADD CONSTRAINT ss_email_threads_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_internal_notes ADD CONSTRAINT ss_internal_notes_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_internal_notes ADD CONSTRAINT ss_internal_notes_lead_id_fkey FOREIGN KEY (lead_id) REFERENCES public.ss_leads(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_internal_tasks ADD CONSTRAINT ss_internal_tasks_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_internal_tasks ADD CONSTRAINT ss_internal_tasks_lead_id_fkey FOREIGN KEY (lead_id) REFERENCES public.ss_leads(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_invoice_reconciliation ADD CONSTRAINT ss_invoice_reconciliation_invoice_id_fkey FOREIGN KEY (invoice_id) REFERENCES public.ss_invoices(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_lead_appointments ADD CONSTRAINT ss_lead_appointments_assigned_staff_id_fkey FOREIGN KEY (assigned_staff_id) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_lead_appointments ADD CONSTRAINT ss_lead_appointments_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_lead_appointments ADD CONSTRAINT ss_lead_appointments_lead_id_fkey FOREIGN KEY (lead_id) REFERENCES public.ss_leads(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_native_push_tokens ADD CONSTRAINT ss_native_push_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_payment_events ADD CONSTRAINT ss_payment_events_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_payment_events ADD CONSTRAINT ss_payment_events_invoice_id_fkey FOREIGN KEY (invoice_id) REFERENCES public.ss_invoices(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_payment_pickups ADD CONSTRAINT ss_payment_pickups_assigned_tech_id_fkey FOREIGN KEY (assigned_tech_id) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_payment_pickups ADD CONSTRAINT ss_payment_pickups_collected_by_fkey FOREIGN KEY (collected_by) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_payment_pickups ADD CONSTRAINT ss_payment_pickups_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_payment_pickups ADD CONSTRAINT ss_payment_pickups_visit_id_fkey FOREIGN KEY (visit_id) REFERENCES public.ss_visits(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_payment_proofs ADD CONSTRAINT ss_payment_proofs_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_payment_proofs ADD CONSTRAINT ss_payment_proofs_invoice_id_fkey FOREIGN KEY (invoice_id) REFERENCES public.ss_invoices(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_pool_costs ADD CONSTRAINT ss_pool_costs_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE CASCADE',
+    'ALTER TABLE ONLY public.ss_qr_scans ADD CONSTRAINT ss_qr_scans_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_scans ADD CONSTRAINT ss_qr_scans_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.ss_staff(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_scans ADD CONSTRAINT ss_qr_scans_visit_id_fkey FOREIGN KEY (visit_id) REFERENCES public.ss_visits(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_tags ADD CONSTRAINT ss_qr_tags_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ss_qr_batches(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_tags ADD CONSTRAINT ss_qr_tags_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_tags ADD CONSTRAINT ss_qr_tags_service_address_id_fkey FOREIGN KEY (service_address_id) REFERENCES public.ss_service_addresses(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_qr_tags ADD CONSTRAINT ss_qr_tags_water_body_id_fkey FOREIGN KEY (water_body_id) REFERENCES public.ss_water_bodies(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_report_events ADD CONSTRAINT ss_report_events_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.ss_customers(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_report_events ADD CONSTRAINT ss_report_events_visit_id_fkey FOREIGN KEY (visit_id) REFERENCES public.ss_visits(id) ON DELETE SET NULL',
+    'ALTER TABLE ONLY public.ss_staff_availability ADD CONSTRAINT ss_staff_availability_tech_id_fkey FOREIGN KEY (tech_id) REFERENCES public.ss_staff(id) ON DELETE CASCADE'
+  ]
+  LOOP
+    BEGIN
+      EXECUTE s;
+    EXCEPTION WHEN duplicate_object OR duplicate_table OR invalid_table_definition THEN
+      NULL;
+    END;
+  END LOOP;
+END
+$mig$;
