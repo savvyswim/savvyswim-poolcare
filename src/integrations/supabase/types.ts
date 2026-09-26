@@ -6877,7 +6877,15 @@ export type Database = {
           tech_id?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_staff_time_off_tech_id_fkey"
+            columns: ["tech_id"]
+            isOneToOne: false
+            referencedRelation: "ss_staff"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_suppression: {
         Row: {
@@ -7302,7 +7310,22 @@ export type Database = {
           truck_id?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_truck_stock_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "ss_inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_truck_stock_truck_id_fkey"
+            columns: ["truck_id"]
+            isOneToOne: false
+            referencedRelation: "ss_trucks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_trucks: {
         Row: {
@@ -7421,7 +7444,15 @@ export type Database = {
           username?: string | null
           vendor_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_vault_logins_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "ss_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_vendors: {
         Row: {
@@ -7523,7 +7554,22 @@ export type Database = {
           window_end?: string | null
           window_start?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ss_visit_requests_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "ss_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ss_visit_requests_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "ss_visits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ss_visits: {
         Row: {
