@@ -651,6 +651,7 @@ export type Database = {
       inspection_requests: {
         Row: {
           address: string
+          assigned_staff_id: string | null
           campaign_id: string | null
           consent_text: string | null
           contact_consent: boolean
@@ -659,7 +660,10 @@ export type Database = {
           created_at: string
           crm_lead_id: string | null
           crm_synced_at: string | null
+          customer_note: string | null
           email: string
+          eta_at: string | null
+          eta_window: string | null
           full_name: string
           id: string
           landing_page: string | null
@@ -680,6 +684,7 @@ export type Database = {
           sms_opt_in: boolean
           source: string | null
           status: string
+          status_changed_at: string | null
           updated_at: string
           utm_campaign: string | null
           utm_content: string | null
@@ -689,6 +694,7 @@ export type Database = {
         }
         Insert: {
           address: string
+          assigned_staff_id?: string | null
           campaign_id?: string | null
           consent_text?: string | null
           contact_consent?: boolean
@@ -697,7 +703,10 @@ export type Database = {
           created_at?: string
           crm_lead_id?: string | null
           crm_synced_at?: string | null
+          customer_note?: string | null
           email: string
+          eta_at?: string | null
+          eta_window?: string | null
           full_name: string
           id?: string
           landing_page?: string | null
@@ -718,6 +727,7 @@ export type Database = {
           sms_opt_in?: boolean
           source?: string | null
           status?: string
+          status_changed_at?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -727,6 +737,7 @@ export type Database = {
         }
         Update: {
           address?: string
+          assigned_staff_id?: string | null
           campaign_id?: string | null
           consent_text?: string | null
           contact_consent?: boolean
@@ -735,7 +746,10 @@ export type Database = {
           created_at?: string
           crm_lead_id?: string | null
           crm_synced_at?: string | null
+          customer_note?: string | null
           email?: string
+          eta_at?: string | null
+          eta_window?: string | null
           full_name?: string
           id?: string
           landing_page?: string | null
@@ -756,6 +770,7 @@ export type Database = {
           sms_opt_in?: boolean
           source?: string | null
           status?: string
+          status_changed_at?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -2272,6 +2287,7 @@ export type Database = {
           low: number
           market_avg: number
           market_note: string | null
+          rate_basis: string | null
           sort_order: number
           updated_at: string
         }
@@ -2284,6 +2300,7 @@ export type Database = {
           low?: number
           market_avg?: number
           market_note?: string | null
+          rate_basis?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -2296,6 +2313,7 @@ export type Database = {
           low?: number
           market_avg?: number
           market_note?: string | null
+          rate_basis?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -2473,6 +2491,7 @@ export type Database = {
           id: string
           is_active: boolean
           is_default: boolean
+          key: string | null
           name: string
           updated_at: string
         }
@@ -2482,6 +2501,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           is_default?: boolean
+          key?: string | null
           name: string
           updated_at?: string
         }
@@ -2491,6 +2511,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           is_default?: boolean
+          key?: string | null
           name?: string
           updated_at?: string
         }
@@ -2652,8 +2673,15 @@ export type Database = {
         Row: {
           address: string | null
           assigned_tech_id: string | null
+          attribution: Json | null
+          attribution_campaign: string | null
+          attribution_landing_page: string | null
+          became_customer_at: string | null
+          billing_anchor_date: string | null
           billing_mode: string
           billing_timing: string
+          card_brand: string | null
+          card_last4: string | null
           charge_for_chems: boolean
           city: string | null
           commitment_end: string | null
@@ -2666,51 +2694,106 @@ export type Database = {
           email: string | null
           emails: Json
           equipment: Json
+          filter_baseline_psi: number | null
+          filter_clean_billing: string | null
+          filter_clean_charge_type: string | null
+          filter_clean_included: boolean | null
+          filter_clean_price: number | null
+          filter_identified_at: string | null
           filter_interval_days: number
+          filter_label_note: string | null
+          filter_label_photo_url: string | null
+          filter_psi_threshold: number | null
+          filter_type: string | null
+          first_month_charge_amount: number | null
+          first_month_charge_status: string | null
+          first_month_charged_at: string | null
+          first_touch_at: string | null
+          first_touch_placement: string | null
           full_name: string
           gallons: number
           gate_code: string | null
+          gate_code_updated_at: string | null
+          gate_code_updated_by: string | null
+          gate_code_updated_by_name: string | null
+          gate_code_updated_by_role: string | null
+          house_photo_path: string | null
           id: string
           internal_notes: string | null
           invoice_day: number
           labor_cost_type: string | null
+          last_backwash_at: string | null
+          last_cartridge_clean_at: string | null
           last_filter_clean_at: string | null
+          last_salt_cell_clean_at: string | null
+          last_touch_at: string | null
+          last_touch_placement: string | null
           lat: number | null
           lng: number | null
           location_code: string | null
           location_notes: string | null
           minutes_at_stop: number | null
           monthly_price: number
+          needs_review: boolean | null
           notify_invoices: boolean
           notify_marketing: boolean
           notify_reports: boolean
           notify_visits: boolean
           phone: string | null
           phones: Json
+          plan_id: string | null
+          pool_number: string | null
+          pool_photo_path: string | null
+          pool_size_band: string | null
           pool_type: string
           postal_code: string | null
           preferred_contact: string
+          price_confirmed_at: string | null
+          price_confirmed_by: string | null
           promo_code: string | null
+          qr_tag_id: string | null
           rate_override: number | null
           rate_override_note: string | null
           rate_type: string | null
           referral_code: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
           route_day: string | null
           route_frequency: string
+          salt_cell_billing: string | null
+          salt_cell_charge_type: string | null
+          salt_cell_included: boolean | null
+          salt_cell_interval_days: number | null
+          salt_cell_price: number | null
+          salt_cell_quantity: number | null
+          sanitizer: string | null
+          service_hold_at: string | null
+          service_hold_reason: string | null
           service_level: string
+          signup_source: string | null
           state: string
           status: Database["public"]["Enums"]["ss_cust_status"]
+          stripe_customer_id: string | null
+          stripe_payment_method_id: string | null
           tech_pay_rate: number | null
           tech_upsell_pct: number | null
           updated_at: string
           user_id: string | null
+          waterfall_override: Json | null
           workflow_template_id: string | null
         }
         Insert: {
           address?: string | null
           assigned_tech_id?: string | null
+          attribution?: Json | null
+          attribution_campaign?: string | null
+          attribution_landing_page?: string | null
+          became_customer_at?: string | null
+          billing_anchor_date?: string | null
           billing_mode?: string
           billing_timing?: string
+          card_brand?: string | null
+          card_last4?: string | null
           charge_for_chems?: boolean
           city?: string | null
           commitment_end?: string | null
@@ -2723,51 +2806,106 @@ export type Database = {
           email?: string | null
           emails?: Json
           equipment?: Json
+          filter_baseline_psi?: number | null
+          filter_clean_billing?: string | null
+          filter_clean_charge_type?: string | null
+          filter_clean_included?: boolean | null
+          filter_clean_price?: number | null
+          filter_identified_at?: string | null
           filter_interval_days?: number
+          filter_label_note?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_threshold?: number | null
+          filter_type?: string | null
+          first_month_charge_amount?: number | null
+          first_month_charge_status?: string | null
+          first_month_charged_at?: string | null
+          first_touch_at?: string | null
+          first_touch_placement?: string | null
           full_name: string
           gallons?: number
           gate_code?: string | null
+          gate_code_updated_at?: string | null
+          gate_code_updated_by?: string | null
+          gate_code_updated_by_name?: string | null
+          gate_code_updated_by_role?: string | null
+          house_photo_path?: string | null
           id?: string
           internal_notes?: string | null
           invoice_day?: number
           labor_cost_type?: string | null
+          last_backwash_at?: string | null
+          last_cartridge_clean_at?: string | null
           last_filter_clean_at?: string | null
+          last_salt_cell_clean_at?: string | null
+          last_touch_at?: string | null
+          last_touch_placement?: string | null
           lat?: number | null
           lng?: number | null
           location_code?: string | null
           location_notes?: string | null
           minutes_at_stop?: number | null
           monthly_price?: number
+          needs_review?: boolean | null
           notify_invoices?: boolean
           notify_marketing?: boolean
           notify_reports?: boolean
           notify_visits?: boolean
           phone?: string | null
           phones?: Json
+          plan_id?: string | null
+          pool_number?: string | null
+          pool_photo_path?: string | null
+          pool_size_band?: string | null
           pool_type?: string
           postal_code?: string | null
           preferred_contact?: string
+          price_confirmed_at?: string | null
+          price_confirmed_by?: string | null
           promo_code?: string | null
+          qr_tag_id?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
           rate_type?: string | null
           referral_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           route_day?: string | null
           route_frequency?: string
+          salt_cell_billing?: string | null
+          salt_cell_charge_type?: string | null
+          salt_cell_included?: boolean | null
+          salt_cell_interval_days?: number | null
+          salt_cell_price?: number | null
+          salt_cell_quantity?: number | null
+          sanitizer?: string | null
+          service_hold_at?: string | null
+          service_hold_reason?: string | null
           service_level?: string
+          signup_source?: string | null
           state?: string
           status?: Database["public"]["Enums"]["ss_cust_status"]
+          stripe_customer_id?: string | null
+          stripe_payment_method_id?: string | null
           tech_pay_rate?: number | null
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          waterfall_override?: Json | null
           workflow_template_id?: string | null
         }
         Update: {
           address?: string | null
           assigned_tech_id?: string | null
+          attribution?: Json | null
+          attribution_campaign?: string | null
+          attribution_landing_page?: string | null
+          became_customer_at?: string | null
+          billing_anchor_date?: string | null
           billing_mode?: string
           billing_timing?: string
+          card_brand?: string | null
+          card_last4?: string | null
           charge_for_chems?: boolean
           city?: string | null
           commitment_end?: string | null
@@ -2780,44 +2918,92 @@ export type Database = {
           email?: string | null
           emails?: Json
           equipment?: Json
+          filter_baseline_psi?: number | null
+          filter_clean_billing?: string | null
+          filter_clean_charge_type?: string | null
+          filter_clean_included?: boolean | null
+          filter_clean_price?: number | null
+          filter_identified_at?: string | null
           filter_interval_days?: number
+          filter_label_note?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_threshold?: number | null
+          filter_type?: string | null
+          first_month_charge_amount?: number | null
+          first_month_charge_status?: string | null
+          first_month_charged_at?: string | null
+          first_touch_at?: string | null
+          first_touch_placement?: string | null
           full_name?: string
           gallons?: number
           gate_code?: string | null
+          gate_code_updated_at?: string | null
+          gate_code_updated_by?: string | null
+          gate_code_updated_by_name?: string | null
+          gate_code_updated_by_role?: string | null
+          house_photo_path?: string | null
           id?: string
           internal_notes?: string | null
           invoice_day?: number
           labor_cost_type?: string | null
+          last_backwash_at?: string | null
+          last_cartridge_clean_at?: string | null
           last_filter_clean_at?: string | null
+          last_salt_cell_clean_at?: string | null
+          last_touch_at?: string | null
+          last_touch_placement?: string | null
           lat?: number | null
           lng?: number | null
           location_code?: string | null
           location_notes?: string | null
           minutes_at_stop?: number | null
           monthly_price?: number
+          needs_review?: boolean | null
           notify_invoices?: boolean
           notify_marketing?: boolean
           notify_reports?: boolean
           notify_visits?: boolean
           phone?: string | null
           phones?: Json
+          plan_id?: string | null
+          pool_number?: string | null
+          pool_photo_path?: string | null
+          pool_size_band?: string | null
           pool_type?: string
           postal_code?: string | null
           preferred_contact?: string
+          price_confirmed_at?: string | null
+          price_confirmed_by?: string | null
           promo_code?: string | null
+          qr_tag_id?: string | null
           rate_override?: number | null
           rate_override_note?: string | null
           rate_type?: string | null
           referral_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           route_day?: string | null
           route_frequency?: string
+          salt_cell_billing?: string | null
+          salt_cell_charge_type?: string | null
+          salt_cell_included?: boolean | null
+          salt_cell_interval_days?: number | null
+          salt_cell_price?: number | null
+          salt_cell_quantity?: number | null
+          sanitizer?: string | null
+          service_hold_at?: string | null
+          service_hold_reason?: string | null
           service_level?: string
+          signup_source?: string | null
           state?: string
           status?: Database["public"]["Enums"]["ss_cust_status"]
+          stripe_customer_id?: string | null
+          stripe_payment_method_id?: string | null
           tech_pay_rate?: number | null
           tech_upsell_pct?: number | null
           updated_at?: string
           user_id?: string | null
+          waterfall_override?: Json | null
           workflow_template_id?: string | null
         }
         Relationships: [
@@ -3616,10 +3802,12 @@ export type Database = {
           pack_size: number | null
           pack_unit: string | null
           quantity: number
+          reorder_qty: number | null
           sku: string | null
           unit: string
           unit_cost: number
           updated_at: string
+          vendor_id: string | null
         }
         Insert: {
           barcode?: string | null
@@ -3630,10 +3818,12 @@ export type Database = {
           pack_size?: number | null
           pack_unit?: string | null
           quantity?: number
+          reorder_qty?: number | null
           sku?: string | null
           unit?: string
           unit_cost?: number
           updated_at?: string
+          vendor_id?: string | null
         }
         Update: {
           barcode?: string | null
@@ -3644,10 +3834,12 @@ export type Database = {
           pack_size?: number | null
           pack_unit?: string | null
           quantity?: number
+          reorder_qty?: number | null
           sku?: string | null
           unit?: string
           unit_cost?: number
           updated_at?: string
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -3667,6 +3859,7 @@ export type Database = {
           quantity_after: number
           reason: string
           total_cost: number | null
+          truck_id: string | null
           unit_cost: number | null
           visit_id: string | null
         }
@@ -3685,6 +3878,7 @@ export type Database = {
           quantity_after: number
           reason?: string
           total_cost?: number | null
+          truck_id?: string | null
           unit_cost?: number | null
           visit_id?: string | null
         }
@@ -3703,6 +3897,7 @@ export type Database = {
           quantity_after?: number
           reason?: string
           total_cost?: number | null
+          truck_id?: string | null
           unit_cost?: number | null
           visit_id?: string | null
         }
@@ -3743,6 +3938,7 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          internal_only: boolean | null
           invoice_id: string
           is_upsell: boolean
           line_total: number
@@ -3757,6 +3953,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
+          internal_only?: boolean | null
           invoice_id: string
           is_upsell?: boolean
           line_total?: number
@@ -3771,6 +3968,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          internal_only?: boolean | null
           invoice_id?: string
           is_upsell?: boolean
           line_total?: number
@@ -3874,13 +4072,18 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          currency: string | null
           customer_id: string
           due_date: string | null
+          hold_at: string | null
           id: string
           invoice_number: string
           issued_on: string
           kind: string
           paid_at: string | null
+          past_due_at: string | null
+          period_month: string | null
+          reminder_sent_at: string | null
           status: string
           stripe_payment_url: string | null
           updated_at: string
@@ -3888,13 +4091,18 @@ export type Database = {
         Insert: {
           amount?: number
           created_at?: string
+          currency?: string | null
           customer_id: string
           due_date?: string | null
+          hold_at?: string | null
           id?: string
           invoice_number?: string
           issued_on?: string
           kind?: string
           paid_at?: string | null
+          past_due_at?: string | null
+          period_month?: string | null
+          reminder_sent_at?: string | null
           status?: string
           stripe_payment_url?: string | null
           updated_at?: string
@@ -3902,13 +4110,18 @@ export type Database = {
         Update: {
           amount?: number
           created_at?: string
+          currency?: string | null
           customer_id?: string
           due_date?: string | null
+          hold_at?: string | null
           id?: string
           invoice_number?: string
           issued_on?: string
           kind?: string
           paid_at?: string | null
+          past_due_at?: string | null
+          period_month?: string | null
+          reminder_sent_at?: string | null
           status?: string
           stripe_payment_url?: string | null
           updated_at?: string
@@ -4032,8 +4245,10 @@ export type Database = {
           customer_id: string
           details: string | null
           due_date: string | null
+          ended_at: string | null
           id: string
           price: number
+          started_at: string | null
           status: string
           tech_id: string | null
           title: string
@@ -4047,8 +4262,10 @@ export type Database = {
           customer_id: string
           details?: string | null
           due_date?: string | null
+          ended_at?: string | null
           id?: string
           price?: number
+          started_at?: string | null
           status?: string
           tech_id?: string | null
           title: string
@@ -4062,8 +4279,10 @@ export type Database = {
           customer_id?: string
           details?: string | null
           due_date?: string | null
+          ended_at?: string | null
           id?: string
           price?: number
+          started_at?: string | null
           status?: string
           tech_id?: string | null
           title?: string
@@ -4205,87 +4424,156 @@ export type Database = {
       ss_leads: {
         Row: {
           address: string | null
+          assigned_at: string | null
+          assigned_staff_id: string | null
+          campaign_id: string | null
+          channel: string | null
           city: string | null
           cleanup_price: number | null
           commitment_months: number | null
           condition: string
           converted_customer_id: string | null
           created_at: string
+          cta: string | null
           email: string | null
+          first_response_at: string | null
           full_name: string
           id: string
+          intake_channel: string | null
+          intake_ref: string | null
+          landing_page: string | null
+          last_reminder_at: string | null
           message: string | null
           monthly_value: number
+          next_action: string | null
+          next_action_due: string | null
+          next_action_owner_id: string | null
+          next_action_set_at: string | null
+          opt_in_at: string | null
           phone: string | null
           photo_url: string | null
+          placement: string | null
           plan_assigned_at: string | null
           plan_id: string | null
           plan_status: string
           pool_size: string | null
           promo_code: string | null
+          referrer: string | null
+          reminder_count: number | null
           service_type: string
+          session_id: string | null
+          sla_due_at: string | null
+          sla_status: string | null
+          sms_opt_in: boolean | null
           source: string
           spa_addon: number
           spa_option: string
           stage: Database["public"]["Enums"]["ss_stage"]
           stage_changed_at: string
           updated_at: string
+          utm: Json | null
         }
         Insert: {
           address?: string | null
+          assigned_at?: string | null
+          assigned_staff_id?: string | null
+          campaign_id?: string | null
+          channel?: string | null
           city?: string | null
           cleanup_price?: number | null
           commitment_months?: number | null
           condition?: string
           converted_customer_id?: string | null
           created_at?: string
+          cta?: string | null
           email?: string | null
+          first_response_at?: string | null
           full_name: string
           id?: string
+          intake_channel?: string | null
+          intake_ref?: string | null
+          landing_page?: string | null
+          last_reminder_at?: string | null
           message?: string | null
           monthly_value?: number
+          next_action?: string | null
+          next_action_due?: string | null
+          next_action_owner_id?: string | null
+          next_action_set_at?: string | null
+          opt_in_at?: string | null
           phone?: string | null
           photo_url?: string | null
+          placement?: string | null
           plan_assigned_at?: string | null
           plan_id?: string | null
           plan_status?: string
           pool_size?: string | null
           promo_code?: string | null
+          referrer?: string | null
+          reminder_count?: number | null
           service_type?: string
+          session_id?: string | null
+          sla_due_at?: string | null
+          sla_status?: string | null
+          sms_opt_in?: boolean | null
           source?: string
           spa_addon?: number
           spa_option?: string
           stage?: Database["public"]["Enums"]["ss_stage"]
           stage_changed_at?: string
           updated_at?: string
+          utm?: Json | null
         }
         Update: {
           address?: string | null
+          assigned_at?: string | null
+          assigned_staff_id?: string | null
+          campaign_id?: string | null
+          channel?: string | null
           city?: string | null
           cleanup_price?: number | null
           commitment_months?: number | null
           condition?: string
           converted_customer_id?: string | null
           created_at?: string
+          cta?: string | null
           email?: string | null
+          first_response_at?: string | null
           full_name?: string
           id?: string
+          intake_channel?: string | null
+          intake_ref?: string | null
+          landing_page?: string | null
+          last_reminder_at?: string | null
           message?: string | null
           monthly_value?: number
+          next_action?: string | null
+          next_action_due?: string | null
+          next_action_owner_id?: string | null
+          next_action_set_at?: string | null
+          opt_in_at?: string | null
           phone?: string | null
           photo_url?: string | null
+          placement?: string | null
           plan_assigned_at?: string | null
           plan_id?: string | null
           plan_status?: string
           pool_size?: string | null
           promo_code?: string | null
+          referrer?: string | null
+          reminder_count?: number | null
           service_type?: string
+          session_id?: string | null
+          sla_due_at?: string | null
+          sla_status?: string | null
+          sms_opt_in?: boolean | null
           source?: string
           spa_addon?: number
           spa_option?: string
           stage?: Database["public"]["Enums"]["ss_stage"]
           stage_changed_at?: string
           updated_at?: string
+          utm?: Json | null
         }
         Relationships: [
           {
@@ -4746,6 +5034,8 @@ export type Database = {
       ss_payments: {
         Row: {
           amount: number
+          confirmed_at: string | null
+          confirmed_by: string | null
           created_at: string
           customer_id: string | null
           id: string
@@ -4756,6 +5046,8 @@ export type Database = {
         }
         Insert: {
           amount: number
+          confirmed_at?: string | null
+          confirmed_by?: string | null
           created_at?: string
           customer_id?: string | null
           id?: string
@@ -4766,6 +5058,8 @@ export type Database = {
         }
         Update: {
           amount?: number
+          confirmed_at?: string | null
+          confirmed_by?: string | null
           created_at?: string
           customer_id?: string | null
           id?: string
@@ -4867,36 +5161,51 @@ export type Database = {
       }
       ss_price_book: {
         Row: {
+          addon_key: string | null
           category: string
           created_at: string
+          default_cost: number | null
           description: string | null
           id: string
           is_active: boolean
+          kind: string | null
           name: string
           price: number
+          price_max: number | null
           recurs_days: number | null
+          target_margin_pct: number | null
           updated_at: string
         }
         Insert: {
+          addon_key?: string | null
           category?: string
           created_at?: string
+          default_cost?: number | null
           description?: string | null
           id?: string
           is_active?: boolean
+          kind?: string | null
           name: string
           price?: number
+          price_max?: number | null
           recurs_days?: number | null
+          target_margin_pct?: number | null
           updated_at?: string
         }
         Update: {
+          addon_key?: string | null
           category?: string
           created_at?: string
+          default_cost?: number | null
           description?: string | null
           id?: string
           is_active?: boolean
+          kind?: string | null
           name?: string
           price?: number
+          price_max?: number | null
           recurs_days?: number | null
+          target_margin_pct?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -5701,11 +6010,17 @@ export type Database = {
       }
       ss_quote_items: {
         Row: {
+          bundle_id: string | null
+          bundle_includes: Json | null
+          bundle_name: string | null
+          choice_group: string | null
+          choice_required: boolean | null
           created_at: string
           description: string | null
           id: string
           image_url: string | null
           is_optional: boolean
+          itemized_unit_price: number | null
           name: string
           quantity: number
           quote_id: string
@@ -5715,11 +6030,17 @@ export type Database = {
           unit_price: number
         }
         Insert: {
+          bundle_id?: string | null
+          bundle_includes?: Json | null
+          bundle_name?: string | null
+          choice_group?: string | null
+          choice_required?: boolean | null
           created_at?: string
           description?: string | null
           id?: string
           image_url?: string | null
           is_optional?: boolean
+          itemized_unit_price?: number | null
           name: string
           quantity?: number
           quote_id: string
@@ -5729,11 +6050,17 @@ export type Database = {
           unit_price?: number
         }
         Update: {
+          bundle_id?: string | null
+          bundle_includes?: Json | null
+          bundle_name?: string | null
+          choice_group?: string | null
+          choice_required?: boolean | null
           created_at?: string
           description?: string | null
           id?: string
           image_url?: string | null
           is_optional?: boolean
+          itemized_unit_price?: number | null
           name?: string
           quantity?: number
           quote_id?: string
@@ -6139,6 +6466,8 @@ export type Database = {
           updated_at: string
           water_body_id: string | null
           weekdays: number[]
+          window_end: string | null
+          window_start: string | null
         }
         Insert: {
           created_at?: string
@@ -6159,6 +6488,8 @@ export type Database = {
           updated_at?: string
           water_body_id?: string | null
           weekdays?: number[]
+          window_end?: string | null
+          window_start?: string | null
         }
         Update: {
           created_at?: string
@@ -6179,6 +6510,8 @@ export type Database = {
           updated_at?: string
           water_body_id?: string | null
           weekdays?: number[]
+          window_end?: string | null
+          window_start?: string | null
         }
         Relationships: [
           {
@@ -6755,7 +7088,9 @@ export type Database = {
         Row: {
           created_at: string
           email: string | null
+          finance_access: boolean | null
           full_name: string
+          hourly_rate: number | null
           id: string
           initials: string | null
           is_active: boolean
@@ -6769,7 +7104,9 @@ export type Database = {
         Insert: {
           created_at?: string
           email?: string | null
+          finance_access?: boolean | null
           full_name: string
+          hourly_rate?: number | null
           id?: string
           initials?: string | null
           is_active?: boolean
@@ -6783,7 +7120,9 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string | null
+          finance_access?: boolean | null
           full_name?: string
+          hourly_rate?: number | null
           id?: string
           initials?: string | null
           is_active?: boolean
@@ -7574,120 +7913,252 @@ export type Database = {
       ss_visits: {
         Row: {
           after_photo_url: string | null
+          amount_paid: number | null
           arrived_at: string | null
+          backwash_done: boolean | null
           before_photo_url: string | null
+          cartridge_cleaned: boolean | null
+          checkin_lat: number | null
+          checkin_lng: number | null
+          checkin_source: string | null
           checklist: Json
           chem_cost: number
           completed_at: string | null
+          cost_items: Json | null
+          cost_total: number | null
           created_at: string
           customer_id: string
+          customer_notified_at: string | null
           dosing: Json
           drive_miles: number | null
           drive_minutes: number | null
           en_route_at: string | null
           feedback: string | null
+          filter_label_photo_url: string | null
+          filter_psi_after: number | null
+          filter_psi_before: number | null
+          filter_type: string | null
+          hold_manual: boolean | null
           id: string
+          invoice_id: string | null
           is_locked: boolean
           issue_reported: string | null
+          labor_cost: number | null
+          labor_hours: number | null
+          late_fee: number | null
+          late_fee_applied_at: string | null
           minutes_on_site: number | null
           no_access_at: string | null
           no_access_photo_url: string | null
           no_access_reason: string | null
           notes: string | null
+          paid_at: string | null
+          parts_cost: number | null
           pay_status: string
+          payment_method: string | null
+          payment_status: string | null
           payout_id: string | null
           photos: Json
           rain_hold: boolean
           readings: Json
+          report_sent_at: string | null
+          report_url: string | null
+          safety_checks: Json | null
+          safety_hazards: string | null
+          safety_ok: boolean | null
+          safety_photos: Json | null
+          safety_sent_at: string | null
           scheduled_date: string
+          service_amount: number | null
+          service_day: string | null
+          signature_name: string | null
+          signature_url: string | null
+          signed_at: string | null
+          signed_by: string | null
           started_at: string | null
           status: string
           stop_order: number
+          summary_emailed_at: string | null
+          swim_hold_reason: string | null
+          swim_ready_notified_at: string | null
+          swim_safe_at: string | null
           tech_bonus: number
           tech_id: string | null
           tech_pay: number
           updated_at: string
           upsell_amount: number
           upsell_commission: number
+          visit_kind: string | null
           water_body_id: string | null
+          window_end: string | null
+          window_start: string | null
+          work_performed: string | null
         }
         Insert: {
           after_photo_url?: string | null
+          amount_paid?: number | null
           arrived_at?: string | null
+          backwash_done?: boolean | null
           before_photo_url?: string | null
+          cartridge_cleaned?: boolean | null
+          checkin_lat?: number | null
+          checkin_lng?: number | null
+          checkin_source?: string | null
           checklist?: Json
           chem_cost?: number
           completed_at?: string | null
+          cost_items?: Json | null
+          cost_total?: number | null
           created_at?: string
           customer_id: string
+          customer_notified_at?: string | null
           dosing?: Json
           drive_miles?: number | null
           drive_minutes?: number | null
           en_route_at?: string | null
           feedback?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_after?: number | null
+          filter_psi_before?: number | null
+          filter_type?: string | null
+          hold_manual?: boolean | null
           id?: string
+          invoice_id?: string | null
           is_locked?: boolean
           issue_reported?: string | null
+          labor_cost?: number | null
+          labor_hours?: number | null
+          late_fee?: number | null
+          late_fee_applied_at?: string | null
           minutes_on_site?: number | null
           no_access_at?: string | null
           no_access_photo_url?: string | null
           no_access_reason?: string | null
           notes?: string | null
+          paid_at?: string | null
+          parts_cost?: number | null
           pay_status?: string
+          payment_method?: string | null
+          payment_status?: string | null
           payout_id?: string | null
           photos?: Json
           rain_hold?: boolean
           readings?: Json
+          report_sent_at?: string | null
+          report_url?: string | null
+          safety_checks?: Json | null
+          safety_hazards?: string | null
+          safety_ok?: boolean | null
+          safety_photos?: Json | null
+          safety_sent_at?: string | null
           scheduled_date?: string
+          service_amount?: number | null
+          service_day?: string | null
+          signature_name?: string | null
+          signature_url?: string | null
+          signed_at?: string | null
+          signed_by?: string | null
           started_at?: string | null
           status?: string
           stop_order?: number
+          summary_emailed_at?: string | null
+          swim_hold_reason?: string | null
+          swim_ready_notified_at?: string | null
+          swim_safe_at?: string | null
           tech_bonus?: number
           tech_id?: string | null
           tech_pay?: number
           updated_at?: string
           upsell_amount?: number
           upsell_commission?: number
+          visit_kind?: string | null
           water_body_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
+          work_performed?: string | null
         }
         Update: {
           after_photo_url?: string | null
+          amount_paid?: number | null
           arrived_at?: string | null
+          backwash_done?: boolean | null
           before_photo_url?: string | null
+          cartridge_cleaned?: boolean | null
+          checkin_lat?: number | null
+          checkin_lng?: number | null
+          checkin_source?: string | null
           checklist?: Json
           chem_cost?: number
           completed_at?: string | null
+          cost_items?: Json | null
+          cost_total?: number | null
           created_at?: string
           customer_id?: string
+          customer_notified_at?: string | null
           dosing?: Json
           drive_miles?: number | null
           drive_minutes?: number | null
           en_route_at?: string | null
           feedback?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_after?: number | null
+          filter_psi_before?: number | null
+          filter_type?: string | null
+          hold_manual?: boolean | null
           id?: string
+          invoice_id?: string | null
           is_locked?: boolean
           issue_reported?: string | null
+          labor_cost?: number | null
+          labor_hours?: number | null
+          late_fee?: number | null
+          late_fee_applied_at?: string | null
           minutes_on_site?: number | null
           no_access_at?: string | null
           no_access_photo_url?: string | null
           no_access_reason?: string | null
           notes?: string | null
+          paid_at?: string | null
+          parts_cost?: number | null
           pay_status?: string
+          payment_method?: string | null
+          payment_status?: string | null
           payout_id?: string | null
           photos?: Json
           rain_hold?: boolean
           readings?: Json
+          report_sent_at?: string | null
+          report_url?: string | null
+          safety_checks?: Json | null
+          safety_hazards?: string | null
+          safety_ok?: boolean | null
+          safety_photos?: Json | null
+          safety_sent_at?: string | null
           scheduled_date?: string
+          service_amount?: number | null
+          service_day?: string | null
+          signature_name?: string | null
+          signature_url?: string | null
+          signed_at?: string | null
+          signed_by?: string | null
           started_at?: string | null
           status?: string
           stop_order?: number
+          summary_emailed_at?: string | null
+          swim_hold_reason?: string | null
+          swim_ready_notified_at?: string | null
+          swim_safe_at?: string | null
           tech_bonus?: number
           tech_id?: string | null
           tech_pay?: number
           updated_at?: string
           upsell_amount?: number
           upsell_commission?: number
+          visit_kind?: string | null
           water_body_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
+          work_performed?: string | null
         }
         Relationships: [
           {
@@ -7715,46 +8186,136 @@ export type Database = {
       }
       ss_water_bodies: {
         Row: {
+          access_notes: string | null
+          automation_brand: string | null
+          avg_depth_ft: number | null
+          cleaner_brand: string | null
+          cleaner_type: string | null
           created_at: string
           customer_id: string
+          features: string[] | null
+          filter_baseline_psi: number | null
+          filter_identified_at: string | null
+          filter_label_photo_url: string | null
+          filter_psi_threshold: number | null
+          filter_type: string | null
           gallons: number
+          gate_code: string | null
+          gate_location: string | null
+          has_dog: boolean | null
+          heater_brand: string | null
+          heater_model: string | null
+          heater_type: string | null
           id: string
           is_active: boolean
           kind: string
+          last_backwash_at: string | null
+          last_cartridge_clean_at: string | null
+          length_ft: number | null
           name: string
           notes: string | null
+          profile_captured_at: string | null
+          profile_captured_by: string | null
+          profile_photos: Json | null
+          pump_brand: string | null
+          pump_hp: string | null
+          pump_model: string | null
+          pump_variable_speed: boolean | null
+          salt_cell_brand: string | null
+          salt_cell_model: string | null
           sanitizer: string | null
           sort_order: number
           surface: string | null
           updated_at: string
+          width_ft: number | null
         }
         Insert: {
+          access_notes?: string | null
+          automation_brand?: string | null
+          avg_depth_ft?: number | null
+          cleaner_brand?: string | null
+          cleaner_type?: string | null
           created_at?: string
           customer_id: string
+          features?: string[] | null
+          filter_baseline_psi?: number | null
+          filter_identified_at?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_threshold?: number | null
+          filter_type?: string | null
           gallons?: number
+          gate_code?: string | null
+          gate_location?: string | null
+          has_dog?: boolean | null
+          heater_brand?: string | null
+          heater_model?: string | null
+          heater_type?: string | null
           id?: string
           is_active?: boolean
           kind?: string
+          last_backwash_at?: string | null
+          last_cartridge_clean_at?: string | null
+          length_ft?: number | null
           name: string
           notes?: string | null
+          profile_captured_at?: string | null
+          profile_captured_by?: string | null
+          profile_photos?: Json | null
+          pump_brand?: string | null
+          pump_hp?: string | null
+          pump_model?: string | null
+          pump_variable_speed?: boolean | null
+          salt_cell_brand?: string | null
+          salt_cell_model?: string | null
           sanitizer?: string | null
           sort_order?: number
           surface?: string | null
           updated_at?: string
+          width_ft?: number | null
         }
         Update: {
+          access_notes?: string | null
+          automation_brand?: string | null
+          avg_depth_ft?: number | null
+          cleaner_brand?: string | null
+          cleaner_type?: string | null
           created_at?: string
           customer_id?: string
+          features?: string[] | null
+          filter_baseline_psi?: number | null
+          filter_identified_at?: string | null
+          filter_label_photo_url?: string | null
+          filter_psi_threshold?: number | null
+          filter_type?: string | null
           gallons?: number
+          gate_code?: string | null
+          gate_location?: string | null
+          has_dog?: boolean | null
+          heater_brand?: string | null
+          heater_model?: string | null
+          heater_type?: string | null
           id?: string
           is_active?: boolean
           kind?: string
+          last_backwash_at?: string | null
+          last_cartridge_clean_at?: string | null
+          length_ft?: number | null
           name?: string
           notes?: string | null
+          profile_captured_at?: string | null
+          profile_captured_by?: string | null
+          profile_photos?: Json | null
+          pump_brand?: string | null
+          pump_hp?: string | null
+          pump_model?: string | null
+          pump_variable_speed?: boolean | null
+          salt_cell_brand?: string | null
+          salt_cell_model?: string | null
           sanitizer?: string | null
           sort_order?: number
           surface?: string | null
           updated_at?: string
+          width_ft?: number | null
         }
         Relationships: [
           {
