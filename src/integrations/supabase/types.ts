@@ -1103,6 +1103,165 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_access_attempts: {
+        Row: {
+          code_norm: string
+          created_at: string
+          id: string
+          reason: string | null
+          success: boolean
+          user_id: string | null
+        }
+        Insert: {
+          code_norm: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Update: {
+          code_norm?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_access_codes: {
+        Row: {
+          address: string | null
+          city: string | null
+          code: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          email: string | null
+          expires_at: string | null
+          full_name: string | null
+          id: string
+          last_send_email: boolean | null
+          last_send_error: string | null
+          last_send_ok: boolean | null
+          last_send_sms: boolean | null
+          note: string | null
+          phone: string | null
+          postal_code: string | null
+          redeemed_at: string | null
+          redeemed_by: string | null
+          state: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          code: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          email?: string | null
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          last_send_email?: boolean | null
+          last_send_error?: string | null
+          last_send_ok?: boolean | null
+          last_send_sms?: boolean | null
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          redeemed_at?: string | null
+          redeemed_by?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          email?: string | null
+          expires_at?: string | null
+          full_name?: string | null
+          id?: string
+          last_send_email?: boolean | null
+          last_send_error?: string | null
+          last_send_ok?: boolean | null
+          last_send_sms?: boolean | null
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          redeemed_at?: string | null
+          redeemed_by?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_access_requests: {
+        Row: {
+          address: string
+          city: string | null
+          created_at: string
+          customer_id: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          note: string | null
+          phone: string | null
+          postal_code: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          state: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ss_accounts: {
         Row: {
           code: string
@@ -1381,6 +1540,99 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_backup_sync: {
+        Row: {
+          created_at: string
+          dirty: boolean
+          entity: string
+          id: string
+          last_error: string | null
+          record_id: string
+          row_index: number | null
+          synced_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dirty?: boolean
+          entity: string
+          id?: string
+          last_error?: string | null
+          record_id: string
+          row_index?: number | null
+          synced_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dirty?: boolean
+          entity?: string
+          id?: string
+          last_error?: string | null
+          record_id?: string
+          row_index?: number | null
+          synced_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_bank_details: {
+        Row: {
+          account_holder: string | null
+          account_number: string | null
+          ach_instructions: string | null
+          bank_name: string | null
+          created_at: string
+          id: string
+          mail_city: string | null
+          mail_line1: string | null
+          mail_line2: string | null
+          mail_postal: string | null
+          mail_state: string | null
+          memo_instructions: string | null
+          payee_name: string
+          routing_number: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          account_holder?: string | null
+          account_number?: string | null
+          ach_instructions?: string | null
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          mail_city?: string | null
+          mail_line1?: string | null
+          mail_line2?: string | null
+          mail_postal?: string | null
+          mail_state?: string | null
+          memo_instructions?: string | null
+          payee_name?: string
+          routing_number?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          account_holder?: string | null
+          account_number?: string | null
+          ach_instructions?: string | null
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          mail_city?: string | null
+          mail_line1?: string | null
+          mail_line2?: string | null
+          mail_postal?: string | null
+          mail_state?: string | null
+          memo_instructions?: string | null
+          payee_name?: string
+          routing_number?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       ss_broadcasts: {
         Row: {
           body: string
@@ -1458,6 +1710,63 @@ export type Database = {
           price_mode?: string
           show_item_prices?: boolean
           sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_calls: {
+        Row: {
+          call_sid: string | null
+          caller_city: string | null
+          caller_state: string | null
+          created_at: string
+          customer_id: string | null
+          direction: string
+          duration_seconds: number | null
+          from_number: string | null
+          id: string
+          is_test: boolean
+          outcome: string | null
+          recording_url: string | null
+          status: string
+          to_number: string | null
+          transcript: string | null
+          updated_at: string
+        }
+        Insert: {
+          call_sid?: string | null
+          caller_city?: string | null
+          caller_state?: string | null
+          created_at?: string
+          customer_id?: string | null
+          direction?: string
+          duration_seconds?: number | null
+          from_number?: string | null
+          id?: string
+          is_test?: boolean
+          outcome?: string | null
+          recording_url?: string | null
+          status?: string
+          to_number?: string | null
+          transcript?: string | null
+          updated_at?: string
+        }
+        Update: {
+          call_sid?: string | null
+          caller_city?: string | null
+          caller_state?: string | null
+          created_at?: string
+          customer_id?: string | null
+          direction?: string
+          duration_seconds?: number | null
+          from_number?: string | null
+          id?: string
+          is_test?: boolean
+          outcome?: string | null
+          recording_url?: string | null
+          status?: string
+          to_number?: string | null
+          transcript?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1690,6 +1999,165 @@ export type Database = {
           started_at?: string
           status?: string
           target?: string
+        }
+        Relationships: []
+      }
+      ss_catalog_sync_log: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          changes: Json
+          created_count: number
+          environment: string
+          error_count: number
+          errors: Json
+          id: string
+          mode: string
+          ran_at: string
+          skipped_count: number
+          updated_count: number
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          changes?: Json
+          created_count?: number
+          environment?: string
+          error_count?: number
+          errors?: Json
+          id?: string
+          mode?: string
+          ran_at?: string
+          skipped_count?: number
+          updated_count?: number
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          changes?: Json
+          created_count?: number
+          environment?: string
+          error_count?: number
+          errors?: Json
+          id?: string
+          mode?: string
+          ran_at?: string
+          skipped_count?: number
+          updated_count?: number
+        }
+        Relationships: []
+      }
+      ss_chat_channels: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          id: string
+          kind: string
+          last_message_at: string | null
+          last_preview: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          kind?: string
+          last_message_at?: string | null
+          last_preview?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          kind?: string
+          last_message_at?: string | null
+          last_preview?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      ss_chat_messages: {
+        Row: {
+          author_id: string | null
+          author_kind: string
+          author_name: string | null
+          body: string
+          channel_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_kind?: string
+          author_name?: string | null
+          body: string
+          channel_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_id?: string | null
+          author_kind?: string
+          author_name?: string | null
+          body?: string
+          channel_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      ss_check_payments: {
+        Row: {
+          amount: number
+          check_number: string | null
+          cleared_at: string | null
+          created_at: string
+          customer_id: string | null
+          delivery: string
+          handled_by: string | null
+          id: string
+          invoice_id: string | null
+          note: string | null
+          posted_payment_id: string | null
+          received_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          check_number?: string | null
+          cleared_at?: string | null
+          created_at?: string
+          customer_id?: string | null
+          delivery?: string
+          handled_by?: string | null
+          id?: string
+          invoice_id?: string | null
+          note?: string | null
+          posted_payment_id?: string | null
+          received_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          check_number?: string | null
+          cleared_at?: string | null
+          created_at?: string
+          customer_id?: string | null
+          delivery?: string
+          handled_by?: string | null
+          id?: string
+          invoice_id?: string | null
+          note?: string | null
+          posted_payment_id?: string | null
+          received_at?: string | null
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2385,6 +2853,291 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_email_attachments: {
+        Row: {
+          content_type: string | null
+          created_at: string
+          filename: string
+          id: string
+          message_id: string
+          size_bytes: number | null
+          storage_path: string
+        }
+        Insert: {
+          content_type?: string | null
+          created_at?: string
+          filename: string
+          id?: string
+          message_id: string
+          size_bytes?: number | null
+          storage_path: string
+        }
+        Update: {
+          content_type?: string | null
+          created_at?: string
+          filename?: string
+          id?: string
+          message_id?: string
+          size_bytes?: number | null
+          storage_path?: string
+        }
+        Relationships: []
+      }
+      ss_email_campaign_recipients: {
+        Row: {
+          campaign_id: string
+          clicked_at: string | null
+          created_at: string
+          email: string
+          error: string | null
+          id: string
+          lead_id: string | null
+          message_id: string | null
+          opened_at: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          clicked_at?: string | null
+          created_at?: string
+          email: string
+          error?: string | null
+          id?: string
+          lead_id?: string | null
+          message_id?: string | null
+          opened_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          clicked_at?: string | null
+          created_at?: string
+          email?: string
+          error?: string | null
+          id?: string
+          lead_id?: string | null
+          message_id?: string | null
+          opened_at?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_email_campaigns: {
+        Row: {
+          audience_filters: Json
+          audience_type: string
+          body_html: string
+          body_text: string
+          created_at: string
+          from_address: string | null
+          id: string
+          name: string
+          reply_to: string | null
+          scheduled_at: string | null
+          sent_at: string | null
+          sent_by: string | null
+          stats: Json
+          status: string
+          subject: string
+          template_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          audience_filters?: Json
+          audience_type?: string
+          body_html: string
+          body_text: string
+          created_at?: string
+          from_address?: string | null
+          id?: string
+          name: string
+          reply_to?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          sent_by?: string | null
+          stats?: Json
+          status?: string
+          subject: string
+          template_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          audience_filters?: Json
+          audience_type?: string
+          body_html?: string
+          body_text?: string
+          created_at?: string
+          from_address?: string | null
+          id?: string
+          name?: string
+          reply_to?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          sent_by?: string | null
+          stats?: Json
+          status?: string
+          subject?: string
+          template_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_email_messages: {
+        Row: {
+          attachment_expected_count: number
+          attachment_failure_summary: string | null
+          attachment_saved_count: number
+          body_html: string | null
+          body_text: string | null
+          created_at: string
+          direction: string
+          from_email: string
+          from_name: string | null
+          id: string
+          in_reply_to: string | null
+          is_read: boolean
+          message_id: string | null
+          refs: string | null
+          sent_by: string | null
+          subject: string | null
+          thread_id: string
+          to_email: string
+        }
+        Insert: {
+          attachment_expected_count?: number
+          attachment_failure_summary?: string | null
+          attachment_saved_count?: number
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          direction: string
+          from_email: string
+          from_name?: string | null
+          id?: string
+          in_reply_to?: string | null
+          is_read?: boolean
+          message_id?: string | null
+          refs?: string | null
+          sent_by?: string | null
+          subject?: string | null
+          thread_id: string
+          to_email: string
+        }
+        Update: {
+          attachment_expected_count?: number
+          attachment_failure_summary?: string | null
+          attachment_saved_count?: number
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          direction?: string
+          from_email?: string
+          from_name?: string | null
+          id?: string
+          in_reply_to?: string | null
+          is_read?: boolean
+          message_id?: string | null
+          refs?: string | null
+          sent_by?: string | null
+          subject?: string | null
+          thread_id?: string
+          to_email?: string
+        }
+        Relationships: []
+      }
+      ss_email_templates: {
+        Row: {
+          body_html: string
+          body_text: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_default: boolean
+          merge_tags: string[]
+          name: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          body_text: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_default?: boolean
+          merge_tags?: string[]
+          name: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          body_text?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_default?: boolean
+          merge_tags?: string[]
+          name?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_email_threads: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          customer_id: string | null
+          id: string
+          last_direction: string
+          last_message_at: string
+          last_snippet: string | null
+          participant_email: string
+          participant_name: string | null
+          status: string
+          subject: string
+          unread_count: number
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          last_direction?: string
+          last_message_at?: string
+          last_snippet?: string | null
+          participant_email: string
+          participant_name?: string | null
+          status?: string
+          subject?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          last_direction?: string
+          last_message_at?: string
+          last_snippet?: string | null
+          participant_email?: string
+          participant_name?: string | null
+          status?: string
+          subject?: string
+          unread_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_equipment: {
         Row: {
           brand: string | null
@@ -2592,6 +3345,99 @@ export type Database = {
           },
         ]
       }
+      ss_internal_notes: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          body: string
+          created_at: string
+          customer_id: string | null
+          id: string
+          lead_id: string | null
+          pinned: boolean
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          body: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          lead_id?: string | null
+          pinned?: boolean
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          lead_id?: string | null
+          pinned?: boolean
+        }
+        Relationships: []
+      }
+      ss_internal_tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          created_by_name: string | null
+          customer_id: string | null
+          details: string | null
+          due_at: string | null
+          escalated_from: string | null
+          escalation_level: number
+          id: string
+          last_escalated_at: string | null
+          lead_id: string | null
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_by_name?: string | null
+          customer_id?: string | null
+          details?: string | null
+          due_at?: string | null
+          escalated_from?: string | null
+          escalation_level?: number
+          id?: string
+          last_escalated_at?: string | null
+          lead_id?: string | null
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_by_name?: string | null
+          customer_id?: string | null
+          details?: string | null
+          due_at?: string | null
+          escalated_from?: string | null
+          escalation_level?: number
+          id?: string
+          last_escalated_at?: string | null
+          lead_id?: string | null
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_inventory: {
         Row: {
           barcode: string | null
@@ -2796,6 +3642,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ss_invoice_reconciliation: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          checked_at: string
+          created_at: string
+          crm_total: number
+          currency: string
+          difference: number
+          id: string
+          invoice_id: string
+          note: string | null
+          state: string
+          stripe_amount: number | null
+          stripe_session_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          checked_at?: string
+          created_at?: string
+          crm_total?: number
+          currency?: string
+          difference?: number
+          id?: string
+          invoice_id: string
+          note?: string | null
+          state?: string
+          stripe_amount?: number | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          checked_at?: string
+          created_at?: string
+          crm_total?: number
+          currency?: string
+          difference?: number
+          id?: string
+          invoice_id?: string
+          note?: string | null
+          state?: string
+          stripe_amount?: number | null
+          stripe_session_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       ss_invoices: {
         Row: {
@@ -3021,6 +3918,54 @@ export type Database = {
           },
         ]
       }
+      ss_lead_appointments: {
+        Row: {
+          assigned_staff_id: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          ends_at: string
+          id: string
+          kind: string
+          lead_id: string
+          location: string | null
+          notes: string | null
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_staff_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          ends_at: string
+          id?: string
+          kind?: string
+          lead_id: string
+          location?: string | null
+          notes?: string | null
+          starts_at: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_staff_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          ends_at?: string
+          id?: string
+          kind?: string
+          lead_id?: string
+          location?: string | null
+          notes?: string | null
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_lead_events: {
         Row: {
           actor_id: string | null
@@ -3217,6 +4162,33 @@ export type Database = {
           },
         ]
       }
+      ss_native_push_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          platform: string
+          token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          platform: string
+          token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          platform?: string
+          token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ss_not_found_events: {
         Row: {
           alert_result: string | null
@@ -3256,6 +4228,261 @@ export type Database = {
           referrer?: string | null
           source?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      ss_notification_prefs: {
+        Row: {
+          account_email: boolean
+          account_in_app: boolean
+          account_push: boolean
+          account_sms: boolean
+          created_at: string
+          lead_sla_email: boolean
+          lead_sla_in_app: boolean
+          lead_sla_push: boolean
+          lead_sla_sms: boolean
+          role_change_email: boolean
+          role_change_in_app: boolean
+          role_change_push: boolean
+          role_change_sms: boolean
+          sms_number: string | null
+          updated_at: string
+          user_id: string
+          visit_email: boolean
+          visit_in_app: boolean
+          visit_push: boolean
+          visit_sms: boolean
+        }
+        Insert: {
+          account_email?: boolean
+          account_in_app?: boolean
+          account_push?: boolean
+          account_sms?: boolean
+          created_at?: string
+          lead_sla_email?: boolean
+          lead_sla_in_app?: boolean
+          lead_sla_push?: boolean
+          lead_sla_sms?: boolean
+          role_change_email?: boolean
+          role_change_in_app?: boolean
+          role_change_push?: boolean
+          role_change_sms?: boolean
+          sms_number?: string | null
+          updated_at?: string
+          user_id: string
+          visit_email?: boolean
+          visit_in_app?: boolean
+          visit_push?: boolean
+          visit_sms?: boolean
+        }
+        Update: {
+          account_email?: boolean
+          account_in_app?: boolean
+          account_push?: boolean
+          account_sms?: boolean
+          created_at?: string
+          lead_sla_email?: boolean
+          lead_sla_in_app?: boolean
+          lead_sla_push?: boolean
+          lead_sla_sms?: boolean
+          role_change_email?: boolean
+          role_change_in_app?: boolean
+          role_change_push?: boolean
+          role_change_sms?: boolean
+          sms_number?: string | null
+          updated_at?: string
+          user_id?: string
+          visit_email?: boolean
+          visit_in_app?: boolean
+          visit_push?: boolean
+          visit_sms?: boolean
+        }
+        Relationships: []
+      }
+      ss_notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ss_payment_events: {
+        Row: {
+          amount: number | null
+          created_at: string
+          currency: string
+          customer_id: string | null
+          detail: Json
+          error_message: string | null
+          id: string
+          invoice_id: string | null
+          kind: string
+          method: string | null
+          status: string | null
+          stripe_amount: number | null
+          stripe_event_id: string | null
+          stripe_session_id: string | null
+          webhook_ok: boolean | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          currency?: string
+          customer_id?: string | null
+          detail?: Json
+          error_message?: string | null
+          id?: string
+          invoice_id?: string | null
+          kind: string
+          method?: string | null
+          status?: string | null
+          stripe_amount?: number | null
+          stripe_event_id?: string | null
+          stripe_session_id?: string | null
+          webhook_ok?: boolean | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          currency?: string
+          customer_id?: string | null
+          detail?: Json
+          error_message?: string | null
+          id?: string
+          invoice_id?: string | null
+          kind?: string
+          method?: string | null
+          status?: string | null
+          stripe_amount?: number | null
+          stripe_event_id?: string | null
+          stripe_session_id?: string | null
+          webhook_ok?: boolean | null
+        }
+        Relationships: []
+      }
+      ss_payment_pickups: {
+        Row: {
+          admin_confirmed_at: string | null
+          admin_note: string | null
+          assigned_tech_id: string | null
+          collected_amount: number | null
+          collected_at: string | null
+          collected_by: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          customer_note: string | null
+          id: string
+          method: string
+          office_note: string | null
+          photo_path: string | null
+          pickup_address: string | null
+          requested_by_customer: boolean
+          scheduled_for: string | null
+          status: string
+          tech_note: string | null
+          visit_id: string | null
+        }
+        Insert: {
+          admin_confirmed_at?: string | null
+          admin_note?: string | null
+          assigned_tech_id?: string | null
+          collected_amount?: number | null
+          collected_at?: string | null
+          collected_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id: string
+          customer_note?: string | null
+          id?: string
+          method?: string
+          office_note?: string | null
+          photo_path?: string | null
+          pickup_address?: string | null
+          requested_by_customer?: boolean
+          scheduled_for?: string | null
+          status?: string
+          tech_note?: string | null
+          visit_id?: string | null
+        }
+        Update: {
+          admin_confirmed_at?: string | null
+          admin_note?: string | null
+          assigned_tech_id?: string | null
+          collected_amount?: number | null
+          collected_at?: string | null
+          collected_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string
+          customer_note?: string | null
+          id?: string
+          method?: string
+          office_note?: string | null
+          photo_path?: string | null
+          pickup_address?: string | null
+          requested_by_customer?: boolean
+          scheduled_for?: string | null
+          status?: string
+          tech_note?: string | null
+          visit_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_payment_proofs: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          image_path: string
+          invoice_id: string
+          method: string
+          note: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          image_path: string
+          invoice_id: string
+          method: string
+          note?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          image_path?: string
+          invoice_id?: string
+          method?: string
+          note?: string | null
         }
         Relationships: []
       }
@@ -3307,6 +4534,72 @@ export type Database = {
           },
         ]
       }
+      ss_phone_optouts: {
+        Row: {
+          created_at: string
+          id: string
+          keyword: string | null
+          opted_out_at: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword?: string | null
+          opted_out_at?: string
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword?: string | null
+          opted_out_at?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_pool_costs: {
+        Row: {
+          chem_cost_per_visit: number
+          chem_supplied_by_customer: boolean
+          created_at: string
+          customer_id: string
+          extra_lines: Json
+          id: string
+          target_margin_pct: number | null
+          tech_pay_per_visit: number | null
+          updated_at: string
+          visits_per_month: number
+        }
+        Insert: {
+          chem_cost_per_visit?: number
+          chem_supplied_by_customer?: boolean
+          created_at?: string
+          customer_id: string
+          extra_lines?: Json
+          id?: string
+          target_margin_pct?: number | null
+          tech_pay_per_visit?: number | null
+          updated_at?: string
+          visits_per_month?: number
+        }
+        Update: {
+          chem_cost_per_visit?: number
+          chem_supplied_by_customer?: boolean
+          created_at?: string
+          customer_id?: string
+          extra_lines?: Json
+          id?: string
+          target_margin_pct?: number | null
+          tech_pay_per_visit?: number | null
+          updated_at?: string
+          visits_per_month?: number
+        }
+        Relationships: []
+      }
       ss_price_book: {
         Row: {
           category: string
@@ -3340,6 +4633,27 @@ export type Database = {
           price?: number
           recurs_days?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_pricing_settings: {
+        Row: {
+          created_at: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
@@ -3802,6 +5116,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ss_qc_reviews: {
         Row: {
           action_required: string | null
@@ -3877,6 +5224,165 @@ export type Database = {
           },
         ]
       }
+      ss_qr_batches: {
+        Row: {
+          batch_number: number
+          created_at: string
+          created_by: string | null
+          first_tag: string
+          format: string
+          id: string
+          last_tag: string
+          note: string | null
+          size: number
+          updated_at: string
+        }
+        Insert: {
+          batch_number: number
+          created_at?: string
+          created_by?: string | null
+          first_tag: string
+          format?: string
+          id?: string
+          last_tag: string
+          note?: string | null
+          size: number
+          updated_at?: string
+        }
+        Update: {
+          batch_number?: number
+          created_at?: string
+          created_by?: string | null
+          first_tag?: string
+          format?: string
+          id?: string
+          last_tag?: string
+          note?: string | null
+          size?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_qr_scans: {
+        Row: {
+          accuracy_m: number | null
+          created_at: string
+          customer_id: string | null
+          distance_ft: number | null
+          id: string
+          input_source: string
+          lat: number | null
+          lng: number | null
+          outcome: string
+          scanned_at: string
+          staff_id: string | null
+          tag_id: string
+          user_agent: string | null
+          visit_id: string | null
+        }
+        Insert: {
+          accuracy_m?: number | null
+          created_at?: string
+          customer_id?: string | null
+          distance_ft?: number | null
+          id?: string
+          input_source?: string
+          lat?: number | null
+          lng?: number | null
+          outcome?: string
+          scanned_at?: string
+          staff_id?: string | null
+          tag_id: string
+          user_agent?: string | null
+          visit_id?: string | null
+        }
+        Update: {
+          accuracy_m?: number | null
+          created_at?: string
+          customer_id?: string | null
+          distance_ft?: number | null
+          id?: string
+          input_source?: string
+          lat?: number | null
+          lng?: number | null
+          outcome?: string
+          scanned_at?: string
+          staff_id?: string | null
+          tag_id?: string
+          user_agent?: string | null
+          visit_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_qr_tags: {
+        Row: {
+          batch_id: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          disabled_at: string | null
+          disabled_reason: string | null
+          first_scanned_at: string | null
+          id: string
+          last_scanned_at: string | null
+          linked_at: string | null
+          linked_by: string | null
+          note: string | null
+          printed_at: string | null
+          qr_url: string | null
+          replaced_by_tag: string | null
+          service_address_id: string | null
+          status: string
+          tag_id: string
+          updated_at: string
+          water_body_id: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          disabled_at?: string | null
+          disabled_reason?: string | null
+          first_scanned_at?: string | null
+          id?: string
+          last_scanned_at?: string | null
+          linked_at?: string | null
+          linked_by?: string | null
+          note?: string | null
+          printed_at?: string | null
+          qr_url?: string | null
+          replaced_by_tag?: string | null
+          service_address_id?: string | null
+          status?: string
+          tag_id: string
+          updated_at?: string
+          water_body_id?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          disabled_at?: string | null
+          disabled_reason?: string | null
+          first_scanned_at?: string | null
+          id?: string
+          last_scanned_at?: string | null
+          linked_at?: string | null
+          linked_by?: string | null
+          note?: string | null
+          printed_at?: string | null
+          qr_url?: string | null
+          replaced_by_tag?: string | null
+          service_address_id?: string | null
+          status?: string
+          tag_id?: string
+          updated_at?: string
+          water_body_id?: string | null
+        }
+        Relationships: []
+      }
       ss_quote_items: {
         Row: {
           created_at: string
@@ -3929,6 +5435,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ss_quote_templates: {
+        Row: {
+          chem_included: boolean
+          created_at: string
+          defaults: Json
+          id: string
+          is_active: boolean
+          is_default: boolean
+          lines: Json
+          name: string
+          plan_id: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          chem_included?: boolean
+          created_at?: string
+          defaults?: Json
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          lines?: Json
+          name: string
+          plan_id: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          chem_included?: boolean
+          created_at?: string
+          defaults?: Json
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          lines?: Json
+          name?: string
+          plan_id?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       ss_quotes: {
         Row: {
@@ -4132,6 +5683,66 @@ export type Database = {
           id?: string
           offsets_hours?: number[]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      ss_report_events: {
+        Row: {
+          action: string
+          actor_role: string
+          actor_user_id: string | null
+          attempt: number
+          bytes: number | null
+          created_at: string
+          customer_id: string | null
+          date_label: string | null
+          error: string | null
+          filename: string | null
+          id: string
+          kind: string
+          meta: Json
+          property_label: string | null
+          recipient: string | null
+          status: string
+          visit_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_role?: string
+          actor_user_id?: string | null
+          attempt?: number
+          bytes?: number | null
+          created_at?: string
+          customer_id?: string | null
+          date_label?: string | null
+          error?: string | null
+          filename?: string | null
+          id?: string
+          kind?: string
+          meta?: Json
+          property_label?: string | null
+          recipient?: string | null
+          status?: string
+          visit_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_role?: string
+          actor_user_id?: string | null
+          attempt?: number
+          bytes?: number | null
+          created_at?: string
+          customer_id?: string | null
+          date_label?: string | null
+          error?: string | null
+          filename?: string | null
+          id?: string
+          kind?: string
+          meta?: Json
+          property_label?: string | null
+          recipient?: string | null
+          status?: string
+          visit_id?: string | null
         }
         Relationships: []
       }
@@ -4528,6 +6139,138 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_sla_alerts: {
+        Row: {
+          body: string
+          channel: string
+          created_at: string
+          error: string | null
+          id: string
+          recipient: string | null
+          sent_at: string | null
+          status: string
+          subject: string | null
+          task_id: string | null
+          template_key: string
+          user_id: string | null
+        }
+        Insert: {
+          body: string
+          channel: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          recipient?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          task_id?: string | null
+          template_key: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          channel?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          recipient?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          task_id?: string | null
+          template_key?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_sla_rules: {
+        Row: {
+          channels: Json
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          enabled: boolean
+          escalate_hours: number | null
+          fallback_user_id: string | null
+          id: string
+          label: string | null
+          lead_id: string | null
+          notes: string | null
+          notify_office: boolean | null
+          reassign_hours: number | null
+          scope: string
+          updated_at: string
+          warn_hours: number | null
+        }
+        Insert: {
+          channels?: Json
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          enabled?: boolean
+          escalate_hours?: number | null
+          fallback_user_id?: string | null
+          id?: string
+          label?: string | null
+          lead_id?: string | null
+          notes?: string | null
+          notify_office?: boolean | null
+          reassign_hours?: number | null
+          scope: string
+          updated_at?: string
+          warn_hours?: number | null
+        }
+        Update: {
+          channels?: Json
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          enabled?: boolean
+          escalate_hours?: number | null
+          fallback_user_id?: string | null
+          id?: string
+          label?: string | null
+          lead_id?: string | null
+          notes?: string | null
+          notify_office?: boolean | null
+          reassign_hours?: number | null
+          scope?: string
+          updated_at?: string
+          warn_hours?: number | null
+        }
+        Relationships: []
+      }
+      ss_sla_templates: {
+        Row: {
+          body_tpl: string
+          channels: Json
+          display_name: string
+          enabled: boolean
+          key: string
+          title_tpl: string
+          updated_at: string
+        }
+        Insert: {
+          body_tpl: string
+          channels?: Json
+          display_name: string
+          enabled?: boolean
+          key: string
+          title_tpl: string
+          updated_at?: string
+        }
+        Update: {
+          body_tpl?: string
+          channels?: Json
+          display_name?: string
+          enabled?: boolean
+          key?: string
+          title_tpl?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_sms_consent: {
         Row: {
           consent_source: string | null
@@ -4722,6 +6465,81 @@ export type Database = {
         }
         Relationships: []
       }
+      ss_staff_availability: {
+        Row: {
+          created_at: string
+          effective_from: string | null
+          effective_to: string | null
+          end_time: string
+          id: string
+          is_active: boolean
+          max_stops: number | null
+          start_time: string
+          tech_id: string
+          updated_at: string
+          weekday: number
+          window_minutes: number
+        }
+        Insert: {
+          created_at?: string
+          effective_from?: string | null
+          effective_to?: string | null
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          max_stops?: number | null
+          start_time?: string
+          tech_id: string
+          updated_at?: string
+          weekday: number
+          window_minutes?: number
+        }
+        Update: {
+          created_at?: string
+          effective_from?: string | null
+          effective_to?: string | null
+          end_time?: string
+          id?: string
+          is_active?: boolean
+          max_stops?: number | null
+          start_time?: string
+          tech_id?: string
+          updated_at?: string
+          weekday?: number
+          window_minutes?: number
+        }
+        Relationships: []
+      }
+      ss_staff_time_off: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          reason: string | null
+          start_date: string
+          tech_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          reason?: string | null
+          start_date: string
+          tech_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          reason?: string | null
+          start_date?: string
+          tech_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_suppression: {
         Row: {
           created_at: string
@@ -4740,6 +6558,57 @@ export type Database = {
           email?: string
           id?: string
           reason?: string
+        }
+        Relationships: []
+      }
+      ss_task_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string | null
+          after: Json
+          batch_id: string
+          before: Json
+          changed_fields: string[]
+          created_at: string
+          customer_id: string | null
+          filters: Json
+          id: string
+          lead_id: string | null
+          source: string
+          task_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string | null
+          after?: Json
+          batch_id: string
+          before?: Json
+          changed_fields?: string[]
+          created_at?: string
+          customer_id?: string | null
+          filters?: Json
+          id?: string
+          lead_id?: string | null
+          source?: string
+          task_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          after?: Json
+          batch_id?: string
+          before?: Json
+          changed_fields?: string[]
+          created_at?: string
+          customer_id?: string | null
+          filters?: Json
+          id?: string
+          lead_id?: string | null
+          source?: string
+          task_id?: string
         }
         Relationships: []
       }
@@ -5066,6 +6935,36 @@ export type Database = {
           },
         ]
       }
+      ss_truck_stock: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          low_threshold: number
+          quantity: number
+          truck_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          low_threshold?: number
+          quantity?: number
+          truck_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          low_threshold?: number
+          quantity?: number
+          truck_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ss_trucks: {
         Row: {
           assigned_tech_id: string | null
@@ -5134,6 +7033,156 @@ export type Database = {
           theme?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      ss_vault_logins: {
+        Row: {
+          account_number: string | null
+          category: string
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          secret_cipher: string | null
+          updated_at: string
+          updated_by: string | null
+          updated_by_name: string | null
+          url: string | null
+          username: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          account_number?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          secret_cipher?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          updated_by_name?: string | null
+          url?: string | null
+          username?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          account_number?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          secret_cipher?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          updated_by_name?: string | null
+          url?: string | null
+          username?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      ss_vendors: {
+        Row: {
+          account_number: string | null
+          active: boolean
+          address: string | null
+          contact_name: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          supplies: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          account_number?: string | null
+          active?: boolean
+          address?: string | null
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          supplies?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          account_number?: string | null
+          active?: boolean
+          address?: string | null
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          supplies?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      ss_visit_requests: {
+        Row: {
+          created_at: string
+          customer_id: string
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          note: string | null
+          office_note: string | null
+          quoted_price: number | null
+          reason: string | null
+          requested_date: string
+          status: string
+          updated_at: string
+          visit_id: string | null
+          window_end: string | null
+          window_start: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          note?: string | null
+          office_note?: string | null
+          quoted_price?: number | null
+          reason?: string | null
+          requested_date: string
+          status?: string
+          updated_at?: string
+          visit_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          note?: string | null
+          office_note?: string | null
+          quoted_price?: number | null
+          reason?: string | null
+          requested_date?: string
+          status?: string
+          updated_at?: string
+          visit_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
         }
         Relationships: []
       }
@@ -5440,6 +7489,36 @@ export type Database = {
           response?: string | null
           retried_at?: string | null
           retried_by?: string | null
+        }
+        Relationships: []
+      }
+      ss_webhook_secret_usage: {
+        Row: {
+          caller_origin: string | null
+          created_at: string
+          endpoint: string
+          hit_count: number
+          id: string
+          key_used: string
+          last_used_at: string
+        }
+        Insert: {
+          caller_origin?: string | null
+          created_at?: string
+          endpoint: string
+          hit_count?: number
+          id?: string
+          key_used: string
+          last_used_at?: string
+        }
+        Update: {
+          caller_origin?: string | null
+          created_at?: string
+          endpoint?: string
+          hit_count?: number
+          id?: string
+          key_used?: string
+          last_used_at?: string
         }
         Relationships: []
       }
@@ -5948,8 +8027,42 @@ export type Database = {
         Args: { _selected_ids: string[]; _signer_name: string; _token: string }
         Returns: Json
       }
+      ss_add_recurring_invoice_lines: {
+        Args: { _customer: string; _invoice: string; _month: string }
+        Returns: undefined
+      }
+      ss_apply_visit_late_fees: { Args: never; Returns: number }
+      ss_approve_access_request: {
+        Args: { _approve: boolean; _request_id: string }
+        Returns: Json
+      }
       ss_build_contract_body: {
         Args: { _quote_id: string; _signer_name?: string }
+        Returns: Json
+      }
+      ss_can_claim_customer: {
+        Args: { _customer_id: string }
+        Returns: boolean
+      }
+      ss_can_finance: { Args: never; Returns: boolean }
+      ss_claim_by_contact: {
+        Args: {
+          _address: string
+          _city?: string
+          _email: string
+          _full_name: string
+          _phone: string
+        }
+        Returns: Json
+      }
+      ss_claim_staff_by_email: { Args: never; Returns: Json }
+      ss_clear_service_hold: {
+        Args: { _customer_id: string }
+        Returns: undefined
+      }
+      ss_confirm_customer: { Args: { _customer_id: string }; Returns: Json }
+      ss_confirm_portal_payment: {
+        Args: { p_confirm?: boolean; p_payment_id: string }
         Returns: Json
       }
       ss_convert_qty: {
@@ -5962,11 +8075,22 @@ export type Database = {
         }
         Returns: number
       }
+      ss_declare_check_payment: {
+        Args: {
+          p_check_number?: string
+          p_delivery?: string
+          p_invoice_id: string
+          p_note?: string
+        }
+        Returns: Json
+      }
       ss_default_upsell_pct: { Args: never; Returns: number }
+      ss_generate_monthly_invoices: { Args: { _month?: string }; Returns: Json }
       ss_generate_route_visits: {
         Args: { p_customer_id: string; p_through: string }
         Returns: number
       }
+      ss_get_cancellation_context: { Args: { p_token: string }; Returns: Json }
       ss_get_contract: {
         Args: { _token: string }
         Returns: {
@@ -5992,6 +8116,28 @@ export type Database = {
       ss_is_office: { Args: never; Returns: boolean }
       ss_is_owner: { Args: never; Returns: boolean }
       ss_is_staff: { Args: never; Returns: boolean }
+      ss_lead_is_resolved: {
+        Args: { _lead: Database["public"]["Tables"]["ss_leads"]["Row"] }
+        Returns: boolean
+      }
+      ss_lead_sla_config: { Args: never; Returns: Json }
+      ss_log_contact_event: {
+        Args: {
+          p_campaign_id?: string
+          p_email?: string
+          p_event_type: string
+          p_full_name?: string
+          p_landing_page?: string
+          p_page_path?: string
+          p_phone?: string
+          p_placement?: string
+          p_referrer?: string
+          p_session_id?: string
+          p_user_agent?: string
+          p_utm?: Json
+        }
+        Returns: Json
+      }
       ss_log_inventory_usage: {
         Args: {
           p_items: Json
@@ -6001,8 +8147,29 @@ export type Database = {
         }
         Returns: Json
       }
+      ss_log_quote_view: {
+        Args: { _device?: string; _referrer?: string; _token: string }
+        Returns: undefined
+      }
+      ss_log_savings_event: {
+        Args: {
+          p_campaign_id?: string
+          p_event_type: string
+          p_landing_page?: string
+          p_page_path?: string
+          p_placement?: string
+          p_referrer?: string
+          p_session_id?: string
+          p_utm?: Json
+        }
+        Returns: Json
+      }
       ss_mark_contract_progress: {
         Args: { _token: string }
+        Returns: undefined
+      }
+      ss_mark_invoice_reminded: {
+        Args: { _invoice_id: string }
         Returns: undefined
       }
       ss_mark_quote_viewed: { Args: { _token: string }; Returns: undefined }
@@ -6038,6 +8205,24 @@ export type Database = {
           viewed_at: string
         }[]
       }
+      ss_my_inspection_requests: {
+        Args: never
+        Returns: {
+          address: string
+          converted_at: string
+          created_at: string
+          customer_note: string
+          eta_at: string
+          eta_window: string
+          full_name: string
+          id: string
+          notes: string
+          preferred_contact_time: string
+          reference_number: string
+          status: string
+          updated_at: string
+        }[]
+      }
       ss_my_invoice_lines: {
         Args: { _invoice_id: string }
         Returns: {
@@ -6045,6 +8230,17 @@ export type Database = {
           line_total: number
           quantity: number
           unit_price: number
+        }[]
+      }
+      ss_my_invoice_payments: {
+        Args: { _invoice_id: string }
+        Returns: {
+          amount: number
+          kind: string
+          method: string
+          note: string
+          paid_on: string
+          pending: boolean
         }[]
       }
       ss_my_level: {
@@ -6091,11 +8287,36 @@ export type Database = {
         }[]
       }
       ss_my_staff_id: { Args: never; Returns: string }
+      ss_my_visit_techs: {
+        Args: never
+        Returns: {
+          tech_name: string
+          visit_id: string
+        }[]
+      }
+      ss_new_referral_code: { Args: never; Returns: string }
+      ss_next_due_date: {
+        Args: { _anchor: string; _from?: string }
+        Returns: string
+      }
+      ss_next_pool_number: { Args: never; Returns: string }
+      ss_norm_address: { Args: { _addr: string }; Returns: string }
+      ss_notify_office: {
+        Args: { _body: string; _kind: string; _link: string; _title: string }
+        Returns: undefined
+      }
+      ss_open_invoice_for: { Args: { _customer: string }; Returns: string }
+      ss_pick_lead_owner: { Args: { p_city: string }; Returns: string }
       ss_portal_pay_invoice: {
         Args: { p_invoice_id: string; p_method: string; p_reference?: string }
         Returns: Json
       }
       ss_portal_update_profile: { Args: { p_patch: Json }; Returns: Json }
+      ss_promote_prospect: {
+        Args: { _customer_id: string }
+        Returns: undefined
+      }
+      ss_purge_webhook_deliveries: { Args: { _days?: number }; Returns: Json }
       ss_rate_limit_hit: {
         Args: {
           _bucket: string
@@ -6105,20 +8326,63 @@ export type Database = {
         }
         Returns: boolean
       }
+      ss_recalc_invoice_paid: {
+        Args: { p_invoice_id: string }
+        Returns: undefined
+      }
       ss_recalc_visit_upsell: {
         Args: { _visit_id: string }
         Returns: undefined
+      }
+      ss_redeem_access_code: { Args: { _code: string }; Returns: Json }
+      ss_remit_info: { Args: never; Returns: Json }
+      ss_request_cancellation: {
+        Args: {
+          p_ip?: string
+          p_note?: string
+          p_preferred_date?: string
+          p_reason: string
+          p_token: string
+          p_user_agent?: string
+        }
+        Returns: Json
       }
       ss_request_visit_reschedule: {
         Args: { p_customer_id: string; p_date: string; p_note?: string }
         Returns: Json
       }
+      ss_run_invoice_dunning: { Args: never; Returns: Json }
+      ss_run_lead_sla: { Args: never; Returns: Json }
+      ss_run_task_sla: { Args: never; Returns: Json }
+      ss_save_quote_picks: {
+        Args: { _selected_ids: string[]; _token: string }
+        Returns: undefined
+      }
       ss_seed_stage_items: {
         Args: { p_name: string; p_project: string; p_stage: string }
         Returns: undefined
       }
+      ss_set_gate_access: {
+        Args: {
+          _customer_id: string
+          _dog_name?: string
+          _gate_code?: string
+          _location_notes?: string
+        }
+        Returns: Json
+      }
       ss_set_visit_flag: {
         Args: { p_customer_id: string; p_flag: string; p_value: boolean }
+        Returns: Json
+      }
+      ss_settle_check_payment: {
+        Args: {
+          p_amount?: number
+          p_check_id: string
+          p_check_number?: string
+          p_note?: string
+          p_status: string
+        }
         Returns: Json
       }
       ss_sign_contract: {
@@ -6130,13 +8394,63 @@ export type Database = {
         }
         Returns: Json
       }
+      ss_sla_effective_config: {
+        Args: { p_customer: string; p_lead: string }
+        Returns: Json
+      }
+      ss_sla_notify: {
+        Args: {
+          p_channels: Json
+          p_key: string
+          p_task: string
+          p_user: string
+          p_vars: Json
+        }
+        Returns: undefined
+      }
       ss_sync_quote_contract: {
         Args: { _quote_id: string }
         Returns: undefined
       }
+      ss_task_sla_config: { Args: never; Returns: Json }
+      ss_touch_customer_attribution: {
+        Args: {
+          p_campaign_id: string
+          p_email: string
+          p_event_type: string
+          p_landing_page: string
+          p_page_path: string
+          p_phone: string
+          p_placement: string
+        }
+        Returns: string
+      }
+      ss_transfer_stock_to_truck: {
+        Args: { p_item_id: string; p_qty: number; p_truck_id: string }
+        Returns: Json
+      }
       ss_unit_factor: { Args: { p_unit: string }; Returns: number }
       ss_unit_family: { Args: { p_unit: string }; Returns: string }
+      ss_update_inspection_status: {
+        Args: {
+          _clear_eta?: boolean
+          _customer_note?: string
+          _eta_at?: string
+          _eta_window?: string
+          _id: string
+          _status?: string
+        }
+        Returns: Json
+      }
       ss_validate_lead_code: { Args: { _code: string }; Returns: Json }
+      ss_visit_parts: {
+        Args: { p_visit_id: string }
+        Returns: {
+          item_name: string
+          qty: number
+          unit: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user" | "crm_manager" | "store_manager"
