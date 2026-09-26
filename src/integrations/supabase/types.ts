@@ -4443,6 +4443,8 @@ export type Database = {
           intake_ref: string | null
           landing_page: string | null
           last_reminder_at: string | null
+          lead_channel: string | null
+          lead_score: number | null
           message: string | null
           monthly_value: number
           next_action: string | null
@@ -4457,9 +4459,12 @@ export type Database = {
           plan_id: string | null
           plan_status: string
           pool_size: string | null
+          portal_status: string | null
           promo_code: string | null
           referrer: string | null
           reminder_count: number | null
+          request_id: string | null
+          score_reasons: Json | null
           service_type: string
           session_id: string | null
           sla_due_at: string | null
@@ -4494,6 +4499,8 @@ export type Database = {
           intake_ref?: string | null
           landing_page?: string | null
           last_reminder_at?: string | null
+          lead_channel?: string | null
+          lead_score?: number | null
           message?: string | null
           monthly_value?: number
           next_action?: string | null
@@ -4508,9 +4515,12 @@ export type Database = {
           plan_id?: string | null
           plan_status?: string
           pool_size?: string | null
+          portal_status?: string | null
           promo_code?: string | null
           referrer?: string | null
           reminder_count?: number | null
+          request_id?: string | null
+          score_reasons?: Json | null
           service_type?: string
           session_id?: string | null
           sla_due_at?: string | null
@@ -4545,6 +4555,8 @@ export type Database = {
           intake_ref?: string | null
           landing_page?: string | null
           last_reminder_at?: string | null
+          lead_channel?: string | null
+          lead_score?: number | null
           message?: string | null
           monthly_value?: number
           next_action?: string | null
@@ -4559,9 +4571,12 @@ export type Database = {
           plan_id?: string | null
           plan_status?: string
           pool_size?: string | null
+          portal_status?: string | null
           promo_code?: string | null
           referrer?: string | null
           reminder_count?: number | null
+          request_id?: string | null
+          score_reasons?: Json | null
           service_type?: string
           session_id?: string | null
           sla_due_at?: string | null
