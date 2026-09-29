@@ -11,6 +11,7 @@ import { listApprovedReviews } from "@/lib/reviews.functions";
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
   "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
+const SHARE_IMAGE = `${SITE_URL}/og-savvy-swim-2026.jpg`;
 
 export const Route = createFileRoute("/")({
   loader: async () => ({ reviews: await listApprovedReviews() }),
@@ -22,8 +23,15 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${SITE_URL}/` },
-
+      { property: "og:image", content: SHARE_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Savvy Swim weekly pool service" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: SHARE_IMAGE },
+      { name: "twitter:image:alt", content: "Savvy Swim weekly pool service" },
     ],
     links: [
       // LCP hero photo, start the fetch during HTML parse. Only the modern
