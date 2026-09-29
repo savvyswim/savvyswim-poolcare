@@ -11,7 +11,7 @@ import { listApprovedReviews } from "@/lib/reviews.functions";
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
   "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
-const SHARE_IMAGE = `${SITE_URL}/og-savvy-swim-2026.jpg`;
+const SHARE_IMAGE = `${SITE_URL}/og-savvy-swim-home-v2.jpg`;
 
 export const Route = createFileRoute("/")({
   loader: async () => ({ reviews: await listApprovedReviews() }),
