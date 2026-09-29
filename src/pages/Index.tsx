@@ -1,7 +1,6 @@
 import { ArrowRight, CalendarCheck, Mail, MapPin, MessageSquare, Phone, Star } from "lucide-react";
 import { useLoaderData } from "@tanstack/react-router";
 
-import Seo from "@/components/Seo";
 import ScrollReveal from "@/components/ScrollReveal";
 import ServiceAreaMap from "@/components/ServiceAreaMap";
 import BusinessInfoCard from "@/components/BusinessInfoCard";
@@ -140,12 +139,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <Seo
-        title="Savvy Swim | Pool Cleaning, Service & Repair in Texas"
-        description="Weekly pool cleaning, maintenance, equipment service and repair across DFW. Free inspection from Savvy Swim, a Santana & Rivera company."
-        path="/"
-        jsonLd={reviewSchema}
-      />
+      <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
 
 
       <SiteHeader />
