@@ -8,9 +8,14 @@ import {
 import { localBusinessSchema, serviceSchema, SITE_URL } from "@/lib/structured-data";
 import { listApprovedReviews } from "@/lib/reviews.functions";
 
+// SEO title keeps the starting price for search rankings.
 const TITLE = "Pool Service DFW from $129.99/mo | Savvy Swim";
 const DESCRIPTION =
   "Weekly pool cleaning, chemistry and repair across DFW from $129.99/mo. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
+// Share-card text (link previews) stays price-free.
+const SHARE_TITLE = "Savvy Swim | Pool Service in Dallas Fort Worth";
+const SHARE_DESCRIPTION =
+  "Weekly pool cleaning, chemistry and repair across DFW. Same tech every week, photo report every visit, no contracts. Book a free inspection.";
 const SHARE_IMAGE = `${SITE_URL}/og-savvy-swim-home-v2.jpg`;
 
 export const Route = createFileRoute("/")({
