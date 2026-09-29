@@ -54,7 +54,7 @@ const SITE_DESCRIPTION =
   "Weekly pool cleaning, equipment repair, and service across Texas. Certified techs, photo reports every visit. Free quote.";
 // Share preview, served from our own domain so nothing outside Savvy Swim
 // appears when a link is posted.
-const OG_IMAGE = "https://savvyswim.com/og-savvy-swim-2026.jpg";
+const OG_IMAGE = "https://savvyswim.com/og-savvy-swim-home-v2.jpg";
 
 const FONT_CSS =
   "https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap";
