@@ -9,233 +9,88 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WeeklyPoolServiceRouteImport } from './routes/weekly-pool-service'
-import { Route as ThankYouRouteImport } from './routes/thank-you'
-import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SurveyRouteImport } from './routes/survey'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as ServiceAreasRouteImport } from './routes/service-areas'
-import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
-import { Route as ScheduleRouteImport } from './routes/schedule'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
-import { Route as ReferRouteImport } from './routes/refer'
-import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PortalRouteImport } from './routes/portal'
-import { Route as PoolCleaningPlanoRouteImport } from './routes/pool-cleaning-plano'
-import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
-import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
-import { Route as PlanoRouteImport } from './routes/plano'
-import { Route as OurWorkRouteImport } from './routes/our-work'
-import { Route as OfficeRouteImport } from './routes/office'
-import { Route as OfferRouteImport } from './routes/offer'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as LeaveAReviewRouteImport } from './routes/leave-a-review'
-import { Route as FriscoRouteImport } from './routes/frisco'
-import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
-import { Route as BookingRouteImport } from './routes/booking'
-import { Route as BookRouteImport } from './routes/book'
-import { Route as BRouteImport } from './routes/b'
-import { Route as AppRouteImport } from './routes/app'
-import { Route as CityRouteImport } from './routes/$city'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CityRouteImport } from './routes/$city'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as BRouteImport } from './routes/b'
+import { Route as BookRouteImport } from './routes/book'
+import { Route as BookingRouteImport } from './routes/booking'
+import { Route as FreeInspectionRouteImport } from './routes/free-inspection'
+import { Route as FriscoRouteImport } from './routes/frisco'
+import { Route as LeaveAReviewRouteImport } from './routes/leave-a-review'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as OfferRouteImport } from './routes/offer'
+import { Route as OfficeRouteImport } from './routes/office'
+import { Route as OurWorkRouteImport } from './routes/our-work'
+import { Route as PlanoRouteImport } from './routes/plano'
+import { Route as PoolCleaningFriscoRouteImport } from './routes/pool-cleaning-frisco'
+import { Route as PoolCleaningFriscoTxRouteImport } from './routes/pool-cleaning-frisco-tx'
+import { Route as PoolCleaningPlanoRouteImport } from './routes/pool-cleaning-plano'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ReferRouteImport } from './routes/refer'
+import { Route as RequestInspectionRouteImport } from './routes/request-inspection'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as ScheduleQrRouteImport } from './routes/schedule-qr'
+import { Route as ServiceAreasRouteImport } from './routes/service-areas'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SurveyRouteImport } from './routes/survey'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
+import { Route as ThankYouRouteImport } from './routes/thank-you'
+import { Route as WeeklyPoolServiceRouteImport } from './routes/weekly-pool-service'
 import { Route as CityIndexRouteImport } from './routes/$city.index'
-import { Route as SignTokenRouteImport } from './routes/sign/$token'
-import { Route as ReviewTokenRouteImport } from './routes/review/$token'
-import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
-import { Route as AppSplatRouteImport } from './routes/app.$'
-import { Route as AdminWebsiteToAppRouteImport } from './routes/admin/website-to-app'
-import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
-import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
-import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
-import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
-import { Route as AdminListingRouteImport } from './routes/admin/listing'
-import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
-import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
-import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
-import { Route as AdminCrmRouteImport } from './routes/admin/crm'
-import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
-import { Route as AdminCalendarRouteImport } from './routes/admin/calendar'
-import { Route as AdminAdsRouteImport } from './routes/admin/ads'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as CityPricingRouteImport } from './routes/$city.pricing'
-import { Route as AdminBookingsIndexRouteImport } from './routes/admin/bookings.index'
-import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
-import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
-import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
-import { Route as AdminCrmSplatRouteImport } from './routes/admin/crm.$'
-import { Route as AdminBookingsIdRouteImport } from './routes/admin/bookings.$id'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AdminAdsRouteImport } from './routes/admin/ads'
+import { Route as AdminCalendarRouteImport } from './routes/admin/calendar'
+import { Route as AdminCanaryRouteImport } from './routes/admin/canary'
+import { Route as AdminCrmRouteImport } from './routes/admin/crm'
+import { Route as AdminLeadSourcesRouteImport } from './routes/admin/lead-sources'
+import { Route as AdminLeadSyncRouteImport } from './routes/admin/lead-sync'
+import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
+import { Route as AdminListingRouteImport } from './routes/admin/listing'
+import { Route as AdminNotFoundRouteImport } from './routes/admin/not-found'
+import { Route as AdminPoolMapRouteImport } from './routes/admin/pool-map'
+import { Route as AdminReviewsRouteImport } from './routes/admin/reviews'
+import { Route as AdminWebhookHealthRouteImport } from './routes/admin/webhook-health'
+import { Route as AdminWebsiteToAppRouteImport } from './routes/admin/website-to-app'
+import { Route as AppSplatRouteImport } from './routes/app.$'
+import { Route as QuoteTokenRouteImport } from './routes/quote.$token'
+import { Route as ReviewTokenRouteImport } from './routes/review/$token'
+import { Route as SignTokenRouteImport } from './routes/sign/$token'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
-import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
-import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
-import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
-import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/public/hooks/webhook-watch'
-import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
-import { Route as ApiPublicHooksSurveyFollowupsRouteImport } from './routes/api/public/hooks/survey-followups'
-import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/public/hooks/smoke-alert'
-import { Route as ApiPublicHooksRetryCrmForwardsRouteImport } from './routes/api/public/hooks/retry-crm-forwards'
-import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
-import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
-import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
-import { Route as ApiPublicHooksCrmTrafficDailyRouteImport } from './routes/api/public/hooks/crm-traffic-daily'
-import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api/public/hooks/crm-payment-status'
-import { Route as ApiPublicHooksCrmLeadUpdateRouteImport } from './routes/api/public/hooks/crm-lead-update'
-import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as AdminBookingsIndexRouteImport } from './routes/admin/bookings.index'
+import { Route as AdminBookingsIdRouteImport } from './routes/admin/bookings.$id'
+import { Route as AdminCrmSplatRouteImport } from './routes/admin/crm.$'
+import { Route as ApiPublicEventsRouteImport } from './routes/api/public/events'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as ApiPublicLeadsRouteImport } from './routes/api/public/leads'
 import { Route as ApiPublicHooksCanaryRouteImport } from './routes/api/public/hooks/canary'
+import { Route as ApiPublicHooksCrmAppointmentStatusRouteImport } from './routes/api/public/hooks/crm-appointment-status'
+import { Route as ApiPublicHooksCrmLeadUpdateRouteImport } from './routes/api/public/hooks/crm-lead-update'
+import { Route as ApiPublicHooksCrmPaymentStatusRouteImport } from './routes/api/public/hooks/crm-payment-status'
+import { Route as ApiPublicHooksCrmTrafficDailyRouteImport } from './routes/api/public/hooks/crm-traffic-daily'
+import { Route as ApiPublicHooksFailureRateWatchRouteImport } from './routes/api/public/hooks/failure-rate-watch'
+import { Route as ApiPublicHooksHealthWatchRouteImport } from './routes/api/public/hooks/health-watch'
+import { Route as ApiPublicHooksLowStockWatchRouteImport } from './routes/api/public/hooks/low-stock-watch'
+import { Route as ApiPublicHooksRetryCrmForwardsRouteImport } from './routes/api/public/hooks/retry-crm-forwards'
+import { Route as ApiPublicHooksSmokeAlertRouteImport } from './routes/api/public/hooks/smoke-alert'
+import { Route as ApiPublicHooksSurveyFollowupsRouteImport } from './routes/api/public/hooks/survey-followups'
+import { Route as ApiPublicHooksVisitRemindersRouteImport } from './routes/api/public/hooks/visit-reminders'
+import { Route as ApiPublicHooksWebhookWatchRouteImport } from './routes/api/public/hooks/webhook-watch'
+import { Route as ApiPublicTwilioContractSmsStatusRouteImport } from './routes/api/public/twilio/contract-sms-status'
+import { Route as ApiPublicTwilioInboundRouteImport } from './routes/api/public/twilio/inbound'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 
-const WeeklyPoolServiceRoute = WeeklyPoolServiceRouteImport.update({
-  id: '/weekly-pool-service',
-  path: '/weekly-pool-service',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ThankYouRoute = ThankYouRouteImport.update({
-  id: '/thank-you',
-  path: '/thank-you',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
-  id: '/terms-and-conditions',
-  path: '/terms-and-conditions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SurveyRoute = SurveyRouteImport.update({
-  id: '/survey',
-  path: '/survey',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServiceAreasRoute = ServiceAreasRouteImport.update({
-  id: '/service-areas',
-  path: '/service-areas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScheduleQrRoute = ScheduleQrRouteImport.update({
-  id: '/schedule-qr',
-  path: '/schedule-qr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScheduleRoute = ScheduleRouteImport.update({
-  id: '/schedule',
-  path: '/schedule',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RequestInspectionRoute = RequestInspectionRouteImport.update({
-  id: '/request-inspection',
-  path: '/request-inspection',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReferRoute = ReferRouteImport.update({
-  id: '/refer',
-  path: '/refer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalRoute = PortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoolCleaningPlanoRoute = PoolCleaningPlanoRouteImport.update({
-  id: '/pool-cleaning-plano',
-  path: '/pool-cleaning-plano',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
-  id: '/pool-cleaning-frisco-tx',
-  path: '/pool-cleaning-frisco-tx',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoolCleaningFriscoRoute = PoolCleaningFriscoRouteImport.update({
-  id: '/pool-cleaning-frisco',
-  path: '/pool-cleaning-frisco',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlanoRoute = PlanoRouteImport.update({
-  id: '/plano',
-  path: '/plano',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OurWorkRoute = OurWorkRouteImport.update({
-  id: '/our-work',
-  path: '/our-work',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfficeRoute = OfficeRouteImport.update({
-  id: '/office',
-  path: '/office',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfferRoute = OfferRouteImport.update({
-  id: '/offer',
-  path: '/offer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LeaveAReviewRoute = LeaveAReviewRouteImport.update({
-  id: '/leave-a-review',
-  path: '/leave-a-review',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FriscoRoute = FriscoRouteImport.update({
-  id: '/frisco',
-  path: '/frisco',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FreeInspectionRoute = FreeInspectionRouteImport.update({
-  id: '/free-inspection',
-  path: '/free-inspection',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BookingRoute = BookingRouteImport.update({
-  id: '/booking',
-  path: '/booking',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BookRoute = BookRouteImport.update({
-  id: '/book',
-  path: '/book',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BRoute = BRouteImport.update({
-  id: '/b',
-  path: '/b',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CityRoute = CityRouteImport.update({
@@ -243,9 +98,154 @@ const CityRoute = CityRouteImport.update({
   path: '/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BRoute = BRouteImport.update({
+  id: '/b',
+  path: '/b',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeInspectionRoute = FreeInspectionRouteImport.update({
+  id: '/free-inspection',
+  path: '/free-inspection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FriscoRoute = FriscoRouteImport.update({
+  id: '/frisco',
+  path: '/frisco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaveAReviewRoute = LeaveAReviewRouteImport.update({
+  id: '/leave-a-review',
+  path: '/leave-a-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfferRoute = OfferRouteImport.update({
+  id: '/offer',
+  path: '/offer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficeRoute = OfficeRouteImport.update({
+  id: '/office',
+  path: '/office',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OurWorkRoute = OurWorkRouteImport.update({
+  id: '/our-work',
+  path: '/our-work',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanoRoute = PlanoRouteImport.update({
+  id: '/plano',
+  path: '/plano',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolCleaningFriscoRoute = PoolCleaningFriscoRouteImport.update({
+  id: '/pool-cleaning-frisco',
+  path: '/pool-cleaning-frisco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolCleaningFriscoTxRoute = PoolCleaningFriscoTxRouteImport.update({
+  id: '/pool-cleaning-frisco-tx',
+  path: '/pool-cleaning-frisco-tx',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolCleaningPlanoRoute = PoolCleaningPlanoRouteImport.update({
+  id: '/pool-cleaning-plano',
+  path: '/pool-cleaning-plano',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferRoute = ReferRouteImport.update({
+  id: '/refer',
+  path: '/refer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestInspectionRoute = RequestInspectionRouteImport.update({
+  id: '/request-inspection',
+  path: '/request-inspection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRoute = ScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleQrRoute = ScheduleQrRouteImport.update({
+  id: '/schedule-qr',
+  path: '/schedule-qr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiceAreasRoute = ServiceAreasRouteImport.update({
+  id: '/service-areas',
+  path: '/service-areas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveyRoute = SurveyRouteImport.update({
+  id: '/survey',
+  path: '/survey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
+  id: '/terms-and-conditions',
+  path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThankYouRoute = ThankYouRouteImport.update({
+  id: '/thank-you',
+  path: '/thank-you',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WeeklyPoolServiceRoute = WeeklyPoolServiceRouteImport.update({
+  id: '/weekly-pool-service',
+  path: '/weekly-pool-service',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CityIndexRoute = CityIndexRouteImport.update({
@@ -253,79 +253,26 @@ const CityIndexRoute = CityIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CityRoute,
 } as any)
-const SignTokenRoute = SignTokenRouteImport.update({
-  id: '/sign/$token',
-  path: '/sign/$token',
-  getParentRoute: () => rootRouteImport,
+const CityPricingRoute = CityPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => CityRoute,
 } as any)
-const ReviewTokenRoute = ReviewTokenRouteImport.update({
-  id: '/review/$token',
-  path: '/review/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuoteTokenRoute = QuoteTokenRouteImport.update({
-  id: '/quote/$token',
-  path: '/quote/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppSplatRoute = AppSplatRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => AppRoute,
-} as any)
-const AdminWebsiteToAppRoute = AdminWebsiteToAppRouteImport.update({
-  id: '/admin/website-to-app',
-  path: '/admin/website-to-app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
-  id: '/admin/webhook-health',
-  path: '/admin/webhook-health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminReviewsRoute = AdminReviewsRouteImport.update({
-  id: '/admin/reviews',
-  path: '/admin/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminPoolMapRoute = AdminPoolMapRouteImport.update({
-  id: '/admin/pool-map',
-  path: '/admin/pool-map',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
-  id: '/admin/not-found',
-  path: '/admin/not-found',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminListingRoute = AdminListingRouteImport.update({
-  id: '/admin/listing',
-  path: '/admin/listing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLeadsRoute = AdminLeadsRouteImport.update({
-  id: '/admin/leads',
-  path: '/admin/leads',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
-  id: '/admin/lead-sync',
-  path: '/admin/lead-sync',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLeadSourcesRoute = AdminLeadSourcesRouteImport.update({
-  id: '/admin/lead-sources',
-  path: '/admin/lead-sources',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminCrmRoute = AdminCrmRouteImport.update({
-  id: '/admin/crm',
-  path: '/admin/crm',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminCanaryRoute = AdminCanaryRouteImport.update({
-  id: '/admin/canary',
-  path: '/admin/canary',
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AdminAdsRoute = AdminAdsRouteImport.update({
+  id: '/admin/ads',
+  path: '/admin/ads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCalendarRoute = AdminCalendarRouteImport.update({
@@ -333,56 +280,84 @@ const AdminCalendarRoute = AdminCalendarRouteImport.update({
   path: '/admin/calendar',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminAdsRoute = AdminAdsRouteImport.update({
-  id: '/admin/ads',
-  path: '/admin/ads',
+const AdminCanaryRoute = AdminCanaryRouteImport.update({
+  id: '/admin/canary',
+  path: '/admin/canary',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const CityPricingRoute = CityPricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => CityRoute,
-} as any)
-const AdminBookingsIndexRoute = AdminBookingsIndexRouteImport.update({
-  id: '/admin/bookings/',
-  path: '/admin/bookings/',
+const AdminCrmRoute = AdminCrmRouteImport.update({
+  id: '/admin/crm',
+  path: '/admin/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
-  id: '/api/public/leads',
-  path: '/api/public/leads',
+const AdminLeadSourcesRoute = AdminLeadSourcesRouteImport.update({
+  id: '/admin/lead-sources',
+  path: '/admin/lead-sources',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
-  id: '/api/public/health',
-  path: '/api/public/health',
+const AdminLeadSyncRoute = AdminLeadSyncRouteImport.update({
+  id: '/admin/lead-sync',
+  path: '/admin/lead-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicEventsRoute = ApiPublicEventsRouteImport.update({
-  id: '/api/public/events',
-  path: '/api/public/events',
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCrmSplatRoute = AdminCrmSplatRouteImport.update({
+const AdminListingRoute = AdminListingRouteImport.update({
+  id: '/admin/listing',
+  path: '/admin/listing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminNotFoundRoute = AdminNotFoundRouteImport.update({
+  id: '/admin/not-found',
+  path: '/admin/not-found',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPoolMapRoute = AdminPoolMapRouteImport.update({
+  id: '/admin/pool-map',
+  path: '/admin/pool-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReviewsRoute = AdminReviewsRouteImport.update({
+  id: '/admin/reviews',
+  path: '/admin/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWebhookHealthRoute = AdminWebhookHealthRouteImport.update({
+  id: '/admin/webhook-health',
+  path: '/admin/webhook-health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWebsiteToAppRoute = AdminWebsiteToAppRouteImport.update({
+  id: '/admin/website-to-app',
+  path: '/admin/website-to-app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSplatRoute = AppSplatRouteImport.update({
   id: '/$',
   path: '/$',
-  getParentRoute: () => AdminCrmRoute,
+  getParentRoute: () => AppRoute,
 } as any)
-const AdminBookingsIdRoute = AdminBookingsIdRouteImport.update({
-  id: '/admin/bookings/$id',
-  path: '/admin/bookings/$id',
+const QuoteTokenRoute = QuoteTokenRouteImport.update({
+  id: '/quote/$token',
+  path: '/quote/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewTokenRoute = ReviewTokenRouteImport.update({
+  id: '/review/$token',
+  path: '/review/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignTokenRoute = SignTokenRouteImport.update({
+  id: '/sign/$token',
+  path: '/sign/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -391,90 +366,45 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const AdminBookingsIndexRoute = AdminBookingsIndexRouteImport.update({
+  id: '/admin/bookings/',
+  path: '/admin/bookings/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
-  id: '/lovable/email/auth/webhook',
-  path: '/lovable/email/auth/webhook',
+const AdminBookingsIdRoute = AdminBookingsIdRouteImport.update({
+  id: '/admin/bookings/$id',
+  path: '/admin/bookings/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
-  id: '/lovable/email/auth/preview',
-  path: '/lovable/email/auth/preview',
+const AdminCrmSplatRoute = AdminCrmSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AdminCrmRoute,
+} as any)
+const ApiPublicEventsRoute = ApiPublicEventsRouteImport.update({
+  id: '/api/public/events',
+  path: '/api/public/events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicTwilioInboundRoute = ApiPublicTwilioInboundRouteImport.update({
-  id: '/api/public/twilio/inbound',
-  path: '/api/public/twilio/inbound',
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicTwilioContractSmsStatusRoute =
-  ApiPublicTwilioContractSmsStatusRouteImport.update({
-    id: '/api/public/twilio/contract-sms-status',
-    path: '/api/public/twilio/contract-sms-status',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksWebhookWatchRoute =
-  ApiPublicHooksWebhookWatchRouteImport.update({
-    id: '/api/public/hooks/webhook-watch',
-    path: '/api/public/hooks/webhook-watch',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksVisitRemindersRoute =
-  ApiPublicHooksVisitRemindersRouteImport.update({
-    id: '/api/public/hooks/visit-reminders',
-    path: '/api/public/hooks/visit-reminders',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksSurveyFollowupsRoute =
-  ApiPublicHooksSurveyFollowupsRouteImport.update({
-    id: '/api/public/hooks/survey-followups',
-    path: '/api/public/hooks/survey-followups',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksSmokeAlertRoute =
-  ApiPublicHooksSmokeAlertRouteImport.update({
-    id: '/api/public/hooks/smoke-alert',
-    path: '/api/public/hooks/smoke-alert',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksRetryCrmForwardsRoute =
-  ApiPublicHooksRetryCrmForwardsRouteImport.update({
-    id: '/api/public/hooks/retry-crm-forwards',
-    path: '/api/public/hooks/retry-crm-forwards',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksLowStockWatchRoute =
-  ApiPublicHooksLowStockWatchRouteImport.update({
-    id: '/api/public/hooks/low-stock-watch',
-    path: '/api/public/hooks/low-stock-watch',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksHealthWatchRoute =
-  ApiPublicHooksHealthWatchRouteImport.update({
-    id: '/api/public/hooks/health-watch',
-    path: '/api/public/hooks/health-watch',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksFailureRateWatchRoute =
-  ApiPublicHooksFailureRateWatchRouteImport.update({
-    id: '/api/public/hooks/failure-rate-watch',
-    path: '/api/public/hooks/failure-rate-watch',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksCrmTrafficDailyRoute =
-  ApiPublicHooksCrmTrafficDailyRouteImport.update({
-    id: '/api/public/hooks/crm-traffic-daily',
-    path: '/api/public/hooks/crm-traffic-daily',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksCrmPaymentStatusRoute =
-  ApiPublicHooksCrmPaymentStatusRouteImport.update({
-    id: '/api/public/hooks/crm-payment-status',
-    path: '/api/public/hooks/crm-payment-status',
+const ApiPublicLeadsRoute = ApiPublicLeadsRouteImport.update({
+  id: '/api/public/leads',
+  path: '/api/public/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
+  id: '/api/public/hooks/canary',
+  path: '/api/public/hooks/canary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksCrmAppointmentStatusRoute =
+  ApiPublicHooksCrmAppointmentStatusRouteImport.update({
+    id: '/api/public/hooks/crm-appointment-status',
+    path: '/api/public/hooks/crm-appointment-status',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksCrmLeadUpdateRoute =
@@ -483,15 +413,85 @@ const ApiPublicHooksCrmLeadUpdateRoute =
     path: '/api/public/hooks/crm-lead-update',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksCrmAppointmentStatusRoute =
-  ApiPublicHooksCrmAppointmentStatusRouteImport.update({
-    id: '/api/public/hooks/crm-appointment-status',
-    path: '/api/public/hooks/crm-appointment-status',
+const ApiPublicHooksCrmPaymentStatusRoute =
+  ApiPublicHooksCrmPaymentStatusRouteImport.update({
+    id: '/api/public/hooks/crm-payment-status',
+    path: '/api/public/hooks/crm-payment-status',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksCanaryRoute = ApiPublicHooksCanaryRouteImport.update({
-  id: '/api/public/hooks/canary',
-  path: '/api/public/hooks/canary',
+const ApiPublicHooksCrmTrafficDailyRoute =
+  ApiPublicHooksCrmTrafficDailyRouteImport.update({
+    id: '/api/public/hooks/crm-traffic-daily',
+    path: '/api/public/hooks/crm-traffic-daily',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksFailureRateWatchRoute =
+  ApiPublicHooksFailureRateWatchRouteImport.update({
+    id: '/api/public/hooks/failure-rate-watch',
+    path: '/api/public/hooks/failure-rate-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksHealthWatchRoute =
+  ApiPublicHooksHealthWatchRouteImport.update({
+    id: '/api/public/hooks/health-watch',
+    path: '/api/public/hooks/health-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksLowStockWatchRoute =
+  ApiPublicHooksLowStockWatchRouteImport.update({
+    id: '/api/public/hooks/low-stock-watch',
+    path: '/api/public/hooks/low-stock-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksRetryCrmForwardsRoute =
+  ApiPublicHooksRetryCrmForwardsRouteImport.update({
+    id: '/api/public/hooks/retry-crm-forwards',
+    path: '/api/public/hooks/retry-crm-forwards',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksSmokeAlertRoute =
+  ApiPublicHooksSmokeAlertRouteImport.update({
+    id: '/api/public/hooks/smoke-alert',
+    path: '/api/public/hooks/smoke-alert',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksSurveyFollowupsRoute =
+  ApiPublicHooksSurveyFollowupsRouteImport.update({
+    id: '/api/public/hooks/survey-followups',
+    path: '/api/public/hooks/survey-followups',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksVisitRemindersRoute =
+  ApiPublicHooksVisitRemindersRouteImport.update({
+    id: '/api/public/hooks/visit-reminders',
+    path: '/api/public/hooks/visit-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksWebhookWatchRoute =
+  ApiPublicHooksWebhookWatchRouteImport.update({
+    id: '/api/public/hooks/webhook-watch',
+    path: '/api/public/hooks/webhook-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicTwilioContractSmsStatusRoute =
+  ApiPublicTwilioContractSmsStatusRouteImport.update({
+    id: '/api/public/twilio/contract-sms-status',
+    path: '/api/public/twilio/contract-sms-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicTwilioInboundRoute = ApiPublicTwilioInboundRouteImport.update({
+  id: '/api/public/twilio/inbound',
+  path: '/api/public/twilio/inbound',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -1056,214 +1056,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/weekly-pool-service': {
-      id: '/weekly-pool-service'
-      path: '/weekly-pool-service'
-      fullPath: '/weekly-pool-service'
-      preLoaderRoute: typeof WeeklyPoolServiceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/thank-you': {
-      id: '/thank-you'
-      path: '/thank-you'
-      fullPath: '/thank-you'
-      preLoaderRoute: typeof ThankYouRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms-and-conditions': {
-      id: '/terms-and-conditions'
-      path: '/terms-and-conditions'
-      fullPath: '/terms-and-conditions'
-      preLoaderRoute: typeof TermsAndConditionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/survey': {
-      id: '/survey'
-      path: '/survey'
-      fullPath: '/survey'
-      preLoaderRoute: typeof SurveyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/service-areas': {
-      id: '/service-areas'
-      path: '/service-areas'
-      fullPath: '/service-areas'
-      preLoaderRoute: typeof ServiceAreasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/schedule-qr': {
-      id: '/schedule-qr'
-      path: '/schedule-qr'
-      fullPath: '/schedule-qr'
-      preLoaderRoute: typeof ScheduleQrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/schedule': {
-      id: '/schedule'
-      path: '/schedule'
-      fullPath: '/schedule'
-      preLoaderRoute: typeof ScheduleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/request-inspection': {
-      id: '/request-inspection'
-      path: '/request-inspection'
-      fullPath: '/request-inspection'
-      preLoaderRoute: typeof RequestInspectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/refer': {
-      id: '/refer'
-      path: '/refer'
-      fullPath: '/refer'
-      preLoaderRoute: typeof ReferRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy-policy': {
-      id: '/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof PrivacyPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal': {
-      id: '/portal'
-      path: '/portal'
-      fullPath: '/portal'
-      preLoaderRoute: typeof PortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pool-cleaning-plano': {
-      id: '/pool-cleaning-plano'
-      path: '/pool-cleaning-plano'
-      fullPath: '/pool-cleaning-plano'
-      preLoaderRoute: typeof PoolCleaningPlanoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pool-cleaning-frisco-tx': {
-      id: '/pool-cleaning-frisco-tx'
-      path: '/pool-cleaning-frisco-tx'
-      fullPath: '/pool-cleaning-frisco-tx'
-      preLoaderRoute: typeof PoolCleaningFriscoTxRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pool-cleaning-frisco': {
-      id: '/pool-cleaning-frisco'
-      path: '/pool-cleaning-frisco'
-      fullPath: '/pool-cleaning-frisco'
-      preLoaderRoute: typeof PoolCleaningFriscoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/plano': {
-      id: '/plano'
-      path: '/plano'
-      fullPath: '/plano'
-      preLoaderRoute: typeof PlanoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/our-work': {
-      id: '/our-work'
-      path: '/our-work'
-      fullPath: '/our-work'
-      preLoaderRoute: typeof OurWorkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/office': {
-      id: '/office'
-      path: '/office'
-      fullPath: '/office'
-      preLoaderRoute: typeof OfficeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/offer': {
-      id: '/offer'
-      path: '/offer'
-      fullPath: '/offer'
-      preLoaderRoute: typeof OfferRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/leave-a-review': {
-      id: '/leave-a-review'
-      path: '/leave-a-review'
-      fullPath: '/leave-a-review'
-      preLoaderRoute: typeof LeaveAReviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/frisco': {
-      id: '/frisco'
-      path: '/frisco'
-      fullPath: '/frisco'
-      preLoaderRoute: typeof FriscoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/free-inspection': {
-      id: '/free-inspection'
-      path: '/free-inspection'
-      fullPath: '/free-inspection'
-      preLoaderRoute: typeof FreeInspectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/booking': {
-      id: '/booking'
-      path: '/booking'
-      fullPath: '/booking'
-      preLoaderRoute: typeof BookingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/book': {
-      id: '/book'
-      path: '/book'
-      fullPath: '/book'
-      preLoaderRoute: typeof BookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/b': {
-      id: '/b'
-      path: '/b'
-      fullPath: '/b'
-      preLoaderRoute: typeof BRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$city': {
@@ -1273,11 +1070,214 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CityRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/b': {
+      id: '/b'
+      path: '/b'
+      fullPath: '/b'
+      preLoaderRoute: typeof BRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-inspection': {
+      id: '/free-inspection'
+      path: '/free-inspection'
+      fullPath: '/free-inspection'
+      preLoaderRoute: typeof FreeInspectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/frisco': {
+      id: '/frisco'
+      path: '/frisco'
+      fullPath: '/frisco'
+      preLoaderRoute: typeof FriscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leave-a-review': {
+      id: '/leave-a-review'
+      path: '/leave-a-review'
+      fullPath: '/leave-a-review'
+      preLoaderRoute: typeof LeaveAReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offer': {
+      id: '/offer'
+      path: '/offer'
+      fullPath: '/offer'
+      preLoaderRoute: typeof OfferRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/office': {
+      id: '/office'
+      path: '/office'
+      fullPath: '/office'
+      preLoaderRoute: typeof OfficeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/our-work': {
+      id: '/our-work'
+      path: '/our-work'
+      fullPath: '/our-work'
+      preLoaderRoute: typeof OurWorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plano': {
+      id: '/plano'
+      path: '/plano'
+      fullPath: '/plano'
+      preLoaderRoute: typeof PlanoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pool-cleaning-frisco': {
+      id: '/pool-cleaning-frisco'
+      path: '/pool-cleaning-frisco'
+      fullPath: '/pool-cleaning-frisco'
+      preLoaderRoute: typeof PoolCleaningFriscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pool-cleaning-frisco-tx': {
+      id: '/pool-cleaning-frisco-tx'
+      path: '/pool-cleaning-frisco-tx'
+      fullPath: '/pool-cleaning-frisco-tx'
+      preLoaderRoute: typeof PoolCleaningFriscoTxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pool-cleaning-plano': {
+      id: '/pool-cleaning-plano'
+      path: '/pool-cleaning-plano'
+      fullPath: '/pool-cleaning-plano'
+      preLoaderRoute: typeof PoolCleaningPlanoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refer': {
+      id: '/refer'
+      path: '/refer'
+      fullPath: '/refer'
+      preLoaderRoute: typeof ReferRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request-inspection': {
+      id: '/request-inspection'
+      path: '/request-inspection'
+      fullPath: '/request-inspection'
+      preLoaderRoute: typeof RequestInspectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule-qr': {
+      id: '/schedule-qr'
+      path: '/schedule-qr'
+      fullPath: '/schedule-qr'
+      preLoaderRoute: typeof ScheduleQrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/service-areas': {
+      id: '/service-areas'
+      path: '/service-areas'
+      fullPath: '/service-areas'
+      preLoaderRoute: typeof ServiceAreasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/survey': {
+      id: '/survey'
+      path: '/survey'
+      fullPath: '/survey'
+      preLoaderRoute: typeof SurveyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-and-conditions': {
+      id: '/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof TermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thank-you': {
+      id: '/thank-you'
+      path: '/thank-you'
+      fullPath: '/thank-you'
+      preLoaderRoute: typeof ThankYouRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/weekly-pool-service': {
+      id: '/weekly-pool-service'
+      path: '/weekly-pool-service'
+      fullPath: '/weekly-pool-service'
+      preLoaderRoute: typeof WeeklyPoolServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$city/': {
@@ -1287,123 +1287,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CityIndexRouteImport
       parentRoute: typeof CityRoute
     }
-    '/sign/$token': {
-      id: '/sign/$token'
-      path: '/sign/$token'
-      fullPath: '/sign/$token'
-      preLoaderRoute: typeof SignTokenRouteImport
-      parentRoute: typeof rootRouteImport
+    '/$city/pricing': {
+      id: '/$city/pricing'
+      path: '/pricing'
+      fullPath: '/$city/pricing'
+      preLoaderRoute: typeof CityPricingRouteImport
+      parentRoute: typeof CityRoute
     }
-    '/review/$token': {
-      id: '/review/$token'
-      path: '/review/$token'
-      fullPath: '/review/$token'
-      preLoaderRoute: typeof ReviewTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quote/$token': {
-      id: '/quote/$token'
-      path: '/quote/$token'
-      fullPath: '/quote/$token'
-      preLoaderRoute: typeof QuoteTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/$': {
-      id: '/app/$'
-      path: '/$'
-      fullPath: '/app/$'
-      preLoaderRoute: typeof AppSplatRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/admin/website-to-app': {
-      id: '/admin/website-to-app'
-      path: '/admin/website-to-app'
-      fullPath: '/admin/website-to-app'
-      preLoaderRoute: typeof AdminWebsiteToAppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/webhook-health': {
-      id: '/admin/webhook-health'
-      path: '/admin/webhook-health'
-      fullPath: '/admin/webhook-health'
-      preLoaderRoute: typeof AdminWebhookHealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/reviews': {
-      id: '/admin/reviews'
-      path: '/admin/reviews'
-      fullPath: '/admin/reviews'
-      preLoaderRoute: typeof AdminReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/pool-map': {
-      id: '/admin/pool-map'
-      path: '/admin/pool-map'
-      fullPath: '/admin/pool-map'
-      preLoaderRoute: typeof AdminPoolMapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/not-found': {
-      id: '/admin/not-found'
-      path: '/admin/not-found'
-      fullPath: '/admin/not-found'
-      preLoaderRoute: typeof AdminNotFoundRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/listing': {
-      id: '/admin/listing'
-      path: '/admin/listing'
-      fullPath: '/admin/listing'
-      preLoaderRoute: typeof AdminListingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/leads': {
-      id: '/admin/leads'
-      path: '/admin/leads'
-      fullPath: '/admin/leads'
-      preLoaderRoute: typeof AdminLeadsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/lead-sync': {
-      id: '/admin/lead-sync'
-      path: '/admin/lead-sync'
-      fullPath: '/admin/lead-sync'
-      preLoaderRoute: typeof AdminLeadSyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/lead-sources': {
-      id: '/admin/lead-sources'
-      path: '/admin/lead-sources'
-      fullPath: '/admin/lead-sources'
-      preLoaderRoute: typeof AdminLeadSourcesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/crm': {
-      id: '/admin/crm'
-      path: '/admin/crm'
-      fullPath: '/admin/crm'
-      preLoaderRoute: typeof AdminCrmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/canary': {
-      id: '/admin/canary'
-      path: '/admin/canary'
-      fullPath: '/admin/canary'
-      preLoaderRoute: typeof AdminCanaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/calendar': {
-      id: '/admin/calendar'
-      path: '/admin/calendar'
-      fullPath: '/admin/calendar'
-      preLoaderRoute: typeof AdminCalendarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/ads': {
-      id: '/admin/ads'
-      path: '/admin/ads'
-      fullPath: '/admin/ads'
-      preLoaderRoute: typeof AdminAdsRouteImport
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
@@ -1413,67 +1308,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+    '/admin/ads': {
+      id: '/admin/ads'
+      path: '/admin/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AdminAdsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$city/pricing': {
-      id: '/$city/pricing'
-      path: '/pricing'
-      fullPath: '/$city/pricing'
-      preLoaderRoute: typeof CityPricingRouteImport
-      parentRoute: typeof CityRoute
-    }
-    '/admin/bookings/': {
-      id: '/admin/bookings/'
-      path: '/admin/bookings'
-      fullPath: '/admin/bookings/'
-      preLoaderRoute: typeof AdminBookingsIndexRouteImport
+    '/admin/calendar': {
+      id: '/admin/calendar'
+      path: '/admin/calendar'
+      fullPath: '/admin/calendar'
+      preLoaderRoute: typeof AdminCalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/leads': {
-      id: '/api/public/leads'
-      path: '/api/public/leads'
-      fullPath: '/api/public/leads'
-      preLoaderRoute: typeof ApiPublicLeadsRouteImport
+    '/admin/canary': {
+      id: '/admin/canary'
+      path: '/admin/canary'
+      fullPath: '/admin/canary'
+      preLoaderRoute: typeof AdminCanaryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/health': {
-      id: '/api/public/health'
-      path: '/api/public/health'
-      fullPath: '/api/public/health'
-      preLoaderRoute: typeof ApiPublicHealthRouteImport
+    '/admin/crm': {
+      id: '/admin/crm'
+      path: '/admin/crm'
+      fullPath: '/admin/crm'
+      preLoaderRoute: typeof AdminCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/events': {
-      id: '/api/public/events'
-      path: '/api/public/events'
-      fullPath: '/api/public/events'
-      preLoaderRoute: typeof ApiPublicEventsRouteImport
+    '/admin/lead-sources': {
+      id: '/admin/lead-sources'
+      path: '/admin/lead-sources'
+      fullPath: '/admin/lead-sources'
+      preLoaderRoute: typeof AdminLeadSourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/crm/$': {
-      id: '/admin/crm/$'
+    '/admin/lead-sync': {
+      id: '/admin/lead-sync'
+      path: '/admin/lead-sync'
+      fullPath: '/admin/lead-sync'
+      preLoaderRoute: typeof AdminLeadSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/listing': {
+      id: '/admin/listing'
+      path: '/admin/listing'
+      fullPath: '/admin/listing'
+      preLoaderRoute: typeof AdminListingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/not-found': {
+      id: '/admin/not-found'
+      path: '/admin/not-found'
+      fullPath: '/admin/not-found'
+      preLoaderRoute: typeof AdminNotFoundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pool-map': {
+      id: '/admin/pool-map'
+      path: '/admin/pool-map'
+      fullPath: '/admin/pool-map'
+      preLoaderRoute: typeof AdminPoolMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/reviews': {
+      id: '/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AdminReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/webhook-health': {
+      id: '/admin/webhook-health'
+      path: '/admin/webhook-health'
+      fullPath: '/admin/webhook-health'
+      preLoaderRoute: typeof AdminWebhookHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/website-to-app': {
+      id: '/admin/website-to-app'
+      path: '/admin/website-to-app'
+      fullPath: '/admin/website-to-app'
+      preLoaderRoute: typeof AdminWebsiteToAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/$': {
+      id: '/app/$'
       path: '/$'
-      fullPath: '/admin/crm/$'
-      preLoaderRoute: typeof AdminCrmSplatRouteImport
-      parentRoute: typeof AdminCrmRoute
+      fullPath: '/app/$'
+      preLoaderRoute: typeof AppSplatRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/admin/bookings/$id': {
-      id: '/admin/bookings/$id'
-      path: '/admin/bookings/$id'
-      fullPath: '/admin/bookings/$id'
-      preLoaderRoute: typeof AdminBookingsIdRouteImport
+    '/quote/$token': {
+      id: '/quote/$token'
+      path: '/quote/$token'
+      fullPath: '/quote/$token'
+      preLoaderRoute: typeof QuoteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+    '/review/$token': {
+      id: '/review/$token'
+      path: '/review/$token'
+      fullPath: '/review/$token'
+      preLoaderRoute: typeof ReviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign/$token': {
+      id: '/sign/$token'
+      path: '/sign/$token'
+      fullPath: '/sign/$token'
+      preLoaderRoute: typeof SignTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.lovable/oauth/consent': {
@@ -1483,109 +1434,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/auth/webhook': {
-      id: '/lovable/email/auth/webhook'
-      path: '/lovable/email/auth/webhook'
-      fullPath: '/lovable/email/auth/webhook'
-      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/auth/preview': {
-      id: '/lovable/email/auth/preview'
-      path: '/lovable/email/auth/preview'
-      fullPath: '/lovable/email/auth/preview'
-      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+    '/admin/bookings/': {
+      id: '/admin/bookings/'
+      path: '/admin/bookings'
+      fullPath: '/admin/bookings/'
+      preLoaderRoute: typeof AdminBookingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/twilio/inbound': {
-      id: '/api/public/twilio/inbound'
-      path: '/api/public/twilio/inbound'
-      fullPath: '/api/public/twilio/inbound'
-      preLoaderRoute: typeof ApiPublicTwilioInboundRouteImport
+    '/admin/bookings/$id': {
+      id: '/admin/bookings/$id'
+      path: '/admin/bookings/$id'
+      fullPath: '/admin/bookings/$id'
+      preLoaderRoute: typeof AdminBookingsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/twilio/contract-sms-status': {
-      id: '/api/public/twilio/contract-sms-status'
-      path: '/api/public/twilio/contract-sms-status'
-      fullPath: '/api/public/twilio/contract-sms-status'
-      preLoaderRoute: typeof ApiPublicTwilioContractSmsStatusRouteImport
+    '/admin/crm/$': {
+      id: '/admin/crm/$'
+      path: '/$'
+      fullPath: '/admin/crm/$'
+      preLoaderRoute: typeof AdminCrmSplatRouteImport
+      parentRoute: typeof AdminCrmRoute
+    }
+    '/api/public/events': {
+      id: '/api/public/events'
+      path: '/api/public/events'
+      fullPath: '/api/public/events'
+      preLoaderRoute: typeof ApiPublicEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/webhook-watch': {
-      id: '/api/public/hooks/webhook-watch'
-      path: '/api/public/hooks/webhook-watch'
-      fullPath: '/api/public/hooks/webhook-watch'
-      preLoaderRoute: typeof ApiPublicHooksWebhookWatchRouteImport
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/visit-reminders': {
-      id: '/api/public/hooks/visit-reminders'
-      path: '/api/public/hooks/visit-reminders'
-      fullPath: '/api/public/hooks/visit-reminders'
-      preLoaderRoute: typeof ApiPublicHooksVisitRemindersRouteImport
+    '/api/public/leads': {
+      id: '/api/public/leads'
+      path: '/api/public/leads'
+      fullPath: '/api/public/leads'
+      preLoaderRoute: typeof ApiPublicLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/survey-followups': {
-      id: '/api/public/hooks/survey-followups'
-      path: '/api/public/hooks/survey-followups'
-      fullPath: '/api/public/hooks/survey-followups'
-      preLoaderRoute: typeof ApiPublicHooksSurveyFollowupsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/smoke-alert': {
-      id: '/api/public/hooks/smoke-alert'
-      path: '/api/public/hooks/smoke-alert'
-      fullPath: '/api/public/hooks/smoke-alert'
-      preLoaderRoute: typeof ApiPublicHooksSmokeAlertRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/retry-crm-forwards': {
-      id: '/api/public/hooks/retry-crm-forwards'
-      path: '/api/public/hooks/retry-crm-forwards'
-      fullPath: '/api/public/hooks/retry-crm-forwards'
-      preLoaderRoute: typeof ApiPublicHooksRetryCrmForwardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/low-stock-watch': {
-      id: '/api/public/hooks/low-stock-watch'
-      path: '/api/public/hooks/low-stock-watch'
-      fullPath: '/api/public/hooks/low-stock-watch'
-      preLoaderRoute: typeof ApiPublicHooksLowStockWatchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/health-watch': {
-      id: '/api/public/hooks/health-watch'
-      path: '/api/public/hooks/health-watch'
-      fullPath: '/api/public/hooks/health-watch'
-      preLoaderRoute: typeof ApiPublicHooksHealthWatchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/failure-rate-watch': {
-      id: '/api/public/hooks/failure-rate-watch'
-      path: '/api/public/hooks/failure-rate-watch'
-      fullPath: '/api/public/hooks/failure-rate-watch'
-      preLoaderRoute: typeof ApiPublicHooksFailureRateWatchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/crm-traffic-daily': {
-      id: '/api/public/hooks/crm-traffic-daily'
-      path: '/api/public/hooks/crm-traffic-daily'
-      fullPath: '/api/public/hooks/crm-traffic-daily'
-      preLoaderRoute: typeof ApiPublicHooksCrmTrafficDailyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/crm-payment-status': {
-      id: '/api/public/hooks/crm-payment-status'
-      path: '/api/public/hooks/crm-payment-status'
-      fullPath: '/api/public/hooks/crm-payment-status'
-      preLoaderRoute: typeof ApiPublicHooksCrmPaymentStatusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/crm-lead-update': {
-      id: '/api/public/hooks/crm-lead-update'
-      path: '/api/public/hooks/crm-lead-update'
-      fullPath: '/api/public/hooks/crm-lead-update'
-      preLoaderRoute: typeof ApiPublicHooksCrmLeadUpdateRouteImport
+    '/api/public/hooks/canary': {
+      id: '/api/public/hooks/canary'
+      path: '/api/public/hooks/canary'
+      fullPath: '/api/public/hooks/canary'
+      preLoaderRoute: typeof ApiPublicHooksCanaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/crm-appointment-status': {
@@ -1595,11 +1497,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksCrmAppointmentStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/canary': {
-      id: '/api/public/hooks/canary'
-      path: '/api/public/hooks/canary'
-      fullPath: '/api/public/hooks/canary'
-      preLoaderRoute: typeof ApiPublicHooksCanaryRouteImport
+    '/api/public/hooks/crm-lead-update': {
+      id: '/api/public/hooks/crm-lead-update'
+      path: '/api/public/hooks/crm-lead-update'
+      fullPath: '/api/public/hooks/crm-lead-update'
+      preLoaderRoute: typeof ApiPublicHooksCrmLeadUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/crm-payment-status': {
+      id: '/api/public/hooks/crm-payment-status'
+      path: '/api/public/hooks/crm-payment-status'
+      fullPath: '/api/public/hooks/crm-payment-status'
+      preLoaderRoute: typeof ApiPublicHooksCrmPaymentStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/crm-traffic-daily': {
+      id: '/api/public/hooks/crm-traffic-daily'
+      path: '/api/public/hooks/crm-traffic-daily'
+      fullPath: '/api/public/hooks/crm-traffic-daily'
+      preLoaderRoute: typeof ApiPublicHooksCrmTrafficDailyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/failure-rate-watch': {
+      id: '/api/public/hooks/failure-rate-watch'
+      path: '/api/public/hooks/failure-rate-watch'
+      fullPath: '/api/public/hooks/failure-rate-watch'
+      preLoaderRoute: typeof ApiPublicHooksFailureRateWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/health-watch': {
+      id: '/api/public/hooks/health-watch'
+      path: '/api/public/hooks/health-watch'
+      fullPath: '/api/public/hooks/health-watch'
+      preLoaderRoute: typeof ApiPublicHooksHealthWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/low-stock-watch': {
+      id: '/api/public/hooks/low-stock-watch'
+      path: '/api/public/hooks/low-stock-watch'
+      fullPath: '/api/public/hooks/low-stock-watch'
+      preLoaderRoute: typeof ApiPublicHooksLowStockWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/retry-crm-forwards': {
+      id: '/api/public/hooks/retry-crm-forwards'
+      path: '/api/public/hooks/retry-crm-forwards'
+      fullPath: '/api/public/hooks/retry-crm-forwards'
+      preLoaderRoute: typeof ApiPublicHooksRetryCrmForwardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/smoke-alert': {
+      id: '/api/public/hooks/smoke-alert'
+      path: '/api/public/hooks/smoke-alert'
+      fullPath: '/api/public/hooks/smoke-alert'
+      preLoaderRoute: typeof ApiPublicHooksSmokeAlertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/survey-followups': {
+      id: '/api/public/hooks/survey-followups'
+      path: '/api/public/hooks/survey-followups'
+      fullPath: '/api/public/hooks/survey-followups'
+      preLoaderRoute: typeof ApiPublicHooksSurveyFollowupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/visit-reminders': {
+      id: '/api/public/hooks/visit-reminders'
+      path: '/api/public/hooks/visit-reminders'
+      fullPath: '/api/public/hooks/visit-reminders'
+      preLoaderRoute: typeof ApiPublicHooksVisitRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/webhook-watch': {
+      id: '/api/public/hooks/webhook-watch'
+      path: '/api/public/hooks/webhook-watch'
+      fullPath: '/api/public/hooks/webhook-watch'
+      preLoaderRoute: typeof ApiPublicHooksWebhookWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/twilio/contract-sms-status': {
+      id: '/api/public/twilio/contract-sms-status'
+      path: '/api/public/twilio/contract-sms-status'
+      fullPath: '/api/public/twilio/contract-sms-status'
+      preLoaderRoute: typeof ApiPublicTwilioContractSmsStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/twilio/inbound': {
+      id: '/api/public/twilio/inbound'
+      path: '/api/public/twilio/inbound'
+      fullPath: '/api/public/twilio/inbound'
+      preLoaderRoute: typeof ApiPublicTwilioInboundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
